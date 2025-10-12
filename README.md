@@ -93,7 +93,7 @@
 2.  PC와 ST-Link 디버거, 그리고 `XM10`의 `SWD` 포트를 연결합니다.
 3.  `STM32CubeIDE`의 <img width="23" height="21" alt="image" src="https://github.com/user-attachments/assets/da49493b-a58f-4b43-9dc3-83ba26bdc7de" />(Debug)을 클릭하여 펌웨어를 업로드하고 디버깅 세션을 시작합니다.
 
-> 📚 더 자세한 내용은 **[Quick Start Guide (문서 링크)]** 를 참고하세요.
+> 📚 더 자세한 내용은 **[Quick Start Guide](/quick-start-guide)** 를 참고하세요.
 
 ---
 
@@ -116,7 +116,7 @@ XM10의 강력한 기능들을 단계별로 마스터할 수 있도록 다양한
     * [Tutorial 8: PI Vector & Aux Input을 이용한 Active-Assist Mode 구현](/examples/08_1_Active_Assist_Mode_Step)
     * [Tutorial 9: 3가지 Mode(Passive, Active-Assist, Resistive)를 이용한 Total Mode Application 구현](/examples/09_Total_Mode_Application)
 
-> 🎓 모든 튜토리얼과 예제 코드는 **[/examples](/examples) 폴더**에서 확인하실 수 있습니다.
+> 🎓 모든 튜토리얼과 예제 코드는 **[Examples](/examples)** 에서 확인하실 수 있습니다.
 
 ---
 
@@ -124,7 +124,7 @@ XM10의 강력한 기능들을 단계별로 마스터할 수 있도록 다양한
 
 사용자 알고리즘 개발에 필요한 모든 API 함수에 대한 상세 설명은 공식 API 문서에서 확인하실 수 있습니다.
 
-> 👉 **[/api-reference](/api-reference)**
+> 👉 **[API Reference](/api-reference)**
 
 ---
 
