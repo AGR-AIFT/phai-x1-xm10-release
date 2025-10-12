@@ -122,9 +122,9 @@ XM10의 강력한 기능들을 단계별로 마스터할 수 있도록 다양한
 
 ## 📜 API Reference (API 레퍼런스)
 
-사용자 알고리즘 개발에 필요한 모든 API 함수에 대한 상세 설명은 공식 API 문서 폴더에서 확인하실 수 있습니다.
+사용자 알고리즘 개발에 필요한 모든 API 함수에 대한 상세 설명은 공식 API 문서에서 확인하실 수 있습니다.
 
-> 👉 **[/api-reference](/api-reference) 폴더**
+> 👉 **[/api-reference](/api-reference)**
 
 ---
 
