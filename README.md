@@ -85,13 +85,13 @@
 
 1.  `STM32CubeIDE`에서 `File > Import... > General > Existing Projects into Workspace`를 선택합니다.
 2.  Clone 받은 `Extension_Module` 폴더를 `Root directory`로 지정하고 프로젝트를 불러옵니다.
-3.  툴바의 **망치 아이콘(Build)**을 클릭하여 에러 없이 빌드가 완료되는지 확인합니다.
+3.  툴바의 <img width="21" height="23" alt="image" src="https://github.com/user-attachments/assets/06d3cdfb-4974-4e9e-8119-5e8a92e5b081" />(Build)을 클릭하여 에러 없이 빌드가 완료되는지 확인합니다.
 
 ### **3. 하드웨어 연결 및 펌웨어 업로드**
 
 1.  `SUIT H10`과 `XM10`을 전용 케이블로 연결합니다.
 2.  PC와 ST-Link 디버거, 그리고 `XM10`의 `SWD` 포트를 연결합니다.
-3.  `STM32CubeIDE`의 **벌레 아이콘(Debug)**을 클릭하여 펌웨어를 업로드하고 디버깅 세션을 시작합니다.
+3.  `STM32CubeIDE`의 <img width="23" height="21" alt="image" src="https://github.com/user-attachments/assets/da49493b-a58f-4b43-9dc3-83ba26bdc7de" />(Debug)을 클릭하여 펌웨어를 업로드하고 디버깅 세션을 시작합니다.
 
 > 📚 더 자세한 내용은 **[Quick Start Guide (문서 링크)]** 를 참고하세요.
 
