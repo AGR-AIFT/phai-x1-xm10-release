@@ -1,0 +1,98 @@
+
+
+#ifndef RISK_MNGR_INC_ERROR_DICTIONARY_H_
+#define RISK_MNGR_INC_ERROR_DICTIONARY_H_
+
+#define NO_ERROR						0x0000
+
+/* FDCAN COMMUNICATION ERROR */
+#define SDO_RX_ERR						0x0001
+#define SDO_TX_ERR						0x0002
+#define PDO_RX_ERR						0x0003
+#define SYNC_RX_ERR						0x0004
+
+/*************** LOW LEVEL CONTROL ERROR ***************/
+
+/* CURRENT/VOLTAGE ERROR       (0x1000 ~ 0x100F)*/
+#define ERROR_PHASE_OVER_CURRENT                    0x1000
+#define ERROR_PHASE_SHORT	                        0x1001
+#define ERROR_INIT_CURRENT	                        0x1002
+#define ERROR_PHASE_OVER_VOLT	                    0x1003
+#define ERROR_INVALID_PEAK_CURRENT_SETTING          0x1004
+#define ERROR_INVALID_CONT_CURRENT_SETTING          0x1005
+#define ERROR_INVALID_OVER_CURRENT_DURATION_SETTING 0x1006
+#define ERROR_INVALID_OVER_CURRENT_ACTION_SETTING   0x1007
+/* HALL SENSOR ERROR           (0x1010 ~ 0x101F)*/
+#define ERROR_HALL_POWER                            0x1010
+#define ERROR_HALL_LOGIC                            0x1011
+#define ERROR_HALL_PATTERN                          0x1012
+#define ERROR_HALL_TABLE_GENERATION_FAILED          0x1013
+#define ERROR_HALL_USAGE_UNSET                      0x1014
+/* INC ENCODER(25kHz) ERROR    (0x1020 ~ 0x102F)*/
+#define ERROR_INC_25KHZ                             0x1020
+#define ERROR_INC_25KHZ_STACKING                    0x1021
+/* ELEC ANGLE HOMING ERROR     (0x1030 ~ 0x103F)*/
+#define ERROR_ELEC_ANGLE_HOMING_MODE_UNSET	        0x1030
+#define ERROR_ELEC_ANGLE_HOMING_NO_HALL_SENSOR      0x1031
+#define ERROR_ELEC_ANGLE_HOMING_NO_ABS_ENCODER      0x1032
+#define ERROR_ELEC_ANGLE_HOMING_FAILED              0x1033
+/* CURRENT CONTROL ERROR       (0x1040 ~ 0x104F)*/
+#define ERROR_CURRENT_CONTROLLER_INPUT_SATURATION   0x1040
+#define ERROR_CURRENT_CONTROLLER_LOW_PERFORMANCE    0x1041
+#define ERROR_CURRENT_CONTROLLER_INVALID_REFERENCE  0x1042
+#define ERROR_CURRENT_CONTROLLER_BW_UNSET           0x1043
+#define ERROR_CURRENT_CONTROLLER_INVALID_GAIN       0x1044
+#define ERROR_CURRENT_CONTROLLER_INVALID_KALMAN     0x1045
+#define ERROR_CURRENT_CONTROLLER_I_GAIN_WINDUP      0x1046
+/* FRICTION COMPENSATOR ERROR   (0x1050 ~ 0x105F)*/
+#define ERROR_FRICTION_COMPENSATOR_INVALID_VELOCITY 0x1050
+#define ERROR_FRICTION_COMPENSATOR_INVALID_INPUT    0x1051
+#define ERROR_FRICTION_COMPENSATOR_INPUT_SATURATION 0x1052
+/* LOW LEVEL TASK RT ERROR      (0x1060 ~ 0x106F)*/
+#define ERROR_LOW_LEVEL_CTRL_RT_BROKEN              0x1060
+
+/* SYSTEM MANAGEMENT ERROR - Error_Type[0] */
+#define I2C_INIT_ERROR                  0x1000
+#define I2C_COMMUNICATION_ERROR         0x1001
+#define BOARD_OVER_CURRENT              0x1002
+#define BOARD_OVER_VOLTAGE              0x1003
+#define BOARD_UNDER_VOLTAGE             0x1004
+#define BOARD_OVER_TEMPERATURE          0x1005
+#define BOOT_SEQUENCE_ERROR             0x1006
+
+
+/* MID LEVEL CONTROL ERROR - Error_Type[2] */
+#define TBD_JOINT                       0x1200
+
+/* IMU CONTROL ERROR - Error_Type[3] */
+#define TBD_IMU                         0x1300
+
+/* FDCAN COMMUNICATION ERROR - Error_Type[4] */
+#define CONFIG_GLOBAL_FILTER_ERROR      0x1400
+#define CONFIG_FILTER_ERROR             0x1401
+#define ACTIVATE_NOTIFY_ERROR           0x1402
+#define CONFIG_TX_DELAY_COMPEN_ERROR    0x1403
+#define ENABLE_TX_DELAY_COMPEN_ERROR    0x1404
+#define FDCAN_START_ERROR               0x1405
+#define TX_FIFO_Q_ERROR                 0x1406
+#define RX_MESSAGE_ERROR                0x1407
+#define FDCAN_TX_ERROR                  0x1408
+#define TX_MESSAGE_TOO_LONG             0x1409
+#define CANNOT_FIND_SDO                 0x1410
+#define SDO_ARGUMENT_ERROR              0x1411
+#define SDO_STATUS_ERROR                0x1412
+#define UNPACK_SDO_ERROR                0x1413
+#define PACK_SDO_RES_ERROR              0x1414
+#define PACK_SDO_REQ_ERROR              0x1415
+#define SDO_SEND_ERROR                  0x1416
+#define CANNOT_FIND_PDO                 0x1417
+#define PDO_COPY_TO_RECEIVE_ERROR       0x1418
+#define UNPACK_PDO_ERROR                0x1419
+#define PDO_COPY_TO_SEND_ERROR          0x1420
+#define PACK_PDO_ERROR                  0x1421
+#define PDO_SEND_ERROR                  0x1422
+
+/* EXTERNAL DEVICE CONTROL ERROR - Error_Type[5] */
+#define MOTOR_OVER_TEMPERATURE          0x1500
+
+#endif /* RISK_MNGR_INC_ERROR_DICTIONARY_H_ */
