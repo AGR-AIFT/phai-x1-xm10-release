@@ -5,7 +5,7 @@
 ## 🎯 학습 목표 (Objective)
 
 * XM10 확장 포트의 핀 번호(`XM_EXT_DIO_x`)와 물리적 위치를 매칭합니다. (아래 그림은 XM10 Overview)
-<img width="1559" height="950" alt="image" src="https://github.com/user-attachments/assets/d13e0072-a85c-453e-921f-6157a679fd18" />
+<img width="1567" height="950" alt="image" src="https://github.com/user-attachments/assets/c2984f32-7cfb-450d-9e75-5ab19e8e0f6b" />
 * `XM_SetExtPinMode`를 사용하여 핀의 용도(입력/출력)를 설정하는 방법을 학습합니다.
 * **입력 풀업(Input Pullup)** 모드를 사용하여 외부 저항 없이 스위치를 연결하는 방법을 이해합니다.
 * `XM_DigitalRead`와 `XM_DigitalWrite` API를 사용하여 외부 신호를 읽고 쓰는 법을 배웁니다.
