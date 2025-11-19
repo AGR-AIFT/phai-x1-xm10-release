@@ -13,14 +13,14 @@
 
 ## ⚙️ 동작 원리 (How it Works)
 
-이 프로그램은 두 개의 상태(`STANDBY`, `ACTIVE`)를 오가며 동작합니다.
+이 프로그램은 두 개의 상태(`XM_STATE_STANDBY`, `XM_STATE_ACTIVE`)를 오가며 동작합니다.
 
-1.  **STANDBY (대기):**
+1.  **XM_STATE_STANDBY (대기):**
     * **진입(Entry):** LED 1을 **심장박동(Heartbeat)** 모드로 설정하여 대기 중임을 알립니다.
-    * **반복(Loop):** 버튼 1이 1초 이상 눌리는지(`XM_BTN_LONG_PRESS`) 감시합니다. 감지되면 `ACTIVE`로 전환합니다.
-2.  **ACTIVE (동작):**
+    * **반복(Loop):** 버튼 1이 1초 이상 눌리는지(`XM_BTN_LONG_PRESS`) 감시합니다. 감지되면 `XM_STATE_ACTIVE`로 전환합니다.
+2.  **XM_STATE_ACTIVE (동작):**
     * **진입(Entry):** LED 1을 빠르게 **깜빡임(Blink)** 모드로 설정하여 동작 중임을 경고합니다.
-    * **반복(Loop):** 버튼 1이 1초 이상 눌리면 다시 `STANDBY`로 복귀합니다.
+    * **반복(Loop):** 버튼 1이 1초 이상 눌리면 다시 `XM_STATE_STANDBY`로 복귀합니다.
 3.  **전환(Transition):** `XM_TSM_TransitionTo` 함수가 호출되면 현재 상태를 정리하고 다음 상태의 `Entry` 함수를 실행합니다.
 
 ---
@@ -37,7 +37,5 @@
 
 ## 💡 직접 해보기 (Things to Try)
 
-* **제 3의 모드 추가:** `ERROR` 상태를 만들고, `ACTIVE` 상태에서 버튼 2를 누르면 `ERROR` 상태로 진입하여 빨간색 LED(LED 3)를 켜보세요.
-* **자동 복귀:** `ACTIVE` 상태 진입 후 5초가 지나면 자동으로 `STANDBY`로 돌아오도록 `XM_GetTick()`을 활용해 코드를 수정해보세요.
-
----
+* **제 3의 모드 추가:** `ERROR` 상태를 만들고, `XM_STATE_ACTIVE` 상태에서 버튼 2를 누르면 `ERROR` 상태로 진입하여 빨간색 LED(LED 3)를 켜보세요.
+* **자동 복귀:** `XM_STATE_ACTIVE` 상태 진입 후 5초가 지나면 자동으로 `XM_STATE_STANDBY`로 돌아오도록 `XM_GetTick()`을 활용해 코드를 수정해보세요.
