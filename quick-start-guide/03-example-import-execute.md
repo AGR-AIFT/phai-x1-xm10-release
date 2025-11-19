@@ -18,6 +18,7 @@
 3.  `General` 폴더를 열고 **`Existing Projects into Workspace`**를 선택한 후 `Next`를 클릭합니다.
 4.  `Select root directory` 항목 옆의 **`Browse...`** 버튼을 눌러 이전 단계에서 `GitHub`로부터 다운로드한 `Extension_Module` 폴더를 선택합니다.
 5.  `Projects:` 목록에 `Extension_Module` 프로젝트가 나타나면 **`Finish`** 버튼을 클릭합니다.
+6.  `Examples`폴더의 원하는 예제 소스파일을 `User_Algorithm` 폴더로 이동하거나(`user_app.c 삭제) `user_app.c`에 복사 붙여 넣기 합니다.
 
 ---
 
