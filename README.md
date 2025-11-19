@@ -105,34 +105,34 @@ XM10의 강력한 기능들을 단계별로 마스터할 수 있도록 다양한
 
 가장 기초적인 입출력 제어부터 상태 기반 프로그래밍(FSM)까지, 임베디드 제어의 핵심을 익힙니다.
 
-  * **[Example 01: 버튼과 LED 기초 (Basic)](/examples/01_button_led_basic)** \* 단순한 폴링(Polling) 방식으로 버튼을 눌러 LED를 켜고 끄는 법을 배웁니다.
-  * **[Example 02: 이벤트와 특수 효과 (Event & Effect)](/examples/02_button_led_event)** \* 클릭(Click) 이벤트를 감지하고, 원샷(One-shot) 등의 LED 특수 효과를 다룹니다.
-  * **[Example 03: 상태 머신 제어 (FSM)](/examples/03_button_led_fsm)** \* 롱 프레스(Long Press)로 모드를 전환하며, 체계적인 상태 머신(TSM)을 구현합니다.
-  * **[Example 04: 외부 디지털 제어 (External GPIO)](/examples/04_ext_io_basic)** \* 확장 포트를 통해 외부 스위치와 LED 회로를 구성하고 제어합니다.
-  * **[Example 05: 아날로그 센서 모니터링 (ADC)](/examples/05_ext_io_analog)** \* 가변저항이나 조도 센서의 전압 값을 읽고 임계치를 판단합니다.
-  * **[Example 06: 외부 안전 제어 (Safety Logic)](/examples/06_ext_io_safety_control)** \* 리미트 스위치 등 외부 신호를 이용해 로봇을 비상 정지시키는 안전 로직을 구현합니다.
+  * **[Example 01: 버튼과 LED 기초 (Basic)](/examples/01_Button_LED_Basic)** \* 단순한 폴링(Polling) 방식으로 버튼을 눌러 LED를 켜고 끄는 법을 배웁니다.
+  * **[Example 02: 이벤트와 특수 효과 (Event & Effect)](/examples/02_Button_LED_Event)** \* 클릭(Click) 이벤트를 감지하고, 원샷(One-shot) 등의 LED 특수 효과를 다룹니다.
+  * **[Example 03: 상태 머신 제어 (FSM)](/examples/03_Button_LED_FSM)** \* 롱 프레스(Long Press)로 모드를 전환하며, 체계적인 상태 머신(TSM)을 구현합니다.
+  * **[Example 04: 외부 디지털 제어 (External GPIO)](/examples/04_Ext_IO_Basic)** \* 확장 포트를 통해 외부 스위치와 LED 회로를 구성하고 제어합니다.
+  * **[Example 05: 아날로그 센서 모니터링 (ADC)](/examples/05_Ext_IO_analog)** \* 가변저항이나 조도 센서의 전압 값을 읽고 임계치를 판단합니다.
+  * **[Example 06: 외부 안전 제어 (Safety Logic)](/examples/06_Ext_IO_Safety_Switch)** \* 리미트 스위치 등 외부 신호를 이용해 로봇을 비상 정지시키는 안전 로직을 구현합니다.
 
 ### **Part 2: XM10 USB 기능 마스터하기**
 
 PC와의 실시간 통신 및 데이터 로깅 기능을 활용하여 개발 효율을 극대화합니다.
 
-  * **[Example 07: USB 시리얼 통신 기초 (CDC Basic)](/examples/07_cdc_basic_print)** \* PC 터미널로 텍스트 메시지를 보내고 통신 연결을 확인합니다.
-  * **[Example 08: USB 시리얼 통신 센서 데이터 모니터링 (CDC Sensor)](/examples/08_cdc_sensor_print)** \* 로봇의 센서 값을 문자열로 변환하여 실시간으로 확인합니다.
-  * **[Example 09: USB 시리얼 통신 고속 데이터 스트리밍 (Binary Stream)](/examples/09_cdc_high_speed_stream)** \* Serial Plotter 등을 위해 500Hz 고속 데이터를 바이너리로 전송합니다.
-  * **[Example 10: USB 메모리 사용자 정의 데이터 로깅 (MSC Logging)](/examples/10_msc_manual_log)** \* USB 메모리에 Binary 파일을 생성하고 데이터를 저장하는 방법을 익힙니다.
+  * **[Example 07: USB 시리얼 통신 기초 (CDC Basic)](/examples/07_CDC_Basic_Print)** \* PC 터미널로 텍스트 메시지를 보내고 통신 연결을 확인합니다.
+  * **[Example 08: USB 시리얼 통신 센서 데이터 모니터링 (CDC Sensor)](/examples/08_CDC_Sensor_Print)** \* 로봇의 센서 값을 문자열로 변환하여 실시간으로 확인합니다.
+  * **[Example 09: USB 시리얼 통신 고속 데이터 스트리밍 (Binary Stream)](/examples/09_CDC_Stream)** \* Serial Plotter 등을 위해 500Hz 고속 데이터를 바이너리로 전송합니다.
+  * **[Example 10: USB 메모리 사용자 정의 데이터 로깅 (MSC Logging)](/examples/10_MSC_Manual_log)** \* USB 메모리에 Binary 파일을 생성하고 데이터를 저장하는 방법을 익힙니다.
 
 ### **Part 3: KIT H10 제어 알고리즘 구현**
 
 실제 웨어러블 로봇(SUIT H10)을 제어하는 고급 알고리즘을 구현합니다.
 
-  * **[Example 11: 패시브 모드 (Passive Mode)](/examples/15_passive_mode)**
+  * **[Example 11: 패시브 모드 (Passive Mode)](/examples/11_Passive_Mode)**
       * P-Vector를 사용하여 설정된 범위를 왕복하는 자동 운동 모드를 구현합니다.
-  * **[Example 12: 액티브 어시스트 (Active Assist)](/examples/16_active_assist)**
+  * **[Example 12: 액티브 어시스트 (Active Assist)](/examples/12_Active_Assist_Mode)**
       * 사용자의 의도(센서 데이터)를 파악하여 보행을 보조하는 토크 제어 알고리즘을 구현합니다.
-  * **[Example 13: 저항 모드 (Resistive Mode)](/examples/13_resistive_mode)** \* H10 슈트의 내장 기능을 활용하여, 물속을 걷는 듯한 저항 운동 모드를 구현합니다.
-  * **[Example 14: 중력 보상 (Gravity Compensation)](/examples/14_gravity_compensation)** *(Planned)*
+  * **[Example 13: 저항 모드 (Resistive Mode)](/examples/13_Resistive_Mode)** \* H10 슈트의 내장 기능을 활용하여, 물속을 걷는 듯한 저항 운동 모드를 구현합니다.
+  * **[Example 14: 중력 보상 (Gravity Compensation)](/examples/14_Gravity_Compensation)** *(Planned)*
       * 로봇의 무게를 상쇄하여 착용자가 무게감을 느끼지 않게 하는 투명 모드를 구현합니다.
-  * **[Example 15: 통합 모드 (Total Application)](/examples/17_total_mode)** *(Planned)*
+  * **[Example 15: 통합 모드 (Total Application)](/examples/17_Total_Mode)** *(Planned)*
       * 위의 모든 모드를 버튼 하나로 전환하며 사용하는 완성된 애플리케이션을 만듭니다.
 
 > 🎓 모든 튜토리얼과 예제 코드는 **[Examples](/examples)** 폴더에서 확인하실 수 있습니다.
