@@ -55,7 +55,7 @@ typedef enum {
 } XmDioPin_t;
 ```
 
-#### `XmDioPin_t`
+#### `XmAdcPin_t`
 
 아날로그 입력을 제어할 핀 번호를 지정합니다.
 
