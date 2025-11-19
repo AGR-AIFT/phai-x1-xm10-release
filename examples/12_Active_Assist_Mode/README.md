@@ -6,11 +6,11 @@
 
 ## 🎯 학습 목표 (Objective)
 
-* `StageAuxTorque()`와 `FlushControlData()`를 사용한 **실시간 토크 제어 입력 생성** 방법을 학습합니다.
+* `XM_SetControlMode(XM_CTRL_TORQUE)`와 `XM_SetAssistTorqueRH(target torque)`, `XM_SetAssistTorqueLH(target torque)`를 사용한 **실시간 토크 제어 입력 생성** 방법을 학습합니다.
 * 시간과 각도 임계값을 조합하여 **사용자의 움직임 의도를 감지**하는 알고리즘을 이해합니다.
 * **계층적 상태 머신**을 사용하여, `Homing`과 같은 동기화 단계와 각 다리의 독립적인 보조 단계를 분리하여 관리하는 방법을 학습합니다.
 * `저역 통과 필터(LPF)`를 이용해 **토크를 부드럽게(Smoothing)** 인가하는 기법을 이해합니다.
-* `suitAssistLevel` 값을 연동하여 **보조력의 강도를 동적으로 조절**하는 방법을 학습합니다.
+* `XM.status.h10.h10AssistLevel` 값을 연동하여 **보조력의 강도를 동적으로 조절**하는 방법을 학습합니다.
 
 ---
 
@@ -36,8 +36,8 @@
 
 3.  **토크 보조 (`AA_SUBSTATE_PROVIDE_ASSIST_DF/AA_SUBSTATE_PROVIDE_ASSIST_PF`):**
     위 두 조건이 모두 충족되면, 시스템은 사용자의 의도를 확신하고 목표 방향으로 **보조 토크를 인가**하기 시작합니다.
-    * `StageAuxTorque()` 함수를 통해 목표 토크(`ASSIST_TORQUE_NM`)를 예약합니다.
-    * 이때, `s_suitData.suitAssistLevel` 값과 연동하면 사용자가 설정한 강도로 보조력이 조절됩니다.
+    * `XM_SetAssistTorqueRH(target torque)`, `XM_SetAssistTorqueLH(target torque)` 함수를 통해 목표 토크(`ASSIST_TORQUE_NM`)를 예약합니다.
+    * 이때, `XM.status.h10.h10AssistLevel` 값과 연동하면 사용자가 설정한 강도로 보조력이 조절됩니다.
     * 토크는 `Low-Pass Filter`를 통해 부드럽게 증가하여 사용자에게 안정적인 보조감을 제공합니다.
     * 사용자가 반대편 피크 지점에 도달하면, 토크를 `0`으로 되돌리고 다시 `WAIT_AT_PEAK` 상태로 복귀합니다.
 
@@ -45,13 +45,13 @@
 
 ## 🚀 실행 방법 (How to Use)
 
-1.  `STM32CubeIDE`에서 본 예제 프로젝트를 빌드하고 펌웨어를 `XM10`에 업로드합니다.
-2.  `SUIT H10`의 전원을 켜고 `XM10`과 연결합니다.
-3.  `angel'a DEV` 또는 다른 제어 수단을 통해 `SUIT H10`의 모드를 **`ASSIST_MODE`로 변경**합니다.
+1.  `STM32CubeIDE`에서 본 예제 소스파일을 `user_app.c`으로 옮겨와서 빌드하고 펌웨어를 `XM10`에 업로드합니다. (user_app.c를 삭제하고 파일 그대로 옮겨와도 됩니다.)
+2.  `KIT H10`의 전원을 켜고 `XM10`과 연결합니다.
+3.  `angel'a DEV` 또는 다른 제어 수단을 통해 `KIT H10`의 모드를 **`ASSIST_MODE`로 변경**합니다.
 4.  로봇 다리가 먼저 **설정된 시작 위치로 이동**한 후 대기하는 것을 확인합니다.
-5.  `SUIT H10`의 보조 레벨(`suitAssistLevel`)을 보조력 조절 버튼으로 **1단계** 높입니다.
+5.  `KIT H10`의 보조 레벨(`XM.status.h10.h10AssistLevel`)을 보조력 조절 버튼으로 **1단계** 높입니다.
 6.  **사용자가 직접 다리를 움직여보세요.** 잠시 후, 움직이는 방향으로 **부드러운 보조력이 느껴지는지** 확인합니다.
-7.  `SUIT H10`의 보조 레벨(`suitAssistLevel`)을 조절하며 **보조력의 강도가 변하는지** 테스트합니다.
+7.  `KIT H10`의 보조 레벨(`XM.status.h10.h10AssistLevel`)을 조절하며 **보조력의 강도가 변하는지** 테스트합니다.
 
 ---
 
