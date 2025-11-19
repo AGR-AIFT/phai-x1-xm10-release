@@ -125,15 +125,11 @@ PC와의 실시간 통신 및 데이터 로깅 기능을 활용하여 개발 효
 
 실제 웨어러블 로봇(SUIT H10)을 제어하는 고급 알고리즘을 구현합니다.
 
-  * **[Example 11: 패시브 모드 (Passive Mode)](/examples/11_Passive_Mode)**
-      * P-Vector를 사용하여 설정된 범위를 왕복하는 자동 운동 모드를 구현합니다.
-  * **[Example 12: 액티브 어시스트 (Active Assist)](/examples/12_Active_Assist_Mode)**
-      * 사용자의 의도(센서 데이터)를 파악하여 보행을 보조하는 토크 제어 알고리즘을 구현합니다.
+  * **[Example 11: 패시브 모드 (Passive Mode)](/examples/11_Passive_Mode)** \* P-Vector를 사용하여 설정된 범위를 왕복하는 자동 운동 모드를 구현합니다.
+  * **[Example 12: 액티브 어시스트 (Active Assist)](/examples/12_Active_Assist_Mode)** \* 사용자의 의도(센서 데이터)를 파악하여 보행을 보조하는 토크 제어 알고리즘을 구현합니다.
   * **[Example 13: 저항 모드 (Resistive Mode)](/examples/13_Resistive_Mode)** \* H10 슈트의 내장 기능을 활용하여, 물속을 걷는 듯한 저항 운동 모드를 구현합니다.
-  * **[Example 14: 중력 보상 (Gravity Compensation)](/examples/14_Gravity_Compensation)** *(Planned)*
-      * 로봇의 무게를 상쇄하여 착용자가 무게감을 느끼지 않게 하는 투명 모드를 구현합니다.
-  * **[Example 15: 통합 모드 (Total Application)](/examples/17_Total_Mode)** *(Planned)*
-      * 위의 모든 모드를 버튼 하나로 전환하며 사용하는 완성된 애플리케이션을 만듭니다.
+  * **[Example 14: 중력 보상 (Gravity Compensation)](/examples/14_Gravity_Compensation)** *(Planned)* \* 로봇의 무게를 상쇄하여 착용자가 무게감을 느끼지 않게 하는 투명 모드를 구현합니다.
+  * **[Example 15: 통합 모드 (Total Application)](/examples/17_Total_Mode)** *(Planned)* \* 위의 모든 모드를 버튼 하나로 전환하며 사용하는 완성된 애플리케이션을 만듭니다.
 
 > 🎓 모든 튜토리얼과 예제 코드는 **[Examples](/examples)** 폴더에서 확인하실 수 있습니다.
 
