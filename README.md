@@ -1,4 +1,4 @@
-# Extension Module: XM10 부분 개방형 R&D 플랫폼
+# eXtension Module: XM10 부분 개방형 R&D 플랫폼
 
 <p align="center">
   <img width="348" height="271" alt="image" src="https://github.com/user-attachments/assets/797cb252-48a7-4d6c-aa9d-3d7ffda565de" />
