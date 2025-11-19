@@ -1,14 +1,62 @@
-# API 레퍼런스: SUIT H10 제어
+# API 레퍼런스: KIT H10 제어 & Data Interface
 
-`XM10`의 핵심 가치중 하나는 `SUIT H10` 로봇을 직접 설계한 알고리즘으로 제어하는 것입니다. 본 API는 SUIT H10과의 연결 상태를 확인하고, 로봇의 현재 상태 데이터를 실시간으로 수신하며, `PIF-Vectors`, `Aux inputs`와 같은 제어 명령을 전송하여 로봇의 움직임을 제어하는 데 필요한 기능을 제공합니다.
-
-`XM10`의 제어 알고리즘은 **SUIT 연결 확인 후 (1) 데이터 수신 → (2) 알고리즘 계산 → (3) 데이터 송신**의 순서로 반복되는 `IPO(Input-Process-Output)` 형태로 구성됩니다.
+`XM10`의 핵심 가치중 하나는 `KIT H10` 로봇을 직접 설계한 알고리즘으로 제어하는 것입니다. 본 API는 SUIT H10과의 연결 상태를 확인하고, 로봇의 현재 상태 데이터를 실시간으로 수신하며, `PIF-Vectors`, `Aux inputs`와 같은 제어 명령을 전송하여 로봇의 움직임을 제어하는 데 필요한 기능을 제공합니다.
 
 ---
 
+## 📌 개요 (Overview)
+
+XM10은 **IPO(Input-Process-Output)** 모델을 따릅니다. 사용자는 `XM.status`에서 센서 값을 읽고(Read-Only), `XM_Set...` 함수를 통해 제어 명령을 내립니다.
+
+## 🛠 데이터 구조 (Data Structures)
+
+### `XmRobot_t` (Global Instance `XM`)
+
+```c
+typedef struct {
+    XmInput_t  status;  // [Read] 센서 데이터 (H10, GRF, IMU)
+    XmOutput_t command; // [Write] 제어 명령 (Helper 함수 사용)
+} XmRobot_t;
+```
+
+  * **주요 필드 접근:**
+      * `XM.status.h10.leftHipAngle`: 왼쪽 고관절 각도 (Degree)
+      * `XM.status.h10.rightHipTorque`: 오른쪽 현재 토크 (Nm)
+      * `XM.status.grf.leftSensorData`: 왼쪽 FSR 센서 배열
+      * `XM.status.imu.acc_z`: IMU 수직 가속도
+
+### `XmControlMode_t`
+
+  * `XM_CTRL_MONITOR` (0): 모니터링 모드. 제어 명령을 전송하지 않습니다. (안전)
+  * `XM_CTRL_TORQUE` (1): 토크 제어 모드. 설정된 토크를 모터로 전송합니다.
+
+-----
+
+## 📚 함수 (Functions)
+
+### `XM_SetControlMode`
+
+로봇의 제어 권한을 설정합니다. 모드 변경 시 안전을 위해 모든 토크 명령이 0으로 초기화됩니다.
+
+  * **Parameters**
+      * `XmControlMode_t mode`: 설정할 모드
+
+### `XM_SetAssistTorque`
+
+양쪽 다리의 보조 토크를 설정합니다. 설정된 값은 다음 제어 주기에 전송됩니다.
+
+  * **Parameters**
+      * `float r`: 오른쪽 토크 (Nm)
+      * `float l`: 왼쪽 토크 (Nm)
+  * **Example**
+    ```c
+    // 5.0Nm 토크 출력
+    XM_SetAssistTorque(5.0f, 5.0f);
+    ```
+
 ## 1. 시스템 및 연결 상태 (System & Connection)
 
-알고리즘을 시작하기 전, `XM10`이 `SUIT H10`의 `제어 모듈(Control Module)`과 안정적으로 통신하고 있는지 반드시 확인해야 합니다.
+알고리즘을 시작하기 전, `XM10`이 `KIT H10`의 `제어 모듈(Control Module)`과 안정적으로 통신하고 있는지 반드시 확인해야 합니다.
 
 ### `IsCmConnected()`
 
@@ -40,12 +88,12 @@ void UpdateOffState(void) {
 
 ## 2. 데이터 수신 (Data Inputs)
 
-`SUIT H10`의 데이터는 `GetSuitData()` 함수 하나로 간편하게 받아올 수 있습니다.
-**`SUIT H10`과 `XM10`간 데이터 송수신 목록은 고정이나, 추후 변경될 여지가 있습니다.**
+`KIT H10`의 데이터는 `GetSuitData()` 함수 하나로 간편하게 받아올 수 있습니다.
+**`KIT H10`과 `XM10`간 데이터 송수신 목록은 고정이나, 추후 변경될 여지가 있습니다.**
 
 ### `GetSuitData()`
 
-`SUIT H10`으로부터 수신된 모든 최신 데이터를 `RxData_t` 구조체에 채워줍니다. 이 함수는 제어 루프가 시작될 때마다 주기적으로 호출하여 로봇의 현재 상태를 파악하는 데 사용됩니다.
+`KIT H10`으로부터 수신된 모든 최신 데이터를 `RxData_t` 구조체에 채워줍니다. 이 함수는 제어 루프가 시작될 때마다 주기적으로 호출하여 로봇의 현재 상태를 파악하는 데 사용됩니다.
 사용자는 `RunUserAlgorithm()`함수 내에서 **(1) 데이터 수신 → (2) 알고리즘 계산 -> (3) 데이터 송신**에 따라 `RunTask()`함수 앞에서 `GetSuitData()`함수를 수행하면 됩니다.
 
 **Syntax**
@@ -84,7 +132,7 @@ bool GetSuitData(RxData_t* data);
 
 | SDO데이터 | 설명 | 단위 | 타입 |
 | :--- | :--- | :--- | :-- |
-| `suitMode` | 현재 SUIT H10 모드(보조/대기) | - | SuitMode_t |
+| `suitMode` | 현재 KIT H10 모드(보조/대기) | - | SuitMode_t |
 | `suitAssistLevel` | 보조 레벨 | level(0-10) | uint8_t |
 | `isPVectorRHDone` | 오른쪽 P-Vector 완료 여부 | - | float |
 | `isPVectorLHDone`| 왼쪽 P-Vector 완료 여부 | - | float |
@@ -119,7 +167,7 @@ static void UpdateSuitData(void)
 
 ## 3. 데이터 송신 (Data Outputs, Control inputs)
 
-`P-Vector`, `I-Vector`, `F-Vector` (PIF-Vectors)와 다양한 제어 명령을 통해 `SUIT H10`의 움직임을 정밀하게 설계할 수 있습니다.
+`P-Vector`, `I-Vector`, `F-Vector` (PIF-Vectors)와 다양한 제어 명령을 통해 `KIT H10`의 움직임을 정밀하게 설계할 수 있습니다.
 **PIF-Vector와 같은 사전정의된 제어 기법의 자세한 내용에 대해서는 `[angel Robotics-Control Algorithm]`(작성 예정)에서 확인할 수 있습니다.**
 
 ### `SendPVector()`
@@ -193,7 +241,7 @@ static void UpdatePassiveMode(void)
 ### `SendIVector()`
 
 **임피던스 제어 파라미터**(`I-Vector`)를 전송하여, 로봇 관절이 마치 용수철이나 댐퍼처럼 동작하도록 설정합니다.
-사전에 `kp`와 `kd`의 최대값을 `SUIT H10`의 **구동기 최대 토크인 10Nm**와 전체 시스템의 동작을 보면서 **신중히 튜닝**해야 합니다. (`SendIVectorKpKdMax()`)
+사전에 `kp`와 `kd`의 최대값을 `KIT H10`의 **구동기 최대 토크인 10Nm**와 전체 시스템의 동작을 보면서 **신중히 튜닝**해야 합니다. (`SendIVectorKpKdMax()`)
 **구동기 최대 전류는 14A이고, 모터드라이버 내부 임피던스 제어 입력 생성시 최대 10A에서 Saturation을 수행하도록 되어 있습니다.**
 
 **`I-Vector`(빨강)와 `P-Vector`(파랑)를 통한 위치 기반 제어 시뮬레이션 예시**
@@ -367,7 +415,7 @@ static void InitHoming(void)
 
 ### `Set...` 루틴 및 파라미터 (Routines & Parameters)
 
-`Set`으로 시작하는 함수들은 `SUIT H10`에 내장된 다양한 제어 보조 루틴을 활성화하거나 관련 파라미터를 실시간으로 조정하는 데 사용됩니다. 이를 통해 사용자는 복잡한 하위 제어 로직을 직접 구현할 필요 없이, 고수준에서 로봇의 동작 특성을 변경할 수 있습니다.
+`Set`으로 시작하는 함수들은 `KIT H10`에 내장된 다양한 제어 보조 루틴을 활성화하거나 관련 파라미터를 실시간으로 조정하는 데 사용됩니다. 이를 통해 사용자는 복잡한 하위 제어 로직을 직접 구현할 필요 없이, 고수준에서 로봇의 동작 특성을 변경할 수 있습니다.
 
 ---
 
@@ -412,9 +460,9 @@ SetVelocityLimit(SYS_NODE_ID_LH, 100.0f, -100.0f);
 
 ### 외란 관측기 (Disturbance Observer)
 
-사용자가 가하는 힘이나 예상치 못한 외부 힘(외란)을 추정하고 보상하여, 더 부드럽고 안정적인 움직임을 만들어내는 `SUIT H10`에 내장된 고급 제어 루틴입니다.
-**`DOB` 기능을 사용하기 위해서는 `SUIT H10`의 구동기가 `DOB`기능에 대한 식별(`System Identification`)이 진행되어 모터드라이버의 `DOB` 식별 정보 기록 여부를 확인해야 합니다.(현재 `SUIT H10`은 `DOB` 식별을 진행하지 않았음, 추후 변경 예정)**
-**`SUIT H10`의 DOB에 대해서는 [`angel Robotics-Control Algorithm`](작성 예정)에서 확인할 수 있습니다.**
+사용자가 가하는 힘이나 예상치 못한 외부 힘(외란)을 추정하고 보상하여, 더 부드럽고 안정적인 움직임을 만들어내는 `KIT H10`에 내장된 고급 제어 루틴입니다.
+**`DOB` 기능을 사용하기 위해서는 `KIT H10`의 구동기가 `DOB`기능에 대한 식별(`System Identification`)이 진행되어 모터드라이버의 `DOB` 식별 정보 기록 여부를 확인해야 합니다.(현재 `KIT H10`은 `DOB` 식별을 진행하지 않았음, 추후 변경 예정)**
+**`KIT H10`의 DOB에 대해서는 [`angel Robotics-Control Algorithm`](작성 예정)에서 확인할 수 있습니다.**
 
 **Syntax**
 ```c
@@ -434,8 +482,8 @@ SetDOBRoutine(SYS_NODE_ID_RH, true);
 
 ### 보상 게인 설정 (Compensation Gain)
 
-`SUIT H10`에 내장된 기본 중력/속도 보상 모드의 강도를 조절합니다.
-**`SUIT H10`의 보상에 대해서는 [`angel Robotics-Compensation`](작성 예정)에서 확인할 수 있습니다.**
+`KIT H10`에 내장된 기본 중력/속도 보상 모드의 강도를 조절합니다.
+**`KIT H10`의 보상에 대해서는 [`angel Robotics-Compensation`](작성 예정)에서 확인할 수 있습니다.**
 
 **Syntax**
 ```c
@@ -461,8 +509,8 @@ SetResistiveCompGain(SYS_NODE_ID_RH, strongResistance);
 
 ### `SendUserBodyData()`
 
-사용자의 신체 정보(몸무게, 키, 분절 길이 등)를 `SUIT H10`로 전송합니다. `SUIT H10`은 이 정보를 바탕으로 실시간 동작 분석을 수행하며 더 정확하고 개인화된 보행 데이터 및 운동 역학 데이터를 계산하여 XM10으로 보내줍니다. **`SUIT H10`의 실시간 동작 분석의 자세한 내용은 [`GaitAnalysis`](작성 예정)에서 확인할 수 있습니다.**
-**사용자가 직접 신체 정보를 측정하여 `SUIT H10`으로 전송해야 합니다.**
+사용자의 신체 정보(몸무게, 키, 분절 길이 등)를 `KIT H10`로 전송합니다. `KIT H10`은 이 정보를 바탕으로 실시간 동작 분석을 수행하며 더 정확하고 개인화된 보행 데이터 및 운동 역학 데이터를 계산하여 XM10으로 보내줍니다. **`KIT H10`의 실시간 동작 분석의 자세한 내용은 [`GaitAnalysis`](작성 예정)에서 확인할 수 있습니다.**
+**사용자가 직접 신체 정보를 측정하여 `KIT H10`으로 전송해야 합니다.**
 
 **`RxData_t` 구조체 중 신체 정보 기반 데이터:**
 | PDO데이터 | 설명 | 단위 | 타입 |
@@ -564,7 +612,7 @@ static void UpdateSingleLegAssistLogic(ActiveAssistFsm_t* fsm, float currentThig
 
 ### `FlushControlData()`
 
-`StageAuxTorque()`를 통해 예약된 모든 실시간 제어 데이터(보조 토크 등)를 **하나의 CAN 메시지로 묶어** `SUIT H10`으로 **즉시 전송**합니다. 이 함수는 **2ms 제어 루프의 가장 마지막에 항상 호출**되어야 합니다.
+`StageAuxTorque()`를 통해 예약된 모든 실시간 제어 데이터(보조 토크 등)를 **하나의 CAN 메시지로 묶어** `KIT H10`으로 **즉시 전송**합니다. 이 함수는 **2ms 제어 루프의 가장 마지막에 항상 호출**되어야 합니다.
 
 **Syntax**
 ```c
