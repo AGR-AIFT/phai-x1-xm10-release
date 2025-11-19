@@ -7,12 +7,12 @@
 시작하기 전에 아래 구성품이 모두 있는지 확인해주세요.
 
 * **로봇 (Robot):**
-    * SUIT H10
+    * KIT H10
 * **보드 (Board):**
     * XM10 Board
     * Sensor Hub Module Board
 * **케이블 (Cables):**
-    * XM10 ↔ SUIT H10 연결 케이블
+    * XM10 ↔ KIT H10 연결 케이블
     * XM10 ↔ Sensor Hub Modules 연결 케이블
 * **디버깅 도구 (Debugging Tools):**
     * ST-Link V2 또는 V3 디버거
@@ -26,9 +26,9 @@
     * Application Module(Jetson Orin NX)
 ---
 
-## 🔌 1단계: SUIT H10과 XM10 연결
+## 🔌 1단계: KIT H10과 XM10 연결
 
-`SUIT H10`의 확장 케이블(왼쪽 구동기쪽 어패럴에 숨겨져 있음)을 `XM10`의 메인 커넥터에 연결합니다. 이 연결을 통해 `전원`과 `CAN-FD` 통신 라인이 활성화됩니다.
+`KIT H10`의 확장 케이블(왼쪽 구동기쪽 어패럴에 숨겨져 있음)을 `XM10`의 메인 커넥터에 연결합니다. 이 연결을 통해 `전원`과 `CAN-FD` 통신 라인이 활성화됩니다.
 
 <img width="1420" height="861" alt="image" src="https://github.com/user-attachments/assets/cac2643d-532b-41a6-a680-7fb57d69d2af" />
 
