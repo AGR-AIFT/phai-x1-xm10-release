@@ -1,5 +1,5 @@
 name: 🔌 하드웨어/통신 문제 (Hardware Issue)
-description: 센서 연결, 통신(CAN/UART), 전원 등 하드웨어 관련 문제를 신고해주세요.
+description: 센서 연결, 통신(CAN/USB/UART), 전원 등 하드웨어 관련 문제를 신고해주세요.
 title: "[HW] "
 labels: ["hardware", "connection"]
 body:
@@ -24,7 +24,7 @@ body:
       options:
         - CAN / CAN FD
         - UART / USART
-        - SPI / I2C
+        - USB CDC / USB MSC
         - GPIO / ADC
         - Other
     validations:
