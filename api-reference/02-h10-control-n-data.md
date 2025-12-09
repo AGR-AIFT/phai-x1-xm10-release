@@ -190,6 +190,7 @@ typedef struct {
 | **`isRightFootContact`** | `bool` | - | 오른쪽 발 착지 여부 |
 | **`gaitState`** | `uint8_t` | - | 보행 중 여부 (`0` / `1`) |
 | **`gaitCycle`** | `uint8_t` | % | 보행 주기 진행률 (0 \~ 100) |
+| **`forwardVelocity`** | `float` | m/s | 전방 속도 (추정치) |
 | **`leftHipTorque`** | `float` | Nm | 왼쪽 모터 현재 출력 토크 (Feedback) |
 | **`rightHipTorque`** | `float` | Nm | 오른쪽 모터 현재 출력 토크 (Feedback) |
 | **`leftHipMotorAngle`** | `float` | deg | 왼쪽 모터 현재 엔코더 각도 (Feedback) |
