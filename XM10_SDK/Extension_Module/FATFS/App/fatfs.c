@@ -34,7 +34,7 @@ void MX_FATFS_Init(void)
 
   /* USER CODE BEGIN Init */
   /* additional user code for init */
-  // [?•µ?‹¬] ê¸°ì¡´?— ?ˆ„ê°? ?—°ê²°í•´ ?†¨?‹¤ë©?(?˜ˆ: USER_Driver), ê°•ì œë¡? ?Š?–´?„œ ?žë¦¬ë?? ë§Œë“­?‹ˆ?‹¤.
+  // [?ï¿½ï¿½?ï¿½ï¿½] ê¸°ì¡´?ï¿½ï¿½ ?ï¿½ï¿½ï¿½? ?ï¿½ï¿½ê²°í•´ ?ï¿½ï¿½?ï¿½ï¿½ï¿½?(?ï¿½ï¿½: USER_Driver), ê°•ì œï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ë¦¬ï¿½?? ë§Œë“­?ï¿½ï¿½?ï¿½ï¿½.
   FATFS_UnLinkDriver(USERPath);
   /* USER CODE END Init */
 }

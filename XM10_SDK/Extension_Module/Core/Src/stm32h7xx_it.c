@@ -15,6 +15,7 @@
   *
   ******************************************************************************
   */
+#include "system_startup.h"
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
@@ -22,7 +23,6 @@
 #include "stm32h7xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "system_startup.h" // for UART4 in XM10-XSENS IMU
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -68,7 +68,11 @@ extern UART_HandleTypeDef huart8;
 extern TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN EV */
-
+/* ?��?��?���? ?��?��?�� ?��?�� 참조 */
+extern UART_HandleTypeDef huart4_manual;
+// DMA RX/TX ?��?�� (system_startup.c?�� ?��?��?��?�� ?��?��?�� ?��)
+extern DMA_HandleTypeDef hdma_uart4_tx_manual;
+extern DMA_HandleTypeDef hdma_uart4_rx_manual;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -342,12 +346,11 @@ void DMAMUX1_OVR_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
-/**
-  * @brief This function handles DMA1 stream2 global interrupt.
-  */
 void DMA1_Stream2_IRQHandler(void)
 {
+  /* USER CODE BEGIN DMA1_Stream2_IRQn 0 */
   System_ISR_DMA_UART4_RX_Manual();
+  /* USER CODE END DMA1_Stream2_IRQn 0 */
 }
 
 /**
@@ -355,7 +358,9 @@ void DMA1_Stream2_IRQHandler(void)
   */
 void DMA1_Stream5_IRQHandler(void)
 {
+  /* USER CODE BEGIN DMA1_Stream5_IRQn 0 */
   System_ISR_DMA_UART4_TX_Manual();
+  /* USER CODE END DMA1_Stream5_IRQn 0 */
 }
 
 /**
@@ -363,6 +368,8 @@ void DMA1_Stream5_IRQHandler(void)
   */
 void UART4_IRQHandler(void)
 {
+  /* USER CODE BEGIN UART4_IRQn 0 */
   System_ISR_UART4_Manual();
+  /* USER CODE END UART4_IRQn 0 */
 }
 /* USER CODE END 1 */

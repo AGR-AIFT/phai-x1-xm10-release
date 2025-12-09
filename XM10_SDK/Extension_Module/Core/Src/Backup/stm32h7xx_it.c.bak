@@ -68,9 +68,9 @@ extern UART_HandleTypeDef huart8;
 extern TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN EV */
-/* ?ˆ˜?™?œ¼ë¡? ?„ ?–¸?•œ ?•¸?“¤ ì°¸ì¡° */
+/* ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½ ì°¸ì¡° */
 extern UART_HandleTypeDef huart4_manual;
-// DMA RX/TX ?•¸?“¤ (system_startup.c?— ?„ ?–¸?˜?–´ ?ˆ?–´?•¼ ?•¨)
+// DMA RX/TX ?ï¿½ï¿½?ï¿½ï¿½ (system_startup.c?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½)
 extern DMA_HandleTypeDef hdma_uart4_tx_manual;
 extern DMA_HandleTypeDef hdma_uart4_rx_manual;
 /* USER CODE END EV */
@@ -346,20 +346,20 @@ void DMAMUX1_OVR_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
-/* 1. UART4 ê¸?ë¡œë²Œ ?¸?„°?Ÿ½?Š¸ (TX ?™„ë£? ?™•?¸?š©) */
+/* 1. UART4 ï¿½?ë¡œë²Œ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ (TX ?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½) */
 void UART4_IRQHandler(void)
 {
   HAL_UART_IRQHandler(&huart4_manual);
 }
 
-/* DMA1 Stream2 ê¸?ë¡œë²Œ ?¸?„°?Ÿ½?Š¸ (UART4 RX?š©?œ¼ë¡? ?• ?‹¹) */
+/* DMA1 Stream2 ï¿½?ë¡œë²Œ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ (UART4 RX?ï¿½ï¿½?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½) */
 void DMA1_Stream2_IRQHandler(void)
 {
   HAL_DMA_IRQHandler(&hdma_uart4_rx_manual);
 }
 
-/* 3. [?•„?ˆ˜] DMA TX ?¸?„°?Ÿ½?Š¸ (? „?†¡ ?™„ë£? ?Š¸ë¦¬ê±°?š©) (UART4 TX?š©?œ¼ë¡? ?• ?‹¹) */
-// (ë§Œì•½ TX DMA ?Š¤?Š¸ë¦¼ì„ DMA1_Stream5ë¡? ?¡?•˜?‹¤ë©?)
+/* 3. [?ï¿½ï¿½?ï¿½ï¿½] DMA TX ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ (?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ï¿½? ?ï¿½ï¿½ë¦¬ê±°?ï¿½ï¿½) (UART4 TX?ï¿½ï¿½?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½) */
+// (ë§Œì•½ TX DMA ?ï¿½ï¿½?ï¿½ï¿½ë¦¼ì„ DMA1_Stream5ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½?)
 void DMA1_Stream5_IRQHandler(void)
 {
   HAL_DMA_IRQHandler(&hdma_uart4_tx_manual);

@@ -83,7 +83,7 @@
    if lengths will always be less than the number of bytes in a size_t. */
 #define configMESSAGE_BUFFER_LENGTH_TYPE         size_t
 /* Queue set definitions. */
-#define configUSE_QUEUE_SETS 1   /* UART Queue 2Í∞? ?ù¥?ÉÅ */
+#define configUSE_QUEUE_SETS 1   /* UART Queue 2ÔøΩ? ?ÔøΩÔøΩ?ÔøΩÔøΩ */
 /* USER CODE END MESSAGE_BUFFER_LENGTH_TYPE */
 
 /* Co-routine definitions. */

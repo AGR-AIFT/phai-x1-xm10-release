@@ -38,6 +38,7 @@
  */
 
 
+
 /**
  *------------------------------------------------------------
  * PUBLIC FUNCTION PROTOTYPES
@@ -74,16 +75,16 @@ int System_Fdcan1_Transmit(uint16_t msgId, uint8_t* data, uint32_t len);
  */
 bool System_Switch_To_IMU_Mode(void);
 
-/* --- ISR Wrappers (For stm32h7xx_it.c) XM10-XSENS IMU 연결시 사용 --- */
-void System_ISR_DMA_UART4_RX_Manual(void);
-void System_ISR_DMA_UART4_TX_Manual(void);
-void System_ISR_UART4_Manual(void);
-
 /**
  * @brief [RTOS 태스크] "강한(strong)" 정의의 StartupTask 구현부.
  * @details main.c에서 생성된 __weak StartStartupTask를 덮어씁니다.
  * 시스템 초기화를 총괄하고, 완료되면 다른 태스크를 깨운 뒤 자신을 삭제합니다.
  */
 void StartStartupTask(void *argument);
+
+/* --- ISR Wrappers (For stm32h7xx_it.c) XM10-XSENS IMU 연결시 사용 --- */
+void System_ISR_DMA_UART4_RX_Manual(void);
+void System_ISR_DMA_UART4_TX_Manual(void);
+void System_ISR_UART4_Manual(void);
 
 #endif /* SYSTEM_CORE_INC_SYSTEM_STARTUP_H_ */

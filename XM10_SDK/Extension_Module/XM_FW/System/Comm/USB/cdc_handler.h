@@ -24,11 +24,11 @@
  * PUBLIC DEFINITIONS AND MACROS
  *-----------------------------------------------------------
  */
-
+// 2ms마다 300바이트가 쏟아져도 100ms를 버티는 크기 (300B*50 = 15KB, 16kB)
 // 버퍼 사이즈 설정 (D3 RAM 여유분에 따라 조절)
 // CDC 전송용 링버퍼 크기 (넉넉하게 16KB ~ 32KB 추천)
-#define CDC_TX_BUFFER_SIZE (32 * 1024) // 32KB Tx Buffer
-#define CDC_RX_BUFFER_SIZE (4 * 1024)  // 4KB Rx Buffer
+#define CDC_TX_RING_BUFFER_SIZE (32 * 1024) // 32kB Tx Ring Buffer
+#define CDC_RX_RING_BUFFER_SIZE (4 * 1024)  // 4kB Rx Ring Buffer
 
 // PC에서 보낼 명령어 정의 (터미널에서 입력하기 쉬운 문자열)
 #define CDC_CMD_STREAMING_START   "AGRB MON START"
