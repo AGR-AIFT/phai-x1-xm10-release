@@ -1,4 +1,4 @@
-# 예제 07-1: Passive Mode 구현
+# 예제 11: Passive Mode 구현
 
 본 예제는 `XM10`의 핵심 기능인 **Task State Machine**과 **P-Vector**와 **I-Vector**를 사용하여, `KIT H10`이 사용자의 개입 없이 설정된 범위(ROM) 내에서 부드러운 왕복 운동을 지속하는 **Passive Mode**를 구현하는 방법을 보여줍니다.
 
