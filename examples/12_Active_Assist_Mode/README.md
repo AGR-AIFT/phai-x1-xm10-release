@@ -1,4 +1,4 @@
-# 예제 08-1: Active-Assist Mode 구현
+# 예제 12: Active-Assist Mode 구현
 
 본 예제는 사용자의 움직임 **의도**를 파악하여, 필요할 때만 목표 지점까지 부드러운 보조력을 가해 움직임을 도와주는 **Active-Assist Mode**를 구현하는 방법을 보여줍니다.
 
