@@ -1,10 +1,10 @@
 # 예제 10: 데이터 로깅 기초 (MSC Manual Log)
 
-본 예제는 로봇의 데이터를 PC 연결 없이 **USB 메모리(Flash Drive)**에 파일로 저장하는 기능을 다룹니다. 현장 실험이나 야외 보행 테스트 시 필수적인 기능입니다.
+본 예제는 로봇의 데이터를 PC 연결 없이 USB 메모리(Flash Drive)에 파일로 저장하는 기능을 다룹니다. 현장 실험이나 야외 보행 테스트 시 필수적인 기능입니다.
 
 ## 🎯 학습 목표 (Objective)
 
-* **MSC(Mass Storage Class)**의 개념과 파일 시스템(FATFS)을 이해합니다.
+* MSC(Mass Storage Class)의 개념과 파일 시스템(FATFS)을 이해합니다.
 * `XM_StartUsbDataLog`와 `XM_StopUsbDataLog` API를 사용하여 원하는 구간을 녹화합니다.
 * 생성된 `.bin` 파일을 엑셀(Excel)이나 매트랩(MATLAB)에서 열어 분석합니다.
 

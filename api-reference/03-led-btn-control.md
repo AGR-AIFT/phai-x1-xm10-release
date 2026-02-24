@@ -7,7 +7,7 @@ XM10 펌웨어는 사용자가 복잡한 타이머 인터럽트나 디바운싱(
 
 ## 1\. 동작 원리 (Operating Principle)
 
-이 모듈은 \*\*시간 기반(Time-driven)\*\*으로 동작하며, 이를 위해 시스템 내부의 **Manager**들이 백그라운드에서 열심히 일하고 있습니다.
+이 모듈은 시간 기반(Time-driven)으로 동작하며, 이를 위해 시스템 내부의 **Manager**들이 백그라운드에서 열심히 일하고 있습니다.
 
 ### The Core Engine: `XM_IO_Update()`
 

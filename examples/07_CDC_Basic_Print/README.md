@@ -1,6 +1,6 @@
 # 예제 07: USB 통신 기초 (CDC Basic Print)
 
-본 예제는 XM10과 PC 간의 **시리얼 통신(Serial Communication)**을 다룹니다. 펌웨어 개발의 필수 도구인 `printf` 스타일의 디버깅 환경을 구축하는 첫 단계입니다.
+본 예제는 XM10과 PC 간의 시리얼 통신(Serial Communication)을 다룹니다. 펌웨어 개발의 필수 도구인 `printf` 스타일의 디버깅 환경을 구축하는 첫 단계입니다.
 
 ## 🎯 학습 목표 (Objective)
 

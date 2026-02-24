@@ -4,7 +4,7 @@
 
 ## 🎯 학습 목표 (Objective)
 
-* `XM_SetExtPinMode`를 사용하여 핀을 **아날로그 모드(XM_IO_ANALOG)**로 설정하는 방법을 학습합니다.
+* `XM_SetExtPinMode`를 사용하여 핀을 아날로그 모드(XM_IO_ANALOG)로 설정하는 방법을 학습합니다.
 * ADC Raw 값을 직관적인 **전압(V) 단위**로 변환하여 읽습니다.
 * **USB CDC** 기능을 사용하여 PC 터미널로 데이터를 전송하고 모니터링하는 방법을 익힙니다.
 * 센서 값에 대한 **임계치(Threshold)** 판단 로직을 구현합니다.
@@ -23,7 +23,11 @@
 
 1.  **하드웨어 연결:**
     * **아날로그 센서(가변저항 등):** 신호선(Vout)을 `XM_EXT_ADC_1`에 연결합니다. (전원은 3.3V, GND 연결)
-<img width="1567" height="950" alt="image" src="https://github.com/user-attachments/assets/68c4baac-c611-434c-b633-efb917b4f971" />
+    <div align="center">
+        <img src="https://github.com/user-attachments/assets/68c4baac-c611-434c-b633-efb917b4f971" width="90%" />
+        <p><b>▲ Figure 1. XM10 Board Overview</b></p>
+    </div>
+
 2.  **PC 연결:** XM10의 USB 포트를 PC에 연결하고 터미널 프로그램(TeraTerm 등)을 엽니다.
 3.  코드를 업로드하고 실행합니다.
 4.  **모니터링:** 터미널에 `Sensor: 1.25 V`와 같은 메시지가 출력되는지 확인합니다.

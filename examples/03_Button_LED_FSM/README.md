@@ -1,6 +1,6 @@
 # 예제 03: 상태 머신 제어 (Button & LED FSM)
 
-본 예제는 로봇 제어의 핵심인 **유한 상태 머신(FSM: Finite State Machine)**을 다룹니다. 시스템을 **대기(Standby)**와 **동작(Active)** 두 가지 상태로 나누고, **롱 프레스(Long Press)** 이벤트를 통해 상태를 전환하는 구조를 구현합니다.
+본 예제는 로봇 제어의 핵심인 유한 상태 머신(FSM: Finite State Machine)을 다룹니다. 시스템을 대기(Standby)와 동작(Active) 두 가지 상태로 나누고, **롱 프레스(Long Press)** 이벤트를 통해 상태를 전환하는 구조를 구현합니다.
 
 ## 🎯 학습 목표 (Objective)
 

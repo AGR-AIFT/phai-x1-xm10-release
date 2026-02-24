@@ -2,7 +2,7 @@
 
 `XM10`의 핵심 가치중 하나는 `KIT H10` 로봇을 직접 설계한 알고리즘으로 제어하는 것입니다. 본 API는 KIT H10과의 연결 상태를 확인하고, 로봇의 현재 상태 데이터를 실시간으로 수신하며, `PIF-Vectors`, `Aux inputs`와 같은 제어 명령을 전송하여 로봇의 움직임을 제어하는 데 필요한 기능을 제공합니다.
 `xm_api_data.h`에 정의된 **로봇 데이터 및 제어 API**에 대한 상세 레퍼런스입니다.
-XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 신경 쓰지 않고, \*\*직관적인 전역 객체(`XM`)\*\*를 통해 로봇의 상태를 읽고 명령을 내릴 수 있도록 **파사드(Facade) 패턴**을 제공합니다.
+XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 신경 쓰지 않고, 직관적인 전역 객체(`XM`)를 통해 로봇의 상태를 읽고 명령을 내릴 수 있도록 **파사드(Facade) 패턴**을 제공합니다.
 
 ---
 
@@ -33,16 +33,16 @@ XM10의 제어 시스템은 엄격한 **IPO (Input-Process-Output)** 모델을 �
 
       * Input Data, Process, Output Data가 처리된 후 Data Logging or Data Streaming을 수행합니다.
       * USB Memory가 연결된 경우 사용자 정의 데이터를 2ms 마다 Memory에 저장합니다.
-      * PC와 USB로 연결되어 시리얼 포트로 `AGRB MON START`문자열을 XM10으로 전송하면 사용자 정의 데이터를 2ms마다 터미널로 전달합니다. 'AGRB MON STOP'을 입력하면 전송을 중단합니다.
+      * PC와 USB로 연결되어 시리얼 포트로 `AGRB MON START`문자열을 XM10으로 전송하면 사용자 정의 데이터를 2ms마다 터미널로 전달합니다. `AGRB MON STOP`을 입력하면 전송을 중단합니다.
 
-> **Note:** 사용자는 데이터를 \*\*수신(Receive)\*\*하거나 \*\*전송(Flush)\*\*하는 함수를 직접 호출할 필요가 없습니다. 오직 데이터를 **읽고(Read)**, \*\*설정(Set)\*\*하기만 하면 됩니다.
+> **Note:** 사용자는 데이터를 수신(Receive)하거나 전송(Flush)하는 함수를 직접 호출할 필요가 없습니다. 오직 데이터를 읽고(Read), 설정(Set)하기만 하면 됩니다.
 > **Note:** 데이터를 저장시에 데이터 저장을 위한 복잡한 로직을 수행할 필요가 없습니다. 저장할 데이터 구조체 정의 및 데이터 전송 API 함수를 호출하기만 하면 됩니다.
 
 -----
 
 ## 🛠 데이터 구조 (Data Structures)
 
-모든 데이터는 **`XmRobot_t`** 타입의 전역 인스턴스인 \*\*`XM`\*\*을 통해 접근합니다.
+모든 데이터는 **`XmRobot_t`** 타입의 전역 인스턴스인 `XM`을 통해 접근합니다.
 
 ### `XmControlMode_t`
 
@@ -185,7 +185,7 @@ typedef struct {
 | **`leftKneeAngle`** | `float` | deg | 왼쪽 무릎 각도 (추청지) |
 | **`rightKneeAngle`** | `float` | deg | 오른쪽 무릎 각도 (추청지) |
 | **`pelvicAngle`** | `float` | deg | 골반 좌우 기울기 (Tilt) |
-| **`pelvicVelY`** | `float` | deg/s | 골반 회전 각속도 |
+| `pelvicVelY` | `float` | deg/s | 골반 회전 각속도 |
 | **`isLeftFootContact`** | `bool` | - | 왼쪽 발 착지 여부 (`true`: 지면 접촉) |
 | **`isRightFootContact`** | `bool` | - | 오른쪽 발 착지 여부 |
 | **`gaitState`** | `uint8_t` | - | 보행 중 여부 (`0` / `1`) |
@@ -199,18 +199,18 @@ typedef struct {
 | `rightHipImuFrontalRoll` | `float` | deg | 오른쪽 고관절 IMU Frontal Roll 각도 |
 | `leftHipImuSagittalPitch` | `float` | deg | 왼쪽 고관절 IMU Sagittal Pitch 각도 |
 | `rightHipImuSagittalPitch` | `float` | deg | 오른쪽 고관절 IMU Sagittal Pitch 각도 |
-| `leftHipImuGlobalAccX` | `float` | m/s^2 | 왼쪽 고관절 IMU Global 가속도 X |
-| `leftHipImuGlobalAccY` | `float` | m/s^2 | 왼쪽 고관절 IMU Global 가속도 Y |
-| `leftHipImuGlobalAccZ` | `float` | m/s^2 | 왼쪽 고관절 IMU Global 가속도 Z |
-| `rightHipImuGlobalAccX` | `float` | m/s^2 | 오른쪽 고관절 IMU Global 가속도 X |
-| `rightHipImuGlobalAccY` | `float` | m/s^2 | 오른쪽 고관절 IMU Global 가속도 Y |
-| `rightHipImuGlobalAccZ` | `float` | m/s^2 | 오른쪽 고관절 IMU Global 가속도 Z |
-| `leftHipImuGlobalGyrX` | `float` | deg/s | 왼쪽 고관절 IMU Global 자이로 X |
-| `leftHipImuGlobalGyrY` | `float` | deg/s | 왼쪽 고관절 IMU Global 자이로 Y |
-| `leftHipImuGlobalGyrZ` | `float` | deg/s | 왼쪽 고관절 IMU Global 자이로 Z |
-| `rightHipImuGlobalGyrX` | `float` | deg/s | 오른쪽 고관절 IMU Global 자이로 X |
-| `rightHipImuGlobalGyrY` | `float` | deg/s | 오른쪽 고관절 IMU Global 자이로 Y |
-| `rightHipImuGlobalGyrZ` | `float` | deg/s | 오른쪽 고관절 IMU Global 자이로 Z |
+| **`leftHipImuGlobalAccX`** | `float` | m/s^2 | 왼쪽 고관절 IMU Global 가속도 X |
+| **`leftHipImuGlobalAccY`** | `float` | m/s^2 | 왼쪽 고관절 IMU Global 가속도 Y |
+| **`leftHipImuGlobalAccZ`** | `float` | m/s^2 | 왼쪽 고관절 IMU Global 가속도 Z |
+| **`rightHipImuGlobalAccX`** | `float` | m/s^2 | 오른쪽 고관절 IMU Global 가속도 X |
+| **`rightHipImuGlobalAccY`** | `float` | m/s^2 | 오른쪽 고관절 IMU Global 가속도 Y |
+| **`rightHipImuGlobalAccZ`** | `float` | m/s^2 | 오른쪽 고관절 IMU Global 가속도 Z |
+| **`leftHipImuGlobalGyrX`** | `float` | deg/s | 왼쪽 고관절 IMU Global 자이로 X |
+| **`leftHipImuGlobalGyrY`** | `float` | deg/s | 왼쪽 고관절 IMU Global 자이로 Y |
+| **`leftHipImuGlobalGyrZ`** | `float` | deg/s | 왼쪽 고관절 IMU Global 자이로 Z |
+| **`rightHipImuGlobalGyrX`** | `float` | deg/s | 오른쪽 고관절 IMU Global 자이로 X |
+| **`rightHipImuGlobalGyrY`** | `float` | deg/s | 오른쪽 고관절 IMU Global 자이로 Y |
+| **`rightHipImuGlobalGyrZ`** | `float` | deg/s | 오른쪽 고관절 IMU Global 자이로 Z |
 
 ### `XM_GRF_SPACE_e`
 
@@ -237,16 +237,16 @@ typedef struct {
     // sensorSpace가 LEFT(1)인 패킷의 데이터
     uint32_t leftLastUpdateTick;    // 데이터 수신 시각 (ms)
     XM_GRF_SPACE_e leftSensorSpace; // 1=왼발, 2=오른발
-    uint8_t leftRollingIndex;   // 0-199 패킷 시퀀스
+    uint8_t leftRollingIndex;       // 0-199 패킷 시퀀스
     uint8_t leftSensorData[XM_GRF_CHANNEL_SIZE]; // 14개 채널 값 (0~255 Raw Value)
-    uint8_t leftBatteryLevel;   // 배터리 잔량 (0~100)
-    uint8_t leftStatusFlags;    // 상태 플래그
+    uint8_t leftBatteryLevel;       // 배터리 잔량 (0~100)
+    uint8_t leftStatusFlags;        // 상태 플래그
     
     // --- Right Foot Data ---
     // sensorSpace가 RIGHT(2)인 패킷의 데이터
     uint32_t rightLastUpdateTick;
     XM_GRF_SPACE_e  rightSensorSpace;   // 1=왼발, 2=오른발
-    uint8_t  rightRollingIndex; // 0-199 패킷 시퀀스
+    uint8_t  rightRollingIndex;         // 0-199 패킷 시퀀스
     uint8_t  rightSensorData[XM_GRF_CHANNEL_SIZE]; // (0~255 Raw Value)
     uint8_t  rightBatteryLevel;
     uint8_t  rightStatusFlags;
@@ -358,8 +358,6 @@ typedef struct {
 
 ## 📚 함수 (Functions)
 
----
-
 알고리즘을 시작하기 전, `XM10`이 `KIT H10`의 `제어 모듈(Control Module)`과 안정적으로 통신하고 있는지 반드시 확인해야 합니다.
 
 ### `XM_IsCmConnected()`
@@ -462,8 +460,11 @@ void Off_Entry(void) {
 **반드시, `I-Vector`에 의해 사전에 임피던스 제어 파라미터가 설정되어 있어야 합니다.**
 **`P-Vector` 전송시, 모터드라이버에서 5차 polynomial 형태의 위치 궤적을 생성합니다.**
 
-**P-Vector 기반 위치 궤적 생성 예시**
-<img width="1912" height="841" alt="image" src="https://github.com/user-attachments/assets/ebd67c3d-2b5d-4453-b081-c20d8750204d" />
+<div align="center">
+    <img src="https://github.com/user-attachments/assets/ebd67c3d-2b5d-4453-b081-c20d8750204d" width="90%" />
+    <p><b>▲ Figure 1. P-Vector 기반 위치 궤적 생성 예시</b></p>
+</div>
+
 
 **Syntax**
 ```c
@@ -530,8 +531,11 @@ static void UpdatePassiveMode(void)
 사전에 `kp`와 `kd`의 최대값을 `KIT H10`의 **구동기 최대 토크인 10Nm**와 전체 시스템의 동작을 보면서 **신중히 튜닝**해야 합니다. (`XM_SendIVectorKpKdMax()`)
 **구동기 최대 전류는 14A이고, 모터드라이버 내부 임피던스 제어 입력 생성시 최대 10A에서 Saturation을 수행하도록 되어 있습니다.**
 
-**`I-Vector`(빨강)와 `P-Vector`(파랑)를 통한 위치 기반 제어 시뮬레이션 예시**
-<img width="1875" height="1024" alt="image" src="https://github.com/user-attachments/assets/abd3a1e3-55cd-4f33-b103-52c22d88a4a2" />
+<div align="center">
+    <img src="https://github.com/user-attachments/assets/abd3a1e3-55cd-4f33-b103-52c22d88a4a2" width="90%"/>
+    <p><b>▲ Figure 2. I-Vector(빨강)와 P-Vector(파랑)를 통한 위치 기반 제어 시뮬레이션 예시</b></p>
+</div>
+
 
 **Syntax**
 ```c
@@ -571,9 +575,11 @@ static void EnterStandbyMode(void)
 
 **힘 기반 궤적**(`F-Vector`)을 전송하여, **지정된 시간 동안 사전 정의된 토크 궤적을 생성**하도록 명령합니다.
 
-**F-Vector 기반 힘 궤적 생성 예시**
-<img width="1295" height="799" alt="image" src="https://github.com/user-attachments/assets/a39ffb45-f10f-4e61-a1c7-b0f235dbc0c7" />
-<img width="1538" height="846" alt="image" src="https://github.com/user-attachments/assets/3560f9a4-d9fa-407e-b9cd-eb24faae42c9" />
+<div align="center">
+    <img src="https://github.com/user-attachments/assets/a39ffb45-f10f-4e61-a1c7-b0f235dbc0c7" width="90%"/>
+    <img src="https://github.com/user-attachments/assets/3560f9a4-d9fa-407e-b9cd-eb24faae42c9" width="90%"/>
+    <p><b>▲ Figure 3. -Vector 기반 힘 궤적 생성 예시</b></p>
+</div>
 
 **Syntax**
 ```c
@@ -703,9 +709,7 @@ static void InitHoming(void)
 
 `Set`으로 시작하는 함수들은 `KIT H10`에 내장된 다양한 제어 보조 루틴을 활성화하거나 관련 파라미터를 실시간으로 조정하는 데 사용됩니다. 이를 통해 사용자는 복잡한 하위 제어 로직을 직접 구현할 필요 없이, 고수준에서 로봇의 동작 특성을 변경할 수 있습니다.
 
----
-
-### 각도 및 각속도 제한 (Angle & Velocity Limit)
+#### 1. 각도 및 각속도 제한 (Angle & Velocity Limit)
 
 로봇의 움직임을 물리적으로 안전한 범위 내로 제한하는 기능입니다.
 
@@ -744,7 +748,7 @@ XM_SetVelocityLimit(SYS_NODE_ID_LH, 100.0f, -100.0f);
 
 ---
 
-### 외란 관측기 (Disturbance Observer)
+#### 2. 외란 관측기 (Disturbance Observer)
 
 사용자가 가하는 힘이나 예상치 못한 외부 힘(외란)을 추정하고 보상하여, 더 부드럽고 안정적인 움직임을 만들어내는 `KIT H10`에 내장된 고급 제어 루틴입니다.
 **`DOB` 기능을 사용하기 위해서는 `KIT H10`의 구동기가 `DOB`기능에 대한 식별(`System Identification`)이 진행되어 모터드라이버의 `DOB` 식별 정보 기록 여부를 확인해야 합니다.(현재 `KIT H10`은 `DOB` 식별을 진행하지 않았음, 추후 변경 예정)**
@@ -766,7 +770,7 @@ XM_SetDOBRoutine(SYS_NODE_ID_RH, true);
 
 ---
 
-### 보상 게인 설정 (Compensation Gain)
+#### 3. 보상 게인 설정 (Compensation Gain)
 
 `KIT H10`에 내장된 기본 중력/속도 보상 모드의 강도를 조절합니다.
 **`KIT H10`의 보상에 대해서는 [`angel Robotics-Compensation`](작성 예정)에서 확인할 수 있습니다.**
@@ -801,7 +805,6 @@ XM_SetResistiveCompGain(SYS_NODE_ID_RH, strongResistance);
 **`RxData_t` 구조체 중 신체 정보 기반 데이터:**
 | PDO데이터 | 설명 | 단위 | 타입 |
 | :--- | :--- | :--- | :-- |
-...
 | `leftKneeAngle` | **추정된** 왼쪽 무릎 각도 | degree | float |
 | `rightKneeAngle` | **추정된** 오른쪽 무릎 각도 | degree | float |
 | `isLeftFootContact`| 왼쪽 발 접지 여부 | - | bool |

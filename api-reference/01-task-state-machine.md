@@ -7,7 +7,7 @@
 
 ## 📌 개요 (Overview)
 
-XM10의 TSM은 \*\*진입(Entry) -\> 반복(Loop) -\> 종료(Exit)\*\*의 3단계 생명주기(Lifecycle)를 자동으로 관리합니다. 사용자는 각 단계에서 수행할 함수만 등록하면 됩니다.
+XM10의 TSM은 진입(Entry) -\> 반복(Loop) -\> 종료(Exit)의 3단계 생명주기(Lifecycle)를 자동으로 관리합니다. 사용자는 각 단계에서 수행할 함수만 등록하면 됩니다.
 
 ## 🛠 데이터 구조 (Data Structures)
 

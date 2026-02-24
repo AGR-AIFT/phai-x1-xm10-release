@@ -28,8 +28,10 @@ XM10 보드에는 총 8개의 확장 DIO핀과 4개의 ADC input핀이 제공됩
 
 > **Warning:** `XM_EXT_ADC_1`과 `XM_EXT_ADC_3`는 `EnableExternalImu()`가 활성화되어 있으면 **ADC 설정이 자동으로 UART로 변경**됩니다.
 
-### Board Overview
-<img width="1567" height="950" alt="image" src="https://github.com/user-attachments/assets/a3c05839-4a08-41ce-86ec-beb0c0863d07" />
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/a3c05839-4a08-41ce-86ec-beb0c0863d07" width="90%" />
+  <p><b>▲ Figure 1. Board Overview</b></p>
+</div>
 
 -----
 

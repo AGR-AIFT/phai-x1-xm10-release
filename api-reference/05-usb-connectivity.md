@@ -6,13 +6,13 @@ XM10은 USB 포트를 통해 두 가지 강력한 기능을 동시에 제공합�
 1.  **MSC (Mass Storage Class):** USB 메모리(Flash Drive)에 데이터를 파일(`bin`)로 저장.
 2.  **CDC (Communication Device Class):** PC와 가상 시리얼 포트로 연결하여 실시간 데이터 전송 및 디버깅.
 
-이 모듈은 사용자가 **원하는 데이터 구조체**를 등록하면, 시스템이 백그라운드에서 자동으로 저장하고 전송하는 \*\*"등록 기반(Registration-based) 자동화 시스템"\*\*을 갖추고 있습니다.
+이 모듈은 사용자가 **원하는 데이터 구조체**를 등록하면, 시스템이 백그라운드에서 자동으로 저장하고 전송하는 등록 기반(Registration-based) 자동화 시스템을 갖추고 있습니다.
 
 -----
 
 ## 1\. 동작 원리 (Operating Principle)
 
-USB 모듈은 사용자의 개입을 최소화하기 위해 **"설정(Setup) 후 자동 실행(Automation)"** 방식을 따릅니다.
+USB 모듈은 사용자의 개입을 최소화하기 위해 **설정(Setup) 후 자동 실행(Automation)** 방식을 따릅니다.
 
 ### The Automation Cycle
 

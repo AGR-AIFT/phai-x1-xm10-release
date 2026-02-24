@@ -1,0 +1,33 @@
+{
+    "configurations": [
+        {
+            "name": "STM32H743 (Main)",
+            "includePath": [
+                "${workspaceFolder}/**"  // 프로젝트 내 모든 헤더 자동 탐색
+            ],
+            "defines": [
+                "USE_HAL_DRIVER",
+                "STM32H743xx"            // ★ CubeIDE Preprocessor에서 확인한 값
+            ],
+            "compilerPath": "",          // 빌드 안 할 거면 비워두는 게 속 편함
+            "cStandard": "gnu11",        // ★ CubeIDE 'Language Standard'와 일치시킴
+            "cppStandard": "gnu++14",    // ★ C++ 표준 (보통 14 사용)
+            "intelliSenseMode": "gcc-arm" // ★ STM32는 ARM 칩이므로 이게 정석
+        },
+        {
+            "name": "STM32G474 (Sub)",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "USE_HAL_DRIVER",
+                "STM32G474xx"
+            ],
+            "compilerPath": "",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "gcc-arm"
+        }
+    ],
+    "version": 4
+}
