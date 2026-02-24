@@ -101,7 +101,7 @@ __attribute__((section(D3_NON_CACHE_SECTION), aligned(32)))
 static uint8_t _UserRxRingBufferFS[APP_RX_DATA_SIZE];
 
 __attribute__((section(D3_NON_CACHE_SECTION), aligned(32)))
-static uint8_t _UserTxRingBufferFS[APP_RX_DATA_SIZE];
+static uint8_t _UserTxRingBufferFS[APP_TX_DATA_SIZE];
 
 #if ((APP_RX_DATA_SIZE-1) & APP_RX_DATA_SIZE) != 0
 #error "APP_RX_DATA_SIZE is not a power of 2"
@@ -110,9 +110,10 @@ static uint8_t _UserTxRingBufferFS[APP_RX_DATA_SIZE];
 #error "APP_TX_DATA_SIZE is not a power of 2"
 #endif
 
-/* [신규] IOIF로 이벤트를 전달할 함수 포인터 */
-static void (*s_tx_cplt_cb)(void) = NULL;
-static void (*s_rx_cplt_cb)(uint8_t*, uint32_t) = NULL;
+/* [신규] IOIF로 이벤트를 전달할 함수 포인터 (ISR에서 읽으므로 volatile) */
+static void (* volatile s_tx_cplt_cb)(void) = NULL;
+static void (* volatile s_rx_cplt_cb)(uint8_t*, uint32_t) = NULL;
+static void (* volatile s_dtr_change_cb)(uint8_t) = NULL;
 
 /* USER CODE END PRIVATE_VARIABLES */
 
@@ -250,7 +251,17 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
     break;
 
     case CDC_SET_CONTROL_LINE_STATE:
-
+    {
+      /*
+       * wLength=0인 요청이므로 pbuf는 USBD_SetupReqTypedef* 포인터.
+       * DTR = wValue bit 0, RTS = wValue bit 1 (USB CDC PSTN spec)
+       */
+      USBD_SetupReqTypedef* setup = (USBD_SetupReqTypedef*)pbuf;
+      uint8_t dtr = (setup != NULL) ? (setup->wValue & 0x01) : 0;
+      if (s_dtr_change_cb != NULL) {
+          s_dtr_change_cb(dtr);
+      }
+    }
     break;
 
     case CDC_SEND_BREAK:
@@ -357,6 +368,11 @@ void CDC_Register_Callbacks(void (*tx_cb)(void), void (*rx_cb)(uint8_t*, uint32_
 {
     s_tx_cplt_cb = tx_cb;
     s_rx_cplt_cb = rx_cb;
+}
+
+void CDC_Register_DTR_Callback(void (*dtr_cb)(uint8_t))
+{
+    s_dtr_change_cb = dtr_cb;
 }
 
 // //Need Optimization

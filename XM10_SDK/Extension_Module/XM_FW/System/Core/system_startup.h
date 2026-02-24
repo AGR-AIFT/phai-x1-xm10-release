@@ -61,13 +61,14 @@ IOIF_FDCANx_t System_GetFDCAN1_Id(void);
 
 /**
  * @brief FDCAN1 채널을 통해 CAN 메시지를 전송하는 래퍼 함수.
- * @note  외부 모듈(cm_drv 등)이 저수준 핸들 ID 없이 FDCAN1을 사용할 수 있도록 추상화 제공.
- * @param[in] msgId 전송할 메시지의 CAN ID.
- * @param[in] data  전송할 데이터의 포인터.
- * @param[in] len   전송할 데이터의 길이 (바이트).
- * @return 0 on success, -1 on error.
+ * @note  외부 모듈(imu_hub_drv 등)이 저수준 핸들 ID 없이 FDCAN1을 사용할 수 있도록 추상화 제공.
+ *        AGR_TxFunc_t 타입과 호환됩니다.
+ * @param[in] can_id CAN ID (11-bit 또는 29-bit).
+ * @param[in] data  전송할 데이터의 포인터 (const).
+ * @param[in] len   전송할 데이터의 길이 (0~64 bytes).
+ * @return 0 on success, <0 on error.
  */
-int System_Fdcan1_Transmit(uint16_t msgId, uint8_t* data, uint32_t len);
+int System_Fdcan1_Transmit(uint32_t can_id, const uint8_t* data, uint8_t len);
 
 /**
  * @brief [신규] Extension Port(PA0, PA1)를 ADC 모드에서 UART(IMU) 모드로 동적 전환합니다.

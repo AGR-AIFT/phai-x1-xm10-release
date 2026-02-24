@@ -30,7 +30,7 @@
 #define CDC_TX_RING_BUFFER_SIZE (32 * 1024) // 32kB Tx Ring Buffer
 #define CDC_RX_RING_BUFFER_SIZE (4 * 1024)  // 4kB Rx Ring Buffer
 
-// PC에서 보낼 명령어 정의 (터미널에서 입력하기 쉬운 문자열)
+// PC에서 보낼 명령어 정의 [Deprecated — PhAI V2에서는 Auto-Stream이 기본]
 #define CDC_CMD_STREAMING_START   "AGRB MON START"
 #define CDC_CMD_STREAMING_STOP    "AGRB MON STOP"
 
@@ -68,8 +68,45 @@ bool CdcStream_Send(const void* data, uint32_t len);
  */
 uint32_t CdcStream_Read(void* buf, uint32_t max_len);
 
-// 현재 모니터링(Scenario 1) 모드가 활성화되었는지 확인
+/**
+ * @brief 스트리밍이 활성화되었는지 확인
+ * @details Auto-Stream 모드에서는 USB CDC 연결 시 자동 true.
+ *          Legacy 모드에서는 "AGRB MON START" 수신 시 true.
+ */
 bool CdcStream_IsStreamingActive(void);
+
+/**
+ * @brief Auto-Stream 모드를 설정합니다.
+ * @param[in] enabled  true: USB 연결 시 자동 스트리밍 (PhAI Studio 기본)
+ *                     false: "AGRB MON START" 대기 (Legacy Python 호환)
+ * @note 기본값은 true (PhAI Studio 기본 동작)
+ */
+void CdcStream_SetAutoStreamEnabled(bool enabled);
+
+/**
+ * @brief USB CDC 연결 상태 변경 시 호출 (usb_mode_handler에서 호출)
+ * @details Auto-Stream 모드에서 연결/해제 시 스트리밍을 자동 제어합니다.
+ */
+void CdcStream_OnConnectionChanged(bool connected);
+
+/**
+ * @brief Host DTR 상태 변경 시 호출 (CDC_SET_CONTROL_LINE_STATE 콜백에서 호출)
+ * @param[in] dtr  1: Host가 COM 포트 열음, 0: Host가 COM 포트 닫음
+ * @details Host가 COM 포트를 닫을 때(dtr=0) Tx 상태를 리셋하여
+ *          다음 연결 시 정상 동작하도록 합니다.
+ */
+void CdcStream_OnHostDtrChanged(uint8_t dtr);
+
+/**
+ * @brief Tx 실패(드롭) 누적 횟수를 반환합니다.
+ * @return 링버퍼 풀로 인해 드롭된 패킷 수
+ */
+uint32_t CdcStream_GetTxDropCount(void);
+
+/**
+ * @brief Tx 드롭 카운터를 0으로 리셋합니다.
+ */
+void CdcStream_ResetTxDropCount(void);
 
 /**
  * @brief [IOIF->System] Tx 완료 콜백. (ISR 컨텍스트에서 호출됨)

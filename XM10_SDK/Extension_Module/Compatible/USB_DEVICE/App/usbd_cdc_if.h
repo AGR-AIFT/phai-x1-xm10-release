@@ -109,6 +109,7 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 
 /* USER CODE BEGIN EXPORTED_FUNCTIONS */
 void CDC_Register_Callbacks(void (*tx_cb)(void), void (*rx_cb)(uint8_t*, uint32_t));
+void CDC_Register_DTR_Callback(void (*dtr_cb)(uint8_t));
 /* USER CODE END EXPORTED_FUNCTIONS */
 
 /**

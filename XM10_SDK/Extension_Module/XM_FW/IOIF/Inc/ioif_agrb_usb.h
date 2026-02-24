@@ -64,6 +64,12 @@ typedef void (*IOIF_USB_CDC_TxCallback_t)(void); // Tx Cplt
 typedef void (*IOIF_USB_CDC_RxCallback_t)(uint8_t* data, uint32_t length);
 
 /**
+ * @brief USB Device CDC DTR 상태 변경 콜백 함수 포인터 타입
+ * @param dtr  1: Host가 COM 포트를 열음, 0: Host가 COM 포트를 닫음
+ */
+typedef void (*IOIF_USB_CDC_DtrCallback_t)(uint8_t dtr);
+
+/**
  * @brief [신규] ISR이 현재 활성화된 스택을 참조하기 위한 전역 플래그
  * @details 이 변수들은 ioif_agrb_usb.c가 "소유"하고 정의합니다.
  */
@@ -118,6 +124,13 @@ AGRBStatusDef ioif_usb_device_init(IOIF_USB_CDC_TxCallback_t user_tx_callback, I
  * @return AGRBStatusDef (ioif_agrb_defs.h 기준)
  */
 AGRBStatusDef ioif_usb_device_deinit(void);
+
+/**
+ * @brief DTR 상태 변경 콜백을 등록합니다.
+ * @details ioif_usb_device_init() 호출 후에 등록해야 합니다.
+ * @param[in] callback  DTR 변경 시 호출될 콜백 (ISR 컨텍스트)
+ */
+void ioif_usb_device_register_dtr_callback(IOIF_USB_CDC_DtrCallback_t callback);
 
 #endif /* IOIF_INC_IOIF_AGRB_USB_H_ */
 

@@ -17,9 +17,7 @@
 #ifndef SYSTEM_BOARD_LED_LED_MANAGER_H_
 #define SYSTEM_BOARD_LED_LED_MANAGER_H_
 
-#include "link_interface.h" // LinkNmtState_t
 #include "ioif_agrb_gpio.h" // IOIF_GPIOx_t
-#include "cm_xm_link.h" // LinkNmtState_t
 
 /**
  *-----------------------------------------------------------
@@ -69,7 +67,7 @@ void LedManager_InitLinkStatusLeds(IOIF_GPIOx_t r_id, IOIF_GPIOx_t g_id, IOIF_GP
 
 /**
  * @brief  [System] 현재 Link(NMT) 상태에 맞춰 LED 패턴 자동 설정
- * @details cm_xm_link 모듈이 NMT 상태 변경 시 호출합니다.
+ * @details PnP Task에서 NMT 상태 변경 시 호출합니다.
  * @param[in] nmtState 새로운 NMT 상태
  * @note   PnP Task에서 호출
  */

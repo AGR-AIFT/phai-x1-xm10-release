@@ -35,10 +35,14 @@
  */
 
 /**
- * @brief 1회 쓰기(Log)의 최대 크기.
- * @details Application Layer는 이 크기보다 작은 struct를 정의해야 합니다.(300byte)
+ * @brief 1회 쓰기(Log)의 최대 크기 (타임스탬프 제외한 User payload 부분).
  */
-#define MAX_LOG_PACKET_SIZE     (512) // 1회 쓰기 최대 크기
+#define MAX_LOG_PACKET_SIZE     (512)
+
+/**
+ * @brief 자동 타임스탬프 헤더 크기 (활성화 시 매 패킷 앞에 4바이트 tick 자동 삽입)
+ */
+#define LOG_TIMESTAMP_SIZE      (sizeof(uint32_t))
 
 /**
  *-----------------------------------------------------------
@@ -51,11 +55,21 @@
  * @details 이 enum은 data_logger.h가 소유하며, xm_api.h에 의해 외부에 노출됩니다.
  */
 typedef enum {
-    LOG_STATUS_IDLE,      // 중지됨 (초기 상태)
-    LOG_STATUS_LOGGING,   // 정상 로깅 중
-    LOG_STATUS_WARNING_QUEUE_FULL, // 큐가 90% 참 (f_write 멈춤 발생 중)
-    LOG_STATUS_ERROR_STOPPED,    // 큐 오버플로우로 로깅이 강제 중지됨
+    LOG_STATUS_IDLE,
+    LOG_STATUS_LOGGING,
+    LOG_STATUS_WARNING_QUEUE_FULL,
+    LOG_STATUS_ERROR_STOPPED,
 } DataLogger_Status_e;
+
+typedef struct {
+    uint32_t total_bytes_written;
+    uint32_t total_packets_logged;
+    uint32_t dropped_packets;
+    uint32_t write_errors;
+    uint32_t sync_count;
+    uint32_t start_tick;
+    uint32_t end_tick;
+} DataLogger_Stats_t;
 
 /**
  *-----------------------------------------------------------
@@ -111,5 +125,30 @@ bool DataLogger_Log(const void* logPacket, uint32_t packetSize);
  * @brief [실시간] 현재 로깅 상태를 반환합니다 (원자적).
  */
 DataLogger_Status_e DataLogger_GetStatus(void);
+
+/**
+ * @brief 로깅 통계를 반환합니다.
+ * @param[out] stats 통계 정보가 복사될 구조체 포인터
+ */
+void DataLogger_GetStats(DataLogger_Stats_t* stats);
+
+/**
+ * @brief User 패킷 크기를 등록합니다 (메타데이터 자동 생성에 사용).
+ * @details XM_SetUsbLogSource() 호출 시 내부적으로 호출됩니다.
+ */
+void DataLogger_SetPacketSize(uint32_t size);
+
+/**
+ * @brief 자동 타임스탬프 삽입을 활성화/비활성화합니다.
+ * @param[in] enabled true: 매 패킷 앞에 4-byte tick_ms 자동 삽입 (기본값: true)
+ * @note User 구조체에 이미 tick을 포함하는 경우 false로 설정
+ */
+void DataLogger_SetAutoTimestamp(bool enabled);
+
+/**
+ * @brief 파일 롤링 크기를 런타임에 설정합니다.
+ * @param[in] size_mb 파일 롤링 크기 (MB). 최소 1, 최대 100. 기본값: 10.
+ */
+void DataLogger_SetRollingSize(uint32_t size_mb);
 
 #endif /* SYSTEM_COMM_USB_DATA_LOGGER_H_ */

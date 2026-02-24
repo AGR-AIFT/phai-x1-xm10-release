@@ -130,6 +130,38 @@ USB 메모리가 인식되었고 파일 시스템이 준비되었는지 확인�
     ```
   * **Returns**: `true` (준비됨), `false` (연결 안 됨)
 
+#### `XM_GetUsbLogStatus` *(v2.0.0 신규)*
+
+현재 USB 로깅 상태를 세분화된 enum으로 반환합니다.
+
+  * **Syntax**
+    ```c
+    XmLogStatus_e XM_GetUsbLogStatus(void);
+    ```
+  * **Returns**: `XM_LOG_STATUS_IDLE`, `XM_LOG_STATUS_LOGGING`, `XM_LOG_STATUS_WARNING_QUEUE_FULL`, `XM_LOG_STATUS_ERROR_STOPPED`
+
+#### `XM_SetUsbLogAutoTimestamp` *(v2.0.0 신규)*
+
+로그 파일에 타임스탬프를 자동 삽입합니다.
+
+  * **Syntax**
+    ```c
+    void XM_SetUsbLogAutoTimestamp(bool enable);
+    ```
+  * **Parameters**
+      * `enable`: `true`이면 각 샘플에 시스템 시간(ms)을 자동 삽입
+
+#### `XM_SetUsbLogRollingSize` *(v2.0.0 신규)*
+
+로그 파일 롤링(자동 분할) 크기를 설정합니다. 설정된 크기를 초과하면 새 파일이 자동 생성됩니다.
+
+  * **Syntax**
+    ```c
+    void XM_SetUsbLogRollingSize(uint32_t bytes);
+    ```
+  * **Parameters**
+      * `bytes`: 파일 분할 크기 (바이트). 0이면 롤링 비활성화
+
 -----
 
 ### 3.3. CDC Control (디버그 및 스트리밍)
@@ -179,6 +211,38 @@ USB 케이블이 PC에 연결되어 가상 시리얼 포트가 열렸는지 확�
     ```c
     bool XM_IsUsbStreamConnected(void);
     ```
+
+#### `XM_IsUsbStreamingActive` *(v2.0.0 신규)*
+
+현재 CDC 스트리밍이 활성 상태인지 확인합니다.
+
+  * **Syntax**
+    ```c
+    bool XM_IsUsbStreamingActive(void);
+    ```
+  * **Returns**: `true` (스트리밍 중), `false` (비활성)
+
+#### `XM_SetUsbAutoStream` *(v2.0.0 신규)*
+
+PC 연결 시 등록된 데이터를 자동으로 스트리밍하는 모드를 설정합니다.
+
+  * **Syntax**
+    ```c
+    void XM_SetUsbAutoStream(bool enable);
+    ```
+  * **Parameters**
+      * `enable`: `true`이면 연결 감지 시 자동 스트리밍 시작
+
+#### `XM_SetUsbStreamModuleId` *(v2.0.0 신규)*
+
+PhAI V2 프로토콜에서 사용하는 모듈 ID를 설정합니다. PhAI Studio와 연동 시 사용합니다.
+
+  * **Syntax**
+    ```c
+    void XM_SetUsbStreamModuleId(uint8_t module_id);
+    ```
+  * **Parameters**
+      * `module_id`: PhAI 프로토콜 모듈 식별자
 
 #### `XM_GetUsbData`
 

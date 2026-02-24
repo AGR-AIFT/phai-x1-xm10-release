@@ -20,6 +20,26 @@ STM32CubeIDE의 .ioc 편집을 하는 과정에
 
 폴더에서 USER Include 영역에 추가해야 올바르게 빌드가 가능합니다.
 
+--------------------------------------------------------------------------------
+[USER CODE 블록 커스터마이징 내역]
+CubeMX 재생성 시 USER CODE 블록 내부는 보존됩니다.
+아래 파일들에 USER CODE 블록 내 커스텀 코드가 포함되어 있습니다:
+
+1. USB_DEVICE/App/usbd_cdc_if.c (.h 포함)
+   - Non-Cacheable DMA 버퍼 (D3 RAM 배치)
+   - IOIF 콜백 등록 (Tx완료, Rx수신, DTR상태변경)
+   - CDC_SET_CONTROL_LINE_STATE에서 DTR 감지 (Host 연결/해제 이벤트)
+   
+2. USB_DEVICE/App/usb_device.c
+   - HAL_PWREx_EnableUSBVoltageDetector() 호출
+   
+3. USB_DEVICE/App/usbd_desc.c
+   - stm32h7xx_compatible.h include 및 조건부 컴파일 가드
+   
+4. USB_DEVICE/Target/usbd_conf.c
+   - USB FIFO 크기 설정
+--------------------------------------------------------------------------------
+
 자세한 사항은 펌웨어팀에 연락 하세용
 
 

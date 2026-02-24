@@ -175,6 +175,8 @@ void Error_Handler(void);
 #define USB_ADC_IN1_GPIO_Port GPIOF
 #define HWREV_2_Pin GPIO_PIN_0
 #define HWREV_2_GPIO_Port GPIOG
+#define FDCAN2_RX_Pin GPIO_PIN_12
+#define FDCAN2_RX_GPIO_Port GPIOB
 #define TP7_Pin GPIO_PIN_3
 #define TP7_GPIO_Port GPIOA
 #define TP8_Pin GPIO_PIN_4
@@ -183,6 +185,8 @@ void Error_Handler(void);
 #define HWREV_1_GPIO_Port GPIOG
 #define HWREV_0_Pin GPIO_PIN_7
 #define HWREV_0_GPIO_Port GPIOE
+#define FDCAN2_TX_Pin GPIO_PIN_13
+#define FDCAN2_TX_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

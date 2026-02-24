@@ -1,16 +1,28 @@
 /**
  ******************************************************************************
- * @file    cm_api.h
- * @author  Hyndo Kim
- * @brief   CM 디바이스의 모든 SDO 및 PDO 객체 ID를 정의
- * @version 0.1
- * @date    2025-09-24
+ * @file    cm_drv.h
+ * @author  HyundoKim
+ * @brief   CM Device Driver - DOP V1 기반 CM 통신 + PnP 상태 머신 통합
+ * @version 2.0.0
+ * @date    2026-02-10
+ *
+ * @details
+ * [변경 이유] .cursorrules Phase 5 - Link → Device 병합
+ * - AS-IS: cm_drv.c (데이터 처리) + cm_xm_link.c (PnP 상태 머신) 분리
+ * - TO-BE: cm_drv.c 하나에 PnP 상태 머신 통합
+ * 
+ * [주요 변경 사항]
+ * 1. CM_EventCallbacks_t 제거 → 내부 함수 직접 호출
+ * 2. CM_Init() 시그니처 변경 (callbacks 파라미터 제거)
+ * 3. CM_Drv_RunPeriodic(), CM_Drv_IsConnected(), CM_Drv_GetNmtState() 추가
+ * 4. PnP Heartbeat 타임아웃: 1초 → 3초 (.cursorrules 표준 통일)
+ * 5. Pre-Op fall-through 버그 수정
  *
  * @copyright Copyright (c) 2025 Angel Robotics Inc. All rights reserved.
  ******************************************************************************
  */
 
-#pragma once // 현대 컴파일러를 위한 최적화
+#pragma once
 
 #ifndef DEVICES_CONTROL_MODULE_INC_CM_DRV_H_
 #define DEVICES_CONTROL_MODULE_INC_CM_DRV_H_
@@ -25,6 +37,17 @@
  *            PUBLIC DEFINITIONS AND ENUMERATIONS
  *-----------------------------------------------------------
  */
+
+/* ===== PnP NMT 상태 정의 (cm_xm_link.h에서 이동) =====
+ * [변경 이유] Link → Device 병합 (.cursorrules Phase 5)
+ * - 값은 CM의 ExtLinkNmtState_t와 동일 (SDO 통신 호환성)
+ */
+typedef enum {
+    CM_NMT_INITIALISING = 0,
+    CM_NMT_PRE_OPERATIONAL,
+    CM_NMT_OPERATIONAL,
+    CM_NMT_STOPPED
+} CM_NmtState_t;
 
 // --- 1. 논리적 Dictionary ID (통신 방향) ---
 typedef enum {
@@ -123,6 +146,7 @@ typedef enum {
 	CM_SDO_ID_C2X_GET_SUIT_ASSIST_LEVEL,
     CM_SDO_ID_C2X_NOTIFY_PVECTOR_DONE_RH,
 	CM_SDO_ID_C2X_NOTIFY_PVECTOR_DONE_LH,
+    CM_SDO_ID_C2X_GET_SUIT_NEUTRAL_POS_SETFLAG,
 } CM_SdoToMasterID_t;
 
 /* --- 3. PDO Object ID 정의 --- */
@@ -168,6 +192,7 @@ typedef enum {
     CM_PDO_ID_C2X_GET_RIGHT_HIP_IMU_GLOBAL_GYR_X,
     CM_PDO_ID_C2X_GET_RIGHT_HIP_IMU_GLOBAL_GYR_Y,
     CM_PDO_ID_C2X_GET_RIGHT_HIP_IMU_GLOBAL_GYR_Z,
+    CM_PDO_ID_C2X_GET_FSM_CURRENT_STATE,
 } CM_PdoToMasterID_t;
 
 /**
@@ -176,22 +201,17 @@ typedef enum {
  *-----------------------------------------------------------
  */
 
-// SDO 이벤트 처리를 위해 상위 계층(cm_xm_link)이 구현해야 할 콜백 함수 구조체
-typedef struct {
-    void (*onCmBootup)(void);
-    void (*onCmHeartbeat)(uint8_t cmNmtState);
-    void (*onSdoResponse)(uint8_t dictId, uint8_t sdoId, int8_t isSuccess);
-    void (*onCmSyncStates)(void);
-
-	void (*onSuitModeChanged)(uint8_t newMode);
-    void (*onAssistLevelChanged)(uint8_t newLevel);
-    void (*onPVectorCompletedRH)(uint8_t isCompleted);
-    void (*onPVectorCompletedLH)(uint8_t isCompleted);
-} CM_EventCallbacks_t;
+/* ===== CM_EventCallbacks_t 제거 =====
+ * [변경 이유] Link → Device 병합 (.cursorrules Phase 5)
+ * - AS-IS: cm_xm_link.c가 콜백을 등록하여 SDO 이벤트 수신
+ * - TO-BE: PnP 상태 머신이 cm_drv.c 내부에 통합되어 직접 호출
+ * - 외부 콜백이 더 이상 불필요하므로 제거
+ */
 
 // 통신 채널(FDCAN 등)을 통해 데이터를 전송하기 위한 함수 포인터 타입
 // 이 함수 포인터를 통해 cm_api는 하위 IOIF 계층과 분리됩니다.
-typedef int (*CM_TxFunc_t)(uint16_t id, uint8_t* data, uint32_t len);
+// [AGR-DOP V2 호환] AGR_TxFunc_t와 동일한 시그니처 사용
+typedef int (*CM_TxFunc_t)(uint32_t can_id, const uint8_t* data, uint8_t len);
 
 typedef enum {
 	SUIT_STANDBY_MODE,
@@ -275,30 +295,30 @@ typedef struct {
     int16_t  rightHipImuGlobalGyrX;     // 2 bytes
     int16_t  rightHipImuGlobalGyrY;     // 2 bytes
     int16_t  rightHipImuGlobalGyrZ;     // 2 bytes
+    uint8_t  h10FSMcurrentState;
 } CM_PdoRx_CmToXm_t;
 #pragma pack(pop)
 
-// CM으로부터 수신한 최종 처리된 데이터 구조체
+// CM으로부터 수신한 최종 처리된 데이터 구조체 (PDO Part)
 typedef struct {
-    // --- Data from PDOs ---
-	uint32_t suitAssistModeLoopCnt;
-	float leftHipAngle;
-	float rightHipAngle;
-	float leftThighAngle;
-	float rightThighAngle;
-	float pelvicAngle;
-	float pelvicVelY;
-	float leftKneeAngle;
-	float rightKneeAngle;
-	bool isLeftFootContact;
-	bool isRightFootContact;
-	uint8_t gaitState;
-	uint8_t gaitCycle;
-	float forwardVelocity;
-	float leftHipTorque;
-	float rightHipTorque;
+    uint32_t suitAssistModeLoopCnt;
+    float leftHipAngle;
+    float rightHipAngle;
+    float leftThighAngle;
+    float rightThighAngle;
+    float pelvicAngle;
+    float pelvicVelY;
+    float leftKneeAngle;
+    float rightKneeAngle;
+    bool isLeftFootContact;
+    bool isRightFootContact;
+    uint8_t gaitState;
+    uint8_t gaitCycle;
+    float forwardVelocity;
+    float leftHipTorque;
+    float rightHipTorque;
     float leftHipMotorAngle;
-	float rightHipMotorAngle;
+    float rightHipMotorAngle;
     float leftHipImuFrontalRoll;
     float leftHipImuSagittalPitch;
     float rightHipImuFrontalRoll;
@@ -315,12 +335,22 @@ typedef struct {
     float rightHipImuGlobalGyrX;
     float rightHipImuGlobalGyrY;
     float rightHipImuGlobalGyrZ;
+    uint8_t h10FSMcurrentState;
+} CM_RxPdoData_t;
 
-    // --- Data from SDOs ---
+// CM으로부터 수신한 최종 처리된 데이터 구조체 (SDO Part)
+typedef struct {
     CM_SuitMode_t suitMode;
     uint8_t  suitAssistLevel;
     bool isPVectorRHDone;
     bool isPVectorLHDone;
+    bool h10NeutralPosSet;
+} CM_RxSdoData_t;
+
+// CM으로부터 수신한 최종 처리된 데이터 구조체 (Total)
+typedef struct {
+    CM_RxPdoData_t pdo; // Data from PDOs
+    CM_RxSdoData_t sdo; // Data from SDOs
 } CM_RxData_t;
 
 /**
@@ -331,33 +361,90 @@ typedef struct {
 
 // --- 초기화 및 코어 처리 함수 ---
 /**
- * @brief CM API 모듈을 초기화합니다.
- * @details 이 함수는 시스템 시작 시 한 번만 호출되어야 합니다.
- * 내부적으로 Object Dictionary를 생성하고, 통신에 필요한 초기 설정을 수행합니다.
+ * @brief CM Device Driver 초기화 (DOP V1 + PnP 상태 머신 통합)
+ * 
+ * @details
+ * [변경 이유] Link → Device 병합 (.cursorrules Phase 5)
+ * - AS-IS: CM_Init(txFunc, callbacks, xmNodeId, cmNodeId) + CM_XM_Link_Init()
+ * - TO-BE: CM_Init(txFunc, xmNodeId, cmNodeId) 하나로 통합
+ * - 외부 콜백(CM_EventCallbacks_t) 제거 → 내부 PnP SM이 직접 처리
+ *
  * @param[in] txFunc      CAN 메시지를 전송할 함수 포인터 (IOIF 계층의 Transmit 함수).
- * @param[in] callbacks   CM으로부터 수신된 SDO 이벤트를 처리할 콜백 함수 구조체 포인터.
  * @param[in] xmNodeId    이 모듈(XM)의 Node ID.
  * @param[in] cmNodeId    통신 대상인 CM의 Node ID.
  */
-void CM_Init(CM_TxFunc_t txFunc, const CM_EventCallbacks_t* callbacks, uint8_t xmNodeId, uint8_t cmNodeId);
+void CM_Init(CM_TxFunc_t txFunc, uint8_t xmNodeId, uint8_t cmNodeId);
 
 /**
- * @brief CM으로부터 수신된 CAN 메시지를 처리(디코딩)합니다.
- * @details CAN 라우터 태스크에서 호출되어 수신된 SDO/PDO 메시지를 파싱하고,
- * 내부 데이터를 업데이트하거나 등록된 콜백을 호출합니다.
- * @param[in] canId   수신된 메시지의 CAN ID.
- * @param[in] data    수신된 데이터 버퍼 포인터.
- * @param[in] len     수신된 데이터의 길이 (바이트).
+ * @brief CM PnP 상태 머신 주기적 실행 (100ms 주기)
+ * 
+ * @details
+ * [변경 이유] cm_xm_link.c → cm_drv.c 병합 (.cursorrules Phase 5)
+ * - AS-IS: CM_XM_Link_RunPeriodic() (System/Links/)
+ * - TO-BE: CM_Drv_RunPeriodic() (Devices/AGR/Control_Module/)
+ * 
+ * [실행 내용]
+ * - INITIALISING: Boot-up SDO 주기적 전송 (1초마다)
+ * - PRE_OPERATIONAL: PDO Mapping → State Sync → NMT Operational
+ * - OPERATIONAL: Heartbeat SDO 전송 + CM Heartbeat Timeout 감시
+ * - STOPPED: 3초 후 INITIALISING으로 재진입 (재연결 시도)
+ * 
+ * @note PnP_Task에서 100ms 주기로 호출됩니다.
  */
-void CM_ProcessCANMessage(uint16_t canId, uint8_t* data, uint8_t len);
+void CM_Drv_RunPeriodic(void);
 
 /**
- * @brief ISR 컨텍스트에서 호출되어 PDO 공유 메모리를 안전하게 업데이트합니다.
- * @details CAN 라우터 태스크에서 호출되어 수신된 SDO/PDO 메시지를 파싱하고, PDO 데이터만 처리
+ * @brief CM과의 PnP 연결 완료 여부 반환
+ * 
+ * @details
+ * [변경 이유] CM_XM_Link_IsConnected() 대체 (.cursorrules Phase 5)
+ * 
+ * @return true: OPERATIONAL + PDO 스트림 시작됨, false: 미연결
+ */
+bool CM_Drv_IsConnected(void);
+
+/**
+ * @brief CM과의 PnP NMT 상태 반환
+ * 
+ * @details
+ * [변경 이유] CM_XM_Link_GetXMNmtState() 대체 (.cursorrules Phase 5)
+ * 
+ * @return CM_NmtState_t 현재 XM→CM PnP NMT 상태
+ */
+CM_NmtState_t CM_Drv_GetNmtState(void);
+
+/**
+ * @brief CM으로부터 수신된 SDO 메시지를 처리합니다.
+ * @details SDO Processor Task (비실시간)에서 호출.
+ *          내부에서 Mutex 보호 후 SDO 언패킹 수행.
+ * 
+ * [변경 이유] .cursorrules 기반 리팩토링
+ * - AS-IS: CM_ProcessCANMessage() - SDO/PDO 모두 수신 가능하나 PDO는 default 드롭
+ * - TO-BE: CM_Drv_ProcessSdo() - SDO 전용, canfd_rx_handler에서 SDO만 라우팅
+ * 
+ * @param[in] canId   수신된 메시지의 CAN ID (0x212).
  * @param[in] data    수신된 데이터 버퍼 포인터.
  * @param[in] len     수신된 데이터의 길이 (바이트).
+ * 
+ * @note Thread-Safe: 내부 Mutex 보호
  */
-void CM_UpdatePdoData(uint8_t* data, uint8_t len);
+void CM_Drv_ProcessSdo(uint16_t canId, uint8_t* data, uint8_t len);
+
+/**
+ * @brief CM으로부터 수신된 PDO 데이터를 처리합니다.
+ * @details FDCAN_Rx_Task (실시간)에서 호출.
+ *          내부에서 Mutex 보호 후 PDO 언패킹 및 스케일링 수행.
+ * 
+ * [변경 이유] .cursorrules 기반 리팩토링
+ * - AS-IS: CM_UpdatePdoData() - 네이밍이 모호
+ * - TO-BE: CM_Drv_ProcessPdo() - PDO 전용 처리 함수로 명확화
+ * 
+ * @param[in] data    수신된 데이터 버퍼 포인터.
+ * @param[in] len     수신된 데이터의 길이 (바이트).
+ * 
+ * @note Thread-Safe: 내부 Mutex 보호 (1ms Timeout)
+ */
+void CM_Drv_ProcessPdo(uint8_t* data, uint8_t len);
 
 // --- 데이터 수신 API ---
 /**
@@ -440,6 +527,11 @@ void CM_UpdateAssistLevel(uint8_t newLevel);
  */
 void CM_UpdatePVectorCompletedRH(uint8_t isCompleted);
 void CM_UpdatePVectorCompletedLH(uint8_t isCompleted);
+
+/**
+ * @brief 중립각도 설정 완료 상태를 내부 데이터 캐시에 업데이트합니다.
+ */
+void CM_UpdateNeutralPosSet(void);
 
 // --- 주 기능 API (주로 Apps 계층에서 사용) ---
 /**

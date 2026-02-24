@@ -64,7 +64,7 @@
 
 * **💻 Application Layer (사용자 영역):** `XM_Apps/User_Algorithm` 폴더에서 바로 여러분의 알고리즘을 설계하고 구현할 수 있습니다. 사용자는 오직 `XM API`만을 `#include`하여 로봇의 모든 기능을 제어합니다.
 * **🧩 Façade Layer (XM API):** `파사드 패턴(Façade Pattern)`을 적용하여 복잡한 내부 시스템을 숨기고, 사용자가 단순하고 통일된 창구(API)를 통해 XM10의 모든 기능에 접근할 수 있도록 합니다.
-* **🏗️ angel Robotics Library (제공 영역):** `System (PnP, Rx/Tx Task)`, `Middlewares (RTOS, USB)`, `Devices (센서 드라이버)`, `IOIF (HAL 래퍼)` 등 로봇 구동의 핵심 요소들은 안정화된 라이브러리 형태로 제공되거나 `Background Task` 형태로 동작됩니다.
+* **🏗️ angel Robotics Library (제공 영역):** `System (PnP Task, Rx/Tx Task)`, `Services (AGR DOP V2, AGR PnP V2)`, `Middlewares (RTOS, USB)`, `Devices (센서 드라이버)`, `IOIF V3.0 (HAL 래퍼)` 등 로봇 구동의 핵심 요소들은 안정화된 라이브러리 형태로 제공되거나 `Background Task` 형태로 동작됩니다.
 
 ---
 
@@ -74,7 +74,7 @@
 
 ### **1. 개발 환경 구축**
 
-* **STM32CubeIDE 설치:** ([링크](https://www.st.com/en/development-tools/stm32cubeide.html))에 **`[1.14.1]`** 버전을 설치해주세요. (경로에 한글이 없도록 주의)
+* **STM32CubeIDE 설치:** ([링크](https://www.st.com/en/development-tools/stm32cubeide.html))에 **`[2.0.0]`** 이상 버전을 설치해주세요. (경로에 한글이 없도록 주의)
 * **Git 설치 및 레포지토리 Clone:**
     ```bash
     git clone [https://github.com/YourUsername/Extension_Module.git](https://github.com/YourUsername/Extension_Module.git)
@@ -110,6 +110,10 @@ XM10의 강력한 기능들을 단계별로 마스터할 수 있도록 다양한
   * **[Example 03: 상태 머신 제어 (FSM)](/examples/03_Button_LED_FSM)** \* 롱 프레스(Long Press)로 모드를 전환하며, 체계적인 상태 머신(TSM)을 구현합니다.
   * **[Example 04: 외부 디지털 제어 (External GPIO)](/examples/04_Ext_IO_Basic)** \* 확장 포트를 통해 외부 스위치와 LED 회로를 구성하고 제어합니다.
   * **[Example 05: 아날로그 센서 모니터링 (ADC)](/examples/05_Ext_IO_analog)** \* 가변저항이나 조도 센서의 전압 값을 읽고 임계치를 판단합니다.
+  * **[Example 05a: DIO→ADC 동적 전환](/examples/05a_Ext_IO_DIO_to_ADC)** \* DIO 핀을 ADC 모드로 동적 전환하여 센서를 읽습니다.
+  * **[Example 05b: FSR 8채널 읽기](/examples/05b_Ext_IO_FSR_8ch)** \* FSR 센서 8채널을 동시에 읽어 압력 분포를 측정합니다.
+  * **[Example 05c: 혼합 ADC 구성](/examples/05c_Ext_IO_Mixed_ADC)** \* ADC 전용 핀과 DIO→ADC 전환 핀을 혼합 사용합니다.
+  * **[Example 05d: DIO/ADC 하이브리드](/examples/05d_Ext_IO_DIO_ADC_Hybrid)** \* 디지털 입출력과 아날로그 입력을 동시에 활용합니다.
   * **[Example 06: 외부 안전 제어 (Safety Logic)](/examples/06_Ext_IO_Safety_Switch)** \* 리미트 스위치 등 외부 신호를 이용해 로봇을 비상 정지시키는 안전 로직을 구현합니다.
 
 ### **Part 2: XM10 USB 기능 마스터하기**
@@ -120,6 +124,9 @@ PC와의 실시간 통신 및 데이터 로깅 기능을 활용하여 개발 효
   * **[Example 08: USB 시리얼 통신 센서 데이터 모니터링 (CDC Sensor)](/examples/08_CDC_Sensor_Print)** \* 로봇의 센서 값을 문자열로 변환하여 실시간으로 확인합니다.
   * **[Example 09: USB 시리얼 통신 고속 데이터 스트리밍 (Binary Stream)](/examples/09_CDC_Stream)** \* Serial Plotter 등을 위해 500Hz 고속 데이터를 바이너리로 전송합니다.
   * **[Example 10: USB 메모리 사용자 정의 데이터 로깅 (MSC Logging)](/examples/10_MSC_Manual_log)** \* USB 메모리에 Binary 파일을 생성하고 데이터를 저장하는 방법을 익힙니다.
+  * **[Example 10a: 등록 기반 자동 로깅 (MSC Basic)](/examples/10a_MSC_Basic_Log)** \* 구조체 등록만으로 2ms 자동 저장되는 편의 기능을 사용합니다.
+  * **[Example 10b: 커스텀 구조체 로깅 (MSC Custom)](/examples/10b_MSC_Custom_Struct)** \* 사용자 정의 데이터 구조를 USB 메모리에 기록합니다.
+  * **[Example 10c: 고급 로깅 (MSC Advanced)](/examples/10c_MSC_Advanced_Log)** \* 롤링 파일, 타임스탬프, 상태 관리 등 고급 로깅 기능을 다룹니다.
 
 ### **Part 3: KIT H10 제어 알고리즘 구현**
 
@@ -128,8 +135,8 @@ PC와의 실시간 통신 및 데이터 로깅 기능을 활용하여 개발 효
   * **[Example 11: 패시브 모드 (Passive Mode)](/examples/11_Passive_Mode)** \* P-Vector를 사용하여 설정된 범위를 왕복하는 자동 운동 모드를 구현합니다.
   * **[Example 12: 액티브 어시스트 (Active Assist)](/examples/12_Active_Assist_Mode)** \* 사용자의 의도(센서 데이터)를 파악하여 보행을 보조하는 토크 제어 알고리즘을 구현합니다.
   * **[Example 13: 저항 모드 (Resistive Mode)](/examples/13_Resistive_Mode)** \* H10 슈트의 내장 기능을 활용하여, 물속을 걷는 듯한 저항 운동 모드를 구현합니다.
-  * **[Example 14: 중력 보상 (Gravity Compensation)](/examples/14_Gravity_Compensation)** *(Planned)* \* 로봇의 무게를 상쇄하여 착용자가 무게감을 느끼지 않게 하는 투명 모드를 구현합니다.
-  * **[Example 15: 통합 모드 (Total Application)](/examples/17_Total_Mode)** *(Planned)* \* 위의 모든 모드를 버튼 하나로 전환하며 사용하는 완성된 애플리케이션을 만듭니다.
+  * **Example 14: 중력 보상 (Gravity Compensation)** *(Planned)* \* 로봇의 무게를 상쇄하여 착용자가 무게감을 느끼지 않게 하는 투명 모드를 구현합니다.
+  * **Example 15: 통합 모드 (Total Application)** *(Planned)* \* 위의 모든 모드를 버튼 하나로 전환하며 사용하는 완성된 애플리케이션을 만듭니다.
 
 > 🎓 모든 튜토리얼과 예제 코드는 **[Examples](/examples)** 폴더에서 확인하실 수 있습니다.
 

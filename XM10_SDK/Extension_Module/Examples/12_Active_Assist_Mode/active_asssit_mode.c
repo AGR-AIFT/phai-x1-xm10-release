@@ -583,7 +583,7 @@ static void InitializeFsm(ActiveAssistFsm_t* fsm)
  */
 static void UpdateActiveAssistMode(void)
 {
-    static uint32_t homingTimer = 0;
+    static uint32_t homingTimer = 0; // ✅ HOMING_FINALIZE_DELAY 전용 타이머
     switch (s_aaGlobalState) {
         case AA_STATE_HOMING:
             switch (s_homingState) {
@@ -629,6 +629,7 @@ static void UpdateActiveAssistMode(void)
                     if (XM.status.h10.isPVectorRHDone && XM.status.h10.isPVectorLHDone) {
                         XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
                         XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
+                        homingTimer = XM_GetTick(); // ✅ FINALIZE_DELAY 진입 시 타이머 시작
                         s_homingState = HOMING_FINALIZE_DELAY;
                     }
                     break;

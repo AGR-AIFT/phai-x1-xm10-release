@@ -28,7 +28,7 @@ extern "C" {
 #include "stm32h7xx_ll_usb.h"
 
 
-#if ( USE_HAL_HCD_REGISTER_CALLBACKS == 0U)
+#ifndef USE_HAL_HCD_REGISTER_CALLBACKS
 #define USE_HAL_HCD_REGISTER_CALLBACKS 1U
 #endif
 

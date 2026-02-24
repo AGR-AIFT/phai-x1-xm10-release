@@ -66,8 +66,9 @@ typedef enum {
  * @brief [유지] 초기화 시 선택할 스토리지 드라이버 타입
  */
 typedef enum {
-    IOIF_FileSystem_DeviceType_SDCard,      // SD 카드
-    IOIF_FileSystem_DeviceType_USBH_MSC,    // USB Host Mass Storage Class
+    IOIF_FileSystem_DeviceType_Auto = 0,    // HAL 매크로로 자동 선택
+    IOIF_FileSystem_DeviceType_SDCard,
+    IOIF_FileSystem_DeviceType_USBH_MSC,
 } IOIF_FileSystem_DeviceType_e;
 
 /**
@@ -154,11 +155,11 @@ typedef uint32_t IOIF_FILEx_t; // File handle ID type
 bool ioif_filesystem_is_ready(void);
 
 /**
- * @brief [유지] FATFS 드라이버를 Link/Mount합니다.
- * @details 시스템 부팅 시 또는 ioif_agrb_usb.c가 Host 모드로 진입할 때 호출됩니다.
- * USB의 경우 f_mount는 즉시 실행되지 않고, HandleHostEvent에서 실행됩니다.
+ * @brief FATFS 드라이버를 Link/Mount합니다.
+ * @param[in] device_type 스토리지 백엔드 타입 (USB MSC / SD Card).
+ *            IOIF_FileSystem_DeviceType_Auto 전달 시 컴파일타임 HAL 매크로로 자동 선택 (기존 동작).
  */
-AGRBFileSystemStatusDef ioif_filesystem_init(void);
+AGRBFileSystemStatusDef ioif_filesystem_init(IOIF_FileSystem_DeviceType_e device_type);
 
 /**
  * @brief [유지] FATFS 드라이버를 Unlink/Unmount하고 Mutex를 삭제합니다.
@@ -239,6 +240,13 @@ AGRBFileSystemStatusDef ioif_filesystem_delete(const char* path, FRESULT* fresul
 void ioif_filesystem_HandleHostEvent(bool isActive);
 
 /**
+ * @brief [신규] 파일 내용을 디스크에 즉시 플러시합니다 (크래시 복구용).
+ * @details f_sync()를 Mutex로 보호하여 호출합니다.
+ * 저순위 DataLoggerTask에서 주기적으로 호출하여 전원 차단 시 데이터 손실을 최소화합니다.
+ */
+AGRBFileSystemStatusDef ioif_filesystem_sync(IOIF_FILEx_t id, FRESULT* fresult);
+
+/**
  * @brief [신규] 저순위 태스크가 주기적으로 호출할 마운트 처리 함수
  */
 AGRBFileSystemStatusDef ioif_filesystem_ProcessMount(void);
@@ -255,7 +263,7 @@ AGRBFileSystemStatusDef ioif_filesystem_ProcessMount(void);
  * 형식으로 파일 시스템을 사용할 수 있게 합니다. (전략 패턴)
  */
 typedef struct {
-    AGRBFileSystemStatusDef (*init)(void);
+    AGRBFileSystemStatusDef (*init)(IOIF_FileSystem_DeviceType_e device_type);
     AGRBFileSystemStatusDef (*deinit)(void);
     AGRBFileSystemStatusDef (*open)(IOIF_FILEx_t* id, const char* path, IOIF_FileSystem_AccessMode_e mode, FRESULT* fresult);
     AGRBFileSystemStatusDef (*open_write)(IOIF_FILEx_t* id, const char* path, IOIF_FileSystem_CreateMode_e mode, FRESULT* fresult);
@@ -269,6 +277,7 @@ typedef struct {
     AGRBFileSystemStatusDef (*get_free_space_mb)(uint32_t* free_mb);
     AGRBFileSystemStatusDef (*get_size_mb)(IOIF_FILEx_t id, uint32_t* size_mb);
     AGRBFileSystemStatusDef (*delete)(const char* path, FRESULT* fresult);
+    AGRBFileSystemStatusDef (*sync)(IOIF_FILEx_t id, FRESULT* fresult);
     bool (*is_ready)(void);
     AGRBFileSystemStatusDef (*process_mount)(void);
 

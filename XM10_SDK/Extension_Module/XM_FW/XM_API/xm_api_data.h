@@ -21,8 +21,7 @@
 #ifndef XM_API_XM_API_DATA_H_
 #define XM_API_XM_API_DATA_H_
 
-#include "cm_drv.h"
-#include "cm_xm_link.h"
+#include "cm_drv.h"             /* CM Device Driver (PnP 통합 완료) */
 #include "data_object_dictionaries.h"
 
 #include <stdint.h>
@@ -97,8 +96,10 @@ typedef struct {
     uint32_t h10AssistModeLoopCnt;  // H10 보조 모드 루프 카운트 (Assist Mode시작시 count)
     XmH10Mode_t h10Mode;    // H10 동작 모드 (Assist(1)<->Standby(0))
     uint8_t h10AssistLevel; // H10 보조 레벨 (0~10)
+    uint8_t h10FSMcurrentState; // H10 현재 FSM 상태
     bool isPVectorRHDone;   // RH Pvector Complete Flag
     bool isPVectorLHDone;   // LH Pvector Complete Flag
+    bool h10IsNeutralPosSet;   // H10 중립각도 설정 완료 상태 (Core Process 끝단에서 초기화)
 
     // --- Kinematics Data (운동학 정보) ---
     float leftHipAngle;     // 왼쪽 고관절 각도 (Degree)
@@ -197,6 +198,40 @@ typedef struct {
     float gyr_x, gyr_y, gyr_z;
 } XmImuData_t;
 
+/**
+ * @brief [IMU Hub Module] 6축 IMU 센서 허브 (EBIMU-9DOFV6 × 6)
+ * @details DOP V2 프로토콜로 연결된 IMU Hub Module 데이터
+ */
+#define XM_IMU_HUB_SENSOR_COUNT  6  /**< IMU Hub의 센서 개수 */
+
+typedef struct {
+    // --- Orientation (Quaternion) ---
+    float q_w, q_x, q_y, q_z;
+
+    // --- Orientation (Euler Angles, Degree) ---
+    float roll, pitch, yaw;
+
+    // --- Calibrated Acceleration (g) ---
+    float acc_x, acc_y, acc_z;
+
+    // --- Calibrated Gyroscope (deg/s) ---
+    float gyr_x, gyr_y, gyr_z;
+
+    // --- Calibrated Magnetometer (uT) ---
+    float mag_x, mag_y, mag_z;
+} XmImuHubSensor_t;
+
+typedef struct {
+    bool  is_connected;      /**< IMU Hub Module 연결 상태 */
+    uint32_t lastUpdateTick; /**< 데이터 수신 시각 (ms) */
+    
+    /** @brief 6개 IMU 센서 데이터 (포트 0~5) */
+    XmImuHubSensor_t sensor[XM_IMU_HUB_SENSOR_COUNT];
+    
+    /** @brief 각 센서의 연결 상태 비트마스크 (bit0~5) */
+    uint8_t connected_mask;
+} XmImuHubData_t;
+
 // [FES Sensor]
 // [EMG Sensor]
 // [FSR Sensor]
@@ -208,9 +243,10 @@ typedef struct {
  * @note  End User는 XM.status를 통해 이 구조체에 접근합니다.
  */
 typedef struct {
-    XmH10Data_t h10;
-    XmGrfData_t grf;
-    XmImuData_t imu;
+    XmH10Data_t     h10;      /**< H10 로봇 본체 데이터 (DOP V1) */
+    XmGrfData_t     grf;      /**< GRF 족압 센서 데이터 */
+    XmImuData_t     imu;      /**< XSENS IMU 데이터 (외부 장착) */
+    XmImuHubData_t  imu_hub;  /**< [신규] IMU Hub 센서 데이터 (DOP V2) ✅ */
 } XmInput_t;
 
 /**
@@ -303,9 +339,10 @@ bool XM_IsCmConnected(void);
 
 /**
  * @brief 현재 CM과의 PnP(NMT) 상태를 가져옵니다.
- * @return CMLinkNmtState_t 열거형 값.
+ * @return CM_NmtState_t 열거형 값.
+ * @details [변경] LinkNmtState_t → CM_NmtState_t (.cursorrules Phase 5)
  */
-LinkNmtState_t XM_GetXMNmtState(void);
+CM_NmtState_t XM_GetXMNmtState(void);
 
 
 /**

@@ -14,7 +14,7 @@
 
 `XM10`은 `STM32CubeIDE`를 공식 개발 환경으로 사용합니다.
 
-1.  **다운로드:** [STMicroelectronics 공식 웹사이트](https://www.st.com/en/development-tools/stm32cubeide.html)에 접속하여, **XM10 릴리즈 노트에 명시된 버전(v1.14.1)을 다운로드**합니다.
+1.  **다운로드:** [STMicroelectronics 공식 웹사이트](https://www.st.com/en/development-tools/stm32cubeide.html)에 접속하여, **XM10 릴리즈 노트에 명시된 버전(v2.0.0 이상)을 다운로드**합니다.
 
 2.  **설치:** 다운로드한 설치 파일을 실행하여 설치를 진행합니다.
 

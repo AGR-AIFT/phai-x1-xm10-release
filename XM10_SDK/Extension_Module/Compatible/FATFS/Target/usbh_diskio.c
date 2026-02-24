@@ -1,4 +1,4 @@
-/* USER CODE BEGIN Header */
+﻿/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    usbh_diskio.c (based on usbh_diskio_template.c v2.0.2)
@@ -30,8 +30,16 @@
 /* Private define ------------------------------------------------------------*/
 
 #define USB_DEFAULT_BLOCK_SIZE 512
+#define USBH_DISKIO_TIMEOUT_MS 5000
 
 /* Private variables ---------------------------------------------------------*/
+/*
+ * D-Cache strategy: scratch buffer uses aligned(32) + manual Cache ops.
+ * Ideally placed in Non-Cacheable region (.dma_noncache) to eliminate Cache ops,
+ * but current approach (SCB_CleanDCache_by_Addr / SCB_InvalidateDCache_by_Addr
+ * + 32-byte aligned) is functionally correct. Consider Non-Cacheable placement
+ * if MPU configuration is revisited.
+ */
 __attribute__((aligned(32)))
 static DWORD scratch[_MAX_SS / 4];
 extern USBH_HandleTypeDef  hUSB_Host;
@@ -127,10 +135,13 @@ DRESULT USBH_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
 
       /* USER CODE BEGIN 4 */
       // [신규] 완료될 때까지 대기 (Blocking)
-      while(status == USBH_OK && USBH_MSC_GetState(&hUSB_Host) != MSC_IDLE)
-      {
-          // 타임아웃 처리 로직 필요 시 추가
-          osDelay(1); 
+      { 
+          uint32_t timeout_count = USBH_DISKIO_TIMEOUT_MS;
+          while(status == USBH_OK && USBH_MSC_GetState(&hUSB_Host) != MSC_IDLE)
+          {
+              osDelay(1);
+              if (--timeout_count == 0) { status = USBH_FAIL; break; }
+          }
       }
       /* USER CODE END 4 */
 
@@ -154,11 +165,14 @@ DRESULT USBH_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
     /* USER CODE BEGIN 6 */
     // [핵심 수정] 작업이 완료될 때까지 대기 (Blocking)
     // MSC 상태가 'MSC_READ'에서 다시 'MSC_IDLE'로 돌아올 때까지 기다립니다.
-    while(status == USBH_OK && USBH_MSC_GetState(&hUSB_Host) != MSC_IDLE)
-    {
-         osDelay(1); // 1ms 대기 (다른 태스크에게 CPU 양보)
-         // TODO: 무한 루프 방지를 위한 Timeout 카운터 추가 권장
-    }
+    { 
+          uint32_t timeout_count = USBH_DISKIO_TIMEOUT_MS;
+          while(status == USBH_OK && USBH_MSC_GetState(&hUSB_Host) != MSC_IDLE)
+          {
+              osDelay(1);
+              if (--timeout_count == 0) { status = USBH_FAIL; break; }
+          }
+      }
     /* USER CODE END 6 */
   }
 
@@ -222,9 +236,13 @@ DRESULT USBH_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
 
       /* USER CODE BEGIN 8 */
       // [신규] 완료 대기
-      while(status == USBH_OK && USBH_MSC_GetState(&hUSB_Host) != MSC_IDLE)
-      {
-          osDelay(1);
+      { 
+          uint32_t timeout_count = USBH_DISKIO_TIMEOUT_MS;
+          while(status == USBH_OK && USBH_MSC_GetState(&hUSB_Host) != MSC_IDLE)
+          {
+              osDelay(1);
+              if (--timeout_count == 0) { status = USBH_FAIL; break; }
+          }
       }
       /* USER CODE END 8 */
 
@@ -240,10 +258,14 @@ DRESULT USBH_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
 
     /* USER CODE BEGIN 9 */
     // [핵심 수정] 작업 완료 대기 (Blocking)
-    while(status == USBH_OK && USBH_MSC_GetState(&hUSB_Host) != MSC_IDLE)
-    {
-         osDelay(1);
-    }
+    { 
+          uint32_t timeout_count = USBH_DISKIO_TIMEOUT_MS;
+          while(status == USBH_OK && USBH_MSC_GetState(&hUSB_Host) != MSC_IDLE)
+          {
+              osDelay(1);
+              if (--timeout_count == 0) { status = USBH_FAIL; break; }
+          }
+      }
     /* USER CODE END 9 */
   }
 

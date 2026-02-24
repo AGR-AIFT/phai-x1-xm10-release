@@ -2,12 +2,17 @@
  ******************************************************************************
  * @file    msc_manual_log.c
  * @author  HyundoKim
- * @brief   [초급, 중급, 고급] 버튼으로 로깅 시작/정지 제어, 사용자 정의 구조체 및 
- * 상태 머신과 연동된 자동 실험 로깅
- * @version 0.1
- * @date    Nov 18, 2025
+ * @brief   [레거시] TSM 연동 로깅 예제 — 새 튜토리얼은 10a/10b/10c 참조
+ * @details
+ * 이 예제는 기존 호환을 위해 유지됩니다.
+ * 단계별 학습은 아래 예제를 참고하세요:
+ *   - 10a_MSC_Basic_Log       : [초급] 최소한 구조체, 버튼 Start/Stop
+ *   - 10b_MSC_Custom_Struct   : [중급] 사용자 정의 구조체, 수동 타임스탬프
+ *   - 10c_MSC_Advanced_Log    : [고급] TSM + 에러 핸들링 + 파일 롤링
+ * @version 1.1
+ * @date    Feb 24, 2026
  *
- * @copyright Copyright (c) 2025 Angel Robotics Co., Ltd. All rights reserved.
+ * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
 
@@ -26,9 +31,8 @@
  *-----------------------------------------------------------
  */
 
-// 저장할 데이터 최적화 (CSV 컬럼이 됨)
+// 저장할 데이터 (tick_ms는 System이 자동 삽입하므로 User payload만 정의)
 typedef struct {
-    uint32_t tick_ms;
     float    cmd_torque;
     float    res_angle;
 } MiniLog_t;
@@ -77,7 +81,6 @@ void User_Setup(void)
     };
     XM_TSM_AddState(s_tsm, &sb_conf);
 
-    // ACTIVE 상태에 Entry/Exit 함수 연결
     XmStateConfig_t act_conf = {
         .id = XM_STATE_ACTIVE,
         .on_entry = Active_Entry,
@@ -86,8 +89,14 @@ void User_Setup(void)
     };
     XM_TSM_AddState(s_tsm, &act_conf);
 
-    /* 내가 만든 구조체만 저장하도록 등록 */
+    /* (1) User payload 등록 — tick_ms는 System이 자동 삽입 (기본 ON) */
     XM_SetUsbLogSource(&myLog, sizeof(MiniLog_t));
+    
+    /* (2) 옵션: 자동 타임스탬프 비활성화 (User 구조체에 tick을 직접 포함하는 경우) */
+    // XM_SetUsbLogAutoTimestamp(false);
+    
+    /* (3) 옵션: 파일 롤링 크기 변경 (기본 10MB) */
+    // XM_SetUsbLogRollingSize(20);
 }
 
 void User_Loop(void)
@@ -111,7 +120,7 @@ static void Standby_loop(void)
             // C언어 문자열 연결 기능을 사용하여 깔끔하게 작성
             // 각 줄 끝에 공백이나 쉼표가 빠지지 않도록 주의하세요.
             // meta data를 저장하면서 log status를 LOG_STATUS_LOGGING으로 변경하여 데이터 저장을 수행할 수 있음.
-            log_start = XM_StartUsbDataLog("TestRun_001", "time_ms, command_torque, result_angle");
+            log_start = XM_StartUsbDataLog("TestRun_001", "command_torque(float), result_angle(float)");
             if (log_start) {
                 XM_TSM_TransitionTo(s_tsm, XM_STATE_ACTIVE);
             } else {
@@ -133,10 +142,7 @@ static void Active_Entry(void)
 
 static void Active_Loop(void)
 {
-    // ... 실험 및 제어 로직 수행 ...
-    // (데이터는 core_process가 2ms마다 자동으로 myLog 구조체를 저장함)
-    // 데이터 채우기
-    myLog.tick_ms    = XM_GetTick();
+    // User payload만 채우면 됨 (tick_ms는 System이 자동 삽입)
     myLog.cmd_torque = XM.command.assist_torque_rh;
     myLog.res_angle  = XM.status.h10.rightHipAngle;
     

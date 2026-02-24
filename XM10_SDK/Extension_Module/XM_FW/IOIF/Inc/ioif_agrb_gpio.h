@@ -26,9 +26,20 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "stm32h7xx_hal.h"
-#include "stm32h7xx_hal_def.h"
-#include "stm32h7xx_hal_gpio.h"
+/* STM32 HAL Headers (MCU별 자동 선택) */
+#if defined(IOIF_MCU_SERIES_H7)
+    #include "stm32h743xx.h"
+    #include "stm32h7xx_hal.h"
+    #include "stm32h7xx_hal_def.h"
+	#include "stm32h7xx_hal_gpio.h"
+#elif defined(IOIF_MCU_SERIES_G4)
+    #include "stm32g4xx.h"
+    #include "stm32g4xx_hal.h"
+	#include "stm32g4xx_hal_def.h"
+	#include "stm32g4xx_hal_gpio.h"
+#else
+    #error "Unsupported MCU series for IOIF GPIO"
+#endif
 
 /**
  *-----------------------------------------------------------
@@ -221,6 +232,107 @@ AGRBStatusDef ioif_gpio_get_state(IOIF_GPIOx_t id, bool* state);
  * @return 1 (GPIO_PIN_SET) 또는 0 (GPIO_PIN_RESET)
  */
 GPIO_PinState ioif_gpio_read_pin(IOIF_GPIOx_t id);
+
+/**
+ * @brief [범용] GPIO 핀을 임시로 Output LOW 모드로 변경
+ * @details 
+ * UART/SPI/I2C 등의 통신 핀을 일시적으로 GPIO Output LOW로 변경합니다.
+ * 센서 전원 리셋 시 누설 전류 차단 용도로 사용됩니다.
+ * 
+ * [사용 시나리오]
+ * - UART 핀을 일시적으로 GPIO Output으로 변경
+ * - 센서 전원 리셋 중 누설 전류 차단
+ * 
+ * @param port GPIO 포트 (예: GPIOA)
+ * @param pin GPIO 핀 (예: GPIO_PIN_2)
+ * @return AGRBStatusDef
+ */
+AGRBStatusDef IOIF_GPIO_SetOutputLow(GPIO_TypeDef* port, uint16_t pin);
+
+/**
+ * @brief [범용] GPIO 핀을 Alternate Function 모드로 복구
+ * @details 
+ * 일시적으로 GPIO Output으로 변경했던 핀을 다시 AF 모드로 복구합니다.
+ * 
+ * @param port GPIO 포트
+ * @param pin GPIO 핀
+ * @param af_number Alternate Function 번호 (예: GPIO_AF7_USART1)
+ * @param pull Pull 모드 (GPIO_NOPULL, GPIO_PULLUP, GPIO_PULLDOWN)
+ * @return AGRBStatusDef
+ */
+AGRBStatusDef IOIF_GPIO_RestoreAFMode(GPIO_TypeDef* port, 
+                                       uint16_t pin, 
+                                       uint32_t af_number,
+                                       uint32_t pull);
+
+/**
+ * ============================================================================
+ * [신규] 범용 GPIO Analog Mode API (H7/G4 공용)
+ * ============================================================================
+ */
+
+/**
+ * @brief [범용] GPIO 핀을 Analog 모드로 설정합니다.
+ * @details 
+ * - ADC/DAC 입력용으로 GPIO를 Analog 모드로 전환합니다.
+ * - 모든 STM32H7/G4 프로젝트에서 재사용 가능합니다.
+ * - IOIF 인스턴스 풀과 독립적으로 동작합니다 (정적 유틸리티 함수).
+ * 
+ * @usage
+ * - ADC 채널 추가 전 GPIO를 Analog로 설정
+ * - 런타임 DIO → ADC 전환 (예: external_io.c)
+ * - Battery Voltage, 온도 센서 등 아날로그 입력 설정
+ * 
+ * @note
+ * - ⚠️ 이 함수는 external_io.c 전용이 아닙니다! 범용 API입니다.
+ * - ⚠️ 특정 사용 사례(DIO → ADC3)에 종속되지 않습니다.
+ * - Pull 저항은 자동으로 GPIO_NOPULL 설정 (ADC는 Pull 불필요).
+ * 
+ * @param port GPIO 포트 (예: GPIOA, GPIOF)
+ * @param pin GPIO 핀 (예: GPIO_PIN_0 ~ GPIO_PIN_15)
+ * @return AGRBStatusDef
+ *         - AGRBStatus_OK: 성공
+ *         - AGRBStatus_PARAM_ERROR: port 또는 pin이 NULL/Invalid
+ * 
+ * @example
+ * ```c
+ * // Battery Voltage (PA0) → ADC1_INP16
+ * IOIF_GPIO_SetAnalogMode(GPIOA, GPIO_PIN_0);
+ * 
+ * // External Sensor (PF3) → ADC3_INP5
+ * IOIF_GPIO_SetAnalogMode(GPIOF, GPIO_PIN_3);
+ * ```
+ */
+AGRBStatusDef IOIF_GPIO_SetAnalogMode(GPIO_TypeDef* port, uint16_t pin);
+
+/**
+ * @brief [범용] GPIO 핀 설정을 해제합니다 (DeInit).
+ * @details 
+ * - HAL_GPIO_DeInit()을 래핑한 범용 API입니다.
+ * - 핀을 Analog 모드로 전환하기 전 기존 설정을 해제할 때 사용합니다.
+ * - 모든 STM32H7/G4 프로젝트에서 재사용 가능합니다.
+ * 
+ * @usage
+ * - DIO → ADC 전환 전 기존 GPIO 설정 해제
+ * - 핀 기능 변경 전 클린업
+ * 
+ * @note
+ * - ⚠️ 이 함수는 external_io.c 전용이 아닙니다! 범용 API입니다.
+ * 
+ * @param port GPIO 포트
+ * @param pin GPIO 핀
+ * @return AGRBStatusDef
+ *         - AGRBStatus_OK: 성공
+ *         - AGRBStatus_PARAM_ERROR: port 또는 pin이 NULL/Invalid
+ * 
+ * @example
+ * ```c
+ * // DIO 핀을 ADC로 전환 (기존 설정 해제 → Analog 설정)
+ * IOIF_GPIO_DeInitPin(GPIOF, GPIO_PIN_3);
+ * IOIF_GPIO_SetAnalogMode(GPIOF, GPIO_PIN_3);
+ * ```
+ */
+AGRBStatusDef IOIF_GPIO_DeInitPin(GPIO_TypeDef* port, uint16_t pin);
 
 #endif /* AGRB_IOIF_GPIO_ENABLE */
 

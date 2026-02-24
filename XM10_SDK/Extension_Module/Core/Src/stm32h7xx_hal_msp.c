@@ -96,7 +96,6 @@ static uint32_t HAL_RCC_ADC12_CLK_ENABLED=0;
 void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  HAL_DMA_MuxSyncConfigTypeDef pSyncConfig;
   if(hadc->Instance==ADC1)
   {
     /* USER CODE BEGIN ADC1_MspInit 0 */
@@ -135,20 +134,10 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     hdma_adc1.Init.MemInc = DMA_MINC_ENABLE;
     hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
     hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
-    hdma_adc1.Init.Mode = DMA_NORMAL;
+    hdma_adc1.Init.Mode = DMA_CIRCULAR;
     hdma_adc1.Init.Priority = DMA_PRIORITY_LOW;
     hdma_adc1.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_adc1) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    pSyncConfig.SyncSignalID = HAL_DMAMUX1_SYNC_EXTI0;
-    pSyncConfig.SyncPolarity = HAL_DMAMUX_SYNC_NO_EVENT;
-    pSyncConfig.SyncEnable = DISABLE;
-    pSyncConfig.EventEnable = ENABLE;
-    pSyncConfig.RequestNumber = 1;
-    if (HAL_DMAEx_ConfigMuxSync(&hdma_adc1, &pSyncConfig) != HAL_OK)
     {
       Error_Handler();
     }
@@ -191,20 +180,10 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     hdma_adc2.Init.MemInc = DMA_MINC_ENABLE;
     hdma_adc2.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
     hdma_adc2.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
-    hdma_adc2.Init.Mode = DMA_NORMAL;
+    hdma_adc2.Init.Mode = DMA_CIRCULAR;
     hdma_adc2.Init.Priority = DMA_PRIORITY_LOW;
     hdma_adc2.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_adc2) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    pSyncConfig.SyncSignalID = HAL_DMAMUX1_SYNC_EXTI0;
-    pSyncConfig.SyncPolarity = HAL_DMAMUX_SYNC_NO_EVENT;
-    pSyncConfig.SyncEnable = DISABLE;
-    pSyncConfig.EventEnable = ENABLE;
-    pSyncConfig.RequestNumber = 1;
-    if (HAL_DMAEx_ConfigMuxSync(&hdma_adc2, &pSyncConfig) != HAL_OK)
     {
       Error_Handler();
     }
@@ -296,6 +275,8 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
 
 }
 
+static uint32_t HAL_RCC_FDCAN_CLK_ENABLED=0;
+
 /**
   * @brief FDCAN MSP Initialization
   * This function configures the hardware resources used in this example
@@ -322,7 +303,10 @@ void HAL_FDCAN_MspInit(FDCAN_HandleTypeDef* hfdcan)
     }
 
     /* Peripheral clock enable */
-    __HAL_RCC_FDCAN_CLK_ENABLE();
+    HAL_RCC_FDCAN_CLK_ENABLED++;
+    if(HAL_RCC_FDCAN_CLK_ENABLED==1){
+      __HAL_RCC_FDCAN_CLK_ENABLE();
+    }
 
     __HAL_RCC_GPIOD_CLK_ENABLE();
     /**FDCAN1 GPIO Configuration
@@ -341,12 +325,51 @@ void HAL_FDCAN_MspInit(FDCAN_HandleTypeDef* hfdcan)
     HAL_NVIC_EnableIRQ(FDCAN1_IT0_IRQn);
     HAL_NVIC_SetPriority(FDCAN1_IT1_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(FDCAN1_IT1_IRQn);
-    HAL_NVIC_SetPriority(FDCAN_CAL_IRQn, 14, 0);
-    HAL_NVIC_EnableIRQ(FDCAN_CAL_IRQn);
     /* USER CODE BEGIN FDCAN1_MspInit 1 */
 
     /* USER CODE END FDCAN1_MspInit 1 */
+  }
+  else if(hfdcan->Instance==FDCAN2)
+  {
+    /* USER CODE BEGIN FDCAN2_MspInit 0 */
 
+    /* USER CODE END FDCAN2_MspInit 0 */
+
+  /** Initializes the peripherals clock
+  */
+    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_FDCAN;
+    PeriphClkInitStruct.FdcanClockSelection = RCC_FDCANCLKSOURCE_PLL;
+    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    /* Peripheral clock enable */
+    HAL_RCC_FDCAN_CLK_ENABLED++;
+    if(HAL_RCC_FDCAN_CLK_ENABLED==1){
+      __HAL_RCC_FDCAN_CLK_ENABLE();
+    }
+
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+    /**FDCAN2 GPIO Configuration
+    PB12     ------> FDCAN2_RX
+    PB13     ------> FDCAN2_TX
+    */
+    GPIO_InitStruct.Pin = FDCAN2_RX_Pin|FDCAN2_TX_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF9_FDCAN2;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    /* FDCAN2 interrupt Init */
+    HAL_NVIC_SetPriority(FDCAN2_IT0_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(FDCAN2_IT0_IRQn);
+    HAL_NVIC_SetPriority(FDCAN2_IT1_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(FDCAN2_IT1_IRQn);
+    /* USER CODE BEGIN FDCAN2_MspInit 1 */
+
+    /* USER CODE END FDCAN2_MspInit 1 */
   }
 
 }
@@ -365,7 +388,10 @@ void HAL_FDCAN_MspDeInit(FDCAN_HandleTypeDef* hfdcan)
 
     /* USER CODE END FDCAN1_MspDeInit 0 */
     /* Peripheral clock disable */
-    __HAL_RCC_FDCAN_CLK_DISABLE();
+    HAL_RCC_FDCAN_CLK_ENABLED--;
+    if(HAL_RCC_FDCAN_CLK_ENABLED==0){
+      __HAL_RCC_FDCAN_CLK_DISABLE();
+    }
 
     /**FDCAN1 GPIO Configuration
     PD0     ------> FDCAN1_RX
@@ -376,10 +402,33 @@ void HAL_FDCAN_MspDeInit(FDCAN_HandleTypeDef* hfdcan)
     /* FDCAN1 interrupt DeInit */
     HAL_NVIC_DisableIRQ(FDCAN1_IT0_IRQn);
     HAL_NVIC_DisableIRQ(FDCAN1_IT1_IRQn);
-    HAL_NVIC_DisableIRQ(FDCAN_CAL_IRQn);
     /* USER CODE BEGIN FDCAN1_MspDeInit 1 */
 
     /* USER CODE END FDCAN1_MspDeInit 1 */
+  }
+  else if(hfdcan->Instance==FDCAN2)
+  {
+    /* USER CODE BEGIN FDCAN2_MspDeInit 0 */
+
+    /* USER CODE END FDCAN2_MspDeInit 0 */
+    /* Peripheral clock disable */
+    HAL_RCC_FDCAN_CLK_ENABLED--;
+    if(HAL_RCC_FDCAN_CLK_ENABLED==0){
+      __HAL_RCC_FDCAN_CLK_DISABLE();
+    }
+
+    /**FDCAN2 GPIO Configuration
+    PB12     ------> FDCAN2_RX
+    PB13     ------> FDCAN2_TX
+    */
+    HAL_GPIO_DeInit(GPIOB, FDCAN2_RX_Pin|FDCAN2_TX_Pin);
+
+    /* FDCAN2 interrupt DeInit */
+    HAL_NVIC_DisableIRQ(FDCAN2_IT0_IRQn);
+    HAL_NVIC_DisableIRQ(FDCAN2_IT1_IRQn);
+    /* USER CODE BEGIN FDCAN2_MspDeInit 1 */
+
+    /* USER CODE END FDCAN2_MspDeInit 1 */
   }
 
 }
@@ -463,6 +512,51 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c)
 }
 
 /**
+  * @brief TIM_Base MSP Initialization
+  * This function configures the hardware resources used in this example
+  * @param htim_base: TIM_Base handle pointer
+  * @retval None
+  */
+void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
+{
+  if(htim_base->Instance==TIM2)
+  {
+    /* USER CODE BEGIN TIM2_MspInit 0 */
+
+    /* USER CODE END TIM2_MspInit 0 */
+    /* Peripheral clock enable */
+    __HAL_RCC_TIM2_CLK_ENABLE();
+    /* USER CODE BEGIN TIM2_MspInit 1 */
+
+    /* USER CODE END TIM2_MspInit 1 */
+
+  }
+
+}
+
+/**
+  * @brief TIM_Base MSP De-Initialization
+  * This function freeze the hardware resources used in this example
+  * @param htim_base: TIM_Base handle pointer
+  * @retval None
+  */
+void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
+{
+  if(htim_base->Instance==TIM2)
+  {
+    /* USER CODE BEGIN TIM2_MspDeInit 0 */
+
+    /* USER CODE END TIM2_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_TIM2_CLK_DISABLE();
+    /* USER CODE BEGIN TIM2_MspDeInit 1 */
+
+    /* USER CODE END TIM2_MspDeInit 1 */
+  }
+
+}
+
+/**
   * @brief UART MSP Initialization
   * This function configures the hardware resources used in this example
   * @param huart: UART handle pointer
@@ -504,16 +598,19 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 
     /* UART7 DMA Init */
     /* UART7_RX Init */
-    hdma_uart7_rx.Instance = DMA1_Stream3;
+    hdma_uart7_rx.Instance = DMA1_Stream2;
     hdma_uart7_rx.Init.Request = DMA_REQUEST_UART7_RX;
     hdma_uart7_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
     hdma_uart7_rx.Init.PeriphInc = DMA_PINC_DISABLE;
     hdma_uart7_rx.Init.MemInc = DMA_MINC_ENABLE;
     hdma_uart7_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
     hdma_uart7_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-    hdma_uart7_rx.Init.Mode = DMA_NORMAL;
-    hdma_uart7_rx.Init.Priority = DMA_PRIORITY_HIGH;
-    hdma_uart7_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    hdma_uart7_rx.Init.Mode = DMA_CIRCULAR;
+    hdma_uart7_rx.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+    hdma_uart7_rx.Init.FIFOMode = DMA_FIFOMODE_ENABLE;
+    hdma_uart7_rx.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_1QUARTERFULL;
+    hdma_uart7_rx.Init.MemBurst = DMA_MBURST_SINGLE;
+    hdma_uart7_rx.Init.PeriphBurst = DMA_PBURST_SINGLE;
     if (HAL_DMA_Init(&hdma_uart7_rx) != HAL_OK)
     {
       Error_Handler();
@@ -560,16 +657,19 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 
     /* UART8 DMA Init */
     /* UART8_RX Init */
-    hdma_uart8_rx.Instance = DMA1_Stream4;
+    hdma_uart8_rx.Instance = DMA1_Stream3;
     hdma_uart8_rx.Init.Request = DMA_REQUEST_UART8_RX;
     hdma_uart8_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
     hdma_uart8_rx.Init.PeriphInc = DMA_PINC_DISABLE;
     hdma_uart8_rx.Init.MemInc = DMA_MINC_ENABLE;
     hdma_uart8_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
     hdma_uart8_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-    hdma_uart8_rx.Init.Mode = DMA_NORMAL;
-    hdma_uart8_rx.Init.Priority = DMA_PRIORITY_HIGH;
-    hdma_uart8_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    hdma_uart8_rx.Init.Mode = DMA_CIRCULAR;
+    hdma_uart8_rx.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+    hdma_uart8_rx.Init.FIFOMode = DMA_FIFOMODE_ENABLE;
+    hdma_uart8_rx.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_1QUARTERFULL;
+    hdma_uart8_rx.Init.MemBurst = DMA_MBURST_SINGLE;
+    hdma_uart8_rx.Init.PeriphBurst = DMA_PBURST_SINGLE;
     if (HAL_DMA_Init(&hdma_uart8_rx) != HAL_OK)
     {
       Error_Handler();

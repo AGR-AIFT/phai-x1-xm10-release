@@ -2,15 +2,16 @@
  ******************************************************************************
  * @file    xm_api_usb.h
  * @author  HyundoKim
- * @brief   XM10 USB 데이터 로깅 및 디버그 통신 API
+ * @brief   XM10 USB 데이터 로깅 및 스트리밍 통신 API (PhAI V2)
  * @details 
  * 이 모듈은 두 가지 핵심 기능을 제공합니다.
  * 1. [MSC] USB 메모리에 센서 데이터 로깅 (Start/Stop)
- * 2. [CDC] PC 터미널(TeraTerm 등)로 디버그 메시지 전송
- * * @note    USB 케이블이 연결되어 있어야 동작하며, 
+ * 2. [CDC] PhAI 프로토콜 패킷으로 래핑된 실시간 데이터 스트리밍
+ *
+ * @note    USB 케이블이 연결되어 있어야 동작하며, 
  * 데이터 로깅의 경우 USB 메모리(Flash Drive)가 인식되어야 합니다.
- * @version 0.1
- * @date    Nov 17, 2025
+ * @version 2.0  (PhAI V2 프로토콜 적용)
+ * @date    Feb 23, 2026
  *
  * @copyright Copyright (c) 2025 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
@@ -23,6 +24,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "phai_packet_builder.h"  /* PHAI_MODULE_* 매크로 (User가 직접 사용) */
 
 /**
  *-----------------------------------------------------------
@@ -146,9 +148,38 @@ void XM_StopUsbDataLog(void);
  */
 XmLogStatus_e XM_GetUsbLogStatus(void);
 
+/**
+ * @brief 자동 타임스탬프(4-byte tick_ms)를 활성화/비활성화합니다.
+ * @param[in] enabled  true: 매 패킷 앞에 tick 자동 삽입 (기본값: true)
+ *                     false: User 구조체에 이미 tick 포함 시 비활성화
+ * @note User_Setup()에서 XM_StartUsbDataLog() 호출 전에 설정하세요.
+ */
+void XM_SetUsbLogAutoTimestamp(bool enabled);
+
+/**
+ * @brief 파일 롤링 크기를 설정합니다.
+ * @param[in] size_mb  파일 분할 크기 (MB). 1~100, 기본값: 10.
+ * @note User_Setup()에서 XM_StartUsbDataLog() 호출 전에 설정하세요.
+ */
+void XM_SetUsbLogRollingSize(uint32_t size_mb);
+
 
 /* ============================================================================
  * USB 모니터링 API (USB Monitoring API) - Device/CDC Mode
+ * ============================================================================
+ * PhAI V2 프로토콜: User payload를 SOF + SEQ_ID + MODULE_ID + CRC8으로 자동 래핑.
+ * 
+ * [사용법]
+ *   1. User_Setup()에서 소스 등록:
+ *      XM_SetUsbStreamSource(&myData, sizeof(myData));
+ *   2. (선택) Module ID 변경:
+ *      XM_SetUsbStreamModuleId(0xF0);
+ *   3. User_Loop()에서 직접 전송 또는 자동 전송:
+ *      XM_SendUsbData(&myData, sizeof(myData));
+ *
+ * [Auto-Stream]
+ *   기본 ON — USB 연결 시 자동 스트리밍 시작 (PhAI Studio 기본 동작).
+ *   XM_SetUsbAutoStream(false) 호출 시 "AGRB MON START" 대기 모드 (Legacy).
  * ==========================================================================*/
 
 /**
@@ -158,29 +189,48 @@ XmLogStatus_e XM_GetUsbLogStatus(void);
 bool XM_IsUsbStreamConnected(void);
 
 /**
- * @brief PC로부터 '모니터링 시작' 명령(Scenario 1)을 받았는지 확인합니다.
- * @details PC 터미널에서 "AGRB_MON_START"를 보내면 true가 됩니다.
- * @return true: 모니터링 활성 (데이터 전송 시작하세요), false: 대기
+ * @brief 스트리밍이 활성화되었는지 확인합니다.
+ * @details Auto-Stream 모드에서는 USB 연결 시 자동 true.
+ *          Legacy 모드에서는 "AGRB MON START" 수신 시 true.
+ * @return true: 스트리밍 활성 (데이터 전송 중), false: 대기
  */
 bool XM_IsUsbStreamingActive(void);
 
 /**
- * @brief [실시간] USB CDC로 구조체 데이터를 전송합니다.
- * @details 2ms 주기 내에서 안전하게 호출 가능 (Non-blocking)
+ * @brief Auto-Stream 모드를 설정합니다.
+ * @param[in] enabled  true: USB 연결 시 자동 스트리밍 (기본값, PhAI Studio)
+ *                     false: "AGRB MON START" 명령 대기 (Legacy Python 호환)
+ */
+void XM_SetUsbAutoStream(bool enabled);
+
+/**
+ * @brief [실시간] USB CDC로 데이터를 PhAI 패킷으로 래핑하여 전송합니다.
+ * @details 1ms 주기 내에서 안전하게 호출 가능 (Non-blocking).
+ *          내부적으로 SOF(0xAA) + LEN + SEQ_ID + MODULE_ID + CRC8을 자동 생성합니다.
+ * @param[in] data  전송할 User 구조체 포인터 (float 배열 또는 4-byte 정렬 struct)
+ * @param[in] len   데이터 바이트 수
+ * @return true: 전송 성공, false: 버퍼 풀 또는 연결 안 됨
  */
 bool XM_SendUsbData(const void* data, uint32_t len);
 
 /**
- * @brief PC로 메시지를 전송합니다. (비차단)
- * @details 이 함수는 메시지를 즉시 전송하지 않고, 내부의 비동기 큐에 저장합니다.
- * 메인 제어 루프(2ms)에서 printf처럼 안전하게 호출할 수 있습니다.
- *
- * @param[in] message 전송할 문자열. (자동으로 "\r\n"이 추가됩니다)
- * @return 큐에 메시지가 성공적으로 추가되면 true.
+ * @brief 스트리밍 데이터의 Module ID를 설정합니다.
+ * @param[in] module_id  Module ID (기본값 0x10 = COMBINED)
+ * @see phai_packet_builder.h: PHAI_MODULE_* 정의 참조
+ */
+void XM_SetUsbStreamModuleId(uint8_t module_id);
+
+/**
+ * @brief PC로 디버그 메시지를 전송합니다. (비차단, Raw 텍스트)
+ * @details PhAI 패킷이 아닌 raw 텍스트로 전송됩니다.
+ * @param[in] message 전송할 문자열.
+ * @return 전송 성공 시 true.
  */
 bool XM_SendUsbDebugMessage(const char* message);
 
-// 데이터 수신
+/**
+ * @brief PC로부터 데이터를 수신합니다. (Non-Blocking)
+ */
 uint32_t XM_GetUsbData(void* buffer, uint32_t max_len);
 
 

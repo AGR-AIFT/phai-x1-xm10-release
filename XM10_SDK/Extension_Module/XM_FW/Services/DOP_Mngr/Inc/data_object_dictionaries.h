@@ -28,13 +28,24 @@
 /**
  * @brief XM 시스템 네트워크의 장치 Node ID
  * @note  XM 프로젝트에 필요한 ID만 명확하게 재정의하여 사용합니다.
+ * 
+ * [DOP V1 vs DOP V2 Node ID]
+ * - DOP V1 (Legacy): CM 코드와 일치
+ *   - CM Node ID = 0x1 (CM 코드: NODE_ID_CM = 1)
+ *   - XM Node ID = 0x2 (CM 코드: NODE_ID_EXTPACK = 2)
+ *   - MD_RH/LH Node ID = 0x6/0x7
+ * 
+ * - DOP V2 (CANopen): AGR_DOP_Node_ID와 일치
+ *   - XM Node ID = 0x02 (AGR_NODE_ID_XM)
+ *   - IMU Hub Node ID = 0x08 (AGR_NODE_ID_IMU_HUB)
+ *   - EMG Hub Node ID = 0x09, FES Hub = 0x0A, GRF Hub = 0x0B
  */
 typedef enum {
     SYS_NODE_ID_ALL   = 0x0,
-    SYS_NODE_ID_CM    = 0x1,
-
-    // This Module (XM)
-    SYS_NODE_ID_XM    = 0x2, // Extension Module (2)
+    
+    /* DOP V1 (Legacy) - CM, XM, MD */
+    SYS_NODE_ID_CM    = 0x1,  // Control Module (CM 코드와 일치)
+    SYS_NODE_ID_XM    = 0x2,  // Extension Module (This Module)
     
     // SUIT Actuators (관절 모듈)
     SYS_NODE_ID_RH    = 0x6, // Right Hip(Sagittal)
@@ -44,6 +55,10 @@ typedef enum {
     SYS_NODE_ID_RA    = 0xA, // Right Ankle (10) (Sagittal)
     SYS_NODE_ID_LA    = 0xB, // Left Ankle  (11) (Sagittal)
 
+    /* DOP V2 (CANopen) - Sensor Modules */
+    SYS_NODE_ID_IMU_HUB = 0x08,  // IMU Hub Module
+    SYS_NODE_ID_EMG_HUB = 0x09,  // EMG Hub Module (향후)
+    
     // Other Devices (향후 확장용)
     // NODE_ID_SENSOR_HUB_EMG = 0xD,
 } SystemNodeID_t;
