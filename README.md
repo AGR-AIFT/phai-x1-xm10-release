@@ -25,7 +25,7 @@
 | :--- | :--- |
 | **독자적 알고리즘 개발** | C 코드로 제어 알고리즘을 제약 없이 이식. PIF-Vectors와 Auxiliary Inputs로 KIT H10의 움직임을 설계 |
 | **생체 신호 연동** | EMG, GRF, FSR 등 센서 허브를 CAN-FD로 손쉽게 연동. 사용자 의도에 실시간 반응하는 시스템 구축 |
-| **고해상도 데이터 분석** | 2ms 주기로 USB 메모리 저장(MSC) 또는 PC 실시간 스트리밍(CDC). MATLAB, Python으로 정밀 분석 |
+| **고해상도 데이터 분석** | 1ms 주기로 USB 메모리 저장(MSC) 또는 PC 실시간 스트리밍(CDC). MATLAB, Python으로 정밀 분석 |
 | **AI 기반 상위 제어** | Jetson Orin NX 등 AM과 연동하여 강화학습, 머신러닝 기반 상위 제어 알고리즘 통합 |
 
 ---
