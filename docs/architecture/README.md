@@ -63,11 +63,12 @@
 
 ### 제어 루프
 
-* **주기:** 2ms (500Hz)
+* **주기:** 1ms (1000Hz)
 * **패턴:** IPO (Input → Process → Output)
   1. **Input:** CAN-FD 수신 데이터(센서, 로봇 상태) 읽기
   2. **Process:** 사용자 알고리즘(`User_Loop`) 실행
   3. **Output:** CAN-FD 제어 명령 전송
+  4. **USB:** USB-CDC Data Streaming or USB-MSC Data Logging
 
 ---
 
