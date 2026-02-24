@@ -52,7 +52,7 @@
 * 레포지토리 Clone:
 
 ```bash
-git clone https://github.com/angel-robotics/Extension_Module.git C:\XM_SDK
+git clone https://github.com/AGR-EXO/Extension_Module.git C:\XM_SDK
 ```
 
 > **경로 주의사항**
