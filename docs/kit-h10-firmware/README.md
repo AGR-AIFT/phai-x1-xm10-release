@@ -146,15 +146,7 @@ CM 내부의 SD카드(SanDisk Micro SD Max Endurance)에는 다음 폴더가 존
 
 ### 수동 작업이 어려운 경우
 
-엔젤로보틱스 CS팀 또는 Research팀에 문의하여 업데이트를 요청할 수 있습니다.
-
-| 담당자 | 이메일 |
-| :--- | :--- |
-| 송정미 부장 | mia96@angel-robotics.com |
-| 김승환 선임연구원 | seunghwan.kim@angel-robotics.com |
-| 김현도 주임연구원 | kairos1991@angel-robotics.com |
-| 정석준 연구원 | jjung_se0k@angel-robotics.com |
-| 이주희 연구원 | jeuheel@angel-robotics.com |
+Discussions의 [Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a)에 문의를 남겨주세요.
 
 ---
 
