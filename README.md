@@ -75,6 +75,8 @@ git clone https://github.com/AGR-EXO/Extension_Module.git C:\XM_SDK
 
 > 단계별 상세 가이드: **[Getting Started](docs/getting-started/)**
 
+> **KIT H10 FW 호환성:** XM FW v2.0.0은 **KIT H10 FW v2.3.0** 이상이 필요합니다. H10 FW가 이전 버전이라면 먼저 업데이트하세요. → **[KIT H10 Firmware 가이드](docs/kit-h10-firmware/)**
+
 ---
 
 ## 문서
@@ -84,6 +86,7 @@ git clone https://github.com/AGR-EXO/Extension_Module.git C:\XM_SDK
 | **[Getting Started](docs/getting-started/)** | 하드웨어 연결부터 첫 빌드까지 3단계 가이드 |
 | **[Tutorials](docs/tutorials/)** | 20개 예제로 배우는 단계별 학습 (기초 → USB → 로봇 제어) |
 | **[API Reference](docs/api-reference/)** | XM API 전체 함수 명세 |
+| **[KIT H10 Firmware](docs/kit-h10-firmware/)** | H10 FW/ContentsFiles 버전 호환성 및 업데이트 가이드 |
 | **[Examples](examples/)** | 예제 소스 코드 (각 폴더에 README 포함) |
 | **[Python Tools](PythonDecoder/)** | CDC/MSC 데이터 수신, 분석, 디코딩 도구 |
 | **[Architecture](docs/architecture/)** | 시스템 아키텍처, 프로토콜, FW 레이어 구조 |

@@ -67,19 +67,33 @@ XM10 개발을 위한 환경 구축 가이드입니다. 처음 사용하시는 �
 
 ---
 
-### 4. [Architecture](architecture/) — 시스템 아키텍처
+### 4. [KIT H10 Firmware](kit-h10-firmware/) — 펌웨어 & 컨텐츠 업데이트
+
+XM10과 연동되는 KIT H10의 펌웨어 및 SD카드 컨텐츠 파일 업데이트 가이드입니다.
+
+| 내용 | 설명 |
+| :--- | :--- |
+| [버전 호환성 매트릭스](kit-h10-firmware/#버전-호환성-매트릭스) | XM FW ↔ H10 FW 대응 버전 확인 |
+| [펌웨어 업데이트](kit-h10-firmware/#펌웨어-업데이트-usb-stick-방식) | USB Stick을 이용한 CM/SAM10 FW 업데이트 |
+| [컨텐츠 파일 업데이트](kit-h10-firmware/#컨텐츠-파일-업데이트-sd카드-방식) | SD카드 교체를 통한 컨텐츠 파일 업데이트 |
+
+> **XM FW 버전을 변경할 때는 반드시 대응하는 H10 FW/ContentsFiles를 함께 업데이트하세요.**
+
+---
+
+### 5. [Architecture](architecture/) — 시스템 아키텍처
 
 XM10의 하드웨어 및 펌웨어 레이어 구조, 통신 프로토콜, 제어 루프를 설명합니다.
 
 ---
 
-### 5. [Advanced Topics](advanced/) — 심화 주제
+### 6. [Advanced Topics](advanced/) — 심화 주제
 
 센서 허브 연동, PhAI 프로토콜, TinyML 등 고급 활용법을 다룹니다.
 
 ---
 
-### 6. [Troubleshooting](troubleshooting.md) — FAQ & 문제 해결
+### 7. [Troubleshooting](troubleshooting.md) — FAQ & 문제 해결
 
 빌드 오류, USB 연결, CAN-FD 통신 등 자주 발생하는 문제의 해결 방법입니다.
 
