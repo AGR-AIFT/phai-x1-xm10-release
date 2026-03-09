@@ -95,3 +95,18 @@ TSM을 실행합니다. **User Task의 무한 루프 내에서 반드시 호출*
   * **Parameters**
       * `XmTsmHandle_t handle`: TSM 핸들
       * `uint32_t next_state_id`: 이동할 다음 상태 ID
+
+---
+
+## 관련 예제
+
+| 예제 | 난이도 | TSM 활용 |
+|------|--------|----------|
+| [00_Quick_Start](../../examples/00_Quick_Start/) | 입문 | 단일 상태 TSM |
+| [01_Button_LED_Basic](../../examples/01_Button_LED_Basic/) | 초급 | 단일 상태 기본 |
+| [03_Button_LED_FSM](../../examples/03_Button_LED_FSM/) | 중급 | STANDBY ↔ ACTIVE 전환 |
+| [06_Ext_IO_Safety_Switch](../../examples/06_Ext_IO_Safety_Switch/) | 중급 | 3상태 + ERROR 처리 |
+| [10c_MSC_Advanced_Log](../../examples/10c_MSC_Advanced_Log/) | 고급 | TSM + 에러 복구 |
+| [11_Passive_Mode](../../examples/11_Passive_Mode/) | 고급 | Homing + 모드 전환 |
+| [12_Active_Assist_Mode](../../examples/12_Active_Assist_Mode/) | 고급 | 계층적 FSM |
+| [17_FSM_Gait_Intent](../../examples/17_FSM_Gait_Intent/) | 고급 | 보행 7단계 FSM |

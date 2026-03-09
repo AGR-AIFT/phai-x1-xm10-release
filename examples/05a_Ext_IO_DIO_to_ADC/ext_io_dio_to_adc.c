@@ -29,8 +29,9 @@
  *   ...
  *   XM_EXT_DIO_8 (PF10) → XM_EXT_ADC_12
  *
- * @version 1.0
- * @date    Feb 24, 2026
+ * @version 1.1
+ * @date    Mar 09, 2026
+ * @see     docs/api-reference/04-external-io.md
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */

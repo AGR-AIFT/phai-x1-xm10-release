@@ -3,10 +3,12 @@
  * @file    button_led_fsm.c
  * @author  HyundoKim
  * @brief   [고급] 롱 프레스와 Task State Machine을 이용한 모드 전환
- * @version 0.1
- * @date    Nov 18, 2025
+ * @version 1.1
+ * @date    Mar 09, 2026
  *
- * @copyright Copyright (c) 2025 Angel Robotics Co., Ltd. All rights reserved.
+ * @see docs/api-reference/01-task-state-machine.md
+ * @see docs/api-reference/03-led-btn-control.md
+ * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
 
@@ -28,7 +30,7 @@
 
 /**
  *-----------------------------------------------------------
- * PULBIC (GLOBAL) VARIABLES
+ * PUBLIC (GLOBAL) VARIABLES
  *-----------------------------------------------------------
  */
 

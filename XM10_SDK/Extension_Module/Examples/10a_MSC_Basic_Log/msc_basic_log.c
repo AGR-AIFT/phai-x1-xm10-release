@@ -22,8 +22,9 @@
  * [디코딩]
  *   PythonDecoder/data_decoder_xm10.py를 사용하여 CSV 변환
  *
- * @version 1.0
- * @date    Feb 24, 2026
+ * @version 1.1
+ * @date    Mar 09, 2026
+ * @see     docs/api-reference/05-usb-connectivity.md
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */

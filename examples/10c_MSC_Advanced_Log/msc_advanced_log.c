@@ -21,8 +21,10 @@
  *   LED2 BLINK  : WARNING (버퍼 90%+, 쓰기 지연 발생)
  *   LED3 SOLID  : ERROR (로깅 중단, 자동 복귀)
  *
- * @version 1.0
- * @date    Feb 24, 2026
+ * @version 1.1
+ * @date    Mar 09, 2026
+ * @see     docs/api-reference/05-usb-connectivity.md
+ * @see     docs/api-reference/01-task-state-machine.md
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */

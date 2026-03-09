@@ -3,10 +3,11 @@
  * @file    button_led_event.c
  * @author  HyundoKim
  * @brief   [중급] 클릭 이벤트 감지 및 LED 특수 효과 사용
- * @version 0.1
- * @date    Nov 18, 2025
+ * @version 1.1
+ * @date    Mar 09, 2026
  *
- * @copyright Copyright (c) 2025 Angel Robotics Co., Ltd. All rights reserved.
+ * @see docs/api-reference/03-led-btn-control.md
+ * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
 
@@ -28,7 +29,7 @@
 
 /**
  *-----------------------------------------------------------
- * PULBIC (GLOBAL) VARIABLES
+ * PUBLIC (GLOBAL) VARIABLES
  *-----------------------------------------------------------
  */
 
@@ -40,7 +41,7 @@
  */
 
 static XmTsmHandle_t s_tsm;
-static bool s_led1_state = false; // LED 1 토글 상태 저장용
+static bool s_led1_state = false; /* LED 1 토글 상태 저장용 */
 
 /**
  *------------------------------------------------------------

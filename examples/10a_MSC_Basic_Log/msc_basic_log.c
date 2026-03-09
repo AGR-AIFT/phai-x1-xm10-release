@@ -22,8 +22,9 @@
  * [디코딩]
  *   PythonDecoder/data_decoder_xm10.py를 사용하여 CSV 변환
  *
- * @version 1.0
- * @date    Feb 24, 2026
+ * @version 1.1
+ * @date    Mar 09, 2026
+ * @see     docs/api-reference/05-usb-connectivity.md
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
@@ -82,7 +83,7 @@ void User_Loop(void)
         XM_SetLedEffect(XM_LED_1, XM_LED_SOLID, 0);
     }
 
-    /* 데이터 갱신 (2ms마다 자동 저장됨) */
+    /* 데이터 갱신 (1ms마다 자동 저장됨) */
     if (s_is_logging) {
         s_log.leftHipAngle = XM.status.h10.leftHipAngle;
     }

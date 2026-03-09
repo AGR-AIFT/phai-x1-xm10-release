@@ -11,10 +11,12 @@
  * 그에 맞춰 적절한 '저항 강도(Gain)'를 계산하여 H10에게 전달합니다.
  * * [제어 로직]
  * Torque(허벅지 목표 토크) = -Gain * Velocity(허벅지 각속도)
- * @version 0.1
- * @date    Nov 18, 2025
+ * @version 1.1
+ * @date    Mar 09, 2026
  *
- * @copyright Copyright (c) 2025 Angel Robotics Co., Ltd. All rights reserved.
+ * @see docs/api-reference/02-h10-control-n-data.md
+ * @see docs/api-reference/01-task-state-machine.md
+ * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
 
@@ -46,7 +48,7 @@
 
 /**
  *-----------------------------------------------------------
- * PULBIC (GLOBAL) VARIABLES
+ * PUBLIC (GLOBAL) VARIABLES
  *-----------------------------------------------------------
  */
 

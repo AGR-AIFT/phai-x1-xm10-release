@@ -1,6 +1,21 @@
 # Advanced Topics — 심화 주제
 
-> 이 섹션은 현재 준비 중입니다. 향후 업데이트를 통해 아래 콘텐츠가 순차적으로 추가될 예정입니다.
+XM10 플랫폼의 심화 활용법을 다룹니다. 일부 주제는 이미 **실습 예제**로 제공되고 있으며, 나머지는 순차적으로 추가될 예정입니다.
+
+---
+
+## 예제로 바로 시작하기
+
+아래 심화 주제는 이미 `examples/` 폴더에 실습 가능한 예제가 있습니다.
+
+| 주제 | 예제 | 설명 |
+| :--- | :--- | :--- |
+| **TinyML on STM32** | [Ex.16 — Tiny AI 센서 퓨전](../../examples/16_TinyAI_Sensor_Fusion/) | 상보 필터 + 3-layer NN MCU 추론 |
+| **역진자 모델 보행 제어** | [Ex.15 — Inverted Pendulum](../../examples/15_Inverted_Pendulum_Control/) | MgL·sin(θ) 중력 보상 + PD 안정화 |
+| **FSM 보행 의도 인식** | [Ex.17 — FSM Gait Intent](../../examples/17_FSM_Gait_Intent/) | 7-phase 보행 FSM + 단계별 보조 토크 |
+| **PD 제어 이론** | [Ex.14 — PD Realtime Control](../../examples/14_PD_Realtime_Control/) | 이산 PD 제어 수식 직접 구현 |
+| **시스템 디버깅** | [Ex.18 — Debug Monitor](../../examples/18_Debug_Monitor/) | 루프 프로파일링 + Health 대시보드 |
+| **메모리 패턴** | [Ex.19 — Memory Aware Design](../../examples/19_Memory_Aware_Design/) | 링 버퍼, 풀 할당자, 이동 평균 |
 
 ---
 
@@ -24,12 +39,12 @@
 
 ### 심화 프로젝트
 
-| 주제 | 설명 |
-| :--- | :--- |
-| TinyML on STM32 | STM32H7에서 경량 AI 모델 학습/추론 파이프라인 |
-| 논문 기반 보행 제어 | 최신 연구 논문의 보행 보조 알고리즘을 XM10에 구현 |
-| 강화학습 기반 제어 | AM(Jetson Orin NX) + XM10 연동 RL 파이프라인 |
-| PhAI Studio 연동 | 데이터 수집 → 전처리 → 학습 → 배포 파이프라인 |
+| 주제 | 설명 | 상태 |
+| :--- | :--- | :---: |
+| TinyML on STM32 | STM32H7에서 경량 AI 모델 학습/추론 파이프라인 | ✅ [Ex.16](../../examples/16_TinyAI_Sensor_Fusion/) |
+| 논문 기반 보행 제어 | 역진자 모델 보행 보조 알고리즘 | ✅ [Ex.15](../../examples/15_Inverted_Pendulum_Control/) |
+| 강화학습 기반 제어 | AM(Jetson Orin NX) + XM10 연동 RL 파이프라인 | 로드맵 |
+| PhAI Studio 연동 | 데이터 수집 → 전처리 → 학습 → 배포 파이프라인 | 로드맵 |
 
 ### Python 도구 심화
 

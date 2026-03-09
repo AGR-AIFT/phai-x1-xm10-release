@@ -1,12 +1,15 @@
 /**
  ******************************************************************************
  * @file    active_assist_mode.c
- * @author  Your Name
- * @brief   Active-Assist Mode 단일 동작 예제
- * @version 0.1
- * @date    Oct 2, 2025
+ * @author  HyundoKim
+ * @brief   [고급] Active-Assist Mode — 의도 기반 양측 독립 토크 보조
+ * @version 1.1
+ * @date    Mar 09, 2026
  *
- * @copyright Copyright (c) 2025 Angel Robotics Co., Ltd. All rights reserved.
+ * @see docs/api-reference/02-h10-control-n-data.md
+ * @see docs/api-reference/01-task-state-machine.md
+ * @see docs/api-reference/05-usb-connectivity.md
+ * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
 
@@ -252,7 +255,7 @@ void User_Setup(void)
     };
     XM_TSM_AddState(s_userHandle, &sb_conf);
 
-    // [등록 3] STANDBY 상태 설정
+    // [등록 3] ACTIVE 상태 설정
     XmStateConfig_t act_conf = {
         .id = XM_STATE_ACTIVE,
         .on_entry = Active_Entry,
@@ -278,7 +281,7 @@ void User_Setup(void)
 
 /*
  * @brief Active-Assist Mode 예제 애플리케이션을 주기적으로 실행합니다.
- * @details Main 태스크의 제어 루프(예: 2ms)에서 계속 호출되어야 합니다.
+ * @details Main 태스크의 제어 루프(예: 1ms)에서 계속 호출되어야 합니다.
  */
 void User_Loop(void)
 {
@@ -583,7 +586,7 @@ static void InitializeFsm(ActiveAssistFsm_t* fsm)
  */
 static void UpdateActiveAssistMode(void)
 {
-    static uint32_t homingTimer = 0;
+    static uint32_t homingTimer = 0; // ✅ HOMING_FINALIZE_DELAY 전용 타이머
     switch (s_aaGlobalState) {
         case AA_STATE_HOMING:
             switch (s_homingState) {
@@ -629,6 +632,7 @@ static void UpdateActiveAssistMode(void)
                     if (XM.status.h10.isPVectorRHDone && XM.status.h10.isPVectorLHDone) {
                         XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
                         XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
+                        homingTimer = XM_GetTick(); // ✅ FINALIZE_DELAY 진입 시 타이머 시작
                         s_homingState = HOMING_FINALIZE_DELAY;
                     }
                     break;

@@ -1,0 +1,11 @@
+# Build output (로컬 빌드 시)
+Debug/
+Release/
+build/
+
+# Claude Code
+.claude/
+
+# clangd (LSP 인덱스 캐시 & 설정)
+.cache/
+.clangd

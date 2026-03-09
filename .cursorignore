@@ -1,0 +1,44 @@
+﻿# ============================================
+# Extension_Module (XM10 Release) .cursorignore
+# MCU: STM32H743XI | RTOS: FreeRTOS | Arch: V2
+# ============================================
+
+# Build Artifacts
+build/
+Debug/
+Release/
+*.elf
+*.bin
+*.hex
+*.map
+*.o
+*.d
+*.a
+*.lst
+*.su
+
+# IDE / Cache / Metadata
+.cache/
+.metadata/
+*.launch
+
+# Third-party: 대형 라이브러리 (수정 안 함)
+**/Middlewares/Third_Party/LwIP/
+**/Middlewares/ST/
+Compatible/
+CMSIS/
+
+# FreeRTOS — RTOS API 참조 필수, ignore 하지 않음!
+# Drivers/STM32H7xx_HAL_Driver — HAL API 참조 필요, ignore 하지 않음!
+
+# Optional (필요시 주석 해제)
+FATFS/
+PythonDecoder/
+Examples/
+
+# Documentation & Assets
+*.pdf
+*.pptx
+*.png
+*.jpg
+.git/

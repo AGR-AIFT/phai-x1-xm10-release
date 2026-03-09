@@ -29,8 +29,9 @@
  *   예: XM_DigitalRead(XM_EXT_DIO_1) → false 반환 (충돌 없음)
  *       XM_SetPinMode(XM_EXT_DIO_1, ...) → 무시 (ADC 설정 유지)
  *
- * @version 1.0
- * @date    Feb 24, 2026
+ * @version 1.1
+ * @date    Mar 09, 2026
+ * @see     docs/api-reference/04-external-io.md
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */

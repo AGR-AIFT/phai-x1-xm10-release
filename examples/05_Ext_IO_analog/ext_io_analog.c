@@ -23,7 +23,8 @@
  *   - 05d  : DIO/ADC 혼합 모드 — 버튼 + LED + FSR 실전 시나리오
  *
  * @version 1.1
- * @date    Feb 24, 2026
+ * @date    Mar 09, 2026
+ * @see docs/api-reference/04-external-io.md
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
@@ -46,7 +47,7 @@
 
 /**
  *-----------------------------------------------------------
- * PULBIC (GLOBAL) VARIABLES
+ * PUBLIC (GLOBAL) VARIABLES
  *-----------------------------------------------------------
  */
 

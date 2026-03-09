@@ -191,11 +191,11 @@ LED에 특수 효과(깜빡임 등)를 설정합니다. 설정 후에는 `XM_IO_
 
     if (evt == XM_BTN_CLICK) {
         // 버튼 1이 '딸깍' 클릭되었을 때 1회 실행
-        SendUsbDebugMessage("Button 1 Clicked!\r\n");
+        XM_SendUsbDebugMessage("Button 1 Clicked!\r\n");
     } 
     else if (evt == XM_BTN_LONG_PRESS) {
         // 버튼 1이 '꾸욱' 눌렸을 때 1회 실행
-        SendUsbDebugMessage("Button 1 Long Pressed!\r\n");
+        XM_SendUsbDebugMessage("Button 1 Long Pressed!\r\n");
     }
     ```
 
@@ -213,3 +213,15 @@ User Task의 무한 루프(`User_Loop` 또는 `TSM_Run` 내부)에서 주기적�
     void XM_IO_Update(void);
     ```
   * **Note**: `core_process.c`가 `_FetchAllInputs` 과정에서 자동으로 호출해주므로, 일반적인 경우 **End User가 직접 호출할 필요는 없습니다.**
+
+---
+
+## 관련 예제
+
+| 예제 | 난이도 | LED/버튼 활용 |
+|------|--------|-------------|
+| [00_Quick_Start](../../examples/00_Quick_Start/) | 입문 | 부팅 시퀀스 + 토글 |
+| [01_Button_LED_Basic](../../examples/01_Button_LED_Basic/) | 초급 | 폴링 상태 미러링 |
+| [02_Button_LED_Event](../../examples/02_Button_LED_Event/) | 초급 | 이벤트 + ONESHOT |
+| [03_Button_LED_FSM](../../examples/03_Button_LED_FSM/) | 중급 | 롱프레스 + Heartbeat/Blink |
+| [18_Debug_Monitor](../../examples/18_Debug_Monitor/) | 중급 | 진단 LED 패턴 |

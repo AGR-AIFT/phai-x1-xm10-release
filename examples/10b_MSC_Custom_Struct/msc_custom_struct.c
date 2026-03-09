@@ -18,8 +18,9 @@
  *   - uint32_t/float는 4바이트, uint8_t/bool은 1바이트
  *   - 아래 구조체는 packed 없이 설계하여 자연 정렬 유지
  *
- * @version 1.0
- * @date    Feb 24, 2026
+ * @version 1.1
+ * @date    Mar 09, 2026
+ * @see     docs/api-reference/05-usb-connectivity.md
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */

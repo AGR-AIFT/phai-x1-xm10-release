@@ -3,10 +3,11 @@
  * @file    cdc_basic_print.c
  * @author  HyundoKim
  * @brief   [초급] 버튼 이벤트 발생 시 텍스트 메시지 전송
- * @version 0.1
- * @date    Nov 18, 2025
+ * @version 1.1
+ * @date    Mar 09, 2026
  *
- * @copyright Copyright (c) 2025 Angel Robotics Co., Ltd. All rights reserved.
+ * @see     docs/api-reference/05-usb-connectivity.md
+ * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
 
@@ -28,7 +29,7 @@
 
 /**
  *-----------------------------------------------------------
- * PULBIC (GLOBAL) VARIABLES
+ * PUBLIC (GLOBAL) VARIABLES
  *-----------------------------------------------------------
  */
 
@@ -75,12 +76,12 @@ void User_Loop(void)
 
 static void Run_Loop(void)
 {
-    // 버튼 1 클릭 이벤트 감지
+    /* 버튼 1 클릭 이벤트 감지 */
     if (XM_GetButtonEvent(XM_BTN_1) == XM_BTN_CLICK) {
-        // 단순 문자열 전송
+        /* 단순 문자열 전송 */
         XM_SendUsbDebugMessage("Hello! Button 1 was clicked.\r\n");
-        
-        // LED 깜빡임으로 반응 확인
+
+        /* LED 깜빡임으로 반응 확인 */
         XM_SetLedEffect(XM_LED_1, XM_LED_ONESHOT, 100);
     }
 }

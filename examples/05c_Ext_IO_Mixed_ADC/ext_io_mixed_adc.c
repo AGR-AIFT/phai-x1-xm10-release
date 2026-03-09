@@ -34,8 +34,9 @@
  *   - ADC_4 (PA1_C): 조이스틱 Y축 (항상 사용 가능)
  *   - DIO 1~4 (PF3~PF6): FSR 센서 4개 (ADC로 전환)
  *
- * @version 1.0
- * @date    Feb 24, 2026
+ * @version 1.1
+ * @date    Mar 09, 2026
+ * @see     docs/api-reference/04-external-io.md
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */

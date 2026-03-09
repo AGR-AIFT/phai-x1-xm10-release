@@ -3,10 +3,11 @@
  * @file    ext_io_basic.c
  * @author  HyundoKim
  * @brief   [초급] 외부 스위치와 LED를 연결하여 직접 제어하기
- * @version 0.1
- * @date    Nov 18, 2025
+ * @version 1.1
+ * @date    Mar 09, 2026
  *
- * @copyright Copyright (c) 2025 Angel Robotics Co., Ltd. All rights reserved.
+ * @see docs/api-reference/04-external-io.md
+ * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
 
@@ -28,7 +29,7 @@
 
 /**
  *-----------------------------------------------------------
- * PULBIC (GLOBAL) VARIABLES
+ * PUBLIC (GLOBAL) VARIABLES
  *-----------------------------------------------------------
  */
 

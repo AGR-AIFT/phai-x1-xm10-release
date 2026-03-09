@@ -2,11 +2,14 @@
  ******************************************************************************
  * @file    passive_mode.c
  * @author  HyundoKim
- * @brief   
- * @version 0.1
- * @date    Nov 18, 2025
+ * @brief
+ * @version 1.1
+ * @date    Mar 09, 2026
  *
- * @copyright Copyright (c) 2025 Angel Robotics Co., Ltd. All rights reserved.
+ * @see docs/api-reference/02-h10-control-n-data.md
+ * @see docs/api-reference/01-task-state-machine.md
+ * @see docs/api-reference/05-usb-connectivity.md
+ * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
 
@@ -121,9 +124,24 @@ typedef struct __attribute__((packed)) {
     float rightHipImuGlobalGyrZ;
 } MyData_t;
 
+/*
+ * 전송할 데이터 구조체 (User가 자유롭게 정의)
+ *
+ * PhAI Studio COMBINED 모드(MODULE_ID=0x10)와 호환하려면
+ * 10개 float (Accel XYZ, Gyro XYZ, Motor Angle L/R, Motor Torque L/R) 순서로 배치.
+ *
+ * User Custom 모드(MODULE_ID=0xF0~0xFE)에서는 어떤 float 배열이든 가능.
+ */
+typedef struct {
+    float accel[3];        /* Accelerometer X, Y, Z (m/s²)  */
+    float gyro[3];         /* Gyroscope X, Y, Z (rad/s)     */
+    float motor_angle[2];  /* Motor Angle Left, Right (deg)  */
+    float motor_torque[2]; /* Motor Torque Left, Right (Nm)  */
+} PhAI_CombinedData_t;    /* 40 bytes = 10 × float32        */
+
 /**
  *-----------------------------------------------------------
- * PULBIC (GLOBAL) VARIABLES
+ * PUBLIC (GLOBAL) VARIABLES
  *-----------------------------------------------------------
  */
 
@@ -137,6 +155,8 @@ typedef struct __attribute__((packed)) {
 // --- Task State Machine Handle ---
 static XmTsmHandle_t s_userHandle;
 static uint32_t s_dataSaveLoopCnt;
+static uint32_t s_session_counter = 0;
+static char s_session_name[32];
 
 // --- Init Homing State Management ---
 static HomingState_t s_homingState = HOMING_ENTRY;
@@ -152,6 +172,7 @@ static PassiveState_t s_passiveState = PASSIVE_STATE_SET_IMPEDANCE;
 // --- For Dat Save ---
 static bool s_debug_USB_metData = false;
 static MyData_t myData;
+static PhAI_CombinedData_t s_streamData;
 
 /**
  *------------------------------------------------------------
@@ -213,7 +234,7 @@ void User_Setup(void)
     };
     XM_TSM_AddState(s_userHandle, &sb_conf);
 
-    // [등록 3] STANDBY 상태 설정
+    // [등록 3] ACTIVE 상태 설정
     XmStateConfig_t act_conf = {
         .id = XM_STATE_ACTIVE,
         .on_entry = Active_Entry,
@@ -226,7 +247,12 @@ void User_Setup(void)
     XM_SetUsbLogSource(&myData, sizeof(MyData_t));
     
     // 스트리밍할 때도 'myData'를 보내겠다! (서로 달라도 됨)
-    XM_SetUsbStreamSource(&myData, sizeof(MyData_t));
+    //XM_SetUsbStreamSource(&myData, sizeof(MyData_t));
+    /* PhAI V2: 데이터 소스 등록 (Auto-Stream 시 매 루프 자동 전송) */
+	XM_SetUsbStreamSource(&s_streamData, sizeof(s_streamData));
+
+    /* Module ID 설정 (COMBINED = PhAI Studio 기본 10ch 모드) */
+	XM_SetUsbStreamModuleId(PHAI_MODULE_COMBINED);
 
     // 기본적으로 XM_CTRL_MONITOR 모드이므로 굳이 Set하지 않아도 됨
     XM_SetControlMode(XM_CTRL_MONITOR);
@@ -287,12 +313,16 @@ static void Active_Entry(void)
     s_previousSuitMode = XM.status.h10.h10Mode;
     EnterPassiveMode();
 
+    snprintf(s_session_name, sizeof(s_session_name), "Gait_%03lu",
+                 (unsigned long)s_session_counter++);
+
     if (XM_IsUsbLogReady()) {
         // "/LOGS/TestRun_001" 폴더를 만들고 "metadata.txt"를 생성함
         // C언어 문자열 연결 기능을 사용하여 깔끔하게 작성
         // 각 줄 끝에 공백이나 쉼표가 빠지지 않도록 주의하세요.
         // meta data를 저장하면서 log status를 LOG_STATUS_LOGGING으로 변경하여 데이터 저장을 수행할 수 있음.
-        s_debug_USB_metData = XM_StartUsbDataLog("TestRun_001", 
+        s_debug_USB_metData = XM_StartUsbDataLog(
+			s_session_name,
             "dataSaveLoopCnt, h10Mode, h10AssistLevel,"
             "leftHipAngle, rightHipAngle, leftThighAngle, rightThighAngle,"
             "pelvicAngle, pelvicVelY, leftKneeAngle, rightKneeAngle, isLeftFootContact,"
@@ -355,6 +385,19 @@ static void Active_Loop(void)
     myData.rightHipImuGlobalGyrY = XM.status.h10.rightHipImuGlobalGyrY;
     myData.rightHipImuGlobalGyrZ = XM.status.h10.rightHipImuGlobalGyrZ;
     s_dataSaveLoopCnt++;
+
+    s_streamData.accel[0] = XM.status.h10.leftHipImuGlobalAccX;
+	s_streamData.accel[1] = XM.status.h10.leftHipImuGlobalAccY;
+	s_streamData.accel[2] = XM.status.h10.leftHipImuGlobalAccZ;
+
+	s_streamData.gyro[0] = XM.status.h10.leftHipImuGlobalGyrX;
+	s_streamData.gyro[1] = XM.status.h10.leftHipImuGlobalGyrY;
+	s_streamData.gyro[2] = XM.status.h10.leftHipImuGlobalGyrZ;
+
+	s_streamData.motor_angle[0]  = XM.status.h10.leftHipMotorAngle;
+	s_streamData.motor_angle[1]  = XM.status.h10.rightHipMotorAngle;
+	s_streamData.motor_torque[0] = XM.status.h10.leftHipTorque;
+	s_streamData.motor_torque[1] = XM.status.h10.rightHipTorque;
 }
 
 static void Active_Exit(void)

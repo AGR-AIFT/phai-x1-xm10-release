@@ -3,10 +3,12 @@
  * @file    button_led_basic.c
  * @author  HyundoKim
  * @brief   [초급] 버튼 상태를 LED에 직접 반영하기
- * @version 0.1
- * @date    Nov 18, 2025
+ * @version 1.1
+ * @date    Mar 09, 2026
  *
- * @copyright Copyright (c) 2025 Angel Robotics Co., Ltd. All rights reserved.
+ * @see docs/api-reference/01-task-state-machine.md
+ * @see docs/api-reference/03-led-btn-control.md
+ * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
 
@@ -28,7 +30,7 @@
 
 /**
  *-----------------------------------------------------------
- * PULBIC (GLOBAL) VARIABLES
+ * PUBLIC (GLOBAL) VARIABLES
  *-----------------------------------------------------------
  */
 
@@ -56,7 +58,7 @@ static void Run_Loop(void);
  *------------------------------------------------------------
  */
 
-/* --- Setup & Loop --- */
+/* --- 설정 및 루프 --- */
 void User_Setup(void)
 {
     // 기본 태스크 생성 (단일 상태)
@@ -80,7 +82,7 @@ void User_Loop(void)
  *------------------------------------------------------------
  */
 
-/* --- State Logic --- */
+/* --- 상태 로직 --- */
 static void Run_Loop(void)
 {
     // 1. 버튼 1의 현재 물리적 상태 확인

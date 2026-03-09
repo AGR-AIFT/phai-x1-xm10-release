@@ -17,8 +17,12 @@ XM10 플랫폼의 전체 문서 인덱스입니다. 아래 학습 경로를 따�
 │   (함수 명세 참조)    (로봇 제어)                                    │
 │                            │                                        │
 │                            ▼                                        │
-│                      Architecture ──► Advanced Topics               │
-│                      (시스템 이해)     (심화 프로젝트)                │
+│                      Tutorials Part 4 ──► Advanced Topics           │
+│                      (심화 프로젝트)       (로드맵/연구)              │
+│                            │                                        │
+│                            ▼                                        │
+│                      Architecture                                   │
+│                      (시스템 이해)                                    │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
@@ -41,15 +45,17 @@ XM10 개발을 위한 환경 구축 가이드입니다. 처음 사용하시는 �
 
 ### 2. [Tutorials](tutorials/) — 단계별 학습
 
-20개의 예제를 통해 XM10의 기능을 단계적으로 마스터합니다.
+27개의 예제를 통해 XM10의 기능을 단계적으로 마스터합니다.
 
 | Part | 주제 | 예제 | 난이도 |
 | :---: | :--- | :--- | :---: |
+| **Part 0** | Quick Start | Ex.00 (1개) | 입문 |
 | **Part 1** | 기본 I/O 제어 | Ex.01 ~ Ex.06 (10개) | 초급 ~ 고급 |
 | **Part 2** | USB 통신 & 데이터 로깅 | Ex.07 ~ Ex.10c (7개) | 초급 ~ 고급 |
 | **Part 3** | KIT H10 로봇 제어 | Ex.11 ~ Ex.13 (3개) | 응용 |
+| **Part 4** | 심화 프로젝트 | Ex.14 ~ Ex.19 (6개) | 중급 ~ 고급 |
 
-> 난이도별 학습 경로와 전체 예제 목록은 **[Tutorials README](tutorials/)** 에서 확인하세요.
+> 난이도별 학습 경로와 전체 예제 목록은 **[Tutorials README](tutorials/)** 또는 **[Examples README](../examples/README.md)** 에서 확인하세요.
 
 ---
 
@@ -103,7 +109,7 @@ XM10의 하드웨어 및 펌웨어 레이어 구조, 통신 프로토콜, 제어
 
 | 리소스 | 설명 |
 | :--- | :--- |
-| [Examples](../examples/) | 20개 예제 소스 코드 (각 폴더에 README 포함) |
+| [Examples](../examples/) | 27개 예제 소스 코드 (각 폴더에 README 포함) |
 | [Python Tools](../PythonDecoder/) | CDC 수신기, CSV 분석기, MSC 바이너리 디코더 |
 | [Changelog](../CHANGELOG.md) | 버전별 변경 이력 |
 | [XM10 SDK](../XM10_SDK/) | SDK 프로젝트 (libXM_Lib.a + 헤더 + user_app.c) |

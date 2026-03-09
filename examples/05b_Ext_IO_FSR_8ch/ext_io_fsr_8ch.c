@@ -30,8 +30,9 @@
  *   16-bit로 읽어도 센서 자체의 노이즈가 하위 비트를 채우므로,
  *   12-bit로 설정하면 노이즈가 자연스럽게 제거되는 효과가 있습니다.
  *
- * @version 1.0
- * @date    Feb 24, 2026
+ * @version 1.1
+ * @date    Mar 09, 2026
+ * @see     docs/api-reference/04-external-io.md
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */

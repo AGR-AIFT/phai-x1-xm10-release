@@ -26,7 +26,7 @@ XM10 보드에는 총 8개의 확장 DIO핀과 4개의 ADC input핀이 제공됩
 | **`XM_EXT_ADC_3`** | EXT\_ADC_3 | **ADC** | 12bit 아날로그 입력 전용 (10kHz Sampling Time) **[주의]** IMU 모듈 사용 시 UART RX로 점유됨 (사용 불가) |
 | **`XM_EXT_ADC_4`** | EXT\_ADC_4 | **ADC** | 16bit 아날로그 입력 전용 (10kHz Sampling Time) |
 
-> **Warning:** `XM_EXT_ADC_1`과 `XM_EXT_ADC_3`는 `EnableExternalImu()`가 활성화되어 있으면 **ADC 설정이 자동으로 UART로 변경**됩니다.
+> **Warning:** `XM_EXT_ADC_1`과 `XM_EXT_ADC_3`는 `XM_EnableExternalImu()`가 활성화되어 있으면 **ADC 설정이 자동으로 UART로 변경**됩니다.
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/a3c05839-4a08-41ce-86ec-beb0c0863d07" width="90%" />
@@ -289,3 +289,17 @@ DIO 핀 번호를 ADC 핀 번호로 변환하는 매크로입니다. `XM_SwitchD
     void XM_EnableExternalImu(void);
     ```
   * **Note**: 이 함수 호출 후 `XM_EXT_ADC_1`, `XM_EXT_ADC_3`은 ADC로 사용할 수 없습니다.
+
+---
+
+## 관련 예제
+
+| 예제 | 난이도 | 외부 I/O 활용 |
+|------|--------|-------------|
+| [04_Ext_IO_Basic](../../examples/04_Ext_IO_Basic/) | 초급 | DIO 입출력 |
+| [05_Ext_IO_analog](../../examples/05_Ext_IO_analog/) | 초급 | 고정 ADC 전압 읽기 |
+| [05a_Ext_IO_DIO_to_ADC](../../examples/05a_Ext_IO_DIO_to_ADC/) | 초급 | DIO→ADC 단일 전환 |
+| [05b_Ext_IO_FSR_8ch](../../examples/05b_Ext_IO_FSR_8ch/) | 중급 | 8채널 일괄 전환 + Resolution |
+| [05c_Ext_IO_Mixed_ADC](../../examples/05c_Ext_IO_Mixed_ADC/) | 중급 | 고정 + 동적 ADC 혼합 |
+| [05d_Ext_IO_DIO_ADC_Hybrid](../../examples/05d_Ext_IO_DIO_ADC_Hybrid/) | 응용 | GPIO + ADC 혼합 모드 |
+| [06_Ext_IO_Safety_Switch](../../examples/06_Ext_IO_Safety_Switch/) | 중급 | 안전 스위치 인터록 |

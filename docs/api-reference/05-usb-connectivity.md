@@ -82,7 +82,7 @@ typedef enum {
   * **Parameters**
       * `data_ptr`: 전송할 구조체의 주소
       * `size`: 구조체의 크기
-  * **Note**: 이 함수로 등록된 데이터는 `StartUsbStream()` 호출 시 **바이너리(Binary)** 형태로 PC에 전송됩니다. (Serial Plotter 등에 적합)
+  * **Note**: 이 함수로 등록된 데이터는 `XM_StartUsbStream()` 호출 시 **바이너리(Binary)** 형태로 PC에 전송됩니다. (Serial Plotter 등에 적합)
 
 -----
 
@@ -105,7 +105,7 @@ USB 메모리에 파일을 생성하고 데이터를 기록하는 기능입니�
   * **Example**
     ```c
     // 버튼을 누르면 "Test_xx.csv" 파일을 만들고, 헤더를 "Time,Angle"로 적음
-    if (GetButtonEvent(XM_BTN_1) == XM_BTN_CLICK) {
+    if (XM_GetButtonEvent(XM_BTN_1) == XM_BTN_CLICK) {
         XM_StartUsbDataLog("Test", "Time_ms, Angle_deg");
     }
     ```
@@ -267,3 +267,25 @@ PC로부터 데이터를 수신합니다. (키보드 입력 등)
     ```c
     void XM_USB_ProcessPeriodic(void);
     ```
+
+---
+
+## 관련 예제
+
+### CDC (시리얼 통신)
+| 예제 | 난이도 | CDC 활용 |
+|------|--------|---------|
+| [00_Quick_Start](../../examples/00_Quick_Start/) | 입문 | 디버그 메시지 전송 |
+| [07_CDC_Basic_Print](../../examples/07_CDC_Basic_Print/) | 초급 | 텍스트 메시지 |
+| [08_CDC_Sensor_Print](../../examples/08_CDC_Sensor_Print/) | 초급 | sprintf 포맷팅 |
+| [09_CDC_Stream](../../examples/09_CDC_Stream/) | 중급 | PhAI V2 바이너리 스트리밍 |
+| [18_Debug_Monitor](../../examples/18_Debug_Monitor/) | 중급 | Health 대시보드 |
+
+### MSC (데이터 로깅)
+| 예제 | 난이도 | MSC 활용 |
+|------|--------|---------|
+| [10_MSC_Manual_log](../../examples/10_MSC_Manual_log/) | 레거시 | 기본 로깅 (10a 참조) |
+| [10a_MSC_Basic_Log](../../examples/10a_MSC_Basic_Log/) | 초급 | 최소 구조체 + 자동 타임스탬프 |
+| [10b_MSC_Custom_Struct](../../examples/10b_MSC_Custom_Struct/) | 중급 | 다중 타입 + 수동 타임스탬프 |
+| [10c_MSC_Advanced_Log](../../examples/10c_MSC_Advanced_Log/) | 고급 | TSM + 에러 복구 + 파일 롤링 |
+| [19_Memory_Aware_Design](../../examples/19_Memory_Aware_Design/) | 중급 | 메모리 효율적 데이터 관리 |

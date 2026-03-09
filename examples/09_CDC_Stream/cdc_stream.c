@@ -16,9 +16,11 @@
  * 2. XM_SetUsbStreamSource()로 등록
  * 3. User_Loop()에서 데이터 갱신 → XM_SendUsbData()로 전송
  *
- * @version 2.0  (PhAI V2 프로토콜 적용)
- * @date    Feb 23, 2026
+ * @version 2.1  (PhAI V2 프로토콜 적용)
+ * @date    Mar 09, 2026
  *
+ * @see     docs/api-reference/05-usb-connectivity.md
+ * @see     docs/api-reference/02-h10-control-n-data.md
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
@@ -56,7 +58,7 @@ typedef struct {
 
 /**
  *-----------------------------------------------------------
- * PULBIC (GLOBAL) VARIABLES
+ * PUBLIC (GLOBAL) VARIABLES
  *-----------------------------------------------------------
  */
 

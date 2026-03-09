@@ -381,10 +381,36 @@ bool XM_IsCmConnected(void);
 void Off_loop(void) {
     // CM과 연결이 확인되면 Standby 상태로 전환합니다.
     if (XM_IsCmConnected()) {
-        XM_TSM_TransitionTaskTo(s_mainTaskHandle, XM_STATE_STANDBY);
+        XM_TSM_TransitionTo(s_mainTaskHandle, XM_STATE_STANDBY);
     }
 }
 ```
+
+---
+
+### `XM_GetXMNmtState()`
+
+```c
+CM_NmtState_t XM_GetXMNmtState(void);
+```
+
+| 항목 | 내용 |
+|------|------|
+| **설명** | CM과의 DOP V3 PnP(NMT) 상태를 반환합니다. |
+| **반환값** | `CM_NmtState_t` 열거형 — 현재 NMT 상태 |
+| **호출 위치** | `User_Loop()` |
+
+**NMT 상태 값:**
+
+| 상태 | 값 | 설명 |
+|------|-----|------|
+| `NMT_STATE_BOOT_UP` | 0 | 부팅 중 (Boot-up 메시지 미수신) |
+| `NMT_STATE_PRE_OPERATIONAL` | 1 | SDO 통신 가능, PDO 비활성 |
+| `NMT_STATE_OPERATIONAL` | 2 | 모든 통신 활성 (정상 상태) |
+| `NMT_STATE_STOPPED` | 3 | 통신 중단됨 |
+
+> **참고**: `XM_IsCmConnected()`는 내부적으로 `XM_GetXMNmtState() == NMT_STATE_OPERATIONAL`을 확인합니다.
+> NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 사용하세요.
 
 ---
 
@@ -716,16 +742,16 @@ static void InitHoming(void)
 **Syntax**
 ```c
 // 각도 제한 루틴 활성화/비활성화
-void SetDegreeLimitRoutine(SystemNodeID_t nodeId, bool isSet);
+void XM_SetDegreeLimitRoutine(SystemNodeID_t nodeId, bool isSet);
 
 // 각도 제한 범위 설정
-void SetDegreeLimit(SystemNodeID_t nodeId, float upperLimit, float lowerLimit);
+void XM_SetDegreeLimit(SystemNodeID_t nodeId, float upperLimit, float lowerLimit);
 
 // 각속도 제한 루틴 활성화/비활성화
-void SetVelocityLimitRoutine(SystemNodeID_t nodeId, bool isSet);
+void XM_SetVelocityLimitRoutine(SystemNodeID_t nodeId, bool isSet);
 
 // 각속도 제한 범위 설정
-void SetVelocityLimit(SystemNodeID_t nodeId, float upperLimit, float lowerLimit);
+void XM_SetVelocityLimit(SystemNodeID_t nodeId, float upperLimit, float lowerLimit);
 ```
 
 **Parameters**
@@ -844,7 +870,7 @@ bodyData[4] = 440;   // 0.440m
 bodyData[5] = 435;   // 0.435m
 bodyData[6] = 60;    // 0.06m
 bodyData[7] = 59;    // 0.059m
-SendUserBodyData(&bodyData[0]);
+XM_SendUserBodyData(&bodyData[0]);
 ```
 
 ---
@@ -889,14 +915,14 @@ void Active_Loop(void) {
 
 -----
 
-### `XM_SetAssistTorqueR` / `XM_SetAssistTorqueL`
+### `XM_SetAssistTorqueRH` / `XM_SetAssistTorqueLH`
 
 한쪽 다리의 토크만 개별적으로 설정합니다. 반대쪽 다리의 토크 값은 이전 상태를 유지합니다.
 
 **Syntax**
 ```c
-void XM_SetAssistTorqueR(float r);
-void XM_SetAssistTorqueL(float l);
+void XM_SetAssistTorqueRH(float r);
+void XM_SetAssistTorqueLH(float l);
 ```
 
 **Parameters**
@@ -905,7 +931,7 @@ void XM_SetAssistTorqueL(float l);
 **Example**
 ```c
 // 오른쪽 다리만 5.0Nm로 설정 (왼쪽은 기존 값 유지)
-XM_SetAssistTorqueR(5.0f);
+XM_SetAssistTorqueRH(5.0f);
 ```
 
 ---
@@ -947,3 +973,17 @@ static void ManageModeTransition(void)
         // 다음 상태 동작 수행
         ...
 ```
+
+---
+
+## 관련 예제
+
+| 예제 | 난이도 | 제어 방식 |
+|------|--------|----------|
+| [08_CDC_Sensor_Print](../../examples/08_CDC_Sensor_Print/) | 초급 | 센서 데이터 읽기 (XM.status) |
+| [11_Passive_Mode](../../examples/11_Passive_Mode/) | 고급 | P-Vector + I-Vector 궤적 제어 |
+| [12_Active_Assist_Mode](../../examples/12_Active_Assist_Mode/) | 고급 | 실시간 토크 제어 (SetAssistTorque) |
+| [13_Resistive_Mode](../../examples/13_Resistive_Mode/) | 중급 | 보상 게인 설정 (SetResistiveCompGain) |
+| [14_PD_Realtime_Control](../../examples/14_PD_Realtime_Control/) | 중급 | PD 토크 제어 |
+| [15_Inverted_Pendulum_Control](../../examples/15_Inverted_Pendulum_Control/) | 고급 | 모델 기반 중력 보상 + PD |
+| [17_FSM_Gait_Intent](../../examples/17_FSM_Gait_Intent/) | 고급 | 보행 단계별 토크 보조 |
