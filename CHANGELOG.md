@@ -4,7 +4,28 @@
 
 ---
 
-## [v2.0.0] — 2026-02-24
+## [v2.0.1] — 2026-03-09
+
+### Fixed
+
+* **libXM_Lib.a 재빌드**: XM_FW 고유 코드(53개)만 포함하도록 수정
+  * AS-IS: Core/Drivers/Middlewares/FATFS/Compatible 등 SDK가 소스로 컴파일하는 코드까지 .a에 포함 → 심볼 중복 + 헤더 ABI 불일치로 런타임 크래시 (vPortFree heap corruption)
+  * TO-BE: XM_FW 레이어만 포함, SDK 측 소스와 충돌 없음
+* **AGR_DOP 리팩토링 구조 반영**: `agr_dop.c` → `Core/` + `Transport/` 분리 구조로 업데이트
+* **SDK 링커 설정 수정**: `--whole-archive` 적용으로 `__weak` 심볼 정상 오버라이드
+  * Libraries(-l) → Other flags 이동 (CubeIDE makefile 명령줄 순서 문제 해결)
+* **SDK XM_FW 헤더 동기화**: ARC_ExtensionBoard 원본과 완전 동기화
+  * AGR_DOP Core/Transport 헤더 추가, 폐기된 `agr_dop.h` 제거
+* **CMake CLI 빌드 도구 추가**: `cproject_to_cmake.py`, `stm32_gcc_toolchain.cmake`
+
+### Note
+
+* libXM_Lib.a는 Debug 빌드(-Og -g3)로 제공됩니다. Release 최적화(-O2) 빌드는 향후 지원 예정입니다.
+* v2.0.0의 libXM_Lib.a는 동작하지 않습니다. **반드시 v2.0.1을 사용하세요.**
+
+---
+
+## [v2.0.0] — 2026-02-24 ⚠️ Deprecated — v2.0.1 사용 권장
 
 ### Breaking Changes
 
