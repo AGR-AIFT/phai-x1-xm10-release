@@ -41,9 +41,9 @@
  *-----------------------------------------------------------
  */
 
-/** @brief OD Entry 최대 개수 (드라이버별) */
+/** @brief OD Entry 최대 개수 (드라이버별, IMU Hub ~111개 수용) */
 #ifndef AGR_OD_MAX_ENTRIES
-#define AGR_OD_MAX_ENTRIES          64
+#define AGR_OD_MAX_ENTRIES          128
 #endif
 
 /**
@@ -170,5 +170,50 @@ typedef enum {
 
 /** @brief PDO Mapping Parameter: TPDO2 Mapping */
 #define AGR_OD_IDX_TPDO2_MAPPING    0x1A01
+
+/**
+ *-----------------------------------------------------------
+ * TRANSPORT SELECTION (프로젝트별 설정 — 유일한 제어점)
+ *-----------------------------------------------------------
+ * 각 모듈에서 사용할 Transport를 여기서만 설정합니다.
+ * CMakeLists.txt는 모든 Transport 소스를 무조건 포함하되,
+ * 비활성 Transport의 .c 파일은 빈 번역 단위로 컴파일됩니다.
+ *
+ * [모듈별 권장 설정]
+ * XM (Extension Module):  CANFD=1, COE=0  (CAN-FD Master)
+ * IMU Hub:                CANFD=1, COE=0  (CAN-FD Slave)
+ * CM (Central Module):    CANFD=1, COE=1  (EtherCAT Slave + CAN-FD Bridge)
+ * MD (Motor Driver):      CANFD=1, COE=1  (EtherCAT Slave + CAN-FD)
+ * Jetson AM:              CANFD=0, COE=1  (EtherCAT Master)
+ */
+
+/** @brief CAN-FD Transport 활성화 (기본 ON) */
+#ifndef AGR_DOP_TRANSPORT_CANFD
+#define AGR_DOP_TRANSPORT_CANFD     1
+#endif
+
+/** @brief CoE (CAN over EtherCAT) Transport 활성화 (기본 OFF) */
+#ifndef AGR_DOP_TRANSPORT_COE
+#define AGR_DOP_TRANSPORT_COE       0
+#endif
+
+/**
+ *-----------------------------------------------------------
+ * CoE CONFIGURATION
+ *-----------------------------------------------------------
+ */
+#if AGR_DOP_TRANSPORT_COE
+
+/** @brief Process Image 최대 크기 (SM2/SM3 각각, bytes) */
+#ifndef AGR_COE_MAX_PI_SIZE
+#define AGR_COE_MAX_PI_SIZE         128
+#endif
+
+/** @brief CoE SDO 최대 데이터 크기 (bytes) */
+#ifndef AGR_COE_SDO_MAX_DATA_SIZE
+#define AGR_COE_SDO_MAX_DATA_SIZE   AGR_SDO_MAX_DATA_SIZE
+#endif
+
+#endif /* AGR_DOP_TRANSPORT_COE */
 
 #endif /* AGR_DOP_CONFIG_H */

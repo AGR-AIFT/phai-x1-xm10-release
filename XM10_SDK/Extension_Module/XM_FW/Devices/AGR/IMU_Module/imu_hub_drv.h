@@ -29,7 +29,7 @@
  * - IMU Hub Node ID: 0x08
  * - TPDO1 (0x188): Group A (Metadata + IMU 0,1,2)
  * - TPDO2 (0x288): Group B (Metadata + IMU 3,4,5)
- * - SDO Request (0x608): PDO Mapping (0x2010/0x2011)
+ * - SDO Request (0x608): TPDO Mapping (0x1A00/0x1A01)
  * - SDO Response (0x588): IMU Connected Mask (0x2000)
  * - Heartbeat (0x708): PnP Master가 처리
  *
@@ -44,7 +44,8 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "agr_dop.h"
+#include "agr_dop_types.h"
+#include "Transport/CAN_FD/agr_dop_canfd.h"
 #include "agr_nmt.h"
 #include "agr_pnp_master.h"  /* ✅ V4.0: 새 AGR_PnP_Master API */
 

@@ -48,8 +48,7 @@
 /** @brief PDO Mapping Table 최대 Entry 개수 */
 #define AGR_PDO_MAP_MAX_ENTRIES     32
 
-/** @brief OD Entry 최대 개수 (드라이버별) */
-#define AGR_OD_MAX_ENTRIES          64
+/* AGR_OD_MAX_ENTRIES: agr_dop_config.h에서 정의 (128) */
 
 /**
  *-----------------------------------------------------------
@@ -163,6 +162,7 @@ typedef struct {
 typedef struct {
     uint16_t od_index;      /**< OD Entry Index */
     uint8_t  od_subindex;   /**< OD Entry Sub-Index */
+    uint8_t  bit_length;    /**< 매핑 크기 (bits), CANopen 표준 4B PDO Mapping */
 } AGR_PDO_MapItem_t;
 
 typedef struct {

@@ -209,7 +209,7 @@ void AGR_NMT_SetState(AGR_NMT_Inst_t* inst, AGR_NMT_State_t new_state);
  *     }
  *     
  *     // 다른 프로토콜 처리 (SDO, PDO)
- *     AGR_DOP_ProcessRxMessage(&s_dop_ctx, can_id, data, len);
+ *     AGR_CANFD_ProcessRxMessage(&s_dop_ctx, can_id, data, len);
  * }
  * ```
  */
