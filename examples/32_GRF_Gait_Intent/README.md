@@ -8,7 +8,9 @@
 >
 > 📄 전제 예제: [Ex.31 DOB 투명 모드](../31_Friction_Comp_DOB/) (Stage 1 완성)
 >
-> 📄 논문 레퍼런스: Winter, D.A. (2009). *Biomechanics and Motor Control of Human Movement*, 4th ed. (보행 위상 정의) · Gervasi, A. et al. (2020). *Exoskeleton gait assistance based on continuous gait phase estimation.* IROS 2020.
+> ⚠️ **아날로그 GRF 센서(`XM.status.grf`)는 별도의 GRF 신발 모듈이 필요합니다.**
+> 이 예제의 기본 동작(Phase 1~4)은 H10 내장 접촉 신호만으로 동작합니다.
+> GRF 모듈 구매·연결 문의: **Angel Robotics (support@angelrobotics.com)**
 
 ---
 
@@ -28,14 +30,72 @@ Stage 5    Shared Autonomy
 
 ---
 
+## 제어 모드 이해 (초급 가이드)
+
+> 이 섹션은 "의도 감지"가 제어공학에서 왜 중요한지 설명합니다.
+
+### 보조 로봇의 딜레마: "언제 도울 것인가?"
+
+외골격이 사람을 도울 때 가장 어려운 문제는 **타이밍**입니다.
+
+```
+너무 이르게 보조: 사람이 원하지 않는 방향으로 밀어 → 불편·위험
+너무 늦게 보조: 이미 근육이 힘을 다 썼을 때 도달 → 효과 없음
+딱 맞게 보조: 근육이 힘을 낼 직전 → 에너지 절감 최대화
+```
+
+이 예제는 **보행 위상(gait phase)**을 추정하여 "지금이 몇 % 보행 진행 중인지"를 알고,
+특정 위상에서 정확한 타이밍에 보조 토크를 인가합니다.
+
+### PhAI X1에서 접근 가능한 GRF 신호 두 종류
+
+```
+신호 1: XM.status.h10.isRightFootContact  (이 예제 사용)
+  → H10 Body Data 패킷에 포함된 바이너리 접촉 신호 (0 or 1)
+  → 장점: 추가 HW 불필요   단점: 힘의 크기 정보 없음
+
+신호 2: XM.status.grf.rightSensorData[14] (고급 확장)
+  → 별도 GRF 신발 센서에서 수신하는 14채널 아날로그 족압
+  → 0~255 raw value, 발바닥 각 영역의 실제 압력 분포
+  → 장점: 연속 신호, 힘의 크기·분포 파악 가능
+  → Stage 2 고도화에 활용 가능
+  ⚠️ GRF 신발 모듈은 별도 하드웨어 구매가 필요합니다.
+     문의: Angel Robotics (support@angelrobotics.com)
+```
+
+<!-- GRF 신발 모듈 사진 (추후 추가 예정) -->
+<!-- ![GRF Shoe Module](./assets/grf_shoe_module.jpg) -->
+
+이 예제는 신호 1(바이너리)로 보행 위상 개념을 학습합니다.
+신호 2(아날로그 14채널)는 더 정밀한 의도 감지의 출발점이며, 별도 GRF 모듈 연결 후 활성화 가능합니다.
+
+### 왜 sin 프로파일인가?
+
+보행 보조 토크는 **계단 함수(on/off)보다 sin 반파**가 왜 더 좋은가?
+
+```
+계단 함수:  0 → 2Nm (갑자기)  → 0 (갑자기)  → 충격, 불편
+sin 반파:   0 → 서서히 → 최대 → 서서히 → 0    → 부드러움
+```
+
+```
+τ = A · sin(phase · π)
+  → phase=0 (발뒤꿈치 착지): τ=0 (충격 없이 시작)
+  → phase=0.5 (입각기 중간): τ=A (최대 보조 — 지면 반발력 최대 구간)
+  → phase=1.0 (다음 착지 직전): τ=0 (자연스럽게 종료)
+```
+
+Quinlivan 2017(Science Robotics)에서 이 방식으로 보행 에너지를 23% 절감함을 실증.
+
+---
+
 ## 학습 목표
 
 - **보행 이벤트(Gait Event)** — Heel Strike(HS)와 Toe Off(TO) — 을 센서 신호에서 추출하는 방법을 학습합니다.
-- **보행 위상 추정기(Phase Estimator)**: `phase += dt / T_period` 를 이해합니다.
-- **위상 동기화 보조 토크** 생성 원리를 학습합니다:
-  - PUSH(입각기 보조): `τ = A · sin(phase · π)`
-  - PULL(유각기 보조): `τ = A · sin((phase - 0.5) · 2π)` [phase > 0.5]
+- **보행 위상 추정기(Phase Estimator)**: `phase += dt / T_period` 의 동작 원리를 이해합니다.
+- **위상 동기화 보조 토크** 생성 원리를 학습합니다.
 - H10 Body Data 의존성과 설정 방법을 이해합니다.
+- `XM.status.grf` (아날로그 GRF)로의 고도화 방향을 이해합니다.
 
 ---
 
@@ -51,8 +111,8 @@ Stage 5    Shared Autonomy
 보행 주기 추정 (T_period, 클램핑: 0.4 ~ 3.0초)
    ↓ phase += dt / T_period
 보행 위상 추정 (0.0 = HS, 1.0 = 다음 HS 직전)
-   ↓ 위상 기반 프로파일
-보조 토크 생성 (sin 반파 형태)
+   ↓ 위상 기반 sin 프로파일
+보조 토크 생성 (PUSH: 입각기 / PULL: 유각기)
 ```
 
 ### 보행 위상 추정기
@@ -64,7 +124,7 @@ if (!was_contact && is_contact) {
     phase = 0.0f;                    // 위상 리셋
 }
 
-// 매 1ms 위상 증분
+// 매 1ms 위상 증분 (선형 보간)
 phase += CONTROL_DT / period_s;
 if (phase >= 1.0f) phase -= 1.0f;   // 래핑
 ```
@@ -92,9 +152,75 @@ if (phase >= 1.0f) phase -= 1.0f;   // 래핑
 
 ---
 
+## 제어공학적 제약사항과 튜닝 가이드
+
+### ① isFootContact = 바이너리, 힘의 크기 정보 없음
+
+이 예제의 `isRightFootContact`는 **0 또는 1**입니다. 실제 GRF는 다음과 같습니다:
+
+```
+진짜 발뒤꿈치 착지 시 GRF 곡선:
+    │      ┌──────┐
+    │   ┌──┘      └──┐
+    │___┘             └___
+     HS              TO
+```
+
+바이너리 신호는 착지 순간과 이탈 순간만 포착합니다. 착지 강도, 발바닥 중심 이동 등은 `XM.status.grf`의 아날로그 신호로만 파악 가능합니다.
+
+**고도화 방향**: `grf.rightSensorData[0~13]`의 14채널 족압을 활용하면 연속 GRF 신호로 더 정밀한 위상 추정이 가능합니다.
+단, **GRF 신발 모듈(별도 HW)** 이 필요합니다. 문의: Angel Robotics (support@angelrobotics.com)
+
+### ② Body Data 통신 지연
+
+```
+H10 CM 내부에서 보행 분석 → DOP V1 PDO로 XM10 전송 (~1ms 주기)
+```
+
+이 지연으로 인해 실제 Heel Strike 발생과 XM10이 감지하는 시점 사이에 **1~2ms 지연**이 있습니다. 보행 속도가 빠를수록 위상 오차로 이어집니다.
+
+### ③ 보행 위상 추정기의 가정과 한계
+
+이 추정기는 다음 가정에 의존합니다:
+
+| 가정 | 실제 상황 | 영향 |
+|------|----------|------|
+| 일정한 보행 속도 | 가속/감속 구간 존재 | 위상 오차 누적 |
+| 좌우 대칭 보행 | 편마비, 절뚝거림 | 비대칭 위상 추정 |
+| 연속 보행 | 멈춤, 방향 전환 | 위상 발산 → BTN3 리셋 필요 |
+| 주기 0.4~3.0s 범위 | 달리기, 매우 느린 보행 | 클램핑으로 방어됨 |
+
+보행이 불규칙하거나 멈출 때는 반드시 BTN3로 추정기를 리셋하세요.
+
+### ④ 보조 토크 진폭 선택 기준 (구동기 한계 고려)
+
+| 진폭 | 적합한 대상 | 기준 |
+|------|-----------|------|
+| 0.5 Nm | 처음 사용자, 감각 확인 | 착용자가 보조를 거의 느끼지 못하는 수준 |
+| 1.0 Nm | 기본 보행 보조 | 일반 성인 보행 최소 유효 보조량 |
+| 2.0 Nm | 노약자, 재활 환자 | 임상 연구에서 사용되는 일반적 범위 |
+| 3.0 Nm | 높은 보조 요구 | Quinlivan 2017에서 최대 효과 구간 |
+| **8.0 Nm 초과** | ❌ 예제에서 권장하지 않음 | 정격 10 Nm 대비 안전 마진 필요 |
+
+> **구동기 안전 한계**: MD 전류 14A 초과 시 보호 동작 (경고 후 전원 OFF), 온도 120°C 이상 전원 OFF.
+> 보조 토크는 **점진적으로** 높이고, 처음에는 반드시 0.5~1.0 Nm에서 시작하세요.
+
+### ⑤ 디버그 확인 포인트
+
+PhAI Studio에서 다음을 확인하세요:
+
+```
+정상: Phase RH/LH가 규칙적인 톱니파 (0→1→0→1...)
+문제1: Phase가 변하지 않음 → H10 Body Data 전송 비활성화
+문제2: Phase가 갑자기 리셋 없이 계속 증가 → is_contact 항상 false
+문제3: Phase가 아주 빠르게 진동 → 노이즈에 의한 잘못된 HS 감지
+```
+
+---
+
 ## 실행 방법
 
-1. **H10 설정 확인 필수**: H10 소프트웨어에서 **Body Data 전송 활성화**. 비활성화 시 `isRightFootContact`/`isLeftFootContact`가 항상 `false`로 수신되어 보행 의도 감지가 불가능합니다.
+1. **H10 설정 확인 필수**: H10 소프트웨어에서 **Body Data 전송 활성화**. 비활성화 시 `isRightFootContact`/`isLeftFootContact`가 항상 `false`.
 2. `grf_gait_intent.c`를 `user_app.c`로 복사 후 빌드하여 XM10에 플래시합니다.
 3. H10 전원 ON → ASSIST MODE 전환.
 4. USB CDC 터미널에서 `[GRF] ACTIVE 진입` 메시지 확인.
@@ -106,10 +232,37 @@ if (phase >= 1.0f) phase -= 1.0f;   // 래핑
 ## 직접 해보기
 
 - **PUSH vs PULL 비교**: BTN2로 모드를 전환하며 체감하는 보조 패턴의 차이를 느껴보세요.
-  PUSH: 입각기(발이 땅에 닿는 구간) 보조 / PULL: 유각기(발을 드는 구간) 보조.
-- **위상 시각화**: PhAI Studio에서 Phase RH/LH가 규칙적인 톱니파(sawtooth)를 그리는지 확인하세요. 불규칙하면 Body Data 설정을 점검하세요.
+- **위상 시각화**: PhAI Studio에서 Phase RH/LH가 규칙적인 톱니파를 그리는지 확인하세요.
 - **토크 진폭 실험**: BTN1로 0.5Nm에서 시작하여 착용자 피드백에 따라 점진적으로 증가합니다.
-- **Stage 3 연결**: 이 예제의 위상 추정기를 Ex.23(Gait Phase Adaptive Torque)과 비교하세요. Stage 3에서는 위상 추정 결과를 적응 학습에 활용합니다.
+- **GRF 고도화 실험**: `XM.status.grf.rightSensorData`의 14채널 값을 USB에 출력하여 아날로그 족압 분포를 관찰해보세요. 연속 GRF 신호로 위상 추정기를 개선할 수 있습니다.
+
+---
+
+## 핵심 레퍼런스
+
+제어공학 배경 없이도 이해할 수 있는 순서로 정렬했습니다.
+
+**[입문] 보행의 생체역학 기초**
+- **Winter, D. A. (2009).** *Biomechanics and Motor Control of Human Movement* (4th ed.). Wiley. (~5000 citations)
+  → 보행 위상(Gait Phase), Heel Strike, Toe Off의 정의 기준. 입문자 필독.
+- **Ferris, D. P., Sawicki, G. S., & Daley, M. A. (2007).** "A physiologist's perspective on robotic exoskeletons for human locomotion." *The International Journal of HR, 4*(3), 507–528. (~400 citations)
+  → 외골격 보조가 인체 근육에 미치는 영향. "왜 이 타이밍인가"의 생리학적 근거.
+
+**[핵심] 보행 위상 동기화 보조**
+- **Quinlivan, B. T. et al. (2017).** "Assistance magnitude versus metabolic cost reductions for a tethered multiarticular soft exosuit." *Science Robotics, 2*(2), eaah4416. (~600 citations)
+  → **Ex.32의 sin 프로파일 보조의 직접 근거 논문.** 보행 위상 동기화로 23% 에너지 절감 실증.
+- **Kim, J. et al. (2019).** "Reducing the metabolic rate of walking and running with a versatile, portable exoskeleton." *Science, 365*(6454), 668–672. (~600 citations)
+  → 실제 포터블 외골격으로 보행 에너지 절감 실증. 이 예제가 지향하는 최종 목표.
+
+**[심화] 보행 의도 감지와 제어 전략**
+- **Tucker, M. R. et al. (2015).** "Control strategies for active lower extremity prosthetics and orthotics: a review." *Journal of NeuroEngineering and Rehabilitation, 12*(1), 1. (~700 citations)
+  → 하지 외골격·의지 제어 전략의 종합 리뷰. 위상 감지 방법론 비교 포함. **가장 포괄적인 리뷰**.
+- **Gervasi, A. et al. (2020).** "Exoskeleton gait assistance based on continuous gait phase estimation." *IROS 2020*.
+  → 이 예제와 가장 유사한 연속 보행 위상 추정 알고리즘.
+
+**[확장] 심층 학습 기반 의도 감지 (Stage 2 → Stage 4 연결)**
+- **Molinaro, D. D. et al. (2020).** "Biological-hip torque estimation using a robotic hip exoskeleton." *IROS 2020*.
+  → 이 예제의 GRF 이벤트 감지를 딥러닝 토크 추정으로 고도화하는 방향.
 
 ---
 
@@ -117,7 +270,9 @@ if (phase >= 1.0f) phase -= 1.0f;   // 래핑
 
 > **Body Data 의존성**: `isRightFootContact`/`isLeftFootContact`는 H10 Body Data 패킷에서 수신됩니다.
 > H10 소프트웨어 설정에서 Body Data 전송이 활성화되어 있어야 합니다.
-> 비활성화 시 Heel Strike 이벤트가 발생하지 않고 보조 토크가 출력되지 않습니다.
+> 비활성화 시 Heel Strike 이벤트가 발생하지 않고 보조 토크가 전혀 출력되지 않습니다.
 
 > **보행 위상 초기화**: 첫 Heel Strike 전까지는 보조 토크를 인가하지 않습니다.
 > 걷다 멈추거나 추정기가 올바르지 않을 때는 BTN3로 리셋하세요.
+
+> **바이너리 한계**: `isFootContact`는 있다/없다의 2값입니다. 실제 지면 반발력의 크기나 분포는 `XM.status.grf` 모듈(별도 연결 필요)로만 파악 가능합니다.

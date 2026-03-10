@@ -19,9 +19,9 @@
  * 공칭 모델: τ_model = τ_grav + τ_fric
  *   → 중력 토크 + 마찰 토크의 합산 (Ex.21과 동일)
  *
- * 실측 토크: τ_meas = Kt · i_meas
- *   → 모터 전류 × 토크 상수로부터 실제 액추에이터 출력 추정
- *   → Kt = 0.8 Nm/A (모터 사양으로부터)
+ * 실측 토크: τ_meas = Kt_joint · i_meas
+ *   → 모터 전류 × 관절 등가 토크 상수로부터 관절 토크 추정
+ *   → Kt_joint = Kt_motor × gear_ratio = 0.085 × 18.75 ≈ 1.594 Nm/A (데이터시트 기준)
  *
  * 외란 추정: τ_ext = LPF(τ_meas - τ_model)
  *   → 실측 - 공칭 = 모델이 설명 못한 나머지 (= 외란)
@@ -77,9 +77,18 @@
 #define B_COULOMB_NM            0.3f        // 쿨롱 마찰 계수 (Nm) — 감속기 정마찰
 #define B_VISCOUS_NMS           0.01f       // 점성 마찰 계수 (Nm·s/rad) — 속도 비례 마찰
 
-// --- 모터 토크 상수 ---
-#define KT_NM_PER_A             0.8f        // 토크 상수 (Nm/A) — 모터 사양서 기준
-                                            // τ_meas = Kt × i_meas (실측 토크 추정에 사용)
+// --- 구동기 사양 (데이터시트 기준) ---
+// rightHipTorque / leftHipTorque 필드는 실제로 모터 전류(A)를 담고 있습니다.
+// 관절 토크 추정: τ_joint [Nm] = Kt_motor [Nm/A] × gear_ratio × i_motor [A]
+#define GEAR_RATIO              18.75f      // 감속비 (양쪽 동일)
+#define KT_MOTOR_NM_PER_A       0.085f      // 모터 토크 상수 (데이터시트, Nm/A)
+#define KT_JOINT_NM_PER_A       (KT_MOTOR_NM_PER_A * GEAR_RATIO)  // ≈ 1.594 Nm/A (관절 등가 토크 상수)
+
+// --- 안전 한계 ---
+// [구동기 스펙] 하드웨어 최대 18.3 Nm, 정격 10 Nm, MD 전류 보호 14A (1.594 Nm/A × 14A ≈ 22.3 Nm)
+// [예제 가이드] 정격(10 Nm) 대비 안전 마진을 고려하여 8 Nm으로 제한
+//              처음 사용 시 더 낮은 값(예: 3~5 Nm)부터 시작 권장
+#define MAX_TORQUE_NM           8.0f        // 토크 포화 한계 (Nm) — 정격 10 Nm 대비 보수적 설정
 
 // --- DOB Q-filter 파라미터 ---
 // Q-filter: 외란 추정치의 고주파 노이즈를 제거하는 1차 저역통과 필터
@@ -462,12 +471,14 @@ static void _RunDobCompensation(void)
     float angle_r_rad = DEG_TO_RAD(angle_r_deg);
     float angle_l_rad = DEG_TO_RAD(angle_l_deg);
 
-    // 모터 전류 획득 (실측 토크 추정에 사용)
-    // τ_meas = Kt × i_meas  (간단한 전류-토크 모델)
-    float current_r_a = XM.status.h10.rightHipTorque;  // Torque = Kt * Current 근사
+    // 모터 전류 획득 후 관절 토크로 변환
+    // rightHipTorque / leftHipTorque 필드는 실제 단위가 모터 전류(A)입니다.
+    // τ_joint [Nm] = Kt_motor [Nm/A] × gear_ratio × i_motor [A]
+    //             = KT_JOINT_NM_PER_A × i_motor  (≈ 1.594 × i)
+    float current_r_a = XM.status.h10.rightHipTorque;  // 모터 전류 (A), 필드명 주의
     float current_l_a = XM.status.h10.leftHipTorque;
-    float tau_meas_r  = KT_NM_PER_A * current_r_a;
-    float tau_meas_l  = KT_NM_PER_A * current_l_a;
+    float tau_meas_r  = KT_JOINT_NM_PER_A * current_r_a;  // 관절 토크 추정 (Nm)
+    float tau_meas_l  = KT_JOINT_NM_PER_A * current_l_a;
 
     // --- 2. 각속도 추정: θ̇ ≈ (θ[k] - θ[k-1]) / dt ---
     float vel_r_rads = 0.0f;
