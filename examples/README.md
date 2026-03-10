@@ -1,6 +1,6 @@
 # XM10 예제 가이드
 
-XM10 Extension Module의 **27개 실습 예제**입니다.
+XM10 Extension Module의 **38개 실습 예제**입니다.
 각 예제 폴더에는 소스 코드(`.c`)와 상세 설명(`README.md`)이 포함되어 있습니다.
 
 > 📖 API 전체 명세: [docs/api-reference/](../docs/api-reference/)
@@ -28,7 +28,19 @@ XM10 Extension Module의 **27개 실습 예제**입니다.
         ├── 17  FSM Gait Intent      ← 7단계 보행 FSM + 단계별 보조
          │
 [유틸]  ├── 18  Debug Monitor        ← 루프 타이밍, Health 대시보드
-        └── 19  Memory Aware Design  ← 링 버퍼, 풀 할당자, 이동 평균
+        ├── 19  Memory Aware Design  ← 링 버퍼, 풀 할당자, 이동 평균
+         │
+[연구]  ├── 20  Impedance Control    ← 가상 스프링-댐퍼 (Hogan 1985)
+        ├── 21  Gravity Comp.        ← 투명 모드, α-점진 증가 (Just 2018)
+        ├── 22  CPG Oscillator       ← 적응 주파수 진동자 (Ronsse 2011)
+        ├── 23  Gait-Phase Adaptive  ← 위상별 정현파 보조 (Quinlivan 2017)
+        ├── 24  Virtual Constraint   ← Bézier + HZD (Westervelt 2003)
+        ├── 25  Stance Stiffness     ← 입각기 가변 강성 (Collins 2015)
+        ├── 26  ILC                  ← 반복 학습 제어 (Emken 2007)
+        ├── 27  MRAC                 ← MIT Rule 적응 (Slotine & Li 1991)
+        ├── 28  Admittance           ← 힘→위치 가상 동역학 (Keemink 2018)
+        ├── 29  Bilateral Coord.     ← 좌우 역위상 커플링 (Duschau-Wicke 2010)
+        └── 30  FF+FB Hybrid         ← 모델 기반 FF + PD FB (Slotine & Li 1991)
 ```
 
 ---
@@ -122,6 +134,46 @@ XM10 Extension Module의 **27개 실습 예제**입니다.
 | :---: | :--- | :---: | :--- |
 | [18](18_Debug_Monitor/) | 시스템 디버깅 모니터 | 중급 | 루프 프로파일링, Health 대시보드 |
 | [19](19_Memory_Aware_Design/) | 메모리 인식 설계 | 중급 | 링 버퍼, 풀 할당자, 이동 평균 |
+
+---
+
+## Part 5: 연구 시리즈 (Ex.20~30) — 논문 레퍼런스 기반
+
+> ⚠️ **Body Data 전제조건** — `gaitCycle`, `footContact`, `forwardVelocity` 등 H10 CM 보행 분석 데이터를 사용하는 예제는 `XM_SendUserBodyData()` 설정이 필수입니다. 상세 내용: [API Reference — Body Data 전제조건](../docs/api-reference/README.md#-body-data-전제조건--반드시-읽으세요)
+
+### 기본 상호작용 제어 (Ex.20~21)
+
+| 예제 | 제목 | Body Data | 난이도 | 논문 |
+| :---: | :--- | :---: | :---: | :--- |
+| [20](20_Impedance_Control/) | 임피던스 제어 | ✗ | ★★☆ | Hogan 1985 (ASME) |
+| [21](21_Gravity_Compensation/) | 중력 보상 / 투명 모드 | ✗ | ★★☆ | Just 2018 (JNER) |
+
+### 리드믹·위상 기반 제어 (Ex.22~25)
+
+| 예제 | 제목 | Body Data | 난이도 | 논문 |
+| :---: | :--- | :---: | :---: | :--- |
+| [22](22_CPG_Oscillator/) | CPG 적응 주파수 진동자 | △ | ★★★ | Ronsse 2011 (MBEC) |
+| [23](23_Gait_Phase_Adaptive_Torque/) | 보행 위상 적응 토크 | ✔ **필수** | ★★★ | Quinlivan 2017 (Science Robotics) |
+| [24](24_Virtual_Constraint/) | 가상 구속 / HZD | ✔ **필수** | ★★★★ | Westervelt 2003 (IEEE TAC) |
+| [25](25_Stance_Stiffness_Modulation/) | 입각기 가변 강성 | ✔ **필수** | ★★★ | Collins 2015 (Nature) |
+
+### 적응·학습 제어 (Ex.26~27)
+
+| 예제 | 제목 | Body Data | 난이도 | 논문 |
+| :---: | :--- | :---: | :---: | :--- |
+| [26](26_Iterative_Learning_Control/) | 반복 학습 제어 (ILC) | ✔ **필수** | ★★★★ | Emken 2007 (ICORR) |
+| [27](27_MRAC/) | 모델 참조 적응 제어 (MRAC) | ✗ | ★★★★★ | Slotine & Li 1991 |
+
+### 고급 상호작용·협응 제어 (Ex.28~30)
+
+| 예제 | 제목 | Body Data | 난이도 | 논문 |
+| :---: | :--- | :---: | :---: | :--- |
+| [28](28_Admittance_Control/) | 어드미턴스 제어 | ✗ | ★★★ | Keemink 2018 (IJRR) |
+| [29](29_Bilateral_Coordination/) | 좌우 협응 제어 | △ | ★★★ | Duschau-Wicke 2010 (TNSRE) |
+| [30](30_FF_FB_Hybrid_Control/) | FF+FB 혼합 제어 | ✗ | ★★★ | Slotine & Li 1991 Ch.6 |
+
+> **난이도 기준**: ★☆☆ 초급 | ★★☆ 중급 | ★★★ 고급 | ★★★★ 연구 | ★★★★★ 고급 연구
+> **Body Data**: ✔ 필수 | △ 권장 | ✗ 불필요
 
 ---
 
