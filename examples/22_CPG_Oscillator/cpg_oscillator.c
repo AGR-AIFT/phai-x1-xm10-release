@@ -219,8 +219,11 @@ void User_Setup(void)
     XM_TSM_AddState(s_tsm, &act_conf);
 
     /* USB 스트리밍 설정 */
-    XM_SetUsbStreamSource(&s_stream_data, sizeof(s_stream_data));
-    XM_SetUsbStreamModuleId(PHAI_MODULE_USER_CUSTOM_1);
+    XM_SetUsbCustomMeta(0xF0,
+        "[{\"name\":\"Phase\",\"unit\":\"deg\"},"
+        "{\"name\":\"Frequency\",\"unit\":\"Hz\"},"
+        "{\"name\":\"Torque\",\"unit\":\"Nm\"},"
+        "{\"name\":\"Sync Error\",\"unit\":\"rad/s\"}]");
 
     /* 초기 제어 모드: 모니터링 */
     XM_SetControlMode(XM_CTRL_MONITOR);
@@ -493,6 +496,7 @@ static void _UpdateStreamData(void)
     s_stream_data.omega_hz   = s_omega / (2.0f * (float)M_PI);
     s_stream_data.torque     = s_torque_cmd;
     s_stream_data.sync_error = fabsf(s_omega - OMEGA_INIT_RAD);
+    XM_SendUsbDataWithId(&s_stream_data, sizeof(s_stream_data), 0xF0);
 }
 
 /**

@@ -215,8 +215,11 @@ void User_Setup(void)
     XM_TSM_AddState(s_tsm, &act_conf);
 
     // USB 스트리밍 설정 (User Custom 모드)
-    XM_SetUsbStreamSource(&s_stream_data, sizeof(s_stream_data));
-    XM_SetUsbStreamModuleId(PHAI_MODULE_USER_CUSTOM_1);
+    XM_SetUsbCustomMeta(0xF0,
+        "[{\"name\":\"Gravity Torque\",\"unit\":\"Nm\"},"
+        "{\"name\":\"Friction Torque\",\"unit\":\"Nm\"},"
+        "{\"name\":\"Total Torque\",\"unit\":\"Nm\"},"
+        "{\"name\":\"Alpha\",\"unit\":\"-\"}]");
 
     // 초기 제어 모드: 모니터링 (토크 미인가)
     XM_SetControlMode(XM_CTRL_MONITOR);
@@ -625,4 +628,5 @@ static void _UpdateStreamData(void)
     s_stream_data.tau_friction = s_tau_friction;
     s_stream_data.tau_total    = s_tau_total;
     s_stream_data.alpha        = s_alpha;
+    XM_SendUsbDataWithId(&s_stream_data, sizeof(s_stream_data), 0xF0);
 }

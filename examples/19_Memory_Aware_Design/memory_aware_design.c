@@ -214,7 +214,11 @@ void User_Setup(void)
     _Pool_Init(&s_pool);
 
     /* USB 스트리밍 등록 (4 × float = 16 bytes) */
-    XM_SetUsbStreamSource(&s_stream_data, sizeof(s_stream_data));
+    XM_SetUsbCustomMeta(0xF0,
+        "[{\"name\":\"Raw Angle\",\"unit\":\"deg\"},"
+        "{\"name\":\"Filtered Angle\",\"unit\":\"deg\"},"
+        "{\"name\":\"Pool Used\",\"unit\":\"cnt\"},"
+        "{\"name\":\"Ring Count\",\"unit\":\"cnt\"}]");
 
     XM_SendUsbDebugMessage("[MEM] Memory-Aware Design example started.\r\n");
     XM_SendUsbDebugMessage("[MEM] BTN1=MemReport  BTN2=EventDump  BTN3=Reserved\r\n");
@@ -252,6 +256,7 @@ static void Run_Loop(void)
     s_stream_data.filtered_angle   = filtered_angle;
     s_stream_data.pool_used_count  = (float)_Pool_GetUsedCount(&s_pool);
     s_stream_data.ring_count       = (float)_RingBuf_GetCount(&s_ring_buf);
+    XM_SendUsbDataWithId(&s_stream_data, sizeof(s_stream_data), 0xF0);
 
     /* 버튼 입력 처리 */
     _HandleButtons();

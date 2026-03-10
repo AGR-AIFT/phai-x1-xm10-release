@@ -329,7 +329,12 @@ void User_Setup(void)
     XM_TSM_AddState(s_tsm, &act_conf);
 
     /* USB 스트리밍 소스 등록 */
-    XM_SetUsbStreamSource(&s_stream, sizeof(StreamData_t));
+    XM_SetUsbCustomMeta(0xF0,
+        "[{\"name\":\"Pitch\",\"unit\":\"deg\"},"
+        "{\"name\":\"Roll\",\"unit\":\"deg\"},"
+        "{\"name\":\"Pitch Rate\",\"unit\":\"deg/s\"},"
+        "{\"name\":\"Class ID\",\"unit\":\"-\"},"
+        "{\"name\":\"Confidence\",\"unit\":\"-\"}]");
 }
 
 /**
@@ -477,6 +482,7 @@ static void Active_Loop(void)
     s_stream.pitch_rate_dps = s_pitch_rate_dps;
     s_stream.class_id       = (float)s_result.class_id;
     s_stream.confidence     = s_result.confidence;
+    XM_SendUsbDataWithId(&s_stream, sizeof(s_stream), 0xF0);
 
     /* ------------------------------------------------
      * [매 500ms] USB CDC 디버그 메시지 출력

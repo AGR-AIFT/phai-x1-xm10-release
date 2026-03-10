@@ -159,8 +159,11 @@ void User_Setup(void)
     };
     XM_TSM_AddState(s_tsm, &act_conf);
 
-    XM_SetUsbStreamSource(&s_stream_data, sizeof(s_stream_data));
-    XM_SetUsbStreamModuleId(PHAI_MODULE_USER_CUSTOM_1);
+    XM_SetUsbCustomMeta(0xF0,
+        "[{\"name\":\"Gait Phase\",\"unit\":\"-\"},"
+        "{\"name\":\"RH Torque\",\"unit\":\"Nm\"},"
+        "{\"name\":\"LH Torque\",\"unit\":\"Nm\"},"
+        "{\"name\":\"Fwd Velocity\",\"unit\":\"m/s\"}]");
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
@@ -372,6 +375,7 @@ static void _UpdateStreamData(void)
     s_stream_data.torque_rh  = s_torque_rh;
     s_stream_data.torque_lh  = s_torque_lh;
     s_stream_data.fwd_vel    = XM.status.h10.forwardVelocity;
+    XM_SendUsbDataWithId(&s_stream_data, sizeof(s_stream_data), 0xF0);
 }
 
 static float _ClampFloat(float val, float min_val, float max_val)

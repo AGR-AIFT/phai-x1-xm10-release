@@ -275,8 +275,8 @@ void User_Setup(void)
     // 로깅할 때 'myData' 구조체를 저장하겠다!
     XM_SetUsbLogSource(&myData, sizeof(MyData_t));
     
-    // 스트리밍할 때도 'myData'를 보내겠다! (서로 달라도 됨)
-    XM_SetUsbStreamSource(&myData, sizeof(MyData_t));
+    /* Total Data Packet (Module ID 0x20)이 모든 H10 센서 데이터를
+     * 자동 스트리밍합니다. XM_SetUsbStreamSource 등록 불필요. */
 }
 
 /*

@@ -174,8 +174,11 @@ void User_Setup(void)
     };
     XM_TSM_AddState(s_tsm, &act_conf);
 
-    XM_SetUsbStreamSource(&s_stream_data, sizeof(s_stream_data));
-    XM_SetUsbStreamModuleId(PHAI_MODULE_USER_CUSTOM_1);
+    XM_SetUsbCustomMeta(0xF0,
+        "[{\"name\":\"Stance R\",\"unit\":\"bool\"},"
+        "{\"name\":\"Stance L\",\"unit\":\"bool\"},"
+        "{\"name\":\"RH Torque\",\"unit\":\"Nm\"},"
+        "{\"name\":\"LH Torque\",\"unit\":\"Nm\"}]");
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
@@ -365,6 +368,7 @@ static void _UpdateStreamData(bool stance_r, bool stance_l)
     s_stream_data.stance_l  = stance_l ? 1.0f : 0.0f;
     s_stream_data.torque_rh = s_torque_rh;
     s_stream_data.torque_lh = s_torque_lh;
+    XM_SendUsbDataWithId(&s_stream_data, sizeof(s_stream_data), 0xF0);
 }
 
 static float _ClampFloat(float val, float min_val, float max_val)

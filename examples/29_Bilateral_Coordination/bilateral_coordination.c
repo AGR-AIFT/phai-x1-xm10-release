@@ -168,8 +168,11 @@ void User_Setup(void)
     };
     XM_TSM_AddState(s_tsm, &act_conf);
 
-    XM_SetUsbStreamSource(&s_stream_data, sizeof(s_stream_data));
-    XM_SetUsbStreamModuleId(PHAI_MODULE_USER_CUSTOM_1);
+    XM_SetUsbCustomMeta(0xF0,
+        "[{\"name\":\"Angle R\",\"unit\":\"deg\"},"
+        "{\"name\":\"Angle L\",\"unit\":\"deg\"},"
+        "{\"name\":\"Torque RH\",\"unit\":\"Nm\"},"
+        "{\"name\":\"Torque LH\",\"unit\":\"Nm\"}]");
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
@@ -348,6 +351,7 @@ static void _UpdateStreamData(float angle_r, float angle_l)
     s_stream_data.angle_l   = angle_l;
     s_stream_data.torque_rh = s_torque_rh;
     s_stream_data.torque_lh = s_torque_lh;
+    XM_SendUsbDataWithId(&s_stream_data, sizeof(s_stream_data), 0xF0);
 }
 
 static float _ClampFloat(float val, float min_val, float max_val)

@@ -270,7 +270,13 @@ void User_Setup(void)
     XM_TSM_AddState(s_tsm, &act_conf);
 
     /* USB 스트리밍 소스 등록 */
-    XM_SetUsbStreamSource(&s_stream, sizeof(StreamData_t));
+    XM_SetUsbCustomMeta(0xF0,
+        "[{\"name\":\"RH Phase\",\"unit\":\"phase\"},"
+        "{\"name\":\"LH Phase\",\"unit\":\"phase\"},"
+        "{\"name\":\"RH Torque\",\"unit\":\"Nm\"},"
+        "{\"name\":\"LH Torque\",\"unit\":\"Nm\"},"
+        "{\"name\":\"Thigh Angle R\",\"unit\":\"deg\"},"
+        "{\"name\":\"Thigh Angle L\",\"unit\":\"deg\"}]");
 
     /* USB MSC 로깅 소스 등록 */
     XM_SetUsbLogSource(&s_log, sizeof(LogData_t));
@@ -665,6 +671,7 @@ static void _UpdateStreamData(void)
     s_stream.lh_torque    = s_gait_lh.current_torque_nm;
     s_stream.thigh_angle_r = XM.status.h10.rightThighAngle;
     s_stream.thigh_angle_l = XM.status.h10.leftThighAngle;
+    XM_SendUsbDataWithId(&s_stream, sizeof(s_stream), 0xF0);
 }
 
 /* ====================================================
