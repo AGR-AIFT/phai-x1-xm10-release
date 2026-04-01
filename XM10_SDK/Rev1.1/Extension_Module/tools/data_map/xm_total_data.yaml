@@ -1,0 +1,351 @@
+# =============================================================================
+# XM10 Total Data Packet — YAML Data Map (SSOT)
+# =============================================================================
+#
+# 이 파일이 Single Source of Truth(SSOT)입니다.
+# Python Code-Gen이 이 파일을 읽어 C header + TypeScript 타입을 자동 생성합니다.
+#
+# 수정 절차:
+#   1. 이 파일 수정 (필드 추가/삭제/순서 변경)
+#   2. CMake 빌드 실행 (자동) 또는 수동: python generate_data_map.py
+#   3. .h 자동 생성 → XM FW 빌드 (필드 변경 시 스냅샷 함수 수정 필요)
+#   4. .ts 자동 생성 → phai-studio import
+#   5. _Static_assert로 크기 검증 → 불일치 시 컴파일 에러
+#
+# 스케일링 공식 (scale_formula):
+#   - "multiply_divide": physical = raw * scale / 32768   (H10 PDO)
+#   - "divide":          physical = raw / scale            (IMU Hub)
+#   - "none":            physical = raw                    (기본값)
+#
+# Version: 2.5
+# Date:    2026-04-01
+# Changes:
+#   - Header: timestamp_ms → xm_loop_count (UserTask 실행 횟수 카운터)
+#     timestamp_ms(SysTick)는 jitter만 보여주고 데이터 freshness 판단 불가
+#     xm_loop_count는 h10AssistModeLoopCnt와 교차 비교하여 blocking 감지 가능
+#   Total packet: 365B (변경 없음)
+#
+# Version: 2.4
+# Date:    2026-04-01
+# Changes:
+#   - FDCAN_Diag → FDCAN1_Diag (6B) + FDCAN2_Diag (6B): Ch1/Ch2 독립 진단
+#     Ch1: XM↔CM, Ch2: XM↔Sensor Module (IMU Hub, EMG Hub 등)
+#   - Reserved_HMMG 34B → 28B (Ch2 진단 6B 사용)
+#   Total packet: 365B (변경 없음)
+#
+# Version: 2.3
+# Date:    2026-03-31
+# Changes:
+#   - FDCAN_Diag 4B → 6B: Rx FIFO0 Fill Level + Tx FIFO Free Level 추가
+#   - Reserved_HMMG 36B → 34B (FIFO 진단 2B 사용)
+#   Total packet: 365B (변경 없음)
+#
+# Version: 2.2
+# Date:    2026-03-26
+# Changes:
+#   - FDCAN_Diag 그룹 추가 (4B): TEC/REC/LEC/BusStatus
+#     CAN bus 에러 vs phase drift 분류를 위한 상시 진단 데이터
+#   - Reserved_HMMG 40B → 36B (FDCAN_Diag 4B 사용)
+#   Total packet: 365B (변경 없음)
+#
+# Version: 2.1
+# Date:    2026-03-23
+# Changes:
+#   - 그룹 재구조화: CM_PDO_Raw → H10_Joint, H10_Segment, H10_Gait,
+#     H10_IMU, H10_Count, H10_State (의미 기반 분류)
+#   - 네이밍: suitAssistModeLoopCnt → h10AssistModeLoopCnt,
+#     xm_status → phai_x1_status, suitMode → h10Mode,
+#     suitAssistLevel → h10AssistLevel
+#   - External_IMU → Ext_IMU, External_IO → Ext_IO (통일)
+#   - IMU Orientation ×6 (TransverseYaw 추가)
+#   Total packet: 365B (변경 없음)
+#
+# Version: 2.0
+# Date:    2026-03-23
+# Changes:
+#   - Header: sensor_mask → device_online_mask (bit5=EMG_Hub 추가)
+#   - H10 PDO: IMU orientation ×6 복원 (FrontalRoll, SagittalPitch, TransverseYaw)
+#     ※ H10 PDO mapping 함수에서 현재 주석처리됨 — placeholder (0 전송)
+#   - Ext_IO: adc_active_mask 추가 (bit0~11 = ADC1~12 활성 여부)
+#   - Reserved_EMG → EMG_Hub (실제 PDO 필드 매핑, 16B)
+#   - Reserved_FES 제거 (H10 전용, XM 불필요)
+#
+# Version: 1.3
+# Date:    2026-03-18
+# Changes:
+#   - H10 PDO: postProcessingCnt 추가 (uint32, GaitAnalysis 5m 분석 카운터)
+#
+# Version: 1.2
+# Date:    2026-03-18
+# Changes:
+#   - H10 PDO: 미요청 7개 필드 제거 (H10_SendSetPDOMapping 주석 처리 반영)
+#     제거: pelvicVelY, gaitState, gaitCycle
+#
+# Version: 1.1
+# Date:    2026-03-18
+# Changes:
+#   - Header: phai_x1_status 추가 (active capabilities bitflags, 7B)
+#   - GRF_Left/Right: *_connected 제거 → sensor_mask로 통합 (17B each)
+#   - Ext_IMU: ext_imu_connected 제거 → sensor_mask로 통합 (40B)
+#   - H10 PDO: line-by-line copy (memcpy 제거, 구조체 레이아웃 의존성 제거)
+# =============================================================================
+
+version: "2.5"
+packet_name: XM_TotalDataPacket
+module_id: 0x20
+endian: little
+
+# =============================================================================
+# Groups — 의미 기반 분류
+# =============================================================================
+groups:
+
+  # ===========================================================================
+  # 1. Header (7B)
+  # ===========================================================================
+  - name: Header
+    desc: "UserTask loop counter, connected device bitflags, and active capability flags"
+    fields:
+      - { name: xm_loop_count,     type: uint32, unit: count, desc: "UserTask execution count (always incrementing, mode-independent)" }
+      - { name: device_online_mask, type: uint16, unit: flags, desc: "Connected device bitflags (bit0=H10, bit1=GRF_L, bit2=GRF_R, bit3=ExtIMU, bit4=IMUHub, bit5=EMGHub)" }
+      - { name: phai_x1_status,     type: uint8,  unit: flags, desc: "Active capability flags (bit0=H10_CONNECTED, bit1=CTRL_TORQUE, bit2-7: reserved)" }
+
+  # ===========================================================================
+  # 2. H10_Joint (16B) — 관절 레벨 데이터
+  # 스케일링: physical = raw_int16 * scale / 32768
+  # ===========================================================================
+  - name: H10_Joint
+    desc: "H10 joint-level data: angles, torque current, motor encoder"
+    scale_formula: multiply_divide
+    fields:
+      - { name: leftHipAngle,       type: int16, scale: 720, unit: deg, desc: "Left hip joint angle (-360~+360)" }
+      - { name: rightHipAngle,      type: int16, scale: 720, unit: deg, desc: "Right hip joint angle" }
+      - { name: leftKneeAngle,      type: int16, scale: 720, unit: deg, desc: "Left knee angle (estimated)" }
+      - { name: rightKneeAngle,     type: int16, scale: 720, unit: deg, desc: "Right knee angle (estimated)" }
+      - { name: leftHipTorque,      type: int16, scale: 60,  unit: A,   desc: "Left hip torque current (-30~+30)" }
+      - { name: rightHipTorque,     type: int16, scale: 60,  unit: A,   desc: "Right hip torque current" }
+      - { name: leftHipMotorAngle,  type: int16, scale: 720, unit: deg, desc: "Left hip motor encoder angle" }
+      - { name: rightHipMotorAngle, type: int16, scale: 720, unit: deg, desc: "Right hip motor encoder angle" }
+
+  # ===========================================================================
+  # 3. H10_Segment (6B) — 신체 세그먼트 자세 추정
+  # ===========================================================================
+  - name: H10_Segment
+    desc: "H10 body segment orientation estimates"
+    scale_formula: multiply_divide
+    fields:
+      - { name: leftThighAngle,  type: int16, scale: 720, unit: deg, desc: "Left thigh absolute angle" }
+      - { name: rightThighAngle, type: int16, scale: 720, unit: deg, desc: "Right thigh absolute angle" }
+      - { name: pelvicAngle,     type: int16, scale: 720, unit: deg, desc: "Pelvic tilt angle" }
+
+  # ===========================================================================
+  # 4. H10_Gait (4B) — 보행 감지 데이터
+  # ===========================================================================
+  - name: H10_Gait
+    desc: "H10 gait detection: foot contact and forward velocity"
+    scale_formula: multiply_divide
+    fields:
+      - { name: isLeftFootContact,  type: uint8, unit: bool,  desc: "Left foot contact (0/1)" }
+      - { name: isRightFootContact, type: uint8, unit: bool,  desc: "Right foot contact (0/1)" }
+      - { name: forwardVelocity,    type: int16, scale: 6000, unit: "m/s", desc: "Forward walking velocity" }
+
+  # ===========================================================================
+  # 5. H10_IMU (36B) — 고관절 IMU (Orientation + Global Acc/Gyr)
+  # Note: Orientation ×6은 H10 PDO mapping에서 현재 주석처리 → placeholder (0)
+  #       추후 H10 측 PDO 매핑 활성화 시 실제 값 전송
+  # ===========================================================================
+  - name: H10_IMU
+    desc: "H10 hip IMU: orientation (3-plane, placeholder) + global acceleration/gyroscope"
+    scale_formula: multiply_divide
+    fields:
+      # Orientation (placeholder)
+      - { name: leftHipImuFrontalRoll,    type: int16, scale: 720, unit: deg,   desc: "Left hip IMU frontal roll (placeholder)" }
+      - { name: leftHipImuSagittalPitch,  type: int16, scale: 720, unit: deg,   desc: "Left hip IMU sagittal pitch (placeholder)" }
+      - { name: leftHipImuTransverseYaw,  type: int16, scale: 720, unit: deg,   desc: "Left hip IMU transverse yaw (placeholder)" }
+      - { name: rightHipImuFrontalRoll,   type: int16, scale: 720, unit: deg,   desc: "Right hip IMU frontal roll (placeholder)" }
+      - { name: rightHipImuSagittalPitch, type: int16, scale: 720, unit: deg,   desc: "Right hip IMU sagittal pitch (placeholder)" }
+      - { name: rightHipImuTransverseYaw, type: int16, scale: 720, unit: deg,   desc: "Right hip IMU transverse yaw (placeholder)" }
+      # Global Acceleration
+      - { name: leftHipImuGlobalAccX,  type: int16, scale: 78.4532, unit: "m/s2", desc: "Left hip IMU global accel X" }
+      - { name: leftHipImuGlobalAccY,  type: int16, scale: 78.4532, unit: "m/s2", desc: "Left hip IMU global accel Y" }
+      - { name: leftHipImuGlobalAccZ,  type: int16, scale: 78.4532, unit: "m/s2", desc: "Left hip IMU global accel Z" }
+      - { name: rightHipImuGlobalAccX, type: int16, scale: 78.4532, unit: "m/s2", desc: "Right hip IMU global accel X" }
+      - { name: rightHipImuGlobalAccY, type: int16, scale: 78.4532, unit: "m/s2", desc: "Right hip IMU global accel Y" }
+      - { name: rightHipImuGlobalAccZ, type: int16, scale: 78.4532, unit: "m/s2", desc: "Right hip IMU global accel Z" }
+      # Global Gyroscope
+      - { name: leftHipImuGlobalGyrX,  type: int16, scale: 1000, unit: deg/s, desc: "Left hip IMU global gyro X" }
+      - { name: leftHipImuGlobalGyrY,  type: int16, scale: 1000, unit: deg/s, desc: "Left hip IMU global gyro Y" }
+      - { name: leftHipImuGlobalGyrZ,  type: int16, scale: 1000, unit: deg/s, desc: "Left hip IMU global gyro Z" }
+      - { name: rightHipImuGlobalGyrX, type: int16, scale: 1000, unit: deg/s, desc: "Right hip IMU global gyro X" }
+      - { name: rightHipImuGlobalGyrY, type: int16, scale: 1000, unit: deg/s, desc: "Right hip IMU global gyro Y" }
+      - { name: rightHipImuGlobalGyrZ, type: int16, scale: 1000, unit: deg/s, desc: "Right hip IMU global gyro Z" }
+
+  # ===========================================================================
+  # 6. H10_Count (8B) — 카운터/타이밍 데이터
+  # ===========================================================================
+  - name: H10_Count
+    desc: "H10 loop counters and timing"
+    fields:
+      - { name: h10AssistModeLoopCnt, type: uint32, unit: count, desc: "H10 assist mode loop counter" }
+      - { name: postProcessingCnt,    type: uint32, unit: count, desc: "GaitAnalysis post-processing sample counter (0~30000, 5m)" }
+
+  # ===========================================================================
+  # 7. H10_State (6B) — H10 상태 정보 (PDO FSM + SDO 통합)
+  # ===========================================================================
+  - name: H10_State
+    desc: "H10 control state: FSM, mode, assist level, calibration flags"
+    fields:
+      - { name: h10FSMcurrentState, type: uint8, unit: enum,  desc: "H10 FSM current state" }
+      - { name: h10Mode,           type: uint8, unit: enum,  desc: "0=STANDBY, 1=ASSIST" }
+      - { name: h10AssistLevel,    type: uint8, unit: level, desc: "Assist level (0~255)" }
+      - { name: isPVectorRHDone,   type: uint8, unit: bool,  desc: "Right hip trajectory completed" }
+      - { name: isPVectorLHDone,   type: uint8, unit: bool,  desc: "Left hip trajectory completed" }
+      - { name: h10NeutralPosSet,  type: uint8, unit: bool,  desc: "Neutral position calibration done" }
+
+  # ===========================================================================
+  # 8. GRF_Left (17B) — MarvelDex_GetLatest(CH_LEFT)
+  # Note: connection status is in device_online_mask bit1
+  # ===========================================================================
+  - name: GRF_Left
+    desc: "Ground Reaction Force sensor (left foot)"
+    fields:
+      - { name: grf_left_sensor_data, type: uint8, count: 14, unit: raw,   desc: "FSR 14ch raw values (0~255)" }
+      - { name: grf_left_battery,     type: uint8, unit: "%",   desc: "Battery level (0~100)" }
+      - { name: grf_left_status,      type: uint8, unit: flags, desc: "Status flags (bit0: charging)" }
+      - { name: grf_left_rolling_idx, type: uint8, unit: count, desc: "Rolling sequence (0~199)" }
+
+  # ===========================================================================
+  # 9. GRF_Right (17B) — MarvelDex_GetLatest(CH_RIGHT)
+  # Note: connection status is in device_online_mask bit2
+  # ===========================================================================
+  - name: GRF_Right
+    desc: "Ground Reaction Force sensor (right foot)"
+    fields:
+      - { name: grf_right_sensor_data, type: uint8, count: 14, unit: raw,   desc: "FSR 14ch raw values (0~255)" }
+      - { name: grf_right_battery,     type: uint8, unit: "%",   desc: "Battery level (0~100)" }
+      - { name: grf_right_status,      type: uint8, unit: flags, desc: "Status flags (bit0: charging)" }
+      - { name: grf_right_rolling_idx, type: uint8, unit: count, desc: "Rolling sequence (0~199)" }
+
+  # ===========================================================================
+  # 10. Ext_IMU (40B) — XsensMTi_GetLatest(0)
+  # Note: connection status is in device_online_mask bit3
+  # ===========================================================================
+  - name: Ext_IMU
+    desc: "Xsens MTi-630 external IMU sensor (float, pre-calibrated)"
+    fields:
+      - { name: ext_imu_q_w,   type: float32, unit: normalized, desc: "Quaternion W" }
+      - { name: ext_imu_q_x,   type: float32, unit: normalized, desc: "Quaternion X" }
+      - { name: ext_imu_q_y,   type: float32, unit: normalized, desc: "Quaternion Y" }
+      - { name: ext_imu_q_z,   type: float32, unit: normalized, desc: "Quaternion Z" }
+      - { name: ext_imu_acc_x, type: float32, unit: "m/s2",     desc: "Acceleration X" }
+      - { name: ext_imu_acc_y, type: float32, unit: "m/s2",     desc: "Acceleration Y" }
+      - { name: ext_imu_acc_z, type: float32, unit: "m/s2",     desc: "Acceleration Z" }
+      - { name: ext_imu_gyr_x, type: float32, unit: deg/s,      desc: "Gyroscope X" }
+      - { name: ext_imu_gyr_y, type: float32, unit: deg/s,      desc: "Gyroscope Y" }
+      - { name: ext_imu_gyr_z, type: float32, unit: deg/s,      desc: "Gyroscope Z" }
+
+  # ===========================================================================
+  # 11. IMU_Hub (125B) — ImuHub_Drv_GetRxData()
+  # Note: connection status is in device_online_mask bit4
+  # ===========================================================================
+  - name: IMU_Hub
+    desc: "IMU Hub module (6x IMU sensors, raw int16)"
+    scale_formula: divide
+    fields:
+      - { name: imu_hub_timestamp,      type: uint32, unit: ms,    desc: "IMU Hub frame timestamp (24-bit, wraps at ~4.6hrs)" }
+      - { name: imu_hub_connected_mask, type: uint8,  unit: flags, desc: "bit0~5: IMU 0~5 connected (1=yes)" }
+      - name: imu_hub_sensor
+        type: imu_hub_sensor_t
+        count: 6
+        desc: "6 IMU sensors (q[4]+a[3]+g[3] = 20B each)"
+
+  # ===========================================================================
+  # 12. Ext_IO (27B) — DIO bitpack + ADC active mask + ADC 12ch
+  # ===========================================================================
+  - name: Ext_IO
+    desc: "Digital IO and ADC channels"
+    fields:
+      - { name: dio_state,       type: uint8,  unit: flags, desc: "DIO 1~8 bit-packed (bit0=DIO1, ...)" }
+      - { name: adc_active_mask, type: uint16, unit: flags, desc: "ADC active flags (bit0~3=ADC1~4 always, bit4~11=ADC5~12 if DIO switched)" }
+      - { name: adc_channel,     type: uint16, count: 12,   unit: raw, desc: "ADC 12ch (16-bit normalized)" }
+
+  # ===========================================================================
+  # 13. EMG_Hub (16B) — EmgHub_Drv_GetRxData()
+  # Note: connection status is in device_online_mask bit5
+  # ===========================================================================
+  - name: EMG_Hub
+    desc: "EMG Hub module (1ch sEMG, DOP V2 TPDO1)"
+    scale_formula: divide
+    fields:
+      - { name: emg_status_flags,    type: uint8,  unit: flags, desc: "bit0: ADC_OK, bit1: IS_ACTIVE, bit2: SATURATED" }
+      - { name: emg_raw_adc,         type: uint16, unit: raw,   desc: "ADC raw value (12-bit, HW OVS 16x)" }
+      - { name: emg_voltage_uv_x10,  type: int16,  scale: 10,   unit: uV, desc: "EMG voltage (uV x10)" }
+      - { name: emg_rms_uv_x10,      type: int16,  scale: 10,   unit: uV, desc: "RMS value (uV x10, 200ms window)" }
+      - { name: emg_envelope_uv_x10, type: int16,  scale: 10,   unit: uV, desc: "Envelope value (uV x10, EMA fc~8Hz)" }
+      - { name: emg_mvc_percent,     type: uint8,  unit: "%",   desc: "MVC normalization (0~100%)" }
+      - { name: emg_is_active,       type: uint8,  unit: bool,  desc: "Muscle contraction detection (0/1)" }
+      - { name: rsv_emg,             type: uint8, count: 5, unit: reserved, desc: "padding for future EMG expansion" }
+
+  # ===========================================================================
+  # 14. FDCAN1_Diag (6B) — Ch1: XM↔CM Bus Health
+  # ===========================================================================
+  #
+  # CAN 에러 판정 체계 (ISO 11898-1):
+  #   TEC/REC < 96       → Error Active   (정상, bus_status=0x00)
+  #   TEC/REC >= 96      → Warning        (bus_status bit1=1)
+  #   TEC/REC >= 128     → Error Passive  (bus_status bit2=1)
+  #   TEC >= 256         → Bus Off        (bus_status bit0=1, 통신 단절)
+  #
+  # LEC (Last Error Code): 마지막 에러 종류 특정
+  #   0=None, 1=Stuff, 2=Form, 3=Ack, 4=Bit1(Recessive), 5=Bit0(Dominant), 6=CRC, 7=NoChange
+  #
+  # bus_status: PSR 레지스터에서 HW가 직접 판정한 값 (TEC/REC와 별도 레지스터)
+  #   bit0: BusOff       — TEC>=256, 버스에서 완전 분리
+  #   bit1: Warning      — TEC/REC>=96, 에러 경고 임계값 도달
+  #   bit2: ErrorPassive — TEC/REC>=128, 능동 에러 플래그 전송 불가
+  #
+  # rx_fifo0_fill / tx_fifo_free: SW 처리 속도 모니터링
+  #   FIFO가 쌓이면 ISR/Task가 제때 처리 못하고 있다는 신호
+  #
+  - name: FDCAN1_Diag
+    desc: "FDCAN1 (Ch1: XM↔CM) bus health diagnostics"
+    fields:
+      - { name: fdcan1_tec,            type: uint8, unit: count, desc: "Tx Error Counter (ECR.TEC, 0~255)" }
+      - { name: fdcan1_rec,            type: uint8, unit: count, desc: "Rx Error Counter (ECR.REC, 0~127)" }
+      - { name: fdcan1_lec,            type: uint8, unit: enum,  desc: "Last Error Code (PSR.LEC, 0~7)" }
+      - { name: fdcan1_bus_status,     type: uint8, unit: flags, desc: "bit0:BusOff, bit1:Warning, bit2:ErrorPassive (PSR register)" }
+      - { name: fdcan1_rx_fifo0_fill,  type: uint8, unit: count, desc: "Rx FIFO0 fill level (RXF0S.F0FL, max 37)" }
+      - { name: fdcan1_tx_fifo_free,   type: uint8, unit: count, desc: "Tx FIFO free level (TXFQS.TFFL, max 32)" }
+
+  # ===========================================================================
+  # 15. FDCAN2_Diag (6B) — Ch2: XM↔Sensor Module Bus Health
+  # ===========================================================================
+  - name: FDCAN2_Diag
+    desc: "FDCAN2 (Ch2: XM↔Sensor Module) bus health diagnostics"
+    fields:
+      - { name: fdcan2_tec,            type: uint8, unit: count, desc: "Tx Error Counter (ECR.TEC, 0~255)" }
+      - { name: fdcan2_rec,            type: uint8, unit: count, desc: "Rx Error Counter (ECR.REC, 0~127)" }
+      - { name: fdcan2_lec,            type: uint8, unit: enum,  desc: "Last Error Code (PSR.LEC, 0~7)" }
+      - { name: fdcan2_bus_status,     type: uint8, unit: flags, desc: "bit0:BusOff, bit1:Warning, bit2:ErrorPassive (PSR register)" }
+      - { name: fdcan2_rx_fifo0_fill,  type: uint8, unit: count, desc: "Rx FIFO0 fill level (RXF0S.F0FL, max 37)" }
+      - { name: fdcan2_tx_fifo_free,   type: uint8, unit: count, desc: "Tx FIFO free level (TXFQS.TFFL, max 32)" }
+
+  # ===========================================================================
+  # 16. Reserved_HMMG (28B)
+  # ===========================================================================
+  - name: Reserved_HMMG
+    reserved: true
+    size: 28
+    desc: "Future HMMG module"
+
+# =============================================================================
+# Complex Types — 복합 타입 정의
+# =============================================================================
+types:
+  imu_hub_sensor_t:
+    size: 20
+    desc: "Single IMU sensor data (int16 packed, 20 bytes)"
+    fields:
+      - { name: q, type: int16, count: 4, scale: 10000, unit: normalized, desc: "Quaternion (w,x,y,z)" }
+      - { name: a, type: int16, count: 3, scale: 100,   unit: g,          desc: "Acceleration (x,y,z)" }
+      - { name: g, type: int16, count: 3, scale: 10,    unit: deg/s,      desc: "Gyroscope (x,y,z)" }

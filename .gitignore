@@ -9,3 +9,6 @@ build/
 # clangd (LSP 인덱스 캐시 & 설정)
 .cache/
 .clangd
+
+# 문서 폴더 (바이너리/대용량 파일 — git-lfs 미사용 시 로컬 관리)
+docs/

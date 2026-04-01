@@ -1,0 +1,137 @@
+/* AUTO-GENERATED from xm_total_data.yaml v2.5 — DO NOT EDIT MANUALLY */
+/* Generated: 2026-04-01 16:20:40 */
+
+export interface ChannelDef {
+  offset: number;
+  type: 'uint8' | 'int8' | 'uint16' | 'int16' | 'uint32' | 'int32' | 'float32';
+  scale: number;
+  scaleFormula: 'none' | 'divide' | 'multiply_divide';
+  unit: string;
+  name: string;
+  group: string;
+  count?: number;  // array size (default 1)
+}
+
+export const TYPE_SIZE: Record<string, number> = {
+  'uint8': 1,
+  'int8': 1,
+  'uint16': 2,
+  'int16': 2,
+  'uint32': 4,
+  'int32': 4,
+  'float32': 4,
+};
+
+export const TOTAL_DATA_MAP: ChannelDef[] = [
+  { offset:   0, type: 'uint32'  , scale:        1, scaleFormula: 'none', unit: 'count', name: 'xm_loop_count', group: 'Header' },
+  { offset:   4, type: 'uint16'  , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'device_online_mask', group: 'Header' },
+  { offset:   6, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'phai_x1_status', group: 'Header' },
+  { offset:   7, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'leftHipAngle', group: 'H10_Joint' },
+  { offset:   9, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'rightHipAngle', group: 'H10_Joint' },
+  { offset:  11, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'leftKneeAngle', group: 'H10_Joint' },
+  { offset:  13, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'rightKneeAngle', group: 'H10_Joint' },
+  { offset:  15, type: 'int16'   , scale:       60, scaleFormula: 'multiply_divide', unit: 'A', name: 'leftHipTorque', group: 'H10_Joint' },
+  { offset:  17, type: 'int16'   , scale:       60, scaleFormula: 'multiply_divide', unit: 'A', name: 'rightHipTorque', group: 'H10_Joint' },
+  { offset:  19, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'leftHipMotorAngle', group: 'H10_Joint' },
+  { offset:  21, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'rightHipMotorAngle', group: 'H10_Joint' },
+  { offset:  23, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'leftThighAngle', group: 'H10_Segment' },
+  { offset:  25, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'rightThighAngle', group: 'H10_Segment' },
+  { offset:  27, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'pelvicAngle', group: 'H10_Segment' },
+  { offset:  29, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'bool', name: 'isLeftFootContact', group: 'H10_Gait' },
+  { offset:  30, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'bool', name: 'isRightFootContact', group: 'H10_Gait' },
+  { offset:  31, type: 'int16'   , scale:     6000, scaleFormula: 'multiply_divide', unit: 'm/s', name: 'forwardVelocity', group: 'H10_Gait' },
+  { offset:  33, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'leftHipImuFrontalRoll', group: 'H10_IMU' },
+  { offset:  35, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'leftHipImuSagittalPitch', group: 'H10_IMU' },
+  { offset:  37, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'leftHipImuTransverseYaw', group: 'H10_IMU' },
+  { offset:  39, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'rightHipImuFrontalRoll', group: 'H10_IMU' },
+  { offset:  41, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'rightHipImuSagittalPitch', group: 'H10_IMU' },
+  { offset:  43, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'rightHipImuTransverseYaw', group: 'H10_IMU' },
+  { offset:  45, type: 'int16'   , scale:  78.4532, scaleFormula: 'multiply_divide', unit: 'm/s2', name: 'leftHipImuGlobalAccX', group: 'H10_IMU' },
+  { offset:  47, type: 'int16'   , scale:  78.4532, scaleFormula: 'multiply_divide', unit: 'm/s2', name: 'leftHipImuGlobalAccY', group: 'H10_IMU' },
+  { offset:  49, type: 'int16'   , scale:  78.4532, scaleFormula: 'multiply_divide', unit: 'm/s2', name: 'leftHipImuGlobalAccZ', group: 'H10_IMU' },
+  { offset:  51, type: 'int16'   , scale:  78.4532, scaleFormula: 'multiply_divide', unit: 'm/s2', name: 'rightHipImuGlobalAccX', group: 'H10_IMU' },
+  { offset:  53, type: 'int16'   , scale:  78.4532, scaleFormula: 'multiply_divide', unit: 'm/s2', name: 'rightHipImuGlobalAccY', group: 'H10_IMU' },
+  { offset:  55, type: 'int16'   , scale:  78.4532, scaleFormula: 'multiply_divide', unit: 'm/s2', name: 'rightHipImuGlobalAccZ', group: 'H10_IMU' },
+  { offset:  57, type: 'int16'   , scale:     1000, scaleFormula: 'multiply_divide', unit: 'deg/s', name: 'leftHipImuGlobalGyrX', group: 'H10_IMU' },
+  { offset:  59, type: 'int16'   , scale:     1000, scaleFormula: 'multiply_divide', unit: 'deg/s', name: 'leftHipImuGlobalGyrY', group: 'H10_IMU' },
+  { offset:  61, type: 'int16'   , scale:     1000, scaleFormula: 'multiply_divide', unit: 'deg/s', name: 'leftHipImuGlobalGyrZ', group: 'H10_IMU' },
+  { offset:  63, type: 'int16'   , scale:     1000, scaleFormula: 'multiply_divide', unit: 'deg/s', name: 'rightHipImuGlobalGyrX', group: 'H10_IMU' },
+  { offset:  65, type: 'int16'   , scale:     1000, scaleFormula: 'multiply_divide', unit: 'deg/s', name: 'rightHipImuGlobalGyrY', group: 'H10_IMU' },
+  { offset:  67, type: 'int16'   , scale:     1000, scaleFormula: 'multiply_divide', unit: 'deg/s', name: 'rightHipImuGlobalGyrZ', group: 'H10_IMU' },
+  { offset:  69, type: 'uint32'  , scale:        1, scaleFormula: 'none', unit: 'count', name: 'h10AssistModeLoopCnt', group: 'H10_Count' },
+  { offset:  73, type: 'uint32'  , scale:        1, scaleFormula: 'none', unit: 'count', name: 'postProcessingCnt', group: 'H10_Count' },
+  { offset:  77, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'enum', name: 'h10FSMcurrentState', group: 'H10_State' },
+  { offset:  78, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'enum', name: 'h10Mode', group: 'H10_State' },
+  { offset:  79, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'level', name: 'h10AssistLevel', group: 'H10_State' },
+  { offset:  80, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'bool', name: 'isPVectorRHDone', group: 'H10_State' },
+  { offset:  81, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'bool', name: 'isPVectorLHDone', group: 'H10_State' },
+  { offset:  82, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'bool', name: 'h10NeutralPosSet', group: 'H10_State' },
+  { offset:  83, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'raw', name: 'grf_left_sensor_data', group: 'GRF_Left', count: 14 },
+  { offset:  97, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: '%', name: 'grf_left_battery', group: 'GRF_Left' },
+  { offset:  98, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'grf_left_status', group: 'GRF_Left' },
+  { offset:  99, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'grf_left_rolling_idx', group: 'GRF_Left' },
+  { offset: 100, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'raw', name: 'grf_right_sensor_data', group: 'GRF_Right', count: 14 },
+  { offset: 114, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: '%', name: 'grf_right_battery', group: 'GRF_Right' },
+  { offset: 115, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'grf_right_status', group: 'GRF_Right' },
+  { offset: 116, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'grf_right_rolling_idx', group: 'GRF_Right' },
+  { offset: 117, type: 'float32' , scale:        1, scaleFormula: 'none', unit: 'normalized', name: 'ext_imu_q_w', group: 'Ext_IMU' },
+  { offset: 121, type: 'float32' , scale:        1, scaleFormula: 'none', unit: 'normalized', name: 'ext_imu_q_x', group: 'Ext_IMU' },
+  { offset: 125, type: 'float32' , scale:        1, scaleFormula: 'none', unit: 'normalized', name: 'ext_imu_q_y', group: 'Ext_IMU' },
+  { offset: 129, type: 'float32' , scale:        1, scaleFormula: 'none', unit: 'normalized', name: 'ext_imu_q_z', group: 'Ext_IMU' },
+  { offset: 133, type: 'float32' , scale:        1, scaleFormula: 'none', unit: 'm/s2', name: 'ext_imu_acc_x', group: 'Ext_IMU' },
+  { offset: 137, type: 'float32' , scale:        1, scaleFormula: 'none', unit: 'm/s2', name: 'ext_imu_acc_y', group: 'Ext_IMU' },
+  { offset: 141, type: 'float32' , scale:        1, scaleFormula: 'none', unit: 'm/s2', name: 'ext_imu_acc_z', group: 'Ext_IMU' },
+  { offset: 145, type: 'float32' , scale:        1, scaleFormula: 'none', unit: 'deg/s', name: 'ext_imu_gyr_x', group: 'Ext_IMU' },
+  { offset: 149, type: 'float32' , scale:        1, scaleFormula: 'none', unit: 'deg/s', name: 'ext_imu_gyr_y', group: 'Ext_IMU' },
+  { offset: 153, type: 'float32' , scale:        1, scaleFormula: 'none', unit: 'deg/s', name: 'ext_imu_gyr_z', group: 'Ext_IMU' },
+  { offset: 157, type: 'uint32'  , scale:        1, scaleFormula: 'none', unit: 'ms', name: 'imu_hub_timestamp', group: 'IMU_Hub' },
+  { offset: 161, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'imu_hub_connected_mask', group: 'IMU_Hub' },
+  { offset: 162, type: 'int16'   , scale:    10000, scaleFormula: 'divide', unit: 'normalized', name: 'imu_hub_sensor[0].q', group: 'IMU_Hub', count: 4 },
+  { offset: 170, type: 'int16'   , scale:      100, scaleFormula: 'divide', unit: 'g', name: 'imu_hub_sensor[0].a', group: 'IMU_Hub', count: 3 },
+  { offset: 176, type: 'int16'   , scale:       10, scaleFormula: 'divide', unit: 'deg/s', name: 'imu_hub_sensor[0].g', group: 'IMU_Hub', count: 3 },
+  { offset: 182, type: 'int16'   , scale:    10000, scaleFormula: 'divide', unit: 'normalized', name: 'imu_hub_sensor[1].q', group: 'IMU_Hub', count: 4 },
+  { offset: 190, type: 'int16'   , scale:      100, scaleFormula: 'divide', unit: 'g', name: 'imu_hub_sensor[1].a', group: 'IMU_Hub', count: 3 },
+  { offset: 196, type: 'int16'   , scale:       10, scaleFormula: 'divide', unit: 'deg/s', name: 'imu_hub_sensor[1].g', group: 'IMU_Hub', count: 3 },
+  { offset: 202, type: 'int16'   , scale:    10000, scaleFormula: 'divide', unit: 'normalized', name: 'imu_hub_sensor[2].q', group: 'IMU_Hub', count: 4 },
+  { offset: 210, type: 'int16'   , scale:      100, scaleFormula: 'divide', unit: 'g', name: 'imu_hub_sensor[2].a', group: 'IMU_Hub', count: 3 },
+  { offset: 216, type: 'int16'   , scale:       10, scaleFormula: 'divide', unit: 'deg/s', name: 'imu_hub_sensor[2].g', group: 'IMU_Hub', count: 3 },
+  { offset: 222, type: 'int16'   , scale:    10000, scaleFormula: 'divide', unit: 'normalized', name: 'imu_hub_sensor[3].q', group: 'IMU_Hub', count: 4 },
+  { offset: 230, type: 'int16'   , scale:      100, scaleFormula: 'divide', unit: 'g', name: 'imu_hub_sensor[3].a', group: 'IMU_Hub', count: 3 },
+  { offset: 236, type: 'int16'   , scale:       10, scaleFormula: 'divide', unit: 'deg/s', name: 'imu_hub_sensor[3].g', group: 'IMU_Hub', count: 3 },
+  { offset: 242, type: 'int16'   , scale:    10000, scaleFormula: 'divide', unit: 'normalized', name: 'imu_hub_sensor[4].q', group: 'IMU_Hub', count: 4 },
+  { offset: 250, type: 'int16'   , scale:      100, scaleFormula: 'divide', unit: 'g', name: 'imu_hub_sensor[4].a', group: 'IMU_Hub', count: 3 },
+  { offset: 256, type: 'int16'   , scale:       10, scaleFormula: 'divide', unit: 'deg/s', name: 'imu_hub_sensor[4].g', group: 'IMU_Hub', count: 3 },
+  { offset: 262, type: 'int16'   , scale:    10000, scaleFormula: 'divide', unit: 'normalized', name: 'imu_hub_sensor[5].q', group: 'IMU_Hub', count: 4 },
+  { offset: 270, type: 'int16'   , scale:      100, scaleFormula: 'divide', unit: 'g', name: 'imu_hub_sensor[5].a', group: 'IMU_Hub', count: 3 },
+  { offset: 276, type: 'int16'   , scale:       10, scaleFormula: 'divide', unit: 'deg/s', name: 'imu_hub_sensor[5].g', group: 'IMU_Hub', count: 3 },
+  { offset: 282, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'dio_state', group: 'Ext_IO' },
+  { offset: 283, type: 'uint16'  , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'adc_active_mask', group: 'Ext_IO' },
+  { offset: 285, type: 'uint16'  , scale:        1, scaleFormula: 'none', unit: 'raw', name: 'adc_channel', group: 'Ext_IO', count: 12 },
+  { offset: 309, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'emg_status_flags', group: 'EMG_Hub' },
+  { offset: 310, type: 'uint16'  , scale:        1, scaleFormula: 'none', unit: 'raw', name: 'emg_raw_adc', group: 'EMG_Hub' },
+  { offset: 312, type: 'int16'   , scale:       10, scaleFormula: 'divide', unit: 'uV', name: 'emg_voltage_uv_x10', group: 'EMG_Hub' },
+  { offset: 314, type: 'int16'   , scale:       10, scaleFormula: 'divide', unit: 'uV', name: 'emg_rms_uv_x10', group: 'EMG_Hub' },
+  { offset: 316, type: 'int16'   , scale:       10, scaleFormula: 'divide', unit: 'uV', name: 'emg_envelope_uv_x10', group: 'EMG_Hub' },
+  { offset: 318, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: '%', name: 'emg_mvc_percent', group: 'EMG_Hub' },
+  { offset: 319, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'bool', name: 'emg_is_active', group: 'EMG_Hub' },
+  { offset: 320, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'reserved', name: 'rsv_emg', group: 'EMG_Hub', count: 5 },
+  { offset: 325, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan1_tec', group: 'FDCAN1_Diag' },
+  { offset: 326, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan1_rec', group: 'FDCAN1_Diag' },
+  { offset: 327, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'enum', name: 'fdcan1_lec', group: 'FDCAN1_Diag' },
+  { offset: 328, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'fdcan1_bus_status', group: 'FDCAN1_Diag' },
+  { offset: 329, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan1_rx_fifo0_fill', group: 'FDCAN1_Diag' },
+  { offset: 330, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan1_tx_fifo_free', group: 'FDCAN1_Diag' },
+  { offset: 331, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan2_tec', group: 'FDCAN2_Diag' },
+  { offset: 332, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan2_rec', group: 'FDCAN2_Diag' },
+  { offset: 333, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'enum', name: 'fdcan2_lec', group: 'FDCAN2_Diag' },
+  { offset: 334, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'fdcan2_bus_status', group: 'FDCAN2_Diag' },
+  { offset: 335, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan2_rx_fifo0_fill', group: 'FDCAN2_Diag' },
+  { offset: 336, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan2_tx_fifo_free', group: 'FDCAN2_Diag' },
+];
+
+export const TOTAL_PACKET_SIZE = 365;
+export const DATA_MAP_VERSION = '2.5';
+export const MODULE_ID_TOTAL = 0x20;
+export const MODULE_ID_USER_META = 0xEF;
+export const MODULE_ID_USER_CUSTOM_START = 0xF0;
+export const MODULE_ID_USER_CUSTOM_END = 0xFE;
