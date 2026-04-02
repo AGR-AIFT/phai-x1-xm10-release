@@ -28,11 +28,11 @@
 // --- Homing 설정 값 ---
 #define HOMING_TRANSITION_DELAY_MS  50    // 각 단계 사이의 지연 시간 (50ms)
 #define HOMING_SPEED_RH             150   // 초당 이동 속도 (deg/s)
-#define HOMING_ACCEL_S0_RH          4     // 초기 가속도(deg/s^2)
-#define HOMING_ACCEL_SD_RH          4     // 말기 가속도(deg/s^2)
+#define HOMING_ACCEL_S0_RH          2     // 초기 가속도(deg/s^2)
+#define HOMING_ACCEL_SD_RH          2     // 말기 가속도(deg/s^2)
 #define HOMING_SPEED_LH             150   // 초당 이동 속도 (deg/s)
-#define HOMING_ACCEL_S0_LH          4     // 초기 가속도(deg/s^2)
-#define HOMING_ACCEL_SD_LH          4     // 말기 가속도(deg/s^2)
+#define HOMING_ACCEL_S0_LH          2     // 초기 가속도(deg/s^2)
+#define HOMING_ACCEL_SD_LH          2     // 말기 가속도(deg/s^2)
 
 // --- Mode Change 설정 값 ---
 #define MODE_TRANSITION_DELAY_MS    500 // 모드 전환 지연 시간 (ms) 설정
@@ -40,12 +40,12 @@
 #define STOP_DURATION_MS            100 // 현재 위치에서 정지할 때까지 걸리는 시간 (ms)
 
 // --- PMode 설정 값 ---
-#define PM_SPEED_RH         150    // 초당 이동 속도 (deg/s)
-#define PM_ACCEL_S0_RH      4      // 초기 가속도(deg/s^2)
-#define PM_ACCEL_SD_RH      4      // 말기 가속도(deg/s^2)
-#define PM_SPEED_LH         150    // 초당 이동 속도 (deg/s)
-#define PM_ACCEL_S0_LH      4      // 초기 가속도(deg/s^2)
-#define PM_ACCEL_SD_LH      4      // 말기 가속도(deg/s^2)
+#define PM_SPEED_RH         250    // 초당 이동 속도 (deg/s)
+#define PM_ACCEL_S0_RH      1      // 초기 가속도(deg/s^2)
+#define PM_ACCEL_SD_RH      1      // 말기 가속도(deg/s^2)
+#define PM_SPEED_LH         250    // 초당 이동 속도 (deg/s)
+#define PM_ACCEL_S0_LH      1      // 초기 가속도(deg/s^2)
+#define PM_ACCEL_SD_LH      1      // 말기 가속도(deg/s^2)
 
 /**
  *-----------------------------------------------------------
@@ -402,13 +402,15 @@ static void InitHoming(void)
     // --- Homing 상태 머신 ---
     switch (s_homingState) {
         case HOMING_ENTRY:
-            XM_SendIVectorKpKdMax(SYS_NODE_ID_RH, 6, 1);
-            XM_SendIVectorKpKdMax(SYS_NODE_ID_LH, 6, 1);
+            XM_SendPVectorReset(SYS_NODE_ID_RH);
+            XM_SendPVectorReset(SYS_NODE_ID_LH);
+            XM_SendIVectorKpKdMax(SYS_NODE_ID_RH, 6, 6);
+            XM_SendIVectorKpKdMax(SYS_NODE_ID_LH, 6, 6);
             s_homingState = HOMING_SET_IMPEDANCE;
             break;
 
         case HOMING_SET_IMPEDANCE: {
-            // 위치 제어를 위한 임피던스(강성) 설정(epsilon 0도, kP 5%, kd 1%)
+            // 위치 제어를 위한 임피던스(강성) 설정
             IVector_t stiffImpedance = { .epsilon = 0, .kp = 80, .kd = 1, .lambda = 0, .duration = 50 };
             XM_SendIVector(SYS_NODE_ID_RH, &stiffImpedance);
             XM_SendIVector(SYS_NODE_ID_LH, &stiffImpedance);
@@ -606,6 +608,11 @@ static void UpdatePassiveMode(void)
     int16_t currentAngleRH = (int16_t)round(XM.status.h10.rightHipMotorAngle * 10.0f);
     int16_t currentAngleLH = (int16_t)round(XM.status.h10.leftHipMotorAngle * 10.0f);
 
+    // 전체 ROM에 대한 duration (왕복 구간에서 공통 사용)
+    int16_t fullRomAngle = abs(JOINT_ANGLE_MAX_ANGLE_INT16 - JOINT_ANGLE_MIN_ANGLE_INT16);
+    uint16_t fullDurationRH = (uint16_t)(((float)fullRomAngle / (float)PM_SPEED_RH) * 1000.0f);
+    uint16_t fullDurationLH = (uint16_t)(((float)fullRomAngle / (float)PM_SPEED_LH) * 1000.0f);
+
     switch (s_passiveState) {
         case PASSIVE_STATE_SET_IMPEDANCE: {
             // 위치 제어를 위한 임피던스(강성) 설정
@@ -616,43 +623,37 @@ static void UpdatePassiveMode(void)
             break;
         }
         case PASSIVE_STATE_START_MOTION: {
-            // 첫 목표 각도로 이동하는 P-Vector 전송
-            int16_t targetAngle = JOINT_ANGLE_MAX_ANGLE_INT16;
-
-            // 목표 각도로 이동하는 데 필요한 duration 계산
-            int16_t angleToMoveRH = abs(targetAngle - currentAngleRH);
-            int16_t angleToMoveLH = abs(targetAngle - currentAngleLH);
+            // [1] 현재 위치 → MAX 궤적
+            int16_t angleToMoveRH = abs(JOINT_ANGLE_MAX_ANGLE_INT16 - currentAngleRH);
+            int16_t angleToMoveLH = abs(JOINT_ANGLE_MAX_ANGLE_INT16 - currentAngleLH);
             uint16_t durationRH = (uint16_t)(((float)angleToMoveRH / (float)PM_SPEED_RH) * 1000.0f);
             uint16_t durationLH = (uint16_t)(((float)angleToMoveLH / (float)PM_SPEED_LH) * 1000.0f);
 
-            PVector_t pVecRH = { .yd = targetAngle, .L = durationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
-            PVector_t pVecLH = { .yd = targetAngle, .L = durationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
-            XM_SendPVector(SYS_NODE_ID_RH, &pVecRH);
-            XM_SendPVector(SYS_NODE_ID_LH, &pVecLH);
+            PVector_t toMaxRH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = durationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
+            PVector_t toMaxLH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = durationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
+            XM_SendPVector(SYS_NODE_ID_RH, &toMaxRH);
+            XM_SendPVector(SYS_NODE_ID_LH, &toMaxLH);
+
+            // [2] MAX → MIN 궤적을 미리 큐에 추가 (pre-queue)
+            PVector_t toMinRH = { .yd = JOINT_ANGLE_MIN_ANGLE_INT16, .L = fullDurationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
+            PVector_t toMinLH = { .yd = JOINT_ANGLE_MIN_ANGLE_INT16, .L = fullDurationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
+            XM_SendPVector(SYS_NODE_ID_RH, &toMinRH);
+            XM_SendPVector(SYS_NODE_ID_LH, &toMinLH);
 
             s_passiveState = PASSIVE_STATE_MOVING_TO_MIN;
             break;
         }
 
         case PASSIVE_STATE_MOVING_TO_MIN: {
-            // P-Vector 이동이 완료되었는지 확인
+            // 첫 번째 궤적 완료 → 두 번째(→MIN) 이미 실행 중 → 세 번째(→MAX) 미리 큐잉
             if (XM.status.h10.isPVectorRHDone && XM.status.h10.isPVectorLHDone) {
                 XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
                 XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
-                
-                // 다시 이전 각도로 이동
-                int16_t targetAngle = JOINT_ANGLE_MIN_ANGLE_INT16;
 
-                // 전체 ROM을 이동하는 데 필요한 duration 계산
-                int16_t angleToMoveRH = abs(JOINT_ANGLE_MAX_ANGLE_INT16 - JOINT_ANGLE_MIN_ANGLE_INT16);
-				int16_t angleToMoveLH = abs(JOINT_ANGLE_MAX_ANGLE_INT16 - JOINT_ANGLE_MIN_ANGLE_INT16);
-				uint16_t durationRH = (uint16_t)(((float)angleToMoveRH / (float)PM_SPEED_RH) * 1000.0f);
-				uint16_t durationLH = (uint16_t)(((float)angleToMoveLH / (float)PM_SPEED_LH) * 1000.0f);
-
-				PVector_t pVecRH = { .yd = targetAngle, .L = durationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
-				PVector_t pVecLH = { .yd = targetAngle, .L = durationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
-                XM_SendPVector(SYS_NODE_ID_RH, &pVecRH);
-                XM_SendPVector(SYS_NODE_ID_LH, &pVecLH);
+                PVector_t toMaxRH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = fullDurationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
+                PVector_t toMaxLH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = fullDurationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
+                XM_SendPVector(SYS_NODE_ID_RH, &toMaxRH);
+                XM_SendPVector(SYS_NODE_ID_LH, &toMaxLH);
 
                 s_passiveState = PASSIVE_STATE_MOVING_TO_MAX;
             }
@@ -660,24 +661,15 @@ static void UpdatePassiveMode(void)
         }
 
         case PASSIVE_STATE_MOVING_TO_MAX: {
-            // P-Vector 이동이 완료되었는지 확인
+            // →MIN 궤적 완료 → →MAX 이미 실행 중 → →MIN 미리 큐잉
             if (XM.status.h10.isPVectorRHDone && XM.status.h10.isPVectorLHDone) {
                 XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
                 XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
 
-                // 다음 목표 각도로 이동
-                int16_t targetAngle = JOINT_ANGLE_MAX_ANGLE_INT16;
-
-                // 전체 ROM(75도)을 이동하는 데 필요한 duration 계산
-                int16_t angleToMoveRH = abs(JOINT_ANGLE_MAX_ANGLE_INT16 - JOINT_ANGLE_MIN_ANGLE_INT16);
-				int16_t angleToMoveLH = abs(JOINT_ANGLE_MAX_ANGLE_INT16 - JOINT_ANGLE_MIN_ANGLE_INT16);
-				uint16_t durationRH = (uint16_t)(((float)angleToMoveRH / (float)PM_SPEED_RH) * 1000.0f);
-				uint16_t durationLH = (uint16_t)(((float)angleToMoveLH / (float)PM_SPEED_LH) * 1000.0f);
-                
-                PVector_t pVecRH = { .yd = targetAngle, .L = durationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
-				PVector_t pVecLH = { .yd = targetAngle, .L = durationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
-                XM_SendPVector(SYS_NODE_ID_RH, &pVecRH);
-                XM_SendPVector(SYS_NODE_ID_LH, &pVecLH);
+                PVector_t toMinRH = { .yd = JOINT_ANGLE_MIN_ANGLE_INT16, .L = fullDurationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
+                PVector_t toMinLH = { .yd = JOINT_ANGLE_MIN_ANGLE_INT16, .L = fullDurationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
+                XM_SendPVector(SYS_NODE_ID_RH, &toMinRH);
+                XM_SendPVector(SYS_NODE_ID_LH, &toMinLH);
 
                 s_passiveState = PASSIVE_STATE_MOVING_TO_MIN;
             }
@@ -685,7 +677,6 @@ static void UpdatePassiveMode(void)
         }
 
         default:
-            // 예외 발생 시 안전을 위해 초기 상태로
             s_passiveState = PASSIVE_STATE_SET_IMPEDANCE;
             break;
     }

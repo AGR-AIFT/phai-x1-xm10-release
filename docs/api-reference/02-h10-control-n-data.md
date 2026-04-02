@@ -976,6 +976,38 @@ static void ManageModeTransition(void)
 
 ---
 
+## 유틸리티 API (Utility API)
+
+### `XM_CaptureLoopCountBase()`
+
+```c
+void XM_CaptureLoopCountBase(void);
+```
+
+H10 Assist Loop Counter의 기준점을 캡처합니다. 호출 시점의 `h10AssistModeLoopCnt`를 기준점(0)으로 저장합니다. 데이터 로깅 세션 시작 시 호출하면, 저장 데이터의 count가 항상 0부터 시작합니다.
+
+### `XM_GetRelativeLoopCount()`
+
+```c
+uint32_t XM_GetRelativeLoopCount(void);
+```
+
+캡처된 기준점 대비 상대 Loop Count를 반환합니다. `XM_CaptureLoopCountBase()` 미호출 시 절대값을 반환합니다.
+
+**사용 예시:**
+```c
+void Active_Entry(void) {
+    XM_CaptureLoopCountBase();  // 기준점 캡처
+}
+
+void Active_Loop(void) {
+    uint32_t elapsed = XM_GetRelativeLoopCount();  // 0부터 시작하는 상대 카운트
+    myData.loopCnt = elapsed;
+}
+```
+
+---
+
 ## 관련 예제
 
 | 예제 | 난이도 | 제어 방식 |

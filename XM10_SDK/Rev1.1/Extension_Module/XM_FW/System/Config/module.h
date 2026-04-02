@@ -79,6 +79,7 @@
  *  55    UART RxTask          ioif_conf.h     event   센서 패킷 파싱 (DMA→파서)
  *  54    UserTask             main.c (IOC)    1ms     IPO Control Loop
  *  51    SDO Processor        module.h        event   PnP/설정 (비실시간)
+ *  32    PSRAM Offload        module.h        20ms    Hot→Cold Buffer 전송
  *  25    PnP Manager          module.h        100ms   연결 관리
  *  24    USB Control          module.h        10ms    USB 모드 전환
  *  17    Button Control       module.h        event   버튼 입력
@@ -107,12 +108,28 @@
 #define TASK_STACK_USB_CONTROL      (1024)
 #define TASK_PERIOD_MS_USB_CONTROL  10
 
+/* ----- PSRAM Offload (Above Normal) ----- */
+/**
+ * @brief PSRAM Cold Buffer Offload Task
+ * @details Hot Buffer(D2) → Cold Buffer(PSRAM) 전송 담당.
+ *          20ms 주기로 Hot Buffer의 데이터를 QSPI Indirect Write로 PSRAM에 쓴다.
+ *          Priority: DataLogger(16) < Normal(24) < Offload(32) < Realtime(50+)
+ *          실행 시간: ~300μs/20ms = 1.5% CPU. Normal 태스크 기아 없음.
+ */
+#define TASK_PRIO_PSRAM_OFFLOAD     osPriorityAboveNormal   /**< PSRAM Cold Buffer Offload (32) */
+#define TASK_STACK_PSRAM_OFFLOAD    (2048)
+#define TASK_PERIOD_MS_OFFLOAD      20
+
 /* ----- Low Priority I/O ----- */
 #define TASK_PRIO_BTN_CONTROL       osPriorityBelowNormal7  /**< (17) 버튼 입력 */
 #define TASK_STACK_BTN_CONTROL      (512)
 
 #define TASK_PRIO_USB_SAVE          osPriorityBelowNormal   /**< (16) USB 데이터 저장 */
-#define TASK_STACK_USB_SAVE         (4096 * 4)
+/* [Phase 2 Fix] 16KB → 8KB: s_read_buf/s_offload_buf가 static으로 이동하고,
+ * cmdBuffer도 static local로 변경하여 스택 부담 최소화.
+ * AS-IS: (4096 * 4) = 16KB → OffloadTask 추가 후 heap 고갈, DataLoggerTask 생성 실패
+ * TO-BE: (2048 * 4) = 8KB → heap ~8KB 절약, path 문자열+FatFS에 충분한 마진 */
+#define TASK_STACK_USB_SAVE         (2048 * 4)
 
 #endif  /* USE_FREERTOS */
 

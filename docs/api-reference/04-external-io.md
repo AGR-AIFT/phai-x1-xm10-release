@@ -213,15 +213,31 @@ AnalogRead의 반환값 해상도를 설정합니다.
     XM_SetAnalogReadResolution(12); // 0~4095 범위로 반환
     ```
 
+#### `XM_GetAnalogResolution`
+
+지정된 ADC 핀의 **하드웨어 네이티브** 해상도를 반환합니다.
+
+  * **Syntax**
+    ```c
+    uint8_t XM_GetAnalogResolution(XmAdcPin_t pin);
+    ```
+  * **Parameters**: `pin` — 조회할 ADC 핀
+  * **Returns**: 해당 ADC 채널의 네이티브 해상도 (bit 수)
+  * **Example**
+    ```c
+    uint8_t res1 = XM_GetAnalogResolution(XM_EXT_ADC_1);  // 12 (ADC1, 12-bit)
+    uint8_t res2 = XM_GetAnalogResolution(XM_EXT_ADC_2);  // 16 (ADC2, 16-bit)
+    ```
+
 #### `XM_GetAnalogReadResolution`
 
-현재 설정된 AnalogRead 해상도를 반환합니다.
+현재 설정된 AnalogRead **출력** 해상도를 반환합니다. `XM_SetAnalogReadResolution()`으로 설정한 값을 확인합니다.
 
   * **Syntax**
     ```c
     uint8_t XM_GetAnalogReadResolution(void);
     ```
-  * **Returns**: 현재 해상도 비트 수
+  * **Returns**: 현재 출력 해상도 비트 수 (기본값 16)
 
 -----
 

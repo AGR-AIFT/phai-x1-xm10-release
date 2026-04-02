@@ -12,9 +12,12 @@ XM10 Extension Module SDK에서 사용 가능한 모든 API의 레퍼런스 문�
 |---|------|------|----------|
 | **01** | [Task State Machine](01-task-state-machine.md) | TSM 생성·상태 관리 | `XM_TSM_Create`, `XM_TSM_AddState`, `XM_TSM_Run`, `XM_TSM_TransitionTo` |
 | **02** | [KIT H10 Control & Data](02-h10-control-n-data.md) | H10 센서 데이터·토크 제어·벡터 명령 | `XM.status.h10.*`, `XM_SetAssistTorque`, `XM_SendPVector`, `XM_SendIVector` |
-| **03** | [LED & Button Control](03-led-btn-control.md) | LED 효과·버튼 이벤트 | `XM_SetLedEffect`, `XM_SetLedState`, `XM_GetButtonEvent` |
+| **03** | [LED & Button Control](03-led-btn-control.md) | LED 효과·버튼 이벤트·채널 LED | `XM_SetLedEffect`, `XM_SetLedState`, `XM_GetButtonEvent`, `XM_SetChannelLedRGB` |
 | **04** | [External I/O](04-external-io.md) | 확장 포트 DIO·ADC | `XM_SetPinMode`, `XM_DigitalRead/Write`, `XM_AnalogReadMillivolts` |
-| **05** | [USB Connectivity](05-usb-connectivity.md) | CDC 디버그·MSC 로깅·스트리밍 | `XM_SendUsbDebugMessage`, `XM_SetUsbStreamSource`, `XM_SetUsbLogSource` |
+| **05** | [USB Connectivity](05-usb-connectivity.md) | CDC 디버그·스트리밍 | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId`, `XM_SetUsbCustomMeta` |
+| **06** | [USB Data Logging](06-usb-data-logging.md) | MSC 데이터 로깅 | `XM_SetUsbLogSource`, `XM_StartUsbDataLog`, `XM_StopUsbDataLog` |
+| **07** | [Memory Management](07-memory-management.md) | 메모리 영역 접근·NV Flash | `XM_GetUserWorkspace`, `XM_GetUserPSRAM`, `XM_UserNV_Read/Write` |
+| **08** | [RTC Clock](08-rtc-clock.md) | 실시간 시계 | `XM_RTC_SetDateTime`, `XM_RTC_GetDateTime`, `XM_RTC_IsRunning` |
 
 ---
 

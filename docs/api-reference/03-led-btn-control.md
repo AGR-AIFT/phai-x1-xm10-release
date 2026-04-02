@@ -201,7 +201,38 @@ LED에 특수 효과(깜빡임 등)를 설정합니다. 설정 후에는 `XM_IO_
 
 -----
 
-### 3.3. System Functions
+### 3.3. Channel LED (Rev2.0 전용)
+
+#### `XM_SetChannelLedRGB`
+
+> **Rev2.0 전용** — Rev1.1에서는 사용할 수 없습니다.
+
+PCA9957 기반의 채널별 RGB LED를 제어합니다. 센서 모듈 연결 상태를 시각적으로 표시하는 데 사용합니다.
+
+  * **Syntax**
+    ```c
+    void XM_SetChannelLedRGB(XmChannelLed_t ch, uint8_t r, uint8_t g, uint8_t b);
+    ```
+  * **Parameters**
+
+    | 이름 | 설명 |
+    |------|------|
+    | `ch` | 채널 식별자 (`XM_CH_LED_EMG`, `XM_CH_LED_FES`, `XM_CH_LED_IMU`, `XM_CH_LED_HMMG`, `XM_CH_LED_GRF_L`, `XM_CH_LED_GRF_R`, `XM_CH_LED_USB`) |
+    | `r` | Red 밝기 (0~255) |
+    | `g` | Green 밝기 (0~255) |
+    | `b` | Blue 밝기 (0~255) |
+
+  * **Note**: `r=0, g=0, b=0`으로 설정하면 시스템 자동 제어로 복구됩니다.
+
+  * **Example**
+    ```c
+    XM_SetChannelLedRGB(XM_CH_LED_IMU, 255, 0, 0);  // IMU LED를 빨간색으로
+    XM_SetChannelLedRGB(XM_CH_LED_IMU, 0, 0, 0);     // 시스템 자동 제어 복구
+    ```
+
+---
+
+### 3.4. System Functions
 
 #### `XM_IO_Update`
 

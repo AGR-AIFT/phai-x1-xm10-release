@@ -258,6 +258,46 @@ PC로부터 데이터를 수신합니다. (키보드 입력 등)
 
 ### 3.4. System Interface
 
+#### `XM_SetUsbCustomMeta`
+
+PhAI Studio Custom 모드 사용 시, Module ID와 JSON 메타데이터를 등록합니다.
+
+  * **Syntax**
+    ```c
+    void XM_SetUsbCustomMeta(uint8_t module_id, const char* json_str);
+    ```
+  * **Parameters**
+
+    | 이름 | 설명 |
+    |------|------|
+    | `module_id` | Custom Module ID (0xF0~0xFE) |
+    | `json_str` | 채널 정의 JSON 문자열 (PhAI Studio V2 호환) |
+
+  * **Example**
+    ```c
+    XM_SetUsbCustomMeta(0xF0, "{\"ch\":[\"angle\",\"torque\",\"velocity\"]}");
+    ```
+
+#### `XM_SendUsbDataWithId`
+
+지정된 Module ID로 바이너리 데이터를 USB CDC 스트리밍합니다.
+
+  * **Syntax**
+    ```c
+    bool XM_SendUsbDataWithId(const void* data, uint32_t len, uint8_t module_id);
+    ```
+  * **Parameters**
+
+    | 이름 | 설명 |
+    |------|------|
+    | `data` | 전송할 데이터 포인터 |
+    | `len` | 데이터 길이 (바이트) |
+    | `module_id` | Module ID (0x10: COMBINED, 0xF0~0xFE: Custom) |
+
+  * **Returns**: `true` 전송 성공, `false` 실패 (연결 없음 등)
+
+> **Note**: `XM_SendUsbData()`(deprecated)를 대체합니다. Module ID를 명시적으로 지정하여 다중 스트림을 지원합니다.
+
 #### `XM_USB_ProcessPeriodic`
 
 **[시스템 내부용]** USB 로깅 및 스트리밍 로직을 처리하는 함수입니다.

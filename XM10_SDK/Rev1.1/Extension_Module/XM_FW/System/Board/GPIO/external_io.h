@@ -47,11 +47,11 @@ typedef enum {
  * @details ✅ ADC1/2/3 통합: DIO 핀도 ADC로 사용 가능
  */
 typedef enum {
-    /* ADC1/2 고정 핀 (항상 사용 가능) */
-    EXT_ADC_1 = 0, // PA0 [Shared] ADC / UART4_TX (IMU 사용 시 GPIO 불가)
-    EXT_ADC_2,     // PA0_C
-    EXT_ADC_3,     // PA1 [Shared] ADC / UART4_RX (IMU 사용 시 GPIO 불가)
-    EXT_ADC_4,     // PA1_C
+    /* ADC1 고정 핀 (Rev2.0: 전부 ADC1 16-bit, 항상 사용 가능) */
+    EXT_ADC_1 = 0, // PB0  (ADC1_INP9)
+    EXT_ADC_2,     // PB1  (ADC1_INP5)
+    EXT_ADC_3,     // PF11 (ADC1_INP2)
+    EXT_ADC_4,     // PF12 (ADC1_INP6)
     
     /* ADC3 동적 핀 (DIO → ADC 전환 필요) */
     EXT_ADC_5,     // PF3 (DIO 1 → ADC3, 전환 필요)
@@ -128,8 +128,8 @@ bool ExternalIO_ReadPin(ExternalDioPin_t pin);
 /**
  * @brief [Facade용] 아날로그 핀의 값을 읽습니다 (실시간 안전, 정규화됨).
  * @details 
- * - ADC1 (USB CC + PA0, PA1): DMA Circular (12-bit native, 정규화 적용)
- * - ADC2 (PA0_C, PA1_C): DMA Circular (16-bit native, 정규화 적용)
+ * - ADC1 (EXT_ADC PB0, PB1, PF11, PF12): DMA Circular (16-bit native, 정규화 적용)
+ * - ADC2 (USB CC PF13, PF14): DMA Circular (12-bit native, USB 전용)
  * - ADC3 (DIO 1~8): DMA Circular (16-bit native, 정규화 적용)
  * - 모든 핀의 반환값은 동일한 출력 resolution으로 정규화됩니다.
  * 
@@ -249,108 +249,35 @@ uint16_t ExternalIO_ReadDioAsAdc3(ExternalDioPin_t dio_pin);
 
 /**
  * ============================================================================
- * [신규] ISR Functions (stm32h7xx_it.c에서 호출, UART4 패턴과 동일)
+ * ISR Functions (stm32h7xx_it.c에서 호출)
  * ============================================================================
  */
 
 /**
  * @brief ADC3 DMA 인터럽트 핸들러 (System Layer)
- * @details 
- * - stm32h7xx_it.c의 DMA2_Stream2_IRQHandler에서 호출됩니다.
- * - IOIF의 DMA 핸들을 조회하여 HAL_DMA_IRQHandler 호출.
- * 
- * @note UART4 패턴 참조: System_ISR_DMA_UART4_RX_Manual()
+ * @details stm32h7xx_it.c의 DMA2_Stream4_IRQHandler에서 호출됩니다.
  */
 void System_ISR_ADC3_DMA(void);
 
 /**
  * @brief ADC3 인터럽트 핸들러 (System Layer)
- * @details 
- * - stm32h7xx_it.c의 ADC3_IRQHandler에서 호출됩니다.
- * - IOIF의 ADC 핸들을 조회하여 HAL_ADC_IRQHandler 호출.
- * 
- * @note UART4 패턴 참조: System_ISR_UART4_Manual()
+ * @details stm32h7xx_it.c의 ADC3_IRQHandler에서 호출됩니다.
  */
 void System_ISR_ADC3(void);
 
 /**
  * ============================================================================
- * [신규] UART4 ISR Functions (ADC3 패턴과 동일)
+ * [DEPRECATED — Rev2.0] UART4 런타임 전환 API
+ * Rev2.0에서 External UART는 USART2(PD5/PD6)로 대체됨.
+ * 하위 호환을 위해 stub(항상 false 반환)만 유지.
  * ============================================================================
  */
 
 /**
- * @brief UART4 인터럽트 핸들러 (System Layer)
- * @details 
- * - ✅ HAL 완전히 숨김 - IOIF에 완전 위임
- * - ✅ ADC3 패턴과 동일한 위임 구조
- * - stm32h7xx_it.c의 UART4_IRQHandler에서 호출됩니다.
- * 
- * @note 
- * - ExternalIO_SwitchToUartMode()로 UART4 초기화 시 자동으로 NVIC 설정됨
- * - RTOS/BareMetal 공통 사용 가능
- */
-void System_ISR_UART4(void);
-
-/**
- * @brief UART4 DMA RX 인터럽트 핸들러 (System Layer)
- * @details 
- * - ✅ HAL 완전히 숨김 - IOIF에 완전 위임
- * - ✅ ADC3 패턴과 동일한 위임 구조
- * - stm32h7xx_it.c의 DMA2_Stream0_IRQHandler에서 호출됩니다.
- * 
- * @note 
- * - ExternalIO_SwitchToUartMode()로 UART4 초기화 시 자동으로 NVIC 설정됨
- * - RTOS/BareMetal 공통 사용 가능
- */
-void System_ISR_UART4_RX_DMA(void);
-
-/**
- * @brief UART4 DMA TX 인터럽트 핸들러 (System Layer)
- * @details 
- * - ✅ HAL 완전히 숨김 - IOIF에 완전 위임
- * - ✅ ADC3 패턴과 동일한 위임 구조
- * - stm32h7xx_it.c의 DMA2_Stream1_IRQHandler에서 호출됩니다.
- * 
- * @note 
- * - ExternalIO_SwitchToUartMode()로 UART4 초기화 시 자동으로 NVIC 설정됨
- * - RTOS/BareMetal 공통 사용 가능
- */
-void System_ISR_UART4_TX_DMA(void);
-
-/**
- * ============================================================================
- * [신규] 런타임 핀 변환 API (ADC ↔ UART 동적 전환)
- * ============================================================================
- */
-
-/**
- * @brief [런타임] External IO의 ADC 핀을 UART4(IMU용)로 동적 전환합니다.
- * @details 
- * - PA0 (External ADC 1) → UART4_TX
- * - PA1 (External ADC 3) → UART4_RX
- * - ADC1/ADC2 중지 → GPIO DeInit → UART4 초기화 (921600 baud)
- * - DMA Circular RX 활성화 (Xsens IMU용)
- * 
- * @return true: 성공, false: 실패 (하드웨어 오류)
- * 
- * @warning 
- * - ⚠️ 이 함수는 **비실시간** 함수입니다. 초기화 단계에서만 호출하세요.
- * - ⚠️ 전환 후 External ADC 1/3은 사용 불가능합니다 (재부팅 필요).
- * - ⚠️ ADC1/ADC2를 사용 중인 경우 먼저 중지해야 합니다.
- * 
- * @usage (Facade Layer)
- * @code
- * // XM API에서 호출
- * if (XM_EnableExternalImu()) {
- *     // IMU 모드 활성화 성공
- * }
- * @endcode
- * 
- * @note 
- * - CubeMX ADC 설정을 런타임에 UART로 교체합니다.
- * - IOIF_UART_InitManual()로 GPIO+DMA+NVIC 자동 설정됩니다.
- * - System Layer는 HAL을 직접 호출하지 않습니다 (아키텍처 준수).
+ * @brief [DEPRECATED] Rev2.0에서 항상 false를 반환합니다.
+ * @details Rev2.0에서 External UART는 USART2(PD5/PD6)로 대체되었습니다.
+ *          하위 호환을 위해 인터페이스만 유지합니다.
+ * @return 항상 false
  */
 bool ExternalIO_SwitchToUartMode(void);
 

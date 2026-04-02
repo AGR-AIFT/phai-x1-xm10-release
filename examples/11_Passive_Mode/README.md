@@ -8,6 +8,7 @@
 * 안전한 시작을 위한 **Homing(원점 복귀)** 절차를 구현하는 방법을 이해합니다.
 * `I-Vector`를 사전에 설정하여 **임피던스 제어**를 수행하는 방법을 학습합니다.
 * `P-Vector`를 반복적으로 전송하여 **연속적인 궤적**을 생성하는 방법을 학습합니다.
+* **FIFO Pre-Queuing** 기법을 사용하여 P-Vector 세그먼트 간 **끊김 없는 연속 궤적**을 구현하는 방법을 학습합니다.
 * `XM.status.h10.isPVector...Done` 플래그와 `XM_ClearPVectorDoneFlag()` 함수를 사용한 **이벤트 기반 상태 전환** 로직을 이해합니다.
 * 모드 변경 시 `XM_SendPVectorReset()`을 사용하여 **안전하게 동작을 중지**하는 방법을 학습합니다.
 
@@ -22,18 +23,19 @@
 
 `XM10` 태스크의 상태가 `XM_STATE_STANDBY`중에 `XM_H10_MODE_ASSIST`가 감지되면(`XM.status.h10.h10Mode`), 로봇은 안전한 시작을 위해 **원점(0도)으로 복귀하는 Homing 절차**를 시작합니다.
 
-1.  **임피던스 설정:** `XM_SendIVectorKpKdMax`와 `XM_SendIVector()`를 호출하여 제어에 적합한 파라미터들을 설정합니다.
-2.  **이동 시작:** 현재 각도에서 0도까지 이동하는 `P-Vector`를 전송합니다. 이때 이동 시간(`L`)은 목표 속도(`HOMING_SPEED_RH`)에 따라 동적으로 계산됩니다.
-3.  **완료 대기:** `XM.status.h10.isPVector...Done` 플래그가 `true`가 될 때까지 기다립니다.
-4.  **상태 전환:** Homing이 완료되면 메인 Task의 상태를 `XM_STATE_ACTIVE`로 전환합니다.
+1.  **P-Vector 리셋:** `XM_SendPVectorReset()`을 호출하여 MD의 궤적 기준점을 현재 모터 위치로 동기화합니다.
+2.  **임피던스 설정:** `XM_SendIVectorKpKdMax`와 `XM_SendIVector()`를 호출하여 제어에 적합한 파라미터들을 설정합니다.
+3.  **이동 시작:** 현재 각도에서 0도까지 이동하는 `P-Vector`를 전송합니다. 이때 이동 시간(`L`)은 목표 속도(`HOMING_SPEED_RH`)에 따라 동적으로 계산됩니다.
+4.  **완료 대기:** `XM.status.h10.isPVector...Done` 플래그가 `true`가 될 때까지 기다립니다.
+5.  **상태 전환:** Homing이 완료되면 메인 Task의 상태를 `XM_STATE_ACTIVE`로 전환합니다.
 
 ### 2. Passive Mode 실행 (`UpdatePassiveMode`)
 
-`XM10` 태스크의 상태가 `XM_STATE_ACTIVE` 상태에 진입하면, `UpdatePassiveMode` 함수가 주기적으로 호출되어 **최대 각도와 최소 각도 사이를 끊임없이 왕복**합니다.
+`XM10` 태스크의 상태가 `XM_STATE_ACTIVE` 상태에 진입하면, `UpdatePassiveMode` 함수가 주기적으로 호출되어 **최대 각도와 최소 각도 사이를 끊임없이 왕복**합니다. **FIFO Pre-Queuing** 기법을 사용하여 세그먼트 간 끊김 없는 연속 궤적을 생성합니다.
 
-1.  **최대 각도로 이동:** `JOINT_ANGLE_MAX_ANGLE_INT16`으로 설정된 목표 위치로 `P-Vector`를 전송합니다.
-2.  **완료 대기 및 방향 전환:** 이동이 완료되면(`XM.status.h10.isPVector...Done == true`), 완료 플래그를 `XM_ClearPVectorDoneFlag()`로 클리어한 뒤, 이번에는 `JOINT_ANGLE_MIN_ANGLE_INT16`을 목표 위치로 하는 `P-Vector`를 전송합니다.
-3.  **최소 각도로 이동 및 반복:** 최소 각도까지 이동이 완료되면, 다시 최대 각도를 목표로 하는 `P-Vector`를 전송하여 왕복 운동을 계속합니다.
+1.  **첫 왕복 시작 (Pre-Queue):** 최대 각도로의 `P-Vector`와 최소 각도로의 `P-Vector`를 **연속으로 2개** 전송하여 MD의 FIFO에 미리 큐잉합니다. 첫 번째 세그먼트가 완료되면 두 번째가 즉시 시작되어 **끊김이 없습니다.**
+2.  **연속 큐잉:** 첫 번째 세그먼트 완료 플래그(`isPVector...Done`)가 수신되면, 두 번째 세그먼트는 이미 실행 중이므로 **다음 방향의 P-Vector를 미리 큐에 추가**합니다.
+3.  **반복:** 매 세그먼트 완료 시마다 다음 궤적을 미리 큐잉하여, MD의 FIFO에 항상 1개 이상의 대기 궤적이 존재하도록 유지합니다.
 
 ### 3. 안전한 모드 전환 (`ManageModeTransition`)
 

@@ -69,11 +69,11 @@ typedef enum {
  * @details ✅ ADC1/2/3 통합: DIO 핀도 ADC로 사용 가능
  */
 typedef enum {
-    /* ADC1/2 고정 핀 (항상 사용 가능) */
-    XM_EXT_ADC_1 = 0, // PA0 [Shared] ADC / UART4_TX (IMU 사용 시 GPIO 불가)
-    XM_EXT_ADC_2,     // PA0_C
-    XM_EXT_ADC_3,     // PA1 [Shared] ADC / UART4_RX (IMU 사용 시 GPIO 불가)
-    XM_EXT_ADC_4,     // PA1_C
+    /* ADC1 고정 핀 (Rev2.0: 전부 ADC1 16-bit, 항상 사용 가능) */
+    XM_EXT_ADC_1 = 0, // PB0  (ADC1_INP9)
+    XM_EXT_ADC_2,     // PB1  (ADC1_INP5)
+    XM_EXT_ADC_3,     // PF11 (ADC1_INP2)
+    XM_EXT_ADC_4,     // PF12 (ADC1_INP6)
     
     /* ADC3 동적 핀 (DIO → ADC 전환 필요) */
     XM_EXT_ADC_5,     // PF3 (DIO 1 → ADC3, XM_SwitchDioToAdc() 호출 필요)
@@ -108,6 +108,14 @@ typedef enum {
 } XmLogicLevel_t;
 
 /**
+ * @brief 확장 포트 전원 전압 선택 (EXT_PWR_SEL_5V, PE3)
+ */
+typedef enum {
+    XM_EXT_PWR_3V3 = 0, /**< 3.3V 출력 (기본값, Low) */
+    XM_EXT_PWR_5V  = 1  /**< 5V 출력 (High) */
+} XmExtPwrVoltage_t;
+
+/**
  *-----------------------------------------------------------
  * PUBLIC VARIABLES(extern)
  *-----------------------------------------------------------
@@ -128,7 +136,7 @@ typedef enum {
 
 /**
  * @brief [비실시간] 디지털 핀의 모드(입력/출력/풀업/풀다운)를 설정합니다.
- * @warning 1ms 실시간 루프 안에서 호출하지 마십시오. (HAL_GPIO_Init 호출로 인한 지연)
+ * @warning 2ms 실시간 루프 안에서 호출하지 마십시오. (HAL_GPIO_Init 호출로 인한 지연)
  * @param[in] pin   설정할 핀 (D0 ~ D7)
  * @param[in] mode  설정할 모드 (XM_INPUT, XM_OUTPUT 등)
  */
@@ -265,16 +273,41 @@ bool XM_IsDioSwitchedToAdc(XmDioPin_t pin);
 
 /**
  * ============================================================================
- * External GPIO 중 ADC Pin(PA0, PA1) -> UART4로 동적 전환 (XM10에서 XSENS IMU를 사용하기 위함)
+ * [Rev2.0] 확장 포트 전원 전압 선택 API (3.3V / 5V)
  * ============================================================================
  */
 
 /**
- * @brief [초기화] 확장 포트(PA0, PA1)를 외부 IMU(Xsens) 통신용으로 설정합니다.
- * @details 기본적으로 이 포트는 ADC로 설정되어 있습니다. 
- * 이 함수를 호출하면 ADC 기능이 중지되고, UART(921600bps)로 재설정되어 IMU와 통신을 시작합니다.
- * * @warning 이 함수는 시스템 부팅 후 초기화 단계(InitUserAlgorithm)에서 한 번만 호출하는 것을 권장합니다.
- * @return 설정 변경 및 IMU 연결 성공 시 true.
+ * @brief [비실시간] 확장 포트의 공급 전압을 3.3V 또는 5V로 전환합니다.
+ * @details
+ * - PE3(EXT_PWR_SEL_5V) GPIO를 제어하여 전원 MUX를 전환합니다.
+ * - 기본값은 3.3V (Low)이며, 5V 센서 사용 시 XM_EXT_PWR_5V로 전환하세요.
+ *
+ * @param[in] voltage 선택할 전압 (XM_EXT_PWR_3V3 또는 XM_EXT_PWR_5V)
+ *
+ * @warning 전환 시 확장 포트에 연결된 외부 디바이스의 전압 규격을 반드시 확인하세요.
+ *
+ * @code
+ * void InitUserAlgorithm(void) {
+ *     XM_SetExtPowerVoltage(XM_EXT_PWR_5V);   // 5V 센서 사용
+ * }
+ * @endcode
+ */
+void XM_SetExtPowerVoltage(XmExtPwrVoltage_t voltage);
+
+/**
+ * ============================================================================
+ * [DEPRECATED — Rev2.0] UART4 동적 전환 API
+ * Rev2.0에서 External UART는 USART2(PD5/PD6) 전용 포트로 대체됨.
+ * ============================================================================
+ */
+
+/**
+ * @brief [DEPRECATED] Rev2.0에서 항상 false를 반환합니다.
+ * @details Rev1.1에서는 PA0/PA1을 UART4로 전환하여 외부 IMU를 연결했으나,
+ *          Rev2.0에서 External UART 전용 포트(USART2, PD5/PD6)가 추가되어
+ *          이 함수는 더 이상 사용되지 않습니다.
+ * @return 항상 false
  */
 bool XM_EnableExternalImu(void);
 

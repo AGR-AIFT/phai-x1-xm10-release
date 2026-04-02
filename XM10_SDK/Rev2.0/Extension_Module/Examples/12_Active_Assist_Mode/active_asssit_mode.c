@@ -35,11 +35,11 @@
 // --- Homing 설정 값 ---
 #define HOMING_TRANSITION_DELAY_MS  50    // 각 단계 사이의 지연 시간 (50ms)
 #define HOMING_SPEED_RH             150   // 초당 이동 속도 (deg/s)
-#define HOMING_ACCEL_S0_RH          4     // 초기 가속도(deg/s^2)
-#define HOMING_ACCEL_SD_RH          4     // 말기 가속도(deg/s^2)
+#define HOMING_ACCEL_S0_RH          2     // 초기 가속도(deg/s^2)
+#define HOMING_ACCEL_SD_RH          2     // 말기 가속도(deg/s^2)
 #define HOMING_SPEED_LH             150   // 초당 이동 속도 (deg/s)
-#define HOMING_ACCEL_S0_LH          4     // 초기 가속도(deg/s^2)
-#define HOMING_ACCEL_SD_LH          4     // 말기 가속도(deg/s^2)
+#define HOMING_ACCEL_S0_LH          2     // 초기 가속도(deg/s^2)
+#define HOMING_ACCEL_SD_LH          2     // 말기 가속도(deg/s^2)
 
 // --- Active-Assist Mode 설정 값 ---
 #define ASSIST_TORQUE_NM                3.0f   // 최대 보조 토크 크기 (Nm)
@@ -577,8 +577,10 @@ static void UpdateActiveAssistMode(void)
             switch (s_homingState) {
                 // --- Homing ---
                 case HOMING_ENTRY: {
-                    XM_SendIVectorKpKdMax(SYS_NODE_ID_RH, 6, 1);
-                    XM_SendIVectorKpKdMax(SYS_NODE_ID_LH, 6, 1);
+                    XM_SendPVectorReset(SYS_NODE_ID_RH);
+                    XM_SendPVectorReset(SYS_NODE_ID_LH);
+                    XM_SendIVectorKpKdMax(SYS_NODE_ID_RH, 6, 6);
+                    XM_SendIVectorKpKdMax(SYS_NODE_ID_LH, 6, 6);
                     s_homingState = HOMING_SET_IMPEDANCE;
                     break;
                 }

@@ -38,7 +38,6 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "ioif_conf.h"  /* IOIF_FDCAN_ISR_DIRECT_ENABLE */
 
 /**
  *-----------------------------------------------------------

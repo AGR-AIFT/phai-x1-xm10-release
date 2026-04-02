@@ -31,11 +31,13 @@
 #define AGR_MW_BOOT_ENABLE
 
 /* -----------------------------------------------------------------------
- * DOP Transport Selection (XM Rev1.1 — CAN-FD only)
+ * DOP Transport Selection (XM Rev2.0 — CAN-FD + UDP)
  * -----------------------------------------------------------------------
  * agr_dop_config.h가 이 파일을 include하므로 #ifndef 가드보다 먼저 적용.
  * - CAN-FD: IMU Hub, EMG Hub, FES Hub (PnP Master)
+ * - UDP:    AM(Jetson) ↔ XM Ethernet 통신 (Rev2.0 전용)
  */
 #define AGR_DOP_TRANSPORT_CANFD     1
+#define AGR_DOP_TRANSPORT_UDP       1
 
 #endif /* AGR_MW_CONF_H_ */

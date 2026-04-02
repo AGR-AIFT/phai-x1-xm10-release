@@ -43,22 +43,18 @@
  *
  * @details
  * [처리 항목]
- * 1. AGR_PnP_Master_Init() - Master PnP 인스턴스 초기화 (FDCAN2)
- * 2. Protocol Device Init (CM, FDCAN1)
+ * 1. AGR_PnP_Master_Init() - Master PnP 인스턴스 초기화
+ * 2. Protocol Device Init (CM)
  * 3. Sensor Device StateInit (GRF, XSENS Auto-Sense 초기화)
  * 4. PnP Task 생성 (100ms 주기)
  *
- * [V5.0 듀얼 CAN 채널]
- * - sensor_tx_func (FDCAN2): V2 Master Heartbeat → Sensor Hub Bus
- * - cm_tx_func (FDCAN1): V1 CM 통신 → CM Bus
- *
- * @param sensor_tx_func  FDCAN2 전송 함수 (System_Fdcan2_Transmit)
- * @param cm_tx_func      FDCAN1 전송 함수 (System_Fdcan1_Transmit)
- * @param get_tick         Tick 함수 (IOIF_TIM_GetTick)
+ * @param pnp_tx_func  PnP Master Heartbeat 전송 함수 (Ch2, System_Fdcan2_Transmit)
+ * @param cm_tx_func   CM(DOP V1) 전송 함수 (Ch1, System_Fdcan1_Transmit)
+ * @param get_tick     Tick 함수 (HAL_GetTick 또는 IOIF_TIM_GetTick)
  *
  * @note V2 Device Driver Init()보다 먼저 호출해야 합니다.
  */
-void PnP_Task_Init(AGR_PnP_TxFunc_t sensor_tx_func,
+void PnP_Task_Init(AGR_PnP_TxFunc_t pnp_tx_func,
                     AGR_PnP_TxFunc_t cm_tx_func,
                     AGR_PnP_GetTickFunc_t get_tick);
 

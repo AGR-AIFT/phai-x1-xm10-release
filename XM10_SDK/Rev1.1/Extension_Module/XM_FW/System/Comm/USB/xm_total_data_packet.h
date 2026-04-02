@@ -1,5 +1,5 @@
 /* AUTO-GENERATED from xm_total_data.yaml v2.5 — DO NOT EDIT MANUALLY */
-/* Generated: 2026-04-01 16:20:46 */
+/* Generated: 2026-04-01 16:15:29 */
 
 #ifndef XM_TOTAL_DATA_PACKET_H
 #define XM_TOTAL_DATA_PACKET_H

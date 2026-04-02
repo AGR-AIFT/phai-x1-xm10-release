@@ -12,8 +12,8 @@
 #ifndef XM_FW_SYSTEM_CONFIG_VERSION_H_
 #define XM_FW_SYSTEM_CONFIG_VERSION_H_
 
-#define FW_VER_MAJOR    2
-#define FW_VER_MINOR    1
+#define FW_VER_MAJOR    1
+#define FW_VER_MINOR    0
 #define FW_VER_PATCH    0
 #define FW_VER_DEBUG    0
 

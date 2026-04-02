@@ -53,7 +53,12 @@
  */
 
 #include "xm_api.h"
+#include "stm32h7xx_hal.h"      /* HAL_FDCAN_GetErrorCounters/ProtocolStatus/RxFifoFillLevel */
+#include "ioif_agrb_dwt.h"      /* IOIF_DWT_GetCycles/CyclesToUs */
+#include "data_logger.h"        /* DataLogger_GetLastFsyncUs */
 #include <string.h>
+
+extern FDCAN_HandleTypeDef hfdcan1;
 
 /* ===================================================================
  * CONSTANTS
@@ -76,7 +81,7 @@
  * 그대로 전달됩니다. 변수명 변경 시 metadata 문자열도 반드시 동기화하세요.
  *
  * auto_timestamp = OFF (수동 count 필드로 대체)
- * 패킷 크기: 108 bytes
+ * 패킷 크기: 118 bytes
  */
 typedef struct __attribute__((packed)) {
     /* --- MATLAB RT 필수 채널 (10ch) --- */
@@ -115,12 +120,25 @@ typedef struct __attribute__((packed)) {
     float    imu_gyr_y_global_rh;      /**< 우측 IMU 자이로 Y [deg/s] */
     float    imu_gyr_z_global_rh;      /**< 우측 IMU 자이로 Z [deg/s] */
 
-    /* --- Extended: 상태 (1ch + padding) --- */
+    /* --- Extended: 상태 (1ch) --- */
     uint8_t  fsm_current_state;         /**< CM FSM 현재 상태 */
-    uint8_t  _pad[3];                   /**< 4-byte 정렬 패딩 */
-} GaitAnalysisLog_t;    /* 108 bytes */
 
-_Static_assert(sizeof(GaitAnalysisLog_t) == 108,
+    /* --- FDCAN Diagnostics (5ch) --- */
+    uint8_t  fdcan_rec;                 /**< Receive Error Counter (0~255) */
+    uint8_t  fdcan_tec;                 /**< Transmit Error Counter (0~255) */
+    uint8_t  fdcan_lec;                 /**< Last Error Code (0=None~7) */
+    uint8_t  fdcan_rx_fifo0_fill;       /**< Rx FIFO0 Fill Level (0~37) */
+    uint8_t  fdcan_bus_status;          /**< bit0:BusOff bit1:Warn bit2:ErrPassive */
+
+    /* --- Timing Diagnostics (4B) --- */
+    uint16_t usertask_jitter_us;        /**< UserTask 주기 편차 [µs] (nominal 1000) */
+    uint16_t fsync_last_us;             /**< 직전 f_sync 소요 시간 [µs] */
+
+    /* --- H10 Counter (4B) --- */
+    uint32_t h10_loop_count;            /**< H10 assist loop counter (PDO gap 검출용) */
+} GaitAnalysisLog_t;    /* 118 bytes */
+
+_Static_assert(sizeof(GaitAnalysisLog_t) == 118,
                "GaitAnalysisLog_t size mismatch — metadata 동기화 필요");
 
 /* ===================================================================
@@ -163,7 +181,14 @@ _Static_assert(sizeof(GaitAnalysisLog_t) == 108,
     "imu_gyr_y_global_rh(float), "          \
     "imu_gyr_z_global_rh(float), "          \
     "fsm_current_state(uint8_t), "          \
-    "_pad(3bytes)"
+    "fdcan_rec(uint8_t), "                  \
+    "fdcan_tec(uint8_t), "                  \
+    "fdcan_lec(uint8_t), "                  \
+    "fdcan_rx_fifo0_fill(uint8_t), "        \
+    "fdcan_bus_status(uint8_t), "           \
+    "usertask_jitter_us(uint16_t), "        \
+    "fsync_last_us(uint16_t), "             \
+    "h10_loop_count(uint32_t)"
 
 /* ===================================================================
  * STATIC VARIABLES
@@ -171,8 +196,6 @@ _Static_assert(sizeof(GaitAnalysisLog_t) == 108,
 
 static GaitAnalysisLog_t s_log;
 static XmTsmHandle_t     s_tsm;
-static uint32_t          s_session_counter = 0;
-static char              s_session_name[32];
 static uint32_t          s_log_loop_count = 0;       /**< 로깅 세션 자체 카운터 (0부터 시작) */
 
 /* ===================================================================
@@ -224,7 +247,7 @@ void User_Setup(void)
 }
 
 /**
- * @brief 주기 루프 (2ms)
+ * @brief 주기 루프 (1ms)
  */
 void User_Loop(void)
 {
@@ -256,18 +279,15 @@ static void _Standby_Loop(void)
  */
 static void _Logging_Entry(void)
 {
-    snprintf(s_session_name, sizeof(s_session_name),
-             "GA_%03lu", (unsigned long)s_session_counter++);
-
-    bool ok = XM_StartUsbDataLog(s_session_name, GAIT_LOG_METADATA);
+    /* 빈 문자열 → boot_count 기반 자동 넘버링 (B003_000 형식)
+     * Why: 수동 GA_000 방식은 재부팅 시 s_session_counter=0 리셋 → 기존 세션 덮어쓰기 위험. */
+    bool ok = XM_StartUsbDataLog("", GAIT_LOG_METADATA);
 
     if (ok) {
-        /* 로깅 자체 카운터 초기화 — CM loopCnt 대신 XM 자체 인덱스 사용
-         * Why: CM loopCnt는 SDO/PDO 타이밍 차이로 base 캡처 시점 문제 발생.
-         *      XM 자체 카운터는 항상 0부터 시작, 매 Loop +1 증가. */
+        memset(&s_log, 0, sizeof(s_log));
         s_log_loop_count = 0;
         XM_SetLedEffect(XM_LED_1, XM_LED_BLINK, 500);
-        XM_InsertUsbLogMarker(1, (uint16_t)s_session_counter);
+        XM_InsertUsbLogMarker(1, 0);
     } else {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_STANDBY);
     }
@@ -370,6 +390,40 @@ static void _UpdateLogData(void)
     s_log.imu_gyr_y_global_rh   = h10->rightHipImuGlobalGyrY;
     s_log.imu_gyr_z_global_rh   = h10->rightHipImuGlobalGyrZ;
 
-    /* --- Extended: 상태 (1ch) --- */
+    /* --- Extended: 상태 --- */
     s_log.fsm_current_state     = h10->h10FSMcurrentState;
+
+    /* --- FDCAN Diagnostics (5ch) --- */
+    FDCAN_ErrorCountersTypeDef err_cnt;
+    FDCAN_ProtocolStatusTypeDef proto_status;
+    if (HAL_FDCAN_GetErrorCounters(&hfdcan1, &err_cnt) == HAL_OK) {
+        s_log.fdcan_rec = (uint8_t)err_cnt.RxErrorCnt;
+        s_log.fdcan_tec = (uint8_t)err_cnt.TxErrorCnt;
+    }
+    if (HAL_FDCAN_GetProtocolStatus(&hfdcan1, &proto_status) == HAL_OK) {
+        s_log.fdcan_lec = (uint8_t)proto_status.LastErrorCode;
+        s_log.fdcan_bus_status =
+            ((proto_status.BusOff)       ? 0x01 : 0) |
+            ((proto_status.Warning)      ? 0x02 : 0) |
+            ((proto_status.ErrorPassive) ? 0x04 : 0);
+    }
+    s_log.fdcan_rx_fifo0_fill = (uint8_t)HAL_FDCAN_GetRxFifoFillLevel(&hfdcan1, FDCAN_RX_FIFO0);
+
+    /* --- Timing Diagnostics (4B) --- */
+    static uint32_t s_last_dwt = 0;
+    uint32_t dwt_now = IOIF_DWT_GetCycles();
+    if (s_last_dwt != 0) {
+        uint32_t delta_us = IOIF_DWT_CyclesToUs(dwt_now - s_last_dwt);
+        int32_t jitter = (int32_t)delta_us - 1000;   /* nominal 1000µs */
+        if (jitter < 0) jitter = -jitter;
+        s_log.usertask_jitter_us = (jitter > 65535) ? 65535 : (uint16_t)jitter;
+    } else {
+        s_log.usertask_jitter_us = 0;
+    }
+    s_last_dwt = dwt_now;
+    uint32_t fsync_us = DataLogger_GetLastFsyncUs();
+    s_log.fsync_last_us = (fsync_us > 65535) ? 65535 : (uint16_t)fsync_us;
+
+    /* --- H10 Counter (4B) --- */
+    s_log.h10_loop_count        = h10->h10AssistModeLoopCnt;
 }
