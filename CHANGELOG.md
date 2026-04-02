@@ -4,6 +4,81 @@
 
 ---
 
+## [v2.1.0] — 2026-04-02
+
+### Highlights
+
+* **AGR_BOOT V2 부트로더 최초 도입** — USB CDC FTP를 통한 펌웨어 업데이트, 자동 백업/롤백, CRC-32 검증
+* **듀얼 HW 리비전 SDK 동시 배포** — `XM10_SDK/Rev1.1/` + `XM10_SDK/Rev2.0/` 폴더 구조
+* **예제 42개** — 입문부터 Physical AI 고급 제어까지 완전한 학습 경로
+* **libXM_Lib.a Release 빌드** — `-O2` 최적화로 전환 (이전 Debug `-Og`)
+
+### Added
+
+* **부트로더 지원**
+  * `boot_fw_info.c` SDK 직접 컴파일 — `.fw_header` 섹션에 `AGRBOOT` 시그니처 배치 (링커 GC 회피)
+  * Post-Build 4단계 자동화: `size_report.py` → `version_generator.py` → `patch_fw_info.py` → `fw_packager.py`
+  * 최종 출력: `XM10_X_X_X_X.bin` (PhAI Studio FTP 업로드용 패키징 바이너리)
+  * 부트로더 매뉴얼: [docs/bootloader/README.md](docs/bootloader/README.md)
+* **Rev2.0 SDK 신규**
+  * Ethernet (LwIP + UDP), PSRAM (8MB QSPI), RTC (MCP79510), LED Driver (PCA9957)
+  * 신규 XM API: `xm_api_memory.h` (PSRAM/Workspace), `xm_api_rtc.h` (RTC 시간 관리)
+  * 신규 디바이스 드라이버: am_drv (Application Module), mcp79510, pca9957, rtl8201f
+  * FDCAN ISR-Direct V5.0, DOP Transport/UDP, ETH UDP Socket
+* **예제 대규모 확장 (20개 → 42개)**
+  * Physical AI 토크 제어 시리즈 (Ex.20~33): Impedance, Gravity Comp, CPG, ILC, MRAC, Admittance, Bilateral, DOB, Kinesthetic Teaching 등
+  * Gait Analysis 로깅 (Ex.34): H10 보행 데이터 자동 수집 + Python 디코더
+* **Data Map Code-Gen**: `xm_total_data.yaml` → `xm_total_data_packet.h` 자동 생성
+  * Total Data Packet v2.5 (365B): FDCAN Ch1/Ch2 독립 진단, `xm_loop_count` 도입
+* **PhAI Studio 연동 강화**
+  * Total Data Packet (Module ID 0x20) 시스템 자동 전송 (1kHz)
+  * User Custom 채널 (0xF0~0xFE): `XM_SetUsbCustomMeta()` + `XM_SendUsbDataWithId()`
+  * Auto-Stream 모드 (레거시 "AGRB MON START" 불필요)
+
+### Changed
+
+* **SDK 폴더 구조**: `XM10_SDK/Extension_Module/` → `XM10_SDK/Rev1.1/` + `XM10_SDK/Rev2.0/`
+* **libXM_Lib.a 빌드 최적화**: Debug (`-Og -g3`) → **Release (`-O2 -g0`)**
+  * Rev1.1: 598KB (59 obj) | Rev2.0: 525KB (66 obj)
+* **AGR_MW 서브모듈 최신화**
+  * OD Discovery (이름/단위 조회), SDO non-expedited Upload (4B 초과 데이터)
+  * `PDO_MAP_MAX_ENTRIES`를 `agr_dop_config.h`로 이동 (재정의 경고 해결)
+* **IOIF 서브모듈 최신화**
+  * TIM PWM/OC 인터럽트 API, `IOIF_TIM_SetCallback` 런타임 콜백 주입
+  * ISR-safe `SetOCMode` / `GenerateUpdate` / `FindByHandle` API
+* **CubeIDE .cproject**: `-lXM_Lib` + `-L XM_FW/` 링커 설정 (이전: `--whole-archive`)
+* **CMakeLists.txt**: XM_FW 소스 컴파일 → `libXM_Lib.a` 링크 방식으로 전환
+* **`ExitRun0Mode()` 추가**: CubeMX 6.13+ startup assembly 호환 (LDO 전원 설정)
+* **Include 경로 정리**: `BuffMngr/Inc` 삭제, `Transport/Serial` + `Transport/UDP` 추가, `Xsens` → `XSENS` 대소문자 수정
+
+### Fixed
+
+* **`.fw_header` 섹션 누락 수정**: `boot_fw_info.c`를 `libXM_Lib.a`에서 분리 → SDK 직접 컴파일 (링커 GC가 .a 내부 미참조 섹션 제거하는 문제 해결)
+* **예제 A→B→C 3경로 완전 동기화**: 42개 예제 `.c` 파일 내용 일치 확인
+* **Rev2.0 XM_Lib 구조 정리**: 소스 복사본 354파일 삭제 (327K줄), `../Extension_Module/` 직접 참조로 전환
+
+### Removed
+
+* `BuffMngr` 모듈 (AGR_MW에서 삭제됨)
+* `user_app.c` 루트 복사본 (`XM_Apps/User_Algorithm/`에서만 관리)
+* SDK 불필요 스크립트: `cproject_to_cmake.py`, `patch_cubemx_overrides.py`
+* Examples A 경로의 README.md 3개 (B 경로에서만 관리 — rule-26)
+* Rev2.0 XM_Lib 내 Drivers/FATFS/Middlewares/Core/Compatible/XM_FW 복사본 전부
+
+### Compatibility
+
+| 컴포넌트 | 최소 버전 | 권장 버전 |
+|----------|----------|----------|
+| AGR_BOOT (부트로더) | v1.1.0 | v1.1.0 |
+| KIT H10 CM | v2.3.0 | v2.3.0+ |
+| KIT H10 ESP32 | v2.3.0 | v2.3.0+ |
+| KIT H10 SAM10/MD | v2.3.0 | v2.3.0+ |
+| STM32CubeIDE | v1.13.2 | v1.14.1+ |
+| Python | 3.8+ | 3.12+ |
+| PhAI Studio | — | 최신 ([studio.onephai.com](https://studio.onephai.com)) |
+
+---
+
 ## [v2.0.1] — 2026-03-09
 
 ### Fixed
