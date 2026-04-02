@@ -221,9 +221,9 @@ list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
 add_dependencies(${CMAKE_PROJECT_NAME} data_map_gen)
 
 # Add linked libraries
+# --whole-archive: HAL __weak 콜백을 libXM_Lib.a의 강한 심볼로 오버라이드 필수
 target_link_libraries(${CMAKE_PROJECT_NAME}
     stm32cubemx
 
-    # XM_FW 정적 라이브러리 (내부 구현 은닉)
-    ${XM_LIB_PATH}
+    -Wl,--whole-archive ${XM_LIB_PATH} -Wl,--no-whole-archive
 )

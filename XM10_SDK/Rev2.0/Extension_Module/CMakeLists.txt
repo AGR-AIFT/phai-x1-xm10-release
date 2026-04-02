@@ -295,10 +295,11 @@ set(XM_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/libXM_Lib.a)
 # libXM_Lib.a 내부의 IOIF 드라이버는 라이브러리 빌드 시점에 이미 활성화되어 있으므로,
 # 여기서 매크로를 변경해도 IOIF 드라이버 동작에는 영향이 없습니다.
 
+# --whole-archive: HAL __weak 콜백을 libXM_Lib.a의 강한 심볼로 오버라이드 필수
 target_link_libraries(${PROJECT_NAME} PRIVATE
     -u _printf_float
     -u _scanf_float
-    ${XM_LIB_PATH}
+    -Wl,--whole-archive ${XM_LIB_PATH} -Wl,--no-whole-archive
 )
 
 # --- Post-build: generate .bin and .hex ---
