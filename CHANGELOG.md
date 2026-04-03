@@ -4,7 +4,28 @@
 
 ---
 
-## [v2.1.0] — 2026-04-02
+## [v2.1.1] — 2026-04-04
+
+> v2.1.0 + 링커 수정 + 디버그 심볼 복원 + xm_api_freertos + Ex.35~36 통합
+
+### Fixed (from v2.1.0)
+
+* **`--whole-archive` 링커 설정 복원**: v2.0.1에서 해결한 HAL `__weak` 오버라이드 문제가 재발 → vPortFree heap corruption 수정
+* **libXM_Lib.a 디버그 심볼 복원**: `-O2 -g0` → `-Og -g3` (Live Expression + 브레이크포인트)
+* **Rev2.0 pre-build**: `patch_cubemx_overrides.py` 복원 (LwIP LWIP_RAND 가드)
+* **Rev2.0 post-build**: `cproject_to_cmake.py` 제거 (SDK CMakeLists.txt 파손 방지)
+* **Rev1.1 xm_api.h**: Rev2.0 전용 include (`xm_api_memory.h`, `xm_api_rtc.h`) 제거
+
+### Added (from v2.1.0)
+
+* **xm_api_freertos.h/c** — 백그라운드 태스크 API (FreeRTOS 래퍼)
+* **Ex.35 MultiLayer Transparent Control** — 다층 투명 제어
+* **Ex.36 OnDevice Kinesthetic Learning** — 온디바이스 동작 학습
+* Ex.11/12 homing 튜닝: accel 4→2 deg/s², IVectorKpKd (6,1)→(6,6)
+
+---
+
+## [v2.1.0] — 2026-04-02 ⚠️ Pre-Release — v2.1.1 사용 권장
 
 ### Highlights
 
