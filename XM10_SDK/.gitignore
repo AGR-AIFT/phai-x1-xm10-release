@@ -19,6 +19,7 @@
 # Libraries
 *.lib
 *.a
+!**/libXM_Lib.a
 *.la
 *.lo
 
