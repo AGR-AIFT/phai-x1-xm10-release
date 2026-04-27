@@ -1,0 +1,48 @@
+name: 🔌 하드웨어/통신 문제 (Hardware Issue)
+description: 센서 연결, 통신(CAN/USB/UART), 전원 등 하드웨어 관련 문제를 신고해주세요.
+title: "[HW] "
+labels: ["hardware", "connection"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        하드웨어 연결 상태를 확인하기 위한 질문들입니다.
+
+  - type: input
+    id: board
+    attributes:
+      label: 사용 중인 하드웨어/보드
+      description: Extension Module 버전이나 MCU 보드 모델명을 적어주세요.
+      placeholder: 예) AGR-EXT-MOD v2.0, Nucleo-F429ZI
+    validations:
+      required: true
+
+  - type: dropdown
+    id: interface
+    attributes:
+      label: 통신 인터페이스
+      options:
+        - CAN / CAN FD
+        - UART / USART
+        - USB CDC / USB MSC
+        - GPIO / ADC
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: wiring
+    attributes:
+      label: 결선 상태 및 전원 (Wiring & Power)
+      description: 어떻게 연결했나요? 전압 레벨(3.3V/5V)과 결선 상태를 설명해주세요. 사진 첨부 환영.
+      placeholder: |
+        VCC: 5V 공급 중
+        CAN High/Low 연결 완료 (종단 저항 120옴 장착함)
+    validations:
+      required: true
+
+  - type: textarea
+    id: symptoms
+    attributes:
+      label: 증상 (LED 상태 등)
+      description: 보드의 LED 상태나 오실로스코프 파형 관측 결과가 있다면 적어주세요.

@@ -1,0 +1,5 @@
+blank_issues_enabled: false  # 빈 양식으로 마음대로 쓰는 것 금지
+contact_links:
+  - name: 💬 질문과 답변 (Q&A)
+    url: https://github.com/AGR-EXO/Extension_Module/discussions
+    about: 버그나 기능 요청이 아닌, 단순 사용법 질문이나 토론은 이곳을 이용해주세요.

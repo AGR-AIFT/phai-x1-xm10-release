@@ -1,0 +1,15 @@
+name: ✨ 기능 제안 (Feature Request)
+description: 새로운 기능이나 드라이버, 예제 추가를 제안해주세요.
+title: "[Feat] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: pitch
+    attributes:
+      label: 어떤 기능이 필요한가요?
+      description: 원하는 기능과 그 이유를 설명해주세요.
+      placeholder: |
+        새로운 FSR 센서에 대한 드라이버 지원이 필요합니다.
+        현재 SDK에는 구형 모델만 지원하고 있어서 사용이 불가능합니다.
+    validations:
+      required: true

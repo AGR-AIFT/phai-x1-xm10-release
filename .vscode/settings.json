@@ -1,0 +1,8 @@
+{
+    "cmake.sourceDirectory": "C:/Users/HyundoKim/Documents/GitHub/Extension_Module/XM10_SDK/Extension_Module",
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": [
+        "--query-driver=C:/ST/STM32CubeIDE_1.13.2/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.100.202509120712/tools/bin/arm-none-eabi-*"
+    ],
+    "cmake.ignoreCMakeListsMissing": true
+}

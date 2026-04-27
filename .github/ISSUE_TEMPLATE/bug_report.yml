@@ -1,0 +1,53 @@
+name: 🐞 SW 버그 리포트 (Software Bug)
+description: SDK 코드 실행 중 발생하는 에러나 오동작을 신고해주세요.
+title: "[SW Bug] "
+labels: ["bug", "software"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        버그를 제보해주셔서 감사합니다!
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 현상 설명 (Description)
+      description: 어떤 문제가 발생했나요? 로그가 있다면 복사해 주세요.
+      placeholder: |
+        XM_SendUsbData() 함수 호출 시 ERROR가 반환됩니다.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: XM SDK 버전 및 커밋 해시
+      placeholder: 예) v1.0.0 또는 Commit b8f2a1
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: 개발 환경 (IDE & Toolchain)
+      placeholder: 예) STM32CubeIDE 1.14.0, GCC 10.3
+    validations:
+      required: true
+
+  - type: input
+    id: Hardware
+    attributes:
+      label: XM 연결 환경
+      placeholder: 예) GRF Module or XSENS IMU 연결
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 재현 방법 (Steps to Reproduce)
+      description: 코드로 재현 가능하다면 스니펫을 첨부해주세요.
+      placeholder: |
+        1. core_process.c main loop의 Real Time이 보장 안됨
+        2. 메인 루프에서 10ms 간격으로 데이터 전송 시도
+        3. 5초 후 멈춤 현상 발생
