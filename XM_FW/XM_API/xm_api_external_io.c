@@ -113,6 +113,17 @@ bool XM_IsDioSwitchedToAdc(XmDioPin_t pin)
     return ExternalIO_IsDioSwitchedToAdc3((ExternalDioPin_t)pin);
 }
 
+void XM_SetExtPowerVoltage(XmExtPwrVoltage_t voltage)
+{
+    IOIF_GPIOx_t id = System_GetExtPwrEnGpioId();
+
+    if (voltage == XM_EXT_PWR_5V) {
+        IOIF_GPIO_SET(id);
+    } else {
+        IOIF_GPIO_RESET(id);
+    }
+}
+
 /**
  * ============================================================================
  * External GPIO 중 ADC Pin(PA0, PA1) -> UART4로 동적 전환 (XM10에서 XSENS IMU를 사용하기 위함)

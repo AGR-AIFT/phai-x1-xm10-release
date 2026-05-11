@@ -16,6 +16,7 @@
 #define SYSTEM_CORE_INC_SYSTEM_STARTUP_H_
 
 #include "ioif_agrb_fdcan.h"
+#include "ioif_agrb_gpio.h"
 
 /**
  *-----------------------------------------------------------
@@ -91,6 +92,12 @@ int System_Fdcan2_Transmit(uint32_t can_id, const uint8_t* data, uint8_t len);
  * @note HAL 직접 호출 (단일 Tx 경로, Mutex 불필요)
  */
 void System_SendSync_Ch1(void);
+
+/**
+ * @brief Returns the IOIF GPIO handle for EXT_PWR_EN(PE4).
+ * @return Initialized IOIF GPIO handle.
+ */
+IOIF_GPIOx_t System_GetExtPwrEnGpioId(void);
 
 /**
  * @brief [신규] Extension Port(PA0, PA1)를 ADC 모드에서 UART(IMU) 모드로 동적 전환합니다.

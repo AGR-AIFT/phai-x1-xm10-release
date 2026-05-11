@@ -108,6 +108,16 @@ typedef enum {
 } XmLogicLevel_t;
 
 /**
+ * @brief Extension port power rail selection.
+ * @note On this Rev1.1 firmware this is backed by EXT_PWR_EN(PE4):
+ *       XM_EXT_PWR_5V enables the external rail, XM_EXT_PWR_3V3 disables it.
+ */
+typedef enum {
+    XM_EXT_PWR_3V3 = 0, /**< Compatibility value: external rail disabled on Rev1.1 */
+    XM_EXT_PWR_5V  = 1  /**< External rail enabled */
+} XmExtPwrVoltage_t;
+
+/**
  *-----------------------------------------------------------
  * PUBLIC VARIABLES(extern)
  *-----------------------------------------------------------
@@ -262,6 +272,15 @@ uint16_t XM_AnalogReadMillivolts(XmAdcPin_t pin);
  * @endcode
  */
 bool XM_IsDioSwitchedToAdc(XmDioPin_t pin);
+
+/**
+ * @brief Enables or disables the extension port power rail.
+ * @details Rev1.1 hardware exposes EXT_PWR_EN(PE4), not a 3.3V/5V selector.
+ *          Use XM_EXT_PWR_5V to enable the rail for external sensors.
+ *
+ * @param[in] voltage XM_EXT_PWR_5V enables EXT_PWR_EN, XM_EXT_PWR_3V3 disables it.
+ */
+void XM_SetExtPowerVoltage(XmExtPwrVoltage_t voltage);
 
 /**
  * ============================================================================

@@ -116,6 +116,7 @@ float pf4_volt_cal;
 float pf5_volt_cal;
 float pf6_volt_cal;
 uint16_t control_ON;
+uint16_t torque_input_pair;  // 0: PF3/PF4 -> RH/LH, 1: PF5/PF6 -> RH/LH
 
 // --- Calibration 상태 ---
 typedef enum {
@@ -173,7 +174,9 @@ static void  _StartCalibration(void);
  */
 void User_Setup(void)
 {
-    // TSM 생성 (초기 상태: OFF — CM 연결 대기)
+    XM_SetExtPowerVoltage(XM_EXT_PWR_5V);
+
+	// TSM 생성 (초기 상태: OFF — CM 연결 대기)
     s_tsm = XM_TSM_Create(XM_STATE_OFF);
 
     // [상태 1] OFF: CM 연결 대기
@@ -321,8 +324,13 @@ static void Active_Loop(void)
     _UpdateStreamData();
 
     if (control_ON == 1)  {
-    	XM_SetAssistTorqueRH(pf3_volt_cal);
-    	XM_SetAssistTorqueLH(pf4_volt_cal);
+        if (torque_input_pair == 1) {
+            XM_SetAssistTorqueRH(pf5_volt_cal);
+            XM_SetAssistTorqueLH(pf6_volt_cal);
+        } else {
+            XM_SetAssistTorqueRH(pf3_volt_cal);
+            XM_SetAssistTorqueLH(pf4_volt_cal);
+        }
     }
 
 }
