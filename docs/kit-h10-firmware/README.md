@@ -1,5 +1,12 @@
 # KIT H10 펌웨어 & 컨텐츠 파일 업데이트
 
+> 📌 **이 페이지를 읽고 나면**: XM FW 버전에 맞는 KIT H10 (CM / ESP32 / SAM10) 펌웨어 + ContentsFiles 를 USB Stick 또는 SD카드 방식으로 업데이트할 수 있습니다.
+> ⏱️ 예상 학습 시간: 20분 (실습 30~60분)
+> 🧰 사전 지식: KIT H10 HW 구조 ([docs/architecture/README.md](../architecture/README.md))
+> 🎯 핵심: 호환성 매트릭스 — **XM v2.0.0 ↔ H10 v2.3.0 ↔ ContentsFiles 2025.02** (혼용 금지)
+
+> ⚠️ **버전 혼용 금지** — XM v2.0.0 + H10 v1.0.x 또는 그 반대 조합 시 CAN-FD 프로토콜 불일치로 통신 오류. 매트릭스 그대로 적용 필수.
+
 XM10은 KIT H10과 CAN-FD로 연동되므로 **XM FW 버전에 맞는 KIT H10 펌웨어 및 컨텐츠 파일**을 사용해야 합니다. 버전이 불일치하면 통신 오류 또는 예기치 않은 동작이 발생할 수 있습니다.
 
 > **반드시 XM FW 버전에 대응하는 KIT H10 FW 및 ContentsFiles를 적용하세요.**

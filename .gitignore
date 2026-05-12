@@ -51,3 +51,6 @@ docs/tutorials/*
 !docs/kit-h10-firmware/
 docs/kit-h10-firmware/*
 !docs/kit-h10-firmware/README.md
+!docs/bootloader/
+docs/bootloader/*
+!docs/bootloader/README.md

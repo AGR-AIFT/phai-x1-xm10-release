@@ -1,5 +1,10 @@
 # Advanced Topics — 심화 주제
 
+> 📌 **이 페이지를 읽고 나면**: XM10 의 심화 주제 (TinyML / 보행 제어 / RL / 데이터 파이프라인) 중 무엇이 이미 실습 가능한지, 무엇이 로드맵에 있는지 한눈에 파악합니다.
+> ⏱️ 예상 학습 시간: 10분 (인덱스 페이지)
+> 🧰 사전 지식: examples 16, 18, 19 + docs/api-reference 일독 권장
+> 🎯 핵심: 학생 자기주도 학습의 출발점 — 관심 분야 예제 + 로드맵 매핑
+
 XM10 플랫폼의 심화 활용법을 다룹니다. 일부 주제는 이미 **실습 예제**로 제공되고 있으며, 나머지는 순차적으로 추가될 예정입니다.
 
 ---
@@ -57,3 +62,18 @@ XM10 플랫폼의 심화 활용법을 다룹니다. 일부 주제는 이미 **�
 ---
 
 콘텐츠 요청이나 기여는 [GitHub Issues](https://github.com/angel-robotics/Extension_Module/issues)에서 받고 있습니다.
+
+---
+
+## 자기주도 학습 권장 경로
+
+| 관심 분야 | 추천 출발점 | 다음 |
+|----------|-----------|------|
+| **AI / ML on MCU** | [Ex.16 TinyAI Sensor Fusion](../../examples/16_TinyAI_Sensor_Fusion/) | [Ex.36 On-Device Kinesthetic Learning](../../examples/36_OnDevice_Kinesthetic_Learning/) |
+| **보행 제어 알고리즘** | [Ex.15 Inverted Pendulum](../../examples/15_Inverted_Pendulum_Control/) → [Ex.17 FSM Gait](../../examples/17_FSM_Gait_Intent/) | [Ex.20~31 Algorithm classic](../../examples/20_Impedance_Control/) |
+| **외란 관측 + 투명 모드** | [Ex.21 Gravity Comp](../../examples/21_Gravity_Compensation/) | [Ex.31 DOB Stage 1](../../examples/31_Friction_Comp_DOB/) → [Ex.35 MultiLayer](../../examples/35_MultiLayer_Transparent_Control/) |
+| **학습 / 적응 제어** | [Ex.26 ILC](../../examples/26_Iterative_Learning_Control/) | [Ex.27 MRAC](../../examples/27_MRAC/) → [Ex.33 Kinesthetic Teaching](../../examples/33_Kinesthetic_Teaching/) |
+| **데이터 수집 / 분석** | [Ex.10c MSC Advanced Log](../../examples/10c_MSC_Advanced_Log/) | [Ex.34 GaitAnalysis Log](../../examples/34_MSC_GaitAnalysis_Log/) (Python + MATLAB) |
+| **시스템 진단 / 디버깅** | [Ex.18 Debug Monitor](../../examples/18_Debug_Monitor/) | [Ex.19 Memory Aware Design](../../examples/19_Memory_Aware_Design/) |
+
+> 💡 **막혔다면**: [docs/troubleshooting.md](../troubleshooting.md) 의 학생 친화 카탈로그 확인. 또는 Claude Code 에 "Ex.XX 막혔어" 질문.
