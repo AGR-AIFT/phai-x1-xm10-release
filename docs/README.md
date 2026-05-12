@@ -2,6 +2,8 @@
 
 XM10 의 전체 문서 인덱스입니다. 처음 시작하는 분은 위에서 아래로 순서대로 읽으면 됩니다.
 
+> **🧭 어디 있을까?** — 키워드로 빠른 검색이 필요하면 **[find-it.md](find-it.md)** 한 페이지에 자주 묻는 키워드 → 정답 페이지가 다 모여 있어요.
+
 ---
 
 ## 시작 흐름
@@ -9,7 +11,7 @@ XM10 의 전체 문서 인덱스입니다. 처음 시작하는 분은 위에서 
 ```
 환경 구축 ──► 첫 빌드 ──► 예제로 학습 ──► API 참고하며 직접 작성
                                     │
-                                    └──► 막히면: Troubleshooting
+                                    └──► 막히면: Troubleshooting / find-it.md
 ```
 
 ---
@@ -101,8 +103,10 @@ ST-Link SWD 직접 업로드 + PhAI Studio USB 업로드 두 가지 방법 + 부
 
 ## 추가 자료
 
+- [🧭 find-it.md](find-it.md) — 키워드 → 페이지 빠른 찾기
 - [Examples](../examples/) — 41 개 예제 소스 코드 (각 폴더에 5 단계 README 포함)
 - [Python Tools](../PythonDecoder/) — USB 시리얼 수신기, USB 메모리 디코더
-- [Changelog](../CHANGELOG.md) — 버전별 변경 이력
+- [Release Notes](release-notes/) — 버전별 첨부 파일 + 호환성 매트릭스
+- [Changelog](../CHANGELOG.md) — 버전별 변경 이력 요약
 - [XM10 SDK](../XM10_SDK/) — Rev1.1 / Rev2.0 SDK 프로젝트
 - [학생 5 명 가상 시뮬레이션](student-walkthrough-simulations.md) — 강사·멘토용 UX 검증 워크스루

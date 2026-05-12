@@ -23,6 +23,10 @@
 
 ---
 
+> **🧭 길 찾기** — 뭘 찾는지는 알겠는데 어디 있는지 모르겠다면 **[docs/find-it.md](docs/find-it.md)** 한 페이지에 다 있어요. "버튼 제어 API 어디?", "Ex.07 안 돼", "보드 핀맵" 같은 자주 묻는 키워드 → 정답 페이지 직행.
+
+---
+
 ## 시작하기
 
 ### AI 와 함께 (가장 빠릅니다)
@@ -92,22 +96,54 @@ git clone https://github.com/AGR-EXO/Extension_Module.git C:\dev\Extension_Modul
 
 ---
 
+## 폴더 구조 한눈에
+
+```
+Extension_Module/
+├── README.md              ← 지금 보는 페이지
+├── docs/                  ← 학생용 문서 (9 카테고리)
+│   ├── find-it.md         ← 🧭 빠른 찾기 인덱스 (먼저 가보세요)
+│   ├── getting-started/   ← 환경 구축 + 첫 빌드
+│   ├── hardware/          ← 보드 외부 인터페이스 + GPIO 핀맵
+│   ├── tutorials/         ← 41 개 예제 학습 흐름 + 16 주 진도표
+│   ├── api-reference/     ← XM 함수 전체 명세
+│   ├── architecture/      ← 내 코드가 언제·어디서 동작하는지
+│   ├── advanced/          ← AI 데이터 파이프라인 + 심화 트랙
+│   ├── bootloader/        ← 펌웨어 업로드 방법
+│   ├── kit-h10-firmware/  ← H10 외골격 펌웨어 호환성
+│   ├── release-notes/     ← 버전별 첨부 파일 + 호환성 매트릭스
+│   └── troubleshooting.md ← 자주 마주치는 문제 모음
+├── examples/              ← 41 개 실습 예제 (각 폴더에 README)
+├── XM10_SDK/              ← STM32CubeIDE 프로젝트
+│   ├── Rev1.1/Extension_Module/  ← PCB Rev 1.1 용
+│   └── Rev2.0/Extension_Module/  ← PCB Rev 2.0 용 (대부분 여기)
+├── PythonDecoder/         ← USB 메모리 / 시리얼 디코더
+├── assets/img/            ← 보드 사진 + 다이어그램 (사용자가 추가)
+├── CLAUDE.md / AGENTS.md  ← AI 코딩 도구 진입점 (Claude Code 등)
+├── CHANGELOG.md           ← 버전별 변경 이력
+└── LICENSE
+```
+
+내가 손대는 코드 위치: `XM10_SDK/Rev2.0/Extension_Module/XM_Apps/User_Algorithm/user_app.c`. 그 외는 라이브러리가 알아서.
+
 ## 전체 문서
 
 | 문서 | 설명 |
 | :--- | :--- |
+| **[🧭 빠른 찾기](docs/find-it.md)** | **"어디 가야 하지" 막힐 때 첫 번째 출구** |
 | [Getting Started](docs/getting-started/) | 하드웨어 연결, 환경 구축, 첫 빌드 — 3 단계 |
 | [Hardware](docs/hardware/) | 보드 외부 인터페이스 + 외부 GPIO 핀맵 (Rev 별) |
-| [Tutorials](docs/tutorials/) | 41 개 예제 학습 로드맵 |
+| [Tutorials](docs/tutorials/) | 41 개 예제 학습 로드맵 + 한 학기 진도표 |
 | [API Reference](docs/api-reference/) | XM 함수 전체 명세 + 흔한 실수 |
 | [Architecture](docs/architecture/) | 내 코드가 어디서 어떻게 동작하는지 |
 | [KIT H10 Firmware](docs/kit-h10-firmware/) | H10 펌웨어/컨텐츠 호환성 + 업데이트 |
 | [Bootloader](docs/bootloader/) | 펌웨어 업로드 방법 (SWD 직접 / USB) |
-| [Advanced Topics](docs/advanced/) | 관심 분야별 자기주도 학습 경로 |
+| [Advanced Topics](docs/advanced/) | AI 데이터 파이프라인 + 관심 분야별 자기주도 학습 |
 | [Troubleshooting](docs/troubleshooting.md) | 자주 마주치는 문제 정리 |
 | [Examples](examples/) | 41 개 예제 (각 폴더에 5 단계 README) |
 | [Python Tools](PythonDecoder/) | USB 시리얼/메모리 디코더, MATLAB 변환 |
-| [Changelog](CHANGELOG.md) | 버전별 변경 이력 |
+| [Release Notes](docs/release-notes/) | 버전별 첨부 파일 + 호환성 매트릭스 |
+| [Changelog](CHANGELOG.md) | 버전별 변경 이력 요약 |
 
 ---
 

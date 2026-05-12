@@ -23,6 +23,11 @@ docs/*
 !docs/README.md
 !docs/troubleshooting.md
 !docs/student-walkthrough-simulations.md
+!docs/find-it.md
+!docs/release-notes/
+docs/release-notes/*
+!docs/release-notes/README.md
+!docs/release-notes/v2.1.1.md
 !docs/getting-started/
 docs/getting-started/*
 !docs/getting-started/00-claude-code-quickstart.md

@@ -16,6 +16,8 @@
 * **`docs/advanced/ai-data-pipeline.md`** — 보드 데이터 → PyTorch / sklearn 학습 흐름 한 페이지 정리 (3 가지 길 + PhAI Studio 연동)
 * **`docs/tutorials/README.md` 16 주 수업 진도표** — 강사용 한 학기 운영 참고 진도표
 * **`docs/student-walkthrough-simulations.md`** — 가상 학생 5 명 UX 시뮬레이션 (강사·멘토용 체크리스트)
+* **`docs/find-it.md`** — 키워드 → 페이지 빠른 찾기 인덱스 (자주 묻는 질문 통합)
+* **`docs/release-notes/`** — 버전별 첨부 파일 + 호환성 매트릭스 (루트 `RELEASE_v*.md` 이전 위치)
 * **`assets/img/README.md`** — 이미지 자료 우선순위 가이드 (Tier 1~6, 35 개 placeholder 목록)
 
 ### Changed
@@ -31,6 +33,11 @@
 
 * **`docs/api-reference/04-external-io.md`** — 잘못된 ADC 핀 정보 (PA0/PA1) → 실제 (PB0/PB1/PF11/PF12) 로 정정, Rev 2.0 누락 보강
 * **`.vscode/settings.json`** — 개발자 절대 경로 박힌 파일을 추적에서 제외 (`.template` 만 추적)
+
+### Moved
+
+* **`RELEASE_v2.1.1.md`** → **`docs/release-notes/v2.1.1.md`** (루트 정리, 향후 릴리즈도 동일 폴더로 일관성)
+* 루트 README 에 **폴더 구조 시각 가이드 + 길 찾기 박스** 추가 — 학생 "어디 가야 하지" 마찰 감소
 
 ---
 
