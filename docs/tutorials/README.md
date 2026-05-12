@@ -4,6 +4,14 @@ XM10의 기능을 단계적으로 마스터할 수 있도록 **27개의 실습 �
 
 > 📖 예제 전체 맵: [examples/README.md](../../examples/README.md)
 
+> 📋 **각 예제 README 의 통일 포맷 (5-step Lab Manual)**:
+> ① 목표 → ② 사전 지식 → ③ 핵심 코드 → ④ 실험 (체크포인트 ✅) → ⑤ 다음 단계 + ⚠️ 흔한 실수
+>
+> 각 예제는 30 분 안에 학습 목표 도달을 기준으로 설계되었습니다. 막히면 ⚠️ 섹션을 먼저 확인하세요.
+
+> 🤖 **AI 트러블슈팅**: Claude Code 에서 `"Ex.XX 가 안 돼"` 라고 말하면 `example-helper` 스킬이
+> 해당 예제 README 의 ⚠️ 섹션 + [docs/troubleshooting.md](../troubleshooting.md) 를 인용해 답합니다.
+
 ---
 
 ## 난이도별 학습 경로

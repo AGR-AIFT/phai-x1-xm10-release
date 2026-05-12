@@ -19,6 +19,24 @@
 
 ---
 
+## 🤖 Claude Code 와 함께 시작하기 (MCU 처음이라면)
+
+`STM32CubeIDE` / 임베디드 경험이 없는 **학생 · 신규 개발자** 를 위한 AI 자동 안내 모드를 지원합니다.
+
+레포 디렉토리에서 [Claude Code](https://claude.com/claude-code) 를 실행한 뒤 다음 한 줄을 입력하세요:
+
+```
+"처음 시작할게"   또는   "/student-onboard"
+```
+
+AI 가 STM32CubeIDE 설치 → 프로젝트 import → 빌드 → 플래시 → LED 점등까지 **6 단계로 자동 안내** 합니다.
+
+> 상세: [📖 docs/getting-started/00-claude-code-quickstart.md](docs/getting-started/00-claude-code-quickstart.md)
+>
+> AI 미사용자는 아래 "빠른 시작 (Quick Start)" 절차를 그대로 따라가셔도 됩니다.
+
+---
+
 ## 핵심 기능
 
 | 기능 | 설명 |

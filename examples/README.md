@@ -9,6 +9,23 @@ XM10 Extension Module의 **41개 실습 예제**입니다.
 
 ---
 
+## 🚀 처음 오신 분 — 첫 30분 동선
+
+| 순서 | 예제 | 난이도 | 학습 포인트 | 권장 시간 |
+|:---:|------|:---:|------------|:---:|
+| 1 | [Ex.00 Quick Start](00_Quick_Start/) | ⭐ | TSM 단일 상태 + LED/버튼/USB CDC 기초 | 30 분 |
+| 2 | [Ex.01 Button & LED Basic](01_Button_LED_Basic/) | ⭐ | 폴링 입출력 (`GetButtonState`) | 20 분 |
+| 3 | [Ex.02 Button & LED Event](02_Button_LED_Event/) | ⭐⭐ | 이벤트 + Toggle + Oneshot 효과 | 25 분 |
+| 4 | [Ex.03 Button & LED FSM](03_Button_LED_FSM/) | ⭐⭐ | TSM 멀티 상태 + 롱 프레스 | 30 분 |
+
+총 약 2 시간 — 외부 HW 불필요. Ex.04 부터 외부 IO / 센서로 확장.
+
+> 📋 **각 예제 README 공통 포맷 (5-step Lab Manual)**: ① 목표 / ② 사전 지식 / ③ 핵심 코드 / ④ 실험 + 변형 / ⑤ 다음 단계 + ⚠️ 흔한 실수
+
+> 🤖 **AI 도움**: Claude Code 에서 `"Ex.XX 막혔어"` → `example-helper` 스킬이 해당 예제의 ⚠️ 섹션 + 트러블슈팅 인용 응답.
+
+---
+
 ## Physical AI 5단계 학습 여정
 
 이 예제들은 하나의 철학적 여정을 따릅니다:
