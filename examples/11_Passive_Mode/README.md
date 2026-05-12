@@ -1,69 +1,150 @@
-# 예제 11: Passive Mode 구현
+# Ex.11 — Passive Mode (P-Vector + I-Vector 자동 왕복 운동)
 
-본 예제는 `XM10`의 핵심 기능인 **Task State Machine**과 **P-Vector**와 **I-Vector**를 사용하여, `KIT H10`이 사용자의 개입 없이 설정된 범위(ROM) 내에서 부드러운 왕복 운동을 지속하는 **Passive Mode**를 구현하는 방법을 보여줍니다.
-
-## 🎯 학습 목표 (Objective)
-
-* `Task State Machine` API를 사용하여 `XM_STATE_OFF`, `XM_STATE_STANDBY`, `XM_STATE_ACTIVE` 상태를 가진 체계적인 애플리케이션을 구성하는 방법을 학습합니다.
-* 안전한 시작을 위한 **Homing(원점 복귀)** 절차를 구현하는 방법을 이해합니다.
-* `I-Vector`를 사전에 설정하여 **임피던스 제어**를 수행하는 방법을 학습합니다.
-* `P-Vector`를 반복적으로 전송하여 **연속적인 궤적**을 생성하는 방법을 학습합니다.
-* **FIFO Pre-Queuing** 기법을 사용하여 P-Vector 세그먼트 간 **끊김 없는 연속 궤적**을 구현하는 방법을 학습합니다.
-* `XM.status.h10.isPVector...Done` 플래그와 `XM_ClearPVectorDoneFlag()` 함수를 사용한 **이벤트 기반 상태 전환** 로직을 이해합니다.
-* 모드 변경 시 `XM_SendPVectorReset()`을 사용하여 **안전하게 동작을 중지**하는 방법을 학습합니다.
+> 🎯 **학습 목표**:
+> - **P-Vector** (궤적 명령) + **I-Vector** (임피던스 설정) 로 H10 의 두 다리를 자동 왕복 운동.
+> - 3-계층 FSM (OFF / STANDBY / ACTIVE) + 내부 sub-FSM (Homing → Mode Transition → Passive Cycle).
+> - PVector queue 패턴 (현재 → MAX → MIN → MAX → ... 미리 큐잉으로 끊김 없는 운동).
+>
+> ⏱️ 권장 시간: 45분 | 🔧 난이도: ⭐⭐⭐
+> 🧰 사전 예제: [Ex.03 FSM](../03_Button_LED_FSM/) + [Ex.10c MSC Advanced](../10c_MSC_Advanced_Log/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [TSM](../../docs/api-reference/01-task-state-machine.md)
 
 ---
 
-## ⚙️ 동작 원리 (How it Works)
+## 1️⃣ 목표 — 이 예제로 무엇이 동작하나
 
-이 예제는 크게 **(1) 초기화 및 원점 복귀**, **(2) Passive Mode 실행**, **(3) 안전한 모드 전환**의 세 단계로 구성된 상태 머신을 기반으로 동작합니다.
-**Passive Mode**에서 사용되는 제어는 `XM.status.h10`의 `rightHipMotorAngle`, `leftHipMotorAngle` 각도를 기준으로 수행됩니다. **해당 각도는 `KIT H10`의 구동기 출력측의 `Encoder`를 통해 측정된 각도입니다.**
+KIT H10 의 좌·우 고관절을 **±25.0 도 사이로 부드럽게 왕복** 시킵니다 (재활 운동용 Passive 모드).
 
-### 1. 초기화 및 원점 복귀 (`InitHoming`)
+| 상태 | 동작 |
+|------|------|
+| OFF | CM 연결 대기 |
+| STANDBY | CM 연결 후 H10 슈트가 ASSIST 모드 요청까지 대기 |
+| ACTIVE (Homing) | 현재 위치 → 0도 위치로 부드럽게 정렬 (속도 150 deg/s) |
+| ACTIVE (Passive Cycle) | 0도 → +25° → −25° → +25° ... 무한 왕복 (속도 250 deg/s) |
+| ACTIVE Exit | H10 STANDBY 요청 시 모터 정지 → STANDBY 복귀 |
 
-`XM10` 태스크의 상태가 `XM_STATE_STANDBY`중에 `XM_H10_MODE_ASSIST`가 감지되면(`XM.status.h10.h10Mode`), 로봇은 안전한 시작을 위해 **원점(0도)으로 복귀하는 Homing 절차**를 시작합니다.
+저장: `/LOGS/Gait_000/` 폴더에 30+ 필드 ([H10 각도/토크/IMU 9-축]) 1 kHz 자동 로깅.
 
-1.  **P-Vector 리셋:** `XM_SendPVectorReset()`을 호출하여 MD의 궤적 기준점을 현재 모터 위치로 동기화합니다.
-2.  **임피던스 설정:** `XM_SendIVectorKpKdMax`와 `XM_SendIVector()`를 호출하여 제어에 적합한 파라미터들을 설정합니다.
-3.  **이동 시작:** 현재 각도에서 0도까지 이동하는 `P-Vector`를 전송합니다. 이때 이동 시간(`L`)은 목표 속도(`HOMING_SPEED_RH`)에 따라 동적으로 계산됩니다.
-4.  **완료 대기:** `XM.status.h10.isPVector...Done` 플래그가 `true`가 될 때까지 기다립니다.
-5.  **상태 전환:** Homing이 완료되면 메인 Task의 상태를 `XM_STATE_ACTIVE`로 전환합니다.
-
-### 2. Passive Mode 실행 (`UpdatePassiveMode`)
-
-`XM10` 태스크의 상태가 `XM_STATE_ACTIVE` 상태에 진입하면, `UpdatePassiveMode` 함수가 주기적으로 호출되어 **최대 각도와 최소 각도 사이를 끊임없이 왕복**합니다. **FIFO Pre-Queuing** 기법을 사용하여 세그먼트 간 끊김 없는 연속 궤적을 생성합니다.
-
-1.  **첫 왕복 시작 (Pre-Queue):** 최대 각도로의 `P-Vector`와 최소 각도로의 `P-Vector`를 **연속으로 2개** 전송하여 MD의 FIFO에 미리 큐잉합니다. 첫 번째 세그먼트가 완료되면 두 번째가 즉시 시작되어 **끊김이 없습니다.**
-2.  **연속 큐잉:** 첫 번째 세그먼트 완료 플래그(`isPVector...Done`)가 수신되면, 두 번째 세그먼트는 이미 실행 중이므로 **다음 방향의 P-Vector를 미리 큐에 추가**합니다.
-3.  **반복:** 매 세그먼트 완료 시마다 다음 궤적을 미리 큐잉하여, MD의 FIFO에 항상 1개 이상의 대기 궤적이 존재하도록 유지합니다.
-
-### 3. 안전한 모드 전환 (`ManageModeTransition`)
-
-사용자가 `KIT H10`의 `KIT_ASSIST_MODE`를 끄면(`XM.status.h10.h10Mode`의 값이 `XM_H10_MODE_STANDBY`로 변경), `ManageModeTransition` 함수가 **안전하게 움직임을 중단**시킵니다.
-
-1.  **궤적 리셋:** `XM_SendPVectorReset()`을 호출하여 현재 진행 중인 `P-Vector` 궤적 생성을 즉시 취소합니다.
-2.  **현재 위치 정지:** `XM_StopMotorAndHold()` 함수가 현재 모터 각도를 읽어와, **목표 위치가 현재 위치인 P-Vector**를 전송하여 부드럽게 그 자리에 멈추도록 합니다.
-3.  **임피던스 설정 초기화:** `EnterStandbyMode()`을 호출하여 임피던스 설정을 초기화합니다.
-4.  **상태 전환:** 정지 동작이 완료되면 메인 Task의 상태를 `XM_STATE_STANDBY`로 안전하게 되돌립니다. 
+> 📸 `![H10 왕복 운동](../assets/img/11_passive_motion.gif)` placeholder
 
 ---
 
-## 🚀 실행 방법 (How to Use)
+## 2️⃣ 사전 지식 — 시작 전 알아둘 것
 
-1.  `STM32CubeIDE`에서 본 예제 소스파일을 `user_app.c`으로 옮겨와서 빌드하고 펌웨어를 `XM10`에 업로드합니다. (user_app.c를 삭제하고 파일 그대로 옮겨와도 됩니다.)
-2.  `KIT H10`의 전원을 켜고 `XM10`과 연결합니다.
-3.  `angel'a DEV` 또는 'KIT H10'의 전원 버튼 더블 클릭을 통해 모드를 **`ASSIST_MODE`로 변경**합니다.
-4.  로봇 다리가 `Homing`에 의해 먼저 **원점(0도)으로 이동**한 후, **설정된 최대/최소 각도 사이를 자동으로 왕복**하는 것을 확인합니다.
-5.  KIT의 모드를 다시 **`STANDBY_MODE`로 변경**합니다.
-6.  로봇 다리가 **그 자리에서 부드럽게 정지**하는 것을 확인합니다.
+- **P-Vector** (Position Vector) — H10 모터의 목표 궤적 명령. `{yd, L, s0, sd}` = 목표각, 시간, 초기/말기 가속도. ([api-ref §2-3](../../docs/api-reference/02-h10-control-n-data.md))
+- **I-Vector** (Impedance Vector) — 위치 제어용 강성/감쇠. `{epsilon, kp, kd, lambda, duration}`. 본 예제: `kp=80, kd=1`.
+- **PVector queue** — H10 가 다음 PVector 를 큐잉 보관. 첫 궤적 진행 중에 다음 궤적 미리 큐잉하면 도착점에서 끊김 없이 자동 시작.
+- **`XM_IsCmConnected()`** — CM (Central Module) 연결 상태. False 시 즉시 OFF 강제 전환 (안전).
+- **`XM.status.h10.h10Mode`** — H10 슈트가 표시하는 보조 모드 (`XM_H10_MODE_STANDBY` / `XM_H10_MODE_ASSIST`). 사용자가 슈트 버튼으로 변경.
+- **Body Data 전제조건**: 본 예제는 토크 직접 명령 X 라 Body Data 호출 불필요.
 
 ---
 
-## 💡 직접 해보기 (Things to Try)
+## 3️⃣ 핵심 코드 — 무엇이 어디서 일어나나
 
-* `passive_mode.c` 파일 상단의 `#define` 값을 수정하여 운동 특성을 변경해보세요.
-* `JOINT_ANGLE_MAX_ANGLE_INT16` / `JOINT_ANGLE_MIN_ANGLE_INT16` 값을 변경하여 **운동 범위(ROM)**를 조절해보세요.
-* `PM_SPEED_RH` / `PM_SPEED_LH` 값을 변경하여 **왕복 운동 속도**를 조절해보세요.
-* `XM_SendIVectorKpKdMax`의 `kp`, `kd` 최대값을 조절하여 적절한 제어 게인을 조절해보세요.
-* `XM_SendIVector`의 파라미터를 조절하여 제어 성능을 튜닝해보세요.
+```c
+/* ① Homing FSM — 슈트 ASSIST 요청 후 0도 위치 정렬 */
+static void InitHoming(void)
+{
+    switch (s_homingState) {
+        case HOMING_ENTRY:
+            XM_SendPVectorReset(SYS_NODE_ID_RH);                   // 기존 궤적 reset
+            XM_SendPVectorReset(SYS_NODE_ID_LH);
+            XM_SendIVectorKpKdMax(SYS_NODE_ID_RH, 6, 6);           // Kp/Kd 최대값 등록
+            s_homingState = HOMING_SET_IMPEDANCE;
+            break;
+        case HOMING_SET_IMPEDANCE: {
+            IVector_t iv = { .epsilon = 0, .kp = 80, .kd = 1, .duration = 50 };
+            XM_SendIVector(SYS_NODE_ID_RH, &iv);                    // ② Stiff impedance
+            XM_SendIVector(SYS_NODE_ID_LH, &iv);
+            s_homingState = HOMING_START_MOTION;
+            break;
+        }
+        case HOMING_START_MOTION: {
+            /* 현재 위치 → 0도 까지의 PVector 계산 + 송신 */
+            PVector_t pv = { .yd = 0, .L = duration, .s0 = 2, .sd = 2 };
+            XM_SendPVector(SYS_NODE_ID_RH, &pv);
+            XM_SendPVector(SYS_NODE_ID_LH, &pv);
+            s_homingState = HOMING_WAIT_FOR_DONE;
+            break;
+        }
+        case HOMING_WAIT_FOR_DONE:
+            if (XM.status.h10.isPVectorRHDone && XM.status.h10.isPVectorLHDone) {
+                XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);            // ③ done flag clear
+                XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
+                s_homingState = HOMING_FINALIZE_DELAY;
+            }
+            break;
+        /* ... DELAY + CLEANUP → ACTIVE 진입 ... */
+    }
+}
 
+/* ④ Passive Cycle — 무한 왕복 */
+static void UpdatePassiveMode(void)
+{
+    switch (s_passiveState) {
+        case PASSIVE_STATE_START_MOTION: {
+            /* [1] 현재 → MAX 궤적 송신 */
+            XM_SendPVector(SYS_NODE_ID_RH, &toMaxRH);
+            XM_SendPVector(SYS_NODE_ID_LH, &toMaxLH);
+            /* [2] MAX → MIN 궤적 미리 큐잉 (pre-queue) */
+            XM_SendPVector(SYS_NODE_ID_RH, &toMinRH);                // ⑤ 큐 사용
+            XM_SendPVector(SYS_NODE_ID_LH, &toMinLH);
+            s_passiveState = PASSIVE_STATE_MOVING_TO_MIN;
+            break;
+        }
+        case PASSIVE_STATE_MOVING_TO_MIN:
+            /* MAX 도착 done → MIN 도착 중 → 다음 MAX 미리 큐잉 */
+            if (XM.status.h10.isPVectorRHDone && XM.status.h10.isPVectorLHDone) {
+                XM_ClearPVectorDoneFlag(...);
+                XM_SendPVector(..., &toMaxRH);                         // 다음 → MAX
+                s_passiveState = PASSIVE_STATE_MOVING_TO_MAX;
+            }
+            break;
+        /* ... MOVING_TO_MAX 대칭 ... */
+    }
+}
+```
+
+전체 코드: [`passive_mode.c`](passive_mode.c) (684 줄, 가장 큰 예제)
+
+> 🧒 ⑤ 의 **pre-queue 패턴** 이 핵심 — 도착점에서 끊김 없이 다음 궤적 시작.
+
+---
+
+## 4️⃣ 실험 — 직접 해보기 (체크포인트)
+
+1. **HW**: KIT H10 ↔ XM10 CAN-FD 연결 + USB MSC 메모리 + 본체 전원
+2. **빌드 + 플래시** → ✅ `0 errors`
+3. **CM 연결 확인** → ✅ OFF → STANDBY 자동 전환 (LED 변화 없음)
+4. **H10 슈트 버튼** 으로 ASSIST 모드 진입 → ✅ Homing 시작 (0도로 정렬)
+5. **Homing 완료** → ✅ Passive 왕복 운동 시작 (±25도, 1초당 한쪽 운동)
+6. **MSC 로깅 확인** → ✅ USB 메모리에 `Gait_000` 폴더 + 30 필드 .bin
+7. **H10 STANDBY 복귀** → ✅ 부드럽게 정지 + STANDBY 상태 복귀
+8. **변형 1 — ROM 변경**: `JOINT_ANGLE_MAX/MIN_ANGLE_INT16` 값 (250 = 25.0°) 을 100 (10°) 또는 400 (40°) 로 변경.
+9. **변형 2 — 속도 변경**: `PM_SPEED_RH/LH` 250 → 100 (느림) 또는 400 (빠름).
+10. **변형 3 — 임피던스 변경**: Stiff `kp=80, kd=1` 을 `kp=40, kd=2` 로 → 부드러운 추종 vs 강한 추종 비교.
+
+---
+
+## 5️⃣ 다음 단계
+
+- 사용자 의도 감지 + 토크 보조: [Ex.12 Active Assist](../12_Active_Assist_Mode/)
+- 저항 운동 (H10 내장 기능 활용): [Ex.13 Resistive](../13_Resistive_Mode/)
+- 토크 직접 제어 (PD): [Ex.14 PD Realtime](../14_PD_Realtime_Control/)
+- 보행 위상 적응 보조: [Ex.17 FSM Gait Intent](../17_FSM_Gait_Intent/) / [Ex.23 Gait Phase Adaptive](../23_Gait_Phase_Adaptive_Torque/)
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| Homing 무한 대기 | `isPVectorDone` 플래그 clear 안 됨 → 다음 PVector 가 done 못 함 | 매 단계 `XM_ClearPVectorDoneFlag` 호출 확인 |
+| 왕복이 끊김 (도착점에서 멈춤) | Pre-queue 패턴 누락 — 다음 PVector 송신 안 됨 | `START_MOTION` 에서 [1]+[2] 둘 다 송신 |
+| H10 가 안 움직임 | `XM_SetControlMode(XM_CTRL_MONITOR)` 만 호출됨 | Active 진입 시 별도 모드 설정 X — H10 슈트가 ASSIST 모드 요청해야 함 |
+| 모터가 ROM 끝에서 충돌음 | 가속도 `s0/sd` 너무 큼 | 1~2 권장. 큰 값은 도착 시 급정지 |
+| MSC 로깅 안 됨 | USB 미삽입 또는 `XM_SetUsbLogSource` 누락 | Setup 에서 호출 확인 + FAT32 |
+| CM 연결 끊김 → 폭주 우려 | OFF 강제 전환으로 안전 | `XM_IsCmConnected()` 가 false 일 때 모든 cycle 첫 줄에서 OFF 전환 |
+| 슈트 STANDBY 복귀 시 H10 잔진동 | `MODE_TRANSITION_*` FSM 미동작 | STOP_PENDING → STOP_COMPLETED → DELAYING 단계 진행 확인 |
+
+막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)

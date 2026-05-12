@@ -1,64 +1,147 @@
-# 예제 12: Active-Assist Mode 구현
+# Ex.12 — Active Assist Mode (의도 감지 + 양측 독립 토크 보조)
 
-본 예제는 사용자의 움직임 **의도**를 파악하여, 필요할 때만 목표 지점까지 부드러운 보조력을 가해 움직임을 도와주는 **Active-Assist Mode**를 구현하는 방법을 보여줍니다.
-
-이 예제는 `Passive Mode`와 달리, 정해진 궤적을 따르는 위치 제어(`P-Vector`)가 아닌, **실시간 토크 제어 입력(Step) 생성**를 핵심으로 사용합니다.
-
-## 🎯 학습 목표 (Objective)
-
-* `XM_SetControlMode(XM_CTRL_TORQUE)`와 `XM_SetAssistTorqueRH(target torque)`, `XM_SetAssistTorqueLH(target torque)`를 사용한 **실시간 토크 제어 입력 생성** 방법을 학습합니다.
-* 시간과 각도 임계값을 조합하여 **사용자의 움직임 의도를 감지**하는 알고리즘을 이해합니다.
-* **계층적 상태 머신**을 사용하여, `Homing`과 같은 동기화 단계와 각 다리의 독립적인 보조 단계를 분리하여 관리하는 방법을 학습합니다.
-* `저역 통과 필터(LPF)`를 이용해 **토크를 부드럽게(Smoothing)** 인가하는 기법을 이해합니다.
-* `XM.status.h10.h10AssistLevel` 값을 연동하여 **보조력의 강도를 동적으로 조절**하는 방법을 학습합니다.
+> 🎯 **학습 목표**:
+> - **사용자 의도 추적** (관절 각도 변화 감지) + 의도 방향으로 부드러운 토크 보조.
+> - 좌/우 다리 **독립 sub-FSM** (한쪽이 의도 감지 → 보조 중, 다른 쪽은 대기 가능).
+> - 토크 smoothing (가파른 변화 방지) + 보조 토크 자동 ramp.
+>
+> ⏱️ 권장 시간: 50분 | 🔧 난이도: ⭐⭐⭐
+> 🧰 사전 예제: [Ex.11 Passive](../11_Passive_Mode/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [TSM](../../docs/api-reference/01-task-state-machine.md)
 
 ---
 
-## ⚙️ 동작 원리 (How it Works)
+## 1️⃣ 목표 — 이 예제로 무엇이 동작하나
 
-이 예제는 **(1) Homing**으로 시작 위치를 정렬한 뒤, **(2) 사용자의 의도를 추적**하고, **(3) 조건이 충족되면 토크를 보조**하는 정교한 상태 머신을 기반으로 동작합니다.
+H10 슈트가 ASSIST 모드일 때 사용자가 다리를 움직이려는 의도를 감지하면, 해당 다리만 의도 방향으로 부드러운 보조 토크를 가합니다. 양 다리 독립 처리.
 
-### 1. 초기 위치 정렬 (`AA_STATE_HOMING`)
+| 상태 (계층) | 동작 |
+|-------------|------|
+| OFF / STANDBY / ACTIVE | Ex.11 과 동일 (CM 연결 + 슈트 ASSIST 대기) |
+| ACTIVE → AA_STATE_HOMING | 양 다리 0도 정렬 |
+| ACTIVE → AA_STATE_ASSISTING | 각 다리 sub-FSM 독립 동작 (의도 추적 → 보조 → 복귀) |
 
-모드가 시작되면, 로봇은 먼저 `Passive Mode` 예제와 유사하게 `P-Vector`와 `I-Vector`를 사용하여 **일정한 시작 위치(`JOINT_ANGLE_MIN_ANGLE_INT16`)로 이동**합니다. 이는 사용자가 항상 예측 가능한 지점에서 보조를 시작할 수 있도록 보장하는 안전 절차입니다. `Homing`이 완료되면, 임피던스 설정이 초기화되며 상위 상태는 `AA_STATE_ASSISTING`으로 전환됩니다.
+핵심 알고리즘: 2초간 의도 각도 추적 → 임계치 (5도) 초과 감지 → 그 방향으로 3 Nm 보조 토크 ramp.
 
-### 2. 의도 감지 및 보조 (`AA_STATE_ASSISTING`)
-
-이 단계부터 양쪽 다리는 각각 독립적인 하위 상태 머신(`AA_SubState_t`)에 따라 동작합니다.
-
-1.  **피크에서 대기 (`AA_SUBSTATE_WAIT_AT_PEAK`):**
-    움직임의 끝 지점(`Peak`)에서 사용자가 다시 움직이기 시작할 때까지 토크 없이 대기합니다. 움직임이 감지되면(`MOVEMENT_START_THRESHOLD_DEG10` 초과) 다음 단계로 넘어갑니다.
-
-2.  **의도 추적 (`AA_SUBSTATE_TRACKING_INTENT`):**
-    사용자의 움직임을 추적하며, 아래 **두 가지 조건이 모두 충족**되는지 확인합니다.
-    * **시간 조건:** 움직임이 시작된 후 일정 시간(`INTENT_TRACKING_DELAY_MS`)이 경과했는가?
-    * **각도 조건:** 사용자가 한 방향으로 일정 각도(`INTENT_ANGLE_THRESHOLD_DEG10`) 이상 진행했는가?
-
-3.  **토크 보조 (`AA_SUBSTATE_PROVIDE_ASSIST_DF/AA_SUBSTATE_PROVIDE_ASSIST_PF`):**
-    위 두 조건이 모두 충족되면, 시스템은 사용자의 의도를 확신하고 목표 방향으로 **보조 토크를 인가**하기 시작합니다.
-    * `XM_SetAssistTorqueRH(target torque)`, `XM_SetAssistTorqueLH(target torque)` 함수를 통해 목표 토크(`ASSIST_TORQUE_NM`)를 예약합니다.
-    * 이때, `XM.status.h10.h10AssistLevel` 값과 연동하면 사용자가 설정한 강도로 보조력이 조절됩니다.
-    * 토크는 `Low-Pass Filter`를 통해 부드럽게 증가하여 사용자에게 안정적인 보조감을 제공합니다.
-    * 사용자가 반대편 피크 지점에 도달하면, 토크를 `0`으로 되돌리고 다시 `WAIT_AT_PEAK` 상태로 복귀합니다.
+> 📸 `![Active Assist 의도 감지](../assets/img/12_active_assist.gif)` placeholder
 
 ---
 
-## 🚀 실행 방법 (How to Use)
+## 2️⃣ 사전 지식 — 시작 전 알아둘 것
 
-1.  `STM32CubeIDE`에서 본 예제 소스파일을 `user_app.c`으로 옮겨와서 빌드하고 펌웨어를 `XM10`에 업로드합니다. (user_app.c를 삭제하고 파일 그대로 옮겨와도 됩니다.)
-2.  `KIT H10`의 전원을 켜고 `XM10`과 연결합니다.
-3.  `angel'a DEV` 또는 다른 제어 수단을 통해 `KIT H10`의 모드를 **`ASSIST_MODE`로 변경**합니다.
-4.  로봇 다리가 먼저 **설정된 시작 위치로 이동**한 후 대기하는 것을 확인합니다.
-5.  `KIT H10`의 보조 레벨(`XM.status.h10.h10AssistLevel`)을 보조력 조절 버튼으로 **1단계** 높입니다.
-6.  **사용자가 직접 다리를 움직여보세요.** 잠시 후, 움직이는 방향으로 **부드러운 보조력이 느껴지는지** 확인합니다.
-7.  `KIT H10`의 보조 레벨(`XM.status.h10.h10AssistLevel`)을 조절하며 **보조력의 강도가 변하는지** 테스트합니다.
+- **Active Assist vs Passive** — Passive 는 정해진 궤적 반복, Active Assist 는 사용자 의도에 반응. Passive = "끌어가기", Active = "도와주기".
+- **의도 감지 (Intent Detection)** — 짧은 시간 (2초) 동안의 각도 변화 적분이 임계치 (5°) 초과 시 그 방향이 사용자 의도.
+- **`XM_SetAssistTorque(L_Nm, R_Nm)`** — 좌·우 다리에 실시간 보조 토크 명령 (Nm). 양수 = +방향, 음수 = -방향. ([api-ref](../../docs/api-reference/02-h10-control-n-data.md))
+- **`XM_SetControlMode(XM_CTRL_TORQUE)`** — 토크 명령 모드 진입. 미설정 시 명령 무시.
+- **Sub-FSM 독립** — 좌·우가 비동기로 다른 단계에 있을 수 있음. 한쪽 추적 중, 다른 쪽 보조 중도 OK.
+- **Smoothing factor** `0.005` — 매 cycle 토크 5/1000 비율로 목표값 추종 → 1초에 약 80% 도달.
 
 ---
 
-## 💡 직접 해보기 (Things to Try)
+## 3️⃣ 핵심 코드 — 무엇이 어디서 일어나나
 
-* `active_assist_mode.c` 파일 상단의 `#define` 값을 수정하여 보조 특성을 변경해보세요.
-* `ASSIST_TORQUE_NM` 값을 변경하여 **최대 보조 토크의 크기**를 조절해보세요.
-* `INTENT_ANGLE_THRESHOLD_DEG10` 값을 변경하여 **의도 감지의 민감도**를 조절해보세요. (값이 작을수록 더 민감해집니다.)
-* `TORQUE_SMOOTHING_FACTOR` 값을 변경하여 **토크가 얼마나 부드럽게/빠르게** 적용될지 조절해보세요. (값이 클수록 더 빠르게 반응합니다.)
+```c
+#define ASSIST_TORQUE_NM             3.0f   // 보조 토크 (Nm)
+#define INTENT_TRACKING_DELAY_MS     2000   // 의도 추적 시간
+#define INTENT_ANGLE_THRESHOLD_DEG10 50     // 5.0도 (=50/10)
+#define TORQUE_SMOOTHING_FACTOR      0.005f // 부드러움
 
+/* ① Sub-FSM 구조 (한쪽 다리) */
+typedef enum {
+    AA_LEG_IDLE,                 // 의도 대기
+    AA_LEG_TRACKING_INTENT,      // 의도 추적 중 (2초 측정)
+    AA_LEG_ASSISTING,            // 보조 중 (토크 ON)
+    AA_LEG_RETURNING,            // 복귀 (토크 OFF)
+} ActiveAssistLegState_t;
+
+/* ② 양 다리 독립 처리 */
+static void Active_Loop(void)
+{
+    XM_SetControlMode(XM_CTRL_TORQUE);                              // 토크 모드
+
+    UpdateAssistFor(SYS_NODE_ID_RH, &s_rh_state, &s_rh_torque);     // ③ 독립 sub-FSM
+    UpdateAssistFor(SYS_NODE_ID_LH, &s_lh_state, &s_lh_torque);
+
+    XM_SetAssistTorque(s_lh_torque_smooth, s_rh_torque_smooth);    // ④ 매 cycle 송신
+}
+
+/* ⑤ Sub-FSM 동작 (의도 추적 → 보조 → 복귀) */
+static void UpdateAssistFor(node_id, state, torque)
+{
+    int16_t cur = (int16_t)round(XM.status.h10.<side>HipMotorAngle * 10.0f);
+
+    switch (*state) {
+        case AA_LEG_IDLE:
+            if (abs(cur - s_anchor_angle) > MOVEMENT_START_THRESHOLD_DEG10) {
+                /* 0.5° 이상 움직임 → 의도 추적 모드로 */
+                s_track_start_time = XM_GetTick();
+                *state = AA_LEG_TRACKING_INTENT;
+            }
+            break;
+        case AA_LEG_TRACKING_INTENT:
+            if (XM_GetTick() - s_track_start_time >= INTENT_TRACKING_DELAY_MS) {
+                int16_t delta = cur - s_anchor_angle;
+                if (abs(delta) > INTENT_ANGLE_THRESHOLD_DEG10) {     // 5° 임계
+                    *torque = (delta > 0) ? +ASSIST_TORQUE_NM : -ASSIST_TORQUE_NM;
+                    *state = AA_LEG_ASSISTING;                       // ⑥ 보조 시작
+                } else {
+                    *state = AA_LEG_IDLE;                            // 의도 부족 → 복귀
+                }
+            }
+            break;
+        case AA_LEG_ASSISTING:
+            /* 토크 유지. 사용자가 반대 방향 의도 → RETURNING */
+            break;
+        case AA_LEG_RETURNING:
+            *torque = 0;
+            *state = AA_LEG_IDLE;
+            break;
+    }
+}
+
+/* ⑦ 토크 smoothing (가파른 변화 방지) */
+s_lh_torque_smooth += (s_lh_torque_target - s_lh_torque_smooth) * TORQUE_SMOOTHING_FACTOR;
+```
+
+전체 코드: [`active_asssit_mode.c`](active_asssit_mode.c) (긴 파일, 의도/토크/Mode Transition 결합)
+
+> 🧒 핵심: ③⑤ 의 **per-leg sub-FSM** + ⑦ smoothing — 한쪽이 강하게 잡고 다른 쪽이 천천히 따라갈 수 있음.
+
+---
+
+## 4️⃣ 실험 — 직접 해보기 (체크포인트)
+
+1. **HW**: KIT H10 ↔ XM10 + 본체 전원 + USB MSC (선택)
+2. **빌드 + 플래시 + CM 연결 + 슈트 ASSIST 모드** → Homing 완료 후 의도 대기
+3. **한쪽 다리만 천천히 움직임** → ✅ 2초 후 그 방향으로 부드러운 보조 토크 시작
+4. **반대 방향으로 다리 의도** → ✅ 보조 토크가 부드럽게 0 으로 복귀 후 새 방향
+5. **양 다리 동시 다른 방향 의도** → ✅ 좌/우가 독립 sub-FSM 진행
+6. **변형 1 — 의도 추적 시간**: `INTENT_TRACKING_DELAY_MS` 를 `500` 또는 `5000` 으로 → 빠르게/느리게 반응.
+7. **변형 2 — 보조 토크 크기**: `ASSIST_TORQUE_NM` 1.0 ~ 5.0 으로 → 가벼움/강함.
+8. **변형 3 — 임계치 변경**: `INTENT_ANGLE_THRESHOLD_DEG10` 50 → 100 (10° 필요) 또는 30 (3°) 로 → 의도 감도 변경.
+9. **변형 4 — Smoothing 가파르게**: `TORQUE_SMOOTHING_FACTOR` 0.005 → 0.05 (10배) → 토크 변화가 거의 즉시 (덜 부드러움).
+
+---
+
+## 5️⃣ 다음 단계
+
+- 저항 운동 (H10 내장 기능): [Ex.13 Resistive](../13_Resistive_Mode/)
+- 토크 직접 제어 (학생 PD 구현): [Ex.14 PD Realtime](../14_PD_Realtime_Control/)
+- AI 의도 추정: [Ex.16 TinyAI](../16_TinyAI_Sensor_Fusion/)
+- 7-phase 보행 FSM: [Ex.17 FSM Gait Intent](../17_FSM_Gait_Intent/)
+- 보행 위상 적응 토크: [Ex.23 Gait Phase Adaptive](../23_Gait_Phase_Adaptive_Torque/)
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| 사용자 의도 인식 안 됨 | `MOVEMENT_START_THRESHOLD_DEG10` 너무 큼 (5 = 0.5°) | 사용자 다리 RoM 측정 후 조정 |
+| 보조 토크가 항상 0 | `XM_SetControlMode(XM_CTRL_TORQUE)` 누락 | Loop 첫 줄에서 매번 호출 |
+| 토크가 갑자기 강하게 들어옴 | Smoothing factor 너무 큼 (즉시 도달) | `0.005` 정도 권장 |
+| 양 다리 sub-FSM 가 동일 동작만 | Per-leg state 가 static 이지만 같은 변수 공유 | `s_rh_state`, `s_lh_state` 분리 확인 |
+| 의도 추적 중에 보조 시작 | 임계치 너무 작거나 추적 시간 너무 짧음 | 추적 시간 2초 + 임계치 5° 조합으로 천천히 안정 |
+| H10 모터 진동 | 토크 변화 너무 빠름 + 임피던스 미설정 | Active Assist 는 토크만 명령, 위치 제어 X. 정상 동작 |
+| 추적 시작 anchor 미갱신 | 매 IDLE 진입 시 `s_anchor_angle = cur` 누락 | sub-FSM IDLE 진입 시 anchor 재설정 |
+
+막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)
