@@ -1,4 +1,17 @@
-# 예제 31: 외란 관측기 기반 투명 모드 완성 (DOB — Stage 1)
+# Ex.31 — Friction Comp DOB (외란 관측기 — 잔류 외란까지 완전 제거)
+
+> 🎯 **학습 목표**:
+> - **DOB (Disturbance Observer)** — Ex.21 의 공칭 모델 보상으로 못 잡은 **잔류 외란** 실시간 추정.
+> - **Q-filter LPF** + **저역 통과** 로 노이즈 강건성과 추정 속도 간 트레이드오프.
+> - **Physical Transparency Stage 1 완성** — 진정한 "투명한" 외골격 (Stage 1 → 2 의 입구).
+>
+> ⏱️ 권장 시간: 50분 | 🔧 난이도: ⭐⭐⭐
+> 🧰 사전 예제: [Ex.21 Gravity Compensation](../21_Gravity_Compensation/) **(필수)** + [Ex.20 Impedance](../20_Impedance_Control/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)
+> 📄 논문: Ohnishi, K., et al. (1996). *Motion control for advanced mechatronics.* IEEE/ASME Trans. Mechatronics, 1(1).
+
+> ⚠️ **rightHipTorque 단위 주의** — 필드명과 달리 실제로는 **모터 전류 (A)** 가 들어옵니다. 토크 환산은 `τ = Kt · rightHipTorque` 로 직접 변환 필요.
+
+---
 
 본 예제는 **외란 관측기(Disturbance Observer, DOB)**를 이용하여
 예제 21(중력+마찰 보상)로는 제거하지 못한 **잔류 외란**을 실시간으로 추정·보상합니다.
@@ -275,3 +288,18 @@ f_c > 159 Hz → α_q < 0 → IIR 발산 ❌
 
 > **rightHipTorque 단위**: 이 필드는 필드명과 달리 **모터 전류(A)**를 제공합니다.
 > 토크 추정: `τ = Kt × rightHipTorque`. 직접 Nm으로 사용하면 안 됩니다.
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| ACTIVE 진입 직후 큰 토크 점프 | `d_hat` 이전 값 잔존 | Entry 에서 `s_d_hat = 0` 강제 초기화 |
+| 추정치 발산 | Q-filter cutoff 너무 큼 → 노이즈 증폭 | Q-filter ω_c 50~100 rad/s 권장 |
+| 추정 너무 느림 | Q-filter cutoff 작음 (10 rad/s 이하) | ω_c ↑ 또는 LPF 시정수 ↓ |
+| DOB 적용했는데 효과 미미 | Ex.21 공칭 모델 부정확 (MGL/B 오류) | Ex.21 먼저 튜닝 + 본 예제 적용 |
+| `rightHipTorque` 직접 Nm 으로 사용 | 단위 오해 → 토크 ×100배 잘못 | `τ = Kt(0.1) × rightHipTorque` 변환 |
+| 잔류 진동 | DOB + FB 게인 합산 시 시스템 불안정 | DOB Q-filter ω_c ↓ 또는 Kp ↓ |
+| BTN 으로 DOB OFF 했는데 토크 잔존 | 비활성 시에도 `d_hat` 누적 | OFF 시 `s_d_hat = 0` 리셋 |
+| Stage 2 (Ex.32) 연결 시 `τ_ext_est` 잡음 큼 | LPF 미적용 | Stage 2 입력 전 추가 LPF (cutoff 5~10 Hz) |

@@ -1,4 +1,16 @@
-# 예제 34: H10 동작분석 데이터 USB-MSC 로깅 (MSC GaitAnalysis Log)
+# Ex.34 — MSC GaitAnalysis Log (H10 보행 데이터 → USB → Python → MATLAB 파이프라인)
+
+> 🎯 **학습 목표**:
+> - H10 SUIT 보행 분석 데이터를 USB 메모리에 **고속 바이너리 로깅** (FAT32 32KB cluster).
+> - Python Decoder 로 CSV 변환 + MATLAB 후처리 자동 워크플로우.
+> - `XM_SetH10AssistExistingMode` 로 보조 ON/OFF 비교 데이터 수집.
+>
+> ⏱️ 권장 시간: 40분 | 🔧 난이도: ⭐⭐
+> 🧰 사전 예제: [Ex.10c MSC Advanced Log](../10c_MSC_Advanced_Log/) + [Ex.17 FSM Gait Intent](../17_FSM_Gait_Intent/) | 📚 관련 docs: [USB Data Logging](../../docs/api-reference/06-usb-data-logging.md)
+
+> ⚠️ **USB 메모리 포맷** — FAT32 + 32 KB cluster 필수 (exFAT 미지원). 4 GB 이상 USB 권장.
+
+---
 
 본 예제는 H10 SUIT 웨어러블 로봇의 동작분석 데이터를 XM10에서 USB 메모리에 저장하는 **데이터 수집 파이프라인**의 XM10 측 구현입니다. 저장된 바이너리를 Python 디코더로 변환하면, MATLAB에서 바로 보행 분석을 수행할 수 있습니다.
 
@@ -149,3 +161,18 @@ run('GaitAnalysis_PP.m');
 | `GaitAnalysis_RT.m` | `GaitAnalysis_Rulebase/MATLAB/` | 실시간 보행 분석 |
 | `GaitAnalysis_PP.m` | `GaitAnalysis_Rulebase/MATLAB/` | 후처리 보행 분석 |
 | `load_decoded_data.m` | `GaitAnalysis_Rulebase/MATLAB/data/` | CSV → MATLAB 변수 로드 |
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| USB 인식 안 됨 | exFAT 또는 NTFS 포맷 | FAT32 + 32 KB cluster 로 재포맷 |
+| `.bin` 파일 크기 0 | `XM_SetUsbLogSource` 미호출 | Setup 에서 등록 확인 |
+| 로깅 중 데이터 누락 | USB 메모리 속도 (USB 2.0 < 30 MB/s) | 빠른 USB 3.0 호환 메모리 사용 |
+| Python Decoder 가 .bin 못 읽음 | 포맷 버전 불일치 | `xm10_gait_tool.py` 최신 버전 |
+| MATLAB load 시 timestamp 점프 | RTC 시간 미설정 | `XM_RTC_SetDateTime` 호출 |
+| 좌·우 데이터 동기 안 맞음 | 별도 로깅 (의도된 경우) | Python Decoder 가 자동 정렬 |
+| Assist OFF 모드인데 토크 출력됨 | `XM_SetH10AssistExistingMode(false)` 호출 누락 | 피험자 안전 위해 사전 확인 |
+| 파일 크기가 너무 큼 | 매 cycle 풀 데이터 (1 kHz × 200 B = 200 KB/s) | 다운샘플 10 → 100 Hz |

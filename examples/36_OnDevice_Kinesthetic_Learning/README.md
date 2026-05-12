@@ -1,4 +1,16 @@
-# 예제 36: On-Device Kinesthetic Learning
+# Ex.36 — On-Device Kinesthetic Learning (MCU 위 Tiny NN 실시간 학습 + LQR 재생)
+
+> 🎯 **학습 목표**:
+> - **On-Device Learning** — MCU 위에서 forward + backward pass 모두 수행 (Ex.16 = inference only).
+> - **교시 → NN 학습 → LQR 재생** 3단계 자동 워크플로우.
+> - **Flash 저장** (BTN1 길게) → 전원 OFF/ON 후 재현 → 영속 학습.
+>
+> ⏱️ 권장 시간: 60분 | 🔧 난이도: ⭐⭐⭐
+> 🧰 사전 예제: [Ex.16 TinyAI Sensor Fusion](../16_TinyAI_Sensor_Fusion/) + [Ex.33 Kinesthetic Teaching](../33_Kinesthetic_Teaching/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [Memory](../../docs/api-reference/07-memory-management.md)
+
+> ⚠️ **Flash 마모 주의** — BTN1 롱프레스 = Flash NV 쓰기. 매 cycle 호출 금지 (10,000 cycle 마모 한계).
+
+---
 
 본 예제는 사람이 로봇을 잡고 움직인 궤적을 **MCU 위에서 Tiny Neural Network로 실시간 학습**한 뒤, 학습된 NN + Multi-Layer 제어로 자율 재현하는 방법을 보여줍니다.
 
@@ -96,3 +108,19 @@ IDLE → [BTN1] → TEACH (투명모드 + 궤적기록, 최대 20초)
 * `LQR_WN`을 10~25 범위로 변경하여 추종 응답 속도를 조절해보세요
 * **BTN1 길게** 눌러 Flash에 저장 후, 전원을 껐다 켜고 **BTN2**로 즉시 재현되는지 확인해보세요
 * `KP_LQR`, `KD_LQR` 주석의 유도 과정을 따라 자신의 링크 물성치로 게인을 재계산해보세요
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| 학습 후 재생이 부정확 | NN_EPOCHS 부족 (≤ 10) | 50~100 epoch 시도 |
+| 학습 시간 너무 길어 멈춤 | BATCH_SIZE 너무 작음 | BATCH 16~32 권장 |
+| Flash 저장 후 OFF/ON 했는데 안 됨 | `XM_UserNV_Erase` 누락 | 쓰기 전 Erase 필수 |
+| BTN1 빠르게 클릭했더니 Flash 마모 경고 | 매 클릭마다 쓰기 → 마모 가속 | BTN1 **롱프레스만** 저장 트리거 |
+| LQR 재생 진동 | KP_LQR / KD_LQR 부적절 | LQR_WN 10~25 범위 조정 |
+| 교시 데이터 노이즈로 학습 발산 | 입력 정규화 누락 | 학습 전 z-score 정규화 |
+| NN 가중치 garbage | Xavier/He 초기화 미적용 | 적절한 초기 분포로 시작 |
+| backward pass 시간이 1 ms 초과 | 큰 NN (hidden > 16) | hidden 8 이하 + 정수 양자화 고려 |
+| 재생 중 BTN1 안 먹힘 | 학습 phase 에서 폴링 누락 | LQR 루프 안에도 BTN 체크 |

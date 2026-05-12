@@ -1,4 +1,16 @@
-# 예제 35: 다층 투명제어 — Zero-Impedance / Virtual Wall / Bilateral Coupling
+# Ex.35 — MultiLayer Transparent Control (Zero-Impedance / Virtual Wall / Bilateral)
+
+> 🎯 **학습 목표**:
+> - **3가지 제어 모드 실시간 전환** — Zero-Impedance (투명) / Virtual Wall (구속) / Bilateral (커플링).
+> - **3개 제어 레이어 조합** — 하나의 예제로 극적으로 다른 물리 느낌 렌더링.
+> - **거치대 고정 H10 다리 (184 g)** 만으로 동작 — 데모/시연용 최적화.
+>
+> ⏱️ 권장 시간: 55분 | 🔧 난이도: ⭐⭐⭐
+> 🧰 사전 예제: [Ex.20 Impedance](../20_Impedance_Control/) + [Ex.21 Gravity Comp](../21_Gravity_Compensation/) + [Ex.31 DOB](../31_Friction_Comp_DOB/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)
+
+> ⚠️ **마찰 보상은 SAM10 (모터 드라이버) 가 수행** — XM10 에서 이중 보상 절대 금지. USB CDC 디버그도 의도적 비활성 (활성 시 크래시 가능).
+
+---
 
 거치대에 고정된 H10의 다리 링크(184g)를 **3가지 제어 모드**로 실시간 전환하며 시연하는 예제입니다. 3개의 제어 레이어를 조합하여 하나의 예제에서 극적으로 다른 물리적 느낌을 렌더링합니다.
 
@@ -163,3 +175,18 @@ STM32CubeIDE **Live Expression**에서 `g_ml_dbg` 구조체를 관찰합니다.
 * Hogan, N. (1985) — Impedance Control
 * Slotine, J.-J. E. & Li, W. (1991) — Applied Nonlinear Control
 * Ex.20 `impedance_control.c`, Ex.21 `gravity_compensation.c`, Ex.31 `friction_comp_dob.c`
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| USB CDC 디버그 추가했더니 크래시 | USB 스택 + 모드 전환 race | 본 예제는 USB CDC 디버그 비활성 (의도) |
+| Zero-Impedance 모드에서 떨림 | DOB Q-filter 너무 빠름 (cutoff 큼) | Q-filter ω_c 50 rad/s 이하로 |
+| 모드 전환 시 큰 토크 점프 | DOB d_hat 잔존 | 다른 모드 전환 시 `s_d_hat = 0` 강제 |
+| 거치대 없는 실제 착용 시 위험 | 본 예제는 거치대 고정 가정 | 실착용 시는 Ex.20 / 21 단독 사용 |
+| 마찰 보상 이중 적용 → 진동 | SAM10 (MD) 가 이미 수행 중 | XM10 에서는 추가 마찰 보상 X |
+| Virtual Wall 모드에서 통과됨 | 강성 (K_wall) 너무 작음 | K_wall ≥ 5 Nm/deg |
+| Bilateral 모드에서 좌·우 동기 | 부호 오류 (둘 다 같은 방향 K) | Ex.29 동일 — 부호 반대 확인 |
+| 토크 ±8 Nm 포화 빈번 | 모드 게인 조합이 너무 큼 | 게인 단계적 ↓ |

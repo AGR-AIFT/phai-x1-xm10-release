@@ -1,4 +1,16 @@
-# 예제 32: GRF 기반 보행 의도 감지 (Stage 2 — Intent Sensing)
+# Ex.32 — GRF Gait Intent (Stage 2 — 발 접지 이벤트로 보행 의도 감지)
+
+> 🎯 **학습 목표**:
+> - **Heel Strike 이벤트** 감지 → 보행 위상 (0~100%) 추정 → **위상 동기 토크** 출력.
+> - 원시 센서 (isFootContact) → **인간 의도 (Intent)** 변환 — Physical AI Stage 2 입문.
+> - **첫 HS 이전엔 토크 0** — 안전 가드 패턴.
+>
+> ⏱️ 권장 시간: 45분 | 🔧 난이도: ⭐⭐⭐
+> 🧰 사전 예제: [Ex.31 DOB Stage 1](../31_Friction_Comp_DOB/) + [Ex.23 Gait Phase Adaptive](../23_Gait_Phase_Adaptive_Torque/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)
+
+> ⚠️ **Body Data 필수** — `isRightFootContact` / `isLeftFootContact` 는 H10 Body Data 패킷. 비활성화 시 HS 이벤트 0 → 보조 토크 0.
+
+---
 
 본 예제는 **발 접촉 센서(GRF — Ground Reaction Force)** 이벤트를 이용하여
 보행 위상(Gait Phase)을 실시간 추정하고, 이에 동기화된 **보조 토크**를 생성합니다.
@@ -262,3 +274,18 @@ PhAI Studio에서 다음을 확인하세요:
 > 걷다 멈추거나 추정기가 올바르지 않을 때는 BTN3로 리셋하세요.
 
 > **바이너리 한계**: `isFootContact`는 있다/없다의 2값입니다. 실제 지면 반발력의 크기나 분포는 `XM.status.grf` 모듈(별도 연결 필요)로만 파악 가능합니다.
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| Heel Strike 안 잡힘 | Body Data 미설정 → footContact 항상 false | `XM_SendUserBodyData` 호출 |
+| Stride 주기 노이즈 (400 ms 미만 점프) | 채터링 (chattering) | min stride 400 ms 가드 + 디바운싱 |
+| 첫 보행 시작 시 큰 토크 점프 | 첫 HS 전 토크 0 가드 누락 | `has_first_hs` 플래그 체크 |
+| 보행 멈췄는데 마지막 위상 유지 | `forwardVelocity` 정지 판정 누락 | < 0.1 m/s → 위상 리셋 |
+| 좌·우 위상이 동기 (둘 다 입각) | 두 다리 모두 같은 HS 기준 사용 | 우측 = 좌측 + 0.5 위상차 |
+| BTN3 리셋해도 잘못된 위상 | static 변수 모두 0 으로 리셋 필요 | 모든 `s_*` static 변수 초기화 |
+| 정확도 부족 (±5%+) | Body Data 가 부정확 (체중·키 오류) | 실측값으로 갱신 |
+| `XM.status.grf` 사용 시도 → 컴파일 에러 | 별도 GRF 모듈 미연결 | 본 예제는 isFootContact 만 사용 |
