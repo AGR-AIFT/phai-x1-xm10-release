@@ -54,3 +54,8 @@ docs/kit-h10-firmware/*
 !docs/bootloader/
 docs/bootloader/*
 !docs/bootloader/README.md
+!docs/hardware/
+docs/hardware/*
+!docs/hardware/README.md
+!docs/hardware/external-gpio-rev1.1.md
+!docs/hardware/external-gpio-rev2.0.md

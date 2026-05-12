@@ -97,6 +97,7 @@ git clone https://github.com/AGR-EXO/Extension_Module.git C:\dev\Extension_Modul
 | 문서 | 설명 |
 | :--- | :--- |
 | [Getting Started](docs/getting-started/) | 하드웨어 연결, 환경 구축, 첫 빌드 — 3 단계 |
+| [Hardware](docs/hardware/) | 보드 외부 인터페이스 + 외부 GPIO 핀맵 (Rev 별) |
 | [Tutorials](docs/tutorials/) | 41 개 예제 학습 로드맵 |
 | [API Reference](docs/api-reference/) | XM 함수 전체 명세 + 흔한 실수 |
 | [Architecture](docs/architecture/) | 내 코드가 어디서 어떻게 동작하는지 |

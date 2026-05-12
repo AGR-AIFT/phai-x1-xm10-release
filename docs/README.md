@@ -63,31 +63,37 @@ XM10 의 전체 문서 인덱스입니다. 처음 시작하는 분은 위에서 
 
 ---
 
-## 4. [KIT H10 Firmware](kit-h10-firmware/) — H10 펌웨어 + 컨텐츠
+## 4. [Hardware](hardware/) — 보드 외부 인터페이스 + 핀맵
+
+보드에 뭐가 몇 개 있는지, 어디에 꽂는지. 외부 GPIO 핀맵은 자주 보게 되는 페이지라 Rev 1.1 / Rev 2.0 별로 분리되어 있어요.
+
+---
+
+## 5. [KIT H10 Firmware](kit-h10-firmware/) — H10 펌웨어 + 컨텐츠
 
 XM 버전과 KIT H10 펌웨어 버전이 맞아야 정상 동작합니다. 업데이트가 필요하면 여기.
 
 ---
 
-## 5. [Architecture](architecture/) — 시스템 큰 그림
+## 6. [Architecture](architecture/) — 시스템 큰 그림
 
 내 코드가 어디서 어떻게 동작하는지 — 처음 시작할 때 한 번 읽으면 전체가 보입니다.
 
 ---
 
-## 6. [Bootloader](bootloader/) — 펌웨어 업로드 방법
+## 7. [Bootloader](bootloader/) — 펌웨어 업로드 방법
 
 ST-Link SWD 직접 업로드 + PhAI Studio USB 업로드 두 가지 방법 + 부트로더 자동 롤백.
 
 ---
 
-## 7. [Advanced Topics](advanced/) — 자기주도 학습 경로
+## 8. [Advanced Topics](advanced/) — 자기주도 학습 경로
 
 관심 분야별 (제어 / AI / 데이터 분석 / 투명 모드 등) 추천 예제 경로.
 
 ---
 
-## 8. [Troubleshooting](troubleshooting.md) — 막혔을 때
+## 9. [Troubleshooting](troubleshooting.md) — 막혔을 때
 
 빌드 오류, USB 연결, 통신 문제 등 자주 마주치는 상황 정리.
 
