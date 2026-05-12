@@ -105,3 +105,4 @@ ST-Link SWD 직접 업로드 + PhAI Studio USB 업로드 두 가지 방법 + 부
 - [Python Tools](../PythonDecoder/) — USB 시리얼 수신기, USB 메모리 디코더
 - [Changelog](../CHANGELOG.md) — 버전별 변경 이력
 - [XM10 SDK](../XM10_SDK/) — Rev1.1 / Rev2.0 SDK 프로젝트
+- [학생 5 명 가상 시뮬레이션](student-walkthrough-simulations.md) — 강사·멘토용 UX 검증 워크스루

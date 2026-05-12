@@ -22,6 +22,7 @@ build/
 docs/*
 !docs/README.md
 !docs/troubleshooting.md
+!docs/student-walkthrough-simulations.md
 !docs/getting-started/
 docs/getting-started/*
 !docs/getting-started/00-claude-code-quickstart.md
@@ -59,3 +60,9 @@ docs/hardware/*
 !docs/hardware/README.md
 !docs/hardware/external-gpio-rev1.1.md
 !docs/hardware/external-gpio-rev2.0.md
+
+# assets/img/ 는 사용자가 채울 자료. README 만 추적 (가이드 문서)
+assets/*
+!assets/img/
+assets/img/*
+!assets/img/README.md

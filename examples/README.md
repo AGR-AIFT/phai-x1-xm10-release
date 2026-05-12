@@ -1,15 +1,14 @@
-# XM10 예제 가이드 — Physical AI 5단계 학습 여정
+# XM10 예제
 
-XM10 Extension Module의 **41개 실습 예제**입니다.
-각 예제 폴더에는 소스 코드(`.c`)와 상세 설명(`README.md`)이 포함되어 있습니다.
+41 개의 실습 예제예요. 각 폴더에 소스 코드 `.c` 와 그 예제만의 설명서 `README.md` 가 함께 들어있어요.
 
-> 📖 API 전체 명세: [docs/api-reference/](../docs/api-reference/)
-> 📘 단계별 학습 가이드: [docs/tutorials/](../docs/tutorials/)
-> 🌐 온라인 학습 플랫폼: [onephai.com](https://onephai.com)
+- API 함수 명세: [docs/api-reference/](../docs/api-reference/)
+- 단계별 학습 안내: [docs/tutorials/](../docs/tutorials/)
+- 온라인 학습 플랫폼: [onephai.com](https://onephai.com)
 
 ---
 
-## 처음 오신 분 — 첫 30분 동선
+## 처음 오신 분 — 첫 30 분 동선
 
 | 순서 | 예제 | 난이도 | 학습 포인트 | 권장 시간 |
 |:---:|------|:---:|------------|:---:|
@@ -18,60 +17,51 @@ XM10 Extension Module의 **41개 실습 예제**입니다.
 | 3 | [Ex.02 Button & LED Event](02_Button_LED_Event/) | ⭐⭐ | 이벤트 + Toggle + Oneshot 효과 | 25 분 |
 | 4 | [Ex.03 Button & LED FSM](03_Button_LED_FSM/) | ⭐⭐ | 멀티 상태 머신 + 롱 프레스 | 30 분 |
 
-총 약 2 시간 — 외부 HW 불필요. Ex.04 부터 외부 IO / 센서로 확장.
+여기까지 약 2 시간이에요. 외부 부품 없이 보드 하나로 다 됩니다. Ex.04 부터 외부 입출력과 센서로 넓혀가요.
 
-> **보드 리비전 호환성**: 41 개 예제 모두 **Rev 1.1 / Rev 2.0 양쪽** 에서 빌드·실행됩니다 (SDK 코드 동일).
-> 단, **외부 GPIO 를 직접 사용하는 예제** (Ex.04~06, Ex.05a~05d, Ex.16 외부 IMU 모드) 는 보드 PCB 의 커넥터 위치/라벨이 리비전마다 다를 수 있어요. 사용 중인 보드의 핀맵을 먼저 확인하세요 — [Rev 1.1 핀맵](../docs/hardware/external-gpio-rev1.1.md) / [Rev 2.0 핀맵](../docs/hardware/external-gpio-rev2.0.md).
+**보드 리비전 호환성** — 41 개 예제는 Rev 1.1 / Rev 2.0 양쪽 모두 빌드·실행됩니다 (SDK 코드가 동일해요). 다만 외부 GPIO 를 직접 다루는 예제 (Ex.04~06, Ex.05a~05d, Ex.16 외부 IMU 모드) 는 보드의 커넥터 위치와 핀 라벨이 리비전마다 달라요. 시작 전에 내 보드의 핀맵을 펴두세요 — [Rev 1.1 핀맵](../docs/hardware/external-gpio-rev1.1.md) / [Rev 2.0 핀맵](../docs/hardware/external-gpio-rev2.0.md).
 
-> 📋 **각 예제 README 공통 포맷 (5-step Lab Manual)**: ① 목표 / ② 사전 지식 / ③ 핵심 코드 / ④ 실험 + 변형 / ⑤ 다음 단계 + ⚠️ 흔한 실수
+각 예제의 README 는 다섯 단계로 정리되어 있어요: ① 목표 / ② 사전 지식 / ③ 핵심 코드 / ④ 실험과 변형 / ⑤ 다음 단계. 마지막에 "흔한 실수" 도 함께.
 
-> 🤖 **AI 도움**: Claude Code 에서 `"Ex.XX 막혔어"` → `example-helper` 스킬이 해당 예제의 ⚠️ 섹션 + 트러블슈팅 인용 응답.
+막혔다면 Claude Code 에서 `"Ex.XX 막혔어"` 라고 말해보세요. `example-helper` 가 해당 예제의 흔한 실수 섹션을 찾아 알려드려요.
 
 ---
 
-## Physical AI 5단계 학습 여정
+## 큰 그림 — 5 단계 학습 흐름
 
-이 예제들은 하나의 철학적 여정을 따릅니다:
-**"로봇이 어떻게 인간을 이해하고, 인간과 함께 성장하는가"**
+기본기를 다진 다음, 41 개 예제는 다섯 단계의 흐름을 따라가요. "로봇이 인간을 어떻게 이해하고, 함께 성장하는가" 라는 한 줄로 묶을 수 있어요.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Foundation   Platform & Tools
-             (00~10c, 18, 19 — 플랫폼 기반, 언제든 참고)
+Foundation   기본 입출력과 도구
+             (00~10c, 18, 19 — 언제든 돌아와 참고)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Stage 1      Physical Transparency   [System 1]
-             로봇이 "보이지 않는 존재"가 된다
+Stage 1      투명한 로봇 만들기
+             착용자가 로봇의 무게·저항을 못 느끼게
              (20 임피던스 · 21 중력보상 · 30 FF+FB · 31 DOB★)
                          ↓
-Stage 2      Intent Sensing          [S1 → S2 전환]
-             센서 신호에서 인간 의도를 추출한다
+Stage 2      의도 읽기
+             센서 신호에서 다음 동작 의도 뽑아내기
              (16 TinyAI · 17 FSM Gait · 22 CPG · 32 GRF★)
                          ↓
-Stage 3      Adaptive Assistance     [S1 + S2 협응]
-             의도를 읽고 실시간으로 보조한다
+Stage 3      맞춤 보조
+             읽은 의도에 맞춰 실시간으로 거들기
              (12 Active Assist · 14 PD · 23 Gait Adaptive · 25 Stance · 28 Admittance)
                          ↓
-Stage 4      Machine Learning        [System 2 강화]
-             경험에서 학습하여 더 나은 제어기가 된다
+Stage 4      경험에서 학습
+             반복하면서 제어기가 스스로 좋아지기
              (15 Inverted Pendulum · 24 Virtual Constraint · 26 ILC · 27 MRAC)
                          ↓
-Stage 5      Shared Autonomy         [S1 + S2 + Human]
-             인간과 AI가 제어권을 나눈다 — 장인 스킬 캡처
+Stage 5      사람과 AI 가 함께
+             제어권 분담 + 전문가 스킬 데이터화
              (11 Passive · 13 Resistive · 29 Bilateral · 33 Kinesthetic★)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ★ 신규 예제 (Ex.31~33)
 ```
 
-> **왜 5단계인가?**
-> 각 단계는 물리적 조건을 선행합니다:
-> - Stage 2는 Stage 1(투명 모드)이 없으면 의도 신호가 노이즈에 묻힙니다.
-> - Stage 3는 Stage 2(의도 감지)가 없으면 보조 타이밍이 맞지 않습니다.
-> - Stage 5(Kinesthetic Teaching)는 Stage 1의 완벽한 투명성 위에서만 가능합니다.
->
-> **System 1 / System 2 (Kahneman 적용)**:
-> System 1 = 빠른 반응 제어 (1kHz 토크 루프) — 외골격의 반사적 행동.
-> System 2 = 느린 추론 AI (VLM, 강화학습) — 고차원 의사결정.
-> 이 예제들은 S1(임베디드)에서 S2(AI)로 연결되는 다리를 구축합니다.
+이 순서에는 이유가 있어요. 로봇이 투명하지 않으면 (Stage 1) 인간 의도 신호가 마찰·중력 노이즈에 묻혀 안 보여요 (Stage 2). 의도를 못 읽으면 보조 타이밍이 빗나가고요 (Stage 3). 그래서 한 단계씩 쌓아 올리는 거예요.
+
+처음부터 5 단계를 다 가야 하는 건 아니에요. **임베디드 처음이면 Foundation 만 한 학기 충분**, **제어 알고리즘에 관심 있으면 Stage 1~3**, **AI 응용이 목표면 Stage 4~5** 로 갈라져요. 추천 경로는 아래 표.
 
 ---
 
@@ -91,11 +81,9 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 
 ---
 
-### Stage 1: Physical Transparency — 로봇을 투명하게 (System 1)
+### Stage 1: 투명한 로봇 만들기
 
-> **목표**: 착용자가 로봇의 무게와 저항을 느끼지 못하도록 만든다.
-> **원칙**: Hogan(1985) — 이상적인 투명 모드에서 로봇의 임피던스는 0이다.
-> **연결**: Stage 2에서 의도 감지를 위한 `τ_ext_est` 신호가 여기서 생성됩니다.
+목표는 착용자가 로봇의 무게·마찰을 못 느끼게 하는 거예요. Hogan(1985) 의 고전적인 정의로 "투명할수록 로봇의 임피던스가 0 에 가깝다". 여기서 만들어지는 외란 추정값이 다음 단계의 의도 감지 신호로 이어져요.
 
 ```
 20  Impedance Control        ← 가상 스프링-댐퍼 (투명 모드 입문)
@@ -106,11 +94,9 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 
 ---
 
-### Stage 2: Intent Sensing — 신호에서 의도를 읽다 (S1 → S2)
+### Stage 2: 의도 읽기
 
-> **목표**: 원시 센서 신호(GRF, IMU, 각도)에서 인간의 다음 동작 의도를 추출한다.
-> **원칙**: Ronsse(2011) — 리드믹 동기화; Gervasi(2020) — 연속 보행 위상 추정.
-> **연결**: 여기서 추출한 의도 신호가 Stage 3의 보조 트리거가 됩니다.
+원시 센서 신호 (GRF, IMU, 관절각) 에서 사람이 다음에 하려는 동작을 추출해요. Ronsse(2011) 의 리드믹 동기화, Gervasi(2020) 의 연속 보행 위상 추정 같은 고전 방법부터 시작해서, 여기서 뽑은 의도 신호가 Stage 3 의 보조 트리거가 돼요.
 
 ```
 16  TinyAI Sensor Fusion     ← IMU + 온디바이스 추론
@@ -121,11 +107,9 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 
 ---
 
-### Stage 3: Adaptive Assistance — 의도에 맞춰 보조하다 (S1 + S2)
+### Stage 3: 맞춤 보조
 
-> **목표**: 감지된 의도에 실시간으로 동기화하여 보조 토크를 생성한다.
-> **원칙**: Quinlivan(2017) — 보행 위상 동기화 보조; Collins(2015) — 최적 강성.
-> **연결**: Stage 4에서 이 보조 전략을 학습 알고리즘으로 자동 최적화합니다.
+읽어낸 의도에 실시간으로 동기화해 보조 토크를 만들어내요. Quinlivan(2017) 의 보행 위상 동기화, Collins(2015) 의 최적 강성 같은 방법들. 이 보조 전략을 다음 단계에서 학습 알고리즘으로 자동 최적화해요.
 
 ```
 12  Active Assist Mode       ← 의도 인식 + 실시간 보조 (계층적 FSM)
@@ -137,11 +121,9 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 
 ---
 
-### Stage 4: Machine Learning — 경험에서 학습하다 (System 2)
+### Stage 4: 경험에서 학습
 
-> **목표**: 반복 경험을 통해 제어기가 스스로 파라미터를 최적화한다.
-> **원칙**: Emken(2007) — 반복 학습 제어; Slotine(1991) — 적응 제어.
-> **연결**: Stage 5의 Kinesthetic Teaching이 수집한 전문가 데이터가 이 단계의 학습 입력이 됩니다.
+반복 경험을 통해 제어기가 자기 파라미터를 스스로 조정해요. Emken(2007) 의 반복 학습 제어 (ILC), Slotine(1991) 의 적응 제어 같은 방법들. Stage 5 에서 전문가 교시로 모은 데이터가 이 단계의 학습 입력으로 들어와요.
 
 ```
 15  Inverted Pendulum        ← 물리 모델 기반 제어 (학습 전 기준선)
@@ -152,11 +134,9 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 
 ---
 
-### Stage 5: Shared Autonomy — 인간과 AI가 함께 (S1 + S2 + Human)
+### Stage 5: 사람과 AI 가 함께
 
-> **목표**: 인간과 AI가 제어권을 분담하고, 전문가 스킬을 데이터로 포착한다.
-> **원칙**: Dragan(2013) — Shared Autonomy; Polanyi(1966) — 암묵지(Tacit Knowledge).
-> **Physical AI 연결**: 전문가가 착용하고 교시한 궤적 데이터 → PhAI Studio → π0 VLA 모델 학습.
+사람과 AI 가 제어권을 분담하고, 말로 표현할 수 없는 전문가의 몸 감각을 데이터로 포착해요. Dragan(2013) 의 공유 자율성, Polanyi(1966) 의 암묵지 개념. 전문가가 투명 로봇을 착용한 채 직접 움직여 만든 궤적 데이터가 다음 세대 AI 모델의 학습 입력이 돼요.
 
 ```
 11  Passive Mode             ← 궤적 제어 (P/I-Vector, 수동 보조)
@@ -165,9 +145,7 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 33  Kinesthetic Teaching ★   ← 전문가 스킬 캡처 → AI 학습 데이터 (장인 암묵지)
 ```
 
-> **Ex.33 핵심**: 운동감각 교시(Kinesthetic Teaching) = 전문가가 투명 로봇을 착용하고
-> 직접 움직여 동작을 교시 → 100Hz 궤적 기록 → π0 스타일 VLA 학습 데이터.
-> *"암묵지를 데이터로"* — 말로 표현할 수 없는 장인 스킬이 AI의 학습 소스가 됩니다.
+**Ex.33 한 줄 요약** — 전문가가 투명 모드로 만든 로봇을 직접 착용하고 동작을 보여주면, 100 Hz 로 궤적이 기록돼요. 그 데이터가 VLA 같은 차세대 AI 모델의 학습 소스가 됩니다. 말로 못 가르치는 장인의 손맛을 데이터로 옮기는 거예요.
 
 ---
 
@@ -272,21 +250,19 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 
 ---
 
-## Part 5: Physical AI 연구 시리즈 — 5단계 학습 여정
+## Part 5: 제어 알고리즘 심화 — 5 단계 흐름 상세
 
-> ⚠️ **Body Data 전제조건** — `gaitCycle`, `footContact`, `forwardVelocity` 등 H10 CM
-> 보행 분석 데이터를 사용하는 예제는 `XM_SendUserBodyData()` 설정이 필수입니다.
-> 상세: [API Reference — Body Data 전제조건](../docs/api-reference/README.md#-body-data-전제조건--반드시-읽으세요)
->
-> 💡 **PhAI Studio 연동**: 모든 예제에 `XM_SetUsbCustomMeta` + `XM_SendUsbDataWithId`가
-> 적용되어 있어 알고리즘 출력을 실시간 모니터링 가능합니다.
+위 큰 그림을 단계별로 표로 풀어둔 거예요. 논문 출처와 난이도가 필요할 때 참고하세요.
+
+**Body Data 전제** — `gaitCycle`, `footContact`, `forwardVelocity` 같은 H10 보행 분석 값을 쓰는 예제는 `XM_SendUserBodyData()` 호출이 먼저 필요해요. 자세한 건 [API Reference — Body Data 전제조건](../docs/api-reference/README.md#-body-data-전제조건--반드시-읽으세요).
+
+**PhAI Studio 연동** — 모든 예제에 USB 실시간 스트리밍 코드가 들어있어요. 보드 동작과 동시에 PhAI Studio 에서 그래프로 확인할 수 있어요.
 
 ---
 
-### Stage 1: Physical Transparency — 로봇을 투명하게 (Ex.20, 21, 30, 31)
+### Stage 1: 투명한 로봇 만들기 (Ex.20, 21, 30, 31)
 
-> Hogan(1985): "이상적인 투명 모드에서 로봇의 임피던스는 0이다."
-> Ex.21(공칭 모델) → Ex.31(DOB)로 진행하며 진정한 투명성을 완성합니다.
+Hogan(1985) 의 정의대로 임피던스를 0 에 가깝게. Ex.21 의 공칭 모델 보상에서 시작해 Ex.31 의 외란 관측기 (DOB) 까지 가면 진짜 투명 모드가 완성돼요.
 
 | 예제 | 제목 | Body Data | 난이도 | 논문 |
 | :---: | :--- | :---: | :---: | :--- |
@@ -295,14 +271,13 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 | [30](30_FF_FB_Hybrid_Control/) | FF+FB 혼합 제어 | ✗ | ★★★ | Slotine & Li 1991 |
 | [31](31_Friction_Comp_DOB/) ★ | **외란 관측기 투명 모드** | ✗ | ★★★ | Ohnishi 1996 (IEEE IE) |
 
-> **Ex.31 핵심**: DOB Q-filter로 잔류 외란 추정 → `τ_ext_est` ≈ 인간 의도 힘 → Stage 2 연결 고리
+**Ex.31 한 줄 요약** — DOB 의 Q-filter 로 잔류 외란을 추정해요. 그 외란값이 사실상 "사람이 가하는 힘" 이라서, 다음 단계 (의도 감지) 의 핵심 신호가 됩니다.
 
 ---
 
-### Stage 2: Intent Sensing — 신호에서 의도를 읽다 (Ex.16, 17, 22, 32)
+### Stage 2: 의도 읽기 (Ex.16, 17, 22, 32)
 
-> 원시 센서 신호가 어떻게 "인간 의도"로 변환되는지를 보여줍니다.
-> Ex.32는 GRF 이벤트 기반의 연속 보행 위상 추정을 구현합니다.
+원시 센서 신호가 어떻게 "인간 의도" 로 변환되는지를 다뤄요. Ex.32 는 발 접지 이벤트 기반으로 연속 보행 위상을 추정해요.
 
 | 예제 | 제목 | Body Data | 난이도 | 논문 |
 | :---: | :--- | :---: | :---: | :--- |
@@ -311,13 +286,13 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 | [22](22_CPG_Oscillator/) | CPG 적응 주파수 진동자 | △ | ★★★ | Ronsse 2011 (MBEC) |
 | [32](32_GRF_Gait_Intent/) ★ | **GRF 보행 위상 추정** | ✔ **필수** | ★★★ | Gervasi 2020 (IROS) |
 
-> **Ex.32 핵심**: Heel Strike → 위상 리셋 → `phase += dt/T` → sin 프로파일 보조 토크
+**Ex.32 한 줄 요약** — 발 뒤꿈치 접지에서 위상을 리셋하고, `phase += dt / T` 로 연속 위상을 업데이트해요. sin 프로파일에 맞춰 보조 토크를 내보내면 보행에 자연스럽게 동기화됩니다.
 
 ---
 
-### Stage 3: Adaptive Assistance — 의도에 맞춰 보조하다 (Ex.12, 14, 23, 25, 28)
+### Stage 3: 맞춤 보조 (Ex.12, 14, 23, 25, 28)
 
-> 감지된 의도에 실시간으로 동기화하여 최적 보조 토크를 생성합니다.
+감지한 의도에 실시간으로 동기화해 최적 보조 토크를 만들어내요.
 
 | 예제 | 제목 | Body Data | 난이도 | 논문 |
 | :---: | :--- | :---: | :---: | :--- |
@@ -329,9 +304,9 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 
 ---
 
-### Stage 4: Machine Learning — 경험에서 학습하다 (Ex.15, 24, 26, 27)
+### Stage 4: 경험에서 학습 (Ex.15, 24, 26, 27)
 
-> 반복 경험과 온라인 적응으로 제어기가 스스로 최적화됩니다.
+반복 경험과 온라인 적응으로 제어기가 스스로 최적화돼요.
 
 | 예제 | 제목 | Body Data | 난이도 | 논문 |
 | :---: | :--- | :---: | :---: | :--- |
@@ -342,11 +317,9 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 
 ---
 
-### Stage 5: Shared Autonomy — 인간과 AI가 함께 (Ex.11, 13, 29, 33)
+### Stage 5: 사람과 AI 가 함께 (Ex.11, 13, 29, 33)
 
-> **암묵지(Tacit Knowledge, Polanyi 1966)**: 전문가가 말로 표현하지 못하는 장인의 솜씨를
-> 외골격 착용 교시(Kinesthetic Teaching)로 데이터화합니다.
-> 이것이 π0 스타일 VLA 모델의 학습 데이터가 됩니다.
+말로 옮길 수 없는 전문가의 몸 감각을 외골격 교시로 데이터화해요. Polanyi(1966) 가 "암묵지" 라고 불렀던 그 영역. 이 데이터가 차세대 VLA 모델의 학습 입력이 됩니다.
 
 | 예제 | 제목 | Body Data | 난이도 | 논문 |
 | :---: | :--- | :---: | :---: | :--- |
@@ -355,12 +328,13 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 | [29](29_Bilateral_Coordination/) | 좌우 협응 제어 | △ | ★★★ | Duschau-Wicke 2010 (TNSRE) |
 | [33](33_Kinesthetic_Teaching/) ★ | **운동감각 교시 + 재생** | ✗ | ★★★★ | Billard 2008 · Chi 2023 |
 
-> **Ex.33 Physical AI 파이프라인**:
-> ```
-> [투명 교시] → [100Hz 궤적 기록] → [PD 재생 검증]
->      ↓ Ex.10b SD카드 저장
-> [PhAI Studio 라벨링] → [VLA 학습] → [배포]
-> ```
+**Ex.33 전체 파이프라인**
+
+```
+[투명 교시] → [100 Hz 궤적 기록] → [PD 재생으로 검증]
+     ↓  Ex.10b SD 카드 저장
+[PhAI Studio 라벨링] → [VLA 학습] → [배포]
+```
 
 ---
 
@@ -371,10 +345,10 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 
 ## 예제 사용법
 
-1. 원하는 예제의 `.c` 파일을 확인합니다.
-2. 코드를 `XM_Apps/User_Algorithm/user_app.c`에 복사합니다.
-3. 프로젝트를 빌드하고 XM10에 업로드합니다.
-4. 각 예제의 `README.md`에서 동작 원리와 실행 방법을 확인합니다.
-5. PhAI Studio에서 USB 연결 → Total Data(0x20) 및 User Custom(`0xF0~0xF3`) 채널 확인.
+1. 원하는 예제 폴더의 `.c` 파일과 `README.md` 를 열어요.
+2. `.c` 코드를 `XM_Apps/User_Algorithm/user_app.c` 에 복사 후 빌드해서 보드에 업로드.
+3. README 의 4 단계 "실험" 을 그대로 따라가며 동작을 확인.
+4. 변형도 시도해보세요 — 값을 바꾸거나 LED 를 다른 핀으로 옮겨봐요.
+5. PhAI Studio 를 연결하면 보드 데이터를 실시간 그래프로 볼 수 있어요 (`0x20` 채널 기본, `0xF0~0xF3` 채널 커스텀).
 
-> 상세 가이드: [Getting Started — 첫 빌드 & 실행](../docs/getting-started/03-first-build.md)
+자세한 빌드·업로드 방법은 [Getting Started — 첫 빌드](../docs/getting-started/03-first-build.md).

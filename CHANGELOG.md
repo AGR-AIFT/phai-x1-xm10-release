@@ -4,6 +4,33 @@
 
 ---
 
+## [unreleased — 2026-05] — Docs UX Overhaul
+
+> 코드 변경 없음. 학생 친화 문서 전면 개편 + Claude Code 온보딩 인프라.
+
+### Added
+
+* **Claude Code 온보딩 인프라** — `CLAUDE.md`, `AGENTS.md`, `.claude/skills/student-onboard/` (6 단계 phased 안내), `.claude/skills/example-helper/` (예제별 트러블 응답)
+* **`docs/getting-started/00-claude-code-quickstart.md`** — AI 자동 안내 진입 페이지
+* **`docs/hardware/`** — 보드 외부 인터페이스 통합 안내 + Rev 1.1 / Rev 2.0 별 외부 GPIO 핀맵
+* **`assets/img/README.md`** — 이미지 자료 우선순위 가이드 (Tier 1~6, 35 개 placeholder 목록)
+
+### Changed
+
+* **41 개 예제 README 통일** — 5 단계 lab manual 포맷 (목표 / 사전 지식 / 핵심 코드 / 실험 / 다음 단계 + 흔한 실수)
+* **`docs/` 4-tier 재구성** — getting-started · tutorials · api-reference · architecture · advanced · bootloader · kit-h10-firmware · troubleshooting 학생 친화 톤
+* **루트 `README.md` 재설계** — Claude Code 우선 + 수동 3 단계 간단 명령
+* **학생 친화 용어 교체** — 내부 약어 (AGR DOP V2, IOIF V3.0, Facade Layer, RTOS Task, PI-Vector, TSM, PDO, CDC, MSC, Cortex-M7 등) → 학생이 이해할 수 있는 자연스러운 표현
+* **AI 틱한 표현 제거** — 📌/⏱️/🧰 메타 박스 + WHY/WHAT/HOW 영문 헤더 + 🧒 비유 박스 정리, 한국어 자연스러운 톤
+* **`examples/README.md`** — Rev 1.1 / Rev 2.0 호환성 통합 안내 (41 개 예제 모두 빌드 호환, 외부 GPIO 핀맵만 리비전별 확인)
+
+### Fixed
+
+* **`docs/api-reference/04-external-io.md`** — 잘못된 ADC 핀 정보 (PA0/PA1) → 실제 (PB0/PB1/PF11/PF12) 로 정정, Rev 2.0 누락 보강
+* **`.vscode/settings.json`** — 개발자 절대 경로 박힌 파일을 추적에서 제외 (`.template` 만 추적)
+
+---
+
 ## [v2.1.1] — 2026-04-04
 
 > v2.1.0 + 링커 수정 + 디버그 심볼 복원 + xm_api_freertos + Ex.35~36 통합
