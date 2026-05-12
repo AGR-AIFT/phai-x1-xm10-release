@@ -1,68 +1,128 @@
-# 예제 05d: DIO/ADC 혼합 모드 — 버튼 + LED + FSR 실전 시나리오
+# Ex.05d — DIO + ADC Hybrid (동일 포트 혼용 + 보호 장치)
 
-본 예제는 **동일한 DIO 포트에서 일부 핀은 GPIO(버튼, LED), 일부 핀은 ADC(FSR 센서)로 동시에 사용**하는 실전 시나리오를 다룹니다. ADC로 전환된 핀에 GPIO 함수를 호출해도 **보호 장치가 안전하게 무시**하는 것을 확인합니다.
+> 🎯 **학습 목표**:
+> - 같은 DIO 포트에서 일부 핀은 GPIO, 다른 핀은 ADC 로 **동시에 사용**.
+> - ADC 전환된 핀에 GPIO API 호출 시 **보호 장치** 가 작동함을 확인.
+> - 실전 시나리오: 외부 버튼으로 FSR 측정 모드를 토글.
+>
+> ⏱️ 권장 시간: 30분 | 🔧 난이도: ⭐⭐⭐
+> 🧰 사전 예제: [Ex.05c Mixed ADC](../05c_Ext_IO_Mixed_ADC/) | 📚 관련 docs: [External IO](../../docs/api-reference/04-external-io.md)
 
-## 🎯 학습 목표 (Objective)
+---
 
-* 동일한 DIO 포트에서 **GPIO와 ADC를 혼합 사용**하는 방법을 학습합니다.
-* ADC 전환된 핀에 GPIO 접근 시 **보호 장치(Guard)**가 작동하여 충돌이 발생하지 않음을 확인합니다.
-* `XM_IsDioSwitchedToAdc()`로 핀 모드를 **런타임에 확인**하는 방법을 익힙니다.
-* 외부 버튼 **Edge Detection** + FSR 측정 + LED 표시를 조합한 **실전 패턴**을 학습합니다.
+## 1️⃣ 목표 — 이 예제로 무엇이 동작하나
 
-## ⚙️ 동작 원리 (How it Works)
+| 핀 | 모드 | 용도 |
+|----|------|------|
+| DIO 1~4 (PF3~PF6) | ADC | FSR 4개 압력 측정 |
+| DIO 5 (PF7) | GPIO Input Pullup | 외부 푸시 버튼 |
+| DIO 6 (PF8) | GPIO Output | 상태 표시 LED |
 
-* **핀 역할 분배:**
-  - DIO 1~4 → ADC 전환 (FSR 센서)
-  - DIO 5 → GPIO Input (외부 버튼, 내부 풀업)
-  - DIO 6 → GPIO Output (상태 표시 LED)
-  - DIO 7~8 → 미사용 (기본 Input Floating)
-* **보호 장치:** ADC로 전환된 DIO 1번에 `XM_SetPinMode()`, `XM_DigitalWrite()`, `XM_DigitalRead()`를 호출해도 안전하게 무시됩니다.
-* **측정 모드 토글:** 외부 버튼을 누를 때마다 측정 모드가 ON/OFF 토글됩니다. Edge Detection으로 버튼 눌림만 감지합니다.
-* **데이터 수집:** 측정 모드일 때만 FSR 4채널의 밀리볼트 값을 수집하고, 총 압력이 임계치를 초과하면 내부 LED로 알림합니다.
+**동작**: 외부 버튼 누름 → 측정 모드 토글. ON 상태에서 FSR 4개 합산 압력 > 6 V (4 × 1.5 V) 이면 내부 LED 1 켜짐.
 
-## 🔌 하드웨어 연결
+> 📸 `![Hybrid 회로](../assets/img/05d_hybrid.png)` placeholder
 
-```
-FSR 센서 (×4):
-  3.3V ─── FSR ──┬── DIO 1~4 (PF3~PF6)
-                 └── 10kΩ ─── GND
+---
 
-외부 버튼:
-  DIO 5 (PF7) ─── 버튼 ─── GND  (내부 풀업 사용)
+## 2️⃣ 사전 지식 — 시작 전 알아둘 것
 
-외부 LED:
-  DIO 6 (PF8) ─── 330Ω ─── LED(+) ─── GND
-```
+- **핀 단위 독립 모드** — 같은 DIO 그룹 내에서도 핀별로 다른 모드 가능 (1~4 = ADC, 5~6 = GPIO).
+- **보호 장치 (Guard Mechanism)** — ADC 로 전환된 핀에 GPIO API (`XM_SetPinMode`, `XM_DigitalWrite`, `XM_DigitalRead`) 를 호출해도 안전하게 무시. 학생 실수 방지.
+- **Edge Detection** — `btn_now && !btn_prev` 패턴으로 "방금 막 눌린 순간" 한 번만 감지 (Leading Edge).
 
-| DIO 핀 | 역할 | 모드 |
-|--------|------|------|
-| DIO 1~4 | FSR 센서 | ADC (전환) |
-| DIO 5 | 외부 버튼 | GPIO Input (Pullup) |
-| DIO 6 | 상태 LED | GPIO Output |
-| DIO 7~8 | 미사용 | GPIO Input (Floating) |
+---
 
-## 🛡️ 보호 장치 동작 확인
-
-코드의 `User_Setup()`에서 보호 장치 테스트를 수행합니다:
+## 3️⃣ 핵심 코드 — 무엇이 어디서 일어나나
 
 ```c
-// ADC 전환된 DIO 1번에 GPIO 함수 호출 → 안전하게 무시됨
-XM_SetPinMode(XM_EXT_DIO_1, XM_EXT_DIO_MODE_OUTPUT);  // 무시됨
-XM_DigitalWrite(XM_EXT_DIO_1, XM_HIGH);                // 무시됨
-XM_DigitalRead(XM_EXT_DIO_1);                          // XM_LOW 반환
+#define BUTTON_PIN  XM_EXT_DIO_5
+#define LED_PIN     XM_EXT_DIO_6
+
+static bool s_measuring = false;
+static bool s_btn_prev = false;
+static uint16_t s_fsr_mv[4];
+static uint32_t s_total_pressure_mv;
+
+void User_Setup(void)
+{
+    XM_SetAnalogReadResolution(12);
+
+    /* ① DIO 1~4 → ADC */
+    for (int i = 0; i < 4; i++) XM_SwitchDioToAdc(XM_EXT_DIO_1 + i);
+
+    /* ② DIO 5~6 은 GPIO 유지 */
+    XM_SetPinMode(BUTTON_PIN, XM_EXT_DIO_MODE_INPUT_PULLUP);
+    XM_SetPinMode(LED_PIN, XM_EXT_DIO_MODE_OUTPUT);
+    XM_DigitalWrite(LED_PIN, XM_LOW);
+
+    /* ③ 보호 장치 테스트 — ADC 핀에 GPIO 호출은 무시됨 */
+    XM_SetPinMode(XM_EXT_DIO_1, XM_EXT_DIO_MODE_OUTPUT);   // 무시
+    XM_DigitalWrite(XM_EXT_DIO_1, XM_HIGH);                  // 무시
+    XmLogicLevel_t dummy = XM_DigitalRead(XM_EXT_DIO_1);     // XM_LOW 반환
+}
+
+static void Run_Loop(void)
+{
+    /* ④ Edge Detection: 버튼이 막 눌린 순간 1회 */
+    bool btn_now = (XM_DigitalRead(BUTTON_PIN) == XM_LOW);
+    bool pressed = (btn_now && !s_btn_prev);
+    s_btn_prev = btn_now;
+
+    if (pressed) {
+        s_measuring = !s_measuring;                           // ⑤ 모드 토글
+        XM_DigitalWrite(LED_PIN, s_measuring ? XM_HIGH : XM_LOW);
+    }
+
+    /* ⑥ 측정 모드에서만 FSR 수집 */
+    if (s_measuring) {
+        s_total_pressure_mv = 0;
+        for (int i = 0; i < 4; i++) {
+            XmAdcPin_t adc = XM_DIO_TO_ADC_PIN(XM_EXT_DIO_1 + i);
+            s_fsr_mv[i] = XM_AnalogReadMillivolts(adc);
+            s_total_pressure_mv += s_fsr_mv[i];
+        }
+        XM_SetLedState(XM_LED_1, s_total_pressure_mv > 6000 ? XM_ON : XM_OFF);
+    } else {
+        XM_SetLedState(XM_LED_1, XM_OFF);
+    }
+}
 ```
 
-## 🚀 실행 방법 (How to Use)
+전체 코드: [`ext_io_dio_adc_hybrid.c`](ext_io_dio_adc_hybrid.c)
 
-1. **하드웨어 연결:** 위 회로도대로 FSR 4개, 버튼 1개, LED 1개를 연결합니다.
-2. 코드를 업로드하고 전원을 켭니다.
-3. **대기 상태:** 외부 LED 꺼짐, 내부 LED 꺼짐.
-4. **버튼 1회 누름:** 측정 모드 ON → 외부 LED 켜짐, FSR 측정 시작.
-5. **FSR 세게 누르기:** 총 압력 > 6V(6000mV)이면 내부 LED1 켜짐.
-6. **버튼 다시 누름:** 측정 모드 OFF → 외부 LED 꺼짐, 측정 중지.
+> 🧒 ④의 Edge Detection 은 "버튼 들고 있는 동안 토글 반복" 을 막는 핵심 패턴.
 
-## 💡 직접 해보기 (Things to Try)
+---
 
-* **채널 확장:** DIO 5를 버튼 대신 FSR로 사용하고, 내부 버튼(BTN1)으로 측정 모드를 제어해보세요.
-* **총 압력 임계치 변경:** `6000`을 `3000`으로 낮춰 민감도를 높여보세요.
-* **CDC 스트리밍 결합:** 예제 09(CDC Stream)와 결합하여 FSR 데이터를 PC에서 실시간 그래프로 확인해보세요.
+## 4️⃣ 실험 — 직접 해보기 (체크포인트)
+
+1. **HW 연결**: FSR 4개 (DIO 1~4), 푸시 버튼 (DIO 5), 외부 LED (DIO 6).
+2. **빌드 + 플래시** → ✅ `0 errors`
+3. **버튼 짧게 누름** → ✅ 외부 LED ON (측정 모드 진입)
+4. **FSR 4개 모두 강하게 누름** → ✅ 내부 LED 1 점등
+5. **버튼 다시 누름** → ✅ 외부 LED OFF, 내부 LED 1 도 꺼짐
+6. **변형 1 — 보호 장치 직접 확인**: Run_Loop 안에서 `XM_DigitalWrite(XM_EXT_DIO_1, XM_HIGH)` 호출 → FSR 값에 영향 없는지 (ADC 정상 동작 유지) 확인.
+7. **변형 2 — 평균 + 표준편차**: 4채널 평균 + 분산 계산 → 분산이 크면 (FSR 들이 비균등 압력) LED 깜빡 효과.
+8. **변형 3 — USB 로 모드 + 압력 모니터링**: sprintf 로 모드/총압력 출력 ([Ex.08](../08_CDC_Sensor_Print/) 패턴).
+
+---
+
+## 5️⃣ 다음 단계
+
+- 외부 IO + 안전 인터록 + FSM: [Ex.06 Safety Switch](../06_Ext_IO_Safety_Switch/)
+- 12채널 데이터를 PC 로 스트리밍: [Ex.09 CDC Stream](../09_CDC_Stream/)
+- 데이터 저장: [Ex.10b MSC Custom Struct](../10b_MSC_Custom_Struct/)
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| 버튼 한 번 누름에 모드가 여러 번 바뀜 | Edge Detection 누락 | `btn_now && !s_btn_prev` 패턴 확인 |
+| `s_btn_prev` 가 매 호출 false 로 초기화 | `static` 누락 | `static bool s_btn_prev = false;` |
+| ADC 핀에 GPIO 코드 추가했더니 빌드는 됐는데 동작 이상 | 보호 장치가 무시했지만 학생 의도 X | 의도 확인 — ADC 핀은 ADC 만 사용 |
+| 외부 LED 가 안 켜짐 | DIO_6 output 설정 누락 | `SetPinMode(LED_PIN, OUTPUT)` 확인 |
+| 측정 모드인데 LED 1 안 켜짐 | 임계치 (6000 mV = 6 V) 너무 높음 | FSR 4개 합산 평소 mV 측정 후 임계치 조정 |
+
+막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)
