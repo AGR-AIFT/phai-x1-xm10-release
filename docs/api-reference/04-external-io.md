@@ -1,5 +1,10 @@
 # API Reference: External I/O Control
 
+> 📌 **이 페이지를 읽고 나면**: DIO 8핀 + ADC 12채널 (고정 4 + 동적 8) 을 자유롭게 제어할 수 있습니다.
+> ⏱️ 예상 학습 시간: 25분
+> 🧰 사전 지식: [Ex.04~05d](../../examples/04_Ext_IO_Basic/) Ext IO 시리즈 7개
+> 🎯 핵심 함수: `XM_SetPinMode` / `XM_DigitalRead/Write` / `XM_AnalogReadMillivolts` / `XM_SwitchDioToAdc` / `XM_DIO_TO_ADC_PIN`
+
 `xm_api_external_io.h`에 정의된 **확장 포트(Extension Port) 제어 API**에 대한 상세 레퍼런스입니다.
 XM10 보드 측면에 있는 확장 핀을 사용하여 외부 센서(ADC) 값을 읽거나, 다른 장치(GPIO)를 제어할 수 있습니다. 아두이노(Arduino)와 유사한 직관적인 인터페이스를 제공합니다.
 
@@ -319,3 +324,17 @@ DIO 핀 번호를 ADC 핀 번호로 변환하는 매크로입니다. `XM_SwitchD
 | [05c_Ext_IO_Mixed_ADC](../../examples/05c_Ext_IO_Mixed_ADC/) | 중급 | 고정 + 동적 ADC 혼합 |
 | [05d_Ext_IO_DIO_ADC_Hybrid](../../examples/05d_Ext_IO_DIO_ADC_Hybrid/) | 응용 | GPIO + ADC 혼합 모드 |
 | [06_Ext_IO_Safety_Switch](../../examples/06_Ext_IO_Safety_Switch/) | 중급 | 안전 스위치 인터록 |
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| `XM_EXT_ADC_1` 또는 `_3` 가 0 mV 만 반환 | `XM_EnableExternalImu()` 활성화로 UART 가 핀 점유 | Rev1.1: `XM_EXT_ADC_2/4` (PA0_C/PA1_C) 사용. Rev2.0: 별도 UART 포트라 무관 |
+| `SwitchDioToAdc` 후 GPIO 로 복구 안 됨 | ADC 전환은 재부팅 전 영구 (의도된 동작) | 보드 리셋 또는 전원 재인가 |
+| `DigitalWrite(ADC 전환된 DIO, ...)` 가 무시됨 | 보호 장치 (Guard Mechanism) — 의도된 동작 | ADC 핀은 ADC API 로만 사용 |
+| 8-bit Resolution 인데 raw 값이 256+ | `SetAnalogReadResolution` 호출 누락 또는 mV API 사용 (Resolution 무관) | Setup 에서 `SetAnalogReadResolution(8)` 호출 |
+| FSR 분압 회로에서 mV 가 항상 0 또는 3300 | 풀다운 10 kΩ 누락 또는 FSR 단락 | FSR (3.3 V) — DIO 핀 — 10 kΩ — GND 회로 |
+| `XM_DIO_TO_ADC_PIN` 컴파일 안 됨 | DIO 1~8 외 핀 사용 (예: DIO_9) | 매크로는 DIO_1~8 에만 유효 |
+| ADC 노이즈가 크다 | 짧지 않은 와이어 + GND 차이 | 짧은 점퍼 + 공통 GND, 가능하면 외부 RC 필터 |

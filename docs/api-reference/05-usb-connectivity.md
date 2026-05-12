@@ -1,5 +1,12 @@
 # API Reference: USB Connectivity
 
+> 📌 **이 페이지를 읽고 나면**: USB-CDC 텍스트/바이너리 송수신 + USB-MSC 로깅 등록을 모두 다룰 수 있습니다.
+> ⏱️ 예상 학습 시간: 25분
+> 🧰 사전 지식: [Ex.07~09](../../examples/07_CDC_Basic_Print/) CDC + [Ex.10~10c](../../examples/10a_MSC_Basic_Log/) MSC
+> 🎯 핵심 함수: `XM_SendUsbDebugMessage` / `XM_SetUsbCustomMeta` / `XM_SendUsbDataWithId` / `XM_SetUsbLogSource` / `XM_StartUsbDataLog`
+>
+> ⚠️ **USB-CDC 단일 점유**: PhAI Studio 와 시리얼 터미널 (PuTTY/RealTerm 등) 을 같은 COM 포트로 **동시 사용 금지** — COM 포트 충돌로 데이터 손실.
+
 `xm_api_usb.h`에 정의된 **USB 통신 및 데이터 관리 API**에 대한 상세 레퍼런스입니다.
 XM10은 USB 포트를 통해 두 가지 강력한 기능을 동시에 제공합니다:
 
@@ -329,3 +336,18 @@ PhAI Studio Custom 모드 사용 시, Module ID와 JSON 메타데이터를 등�
 | [10b_MSC_Custom_Struct](../../examples/10b_MSC_Custom_Struct/) | 중급 | 다중 타입 + 수동 타임스탬프 |
 | [10c_MSC_Advanced_Log](../../examples/10c_MSC_Advanced_Log/) | 고급 | TSM + 에러 복구 + 파일 롤링 |
 | [19_Memory_Aware_Design](../../examples/19_Memory_Aware_Design/) | 중급 | 메모리 효율적 데이터 관리 |
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| 시리얼 터미널에 메시지 0줄 | PhAI Studio + 시리얼 터미널 동시 점유 (COM 충돌) | 다른 클라이언트 모두 종료 후 재연결 |
+| COM 포트 자체가 안 생김 | 데이터 통신 X (충전 전용) USB-C 케이블 | 데이터 전송 가능 케이블 사용 + Windows 장치 관리자 확인 |
+| `XM_SendUsbDataWithId` 가 자주 `false` 반환 | 버퍼 풀 가득 (drop 발생) | 전송 주기 ↓ (1 kHz → 100 Hz) 또는 구조체 크기 ↓ |
+| User Custom 채널 이름이 PhAI 에 안 보임 | `XM_SetUsbCustomMeta` 호출 누락 또는 JSON 문법 오류 | Setup 에서 한 줄 JSON + jsonlint 검증 |
+| MSC USB 가 인식 안 됨 | exFAT 또는 NTFS 포맷 | **FAT32** + 32 KB cluster 권장 |
+| sprintf `%f` 출력이 정수처럼 | newlib-nano (기본) 가 `%f` 미지원 | `Project Properties > MCU Settings > Use float with printf` 체크 |
+| 한글 메시지 깨짐 | 터미널 인코딩 UTF-8 아님 | PuTTY: Translation > UTF-8 |
+| MSC 로깅 시작 했는데 .bin 0 byte | `XM_SetUsbLogSource` 누락 | Setup 에서 호출 확인 |

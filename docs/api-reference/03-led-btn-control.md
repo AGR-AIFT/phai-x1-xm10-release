@@ -1,5 +1,10 @@
 # API Reference: LED & Button Control
 
+> 📌 **이 페이지를 읽고 나면**: 내장 LED 3개 + 버튼 3개를 폴링/이벤트 양방향 모두 제어할 수 있습니다.
+> ⏱️ 예상 학습 시간: 15분
+> 🧰 사전 지식: [Ex.01](../../examples/01_Button_LED_Basic/) (폴링) + [Ex.02](../../examples/02_Button_LED_Event/) (이벤트) + [Ex.03](../../examples/03_Button_LED_FSM/) (롱프레스)
+> 🎯 핵심 함수: `XM_SetLedState` / `XM_SetLedEffect` / `XM_GetButtonState` / `XM_GetButtonEvent` / `XM_SetChannelLedRGB` (Rev2.0)
+
 `xm_api_led_btn.h`에 정의된 **내장 UI(LED, Button) 제어 API**에 대한 상세 레퍼런스입니다.
 XM10 펌웨어는 사용자가 복잡한 타이머 인터럽트나 디바운싱(Debouncing) 로직을 직접 구현할 필요 없이, 직관적인 함수 호출만으로 **깜빡임(Blink)**, **클릭(Click)**, **롱 프레스(Long Press)** 등의 고급 입출력 기능을 구현할 수 있도록 돕습니다.
 
@@ -244,6 +249,19 @@ User Task의 무한 루프(`User_Loop` 또는 `TSM_Run` 내부)에서 주기적�
     void XM_IO_Update(void);
     ```
   * **Note**: `core_process.c`가 `_FetchAllInputs` 과정에서 자동으로 호출해주므로, 일반적인 경우 **End User가 직접 호출할 필요는 없습니다.**
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| LED 가 깜빡 모드 설정했는데 동작 안 함 | `XM_IO_Update` 가 호출 안 됨 (User Task 가 멈췄거나 `XM_TSM_Run` 누락) | `core_process` 가 자동 호출하므로 사용자 코드가 무한 루프에 빠지지 않았는지 확인 |
+| `GetButtonEvent` 가 같은 이벤트를 여러 번 반환 | Run_Loop 안에서 다른 곳에서도 `GetButtonEvent` 호출 (Read-Clear 동시 소비) | 한 이벤트 채널 = 한 곳에서만 읽기 |
+| `XM_BTN_LONG_PRESS` 가 트리거 안 됨 | 누르고 있는 시간 < 1초 | 1초 이상 유지 필요 |
+| `SetLedEffect` 후에 `SetLedState` 가 안 먹힘 | 효과 모드가 우선 — `SetLedState` 가 무시되거나 덮어써짐 | `SetLedEffect(LED, XM_LED_OFF, 0)` 으로 효과 해제 후 사용 |
+| Channel LED RGB 가 동작 안 함 | Rev1.1 사용 — PCA9957 미장착 | Rev2.0 전용 — Rev1.1 은 내장 LED 3개만 |
+| `ONESHOT` LED 가 1회 후에 다시 안 켜짐 | 의도된 동작 (One-shot) | 매번 다시 트리거하려면 이벤트마다 `SetLedEffect` 호출 |
 
 ---
 

@@ -1,5 +1,10 @@
 # API 레퍼런스: Task State Machine (TSM)
 
+> 📌 **이 페이지를 읽고 나면**: TSM 로 상태 기반 제어 알고리즘을 작성할 수 있습니다.
+> ⏱️ 예상 학습 시간: 15분
+> 🧰 사전 지식: [Ex.00 Quick Start](../../examples/00_Quick_Start/) 의 단일 상태 TSM
+> 🎯 핵심 함수: `XM_TSM_Create` / `XM_TSM_AddState` / `XM_TSM_Run` / `XM_TSM_TransitionTo`
+
 `xm_api_tsm.h`에 정의된 태스크 상태 머신 API입니다. 복잡한 제어 로직을 **상태(State)** 단위로 나누어 직관적으로 구현할 수 있도록 돕습니다.
 본 API를 사용하면, 사용자는 자신의 알고리즘을 체계적인 상태 머신으로 손쉽게 구성할 수 있습니다.
 
@@ -95,6 +100,18 @@ TSM을 실행합니다. **User Task의 무한 루프 내에서 반드시 호출*
   * **Parameters**
       * `XmTsmHandle_t handle`: TSM 핸들
       * `uint32_t next_state_id`: 이동할 다음 상태 ID
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| TSM 등록은 했는데 함수가 호출 안 됨 | `User_Loop` 안에서 `XM_TSM_Run(handle)` 누락 | `XM_TSM_Run` 가 매 주기 호출되어야 dispatch |
+| `TransitionTo` 호출했는데 즉시 안 바뀜 | 의도된 동작 — 다음 주기에 `Exit → Entry` 순으로 전환 | 정상. 즉시 전환 필요하면 별도 플래그 처리 |
+| Entry 가 매 주기 반복 호출됨 | 학생이 직접 `Entry()` 함수 호출 (TSM 가 자동 호출하는데 중복) | Entry 는 `TransitionTo` 시 1회만. 직접 호출 금지 |
+| 상태 ID 충돌 (다른 상태가 같은 ID) | `AddState` 두 번 호출하며 동일 `id` 사용 | 표준 (`XM_STATE_*`) + 사용자 정의 (`XM_STATE_START` = 10) 충돌 회피 |
+| `XM_STATE_OFF` 에서 시작했는데 아무 동작 X | `XM_STATE_OFF` 의 `on_loop` 미등록 또는 의도된 idle 상태 | 첫 상태에서 `on_loop` 정의 또는 `TransitionTo` 호출 추가 |
 
 ---
 

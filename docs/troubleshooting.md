@@ -133,4 +133,130 @@ New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name
 
 ---
 
+## 학생 친화 카탈로그 — 자주 마주치는 함정
+
+### 코드 작성 패턴
+
+#### `sprintf("%.2f", val)` 결과가 정수처럼 출력됨
+
+**원인:** newlib-nano (기본 ARM 라이브러리) 가 float 형식 미지원
+
+**해결:** STM32CubeIDE → `Project > Properties > C/C++ Build > Settings > MCU Settings` → **"Use float with printf"** 체크.
+
+#### `static` 누락으로 변수가 매 호출 0 으로 초기화
+
+**증상:** 토글 동작이 안 되거나, 타이머가 매번 reset
+
+**원인:** 함수 내부 변수는 매 호출 스택에 새로 생성. `static` 키워드로 보존 필요.
+
+```c
+// ❌ 잘못된 예
+static void Run_Loop(void) {
+    bool toggle = false;          // 매 호출 false 로 reset
+    if (clicked) toggle = !toggle;  // 절대 true 가 안 됨
+}
+
+// ✅ 올바른 예
+static void Run_Loop(void) {
+    static bool toggle = false;    // 다음 호출까지 유지
+    if (clicked) toggle = !toggle;
+}
+```
+
+#### `XM_TSM_Run()` 누락으로 상태 콜백 미실행
+
+**증상:** Add_State 등록했는데 `on_loop` 함수가 호출 안 됨
+
+**해결:** `User_Loop()` 안에서 반드시 `XM_TSM_Run(handle);` 호출.
+
+#### Active Low vs Active High 혼동
+
+**증상:** 외부 스위치 누름인데 LED 가 반대 동작
+
+**규칙:**
+- 풀업 (`INPUT_PULLUP`) + 스위치 한쪽 GND → 눌림 = `XM_LOW` (Active Low)
+- 풀다운 (`INPUT_PULLDOWN`) + 스위치 한쪽 3.3V → 눌림 = `XM_HIGH` (Active High)
+
+본 SDK 의 내장 버튼 (`XM_GetButtonState`) 은 추상화되어 항상 `XM_PRESSED`.
+
+#### Edge Detection 누락
+
+**증상:** 버튼 한 번 눌렀는데 토글이 여러 번 발생
+
+**해결:** 직전 상태 (`s_btn_prev`) 와 현재 상태 비교로 "방금 막 눌린 순간" 만 감지.
+
+```c
+bool btn_now = (XM_DigitalRead(BTN) == XM_LOW);
+bool pressed = (btn_now && !s_btn_prev);  // Leading edge
+s_btn_prev = btn_now;
+if (pressed) { /* 1회만 실행 */ }
+```
+
+또는 `XM_GetButtonEvent()` 의 read-clear 동작 활용 (Ex.02 참조).
+
+### USB / 통신 함정
+
+#### USB-CDC 메시지가 PhAI Studio 또는 터미널에 안 보임
+
+**원인 1:** 다른 시리얼 클라이언트가 동일 COM 포트 점유 (PhAI Studio + PuTTY 동시 실행)
+
+**원인 2:** USB-C 케이블이 데이터 전송 불가 (충전 전용)
+
+**원인 3:** Windows 장치 관리자에서 `STMicroelectronics Virtual COM Port` 미인식
+
+**해결 순서:**
+1. 모든 시리얼 클라이언트 종료 → 하나만 단독 실행
+2. 데이터 전송 가능 USB-C 케이블 (가능하면 PC 후면 USB-A 직결, 허브 X)
+3. [STM32 VCP 드라이버 설치](https://www.st.com/en/development-tools/stsw-stm32102.html)
+
+#### Python 디코더가 .bin 파일을 못 읽음 ("size mismatch")
+
+**원인:** 구조체 크기와 `metadata.txt` 의 합산이 어긋남 (padding 또는 정렬 차이)
+
+**해결:**
+1. 보드에서 `XM_SendUsbDebugMessage` 로 `printf("size=%u", sizeof(MyStruct))` 출력
+2. metadata 의 필드 크기 합산이 일치하는지 검증
+3. 비정렬 시 `_pad(Nbytes)` 명시 또는 `__attribute__((packed))` 사용
+
+### KIT H10 / 로봇 제어 함정
+
+#### `XM.status.h10.*` 가 모두 0
+
+- KIT H10 본체 전원 OFF → 24 V 입력 확인
+- CAN-FD HIGH/LOW 핀 거꾸로 → 핀맵 ([01-hardware-setup.md Figure 1](getting-started/01-hardware-setup.md)) 확인
+- KIT H10 FW v2.3.0 미만 → [kit-h10-firmware/](kit-h10-firmware/) 가이드
+
+#### `gaitCycle`, `forwardVelocity`, `footContact` 가 항상 0
+
+**원인:** Body Data 전제조건 미충족 — `XM_SendUserBodyData()` 미호출
+
+**해결:** [examples/README.md — Body Data 안내](../examples/README.md#part-5) 참조.
+
+#### `SetAssistTorque` 호출했는데 H10 안 움직임
+
+- `XM_SetControlMode(XM_CTRL_TORQUE)` 누락 → Active 진입 시 1회 호출
+- 안전 스위치 트리거 상태 → ERROR 상태 점검
+- H10 본체 모터 활성화 안 됨 → 본체 LED / 토크 큐 확인
+
+### 환경 / 시스템 함정
+
+#### Windows 사용자명에 한글 포함
+
+**증상:** `C:\Users\홍길동\...` 경로에서 빌드 시 한글 인코딩 또는 MAX_PATH 문제
+
+**해결:** 사용자 폴더 대신 **드라이브 루트** 에 clone:
+```powershell
+git clone https://github.com/AGR-EXO/Extension_Module.git C:\dev\Extension_Module
+```
+
+#### 클라우드 동기화 폴더 (OneDrive, iCloud) 에 clone
+
+**증상:** 빌드 중 파일 잠금 충돌, 동기화 충돌 파일 생성
+
+**해결:** 클라우드 비동기 폴더 (예: `C:\dev\`) 로 이동.
+
+---
+
 문제가 해결되지 않으면 [GitHub Issues](https://github.com/angel-robotics/Extension_Module/issues)에 문의해주세요.
+
+> 🤖 Claude Code 사용자: `"Ex.XX 가 안 돼"` 또는 `"빌드 에러 났어"` 한 줄로 `example-helper` 스킬이 본 페이지의 해당 항목 + 예제 README 의 ⚠️ 섹션을 인용해 답합니다.
