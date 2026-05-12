@@ -1,0 +1,14 @@
+{
+    "//": "이 파일은 템플릿입니다. 본인 환경에 맞게 수정 후 'settings.json' 으로 복사하세요.",
+    "//   1. STM32CUBEIDE_INSTALL_PATH 를 실제 STM32CubeIDE 설치 경로로 변경": "",
+    "//   2. Rev1.1 보드 사용 시 cmake.sourceDirectory 의 Rev2.0 → Rev1.1 로 변경": "",
+    "//   3. settings.json 은 .gitignore 에 등록되어 있어 개인 환경별 커스터마이즈 가능": "",
+
+    "cmake.sourceDirectory": "${workspaceFolder}/XM10_SDK/Rev2.0/Extension_Module",
+    "cmake.ignoreCMakeListsMissing": true,
+
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": [
+        "--query-driver=<STM32CUBEIDE_INSTALL_PATH>/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.*/tools/bin/arm-none-eabi-*"
+    ]
+}
