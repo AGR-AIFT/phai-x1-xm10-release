@@ -45,7 +45,7 @@
 /* Envelope voltage that maps to full torque after deadband. Tune per sensor/user. */
 #define EMG_FULL_SCALE_V        1.000f
 
-#define EMG_MAX_TORQUE_NM       10.0f
+#define EMG_MAX_TORQUE_NM       2.5f
 #define EMG_MIN_TORQUE_NM       0.0f
 
 /**

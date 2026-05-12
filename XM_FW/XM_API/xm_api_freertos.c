@@ -10,7 +10,9 @@
  */
 
 #include "xm_api_freertos.h"
+#include "FreeRTOS.h"
 #include "cmsis_os2.h"
+#include "portable.h"
 
 /**
  *-----------------------------------------------------------
