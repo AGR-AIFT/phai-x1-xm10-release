@@ -133,7 +133,7 @@ New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name
 
 ---
 
-## 학생 친화 카탈로그 — 자주 마주치는 함정
+## 자주 마주치는 함정
 
 ### 코드 작성 패턴
 
