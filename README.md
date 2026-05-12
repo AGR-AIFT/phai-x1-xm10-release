@@ -64,7 +64,7 @@ git clone https://github.com/AGR-EXO/Extension_Module.git C:\dev\Extension_Modul
 
 | 영역 | 내용 |
 | :--- | :--- |
-| 🦾 **외골격 제어 알고리즘** | C 코드로 직접 설계. PI-Vector + Auxiliary Inputs 로 KIT H10 움직임 완전 제어 |
+| 🦾 **제어 알고리즘** | C 코드로 직접 설계. PI-Vector + Auxiliary Inputs 로 KIT H10 움직임 완전 제어 |
 | 🧠 **생체 신호 통합** | EMG / GRF / FSR 센서 허브 CAN-FD 직결, 사용자 의도에 실시간 반응 |
 | 📈 **고해상도 데이터** | 1 ms 주기 USB 메모리 로깅 (MSC) + PC 실시간 스트리밍 (CDC), MATLAB / Python 자동 분석 |
 | 🤖 **AI 상위 제어** | Jetson Orin NX / AGX 연동 강화학습 + 머신러닝 + MCU 내장 Tiny NN |
