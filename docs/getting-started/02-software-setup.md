@@ -1,37 +1,28 @@
 # 02 — 개발 환경 구축
 
-> 📌 **이 페이지를 읽고 나면**: STM32CubeIDE 설치 + 본 레포 clone 까지 완료됩니다.
-> ⏱️ 예상 학습 시간: 20분 (다운로드 시간 포함)
-> 🧰 사전 지식: [01. 하드웨어 연결](01-hardware-setup.md) 완료
+STM32CubeIDE 설치와 레포 clone 까지. 다운로드 시간 포함해 20 분 정도 걸립니다. [01 하드웨어 연결](01-hardware-setup.md) 이 끝났다는 전제로 시작합니다.
+
+XM10 보드의 프로세서는 PC 와 종류가 다르기 때문에, C 코드를 보드용 기계어 (`.elf`) 로 바꿔주는 컴파일러 + 보드에 쓸 수 있는 드라이버 + 코드 편집기가 필요합니다. 이 세트를 통째로 묶어주는 게 ST 사의 무료 IDE 인 **STM32CubeIDE** 예요. 이거 하나만 깔면 끝납니다.
+
+> Claude Code 사용자는 `"환경 구축 도와줘"` 한 줄로 이 페이지의 전 과정을 AI 가 자동 안내합니다 → [Claude Code 와 함께 시작](00-claude-code-quickstart.md)
 
 ---
 
-## 💡 WHY — 왜 이 도구들이 필요한가
-
-XM10 의 MCU (STM32H743) 는 ARM Cortex-M7 — 학생 PC 의 x86 과 다른 아키텍처입니다. **C 코드 → ARM 기계어 (.elf)** 로 변환하려면 ARM GCC 컴파일러 + 보드에 쓰기 위한 ST-Link 드라이버 + 코드 편집기가 필요합니다.
-이 세트를 통째 묶어 제공하는 것이 ST 사의 무료 IDE **STM32CubeIDE** 입니다.
-
-> 🧒 비유: 영문 책 (.elf) 을 한국어 책 (C 코드) 으로 쓰려면 영영사전 + 한영사전 + 종이가 다 있어야 함. CubeIDE = 세트.
-
-> 🤖 **AI 와 함께 진행하기**: Claude Code 사용자는 `"환경 구축 도와줘"` 한 줄로 본 페이지의 전 과정을 AI 가 자동 안내합니다. → [00-claude-code-quickstart](00-claude-code-quickstart.md)
-
----
-
-## 📖 WHAT — 무엇을 설치하나
+## 설치할 것
 
 | 항목 | 용도 | 다운로드 |
 |------|------|---------|
-| **STM32CubeIDE v2.0.0+** | C 코드 → ARM 기계어 변환 + 디버거 | [st.com](https://www.st.com/en/development-tools/stm32cubeide.html) (ST 계정 무료 가입 필요) |
-| **GitHub Desktop** (선택) | 본 레포 clone + 업데이트 관리 GUI | [desktop.github.com](https://desktop.github.com/) |
-| **Git for Windows** (대안) | CLI 로 clone 하는 경우 | [git-scm.com](https://git-scm.com/download/win) |
+| STM32CubeIDE v2.0.0+ | C 코드 → 보드 기계어 변환 + 디버거 | [st.com](https://www.st.com/en/development-tools/stm32cubeide.html) (ST 계정 무료 가입 필요) |
+| GitHub Desktop (선택) | GUI 로 레포 clone + 업데이트 관리 | [desktop.github.com](https://desktop.github.com/) |
+| Git for Windows (대안) | 커맨드라인으로 clone 하는 경우 | [git-scm.com](https://git-scm.com/download/win) |
 
-함께 자동 설치되는 것: ARM GCC 컴파일러, ST-Link USB 드라이버, J-Link 옵션 드라이버.
+CubeIDE 가 컴파일러 + ST-Link USB 드라이버 + J-Link 드라이버까지 같이 깔아줍니다.
 
 ---
 
-## 🔧 HOW — 단계별 진행
+## 단계
 
-### 1단계 — STM32CubeIDE 설치
+### 1. STM32CubeIDE 설치
 
 1. ST 공식 페이지 접속 → v2.0.0 이상 선택 → ST 계정 로그인 → Windows 버전 다운로드
 2. 설치 마법사 진행 — **반드시 다음 항목 확인**:
@@ -49,12 +40,12 @@ where STM32CubeIDE.exe
 ```
 ✅ 경로가 출력되면 성공.
 
-### 2단계 — 레포 clone
+### 2. 레포 clone
 
-**옵션 A — GitHub Desktop (GUI 친화)**:
+**옵션 A — GitHub Desktop (GUI)**:
 1. [GitHub Desktop 설치](https://desktop.github.com/) + 로그인
 2. 브라우저에서 [Extension_Module 레포](https://github.com/AGR-EXO/Extension_Module) → `<> Code` → `Open with GitHub Desktop`
-3. **Local Path** 를 **얕고 한글 없는 경로** 로 지정 (`C:\dev\`, `C:\xm10\` 등) → `Clone`
+3. Local Path 를 짧고 한글 없는 경로로 지정 (`C:\dev\`, `C:\xm10\` 등) → Clone
 
 **옵션 B — Git CLI (PowerShell)**:
 ```powershell
@@ -69,50 +60,49 @@ Test-Path C:\dev\Extension_Module\README.md
 ```
 `True` 가 출력되면 성공.
 
-### 3단계 — VS Code settings.json 적용 (선택, VS Code + clangd 사용 시)
+### 3. VS Code settings.json 적용 (선택)
 
-본 레포는 `.vscode/settings.json.template` 를 제공합니다 (개발자 PC 절대경로 누출 방지).
+VS Code + clangd 환경을 쓰는 경우에만. 이 레포에는 `.vscode/settings.json.template` 가 있어요 (개발자 PC 의 절대경로가 노출되지 않도록).
 
 ```powershell
 Copy-Item C:\dev\Extension_Module\.vscode\settings.json.template `
           C:\dev\Extension_Module\.vscode\settings.json
 ```
 
-그 후 `settings.json` 을 열고 `<STM32CUBEIDE_INSTALL_PATH>` 를 실제 설치 경로로 변경.
-
-CubeIDE 만 사용하는 학생은 이 단계를 건너뛰어도 됩니다.
+복사 후 `settings.json` 을 열어 `<STM32CUBEIDE_INSTALL_PATH>` 를 실제 설치 경로로 바꾸면 됩니다. CubeIDE 만 쓰는 분은 이 단계 건너뛰세요.
 
 ---
 
-## ⚠️ 흔한 실수 / 막혔다면
+## 자주 막히는 부분
 
-### clone 경로 관련
+### Clone 경로
 
 | 경로 예시 | 상태 |
 |----------|------|
-| `C:\dev\Extension_Module\` | ✅ 권장 |
-| `C:\xm10\` | ✅ 권장 (가장 짧음) |
-| `D:\Projects\Extension_Module\` | ✅ OK |
-| `C:\Users\사용자\Documents\GitHub\Extension_Module\` | ⚠️ 주의 (한글 + 깊은 경로) |
-| `C:\Users\...\OneDrive - 회사\...\Extension_Module\` | ❌ 오류 가능 (MAX_PATH 260 초과) |
+| `C:\dev\Extension_Module\` | 권장 |
+| `C:\xm10\` | 권장 (가장 짧음) |
+| `D:\Projects\Extension_Module\` | OK |
+| `C:\Users\사용자\Documents\GitHub\Extension_Module\` | 주의 (한글 + 깊은 경로) |
+| `C:\Users\...\OneDrive - 회사\...\Extension_Module\` | 오류 위험 (MAX_PATH 260 초과) |
 
-**규칙:**
-1. 드라이브 루트에 가까운 짧은 경로
-2. 한글 · 공백 · 특수문자 금지
-3. OneDrive / iCloud 등 클라우드 동기화 폴더 피하기 (파일 잠금 충돌)
+세 가지만 지키면 됩니다.
 
-근본 해결: Windows Long Path 활성화 → [troubleshooting](../troubleshooting.md#경로-길이-문제-windows-max_path)
+1. 드라이브 루트와 가까운 짧은 경로
+2. 한글·공백·특수문자 피하기
+3. OneDrive / iCloud 같은 클라우드 동기화 폴더 안에 두지 않기 (파일 잠금 충돌)
 
-### 설치 / 다운로드 관련
+근본 해결법은 [Windows Long Path 활성화](../troubleshooting.md#경로-길이-문제-windows-max_path) 참조.
 
-- **ST 다운로드 페이지에서 "no eligible files"** → ST 계정 로그인 안 됨. 학교 이메일로 무료 가입
-- **설치 도중 백신 차단** → 백신 SW 임시 비활성화 후 재시도
-- **`where STM32CubeIDE.exe` 가 못 찾음** → PATH 미등록. 시작 메뉴에서 한 번 실행 후 다시 시도
-- **GitHub Desktop 로그인 실패** → 2FA 활성화 시 personal access token 필요
-- **clone 시 SSL 에러** → 사내 프록시. `git config --global http.sslVerify false` (보안 우려, 일시적 우회만)
+### 설치 / 다운로드
+
+- **ST 다운로드 페이지에서 "no eligible files"** — ST 계정 로그인 안 됨. 학교 이메일로 무료 가입 가능합니다.
+- **설치 중 백신이 차단합니다** — 백신을 잠시 끄고 재시도.
+- **`where STM32CubeIDE.exe` 가 못 찾습니다** — PATH 등록이 안 된 상태. 시작 메뉴에서 한 번 실행한 뒤 다시 시도.
+- **GitHub Desktop 로그인 실패** — 2단계 인증을 켜뒀다면 personal access token 이 필요합니다.
+- **clone 할 때 SSL 에러** — 사내 프록시 환경일 가능성. `git config --global http.sslVerify false` 는 임시 우회용이지 보안상 권장하지는 않습니다.
 
 ---
 
-## ➡️ 다음 단계
+## 다음으로
 
-✅ 두 도구 설치 + clone 완료 → [03. 첫 빌드 & 실행](03-first-build.md) 으로 진행
+두 도구 설치 + clone 이 끝났으면 → [03 첫 빌드 & 실행](03-first-build.md)

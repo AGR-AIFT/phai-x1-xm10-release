@@ -1,35 +1,29 @@
-# Tutorials — 단계별 학습 가이드
+# Tutorials — 41 개 예제로 배우기
 
-XM10 의 기능을 단계적으로 마스터할 수 있도록 **41 개의 실습 예제** 를 제공합니다. 각 예제 폴더에는 소스 코드와 5-step Lab Manual 형식의 README 가 포함되어 있습니다.
+XM10 기능을 단계적으로 익힐 수 있도록 41 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 한 예제는 30 분 안에 끝나도록 설계했어요.
 
-> 📖 예제 전체 인덱스: [examples/README.md](../../examples/README.md)
-
-> 📋 **각 예제 README 통일 포맷 (5-step Lab Manual)**:
-> ① 목표 → ② 사전 지식 → ③ 핵심 코드 → ④ 실험 (체크포인트 ✅) → ⑤ 다음 단계 + ⚠️ 흔한 실수
->
-> 각 예제는 **30 분 이내 학습 목표 도달** 을 기준으로 설계. 막히면 ⚠️ 섹션 먼저 확인.
-
-> 🤖 **AI 트러블슈팅**: Claude Code 에서 `"Ex.XX 가 안 돼"` 라고 말하면 `example-helper` 스킬이
-> 해당 예제 README 의 ⚠️ 섹션 + [docs/troubleshooting.md](../troubleshooting.md) 를 인용해 답합니다.
+예제 전체 카탈로그는 [examples/README.md](../../examples/README.md) 에 있고, 막히면 각 README 맨 아래의 "흔한 실수" 섹션을 먼저 보세요. Claude Code 사용자라면 `"Ex.XX 가 안 돼"` 라고만 말해도 `example-helper` 가 해당 예제의 흔한 실수 + 트러블슈팅 문서를 인용해 답해줍니다.
 
 ---
 
-## 추천 학습 경로
+## 추천 순서
 
-| 경로 | 대상 | 권장 순서 |
-|------|------|----------|
-| **🚀 입문 (3시간)** | 임베디드 처음 — 빠르게 동작 확인까지 | Ex.00 → 01 → 04 → 07 → 10a → 11 |
-| **🛠️ 중급 (1주)** | 임베디드 기초 있음 — 통신/로깅 + 실시간 제어 | Ex.02 → 05b → 08 → 10b → 12 → 14 → 18 |
-| **🧠 고급 (수업/연구)** | 제어 알고리즘 + AI 설계 | Ex.03 → 09 → 10c → 15 → 16 → 17 → 19 → 20+ |
-| **🤖 응용 프로젝트** | Physical AI / 재활 / 학습 제어 | Ex.21 → 31 → 32 → 33 → 36 |
+자기 수준에 맞는 경로 하나를 골라 따라가면 됩니다.
+
+| 경로 | 대상 | 순서 |
+|------|------|------|
+| 입문 (3 시간) | 임베디드 처음 — 일단 동작 확인까지 가보기 | Ex.00 → 01 → 04 → 07 → 10a → 11 |
+| 중급 (1 주) | 임베디드 기초 있음 — 통신·로깅·실시간 제어 | Ex.02 → 05b → 08 → 10b → 12 → 14 → 18 |
+| 고급 (한 학기) | 제어 알고리즘 + AI 직접 설계 | Ex.03 → 09 → 10c → 15 → 16 → 17 → 19 → 20+ |
+| Physical AI 응용 | 재활·학습 제어 등 | Ex.21 → 31 → 32 → 33 → 36 |
 
 ---
 
-## Part 0 — Quick Start
+## Part 0 — 동작 확인
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [00](../../examples/00_Quick_Start/) | 보드 동작 확인 | ⭐ | TSM + LED + USB CDC — 외부 HW 불필요 |
+| [00](../../examples/00_Quick_Start/) | 보드 동작 확인 | ⭐ | 상태 머신 + LED + USB 시리얼 — 외부 하드웨어 없이 |
 
 ---
 
@@ -41,9 +35,9 @@ XM10 의 기능을 단계적으로 마스터할 수 있도록 **41 개의 실습
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [01](../../examples/01_Button_LED_Basic/) | 버튼 + LED 기초 | ⭐ | 폴링 방식 디지털 I/O |
-| [02](../../examples/02_Button_LED_Event/) | 이벤트 + 특수 효과 | ⭐⭐ | 클릭 이벤트, Oneshot LED |
-| [03](../../examples/03_Button_LED_FSM/) | FSM 상태 머신 | ⭐⭐ | LongPress 모드 전환, Task State Machine |
+| [01](../../examples/01_Button_LED_Basic/) | 버튼 + LED 기초 | ⭐ | 버튼 상태를 매번 확인해서 LED 제어 |
+| [02](../../examples/02_Button_LED_Event/) | 이벤트 + 특수 효과 | ⭐⭐ | 클릭 이벤트 감지, 한 번만 깜빡이는 LED |
+| [03](../../examples/03_Button_LED_FSM/) | 상태 머신 (FSM) | ⭐⭐ | 길게 누르기로 모드 전환, 상태별 동작 분리 |
 
 ### External I/O — GPIO & ADC (Ex.04 ~ 06)
 
@@ -63,108 +57,107 @@ XM10 의 기능을 단계적으로 마스터할 수 있도록 **41 개의 실습
 
 ## Part 2 — USB 통신 + 데이터 로깅
 
-PC ↔ 보드 실시간 통신과 USB 메모리 로깅 — 디버깅 + 데이터 수집의 핵심.
+PC 와 실시간으로 메시지를 주고받거나 USB 메모리에 데이터를 저장합니다. 디버깅과 데이터 수집의 핵심.
 
-> ⚠️ **USB-CDC 단일 점유**: Ex.07~09 는 시리얼 터미널 또는 PhAI Studio **둘 중 하나만** 사용. 동시 점유 시 충돌.
+> **주의**: USB 시리얼 (CDC) 포트는 한 번에 한 프로그램만 점유 가능. Ex.07~09 는 시리얼 터미널 또는 PhAI Studio 중 하나만 열어둔 상태에서 실행하세요. 동시에 켜면 충돌합니다.
 
-### USB-CDC 시리얼 통신 (Ex.07 ~ 09)
-
-| 예제 | 제목 | 난이도 | 학습 내용 |
-| :---: | :--- | :---: | :--- |
-| [07](../../examples/07_CDC_Basic_Print/) | USB 시리얼 기초 | ⭐⭐ | PC 터미널 텍스트 메시지 |
-| [08](../../examples/08_CDC_Sensor_Print/) | 센서 데이터 모니터링 | ⭐⭐ | sprintf + 실시간 출력 |
-| [09](../../examples/09_CDC_Stream/) | 고속 바이너리 스트리밍 | ⭐⭐⭐ | PhAI V2 프로토콜, 500 Hz |
-
-### USB-MSC 데이터 로깅 (Ex.10 ~ 10c)
+### USB 시리얼 통신 — Ex.07 ~ 09
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [10](../../examples/10_MSC_Manual_log/) | 수동 로깅 (legacy) | ⭐⭐ | TSM 연동 (10a/10b/10c 권장) |
-| [10a](../../examples/10a_MSC_Basic_Log/) | 등록 기반 자동 로깅 | ⭐⭐ | 구조체 등록만으로 자동 저장 |
-| [10b](../../examples/10b_MSC_Custom_Struct/) | 커스텀 구조체 | ⭐⭐⭐ | 사용자 정의 + 수동 timestamp |
-| [10c](../../examples/10c_MSC_Advanced_Log/) | 고급 로깅 시스템 | ⭐⭐⭐ | 롤링 파일, 에러 모니터링, LED 피드백 |
+| [07](../../examples/07_CDC_Basic_Print/) | USB 시리얼 기초 | ⭐⭐ | PC 터미널로 텍스트 메시지 |
+| [08](../../examples/08_CDC_Sensor_Print/) | 센서 데이터 모니터링 | ⭐⭐ | 실시간 데이터 sprintf 출력 |
+| [09](../../examples/09_CDC_Stream/) | 고속 바이너리 스트리밍 | ⭐⭐⭐ | PhAI Studio 호환 프로토콜, 500 Hz 전송 |
 
-> **MSC 시리즈 권장 순서:** Ex.10a → 10b → 10c (10 은 legacy).
+### USB 메모리 로깅 — Ex.10 ~ 10c
+
+| 예제 | 제목 | 난이도 | 학습 내용 |
+| :---: | :--- | :---: | :--- |
+| [10](../../examples/10_MSC_Manual_log/) | 수동 로깅 (구버전) | ⭐⭐ | 10a/10b/10c 권장 |
+| [10a](../../examples/10a_MSC_Basic_Log/) | 등록만 하면 자동 저장 | ⭐⭐ | 구조체 한 번 등록하면 알아서 기록 |
+| [10b](../../examples/10b_MSC_Custom_Struct/) | 커스텀 구조체 | ⭐⭐⭐ | 내 데이터 + 직접 시각 찍기 |
+| [10c](../../examples/10c_MSC_Advanced_Log/) | 고급 로깅 | ⭐⭐⭐ | 파일 분할 (롤링), 에러 모니터링, LED 피드백 |
+
+> 권장 순서: Ex.10a → 10b → 10c (10 은 구버전, 새로 시작하면 10a 부터).
 
 ---
 
-## Part 3 — KIT H10 외골격 모드
+## Part 3 — KIT H10 외골격 기본 모드
 
-실제 웨어러블 로봇 (KIT H10) 의 3 가지 기본 동작 모드.
+실제 외골격 로봇 (KIT H10) 의 세 가지 기본 동작 모드.
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [11](../../examples/11_Passive_Mode/) | Passive Mode | ⭐⭐⭐ | P/I-Vector 기반 자동 왕복 |
-| [12](../../examples/12_Active_Assist_Mode/) | Active Assist Mode | ⭐⭐⭐ | 의도 감지 + 보조 토크 |
-| [13](../../examples/13_Resistive_Mode/) | Resistive Mode | ⭐⭐ | H10 내장 모드 + 물속 걷기 저항감 |
+| [11](../../examples/11_Passive_Mode/) | Passive (수동 모드) | ⭐⭐⭐ | 사전 정의 움직임 명령으로 자동 왕복 |
+| [12](../../examples/12_Active_Assist_Mode/) | Active Assist (능동 보조) | ⭐⭐⭐ | 사용자 의도 감지 후 보조 토크 |
+| [13](../../examples/13_Resistive_Mode/) | Resistive (저항 모드) | ⭐⭐ | H10 내장 모드 — 물속 걷기 같은 저항감 |
 
 ---
 
 ## Part 4 — 제어 알고리즘 기초
 
-학생이 직접 구현하는 첫 사용자 정의 제어 알고리즘.
+직접 작성하는 첫 제어 알고리즘들.
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [14](../../examples/14_PD_Realtime_Control/) | PD 실시간 토크 제어 | ⭐⭐⭐ | 이산 PD + 토크 포화 |
-| [15](../../examples/15_Inverted_Pendulum_Control/) | 역진자 모델 보행 보조 | ⭐⭐⭐ | 중력 보상 MgL·sin(θ) + Lyapunov |
-| [16](../../examples/16_TinyAI_Sensor_Fusion/) | Tiny AI 센서 퓨전 | ⭐⭐⭐ | 상보 필터 + 3-layer NN MCU 추론 |
-| [17](../../examples/17_FSM_Gait_Intent/) | FSM 보행 의도 인식 | ⭐⭐⭐ | 7-phase 보행 FSM + 단계별 토크 |
-| [18](../../examples/18_Debug_Monitor/) | 시스템 디버깅 모니터 | ⭐⭐ | 루프 프로파일링, Health 대시보드 |
-| [19](../../examples/19_Memory_Aware_Design/) | 메모리 인식 설계 | ⭐⭐⭐ | Ring Buffer, Pool, sizeof |
+| [14](../../examples/14_PD_Realtime_Control/) | PD 실시간 토크 제어 | ⭐⭐⭐ | PD 수식, 이산 미분, 토크 포화 |
+| [15](../../examples/15_Inverted_Pendulum_Control/) | 역진자 모델 보행 보조 | ⭐⭐⭐ | 중력 보상 MgL·sin(θ) + Lyapunov 안정성 |
+| [16](../../examples/16_TinyAI_Sensor_Fusion/) | Tiny AI 센서 퓨전 | ⭐⭐⭐ | 보드 안에서 3-layer 신경망 추론 |
+| [17](../../examples/17_FSM_Gait_Intent/) | 보행 의도 인식 (FSM) | ⭐⭐⭐ | 보행 7 단계 상태 머신 + 단계별 토크 |
+| [18](../../examples/18_Debug_Monitor/) | 시스템 디버깅 모니터 | ⭐⭐ | 루프 실행 시간 측정, 상태 대시보드 |
+| [19](../../examples/19_Memory_Aware_Design/) | 메모리 인식 설계 | ⭐⭐⭐ | 링 버퍼, 풀 할당자, malloc 없이 구현 |
 
 ---
 
-## Part 5 — 제어 알고리즘 심화 (Algorithm Classic)
+## Part 5 — 제어 알고리즘 심화
 
-상호작용 역학 + 투명 모드 + 보행 위상 기반 제어 — 외골격 제어의 정통 기법.
+상호작용 역학, 투명 모드, 보행 위상 기반 제어 — 외골격 제어의 정통 기법들.
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [20](../../examples/20_Impedance_Control/) | Hogan Impedance | ⭐⭐⭐ | 가상 스프링-댐퍼 상호작용 (Hogan 1985) |
-| [21](../../examples/21_Gravity_Compensation/) | Gravity Compensation | ⭐⭐⭐ | Mgl·sin(θ) + 마찰 보상 + α 점진 활성화 |
-| [22](../../examples/22_CPG_Oscillator/) | CPG Adaptive Oscillator | ⭐⭐⭐ | 적응 주파수 φ·ω (Ronsse 2011) |
-| [23](../../examples/23_Gait_Phase_Adaptive_Torque/) | Gait Phase Adaptive | ⭐⭐⭐ | 4 구간 정현파 토크 (Quinlivan 2017) |
-| [24](../../examples/24_Virtual_Constraint/) | Virtual Constraint / HZD | ⭐⭐⭐ | 5 차 Bézier (Westervelt 2003) |
-| [25](../../examples/25_Stance_Stiffness_Modulation/) | Stance Stiffness | ⭐⭐⭐ | 입각/유각 LPF blending (Collins 2015) |
+| [20](../../examples/20_Impedance_Control/) | Hogan 임피던스 제어 | ⭐⭐⭐ | 가상 스프링-댐퍼 상호작용 (Hogan 1985) |
+| [21](../../examples/21_Gravity_Compensation/) | 중력 보상 (투명 모드) | ⭐⭐⭐ | Mgl·sin(θ) + 마찰 보상 + 점진 활성화 |
+| [22](../../examples/22_CPG_Oscillator/) | CPG 적응 진동자 | ⭐⭐⭐ | 보행 리듬 자동 동기화 (Ronsse 2011) |
+| [23](../../examples/23_Gait_Phase_Adaptive_Torque/) | 보행 위상 적응 토크 | ⭐⭐⭐ | 4 구간 정현파 토크 (Quinlivan 2017) |
+| [24](../../examples/24_Virtual_Constraint/) | 가상 구속 (HZD) | ⭐⭐⭐ | 5 차 Bézier 궤도 (Westervelt 2003) |
+| [25](../../examples/25_Stance_Stiffness_Modulation/) | 입각기 가변 강성 | ⭐⭐⭐ | 입각/유각 부드러운 전환 (Collins 2015) |
 
 ---
 
-## Part 6 — 학습 + 적응 제어 (Learning / Adaptive)
+## Part 6 — 학습 + 적응 제어
 
-매 보행 주기마다 학습하거나 사용자 변화에 자동 적응하는 제어.
+매 보행 주기마다 스스로 학습하거나, 사용자 변화에 자동으로 적응하는 제어.
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [26](../../examples/26_Iterative_Learning_Control/) | Iterative Learning Control | ⭐⭐⭐ | P-type ILC + 위상 인덱싱 (Emken 2007) |
-| [27](../../examples/27_MRAC/) | Model Reference Adaptive | ⭐⭐⭐ | MIT Rule + Projection (Slotine 1991) |
-| [28](../../examples/28_Admittance_Control/) | Admittance Control | ⭐⭐⭐ | 힘 → 위치 (Impedance 쌍대, Keemink 2018) |
-| [29](../../examples/29_Bilateral_Coordination/) | Bilateral Coordination | ⭐⭐⭐ | 역위상 대칭 + 약측 강화 (재활) |
-| [30](../../examples/30_FF_FB_Hybrid_Control/) | FF + FB Hybrid | ⭐⭐⭐ | Computed Torque + BTN3 비교 토글 |
+| [26](../../examples/26_Iterative_Learning_Control/) | 반복 학습 제어 (ILC) | ⭐⭐⭐ | 주기마다 토크 프로파일 학습 (Emken 2007) |
+| [27](../../examples/27_MRAC/) | 모델 참조 적응 제어 | ⭐⭐⭐ | MIT Rule 로 게인 온라인 적응 (Slotine 1991) |
+| [28](../../examples/28_Admittance_Control/) | 어드미턴스 제어 | ⭐⭐⭐ | 힘 입력 → 위치 출력 (임피던스의 짝, Keemink 2018) |
+| [29](../../examples/29_Bilateral_Coordination/) | 좌·우 협응 제어 | ⭐⭐⭐ | 역위상 대칭 + 약측 강화 (재활용) |
+| [30](../../examples/30_FF_FB_Hybrid_Control/) | FF + FB 혼합 제어 | ⭐⭐⭐ | 모델 기반 사전 보상 + PD 피드백 |
 
 ---
 
-## Part 7 — Advanced Applications (Physical AI)
+## Part 7 — Physical AI 응용
 
-투명성 → 의도 감지 → 학습 → 자율 재생 — Physical AI 의 핵심 stage.
+투명성 → 의도 감지 → 학습 → 자율 재생으로 이어지는 Physical AI 의 핵심 단계들.
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [31](../../examples/31_Friction_Comp_DOB/) | Friction Comp DOB | ⭐⭐⭐ | 외란 관측기 — Physical Transparency 완성 |
-| [32](../../examples/32_GRF_Gait_Intent/) | GRF Gait Intent | ⭐⭐⭐ | Stage 2 의도 감지 (Heel Strike) |
-| [33](../../examples/33_Kinesthetic_Teaching/) | Kinesthetic Teaching | ⭐⭐⭐ | 전문가 시연 캡처 + 재생 (Stage 5) |
-| [34](../../examples/34_MSC_GaitAnalysis_Log/) | MSC GaitAnalysis Log | ⭐⭐ | H10 → USB → Python → MATLAB |
-| [35](../../examples/35_MultiLayer_Transparent_Control/) | MultiLayer Transparent | ⭐⭐⭐ | Zero-Imp / Virtual Wall / Bilateral 전환 |
-| [36](../../examples/36_OnDevice_Kinesthetic_Learning/) | On-Device Learning | ⭐⭐⭐ | MCU 위 Tiny NN 학습 + LQR 재생 |
+| [31](../../examples/31_Friction_Comp_DOB/) | 외란 관측기 (DOB) | ⭐⭐⭐ | 남은 외란까지 추정해서 진정한 투명 모드 |
+| [32](../../examples/32_GRF_Gait_Intent/) | 발 접지로 의도 감지 | ⭐⭐⭐ | Heel Strike 이벤트로 보행 위상 추정 |
+| [33](../../examples/33_Kinesthetic_Teaching/) | 직접 가르치기 + 재생 | ⭐⭐⭐ | 사람이 손으로 시연 → 보드가 그대로 재생 |
+| [34](../../examples/34_MSC_GaitAnalysis_Log/) | 보행 분석 데이터 로깅 | ⭐⭐ | H10 → USB 메모리 → Python → MATLAB |
+| [35](../../examples/35_MultiLayer_Transparent_Control/) | 다층 투명 제어 | ⭐⭐⭐ | 투명/벽/좌우 커플링 세 모드 실시간 전환 |
+| [36](../../examples/36_OnDevice_Kinesthetic_Learning/) | 보드 안에서 직접 학습 | ⭐⭐⭐ | 작은 신경망을 보드 위에서 학습 → LQR 재생 |
 
 ---
 
-## 예제 사용 방법
+## 예제 시험해보기
 
-1. `examples/` 폴더에서 원하는 예제의 `.c` 파일 확인.
-2. 해당 파일 내용을 `XM_Apps/User_Algorithm/user_app.c` 에 복사.
+1. `examples/` 에서 원하는 예제의 `.c` 파일을 엽니다.
+2. 내용을 통째로 `XM_Apps/User_Algorithm/user_app.c` 에 복사.
 3. STM32CubeIDE 에서 빌드 → XM10 에 업로드.
-4. 각 예제 폴더의 `README.md` 5-step 가이드 따라가기.
+4. 해당 예제의 README 를 따라가며 동작을 확인합니다.
 
-> 첫 빌드/실행 상세: [Getting Started — 첫 빌드 & 실행](../getting-started/03-first-build.md)
-> 🤖 첫 환경 구축: [Claude Code Quick Start](../getting-started/00-claude-code-quickstart.md)
+빌드/플래시가 처음이라면: [첫 빌드 & 실행](../getting-started/03-first-build.md) · AI 자동 안내가 편하다면: [Claude Code 와 함께 시작](../getting-started/00-claude-code-quickstart.md)

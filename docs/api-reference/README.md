@@ -1,33 +1,31 @@
-# API Reference
+# API 참고서
 
-> **상위 문서**: [Documentation Home](../README.md) | [Examples Guide](../../examples/README.md)
+> 상위: [문서 인덱스](../README.md) · [예제 가이드](../../examples/README.md)
 
-XM10 Extension Module SDK에서 사용 가능한 모든 API의 레퍼런스 문서 목록입니다.
+알고리즘을 작성하면서 옆에 두고 보는 함수 명세입니다. 처음부터 다 읽을 필요는 없고, 필요할 때 해당 그룹만 펴보세요.
 
 ---
 
-## 📚 API 문서 목록
+## 함수 그룹
 
-| # | 문서 | 내용 | 핵심 API |
+| # | 문서 | 내용 | 자주 쓰는 함수 |
 |---|------|------|----------|
-| **01** | [Task State Machine](01-task-state-machine.md) | TSM 생성·상태 관리 | `XM_TSM_Create`, `XM_TSM_AddState`, `XM_TSM_Run`, `XM_TSM_TransitionTo` |
-| **02** | [KIT H10 Control & Data](02-h10-control-n-data.md) | H10 센서 데이터·토크 제어·벡터 명령 | `XM.status.h10.*`, `XM_SetAssistTorque`, `XM_SendPVector`, `XM_SendIVector` |
-| **03** | [LED & Button Control](03-led-btn-control.md) | LED 효과·버튼 이벤트·채널 LED | `XM_SetLedEffect`, `XM_SetLedState`, `XM_GetButtonEvent`, `XM_SetChannelLedRGB` |
-| **04** | [External I/O](04-external-io.md) | 확장 포트 DIO·ADC | `XM_SetPinMode`, `XM_DigitalRead/Write`, `XM_AnalogReadMillivolts` |
-| **05** | [USB Connectivity](05-usb-connectivity.md) | CDC 디버그·스트리밍 | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId`, `XM_SetUsbCustomMeta` |
-| **06** | [USB Data Logging](06-usb-data-logging.md) | MSC 데이터 로깅 | `XM_SetUsbLogSource`, `XM_StartUsbDataLog`, `XM_StopUsbDataLog` |
-| **07** | [Memory Management](07-memory-management.md) | 메모리 영역 접근·NV Flash | `XM_GetUserWorkspace`, `XM_GetUserPSRAM`, `XM_UserNV_Read/Write` |
-| **08** | [RTC Clock](08-rtc-clock.md) | 실시간 시계 | `XM_RTC_SetDateTime`, `XM_RTC_GetDateTime`, `XM_RTC_IsRunning` |
+| 01 | [상태 머신 (TSM)](01-task-state-machine.md) | 상태별 동작 분리 + 전이 | `XM_TSM_Create`, `XM_TSM_AddState`, `XM_TSM_Run`, `XM_TSM_TransitionTo` |
+| 02 | [KIT H10 제어 + 데이터](02-h10-control-n-data.md) | 외골격 센서 읽기 + 토크/위치 명령 | `XM.status.h10.*`, `XM_SetAssistTorque`, `XM_SendPVector`, `XM_SendIVector` |
+| 03 | [LED + 버튼](03-led-btn-control.md) | 보드 LED 효과, 버튼 이벤트 | `XM_SetLedEffect`, `XM_SetLedState`, `XM_GetButtonEvent`, `XM_SetChannelLedRGB` |
+| 04 | [외부 IO](04-external-io.md) | 확장 포트 GPIO/ADC | `XM_SetPinMode`, `XM_DigitalRead/Write`, `XM_AnalogReadMillivolts` |
+| 05 | [USB 시리얼 통신](05-usb-connectivity.md) | PC 로 텍스트/바이너리 전송 | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId`, `XM_SetUsbCustomMeta` |
+| 06 | [USB 메모리 로깅](06-usb-data-logging.md) | USB 메모리에 자동 저장 | `XM_SetUsbLogSource`, `XM_StartUsbDataLog`, `XM_StopUsbDataLog` |
+| 07 | [메모리 영역](07-memory-management.md) | 빠른 메모리 + 비휘발성 저장소 | `XM_GetUserWorkspace`, `XM_GetUserPSRAM`, `XM_UserNV_Read/Write` |
+| 08 | [실시간 시계](08-rtc-clock.md) | 날짜/시간 읽기·쓰기 | `XM_RTC_SetDateTime`, `XM_RTC_GetDateTime`, `XM_RTC_IsRunning` |
 
 ---
 
-## ⚠️ Body Data 전제조건 — 반드시 읽으세요
+## Body Data — 보행 분석 데이터를 쓰려면 먼저 읽어주세요
 
-> **H10 CM 보행 분석 데이터를 사용하는 예제에 필수입니다.**
+KIT H10 중앙 모듈은 1 kHz 로 사용자 보행을 분석해서 다음과 같은 데이터를 추정합니다. 그런데 이 분석은 사용자 신체 정보 (체중, 신장, 다리 길이) 가 있어야 정확합니다. 이 데이터를 쓰는 예제 (특히 Ex.23 이상) 에서는 `User_Setup()` 에 `XM_SendUserBodyData()` 호출이 반드시 필요해요.
 
-### 보행 분석 데이터란?
-
-H10 CM(Central Module)은 실시간 보행 분석(1kHz)으로 다음 데이터를 추정합니다:
+### 어떤 데이터?
 
 | 데이터 | API 경로 | 설명 |
 |--------|----------|------|
@@ -37,14 +35,11 @@ H10 CM(Central Module)은 실시간 보행 분석(1kHz)으로 다음 데이터�
 | `forwardVelocity` | `XM.status.h10.forwardVelocity` | 전진 속도 (m/s) |
 | `gaitState` | `XM.status.h10.gaitState` | 보행 상태 비트마스크 |
 
-### 왜 Body Data가 필요한가?
+### 미설정 시 증상
 
-이 보행 분석은 **사용자 신체 정보(체중, 신장, 다리 길이)**를 기반으로 동작합니다.
-`XM_SendUserBodyData()` 없이는:
-
-- `gaitCycle` 부정확 → 보행 위상 추정 오류
-- `footContact` 미검출 → 입각/유각 구분 불가
-- `forwardVelocity` 부정확
+- `gaitCycle` 이 부정확해서 보행 위상 추정이 어긋남
+- `footContact` 이 항상 0 — 입각/유각 구분 불가
+- `forwardVelocity` 값이 부정확
 
 ### 설정 방법
 
@@ -68,30 +63,30 @@ void User_Setup(void)
 }
 ```
 
-### Body Data 필요 여부 (예제별)
+### 예제별 필요 여부
 
 | 예제 | Body Data | 이유 |
 |------|:---------:|------|
-| 00~19 | 대부분 불필요 | 기본 I/O, USB, 단순 제어 |
-| **20** Impedance | ✗ | 관절각·토크 피드백만 사용 |
-| **21** Gravity Comp | ✗ | 관절각 기반 중력 계산 |
-| **22** CPG Oscillator | △ | gaitCycle 사용 시 필요, 각도 피드백 모드로 대체 가능 |
-| **23** Gait-Phase Adaptive | ✔ **필수** | gaitCycle이 토크 프로파일의 위상 소스 |
-| **24** Virtual Constraint | ✔ **필수** | gaitCycle이 위상 변수 s의 유일한 소스 |
-| **25** Stance Stiffness | ✔ **필수** | footContact 없이 입각/유각 구분 불가 |
-| **26** ILC | ✔ **필수** | gaitCycle이 학습 인덱스 소스 |
-| **27** MRAC | ✗ | 관절각 직접 피드백 |
-| **28** Admittance | ✗ | 측정 토크 피드백만 사용 |
-| **29** Bilateral | △ | 각도 기반 동작, Body Data로 정확도 향상 |
-| **30** FF+FB Hybrid | ✗ | 모델 파라미터 매크로로 직접 설정 |
+| 00~19 | 대부분 불필요 | 기본 입출력, USB, 단순 제어 |
+| 20 임피던스 | ✗ | 관절각·토크 피드백만 사용 |
+| 21 중력 보상 | ✗ | 관절각 기반 중력 계산 |
+| 22 CPG 진동자 | △ | `gaitCycle` 모드 시 필요, 각도 피드백 모드로 대체 가능 |
+| 23 보행 위상 적응 | ✔ 필수 | `gaitCycle` 이 토크 프로파일의 위상 소스 |
+| 24 가상 구속 (HZD) | ✔ 필수 | `gaitCycle` 이 위상 변수의 유일한 소스 |
+| 25 입각기 가변 강성 | ✔ 필수 | `footContact` 없이 입각/유각 구분 불가 |
+| 26 ILC | ✔ 필수 | `gaitCycle` 이 학습 인덱스 소스 |
+| 27 MRAC | ✗ | 관절각 직접 피드백 |
+| 28 어드미턴스 | ✗ | 측정 토크 피드백만 사용 |
+| 29 좌우 협응 | △ | 각도 기반 동작, Body Data 로 정확도 향상 |
+| 30 FF+FB 혼합 | ✗ | 모델 파라미터 매크로로 직접 설정 |
 
-> **대안**: `gaitCycle`이나 `footContact` 없이 보행 위상이 필요하면 **IMU Hub**, **GRF 슈즈** 등 외부 센서 모듈로 독립 계측하여 사용할 수 있습니다.
+> `gaitCycle` 이나 `footContact` 없이 보행 위상이 필요하면 IMU Hub 나 GRF 슈즈 같은 외부 센서로 독립 계측해서 쓸 수도 있습니다.
 
 ---
 
-## 🔧 자주 쓰는 API 빠른 참조
+## 자주 쓰는 함수 빠른 참조
 
-### 센서 데이터 (H10)
+### 외골격 센서 데이터
 
 ```c
 // 고관절 각도
@@ -134,44 +129,46 @@ XM_SetAssistTorqueLH(0.0f);
 XM_SetControlMode(XM_CTRL_MONITOR);
 ```
 
-### 벡터 명령 (궤도·임피던스·힘)
+### 사전 정의 움직임 명령 (P-Vector / I-Vector)
+
+직접 토크 계산 대신 "이 위치로 이 시간 안에 가" 같은 한 줄 명령으로 외골격을 움직이는 방식이에요.
 
 ```c
-// P-Vector: 위치 궤도
+// 위치 명령 — 목표 각도까지 정해진 시간 안에 이동
 PVector_t pv = { .yd = -250, .L = 1000, .s0 = 4, .sd = 4 };
-// yd = 목표각 ×10 (deg×10), L = 소요시간 (ms)
+// yd = 목표각 × 10 (deg × 10),  L = 소요 시간 (ms)
 XM_SendPVector(SYS_NODE_ID_RH, &pv);
 
-// I-Vector: 임피던스 (가상 스프링-댐퍼)
+// 임피던스 명령 — 가상 스프링-댐퍼처럼 동작
 IVector_t iv = { .epsilon = 0, .kp = 80, .kd = 1, .lambda = 0, .duration = 50 };
-// kp/kd: 0~100 (%)
+// kp / kd: 0~100 (%)
 XM_SendIVector(SYS_NODE_ID_RH, &iv);
 ```
 
 ---
 
-## 🏗️ 제어 시스템 아키텍처
+## 제어 시스템 한눈에
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│  H10 CM (Central Module)                            │
-│  실시간 보행 분석 (1kHz)                              │
-│  ┌──────────────┐   ⚠️ Body Data 필수               │
-│  │ gaitCycle    │← XM_SendUserBodyData()             │
+│  KIT H10 중앙 모듈                                   │
+│  실시간 보행 분석 (1 kHz)                            │
+│  ┌──────────────┐   Body Data 설정 필요             │
+│  │ gaitCycle    │← XM_SendUserBodyData()            │
 │  │ footContact  │                                    │
 │  │ forwardVel   │                                    │
 │  └──────────────┘                                   │
 │  고관절 모터 각도 / 추정 토크                          │
 └──────────────────┬──────────────────────────────────┘
-                   │ CAN-FD (1ms PDO)
+                   │ CAN-FD (1 ms 주기 센서 데이터)
 ┌──────────────────▼──────────────────────────────────┐
-│  XM10 Extension Module                              │
+│  XM10                                               │
 │  ┌───────────────────────────────────────────────┐  │
-│  │  User_Loop() — 1kHz 제어 루프                  │  │
+│  │  User_Loop() — 매 1 ms 호출                    │  │
 │  │                                               │  │
 │  │  XM.status.h10.* 읽기                         │  │
 │  │      ↓                                        │  │
-│  │  제어 법칙 계산 (예: τ = K·e + B·ė)           │  │
+│  │  내 알고리즘 계산 (예: τ = K·e + B·ė)         │  │
 │  │      ↓                                        │  │
 │  │  XM_SetAssistTorque(RH, LH) 전송              │  │
 │  └───────────────────────────────────────────────┘  │
@@ -180,46 +177,44 @@ XM_SendIVector(SYS_NODE_ID_RH, &iv);
 
 ---
 
-## 📖 토크 제어 예제 가이드 (Ex.11~30)
+## 토크 제어 예제 한눈 정리
 
-### 기본 보행 제어 모드 (Ex.11~13)
+### 외골격 기본 모드 (Ex.11~13)
 
-| 예제 | 제어 방식 | Body Data | 난이도 |
-|------|----------|:---------:|:------:|
-| **11** Passive Mode | P-Vector·I-Vector 궤도 | ✗ | ★★★★ |
-| **12** Active Assist | 의도 감지 + 단계 토크 | ✗ | ★★★★ |
-| **13** Resistive Mode | τ = −B·ω (속도 저항) | ✗ | ★★★ |
+| 예제 | 제어 방식 | Body Data |
+|------|----------|:---------:|
+| 11 Passive | 사전 정의 움직임 명령 (P/I-Vector) | ✗ |
+| 12 Active Assist | 의도 감지 + 단계 토크 | ✗ |
+| 13 Resistive | τ = −B·ω (속도 저항) | ✗ |
 
-### 토크 제어 심화 (Ex.14~15)
+### 토크 제어 입문 (Ex.14~15)
+
+| 예제 | 제어 방식 | Body Data |
+|------|----------|:---------:|
+| 14 PD 제어 | τ = Kp·e + Kd·ė | ✗ |
+| 15 역진자 모델 | τ = Mgl·sin(θ) + PD | ✗ |
+
+### 제어 연구 시리즈 (Ex.20~30)
 
 | 예제 | 제어 방식 | Body Data | 논문 |
 |------|----------|:---------:|------|
-| **14** PD Control | τ = Kp·e + Kd·ė | ✗ | - |
-| **15** Inverted Pendulum | τ = Mgl·sin(θ) + PD | ✗ | - |
-
-### 토크 제어 연구 시리즈 (Ex.20~30)
-
-| 예제 | 제어 방식 | Body Data | 논문 레퍼런스 | 난이도 |
-|------|----------|:---------:|--------------|:------:|
-| **20** Impedance | τ = K·(θ_d−θ) + B·θ̇ | ✗ | Hogan 1985 (ASME) | ★★☆ |
-| **21** Gravity Comp | τ = α·(Mgl·cos θ + B_f·θ̇) | ✗ | Just 2018 (JNER) | ★★☆ |
-| **22** CPG Oscillator | φ̇ = ω + ε·F·cosφ | △ | Ronsse 2011 (MBEC) | ★★★ |
-| **23** Gait-Phase Adaptive | τ(φ) = A·sin(π·φ) 구간별 | ✔ | Quinlivan 2017 (SciRobot) | ★★★ |
-| **24** Virtual Constraint | θ_d(s) = Bézier(s) | ✔ | Westervelt 2003 (IEEE TAC) | ★★★★ |
-| **25** Stance Stiffness | K_stance/K_swing 전환 | ✔ | Collins 2015 (Nature) | ★★★ |
-| **26** ILC | τ_{k+1} = τ_k + L·e_k | ✔ | Emken 2007 (ICORR) | ★★★★ |
-| **27** MRAC | MIT Rule 적응 게인 | ✗ | Slotine & Li 1991 | ★★★★★ |
-| **28** Admittance | τ_ext → 가상 동역학 → θ_ref | ✗ | Keemink 2018 (IJRR) | ★★★ |
-| **29** Bilateral | τ_R = −K_c·(θ_R+θ_L) | △ | Duschau-Wicke 2010 (TNSRE) | ★★★ |
-| **30** FF+FB Hybrid | τ = τ_ff(모델) + τ_fb(PD) | ✗ | Slotine & Li 1991 Ch.6 | ★★★ |
-
-> **난이도 기준**: ★☆☆ 초급 | ★★☆ 중급 | ★★★ 고급 | ★★★★ 연구 | ★★★★★ 고급 연구
+| 20 임피던스 | τ = K·(θ_d−θ) + B·θ̇ | ✗ | Hogan 1985 |
+| 21 중력 보상 | τ = α·(Mgl·cos θ + B_f·θ̇) | ✗ | Just 2018 |
+| 22 CPG 진동자 | φ̇ = ω + ε·F·cosφ | △ | Ronsse 2011 |
+| 23 보행 위상 적응 | τ(φ) = A·sin(π·φ) 구간별 | ✔ | Quinlivan 2017 |
+| 24 가상 구속 (HZD) | θ_d(s) = Bézier(s) | ✔ | Westervelt 2003 |
+| 25 입각기 가변 강성 | K_stance / K_swing 전환 | ✔ | Collins 2015 |
+| 26 ILC | τ_{k+1} = τ_k + L·e_k | ✔ | Emken 2007 |
+| 27 MRAC | MIT Rule 적응 게인 | ✗ | Slotine 1991 |
+| 28 어드미턴스 | τ_ext → 가상 동역학 → θ_ref | ✗ | Keemink 2018 |
+| 29 좌우 협응 | τ_R = −K_c·(θ_R+θ_L) | △ | Duschau-Wicke 2010 |
+| 30 FF+FB 혼합 | τ = τ_ff(모델) + τ_fb(PD) | ✗ | Slotine 1991 Ch.6 |
 
 ---
 
-## 🔗 관련 문서
+## 관련 문서
 
-- [Getting Started](../getting-started/) — 개발환경 설정 및 첫 빌드
-- [Architecture Overview](../architecture/) — XM10 시스템 아키텍처
-- [KIT H10 Firmware Compatibility](../kit-h10-firmware/) — 펌웨어 호환성 매트릭스
-- [Tutorials](../tutorials/) — 단계별 학습 경로
+- [Getting Started](../getting-started/) — 환경 구축 + 첫 빌드
+- [Architecture](../architecture/) — 시스템 큰 그림
+- [KIT H10 Firmware](../kit-h10-firmware/) — 펌웨어 호환성
+- [Tutorials](../tutorials/) — 예제 학습 경로
