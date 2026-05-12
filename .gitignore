@@ -35,6 +35,9 @@ docs/api-reference/*
 !docs/api-reference/03-led-btn-control.md
 !docs/api-reference/04-external-io.md
 !docs/api-reference/05-usb-connectivity.md
+!docs/api-reference/06-usb-data-logging.md
+!docs/api-reference/07-memory-management.md
+!docs/api-reference/08-rtc-clock.md
 !docs/api-reference/README.md
 !docs/advanced/
 docs/advanced/*
