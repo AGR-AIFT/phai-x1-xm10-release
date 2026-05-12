@@ -1,7 +1,7 @@
 # eXtension Module: XM10
 
 <p align="center">
-  <img width="348" height="271" alt="XM10 Board" src="https://github.com/user-attachments/assets/797cb252-48a7-4d6c-aa9d-3d7ffda565de" />
+  <img width="332" height="231" alt="XM10 Board" src="https://github.com/user-attachments/assets/871dc578-57ab-41ed-8d39-76a43e65f24d" />
 </p>
 <p align="center">
   <a href="https://github.com/angel-robotics/Extension_Module/releases/tag/v2.0.0"><img src="https://img.shields.io/badge/Release-v2.0.0-brightgreen.svg" alt="Release"></a>
@@ -19,7 +19,7 @@
 
 ---
 
-## 🤖 Claude Code 와 함께 시작하기 (MCU 처음이라면)
+## 🤖 Claude Code 와 함께 시작하기
 
 `STM32CubeIDE` / 임베디드 경험이 없는 **학생 · 신규 개발자** 를 위한 AI 자동 안내 모드를 지원합니다.
 
