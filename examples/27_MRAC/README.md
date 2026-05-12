@@ -1,68 +1,178 @@
-# 예제 27: 모델 참조 적응 제어 MRAC (Model Reference Adaptive Control)
+# Ex.27 — MRAC (Model Reference Adaptive Control — MIT Rule 온라인 게인 적응)
 
-본 예제는 **MRAC(Model Reference Adaptive Control)**를 구현합니다. 참조 모델(이상적인 응답)을 정의하고 MIT Rule로 적응 게인을 온라인 조정하여 실제 시스템이 참조 모델을 추종하도록 합니다.
-
-> 📖 API 레퍼런스: [H10 Control & Data](../../docs/api-reference/02-h10-control-n-data.md) · [Task State Machine](../../docs/api-reference/01-task-state-machine.md)
+> 🎯 **학습 목표**:
+> - **참조 모델** (1차 LPF) 정의 + **MIT Rule** 로 게인 θ̂₁, θ̂₂ 온라인 적응.
+> - 고정 게인 PD 의 한계 (체중·외란 변화 시 재튜닝 필요) vs MRAC 자동 적응 비교.
+> - **파라미터 드리프트 방지** — Projection (범위 제한) 의 필요성.
 >
-> 📄 논문 레퍼런스: Slotine, J.-J. E., & Li, W. (1991). *Applied Nonlinear Control.* Prentice Hall, Chapter 8 (Model Reference Adaptive Control).
+> ⏱️ 권장 시간: 50분 | 🔧 난이도: ⭐⭐⭐
+> 🧰 사전 예제: [Ex.14 PD](../14_PD_Realtime_Control/) (고정 게인 vs 적응) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)
+> 📄 논문: Slotine, J.-J. E., & Li, W. (1991). *Applied Nonlinear Control*, Ch.8 (MRAC 교과서). Sharifi, M. (2014). *Nonlinear MRAC for HRI.* Control Eng. Pract., 32.
 
-## 🎯 학습 목표 (Objective)
+---
 
-* **참조 모델**: 원하는 시스템 동특성을 1차 LPF로 정의합니다: `x_m[k+1] = a_m·x_m + b_m·r`
-* **MIT Rule** 적응 법칙을 구현합니다:
-  - `θ̂₁ += γ·e·x` (상태 피드백 게인 적응)
-  - `θ̂₂ += γ·e·r` (입력 피드포워드 게인 적응)
-* 고정 게인 PD 대비 **적응 제어의 장점**을 이해합니다.
+## 1️⃣ 목표 — 이 예제로 무엇이 동작하나
 
-### 제어 법칙
+참조 모델 (이상적 응답) 을 정의하면 MRAC 가 자동으로 게인을 조정해 추종:
 
 ```
-e = x_m − x          (추종 오차)
-u = θ̂₁·x + θ̂₂·r    (적응 제어 입력)
-τ = u·τ_scale
+참조 모델  : x_m[k+1] = 0.99·x_m + 0.01·r       (1차 LPF, ~100 ms 응답)
+적응 입력  : τ = θ̂₁·x + θ̂₂·r                  (선형 파라미터화)
+적응 법칙  : θ̂₁ += γ·e·x,   θ̂₂ += γ·e·r       (MIT Rule)
 ```
 
----
+| BTN | 동작 |
+|-----|------|
+| 1 | 참조 r (5° / 10° / 15° / 20° 순환) |
+| 2 | 적응 속도 γ (0.001 / 0.005 / 0.01 / 0.05) |
+| 3 | θ̂ 리셋 (θ̂₁=0, θ̂₂=0.5) — 처음부터 적응 재시작 |
 
-## ⚙️ 동작 원리 (How it Works)
+USB CDC `MRAC | r:10.0 xm:8.5 θ:7.8 e:0.7 θ̂1:0.15 θ̂2:0.62` 매 500 ms.
 
-### 제어 루프 (ACTIVE, 1kHz)
-
-1. 참조 모델 업데이트: `x_m[k+1] = 0.99·x_m + 0.01·r`
-2. 추종 오차 `e = x_m − θ_current` 계산
-3. MIT Rule로 `θ̂₁`, `θ̂₂` 업데이트 (범위 제한)
-4. 제어 입력 `u = θ̂₁·x + θ̂₂·r` → τ 산출 → 전송
-
-### 버튼 조작
-
-| 버튼 | 동작 |
-|------|------|
-| BTN1 클릭 | 참조 입력 `r` 순환 (0° → 10° → 20° → −10°) |
-| BTN2 클릭 | 적응 이득 γ 순환 (0.001 → 0.01 → 0.1) |
-| BTN3 클릭 | 적응 게인 리셋 (θ̂₁=0, θ̂₂=1) |
+> 📸 `![게인 θ̂₁/θ̂₂ 적응 궤적](../assets/img/27_mrac_evolution.png)` placeholder
 
 ---
 
-## 🚀 실행 방법 (How to Use)
+## 2️⃣ 사전 지식 — 시작 전 알아둘 것
 
-1. 빌드 후 XM10에 플래시합니다. (Body Data 불필요)
-2. KIT H10 전원 ON → ASSIST MODE.
-3. BTN1로 참조 입력 `r`(목표 각도)을 설정합니다.
-4. 시스템이 자동으로 게인을 적응시켜 실제 각도가 참조 모델을 추종하는 것을 관찰합니다.
-5. USB CDC에서 `MRAC | r:... xm:... θ:... e:... θ̂1:... θ̂2:...` 출력 확인.
+### 고정 PD vs MRAC
+
+| | PD (Ex.14) | MRAC (이 예제) |
+|--|----------|--------------|
+| 게인 | 고정 (Kp, Kd) | 온라인 적응 (θ̂₁, θ̂₂) |
+| 체중 변화 대응 | 재튜닝 필요 | 자동 적응 |
+| 안정성 보장 | 쉬움 | Lyapunov 분석 필요 |
+| 본 예제 안정화 장치 | — | Projection (범위 제한) |
+
+### MIT Rule (Gradient Descent)
+
+```
+J(θ̂) = 0.5 · e²                              (cost function)
+θ̂[k+1] = θ̂[k] − γ · ∂J/∂θ̂
+       = θ̂[k] + γ · e · ∂x/∂θ̂              (chain rule)
+
+→ θ̂₁ 의 영향: ∂x/∂θ̂₁ ≈ x   →  θ̂₁ += γ · e · x
+→ θ̂₂ 의 영향: ∂x/∂θ̂₂ ≈ r   →  θ̂₂ += γ · e · r
+```
+
+### 파라미터 드리프트 (Projection)
+
+- MIT Rule 은 **Lyapunov 안정성 X** — 외란 시 θ̂ 가 무한대로 발산 가능
+- 해결: 모든 step 마다 θ̂ 를 [min, max] 범위로 강제 클램프
+  - θ̂₁ ∈ [−1.0, +1.0]
+  - θ̂₂ ∈ [0.0, +2.0] (입력 게인 양수 유지)
+
+### 1차 참조 모델 의미
+
+```
+x_m[k+1] = 0.99 · x_m[k] + 0.01 · r
+```
+- 극점 0.99 → 시정수 ≈ 100 ms @ 1 kHz
+- DC 게인 = 0.01 / (1 − 0.99) = 1 (steady-state x_m = r)
 
 ---
 
-## 💡 직접 해보기 (Things to Try)
+## 3️⃣ 핵심 코드 — 무엇이 어디서 일어나나
 
-* **γ 비교**: γ=0.001(느린 적응) vs γ=0.1(빠른 적응). 빠를수록 수렴이 빠르지만 불안정해질 수 있습니다.
-* **BTN3 리셋 후 재적응**: 게인을 초기화하고 수렴 과정을 다시 관찰합니다.
-* **고정 게인 PD와 비교**: `14_PD_Realtime_Control` 예제와 동일 조건에서 응답을 비교합니다.
-* **파라미터 변화 시험**: 착용자가 갑자기 움직임을 바꿀 때 MRAC가 어떻게 적응하는지 관찰합니다.
+```c
+#define AM_REF      0.99f                                           // 참조 모델 극점
+#define BM_REF      0.01f                                           // DC unity gain
+#define THETA1_MIN -1.0f
+#define THETA1_MAX  1.0f
+#define THETA2_MIN  0.0f
+#define THETA2_MAX  2.0f
+
+static float s_x_m  = 0.0f;                                         // ① 참조 모델 상태
+static float s_theta1 = 0.0f;                                       //    상태 피드백 게인 (적응)
+static float s_theta2 = 0.5f;                                       //    입력 게인 (적응)
+static float s_r_ref  = 10.0f;                                      //    목표 (BTN1)
+static float s_gamma  = 0.005f;                                     //    적응 속도
+
+static void Active_Loop(void)
+{
+    float theta = XM.status.h10.rightHipAngle;                      // ② 실제 각도 x
+
+    /* ③ 참조 모델 업데이트 (1차 LPF) */
+    s_x_m = AM_REF * s_x_m + BM_REF * s_r_ref;
+
+    /* ④ 추종 오차 */
+    float e = s_x_m - theta;
+
+    /* ⑤ MIT Rule 적응 (gradient descent) */
+    s_theta1 += s_gamma * e * theta;
+    s_theta2 += s_gamma * e * s_r_ref;
+
+    /* ⑥ Projection (드리프트 방지) */
+    s_theta1 = _ClampFloat(s_theta1, THETA1_MIN, THETA1_MAX);
+    s_theta2 = _ClampFloat(s_theta2, THETA2_MIN, THETA2_MAX);
+
+    /* ⑦ 적응 제어 입력 */
+    float u = s_theta1 * theta + s_theta2 * s_r_ref;
+    float tau = _ClampFloat(u, -MAX_TORQUE_NM, MAX_TORQUE_NM);
+
+    XM_SetAssistTorqueRH(tau);
+    XM_SetAssistTorqueLH(tau);
+}
+
+static void _HandleButtons(void)
+{
+    if (XM_GetButtonEvent(XM_BTN_1) == XM_BTN_CLICK) {              /* BTN1: r 순환 */
+        s_r_ref += R_REF_STEP;
+        if (s_r_ref > R_REF_MAX) s_r_ref = R_REF_MIN;
+    }
+    if (XM_GetButtonEvent(XM_BTN_2) == XM_BTN_CLICK) {              /* BTN2: γ 순환 */
+        gamma_idx = (gamma_idx + 1) % 4;
+        s_gamma = gamma_presets[gamma_idx];
+    }
+    if (XM_GetButtonEvent(XM_BTN_3) == XM_BTN_CLICK) {              /* BTN3: 리셋 */
+        s_theta1 = 0.0f; s_theta2 = 0.5f; s_x_m = 0.0f;
+    }
+}
+```
+
+전체 코드: [`mrac_adaptive_control.c`](mrac_adaptive_control.c) (374 줄)
+
+> 🧒 ⑥ 의 **Projection 가드** 가 핵심. 없으면 외란 시 θ̂ 무한 발산. MIT Rule 은 안정성 보장 X 라는 점 명심.
 
 ---
 
-## ⚠️ 주의사항
+## 4️⃣ 실험 — 직접 해보기 (체크포인트)
 
-Body Data 설정은 이 예제에서 **불필요**합니다. 관절각 직접 피드백만 사용합니다.
-MIT Rule은 Lyapunov 안정성을 엄밀히 보장하지 않습니다. `THETA_MAX` 범위 제한이 드리프트 방지를 위해 반드시 유지되어야 합니다.
+1. **빌드/플래시 + ASSIST** (Body Data 불필요) → ✅ θ̂₁=0, θ̂₂=0.5 초기 상태
+2. **BTN 1 클릭** → ✅ r=10° (기본). USB `MRAC | r:10.0 ...`
+3. **수렴 관찰 (5~10 초)** → ✅ θ_actual 이 x_m 추종 시작, θ̂ 값 점진 변화
+4. **30 초 후** → ✅ 정상 상태, θ ≈ x_m, e ≈ 0
+5. **BTN 1 두 번 더** → ✅ r 15° → 20° → 5° 순환. 새 목표에 다시 적응
+6. **BTN 2 클릭** → ✅ γ 0.001 (매우 느림) → 수렴 느려짐
+7. **BTN 2 → 0.05** → ✅ 빠른 적응. 가능하면 진동 관찰
+8. **BTN 3 클릭 (리셋)** → ✅ θ̂ 초기값 복귀. 다시 적응 시작
+9. **변형 1 — γ = 0.1+ (불안정 한계)**: 발산 직접 체험 (Projection 이 막아줌)
+10. **변형 2 — Projection 끄기**: `_ClampFloat` 호출 제거 → θ̂ 점점 발산
+11. **변형 3 — 참조 모델 시정수**: `AM_REF` 0.99 → 0.95 (빠른 응답 50 ms) vs 0.999 (느림 1초)
+12. **변형 4 — PD 와 비교**: [Ex.14](../14_PD_Realtime_Control/) 와 동일 r 로 응답 비교
+13. **변형 5 — 외란 추가**: User_Loop 에 인위적 `theta += sinf(t * 0.01f)` → MRAC 대응 관찰
+
+---
+
+## 5️⃣ 다음 단계
+
+- ILC (주기 반복 학습): [Ex.26 ILC](../26_Iterative_Learning_Control/)
+- 어드미턴스 (힘→위치 적응): [Ex.28 Admittance Control](../28_Admittance_Control/)
+- FF+FB 혼합 (모델 + 적응): [Ex.30 FF+FB Hybrid](../30_FF_FB_Hybrid_Control/)
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| θ̂ 무한 발산 | Projection 누락 | `_ClampFloat(θ̂, MIN, MAX)` 매 cycle |
+| 수렴 매우 느림 | γ = 0.001 | γ 0.005 → 0.01 |
+| 진동 (oscillation) | γ 너무 큼 (0.05+) | γ ↓ 또는 참조 모델 시정수 ↑ |
+| θ 가 x_m 안 따라감 | θ̂₂ 가 [0, 2] 범위에 묶임 | 부호 확인 + 범위 확장 |
+| 정상 상태 오차 큼 | DC 게인 ≠ 1 (`a_m + b_m ≠ 1`) | 0.99 + 0.01 = 1.00 확인 |
+| BTN 3 후에도 동일 거동 | s_x_m 만 0 으로 리셋, θ̂ 유지 | θ̂₁=0, θ̂₂=0.5 동시 리셋 |
+| 부정확한 모델로 발산 | MIT Rule 은 Lyapunov 보장 X | Projection 의존 — 강건성 한계 인지 |
+| 빠른 r 변경 시 transient | LPF 응답 100 ms — 정상 | r 변경 후 0.5 초 기다림 |
+
+막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)
