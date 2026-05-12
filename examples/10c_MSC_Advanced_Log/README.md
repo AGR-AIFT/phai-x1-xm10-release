@@ -1,53 +1,151 @@
-# 예제 10c: 상태 머신(TSM) + 에러 모니터링 + 파일 롤링 (MSC Advanced Log)
+# Ex.10c — MSC Advanced Log (TSM + 에러 모니터링 + 파일 롤링)
 
-본 예제는 실제 제품 수준의 데이터 로깅 시스템을 구현하는 **고급 패턴**을 다룹니다. 상태 머신(TSM)으로 로깅 흐름을 제어하고, 실시간 에러 모니터링과 자동 복구를 포함합니다.
+> 🎯 **학습 목표**:
+> - TSM (STANDBY/ACTIVE) 와 로깅을 결합한 **제품 수준** 패턴.
+> - `XM_GetUsbLogStatus()` 로 실시간 에러 모니터링 (WARNING_QUEUE_FULL / WARNING_DISK_LOW / ERROR_STOPPED).
+> - 파일 롤링 (`XM_SetUsbLogRollingSize`) + 세션 카운터 자동 증가.
+> - 세션 마커 (`XM_InsertUsbLogMarker`) 로 데이터 후처리 시 분할점 표시.
+>
+> ⏱️ 권장 시간: 40분 | 🔧 난이도: ⭐⭐⭐
+> 🧰 사전 예제: [Ex.10b Custom Struct](../10b_MSC_Custom_Struct/) + [Ex.03 FSM](../03_Button_LED_FSM/) | 📚 관련 docs: [USB Connectivity](../../docs/api-reference/05-usb-connectivity.md) · [TSM](../../docs/api-reference/01-task-state-machine.md)
 
-## 🎯 학습 목표 (Objective)
+---
 
-* **상태 머신(TSM)**과 데이터 로깅을 연동하는 패턴을 학습합니다.
-* `XM_GetUsbLogStatus()`로 로깅 상태(WARNING, ERROR)를 실시간 모니터링합니다.
-* **LED 피드백**으로 사용자에게 시스템 상태를 시각적으로 전달합니다.
-* `XM_SetUsbLogRollingSize()`로 **파일 롤링 크기**를 런타임에 설정합니다.
-* 에러 발생 시 상태 머신을 통한 **자동 복귀** 전략을 이해합니다.
+## 1️⃣ 목표 — 이 예제로 무엇이 동작하나
 
-## ⚙️ 동작 원리 (How it Works)
+본격 제품 수준 로깅 시스템:
 
-* **상태 전이:**
-  ```
-  STANDBY ──(BTN1)──▶ ACTIVE ──(BTN2)──▶ STANDBY
-                        │                    ▲
-                        └──(ERROR 감지)──────┘
-  ```
-* **Entry/Exit 패턴:** `Active_Entry()`에서 세션을 시작하고, `Active_Exit()`에서 정리합니다. 에러로 인한 자동 전이 시에도 `on_exit`이 호출되어 안전하게 종료됩니다.
-* **파일 롤링:** `XM_SetUsbLogRollingSize(5)`로 5MB마다 새 파일로 분할합니다. 장시간 로깅 시 하나의 파일이 지나치게 커지는 것을 방지합니다.
-* **세션 카운터:** `Gait_000`, `Gait_001`, ... 형식으로 매 세션마다 고유한 폴더명을 자동 생성합니다.
+```
+STANDBY ──(BTN1)──▶ ACTIVE ──(BTN2)──▶ STANDBY
+                       │                  ▲
+                       └─(ERROR 감지)─────┘ (자동 복귀)
+```
 
-## 📊 LED 피드백 표
+### LED 상태 표시 (실시간 진단)
 
-| LED   | 상태     | 의미 |
-|-------|----------|------|
-| LED1 OFF    | STANDBY  | 대기 중 |
-| LED1 BLINK  | ACTIVE   | 로깅 진행 중 |
-| LED2 BLINK  | WARNING  | 버퍼 90%+ 또는 쓰기 지연 발생 |
-| LED3 SOLID  | ERROR    | 로깅 중단, STANDBY로 자동 복귀 |
-| LED3 HEARTBEAT | -    | USB 메모리 미준비 |
+| LED | 상태 | 의미 |
+|-----|------|------|
+| LED1 BLINK | ACTIVE | 로깅 중 |
+| LED2 BLINK | WARNING | 버퍼 90%+ (쓰기 지연) |
+| LED2 SOLID | WARNING | 디스크 잔여 50 MB 미만 |
+| LED3 SOLID | ERROR | 로깅 중단 (자동 복귀) |
 
-## 🚀 실행 방법 (How to Use)
+저장: `Gait_000`, `Gait_001`, ... (세션 카운터 자동 증가). 6 필드 × float = 24 B + Header = 28 B/record. 파일 롤링 5 MB.
 
-1.  USB 메모리를 연결하고 코드를 업로드합니다.
-2.  **BTN1 클릭:** 로깅 시작 → LED1 깜빡임
-3.  로깅 중 LED2가 깜빡이면 쓰기 속도가 느려지고 있다는 경고입니다.
-4.  **BTN2 클릭:** 로깅 정지 → 모든 LED 꺼짐
-5.  에러 발생 시 LED3이 켜지고 자동으로 STANDBY 상태로 복귀합니다.
-6.  USB 메모리에서 `/LOGS/Gait_000/` 폴더를 확인합니다.
-7.  **Python 디코더로 CSV 변환:**
-    ```bash
-    python data_decoder_xm10.py /LOGS/Gait_000
-    ```
+---
 
-## 💡 직접 해보기 (Things to Try)
+## 2️⃣ 사전 지식 — 시작 전 알아둘 것
 
-* `XM_SetUsbLogRollingSize(1)`로 설정하여 1MB마다 파일이 분할되는 것을 확인해보세요.
-* 로깅 중 USB 메모리를 의도적으로 뽑아 에러 복구 동작을 테스트해보세요.
-* `DataLogger_GetStats()`를 통해 `dropped_packets`와 `write_errors` 값을 모니터링하는 코드를 추가해보세요.
-* 실제 보행 테스트에서 10분 이상 로깅 후 `summary.txt`의 통계를 분석해보세요.
+- **`XM_GetUsbLogStatus()`** 반환: `IDLE / LOGGING / WARNING_QUEUE_FULL / WARNING_DISK_LOW / ERROR_STOPPED` → 학생 코드에서 매 cycle 모니터링.
+- **`XM_SetUsbLogRollingSize(MB)`** — 한 파일 최대 크기. 본 예제는 5 MB. 큰 데이터 세션을 여러 파일로 분할.
+- **`XM_InsertUsbLogMarker(type, value)`** — 데이터 흐름 중간에 마커 삽입. 후처리 시 세션 시작/정지/이벤트 분할 기준.
+- **`XM_GetUsbDiskFreeMB()` / `TotalMB()`** — 디스크 잔여/총량 모니터링.
+- **자동 복구** — ERROR_STOPPED 발생 시 ACTIVE → STANDBY 로 강제 전환 → 다음 BTN1 으로 재시작.
+
+---
+
+## 3️⃣ 핵심 코드 — 무엇이 어디서 일어나나
+
+```c
+typedef struct {
+    float hip_L, hip_R, knee_L, knee_R, torque_L, torque_R;
+} GaitLog_t;  /* 24 bytes */
+
+static GaitLog_t s_log;
+static uint32_t s_session_counter = 0;
+static char s_session_name[32];
+
+void User_Setup(void)
+{
+    /* TSM STANDBY/ACTIVE 등록 생략 */
+    XM_SetUsbLogSource(&s_log, sizeof(GaitLog_t));
+    XM_SetUsbLogRollingSize(5);                                         // ① 5 MB 분할
+}
+
+static void Active_Entry(void)
+{
+    snprintf(s_session_name, sizeof(s_session_name),
+             "Gait_%03lu", (unsigned long)s_session_counter++);          // ② 자동 카운터
+
+    bool ok = XM_StartUsbDataLog(s_session_name,
+        "hip_L(float), hip_R(float), knee_L(float), knee_R(float), "
+        "torque_L(float), torque_R(float)");
+
+    if (ok) {
+        XM_SetLedEffect(XM_LED_1, XM_LED_BLINK, 500);
+        XM_InsertUsbLogMarker(1, (uint16_t)s_session_counter);           // ③ 시작 마커
+    } else {
+        XM_TSM_TransitionTo(s_tsm, XM_STATE_STANDBY);                    // 시작 실패
+    }
+}
+
+static void Active_Loop(void)
+{
+    /* 데이터 갱신 */
+    s_log.hip_L    = XM.status.h10.leftHipAngle;
+    s_log.hip_R    = XM.status.h10.rightHipAngle;
+    s_log.knee_L   = XM.status.h10.leftKneeAngle;
+    s_log.knee_R   = XM.status.h10.rightKneeAngle;
+    s_log.torque_L = XM.command.assist_torque_lh;
+    s_log.torque_R = XM.command.assist_torque_rh;
+
+    /* ④ 실시간 상태 모니터링 */
+    switch (XM_GetUsbLogStatus()) {
+    case XM_LOG_STATUS_WARNING_QUEUE_FULL:
+        XM_SetLedEffect(XM_LED_2, XM_LED_BLINK, 200);  break;
+    case XM_LOG_STATUS_WARNING_DISK_LOW:
+        XM_SetLedEffect(XM_LED_2, XM_LED_SOLID, 0);     break;
+    case XM_LOG_STATUS_ERROR_STOPPED:
+        XM_SetLedEffect(XM_LED_3, XM_LED_SOLID, 0);
+        XM_TSM_TransitionTo(s_tsm, XM_STATE_STANDBY);                    // 자동 복귀
+        return;
+    default:
+        XM_SetLedEffect(XM_LED_2, XM_LED_SOLID, 0);     break;
+    }
+
+    if (XM_GetButtonEvent(XM_BTN_2) == XM_BTN_CLICK) {
+        XM_InsertUsbLogMarker(2, 0);                                     // ⑤ 정지 마커
+        XM_TSM_TransitionTo(s_tsm, XM_STATE_STANDBY);
+    }
+}
+```
+
+전체 코드: [`msc_advanced_log.c`](msc_advanced_log.c)
+
+> 🧒 핵심: ④ 의 `switch` 가 매 cycle 상태 점검. WARNING 은 LED 만, ERROR 는 자동 복귀.
+
+---
+
+## 4️⃣ 실험 — 직접 해보기 (체크포인트)
+
+1. **FAT32 USB + 빌드 + 플래시**
+2. **BTN 1** → ✅ `/LOGS/Gait_000/` 생성, LED 1 깜빡
+3. **30초 데이터 누적** → 5 MB 마다 새 파일 (`data_000_part_001.bin`, `_part_002.bin` ...)
+4. **BTN 2** → ✅ 정지 + 마커 type=2 삽입
+5. **다시 BTN 1** → ✅ `/LOGS/Gait_001/` 자동 생성 (카운터 증가)
+6. **변형 1 — WARNING 강제 발생**: rolling size 를 `1` MB 로 → 짧은 시간 내 다음 분할 → 디스크 잔여 가까워질 때 LED 2 SOLID 관찰.
+7. **변형 2 — Disk Low 시뮬레이션**: USB 를 거의 가득 채운 상태로 시작 → `WARNING_DISK_LOW` 트리거.
+8. **변형 3 — 외부 트리거**: Ex.06 의 외부 안전 스위치로 자동 정지 + 마커 삽입.
+
+---
+
+## 5️⃣ 다음 단계
+
+- 외부 IO + 안전 스위치 + 로깅 결합: [Ex.06 Safety](../06_Ext_IO_Safety_Switch/) + 본 예제
+- 실시간 PC 스트리밍 + 보드 저장 동시: [Ex.09 CDC Stream](../09_CDC_Stream/) + [본 예제]
+- 보행 분석 데이터 파이프라인 응용: [Ex.34 MSC Gait Analysis Log](../34_MSC_GaitAnalysis_Log/) (있는 경우)
+
+---
+
+## ⚠️ 흔한 실수
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| ERROR 발생 후 다시 시작 안 됨 | 자동 복귀 후 ERROR LED 가 그대로 → 학생이 STANDBY 인 줄 모름 | `Active_Exit` 에서 LED 모두 OFF 처리 또는 manual reset |
+| WARNING_QUEUE_FULL 자주 발생 | USB 쓰기 속도 < 데이터 생성 속도 | rolling size ↓ 또는 데이터 크기 ↓ |
+| 세션 카운터가 부팅마다 0 으로 초기화 | `s_session_counter` 가 RAM 변수 | 의도된 동작. 영구 카운터 필요 시 NV 사용 |
+| 마커가 디코더에서 안 보임 | 디코더가 marker 지원 안 함 | PythonDecoder 최신 버전 사용 |
+| 5MB 파일이 안 정확히 5MB | flush 시점 + 마지막 record 정렬 | 정상. 약간 ± 가능 |
+| Stop 시 summary.txt 가 비어있음 | session 통계 미수집 (짧은 세션) | 충분히 길게 로깅 후 검증 |
+
+막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)
