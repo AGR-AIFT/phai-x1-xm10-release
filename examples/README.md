@@ -9,16 +9,19 @@ XM10 Extension Module의 **41개 실습 예제**입니다.
 
 ---
 
-## 🚀 처음 오신 분 — 첫 30분 동선
+## 처음 오신 분 — 첫 30분 동선
 
 | 순서 | 예제 | 난이도 | 학습 포인트 | 권장 시간 |
 |:---:|------|:---:|------------|:---:|
-| 1 | [Ex.00 Quick Start](00_Quick_Start/) | ⭐ | TSM 단일 상태 + LED/버튼/USB CDC 기초 | 30 분 |
+| 1 | [Ex.00 Quick Start](00_Quick_Start/) | ⭐ | 상태 머신 + LED + 버튼 + USB 시리얼 기초 | 30 분 |
 | 2 | [Ex.01 Button & LED Basic](01_Button_LED_Basic/) | ⭐ | 폴링 입출력 (`GetButtonState`) | 20 분 |
 | 3 | [Ex.02 Button & LED Event](02_Button_LED_Event/) | ⭐⭐ | 이벤트 + Toggle + Oneshot 효과 | 25 분 |
-| 4 | [Ex.03 Button & LED FSM](03_Button_LED_FSM/) | ⭐⭐ | TSM 멀티 상태 + 롱 프레스 | 30 분 |
+| 4 | [Ex.03 Button & LED FSM](03_Button_LED_FSM/) | ⭐⭐ | 멀티 상태 머신 + 롱 프레스 | 30 분 |
 
 총 약 2 시간 — 외부 HW 불필요. Ex.04 부터 외부 IO / 센서로 확장.
+
+> **보드 리비전 호환성**: 41 개 예제 모두 **Rev 1.1 / Rev 2.0 양쪽** 에서 빌드·실행됩니다 (SDK 코드 동일).
+> 단, **외부 GPIO 를 직접 사용하는 예제** (Ex.04~06, Ex.05a~05d, Ex.16 외부 IMU 모드) 는 보드 PCB 의 커넥터 위치/라벨이 리비전마다 다를 수 있어요. 사용 중인 보드의 핀맵을 먼저 확인하세요 — [Rev 1.1 핀맵](../docs/hardware/external-gpio-rev1.1.md) / [Rev 2.0 핀맵](../docs/hardware/external-gpio-rev2.0.md).
 
 > 📋 **각 예제 README 공통 포맷 (5-step Lab Manual)**: ① 목표 / ② 사전 지식 / ③ 핵심 코드 / ④ 실험 + 변형 / ⑤ 다음 단계 + ⚠️ 흔한 실수
 
@@ -193,6 +196,8 @@ Stage 5      Shared Autonomy         [S1 + S2 + Human]
 | [03](03_Button_LED_FSM/) | 상태 머신 모드 전환 | 중급 | `XM_TSM_*`, `XM_BTN_LONG_PRESS` |
 
 ### External I/O (04~06)
+
+> 외부 GPIO 헤더의 커넥터 위치·핀 라벨은 보드 리비전마다 다릅니다. 시작 전 사용 중인 보드의 [Rev 1.1 핀맵](../docs/hardware/external-gpio-rev1.1.md) 또는 [Rev 2.0 핀맵](../docs/hardware/external-gpio-rev2.0.md) 을 펴두세요.
 
 | 예제 | 제목 | 난이도 | 핵심 API |
 | :---: | :--- | :---: | :--- |
