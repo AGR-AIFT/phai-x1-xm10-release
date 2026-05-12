@@ -43,6 +43,7 @@ docs/api-reference/*
 !docs/advanced/
 docs/advanced/*
 !docs/advanced/README.md
+!docs/advanced/ai-data-pipeline.md
 !docs/architecture/
 docs/architecture/*
 !docs/architecture/README.md

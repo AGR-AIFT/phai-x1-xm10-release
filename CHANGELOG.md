@@ -13,6 +13,9 @@
 * **Claude Code 온보딩 인프라** — `CLAUDE.md`, `AGENTS.md`, `.claude/skills/student-onboard/` (6 단계 phased 안내), `.claude/skills/example-helper/` (예제별 트러블 응답)
 * **`docs/getting-started/00-claude-code-quickstart.md`** — AI 자동 안내 진입 페이지
 * **`docs/hardware/`** — 보드 외부 인터페이스 통합 안내 + Rev 1.1 / Rev 2.0 별 외부 GPIO 핀맵
+* **`docs/advanced/ai-data-pipeline.md`** — 보드 데이터 → PyTorch / sklearn 학습 흐름 한 페이지 정리 (3 가지 길 + PhAI Studio 연동)
+* **`docs/tutorials/README.md` 16 주 수업 진도표** — 강사용 한 학기 운영 참고 진도표
+* **`docs/student-walkthrough-simulations.md`** — 가상 학생 5 명 UX 시뮬레이션 (강사·멘토용 체크리스트)
 * **`assets/img/README.md`** — 이미지 자료 우선순위 가이드 (Tier 1~6, 35 개 placeholder 목록)
 
 ### Changed

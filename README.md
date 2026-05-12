@@ -84,11 +84,11 @@ git clone https://github.com/AGR-EXO/Extension_Module.git C:\dev\Extension_Modul
 | 수준 | 추천 순서 | 시간 |
 | :--- | :--- | :--- |
 | 입문 | Ex.00 → 01 → 04 → 07 → 10a → 11 | 3 시간 정도 |
-| 중급 | Ex.02 → 05b → 08 → 10b → 12 → 14 → 18 | 1 주 정도 |
-| 고급 | Ex.03 → 09 → 10c → 15 → 16 → 17 → 19 → 20+ | 한 학기 |
+| 중급 | Ex.02 → 05b → 08 → 10b → 12 → 14 → 18 | 1 주 정도 (하루 1~2 시간) |
+| 고급 | Ex.03 → 09 → 10c → 15 → 16 → 17 → 19 → 20+ | 한 학기 (예제당 1~2 주씩 깊이) |
 | Physical AI 응용 | Ex.21 → 31 → 32 → 33 → 36 | 자기주도 |
 
-전체 인덱스 + 난이도별 정리: **[docs/tutorials/](docs/tutorials/)** · 예제 카탈로그: **[examples/](examples/)**
+전체 인덱스 + 난이도별 정리: **[docs/tutorials/](docs/tutorials/)** · 한 학기 수업 진도표 예시도 같은 페이지 · 예제 카탈로그: **[examples/](examples/)**
 
 ---
 
