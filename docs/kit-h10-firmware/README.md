@@ -13,6 +13,18 @@ XM10은 KIT H10과 CAN-FD로 연동되므로 **XM FW 버전에 맞는 KIT H10 �
 
 ---
 
+## 🎯 한눈 의사결정 가이드
+
+| 상황 | 무엇이 필요한가 | 어디로 |
+|------|---------------|-------|
+| **새 XM10 받음, H10 새것** | 호환성 매트릭스 확인 → 일치하면 그대로 사용 | ↓ 매트릭스 |
+| **XM10 v2.0.0 인데 H10 가 구버전** | CM/SAM10/ESP32 + ContentsFiles 업데이트 | ↓ 펌웨어 업데이트 (USB Stick) |
+| **펌웨어는 OK, 모션맵/음성 갱신** | ContentsFiles 만 SD카드 교체 | ↓ 컨텐츠 파일 업데이트 (SD카드) |
+| **업데이트 도중 빨간 LED** | 오류 발생 | ↓ 오류 대응 표 |
+| **수동 작업 불가** | 지원 요청 | [Discussions Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a) |
+
+---
+
 ## 버전 호환성 매트릭스
 
 | XM FW 버전 | KIT H10 FW 버전 | ContentsFiles | 비고 |
@@ -153,7 +165,12 @@ CM 내부의 SD카드(SanDisk Micro SD Max Endurance)에는 다음 폴더가 존
 
 ### 수동 작업이 어려운 경우
 
-Discussions의 [Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a)에 문의를 남겨주세요.
+| 채널 | 용도 |
+|------|------|
+| [GitHub Discussions Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a) | 일반 질문 + 절차 문의 |
+| [GitHub Issues](https://github.com/AGR-EXO/Extension_Module/issues) | 버그 리포트 + 기능 제안 |
+| Release 의 **`KIT_H10_FW_Update.pdf`** | 펌웨어 업데이트 사진 매뉴얼 |
+| Release 의 **`KIT_H10_ContentsFiles_Update.pdf`** | 컨텐츠 파일 업데이트 사진 매뉴얼 |
 
 ---
 

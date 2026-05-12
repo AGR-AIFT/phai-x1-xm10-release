@@ -8,119 +8,132 @@
   <a href="#"><img src="https://img.shields.io/badge/Platform-STM32H7-blue.svg" alt="Platform"></a>
   <a href="#"><img src="https://img.shields.io/badge/OS-FreeRTOS-orange.svg" alt="OS"></a>
   <a href="#"><img src="https://img.shields.io/badge/Comm-CAN--FD-red.svg" alt="CAN-FD"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Examples-41-success.svg" alt="Examples"></a>
   <a href="/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
 </p>
 
-**`XM10`은 angel Robotics의 고관절 보조 로봇 `KIT H10`의 두뇌를 확장하는 알고리즘 개발 플랫폼입니다.**
+<p align="center">
+  <b>angel Robotics 의 고관절 보조 로봇 <code>KIT H10</code> 두뇌를 확장하는 알고리즘 개발 플랫폼</b>
+</p>
 
-연구실에 갇혀 있던 아이디어를 실제 로봇에서 실현하세요. 검증된 하드웨어 위에 사용자 알고리즘을 자유롭게 설계하고, 생체 신호 센서를 연동하며, AI 모듈과의 연계까지 확장할 수 있습니다.
+<p align="center">
+  검증된 외골격 하드웨어 위에 사용자 알고리즘을 자유롭게 설계.<br>
+  생체 신호 센서 연동, AI 모듈 확장, 실시간 데이터 분석까지 — <b>한 보드에서 끝</b>.
+</p>
 
-> **대학 및 기업 연구원** · **의료기기 엔지니어** · **로봇 공학 학생** 을 위한 부분 개방형 R&D 플랫폼
+<p align="center">
+  <i>대학 · 기업 연구원 · 의료기기 엔지니어 · 로봇 공학 학생 을 위한 부분 개방형 R&D 플랫폼</i>
+</p>
 
 ---
 
-## 🤖 Claude Code 와 함께 시작하기
+## 🚀 시작하기
 
-`STM32CubeIDE` / 임베디드 경험이 없는 **학생 · 신규 개발자** 를 위한 AI 자동 안내 모드를 지원합니다.
+### 🤖 AI 와 함께 (권장 — 처음이라면)
 
-레포 디렉토리에서 [Claude Code](https://claude.com/claude-code) 를 실행한 뒤 다음 한 줄을 입력하세요:
+`STM32CubeIDE` / 임베디드 경험이 전혀 없어도 OK. **Claude Code** 가 환경 구축부터 LED 점등까지 6 단계를 대화로 안내합니다.
 
 ```
-"처음 시작할게"   또는   "/student-onboard"
+1. Claude Code 설치    →   https://claude.com/claude-code
+2. 본 레포에서 실행    →   claude
+3. AI 에게 한 줄       →   "처음 시작할게"   또는   /student-onboard
 ```
 
-AI 가 STM32CubeIDE 설치 → 프로젝트 import → 빌드 → 플래시 → LED 점등까지 **6 단계로 자동 안내** 합니다.
+> 📖 상세 가이드: **[docs/getting-started/00-claude-code-quickstart.md](docs/getting-started/00-claude-code-quickstart.md)**
 
-> 상세: [📖 docs/getting-started/00-claude-code-quickstart.md](docs/getting-started/00-claude-code-quickstart.md)
+### 🛠️ 수동 진행 (AI 미사용)
+
+```bash
+# 1. Clone — 짧고 한글 없는 경로 권장
+git clone https://github.com/AGR-EXO/Extension_Module.git C:\dev\Extension_Module
+
+# 2. STM32CubeIDE 에서 Import
+#    File → Import → Existing Projects into Workspace
+#    Root: C:\dev\Extension_Module\XM10_SDK\Rev2.0\Extension_Module\
+
+# 3. Build (Ctrl+B) → Debug (F11)
+```
+
+> 📖 단계별 상세: **[docs/getting-started/](docs/getting-started/)** (Hardware → Software → First Build)
 >
-> AI 미사용자는 아래 "빠른 시작 (Quick Start)" 절차를 그대로 따라가셔도 됩니다.
+> ⚠️ **H10 펌웨어 호환성**: XM v2.0.0 ↔ **KIT H10 v2.3.0** 필수. 구버전이면 → [KIT H10 Firmware 가이드](docs/kit-h10-firmware/)
 
 ---
 
-## 핵심 기능
+## 🛠️ 무엇을 만들 수 있나
 
-| 기능 | 설명 |
+| 영역 | 내용 |
 | :--- | :--- |
-| **독자적 알고리즘 개발** | C 코드로 제어 알고리즘을 제약 없이 이식. PIF-Vectors와 Auxiliary Inputs로 KIT H10의 움직임을 설계 |
-| **생체 신호 연동** | EMG, GRF, FSR 등 센서 허브를 CAN-FD로 손쉽게 연동. 사용자 의도에 실시간 반응하는 시스템 구축 |
-| **고해상도 데이터 분석** | 1ms 주기로 USB 메모리 저장(MSC) 또는 PC 실시간 스트리밍(CDC). MATLAB, Python으로 정밀 분석 |
-| **AI 기반 상위 제어** | Jetson Orin NX, AGX 등과 연동하여 강화학습, 머신러닝 기반 상위 제어 알고리즘 통합 |
+| 🦾 **외골격 제어 알고리즘** | C 코드로 직접 설계. PI-Vector + Auxiliary Inputs 로 KIT H10 움직임 완전 제어 |
+| 🧠 **생체 신호 통합** | EMG / GRF / FSR 센서 허브 CAN-FD 직결, 사용자 의도에 실시간 반응 |
+| 📈 **고해상도 데이터** | 1 ms 주기 USB 메모리 로깅 (MSC) + PC 실시간 스트리밍 (CDC), MATLAB / Python 자동 분석 |
+| 🤖 **AI 상위 제어** | Jetson Orin NX / AGX 연동 강화학습 + 머신러닝 + MCU 내장 Tiny NN |
 
 ---
 
-## 시스템 아키텍처
+## 🧱 시스템 아키텍처
 
 <p align="center">
   <img width="1895" height="930" alt="XM10 FW Architecture" src="https://github.com/user-attachments/assets/6f3e0f15-6865-459b-9fe2-6bf2cff27103" />
 </p>
 
-* **Application Layer** — `XM_Apps/User_Algorithm`에서 `XM API`만으로 로봇의 모든 기능을 제어
-* **Facade Layer (XM API)** — 복잡한 내부를 숨기고 단순한 창구(API)를 제공하는 파사드 패턴
-* **angel Robotics Library** — System, Services, Middlewares, Devices, IOIF가 라이브러리로 제공
+| 레이어 | 역할 | 학생 작업? |
+| :--- | :--- | :-: |
+| **Application** | `User_Algorithm/user_app.c` — XM API 만으로 로봇 전체 제어 | ✅ |
+| **Facade (XM API)** | 복잡한 내부를 숨기는 단일 API 창구 (파사드 패턴) | 호출만 |
+| **angel Robotics Library** | System / Services / Devices / IOIF — `.a` 라이브러리 제공 | 사용만 |
+| **Middlewares + HAL** | FreeRTOS, USB CDC/MSC, FatFs, STM32H7 HAL | — |
 
-> 전체 아키텍처 상세: **[Architecture](docs/architecture/)**
-
----
-
-## 빠른 시작 (Quick Start)
-
-### 1. 개발 환경 구축
-
-* [STM32CubeIDE **v2.0.0** 이상](https://www.st.com/en/development-tools/stm32cubeide.html) 설치
-* 레포지토리 Clone:
-
-```bash
-git clone https://github.com/AGR-EXO/Extension_Module.git C:\XM_SDK
-```
-
-> **경로 주의사항**
-> * 프로젝트를 **짧은 경로**에 Clone하세요 (예: `C:\XM_SDK\`, `D:\Projects\XM\`)
-> * `C:\Users\...\OneDrive\...\` 같은 깊은 경로는 Windows MAX_PATH 제한으로 빌드 오류 발생 가능
-> * 경로에 **한글, 공백, 특수문자**가 포함되지 않도록 주의
->
-> 상세 내용: [Troubleshooting - 경로 문제](docs/troubleshooting.md#경로-길이-문제-windows-max_path)
-
-### 2. 프로젝트 빌드
-
-1. STM32CubeIDE → `File > Import... > Existing Projects into Workspace`
-2. Clone 받은 `XM10_SDK/Extension_Module` 폴더를 Root directory로 지정
-3. <img width="21" height="23" alt="Build" src="https://github.com/user-attachments/assets/06d3cdfb-4974-4e9e-8119-5e8a92e5b081" /> Build 클릭 → 에러 없이 완료 확인
-
-### 3. 펌웨어 업로드
-
-1. KIT H10 ↔ XM10 연결, ST-Link 디버거 ↔ XM10 SWD 포트 연결
-2. <img width="23" height="21" alt="Debug" src="https://github.com/user-attachments/assets/da49493b-a58f-4b43-9dc3-83ba26bdc7de" /> Debug 클릭 → 펌웨어 업로드 및 디버깅 시작
-
-> 단계별 상세 가이드: **[Getting Started](docs/getting-started/)**
-
-> **KIT H10 FW 호환성:** XM FW v2.0.0은 **KIT H10 FW v2.3.0** 이상이 필요합니다. H10 FW가 이전 버전이라면 먼저 업데이트하세요. → **[KIT H10 Firmware 가이드](docs/kit-h10-firmware/)**
+> 📖 IPO 제어 루프 + RTOS Task 우선순위 + 호출 체인 상세: **[docs/architecture/](docs/architecture/)**
 
 ---
 
-## 문서
+## 📚 학습 경로
+
+41 개의 예제가 **5-step Lab Manual** 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + ⚠️) 으로 통일되어 있습니다.
+
+| 단계 | 추천 경로 | 소요 시간 |
+| :--- | :--- | :--- |
+| **🚀 입문** | Ex.00 → 01 → 04 → 07 → 10a → 11 | ~3 시간 |
+| **🛠️ 중급** | Ex.02 → 05b → 08 → 10b → 12 → 14 → 18 | ~1 주 |
+| **🧠 고급** | Ex.03 → 09 → 10c → 15 → 16 → 17 → 19 → 20+ | 수업 학기 |
+| **🤖 응용 (Physical AI)** | Ex.21 → 31 → 32 → 33 → 36 | 자기주도 |
+
+> 📖 7 개 Part 전체 인덱스 + 난이도 별: **[docs/tutorials/](docs/tutorials/)**
+> 📖 예제 41 개 카탈로그: **[examples/](examples/)**
+
+---
+
+## 📖 전체 문서
 
 | 문서 | 설명 |
 | :--- | :--- |
-| **[Getting Started](docs/getting-started/)** | 하드웨어 연결부터 첫 빌드까지 3단계 가이드 |
-| **[Tutorials](docs/tutorials/)** | 20개 예제로 배우는 단계별 학습 (기초 → USB → 로봇 제어) |
-| **[API Reference](docs/api-reference/)** | XM API 전체 함수 명세 |
-| **[KIT H10 Firmware](docs/kit-h10-firmware/)** | H10 FW/ContentsFiles 버전 호환성 및 업데이트 가이드 |
-| **[Examples](examples/)** | 예제 소스 코드 (각 폴더에 README 포함) |
-| **[Python Tools](PythonDecoder/)** | CDC/MSC 데이터 수신, 분석, 디코딩 도구 |
-| **[Architecture](docs/architecture/)** | 시스템 아키텍처, 프로토콜, FW 레이어 구조 |
-| **[Troubleshooting](docs/troubleshooting.md)** | FAQ 및 빌드 오류 해결 |
+| **[Getting Started](docs/getting-started/)** | 하드웨어 연결 → 환경 구축 → 첫 빌드 (3 단계) |
+| **[Tutorials](docs/tutorials/)** | 41 개 예제 학습 로드맵 (난이도/시간/추천 경로) |
+| **[API Reference](docs/api-reference/)** | XM API 8 그룹 전체 함수 명세 + ⚠️ 흔한 실수 |
+| **[Architecture](docs/architecture/)** | FW 레이어 + IPO 제어 루프 + RTOS Task |
+| **[KIT H10 Firmware](docs/kit-h10-firmware/)** | H10 FW + ContentsFiles 호환성 + 업데이트 |
+| **[Bootloader](docs/bootloader/)** | AGR_BOOT V2 — SWD + PhAI Studio FTP |
+| **[Advanced Topics](docs/advanced/)** | 자기주도 학습 권장 경로 6 분야 |
+| **[Troubleshooting](docs/troubleshooting.md)** | 빌드/하드웨어/통신 오류 학생 친화 카탈로그 |
+| **[Examples](examples/)** | 예제 41 개 (각 폴더에 5-step README) |
+| **[Python Tools](PythonDecoder/)** | CDC/MSC 디코더, MATLAB 변환 |
 | **[Changelog](CHANGELOG.md)** | 버전별 변경 이력 |
 
 ---
 
-## 개발 진행 상황
+## 🤝 참여 + 지원
 
-본 프로젝트는 활발하게 연구 개발이 진행 중입니다. 기능 개선, 버그 수정, 문서 업데이트가 수시로 이루어질 예정이므로 주기적으로 업데이트해 주시기 바랍니다.
+본 프로젝트는 활발히 연구 개발 중. 기능 개선 · 버그 수정 · 문서 보강이 수시로 진행됩니다.
 
-버그 리포트, 기능 제안, 문서 개선 등 어떤 형태의 기여도 환영합니다.
+| 채널 | 용도 |
+| :--- | :--- |
+| [GitHub Issues](https://github.com/AGR-EXO/Extension_Module/issues) | 버그 리포트 · 기능 제안 |
+| [GitHub Discussions](https://github.com/AGR-EXO/Extension_Module/discussions) | Q&A · 사용 사례 공유 |
+| Claude Code 안의 `example-helper` 스킬 | "Ex.XX 가 안 돼" 즉시 트러블슈팅 |
 
 ---
 
 ## 라이선스
 
-본 프로젝트는 [MIT License](/LICENSE)를 따릅니다.
+[MIT License](/LICENSE)
