@@ -4,7 +4,7 @@
   <img width="332" height="231" alt="XM10 Board" src="https://github.com/user-attachments/assets/871dc578-57ab-41ed-8d39-76a43e65f24d" />
 </p>
 <p align="center">
-  <a href="https://github.com/angel-robotics/Extension_Module/releases/tag/v2.0.0"><img src="https://img.shields.io/badge/Release-v2.0.0-brightgreen.svg" alt="Release"></a>
+  <a href="https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.1.1"><img src="https://img.shields.io/badge/Release-v2.1.1-brightgreen.svg" alt="Release"></a>
   <a href="#"><img src="https://img.shields.io/badge/Platform-STM32H7-blue.svg" alt="Platform"></a>
   <a href="#"><img src="https://img.shields.io/badge/OS-FreeRTOS-orange.svg" alt="OS"></a>
   <a href="#"><img src="https://img.shields.io/badge/Comm-CAN--FD-red.svg" alt="CAN-FD"></a>
@@ -29,14 +29,23 @@
 
 ## 시작하기
 
+본 SDK 는 **GitHub Releases 에서 ZIP 으로 배포**됩니다. git clone 이 아닌 **본인 보드 리비전 ZIP 만 다운로드**하면 됩니다.
+
+📦 **다운로드**: [Releases v2.1.1](https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.1.1) → Assets 섹션
+- **Rev2.0 보드** → `Rev2.0.zip` (대부분 여기)
+- **Rev1.1 보드** → `Rev1.1.zip`
+- 보드 라벨로 본인 리비전 확인 후 선택. 모호하면 → [docs/architecture/](docs/architecture/) 비교표
+
 ### AI 와 함께 (가장 빠릅니다)
 
 STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code** 가 설치부터 보드 LED 점등까지 대화로 안내해줍니다.
 
 ```
-1. Claude Code 설치    →   https://claude.com/claude-code
-2. 레포 폴더에서 실행   →   claude
-3. AI 에게 한 줄        →   "처음 시작할게"   또는   /student-onboard
+1. SDK ZIP 다운로드     →   Releases 에서 본인 Rev 의 ZIP
+2. 압축 해제            →   C:\dev\Extension_Module  (한글·공백 경로 금지)
+3. Claude Code 설치     →   https://claude.com/claude-code
+4. 압축 푼 폴더에서 실행 →   claude
+5. AI 에게 한 줄         →   "처음 시작할게"   또는   /student-onboard
 ```
 
 자세한 흐름: [docs/getting-started/00-claude-code-quickstart.md](docs/getting-started/00-claude-code-quickstart.md)
@@ -44,19 +53,23 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 ### 직접 진행하고 싶다면
 
 ```bash
-# 1. Clone — 한글 없는 짧은 경로에
-git clone https://github.com/AGR-EXO/Extension_Module.git C:\dev\Extension_Module
+# 1. SDK ZIP 다운로드
+#    https://github.com/AGR-EXO/Extension_Module/releases/latest
+#    → Rev2.0.zip (또는 Rev1.1.zip) 선택
 
-# 2. STM32CubeIDE 에서 Import
+# 2. 압축 해제 — 한글·공백 없는 짧은 경로에
+#    예: C:\dev\Extension_Module\
+
+# 3. STM32CubeIDE 에서 Import
 #    File → Import → Existing Projects into Workspace
-#    Root: C:\dev\Extension_Module\XM10_SDK\Rev2.0\Extension_Module\
+#    Root: 압축 해제 폴더 안의 Extension_Module\ (.project 가 있는 폴더)
 
-# 3. Build (Ctrl+B) → Debug (F11)
+# 4. Build (Ctrl+B) → Debug (F11)
 ```
 
 단계별 상세: [docs/getting-started/](docs/getting-started/) (하드웨어 → 환경 구축 → 첫 빌드)
 
-> **H10 펌웨어 버전 확인**: XM v2.0.0 은 **KIT H10 v2.3.0** 과 짝입니다. 구버전이면 먼저 → [KIT H10 Firmware 가이드](docs/kit-h10-firmware/)
+> **H10 펌웨어 버전 확인**: XM v2.1.1 은 **KIT H10 v2.3.0** 과 짝입니다. 구버전이면 먼저 → [KIT H10 Firmware 가이드](docs/kit-h10-firmware/)
 
 ---
 
@@ -119,6 +132,7 @@ Extension_Module/
 │   └── Rev2.0/Extension_Module/  ← PCB Rev 2.0 용 (대부분 여기)
 ├── PythonDecoder/         ← USB 메모리 / 시리얼 디코더
 ├── assets/img/            ← 보드 사진 + 다이어그램 (사용자가 추가)
+├── .claude/skills/        ← Claude Code 학생 온보딩 / 예제 트러블슈팅 스킬
 ├── CLAUDE.md / AGENTS.md  ← AI 코딩 도구 진입점 (Claude Code 등)
 ├── CHANGELOG.md           ← 버전별 변경 이력
 └── LICENSE

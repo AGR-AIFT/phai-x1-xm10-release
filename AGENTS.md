@@ -24,7 +24,7 @@
 
 ## 절대 룰
 
-1. 한글·공백 경로 금지 (CubeIDE 설치 경로 + clone 경로 모두)
+1. 한글·공백 경로 금지 (CubeIDE 설치 경로 + SDK ZIP 압축 해제 경로 모두)
 2. USB-CDC 단일 점유 — PhAI Studio 와 시리얼 터미널 동시 사용 금지
 3. 사용자 코드 영역: `XM_Apps/User_Algorithm/` 또는 `examples/*/` 만 수정. 라이브러리 (`XM_Lib`, `IOIF`, `AGR_MW`) 봉인.
 4. HW Rev 호환: `Rev1.1` vs `Rev2.0` 독립 SDK — 본인 보드 리비전 확인 필요

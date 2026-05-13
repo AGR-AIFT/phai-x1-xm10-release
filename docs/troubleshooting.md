@@ -14,11 +14,13 @@ XM10 개발 중 자주 발생하는 문제와 해결 방법을 정리한 문서�
 
 **해결 방법:**
 
-**방법 1: 짧은 경로에 프로젝트 이동 (권장)**
+**방법 1: 짧은 경로에 SDK 압축 해제 (권장)**
 
-```bash
-# 드라이브 루트에 가까운 짧은 경로로 Clone
-git clone https://github.com/angel-robotics/Extension_Module.git C:\XM_SDK
+본 SDK 는 GitHub Releases 의 ZIP 으로 받습니다. 압축 해제 위치를 드라이브 루트에 가깝게 잡으면 경로 길이 문제를 피할 수 있습니다.
+
+```powershell
+# Releases 페이지에서 본인 Rev ZIP 다운로드 후
+Expand-Archive -Path "$HOME\Downloads\Rev2.0.zip" -DestinationPath C:\XM_SDK\ -Force
 ```
 
 | 구분 | 경로 예시 | 빌드 최대 경로 |
@@ -244,9 +246,9 @@ if (pressed) { /* 1회만 실행 */ }
 
 **증상:** `C:\Users\홍길동\...` 경로에서 빌드 시 한글 인코딩 또는 MAX_PATH 문제
 
-**해결:** 사용자 폴더 대신 **드라이브 루트** 에 clone:
+**해결:** 사용자 폴더 대신 **드라이브 루트** 에 SDK 압축 해제:
 ```powershell
-git clone https://github.com/AGR-EXO/Extension_Module.git C:\dev\Extension_Module
+Expand-Archive -Path "$HOME\Downloads\Rev2.0.zip" -DestinationPath C:\dev\ -Force
 ```
 
 #### 클라우드 동기화 폴더 (OneDrive, iCloud) 에 clone
@@ -257,6 +259,6 @@ git clone https://github.com/AGR-EXO/Extension_Module.git C:\dev\Extension_Modul
 
 ---
 
-문제가 해결되지 않으면 [GitHub Issues](https://github.com/angel-robotics/Extension_Module/issues)에 문의해주세요.
+문제가 해결되지 않으면 [GitHub Issues](https://github.com/AGR-EXO/Extension_Module/issues)에 문의해주세요.
 
 > 🤖 Claude Code 사용자: `"Ex.XX 가 안 돼"` 또는 `"빌드 에러 났어"` 한 줄로 `example-helper` 스킬이 본 페이지의 해당 항목 + 예제 README 의 ⚠️ 섹션을 인용해 답합니다.
