@@ -56,7 +56,7 @@
 
 ---
 
-콘텐츠 요청이나 기여는 [GitHub Issues](https://github.com/angel-robotics/Extension_Module/issues)에서 받고 있습니다.
+콘텐츠 요청이나 기여는 [GitHub Issues](https://github.com/AGR-EXO/Extension_Module/issues)에서 받고 있습니다.
 
 ---
 
