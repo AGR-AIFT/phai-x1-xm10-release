@@ -67,6 +67,12 @@ Expand-Archive -Path "$HOME\Downloads\Rev2.0.zip" -DestinationPath C:\dev\ -Forc
 cd C:\dev\Extension_Module
 ```
 
+압축 푼 폴더 (`C:\dev\Extension_Module\`) 한 곳이 **모든 역할의 단일 진입점** 입니다:
+
+- ✅ **Claude Code 진입 폴더** — `claude` 실행 시 이 폴더의 `CLAUDE.md` (Rev 특화) + `.claude/skills/` 자동 로드
+- ✅ **CubeIDE Import root** — 이 폴더 자체를 import (`.project` 가 폴더 root 에 있음)
+- ✅ **코드 작성 폴더** — `XM_Apps/User_Algorithm/user_app.c` 가 같은 폴더 안에서 바로 접근
+
 > 💡 ZIP 내부 최상위 폴더명이 다르면 (`Extension_Module-Rev2.0/` 같은) `Get-ChildItem C:\dev\` 로 실제 이름 확인 후 `cd` 명령 조정하세요.
 
 ### 3. Claude Code 실행 + 자동 안내 트리거

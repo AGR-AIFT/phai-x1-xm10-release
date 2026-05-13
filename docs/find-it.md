@@ -19,7 +19,7 @@
 
 | 상황 | 어디로 |
 |------|--------|
-| 내 코드 어디에 쓰지 | `XM10_SDK/Rev2.0/Extension_Module/XM_Apps/User_Algorithm/user_app.c` |
+| 내 코드 어디에 쓰지 | `XM_Apps/User_Algorithm/user_app.c` (ZIP 압축 푼 폴더 기준) |
 | 내 코드가 언제 호출되는지 | [docs/architecture/README.md](architecture/README.md) |
 | 함수 시그니처 / API 명세 | [docs/api-reference/](api-reference/) |
 | 버튼 / LED 제어 | [api-reference/03-led-btn-control.md](api-reference/03-led-btn-control.md) + Ex.01~03 |

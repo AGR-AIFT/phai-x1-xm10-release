@@ -27,9 +27,10 @@ CubeIDE 가 자동으로 만들어 줍니다.
 
 `File` → `Import...` → `General` → **`Existing Projects into Workspace`** → `Next`
 
-`Browse...` → 본인 보드 리비전 폴더:
-- **Rev 2.0 보드** (최신): `C:\dev\Extension_Module\XM10_SDK\Rev2.0\Extension_Module\`
-- **Rev 1.1 보드**: `C:\dev\Extension_Module\XM10_SDK\Rev1.1\Extension_Module\`
+`Browse...` → **압축 푼 폴더 자체** 선택:
+- 권장: `C:\dev\Extension_Module\` (`.project` 가 폴더 root 에 있음)
+
+본 SDK ZIP 은 Rev 별로 평탄화 배포라 (Rev1.1.zip / Rev2.0.zip), 압축 풀면 본인 Rev SDK 한 벌이 ZIP root 에 그대로 들어있습니다. Rev 폴더 안으로 들어갈 필요 없습니다.
 
 `Projects:` 리스트에 `Extension_Module` 표시 → `Finish`
 
@@ -82,7 +83,7 @@ XM10 보드의 LED 1 이 1 초 주기로 두근-두근 깜빡이면 → 펌웨�
 ### 빌드
 
 - **`fatal error: 'xxx.h' file not found`** — Include Path 가 빠졌습니다. Project Properties → C/C++ Build → Settings 에서 확인.
-- **`undefined reference to 'xxx'`** — 라이브러리 (`.a`) 파일이 없습니다. SDK 폴더가 손상됐을 가능성 — 02 단계부터 다시 clone.
+- **`undefined reference to 'xxx'`** — 라이브러리 (`.a`) 파일이 없습니다. SDK 폴더가 손상됐을 가능성 — 02 단계부터 다시 ZIP 다운로드 + 압축 해제.
 - **`region 'RAM' overflowed by N bytes`** — 코드가 메모리 한계를 넘었어요. 큰 배열·구조체부터 줄여보세요.
 - **빌드가 너무 느립니다** — 백신이 임시 파일을 계속 스캔하는 경우. CubeIDE workspace 폴더를 백신 예외에 등록하세요.
 - **`1 errors`** — Console 상단의 빨간 에러 메시지를 통째로 AI 에게 붙여넣고 물어보세요.

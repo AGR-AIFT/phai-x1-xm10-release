@@ -59,13 +59,16 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 # 2. 압축 해제 — 한글·공백 없는 짧은 경로에
 #    예: C:\dev\Extension_Module\
+#    압축 풀면 ZIP root 에 .project, CLAUDE.md, docs/, examples/, .claude/ 가 함께 있음
 
 # 3. STM32CubeIDE 에서 Import
 #    File → Import → Existing Projects into Workspace
-#    Root: 압축 해제 폴더 안의 Extension_Module\ (.project 가 있는 폴더)
+#    Root: 압축 해제 폴더 자체 (C:\dev\Extension_Module\ — .project 가 여기에 있음)
 
 # 4. Build (Ctrl+B) → Debug (F11)
 ```
+
+> 💡 본 SDK 는 **Rev 별로 독립 ZIP 배포** 입니다. Rev2.0.zip 을 풀면 Rev 2.0 SDK 한 벌이 ZIP root 에 평탄화되어 들어있고, Rev1.1.zip 도 마찬가지로 Rev 1.1 SDK 만 들어있습니다. 보드 라벨로 본인 Rev 확인 후 정확한 ZIP 선택하세요.
 
 단계별 상세: [docs/getting-started/](docs/getting-started/) (하드웨어 → 환경 구축 → 첫 빌드)
 
@@ -111,6 +114,8 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 ## 폴더 구조 한눈에
 
+> 본 트리는 **GitHub 레포 전체 구조** (사내 개발 view). 학생이 받는 **ZIP 다운로더 (Rev1.1.zip / Rev2.0.zip)** 는 본인 Rev SDK 한 벌이 ZIP root 에 평탄화되어 있고, `docs/`, `examples/`, `.claude/`, `CLAUDE.md` (Rev 특화) 가 함께 들어있습니다. 학생은 압축 푼 폴더 안에서만 작업합니다.
+
 ```
 Extension_Module/
 ├── README.md              ← 지금 보는 페이지
@@ -138,7 +143,7 @@ Extension_Module/
 └── LICENSE
 ```
 
-내가 손대는 코드 위치: `XM10_SDK/Rev2.0/Extension_Module/XM_Apps/User_Algorithm/user_app.c`. 그 외는 라이브러리가 알아서.
+내가 손대는 코드 위치: `XM_Apps/User_Algorithm/user_app.c` (ZIP 압축 푼 폴더 기준). 그 외는 라이브러리가 알아서.
 
 ## 전체 문서
 

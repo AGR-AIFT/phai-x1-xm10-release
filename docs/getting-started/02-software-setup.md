@@ -67,9 +67,21 @@ Expand-Archive -Path "$HOME\Downloads\Rev2.0.zip" -DestinationPath C:\dev\ -Forc
 
 ✅ 검증:
 ```powershell
-Test-Path C:\dev\Extension_Module\README.md
+Test-Path C:\dev\Extension_Module\.project      # CubeIDE 프로젝트 파일
+Test-Path C:\dev\Extension_Module\CLAUDE.md     # AI 진입점
 ```
-`True` 가 출력되면 성공.
+둘 다 `True` 면 성공. 압축 풀린 폴더 (`C:\dev\Extension_Module\`) 자체가 **CubeIDE 가 Import 할 프로젝트 root** 이자 **Claude Code 가 켜질 진입 폴더** 입니다.
+
+압축 푼 폴더 안에 다음이 모두 있어야 정상:
+
+| 항목 | 역할 |
+|------|------|
+| `.project`, `.cproject`, `*.ld`, `startup_*.s` | CubeIDE 프로젝트 + 빌드 설정 |
+| `CLAUDE.md` | AI 도구 자동 안내 진입점 (Rev 특화) |
+| `.claude/skills/` | Claude Code 학생 온보딩/예제 트러블 스킬 |
+| `docs/`, `examples/` | 학습 문서 + 41 개 실습 예제 |
+| `Drivers/`, `XM_API/`, `XM_Apps/`, `XM_FW/`, `XM_Lib/` | SDK 코드 |
+| `Middlewares/`, `FATFS/`, `LWIP/` (Rev 2.0 만) | HAL/CMSIS/STM32 미들웨어 |
 
 > 💡 ZIP 내부 최상위 폴더명이 다르면 (`Extension_Module-Rev2.0/` 같은) `Get-ChildItem C:\dev\` 로 실제 이름을 확인하고 후속 경로를 조정하세요. 필요하면 `Rename-Item` 으로 `Extension_Module` 로 통일해도 됩니다.
 
