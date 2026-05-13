@@ -1034,7 +1034,7 @@ void Active_Loop(void) {
 | `XM.status.h10.*` 가 모두 0 | KIT H10 미연결 또는 CAN-FD HIGH/LOW 핀 거꾸로 | [01-hardware-setup.md](../getting-started/01-hardware-setup.md) Figure 1 핀맵 확인 |
 | `XM.status.h10.is_connected` 가 false | CAN-FD 케이블 헐겁거나 H10 본체 전원 OFF | KIT H10 24 V 입력 + 깊은 커넥터 삽입 |
 | `SetAssistTorque` 호출했는데 토크 0 | `XM_SetControlMode(XM_CTRL_TORQUE)` 미호출 | Active 진입 시 1회 모드 설정 필요 |
-| 토크 명령은 보내지는데 H10 안 움직임 | KIT H10 FW < v2.3.0 (XM v2.0.0 비호환) | [kit-h10-firmware/](../kit-h10-firmware/) 가이드로 업데이트 |
+| 토크 명령은 보내지는데 H10 안 움직임 | KIT H10 FW < v2.3.0 (XM v2.0.0 이상 비호환) | [kit-h10-firmware/](../kit-h10-firmware/) 가이드로 업데이트 |
 | `gaitCycle`, `forwardVelocity` 등이 항상 0 | `XM_SendUserBodyData()` 미호출 (Body Data 전제조건) | [examples/README.md](../../examples/README.md#part-5) Body Data 안내 참조 |
 | IPO 사이클이 어긋남 / Tick 누락 | `User_Loop` 안에서 blocking 호출 (osDelay 등) | `XM_GetTick()` + 논블로킹 패턴 사용 ([Ex.08](../../examples/08_CDC_Sensor_Print/)) |
 | `XM.command` 직접 쓰기 시 효과 없음 | `XM.command` 는 Staging 영역 — `XM_Set*` 함수가 dirty flag 설정 | 반드시 setter 함수 (`XM_SetAssistTorque` 등) 사용 |

@@ -12,7 +12,7 @@ XM10 보드의 프로세서는 PC 와 종류가 다르기 때문에, C 코드를
 
 | 항목 | 필수 여부 | 용도 | 다운로드 |
 |------|---------|------|---------|
-| STM32CubeIDE v1.13.2+ | 필수 | C 코드 → 보드 기계어 변환 + 디버거 | [st.com](https://www.st.com/en/development-tools/stm32cubeide.html) (ST 계정 무료 가입 필요) |
+| STM32CubeIDE v2.0.0+ | 필수 | C 코드 → 보드 기계어 변환 + 디버거 | [st.com](https://www.st.com/en/development-tools/stm32cubeide.html) (ST 계정 무료 가입 필요) |
 | 7-Zip | 선택 | ZIP 압축 해제 (Windows 기본 도구가 깨질 때 대안) | [7-zip.org](https://www.7-zip.org/) |
 
 CubeIDE 가 컴파일러 + ST-Link USB 드라이버 + J-Link 드라이버까지 같이 깔아줍니다. git 은 필요하지 않습니다 — SDK 는 GitHub Releases 의 ZIP 으로 받습니다.
@@ -23,7 +23,7 @@ CubeIDE 가 컴파일러 + ST-Link USB 드라이버 + J-Link 드라이버까지 
 
 ### 1. STM32CubeIDE 설치
 
-1. ST 공식 페이지 접속 → v1.13.2 이상 선택 → ST 계정 로그인 → Windows 버전 다운로드
+1. ST 공식 페이지 접속 → v2.0.0 이상 선택 → ST 계정 로그인 → Windows 버전 다운로드
 2. 설치 마법사 진행 — **반드시 다음 항목 확인**:
 
 | 항목 | 권장 | 비권장 |

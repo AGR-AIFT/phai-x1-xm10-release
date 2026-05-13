@@ -136,7 +136,7 @@ if (XM_GetButtonState(BUTTON_USER1) == BUTTON_PRESSED) {
 | Ex.14 README 읽기 | 5 단계 lab manual 포맷 ✅ | |
 | "사전 지식" 섹션 | "PD 제어식은 알지만 `XM_SetUserTorque*` API 가 처음" | API 시그니처 명시 ✅ |
 | 핵심 코드 복사 | `user_app.c` 에 그대로 붙임 | 잘됨 ✅ |
-| **빌드 후 H10 연결** | "H10 펌웨어 v2.3.0 인지 어떻게 확인?" | 루트 README 에 "v2.0.0 은 v2.3.0 과 짝" 명시 + kit-h10-firmware 링크 ✅ |
+| **빌드 후 H10 연결** | "H10 펌웨어 v2.3.0 인지 어떻게 확인?" | 루트 README 에 "XM v2.0.0 이상 ↔ H10 v2.3.0 짝" 명시 + kit-h10-firmware 링크 ✅ |
 | **실험 4 단계 변형** | "Kp 값을 어떻게 튜닝해야 하지" | Ex.14 README 의 변형 섹션이 "Kp 를 2 배로 늘려보세요" 같은 구체 안내 ✅ |
 
 ### ③ 깊이 있는 변형
