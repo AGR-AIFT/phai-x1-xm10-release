@@ -1,12 +1,13 @@
 ---
 name: student-onboard
 description: |
-  XM10 처음 시작 학생 온보딩. STM32CubeIDE 설치 → 프로젝트 import → 빌드 → 플래시 → LED 점등까지
+  XM10 처음 시작 학생 온보딩. STM32CubeIDE 설치 → SDK ZIP 다운로드 + Import → 빌드 → 플래시 → LED 점등까지
   6단계 phased 자동 안내. 학생이 사용자 코드 작성 직전 단계 (Ex.00 Quick Start) 까지 도달시키는 것이 목표.
+  배포 형태: per-Rev ZIP (Rev1.1.zip / Rev2.0.zip) via GitHub Releases — git clone 미사용.
 
   TRIGGER when:
     - 사용자가 "처음 시작", "환경 구축", "XM10 시작", "수업에서 받았어", "getting started" 언급
-    - 사용자가 GitHub URL (Extension_Module) 공유 후 첫 응답 단계
+    - 사용자가 GitHub URL (Extension_Module) 또는 Release 페이지 URL 공유 후 첫 응답 단계
     - 사용자가 "/student-onboard" 명시 호출
     - CLAUDE.md 자동 로드 직후 사용자가 onboarding 의도 표시
 
@@ -34,7 +35,7 @@ XM10 보드를 처음 받는 학생을 위한 phased 환경 구축 가이드. MC
 |---|------|------|------|
 | 0 | 사전 점검 | OS / 한글 경로 / 관리자 권한 / 이미 완료 여부 확인 | (본 파일 하단) |
 | 1 | CubeIDE 설치 | STM32CubeIDE 다운로드 페이지 자동 오픈 + 설치 검증 | [phases/01-install-cubeide.md](phases/01-install-cubeide.md) |
-| 2 | Clone + Import | 한글 없는 경로에 clone + CubeIDE Existing Project Import | [phases/02-clone-and-import.md](phases/02-clone-and-import.md) |
+| 2 | Download + Import | GitHub Releases 에서 본인 Rev ZIP 다운로드 + 압축 해제 + CubeIDE Existing Project Import | [phases/02-download-and-import.md](phases/02-download-and-import.md) |
 | 3 | Build | Build All + `.elf` 생성 확인 | [phases/03-build-firmware.md](phases/03-build-firmware.md) |
 | 4 | Flash | ST-Link 연결 + Debug/Run 으로 플래시 | [phases/04-flash-firmware.md](phases/04-flash-firmware.md) |
 | 5 | LED 검증 | 전원 LED + Status LED 점등 확인 | [phases/05-verify-leds.md](phases/05-verify-leds.md) |
@@ -66,21 +67,23 @@ echo "ok"
 - 성공 → 다음 검사
 
 ```powershell
-# 4) git / curl 등 기본 도구 존재
-where git
+# 4) PowerShell 압축 해제 도구 (Windows 10+ 기본 내장) 존재
+Get-Command Expand-Archive
 ```
-- 실패 → "Git for Windows 설치 필요: https://git-scm.com/download/win" 안내 (Start-Process 또는 markdown 링크)
+- 실패 → "PowerShell 5.0+ 필요 (Windows 10 이상). Windows 업데이트 확인 또는 [7-Zip](https://www.7-zip.org/) 설치" 안내
 - 성공 → Phase 1 진입 안내:
    ```
    ✅ Phase 0 통과. 이제 Phase 1 (STM32CubeIDE 설치) 로 진행할게요.
    준비됐으면 "다음" 또는 "Phase 1 시작" 이라고 말씀해주세요.
    ```
 
+> 💡 git 은 본 SDK 사용에 필수가 아닙니다. SDK 는 GitHub Releases ZIP 으로 받으므로 git clone 이 필요하지 않습니다. git 이 있다면 업데이트 추적/PR 등에 편하지만 학습 진행에는 무관.
+
 ## 트리거 메커니즘
 
 - **1차 (텍스트 매칭)**: description 의 트리거 키워드 → AI 가 본 skill 호출 판단
 - **2차 (CLAUDE.md 안내)**: 학생이 CLAUDE.md 의 "처음 시작 안내" 박스를 보고 명시적으로 트리거
-- **3차 (URL-first cold path)**: 학생이 GitHub URL 만 공유한 cold 상태 → AI 가 `WebFetch` 로 본 SKILL.md 또는 CLAUDE.md 읽고 진입
+- **3차 (URL-first cold path)**: 학생이 GitHub 레포 URL 또는 Releases 페이지 URL 만 공유한 cold 상태 → AI 가 `WebFetch` 로 본 SKILL.md 또는 CLAUDE.md 읽고 진입. SDK 는 git clone 이 아닌 `Rev1.1.zip` / `Rev2.0.zip` 다운로드 + 압축 해제 (Phase 2 참조).
 
 ## 종료 조건
 

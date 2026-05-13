@@ -68,5 +68,5 @@ where STM32CubeIDE.exe
 
 ## ➡️ 다음 단계
 
-✅ Phase 1 완료. Phase 2 (레포 clone + 프로젝트 import) 로 진행:
-→ [02-clone-and-import.md](02-clone-and-import.md)
+✅ Phase 1 완료. Phase 2 (SDK ZIP 다운로드 + 프로젝트 import) 로 진행:
+→ [02-download-and-import.md](02-download-and-import.md)
