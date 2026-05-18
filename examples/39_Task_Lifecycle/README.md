@@ -73,4 +73,4 @@ if (s_heavy != NULL && XM_Task_IsComplete(s_heavy)) {
 ## 다음 단계
 
 - 본 예제 + Ex.38 패턴 결합 → Periodic + OneShot 혼합
-- 자세한 토폴로지: [`docs/api-reference/09-background-task.md`](../../docs/api-reference/09-background-task.md)
+- 자세한 토폴로지: [`docs/api-reference/09-task-creation.md`](../../docs/api-reference/09-task-creation.md)

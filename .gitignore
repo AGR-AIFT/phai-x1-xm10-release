@@ -45,7 +45,7 @@ docs/api-reference/*
 !docs/api-reference/06-usb-data-logging.md
 !docs/api-reference/07-memory-management.md
 !docs/api-reference/08-rtc-clock.md
-!docs/api-reference/09-background-task.md
+!docs/api-reference/09-task-creation.md
 !docs/api-reference/README.md
 !docs/advanced/
 docs/advanced/*

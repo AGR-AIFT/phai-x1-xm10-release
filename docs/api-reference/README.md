@@ -18,7 +18,7 @@
 | 06 | [USB 메모리 로깅](06-usb-data-logging.md) | USB 메모리에 자동 저장 | `XM_SetUsbLogSource`, `XM_StartUsbDataLog`, `XM_StopUsbDataLog` |
 | 07 | [메모리 영역](07-memory-management.md) | 빠른 메모리 + 비휘발성 저장소 | `XM_GetUserWorkspace`, `XM_GetUserPSRAM`, `XM_UserNV_Read/Write` |
 | 08 | [실시간 시계](08-rtc-clock.md) | 날짜/시간 읽기·쓰기 | `XM_RTC_SetDateTime`, `XM_RTC_GetDateTime`, `XM_RTC_IsRunning` |
-| 09 | [보조 task + 데이터 공유](09-background-task.md) | 1 kHz 제어 루프와 별도 작업 + 안전한 데이터 공유 | `XM_Task_CreateOneShot/Periodic`, `XM_Mutex_Lock/Unlock` |
+| 09 | [보조 task + 데이터 공유](09-task-creation.md) | 1 kHz 제어 루프와 별도 작업 + 안전한 데이터 공유 | `XM_Task_CreateOneShot/Periodic`, `XM_Mutex_Lock/Unlock` |
 
 ---
 

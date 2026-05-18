@@ -3,7 +3,7 @@
 > XM10 SDK 의 사용자 보조 task 작성 가이드. 시스템 task 인벤토리 + 우선순위 +
 > 데이터 흐름 + 공유변수 패턴 4가지.
 
-**Audience**: SDK 사용자 (학생 / 연구자 / 일반 로보틱스 개발자)
+**Audience**: SDK 사용자 (연구자 / 학습자 / 일반 로보틱스 개발자)
 **Date**: 2026-05-15
 **Related**:
 - 사용자 API: [`XM_FW/XM_API/xm_api_freertos.h`](../../XM_FW/XM_API/xm_api_freertos.h)
