@@ -28,6 +28,9 @@ docs/*
 docs/release-notes/*
 !docs/release-notes/README.md
 !docs/release-notes/v2.1.1.md
+!docs/release-notes/v2.2.0.md
+!docs/dev/
+!docs/dev/12_Task_Topology.md
 !docs/getting-started/
 docs/getting-started/*
 !docs/getting-started/00-claude-code-quickstart.md
