@@ -55,14 +55,14 @@ typedef enum {
 
 /**
  * @brief USB 스트리밍용 데이터 구조체
- * @details 계단식 램프 프로파일 핵심 변수를 실시간 스트리밍합니다.
- *          PhAI Studio User Custom 모드에서 4채널 float로 표시됩니다.
+ * @details PF3~PF6 ADC 전압을 실시간 스트리밍합니다.
+ *          PC monitor에서 4채널 float로 표시됩니다.
  */
 typedef struct {
-    float step;             // 현재 단계 (0~19)
-    float level;            // 현재 토크 레벨 (Nm)
-    float torque_cmd;       // 토크 명령 (Nm)
-    float phase;            // 위상 (0=ramp, 1=hold, 2=done)
+    float pf3_volt;         // PF3 raw voltage (V)
+    float pf4_volt;         // PF4 raw voltage (V)
+    float pf5_volt;         // PF5 raw voltage (V)
+    float pf6_volt;         // PF6 raw voltage (V)
 } RampStreamData_t;
 
 /**
@@ -204,10 +204,10 @@ void User_Setup(void)
 
     // USB 스트리밍 설정 (User Custom 모드)
     XM_SetUsbCustomMeta(0xF0,
-        "[{\"name\":\"Step\",\"unit\":\"\"},"
-        "{\"name\":\"Level\",\"unit\":\"Nm\"},"
-        "{\"name\":\"Torque Cmd\",\"unit\":\"Nm\"},"
-        "{\"name\":\"Phase\",\"unit\":\"\"}]");
+        "[{\"name\":\"PF3\",\"unit\":\"V\"},"
+        "{\"name\":\"PF4\",\"unit\":\"V\"},"
+        "{\"name\":\"PF5\",\"unit\":\"V\"},"
+        "{\"name\":\"PF6\",\"unit\":\"V\"}]");
 
     // DIO_1~DIO_4 (PF3~PF6)를 ADC3 모드로 전환 — 16-bit 4채널 ADC 입력
     XM_SwitchDioToAdc(XM_EXT_DIO_1);
@@ -442,10 +442,10 @@ static void _UpdateUsbDebug(void)
  */
 static void _UpdateStreamData(void)
 {
-    s_stream_data.step        = (float)s_step;
-    s_stream_data.level       = (float)MAX_LEVEL * TORQUE_STEP_NM;
-    s_stream_data.torque_cmd  = s_torque_cmd;
-    s_stream_data.phase       = (float)s_phase;
+    s_stream_data.pf3_volt = pf3_volt;
+    s_stream_data.pf4_volt = pf4_volt;
+    s_stream_data.pf5_volt = pf5_volt;
+    s_stream_data.pf6_volt = pf6_volt;
     XM_SendUsbDataWithId(&s_stream_data, sizeof(s_stream_data), 0xF0);
 }
 
