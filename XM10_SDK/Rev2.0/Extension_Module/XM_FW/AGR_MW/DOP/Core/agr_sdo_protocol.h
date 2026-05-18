@@ -86,7 +86,7 @@ void AGR_SDO_CreateAbortResponse(AGR_SDO_Msg_t* out_rsp,
  * OD Entry를 조회하여 응답을 생성합니다.
  * DOP-level 콜백(on_sdo_request)은 상위 Facade에서 처리합니다.
  */
-int AGR_SDO_ProcessRequest(const AGR_OD_Table_t* od,
+int32_t AGR_SDO_ProcessRequest(const AGR_OD_Table_t* od,
                            const AGR_SDO_Msg_t* req,
                            AGR_SDO_Msg_t* out_rsp);
 
@@ -102,7 +102,7 @@ int AGR_SDO_ProcessRequest(const AGR_OD_Table_t* od,
  * @param out_buf 출력 버퍼 (최소 4 + data_len 바이트)
  * @return 인코딩된 바이트 수, <0=에러
  */
-int AGR_SDO_Encode(const AGR_SDO_Msg_t* msg, uint8_t* out_buf);
+int32_t AGR_SDO_Encode(const AGR_SDO_Msg_t* msg, uint8_t* out_buf);
 
 /**
  * @brief SDO 메시지 디코딩 (바이트 버퍼에서)
@@ -111,7 +111,7 @@ int AGR_SDO_Encode(const AGR_SDO_Msg_t* msg, uint8_t* out_buf);
  * @param out_msg 출력 SDO 메시지
  * @return 0=성공, <0=에러
  */
-int AGR_SDO_Decode(const uint8_t* in_buf,
+int32_t AGR_SDO_Decode(const uint8_t* in_buf,
                    uint8_t in_len,
                    AGR_SDO_Msg_t* out_msg);
 

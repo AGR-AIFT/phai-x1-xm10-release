@@ -51,6 +51,9 @@
 /** @brief GPIO bit-bang 딜레이 루프 카운트 (~5us @480MHz) */
 #define IOIF_I2C_BUS_RECOVERY_DELAY_LOOPS  (100U)
 
+/** @brief 자동 복구 reset 시도 한계 default (recovery.reset_attempt_limit == 0 시 사용) */
+#define IOIF_I2C_DEFAULT_RESET_ATTEMPT_LIMIT  (5U)
+
 typedef uint32_t IOIF_I2Cx_t;
 
 typedef enum {
@@ -83,6 +86,27 @@ typedef struct {
         size_t tx_size;
         size_t rx_size;
     } dma;
+
+    /**
+     * @brief 자동 복구 정책 (Optional, RTOS 모드 전용)
+     *
+     * Hybrid recovery model:
+     *   - IOIF: 자동 reset (threshold 도달 시) + circuit breaker (limit 도달 시 BUS_DEAD)
+     *   - Caller: 명시적 ioif_i2c.reset() — IOIF 의 BUS_DEAD 상태도 강제 해제
+     *
+     * @field auto_reset_after    연속 에러 N회 도달 시 다음 transaction 시작 직전에
+     *                            자동으로 internal reset 호출. 0 = 비활성 (backward compat).
+     * @field reset_attempt_limit 자동 reset 시도 한계. 도달 시 instance 가 BUS_DEAD 상태로
+     *                            진입하여 모든 transaction 이 NO_RESOURCE 즉시 리턴.
+     *                            0 + auto_reset_after > 0 = IOIF_I2C_DEFAULT_RESET_ATTEMPT_LIMIT(5)
+     *                            적용. caller 가 명시적 reset() 호출 시 BUS_DEAD 해제.
+     *
+     * 성공 transaction 1회 발생 시 consecutive_errors / reset_attempts 모두 0 으로 초기화.
+     */
+    struct {
+        uint16_t auto_reset_after;
+        uint8_t  reset_attempt_limit;
+    } recovery;
     #endif
 } IOIF_I2C_Initialize_t;
 
@@ -109,6 +133,15 @@ typedef struct {
      *         HAL_I2C_ERROR_TIMEOUT, HAL_I2C_ERROR_SIZE
      */
     uint32_t (*get_last_error)(IOIF_I2Cx_t id);
+
+    /**
+     * @brief BUS_DEAD 상태 조회
+     * @details 자동 복구 limit 에 도달하여 IOIF 가 transaction 을 영구 거부 중인지 확인.
+     *          true 반환 시 모든 transaction 이 NO_RESOURCE 리턴. caller 가 명시적
+     *          reset() 호출 시 false 로 복구됨.
+     * @return true = bus dead (recovery 포기), false = 정상
+     */
+    bool (*is_bus_dead)(IOIF_I2Cx_t id);
 } IOIF_I2C_Handle_t;
 
 extern IOIF_I2C_Handle_t ioif_i2c;

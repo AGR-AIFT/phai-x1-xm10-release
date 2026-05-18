@@ -2,30 +2,27 @@
  ******************************************************************************
  * @file    fes_hub_drv.h
  * @author  HyundoKim
- * @brief   [Device Layer] XM10 ↔ FES Hub 통신 드라이버 (Master, CANopen 표준)
- * @version 1.0
- * @date    2026-03-21
+ * @brief   [Device Layer] XM10 <-> FES Hub 통신 드라이버 (Master, DOP V3 ES-vector)
+ * @version 2.0
+ * @date    2026-04-09
  *
  * @details
- * XM10(Master)이 FES Hub(Slave, Node 0x0A)와 DOP/PnP로 통신하기 위한 드라이버.
- * IMU Hub 드라이버 패턴을 기반으로, FES 모듈에 맞게 단순화.
+ * XM10(Master)이 FES Hub(Slave, Node 0x0C)와 DOP/PnP로 통신하기 위한 드라이버.
+ * IMU Hub 드라이버 패턴을 기반으로, FES ES-vector 모델에 맞게 리팩토링.
+ *
+ * [V2.0 변경 — ES-vector 모델 (2026-04-09)]
+ * - 기존 14B RPDO 모델 (FesHub_Cmd_t / RpdoPayload_t / SendRPDO1) 완전 폐기
+ * - ES-vector 6B: 비주기 SDO Download (0x6300, atomic 단일 프레임)
+ * - Master Command 1B: SDO Download (0x6310, 가상 ISI EXT 트리거)
+ * - TPDO1 (0x18C, 37B): FES Feedback (Legacy 16B + KHJ 21B: FSM/ISI/target/impedance)
+ * - Pre-Op: TPDO1 Mapping + NMT START (RPDO mapping step 제거)
  *
  * [통신 구조]
- * - FES Hub Node ID: 0x0A
- * - RPDO1 (0x20A): FES Command  (2ch × 7B = 14B, Master → Slave)
- * - TPDO1 (0x18A): FES Feedback (16B, Slave → Master)
- * - SDO Request  (0x60A): OD 읽기/쓰기 (PDO Mapping 설정)
- * - SDO Response (0x58A): OD 기반 응답
- * - Heartbeat (0x70A): PnP Master가 처리
- *
- * [메시지 처리 흐름]
- * canfd_rx_handler.c 에서 라우팅:
- *     ├─ 0x700: Boot-up/Heartbeat → AGR_PnP_Master_ProcessMessage() [PnP Master]
- *     ├─ 0x580: SDO Response → FesHub_Drv_ProcessCANMessage() [Device Driver]
- *     └─ 0x180: TPDO1 → FesHub_Drv_ProcessCANMessage() [Device Driver]
- *
- * [RPDO1 전송]
- * Application Task에서 FesHub_Drv_SendRPDO1() 호출 → FES Hub로 명령 전송
+ * - FES Hub Node ID: 0x0C (AGR_NODE_ID_FES_HUB, Node ID v3.0)
+ * - TPDO1 (0x18C): FES Feedback (37B = Legacy 16B + KHJ 21B, Slave -> Master, 10ms)
+ * - SDO Request  (0x60C): ES-vector Write + Master Cmd + OD 설정
+ * - SDO Response (0x58C): OD 기반 응답
+ * - Heartbeat (0x70C): PnP Master가 처리
  *
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
@@ -54,15 +51,13 @@
 
 /**
  *-----------------------------------------------------------
- * SCALING — int16 ↔ float 변환
+ * SCALING — int16 <-> float 변환
  *-----------------------------------------------------------
- * - Amplitude: int16 / 10.0f → float mA (0.1mA 정밀도)
- * - Frequency: uint16 / 10.0f → float Hz (0.1Hz 정밀도)
- * - Voltage:   uint16 / 100.0f → float V (0.01V 정밀도)
  */
-#define FESHUB_SCALE_AMPLITUDE      10.0f
-#define FESHUB_SCALE_FREQUENCY      10.0f
-#define FESHUB_SCALE_VOLTAGE        100.0f
+#define FESHUB_SCALE_AMPLITUDE      10.0f   /**< x10: mA, 0.1mA precision */
+#define FESHUB_SCALE_FREQUENCY      10.0f   /**< x10: Hz, 0.1Hz precision */
+#define FESHUB_SCALE_VOLTAGE        100.0f  /**< x100: V, 0.01V precision */
+#define FESHUB_SCALE_IMPEDANCE      10.0f   /**< x10: ohm, 0.1ohm precision */
 
 /**
  *-----------------------------------------------------------
@@ -71,18 +66,7 @@
  */
 
 /**
- * @brief FES 채널 명령 코드 (XM → FES Hub, RPDO)
- */
-typedef enum {
-    FESHUB_CMD_NOP         = 0x00,  /**< No operation */
-    FESHUB_CMD_SET_PARAM   = 0x01,  /**< 파라미터 설정 (IDLE → READY) */
-    FESHUB_CMD_START       = 0x02,  /**< 자극 시작 (READY → STIMULATING) */
-    FESHUB_CMD_STOP        = 0x03,  /**< 자극 정지 (→ RAMP_DOWN → IDLE) */
-    FESHUB_CMD_RESET_FAULT = 0x04,  /**< Fault 리셋 (FAULT → IDLE) */
-} FesHub_Cmd_t;
-
-/**
- * @brief FES 채널 상태 (FES Hub → XM, TPDO)
+ * @brief FES 채널 상태 (FES Hub -> XM, TPDO)
  */
 typedef enum {
     FESHUB_STATE_IDLE        = 0,
@@ -92,21 +76,27 @@ typedef enum {
 } FesHub_ChState_t;
 
 /**
- * @brief FES 채널별 명령 구조체 (RPDO1 서브 필드, 7B)
+ * @brief ES-vector 페이로드 (XM -> FES Hub, PPT 충실)
+ * @details 6 bytes, SDO Download to 0x6300:00 (atomic 단일 CAN-FD 프레임)
  */
 typedef struct __attribute__((packed)) {
-    uint8_t  command;            /**< FesHub_Cmd_t */
-    int16_t  amplitude_x10;     /**< mA × 10 (0.1mA 정밀도) */
-    uint16_t frequency_x10;     /**< Hz × 10 (0.1Hz 정밀도) */
-    uint16_t pulse_width_us;    /**< 펄스 폭 (μs) */
-} FesHub_ChCmd_t;  /* 7 bytes */
+    uint8_t  ch_select;      /**< [1,2,3] 1=CH1, 2=CH2, 3=Both */
+    uint8_t  amplitude_mA;   /**< [0..80] 전류 진폭 (mA) */
+    uint8_t  duty_x1000;     /**< [0..100] 듀티비 x0.001 */
+    uint8_t  frequency_Hz;   /**< [10..100] 펄스 주파수 (Hz) */
+    uint16_t burst_ms;       /**< LE, [0..60000, 65535=infinite] */
+} FesHub_ESVector_t;  /* 6 bytes */
 
 /**
- * @brief RPDO1 전송 페이로드 (XM → FES Hub, 14B)
+ * @brief Master Command (XM -> FES Hub, 가상 ISI EXT 트리거)
+ * @details SDO Download to 0x6310:00 (UINT8, 1-shot)
  */
-typedef struct __attribute__((packed)) {
-    FesHub_ChCmd_t ch[FESHUB_CH_COUNT];  /**< 2ch × 7B = 14B */
-} FesHub_RpdoPayload_t;  /* 14 bytes */
+typedef enum {
+    FESHUB_MCMD_NOOP         = 0,  /**< No operation */
+    FESHUB_MCMD_TOGGLE_CH1   = 1,  /**< CH1 토글 (가상 ISI EXT7) */
+    FESHUB_MCMD_TOGGLE_CH2   = 2,  /**< CH2 토글 (가상 ISI EXT8) */
+    FESHUB_MCMD_TOGGLE_BOTH  = 3,  /**< 양채널 (EXT7 + EXT8) */
+} FesHub_MasterCmd_t;
 
 /**
  * @brief FES Hub 수신 데이터 (TPDO1 디코딩 결과)
@@ -128,11 +118,24 @@ typedef struct {
     /* Digipot 위치 (0~127) */
     uint8_t digipot_pos;
 
+    /* ES-vector state: [3:0]=CH0, [7:4]=CH1 (ESState_t) */
+    uint8_t es_state_packed;
+
     /* Timestamp (24-bit ms) */
     uint32_t timestamp;
 
     /* Error Register */
     uint8_t error_register;
+
+    /* KHJ Current Control + ES-vector telemetry */
+    uint8_t  fsm_state;                              /**< FSM state_curr */
+    uint8_t  fsm_state_prev;                         /**< FSM state_prev */
+    uint8_t  isi_packed;                             /**< bit[N] = ISI[N] */
+    uint8_t  ch_es_error_lo[FESHUB_CH_COUNT];        /**< ES-vector error_code low byte */
+    float    ch_target_amplitude_mA[FESHUB_CH_COUNT]; /**< target amplitude (mA) */
+    float    ch_impedance[FESHUB_CH_COUNT];           /**< filtered impedance */
+    uint16_t ch_pulse_cnt[FESHUB_CH_COUNT];          /**< burst pulse counter */
+    float    ch_voltage_diff_V[FESHUB_CH_COUNT];     /**< differential voltage (V) */
 } FesHub_RxData_t;
 
 /**
@@ -144,7 +147,7 @@ typedef struct {
 /**
  * @brief FES Hub 드라이버 초기화 (XM Master)
  * @param tx_func     CAN 전송 함수
- * @param master_pnp  Master PnP 인스턴스 (pnp_task.c에서 제공)
+ * @param master_pnp  Master PnP 인스턴스
  * @return 0=성공, <0=에러
  */
 int FesHub_Drv_Init(AGR_TxFunc_t tx_func, AGR_PnP_Master_t* master_pnp);
@@ -154,12 +157,11 @@ int FesHub_Drv_Init(AGR_TxFunc_t tx_func, AGR_PnP_Master_t* master_pnp);
  * @param can_id CAN ID
  * @param data   수신 데이터
  * @param len    데이터 길이
- * @note canfd_rx_handler.c에서 호출 (0x58A, 0x18A)
  */
 void FesHub_Drv_ProcessCANMessage(uint16_t can_id, uint8_t* data, uint8_t len);
 
 /**
- * @brief 최신 FES Hub 데이터 읽기 (Lock-Free Double Buffer)
+ * @brief 최신 FES Hub 데이터 읽기 (Mutex + Snapshot)
  * @param[out] rx_data 수신 데이터
  * @return true=유효 데이터 있음
  */
@@ -167,13 +169,11 @@ bool FesHub_Drv_GetRxData(FesHub_RxData_t* rx_data);
 
 /**
  * @brief 데이터 준비 여부 확인
- * @return true=최소 1회 TPDO 수신 완료
  */
 bool FesHub_Drv_IsDataReady(void);
 
 /**
  * @brief FES Hub 연결 상태 확인
- * @return true=연결됨 (OPERATIONAL + Heartbeat OK)
  */
 bool FesHub_Drv_IsConnected(void);
 
@@ -183,15 +183,22 @@ bool FesHub_Drv_IsConnected(void);
 AGR_NMT_State_t FesHub_Drv_GetNmtState(void);
 
 /**
- * @brief RPDO1 전송 (FES 명령, XM → FES Hub)
- * @param payload RPDO1 페이로드 (14B, 2ch 명령)
+ * @brief ES-vector 전송 (XM -> FES Hub, SDO 0x6300:00)
+ * @param esv  ES-vector 페이로드 (6B)
+ * @return 0=성공, <0=에러
+ * @note CAN-FD 단일 프레임 atomic 전송 (AGR_CANFD_SendSDOWrite)
+ */
+int FesHub_Drv_SendESVector(const FesHub_ESVector_t* esv);
+
+/**
+ * @brief Master Command 전송 (XM -> FES Hub, SDO 0x6310:00)
+ * @param cmd  Master Command (1B)
  * @return 0=성공, <0=에러
  */
-int FesHub_Drv_SendRPDO1(const FesHub_RpdoPayload_t* payload);
+int FesHub_Drv_SendMasterCommand(FesHub_MasterCmd_t cmd);
 
 /**
  * @brief 주기 실행 (Pre-Op SM + Timeout/Retry)
- * @note pnp_task.c에서 100ms 주기로 호출
  */
 void FesHub_Drv_RunPeriodic(void);
 

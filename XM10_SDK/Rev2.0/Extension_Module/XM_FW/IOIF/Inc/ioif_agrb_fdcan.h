@@ -99,12 +99,6 @@ typedef void (*IOIF_FDCAN_RxCallback_t)(IOIF_FDCAN_Msg_t* msg);
 AGRBStatusDef IOIF_FDCAN_AssignInstance(IOIF_FDCANx_t* id, FDCAN_HandleTypeDef* hfdcan);
 
 /**
- * @deprecated [REMOVED] IOIF_FDCAN_GetRxSemaphore
- * 세마포어 Give/Take 동일 소스 원칙에 따라 RxTask가 IOIF 내부로 이동됨.
- * System Layer는 IOIF_FDCAN_RegisterRxCallback()으로 콜백만 등록하면 됨.
- */
-
-/**
  * @brief FDCAN 인스턴스의 통신을 시작합니다. (필터 설정 및 인터럽트 활성화 포함)
  * @param id IOIF_FDCAN_AssignInstance를 통해 발급받은 ID.
  * @return AGRBStatus_OK on success.
@@ -133,6 +127,17 @@ AGRBStatusDef IOIF_FDCAN_Transmit(IOIF_FDCANx_t id, uint32_t can_id, const uint8
 uint32_t IOIF_FDCAN_GetTxFifoFreeLevel(IOIF_FDCANx_t id);
 
 /**
+ * @brief 현재 HW Tx 에 pending 된 메시지 개수 (TXBRP popcount)
+ * @param id IOIF_FDCANx_t 핸들
+ * @return pending buffer 개수 (0 = idle, max = Tx FIFO/Queue 크기). invalid id 시 0
+ * @details TXBRP (Tx Buffer Request Pending) 레지스터의 set bit 수를 반환. Queue 모드에서
+ *          `GetTxFifoFreeLevel` 이 full flag 만 노출하므로, backpressure 진단 및 Live
+ *          Expression 관측에 적합. STM32H7/G4 FDCAN 공통.
+ * @note Thread-Safe: HW 레지스터 Read-Only (Mutex 불필요)
+ */
+uint32_t IOIF_FDCAN_GetTxInFlightCount(IOIF_FDCANx_t id);
+
+/**
  * @brief Rx FIFO0 채움 수준 확인 (HW 레지스터 Read-Only)
  * @param id IOIF_FDCANx_t 핸들
  * @return 채움 수준 (0=Empty, max=RxFifo0ElmtsNbr)
@@ -149,6 +154,44 @@ uint32_t IOIF_FDCAN_GetRxFifo0FillLevel(IOIF_FDCANx_t id);
  * @note Thread-Safe: HW 레지스터 Read-Only (Mutex 불필요)
  */
 AGRBStatusDef IOIF_FDCAN_GetErrorCounters(IOIF_FDCANx_t id, uint8_t* tec, uint8_t* rec);
+
+/**
+ * @brief IOIF 관측 FDCAN 이벤트 누적 통계
+ * @details `IOIF_FDCAN_GetErrorCounters` 가 실시간 HW TEC/REC snapshot 을 반환하는 반면,
+ *          본 구조는 `HAL_FDCAN_ErrorStatusCallback` 이 관측한 bus-off / error-passive
+ *          이벤트의 누적 카운트를 담는다. 텔레메트리/진단 용도.
+ */
+typedef struct {
+    uint32_t bus_off_count;              /**< Bus Off 이벤트 누적 횟수 */
+    uint32_t error_passive_count;        /**< Error Passive 이벤트 누적 횟수 */
+    uint8_t  last_tec_at_error_passive;  /**< 가장 최근 Error Passive 발생 시 TEC 값 */
+} IOIF_FDCAN_ErrorStats_t;
+
+/**
+ * @brief FDCAN 누적 에러 이벤트 통계 조회
+ * @param id IOIF_FDCANx_t 핸들
+ * @param[out] stats 누적 통계 구조체
+ * @return AGRBStatus_OK on success
+ * @note Thread-Safe: ISR 에서 volatile 증가, Task 에서 읽기. 필드별 uint32_t 는 ARM M4/M7
+ *       atomic 읽기 보장. struct 복사 중 ISR 개입 시 필드간 부분 최신 가능 (통계 용도 허용).
+ */
+AGRBStatusDef IOIF_FDCAN_GetErrorStats(IOIF_FDCANx_t id, IOIF_FDCAN_ErrorStats_t* stats);
+
+/**
+ * @brief SW Tx Queue 사용량 통계 조회
+ * @param id IOIF_FDCANx_t 핸들
+ * @param[out] now  현재 큐잉된 메시지 개수 (0 ~ IOIF_FDCAN_SW_TX_QUEUE_SIZE). NULL 허용
+ * @param[out] peak 관측된 최대 큐 사용량 (high-water mark). NULL 허용
+ * @param[out] drop Queue Full 로 인한 drop 누적 횟수. NULL 허용
+ * @return AGRBStatus_OK / AGRBStatus_ERROR (invalid id)
+ * @details `IOIF_FDCAN_GetTxInFlightCount` 가 HW Tx pending 을 보는 반면, 본 API 는
+ *          IOIF 내부의 SW queue 사용량을 본다. 두 값의 합 = 총 outstanding TX.
+ * @note Thread-Safe: volatile read. Task context 에서 호출.
+ */
+AGRBStatusDef IOIF_FDCAN_GetQueueStats(IOIF_FDCANx_t id,
+                                        uint8_t* now,
+                                        uint8_t* peak,
+                                        uint32_t* drop);
 
 /**
  * @brief FDCAN 프로토콜 상태 조회 (HW 레지스터 Read-Only)

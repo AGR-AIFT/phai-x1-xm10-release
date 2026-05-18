@@ -186,7 +186,7 @@ static void _UpdateStreamData(void);
 /**
  * @brief 사용자 초기 설정 — TSM 생성 및 상태 등록
  */
-void User_Setup(void)
+void Control_Setup(void)
 {
     // TSM 생성 (초기 상태: OFF — CM 연결 대기)
     s_tsm = XM_TSM_Create(XM_STATE_OFF);
@@ -228,7 +228,7 @@ void User_Setup(void)
 /**
  * @brief 메인 루프 — 1ms 주기로 호출됨
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
     // CM 연결 끊김 시 OFF 상태로 강제 전환 (안전 우선)
     if (!XM_IsCmConnected()) {

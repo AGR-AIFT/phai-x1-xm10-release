@@ -27,7 +27,7 @@
  * static AGR_PnP_Master_t s_master_pnp;
  *
  * void System_Init(void) {
- *     AGR_PnP_Master_Init(&s_master_pnp, AGR_NODE_ID_XM,
+ *     AGR_PnP_Master_Init(&s_master_pnp, MY_NODE_ID,
  *                          System_Fdcan1_Transmit, HAL_GetTick);
  *     ImuHub_Drv_Init(tx_func, &s_master_pnp);
  * }
@@ -36,7 +36,7 @@
  * void ImuHub_Drv_Init(AGR_TxFunc_t tx, AGR_PnP_Master_t* master) {
  *     AGR_PnP_Master_AddSlave(master, &(AGR_PnP_SlaveConfig_t){
  *         .name = "IMU Hub",
- *         .node_id = AGR_NODE_ID_IMU_HUB,
+ *         .node_id = SLAVE_NODE_ID,
  *         .heartbeat_timeout_ms = 3000,
  *         .on_bootup = _OnBootup,
  *     });
@@ -139,7 +139,7 @@ typedef struct {
  */
 typedef struct {
     /* 설정 */
-    uint8_t              my_node_id;     /**< Master 자신의 Node ID (e.g., AGR_NODE_ID_XM) */
+    uint8_t              my_node_id;     /**< Master 자신의 Node ID (System Config 매크로) */
     AGR_PnP_TxFunc_t     tx_func;        /**< CAN 전송 함수 */
     AGR_PnP_GetTickFunc_t get_tick;      /**< Tick 함수 */
 
@@ -164,14 +164,14 @@ typedef struct {
  * @brief Master PnP 초기화
  *
  * @param master     Master 인스턴스 (System Layer에서 정적 할당)
- * @param my_node_id 자신의 CANopen Node ID (e.g., AGR_NODE_ID_XM)
+ * @param my_node_id 자신의 CANopen Node ID (System Config 에서 정의)
  * @param tx_func    CAN 전송 함수 (Dependency Injection)
  * @param get_tick   Tick 함수 (HAL_GetTick 또는 IOIF_TIM_GetTick)
  * @return 0: 성공, <0: 에러
  *
  * @note System Layer(system_startup.c)에서 1회 호출합니다.
  */
-int AGR_PnP_Master_Init(AGR_PnP_Master_t* master,
+int32_t AGR_PnP_Master_Init(AGR_PnP_Master_t* master,
                          uint8_t my_node_id,
                          AGR_PnP_TxFunc_t tx_func,
                          AGR_PnP_GetTickFunc_t get_tick);
@@ -189,7 +189,7 @@ int AGR_PnP_Master_Init(AGR_PnP_Master_t* master,
  * ```c
  * int idx = AGR_PnP_Master_AddSlave(master, &(AGR_PnP_SlaveConfig_t){
  *     .name = "IMU Hub",
- *     .node_id = AGR_NODE_ID_IMU_HUB,
+ *     .node_id = SLAVE_NODE_ID,
  *     .heartbeat_timeout_ms = 3000,
  *     .callbacks = {
  *         .on_slave_bootup = _OnBootup,
@@ -200,7 +200,7 @@ int AGR_PnP_Master_Init(AGR_PnP_Master_t* master,
  * });
  * ```
  */
-int AGR_PnP_Master_AddSlave(AGR_PnP_Master_t* master,
+int32_t AGR_PnP_Master_AddSlave(AGR_PnP_Master_t* master,
                               const AGR_PnP_SlaveConfig_t* config);
 
 /**
@@ -257,7 +257,7 @@ void AGR_PnP_Master_ProcessMessage(AGR_PnP_Master_t* master,
  *
  * @details CANopen 표준: CAN ID = 0x000, Data = [cmd, node_id]
  */
-int AGR_PnP_Master_SendNmt(AGR_PnP_Master_t* master,
+int32_t AGR_PnP_Master_SendNmt(AGR_PnP_Master_t* master,
                             uint8_t slave_node_id,
                             AGR_NMT_Cmd_t cmd);
 

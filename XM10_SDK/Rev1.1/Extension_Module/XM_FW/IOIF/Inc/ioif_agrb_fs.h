@@ -279,6 +279,25 @@ AGRBFileSystemStatusDef ioif_filesystem_truncate(IOIF_FILEx_t id, FRESULT* fresu
  */
 AGRBFileSystemStatusDef ioif_filesystem_ProcessMount(void);
 
+/**
+ * @brief FATFS mount 준비 대기 (tight polling). data_logger 초기화 전 호출.
+ *
+ * @details
+ * 내부 do-while 루프로 ProcessMount() + is_ready() 를 timeout 내 반복.
+ * timeout_ms == 0 이어도 1회 시도 (try_once semantic).
+ * sleep 호출 없음 — 호출 task 가 timeout_ms 동안 CPU 점유 polling.
+ *
+ * @warning [Caller Contract] 본 함수는 polling API. 호출 task 가 block 됨.
+ *          - low-priority task (e.g. DataLoggerTask init) 또는 startup path 에서만 호출.
+ *          - 제어 주기 task / ISR 에서 호출 금지.
+ *
+ * @param timeout_ms 최대 대기 시간 (ms). 0 → 1회 시도만.
+ * @return IOIF_FileSystem_OK              : 준비 완료 (is_ready == true)
+ *         IOIF_FileSystem_TIMEOUT         : timeout 내 준비 안됨
+ *         IOIF_FileSystem_NOT_INITIALIZED : ioif_filesystem_init() 미호출
+ */
+AGRBFileSystemStatusDef ioif_filesystem_ensure_ready(uint32_t timeout_ms);
+
 /* ===================================================================
  * [유지] AGRBFileSystem 구조체 (API 추상화)
  * =================================================================== */
@@ -311,6 +330,7 @@ typedef struct {
     AGRBFileSystemStatusDef (*truncate)(IOIF_FILEx_t id, FRESULT* fresult);
     bool (*is_ready)(void);
     AGRBFileSystemStatusDef (*process_mount)(void);
+    AGRBFileSystemStatusDef (*ensure_ready)(uint32_t timeout_ms);
 
 } AGRBFileSystem_t;
 

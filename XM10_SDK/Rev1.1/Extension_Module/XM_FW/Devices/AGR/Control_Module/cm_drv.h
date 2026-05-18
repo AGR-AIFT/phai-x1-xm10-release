@@ -673,4 +673,35 @@ void CM_StageAuxTorque(SystemNodeID_t nodeId, float torque);
  */
 void CM_FlushControlPDOs(void);
 
+/* ====================================================================
+ *  [Phase 1] PDO Loop Counter 진단 API
+ *  FW 카운터 = CAN 수신 직후 품질 (DataLogger 큐 진입 전).
+ *  Python 디코더 = USB 저장 후 품질. 차이 = Hot Buffer drop 구간.
+ *
+ *  분류:
+ *   normal   : delta == 1 (정상)
+ *   dup      : delta == 0 (phase drift, 무해)
+ *   gap      : delta >  1, |delta| <= 1000 (CAN 수신 누락)
+ *   wrap     : |delta| > 1000 (카운터 wrap / 세션 경계)
+ *   missed_cycles : gap 시 누락된 H10 사이클 누적 합
+ *
+ *  Gap burst histogram (CM_PDO_GAP_HIST_BINS=5):
+ *   bin 0 = 1-miss, bin 1 = 2-miss, bin 2 = 3-miss (critical 경계),
+ *   bin 3 = 4-miss, bin 4 = 5-miss 이상
+ * ==================================================================== */
+#define CM_PDO_GAP_HIST_BINS    5
+
+typedef struct {
+    uint32_t normal_count;
+    uint32_t dup_count;
+    uint32_t gap_count;
+    uint32_t wrap_count;
+    uint32_t missed_cycles;
+    uint32_t gap_max_burst;                  /**< 단일 gap 최대 길이 (H10 cycles) */
+    uint32_t gap_hist[CM_PDO_GAP_HIST_BINS]; /**< gap 크기 분포 */
+} CM_PdoDiag_t;
+
+void CM_GetPdoDiag(CM_PdoDiag_t* diag);
+void CM_ResetPdoDiag(void);
+
 #endif /* DEVICES_CONTROL_MODULE_INC_CM_DRV_H_ */

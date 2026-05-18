@@ -79,6 +79,37 @@ typedef enum {
 } XmLogMarkerType_e;
 
 /**
+ * @brief USB-CDC 통신 모드.
+ * @details 한 보드/한 케이블에서 3가지 호스트 클래스를 분리 지원하기 위한
+ *          모드 분류. wire-level transport 와 역할(목적)을 함께 표현.
+ *          - PHAI       : PhAI Studio 실시간 telemetry (Total Data auto-pump)
+ *          - PRODUCTION : sensor-studio HW 검증 / SI 측정 / 양산 (COBS+CRC DOP)
+ *          - TERMINAL   : 예제 / Raw 터미널 — auto-pump OFF, 사용자 명시 TX 만
+ *
+ *          모드 전환 규칙:
+ *          - default (DTR=1) → PHAI
+ *          - 첫 유효 DOP frame (SDO Request 도달) → 자동 PRODUCTION latch
+ *          - DTR=0 / disconnect → PHAI 로 자동 복귀 (latch reset)
+ *          - 사용자 예제가 setup 에서 XM_USB_SetMode(TERMINAL) 호출 시 → 명시
+ *            전환, 자동 전환 비활성. TERMINAL 은 wire 신호로 식별 불가.
+ */
+typedef enum {
+    XM_USB_MODE_PHAI       = 0,
+    XM_USB_MODE_PRODUCTION = 1,
+    XM_USB_MODE_TERMINAL   = 2,
+} XM_USB_Mode_e;
+
+/**
+ * @brief USB-CDC 모드 변경 콜백.
+ * @details 모드가 실제 전환된 직후 호출. 향후 OD 모드 플래그(0x6000/0x7000)
+ *          양방향 동기화, LED 패턴 전환, sensor-studio Test Mode 진입/이탈
+ *          외부 알림 등에 사용. ISR 컨텍스트 호출 가능하므로 짧고 비차단.
+ * @param[in] prev 이전 모드
+ * @param[in] next 새 모드
+ */
+typedef void (*XM_USB_ModeChangeCb_t)(XM_USB_Mode_e prev, XM_USB_Mode_e next);
+
+/**
  *-----------------------------------------------------------
  * PUBLIC VARIABLES(extern)
  *-----------------------------------------------------------
@@ -163,6 +194,18 @@ bool XM_StartUsbDataLog(const char* sessionName, const char* metadata);
 void XM_StopUsbDataLog(void);
 
 /**
+ * @brief [Option A] 현재/마지막 활성 USB 세션 이름 조회.
+ * @details
+ *   Emergency Stop 후 재진입 시 같은 폴더에 이어쓰기 위한 용도.
+ *   최초 XM_StartUsbDataLog("")로 시작 → boot_count 기반 자동 이름 생성 →
+ *   이 API로 이름 조회 → 예제가 보관 →
+ *   재진입 시 XM_StartUsbDataLog(보관_이름) → FW가 같은 폴더에 data_001_*, data_002_* 등 증분.
+ * @param[out] out_buf  세션 이름 복사 버퍼
+ * @param[in]  buf_size 버퍼 크기 (>=32 권장)
+ */
+void XM_GetActiveUsbSessionName(char* out_buf, uint32_t buf_size);
+
+/**
  * @brief [실시간] 2ms 제어 루프에서 로그 데이터를 링 버퍼에 씁니다.
  * @details 이 함수는 비차단(Non-Blocking)이며, 링 버퍼에 memcpy 후
  * 원자적(atomic) 포인터 연산을 수행합니다.
@@ -184,14 +227,14 @@ XmLogStatus_e XM_GetUsbLogStatus(void);
  * @brief 자동 타임스탬프(4-byte tick_ms)를 활성화/비활성화합니다.
  * @param[in] enabled  true: 매 패킷 앞에 tick 자동 삽입 (기본값: true)
  *                     false: User 구조체에 이미 tick 포함 시 비활성화
- * @note User_Setup()에서 XM_StartUsbDataLog() 호출 전에 설정하세요.
+ * @note Control_Setup()에서 XM_StartUsbDataLog() 호출 전에 설정하세요.
  */
 void XM_SetUsbLogAutoTimestamp(bool enabled);
 
 /**
  * @brief 파일 롤링 크기를 설정합니다.
  * @param[in] size_mb  파일 분할 크기 (MB). 1~100, 기본값: 10.
- * @note User_Setup()에서 XM_StartUsbDataLog() 호출 전에 설정하세요.
+ * @note Control_Setup()에서 XM_StartUsbDataLog() 호출 전에 설정하세요.
  */
 void XM_SetUsbLogRollingSize(uint32_t size_mb);
 
@@ -263,11 +306,11 @@ bool XM_InsertUsbLogMarker(XmLogMarkerType_e type, uint16_t data);
  * PhAI V2 프로토콜: User payload를 SOF + SEQ_ID + MODULE_ID + CRC8으로 자동 래핑.
  * 
  * [사용법]
- *   1. User_Setup()에서 소스 등록:
+ *   1. Control_Setup()에서 소스 등록:
  *      XM_SetUsbStreamSource(&myData, sizeof(myData));
  *   2. (선택) Module ID 변경:
  *      XM_SetUsbStreamModuleId(0xF0);
- *   3. User_Loop()에서 직접 전송 또는 자동 전송:
+ *   3. Control_Loop()에서 직접 전송 또는 자동 전송:
  *      XM_SendUsbData(&myData, sizeof(myData));
  *
  * [Auto-Stream]
@@ -297,6 +340,50 @@ bool XM_IsUsbStreamingActive(void);
 void XM_SetUsbAutoStream(bool enabled);
 
 /**
+ * @brief 현재 USB-CDC 통신 모드를 조회합니다.
+ * @return XM_USB_Mode_e (PHAI / PRODUCTION / TERMINAL)
+ */
+XM_USB_Mode_e XM_USB_GetMode(void);
+
+/**
+ * @brief USB-CDC 통신 모드를 명시적으로 전환합니다.
+ * @details 예제·터미널 사용자는 setup 에서 XM_USB_SetMode(XM_USB_MODE_TERMINAL)
+ *          를 1회 호출하여 PhAI auto-pump 를 차단하고 깨끗한 텍스트 IO 만 사용.
+ *          PRODUCTION 으로의 자동 전환은 sensor-studio 의 첫 유효 DOP frame
+ *          수신 시 cdc_dop_router 가 수행하므로 명시 호출 불필요.
+ * @param[in] mode  전환할 모드.
+ * @note  TERMINAL 명시 후에는 PRODUCTION 자동 전환이 비활성화됨.
+ */
+void XM_USB_SetMode(XM_USB_Mode_e mode);
+
+/**
+ * @brief 모드 변경 콜백을 등록합니다.
+ * @details 향후 OD 모드 플래그 양방향 동기화, LED 패턴, 외부 표시기 트리거
+ *          용도. 등록은 1개만 유지 (마지막 등록자 우선). NULL 전달 시 해제.
+ * @param[in] cb  콜백 함수 포인터 (NULL 허용 = 해제)
+ */
+void XM_USB_RegisterModeChangeCallback(XM_USB_ModeChangeCb_t cb);
+
+/* ==========================================================================
+ * Internal — cdc_dop_router 전용 (사용자 호출 금지)
+ * ========================================================================== */
+
+/**
+ * @brief [Internal] 첫 유효 DOP frame 수신 시 cdc_dop_router 가 호출.
+ *        TERMINAL 모드(사용자 lock 상태) 가 아니면 PRODUCTION 으로 latch.
+ *        idempotent — 이미 PRODUCTION 이면 무동작.
+ * @return true: 이 호출이 실제 전환을 일으킴, false: 무변화
+ */
+bool XM_USB_RequestProductionLatch(void);
+
+/**
+ * @brief [Internal] DTR=0 (USB 분리 / re-enumerate) 시 cdc_handler 가 호출.
+ *        PHAI 로 자동 복귀 + 사용자 lock 해제. 다음 DTR=1 시 다시 PHAI →
+ *        (첫 DOP frame 도착 시) PRODUCTION 라이프사이클 재개.
+ */
+void XM_USB_OnDtrLost(void);
+
+/**
  * @brief [실시간] USB CDC로 데이터를 PhAI 패킷으로 래핑하여 전송합니다.
  * @deprecated XM_SendUsbDataWithId()로 대체됨. Module ID를 명시적으로 지정하세요.
  * @details 1ms 주기 내에서 안전하게 호출 가능 (Non-blocking).
@@ -322,9 +409,9 @@ void XM_SetUsbStreamModuleId(uint8_t module_id);
  * 데이터를 추가로 전송하고 싶을 때 아래 API를 사용합니다.
  *
  * [사용법]
- *   1. User_Setup()에서 메타데이터 등록:
+ *   1. Control_Setup()에서 메타데이터 등록:
  *      XM_SetUsbCustomMeta(0xF0, "[{\"name\":\"Target\",\"unit\":\"deg\"}]");
- *   2. User_Loop()에서 데이터 전송:
+ *   2. Control_Loop()에서 데이터 전송:
  *      float data[4] = { target, current, error, torque };
  *      XM_SendUsbDataWithId(data, sizeof(data), 0xF0);
  * ========================================================================== */
@@ -332,7 +419,7 @@ void XM_SetUsbStreamModuleId(uint8_t module_id);
 /**
  * @brief User Custom 채널 메타데이터를 등록합니다.
  * @details USB 연결 시 Module ID 0xEF로 자동 전송됩니다.
- *          User_Setup()에서 1회 호출하면 됩니다.
+ *          Control_Setup()에서 1회 호출하면 됩니다.
  * @param[in] module_id  대상 Module ID (0xF0~0xFE)
  * @param[in] json_str   채널 정의 JSON string (NULL-terminated, 문자열 리터럴 권장)
  * @note json_str 포인터는 프로그램 수명 동안 유효해야 합니다 (복사하지 않음).
@@ -345,7 +432,7 @@ void XM_SetUsbCustomMeta(uint8_t module_id, const char* json_str);
  * @param[in] len        바이트 수 (sizeof(float) × 채널수)
  * @param[in] module_id  Module ID (0xF0~0xFE)
  * @return true: 전송 성공, false: 버퍼 풀 또는 연결 없음
- * @note User_Loop() 내에서 호출. Non-blocking.
+ * @note Control_Loop() 내에서 호출. Non-blocking.
  */
 bool XM_SendUsbDataWithId(const void* data, uint32_t len, uint8_t module_id);
 

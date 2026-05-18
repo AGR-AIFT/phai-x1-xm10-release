@@ -1,86 +1,79 @@
 /**
- * @file task_mngr.h
- * @brief TSM 엔진을 감싸는 Wrapper (용어 통일 및 정적 할당 반영)
+ * @file  task_mngr.h
+ * @brief AGR_MW TSM public API — task/FSM lifecycle manager
+ * @details
+ *   This is the only public entry point for TSM. The internal FSM engine
+ *   (task_state_machine.h) is private and lives under TSM/Inc/internal/.
  */
 
-#ifndef TASK_STATE_MACHINE_INC_TASK_MNGR_H_
-#define TASK_STATE_MACHINE_INC_TASK_MNGR_H_
+#ifndef AGR_MW_TSM_INC_TASK_MNGR_H_
+#define AGR_MW_TSM_INC_TASK_MNGR_H_
 
-#include "task_state_machine.h"
+#include <stdint.h>
+#include <stdbool.h>
 
 /**
  *-----------------------------------------------------------
- *              MACROS AND PREPROCESSOR DIRECTIVES
- *-----------------------------------------------------------
- * @brief Directives and macros for readability and efficiency.
- */
-
-/**
- *------------------------------------------------------------
  *                     TYPE DECLARATIONS
- *------------------------------------------------------------
- * @brief Custom data types and structures for the module.
+ *-----------------------------------------------------------
  */
 
-/**
- * @brief TSM 공개 객체 (핸들 겸 모니터링 데이터)
- * @details 이 모듈을 사용하는 상위 계층(API)은 이 구조체를 핸들로 사용합니다.
- */
-typedef struct {
-    /* Public Monitoring Area */
-    uint8_t current_state_id;
-    TsmLifecycle_e current_step;
+/* State callbacks. */
+typedef void (*EntryFunc_t)(void);
+typedef void (*LoopFunc_t)(void);
+typedef void (*ExitFunc_t)(void);
 
-    uint8_t prev_state_id;
-    TsmLifecycle_e prev_step;
-    
-    /* Private Hidden Area (상위 계층은 접근 금지) */
-    // C언어의 상속 흉내내기: 내부 구현은 .c 파일의 '확장 구조체'에 숨김
-} TsmObject_t;
+/* State lifecycle phase. */
+typedef enum {
+    TSM_LIFECYCLE_ENTRY,
+    TSM_LIFECYCLE_LOOP,
+    TSM_LIFECYCLE_EXIT
+} TsmLifecycle_e;
 
-/**
- *------------------------------------------------------------
- *                      GLOBAL VARIABLES
- *------------------------------------------------------------
- * @brief Extern declarations for global variables.
- */
-
-
-
+/* Opaque task handle. Consumers receive a pointer from TaskMngr_Create()
+ * and may only pass it back to TaskMngr_* APIs. Direct field access is
+ * unavailable by design — use the getters below. */
+typedef struct TsmObject_s TsmObject_t;
 
 /**
  *------------------------------------------------------------
  *                     FUNCTION PROTOTYPES
  *------------------------------------------------------------
- * @brief Function prototypes declaration for this module.
  */
 
-/**
- * @brief 정적 풀에서 태스크 핸들을 할당받아 초기화합니다.
- */
+/** @brief Allocate a task from the static pool. Returns NULL if pool full. */
 TsmObject_t* TaskMngr_Create(uint8_t initial_state_id);
 
-/**
- * @brief 태스크에 상태를 추가합니다. (용어 변경: Entry/Loop/Exit)
- */
+/** @brief Register a state with Entry/Loop/Exit callbacks. */
 void TaskMngr_AddState(TsmObject_t* obj, uint8_t state_id,
-                  EntryFunc_t entry, LoopFunc_t loop, ExitFunc_t exit);
+                       EntryFunc_t entry, LoopFunc_t loop, ExitFunc_t exit);
 
-/**
- * @brief 태스크 실행 (Loop에서 호출)
- */
+/** @brief Advance the task one tick. Call from a periodic context. */
 void TaskMngr_Run(TsmObject_t* obj);
 
-/**
- * @brief 상태 전환 요청
- * @return  0: 성공, -1: 대상 상태를 찾을 수 없음
- */
-int TaskMngr_Transition(TsmObject_t* obj, uint8_t next_state_id);
+/** @brief Request a safe transition (exit current → enter next).
+ *  @return 0 on success, -1 if state id not registered. */
+int32_t TaskMngr_Transition(TsmObject_t* obj, uint8_t next_state_id);
 
-/**
- * @brief 정적 메모리 풀을 초기화합니다 (TaskMngr + TSM 모두 리셋).
- */
+/** @brief Reset the static pool (invalidates all outstanding handles). */
 void TaskMngr_ResetPool(void);
 
+/**
+ *------------------------------------------------------------
+ *                     STATE ACCESSORS
+ *------------------------------------------------------------
+ */
 
-#endif /* TASK_STATE_MACHINE_INC_TASK_MNGR_H_ */
+/** @brief Current state id, or 0xFF if obj is NULL. */
+uint8_t TaskMngr_GetStateId(const TsmObject_t* obj);
+
+/** @brief Current lifecycle phase, or TSM_LIFECYCLE_ENTRY if obj is NULL. */
+TsmLifecycle_e TaskMngr_GetLifecycle(const TsmObject_t* obj);
+
+/** @brief Previous state id, or 0xFF if obj is NULL. */
+uint8_t TaskMngr_GetPrevStateId(const TsmObject_t* obj);
+
+/** @brief Previous lifecycle phase, or TSM_LIFECYCLE_ENTRY if obj is NULL. */
+TsmLifecycle_e TaskMngr_GetPrevLifecycle(const TsmObject_t* obj);
+
+#endif /* AGR_MW_TSM_INC_TASK_MNGR_H_ */

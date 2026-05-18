@@ -147,25 +147,29 @@ typedef struct {
  * PDO MAPPING TABLE (동적 PDO 매핑 - 런타임 설정)
  *-----------------------------------------------------------
  * @brief Master가 SetPDOMapping SDO로 런타임에 설정하는 PDO 리스트
- * @details 
- * - Master(XM10)가 Slave(CM, IMU Hub)에게 "이 OD Entry들을 PDO로 보내라"고 요청
+ * @details
+ * - Master가 Slave(CM, IMU/EMG/FES Hub)에게 "이 OD Entry들을 PDO로 보내라"고 요청
  * - Slave는 이 테이블에 따라 PDO 페이로드를 구성하여 전송
- * 
+ * - Wire format (SDO 0x1A00.xx) 은 Legacy 4B (CiA 301) / Extended 8B (AGR) 양쪽을 지원.
+ *   자세한 포맷은 docs/pdo_mapping_format.md 와 agr_pdo_engine.h 참조.
+ * - 런타임 내부 보관은 항상 AGR_PDO_MapItem_t 로 통일.
+ *
  * @example
  * ```c
- * // XM10에서 IMU Hub에게 전송 요청
+ * // Master 에서 Slave 로 TPDO 매핑 요청 (Extended 8B, 단일 37B entry)
+ * // Header(0x81) + [IdxL, IdxH, Sub, Flags, Len0..Len3]
  * static const uint8_t pdo_list[] = {
- *     0x60, 0x00,  // Index 0x6000 (IMU0_AccX)
- *     0x60, 0x01,  // Index 0x6001 (IMU0_AccY)
- *     0x60, 0x02,  // Index 0x6002 (IMU0_AccZ)
+ *     0x81,
+ *     0x18, 0x70, 0x00, 0x00, 37, 0, 0, 0
  * };
- * AGR_SDO_Write(IMU_HUB_NODE_ID, 0x1600, pdo_list, sizeof(pdo_list));
+ * AGR_SDO_Write(FES_HUB_NODE_ID, 0x1A00, pdo_list, sizeof(pdo_list));
  * ```
  */
 typedef struct {
-    uint16_t od_index;      /**< OD Entry Index */
-    uint8_t  od_subindex;   /**< OD Entry Sub-Index */
-    uint8_t  bit_length;    /**< 매핑 크기 (bits), CANopen 표준 4B PDO Mapping */
+    uint16_t od_index;       /**< OD Entry Index */
+    uint8_t  od_subindex;    /**< OD Entry Sub-Index */
+    uint8_t  flags;          /**< bit 0: signed, bit 1..7: reserved */
+    uint32_t length_bytes;   /**< 매핑 크기 (bytes), Extended 포맷 */
 } AGR_PDO_MapItem_t;
 
 typedef struct {

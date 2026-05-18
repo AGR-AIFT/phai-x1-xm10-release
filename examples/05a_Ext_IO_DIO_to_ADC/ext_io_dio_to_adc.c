@@ -69,7 +69,7 @@ static void Run_Loop(void);
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /*
      * [Step 1] DIO 핀을 ADC로 전환
@@ -94,7 +94,7 @@ void User_Setup(void)
     XM_TSM_AddState(s_tsm, &conf);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     XM_TSM_Run(s_tsm);
 }

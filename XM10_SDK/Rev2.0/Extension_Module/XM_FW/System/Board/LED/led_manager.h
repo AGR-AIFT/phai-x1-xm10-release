@@ -194,6 +194,16 @@ void LedManager_SetChannelFullPattern(ChannelLedId_t ch,
                                        LedMode_t red,
                                        LedMode_t blue);
 
+/**
+ * @brief PCA9957 channel LED suspend 토글 — SPI LED stimulus 활성 시 사용.
+ * @details suspend=true: 평시 led_manager 가 PCA9957_UpdateAll() 호출을 skip.
+ *          internal s_pwm_buffer 는 평시처럼 갱신되어 resume 시점에 복원.
+ *          suspend=false: dirty flag set → 다음 Update 에서 자동 reflush.
+ *          xm_periph_stimulus.c 가 SetEnabled(XM_STIM_SPI_LED, on) 에서 호출.
+ */
+void LedManager_SetChannelSuspend(bool suspend);
+bool LedManager_IsChannelSuspended(void);
+
 /* ===== Device State → LED 자동 매핑 ===== */
 
 void LedManager_SetCanDeviceState(ChannelLedId_t ch, ChannelDevState_t state);

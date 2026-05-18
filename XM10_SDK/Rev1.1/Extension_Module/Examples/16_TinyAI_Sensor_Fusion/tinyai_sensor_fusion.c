@@ -299,7 +299,7 @@ static void _PrintDebugInfo(void);
  * @brief Tiny AI 센서 퓨전 예제를 초기화합니다.
  * @details 부팅 시 한 번 호출됩니다. TSM을 생성하고 USB 스트리밍 소스를 등록합니다.
  */
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* TSM 생성 (초기 상태: OFF) */
     s_tsm = XM_TSM_Create(XM_STATE_OFF);
@@ -340,7 +340,7 @@ void User_Setup(void)
 /**
  * @brief 매 제어 루프(1ms)마다 호출되는 메인 루프입니다.
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
     /* CM 연결이 끊기면 안전을 위해 OFF로 강제 전환 */
     if (!XM_IsCmConnected()) {

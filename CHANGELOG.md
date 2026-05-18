@@ -4,6 +4,32 @@
 
 ---
 
+## [v2.2.0] — 2026-05-15
+
+> 사용자 함수 이름 정리 + Rev 1.1 / Rev 2.0 Task API 평준화 + 학습 예제 2 개 추가.
+
+### Added
+
+* **사용자 함수 이름 통일** — `User_Setup` / `User_Loop` → `Control_Setup` / `Control_Loop` (옛 이름 호환 유지)
+* **Rev 1.1 에도 보조 task API 추가** — `XM_Task_CreateOneShot/Periodic`, `XM_Task_IsComplete/Delete`, `XM_Mutex_*` (Rev 2.0 와 동일)
+* **`Examples/38_Periodic_Background_Task/`** — `Control_Loop`(1 kHz) + 보조 task(100 Hz) 데이터 공유 패턴 데모
+* **`Examples/39_Task_Lifecycle/`** — OneShot task Create → Complete → Delete 사이클 데모
+* **`docs/dev/12_Task_Topology.md`** — 시스템 task 인벤토리 + prio_hint 가이드 + 데이터 흐름 다이어그램
+* **`docs/release-notes/v2.2.0.md`** — 본 릴리즈 노트
+
+### Changed
+
+* **폴더 이름** — `XM_Apps/User_Algorithm/` → `XM_Apps/Control_Task/` (회사 모듈 컨벤션 정합)
+* **`libXM_Lib.a` 양 Rev 재빌드** — 신규 task 관리 코드 + 옛/새 함수 이름 자동 매핑 (`user_compat`) + 진단 유틸 (`diag_perf`, `hardfault_dump`) 통합
+* **Ex.36 (OnDevice Kinesthetic Learning)** — 옛 `XM_BgTask_Create` → 새 `XM_Task_CreateOneShot` 마이그레이션
+
+### Compatibility
+
+* **기존 v2.1.1 코드** — 새 SDK 로 그대로 컴파일 가능 (옛 함수 이름·옛 API 자동 인식)
+* **API surface** — Rev 1.1 / Rev 2.0 동일 (이전까지는 Rev 2.0 에만 일부 task API 존재)
+
+---
+
 ## [unreleased — 2026-05] — Docs UX Overhaul
 
 > 코드 변경 없음. 학생 친화 문서 전면 개편 + Claude Code 온보딩 인프라.

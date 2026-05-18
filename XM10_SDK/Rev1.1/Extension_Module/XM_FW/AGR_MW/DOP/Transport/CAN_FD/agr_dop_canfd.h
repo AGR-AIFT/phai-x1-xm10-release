@@ -83,7 +83,7 @@ static inline uint32_t AGR_CANFD_GetHeartbeatID(uint8_t node_id) {
  * @param tx_func  CAN 전송 함수 (Dependency Injection)
  * @return 0=성공, <0=에러
  */
-int AGR_CANFD_Init(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_CANFD_Init(AGR_DOP_Ctx_t* ctx,
                    const AGR_OD_Table_t* od,
                    uint8_t node_id,
                    AGR_TxFunc_t tx_func);
@@ -112,7 +112,7 @@ void AGR_CANFD_Reset(AGR_DOP_Ctx_t* ctx);
  * CAN-ID를 Function Code(상위 4bit)와 Node ID(하위 7bit)로 분리하여
  * SDO/PDO/SYNC/EMCY 메시지를 자동 분류하고 Core 모듈에 위임합니다.
  */
-int AGR_CANFD_ProcessRxMessage(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_CANFD_ProcessRxMessage(AGR_DOP_Ctx_t* ctx,
                                uint32_t can_id,
                                const uint8_t* data,
                                uint8_t len);
@@ -130,7 +130,7 @@ int AGR_CANFD_ProcessRxMessage(AGR_DOP_Ctx_t* ctx,
  * @param out_rsp 응답 SDO 메시지 (출력)
  * @return 0=성공, <0=에러
  */
-int AGR_CANFD_ProcessSDORequest(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_CANFD_ProcessSDORequest(AGR_DOP_Ctx_t* ctx,
                                 const AGR_SDO_Msg_t* req,
                                 AGR_SDO_Msg_t* out_rsp);
 
@@ -141,7 +141,7 @@ int AGR_CANFD_ProcessSDORequest(AGR_DOP_Ctx_t* ctx,
  * @param msg       SDO 메시지
  * @return 0=성공, <0=에러
  */
-int AGR_CANFD_SendSDO(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_CANFD_SendSDO(AGR_DOP_Ctx_t* ctx,
                       uint8_t target_id,
                       const AGR_SDO_Msg_t* msg);
 
@@ -154,7 +154,7 @@ int AGR_CANFD_SendSDO(AGR_DOP_Ctx_t* ctx,
  * @param data_len 데이터 길이
  * @return 0=성공, <0=에러
  */
-int AGR_CANFD_SendSDOWrite(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_CANFD_SendSDOWrite(AGR_DOP_Ctx_t* ctx,
                            uint16_t index,
                            uint8_t subindex,
                            const void* data,
@@ -179,7 +179,7 @@ void AGR_CANFD_SetTargetNodeId(AGR_DOP_Ctx_t* ctx, uint8_t target_node_id);
  * @param pdo_num PDO 번호 (1~4)
  * @return 0=성공, <0=에러
  */
-int AGR_CANFD_SendTxPDO(AGR_DOP_Ctx_t* ctx, uint8_t pdo_num);
+int32_t AGR_CANFD_SendTxPDO(AGR_DOP_Ctx_t* ctx, uint8_t pdo_num);
 
 /**
  *-----------------------------------------------------------
@@ -208,7 +208,7 @@ void AGR_CANFD_DisableSync(AGR_DOP_Ctx_t* ctx);
  * @param ctx DOP Context
  * @return 0=성공, <0=에러
  */
-int AGR_CANFD_SendSYNC(AGR_DOP_Ctx_t* ctx);
+int32_t AGR_CANFD_SendSYNC(AGR_DOP_Ctx_t* ctx);
 
 /**
  *-----------------------------------------------------------
@@ -236,7 +236,7 @@ void AGR_CANFD_EnableEmergency(AGR_DOP_Ctx_t* ctx,
  * @details CiA 301 EMCY format (8 bytes):
  *   [ErrorCode_Lo][ErrorCode_Hi][ErrorRegister][MfgSpecific x5]
  */
-int AGR_CANFD_SendEmergency(AGR_DOP_Ctx_t* ctx, uint16_t error_code,
+int32_t AGR_CANFD_SendEmergency(AGR_DOP_Ctx_t* ctx, uint16_t error_code,
                              uint8_t error_register);
 
 #endif /* AGR_DOP_CANFD_H */

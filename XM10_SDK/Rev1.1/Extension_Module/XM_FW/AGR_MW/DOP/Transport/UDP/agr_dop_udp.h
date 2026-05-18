@@ -122,7 +122,7 @@ typedef void (*AGR_UDP_EmcyCallback_t)(uint8_t src_id, uint16_t error_code,
  * @param node_id  자신의 Node ID (0x01~0x7F)
  * @return 0=성공, <0=에러
  */
-int AGR_UDP_Init(AGR_DOP_Ctx_t* ctx, const AGR_OD_Table_t* od, uint8_t node_id);
+int32_t AGR_UDP_Init(AGR_DOP_Ctx_t* ctx, const AGR_OD_Table_t* od, uint8_t node_id);
 
 /**
  * @brief UDP Transport 종료
@@ -141,7 +141,7 @@ void AGR_UDP_DeInit(void);
  * @param pdo_num PDO 번호 (1~4)
  * @return 0=성공, <0=에러
  */
-int AGR_UDP_SendTxPDO(AGR_DOP_Ctx_t* ctx, uint8_t pdo_num);
+int32_t AGR_UDP_SendTxPDO(AGR_DOP_Ctx_t* ctx, uint8_t pdo_num);
 
 /**
  * @brief SDO 메시지 전송
@@ -150,7 +150,7 @@ int AGR_UDP_SendTxPDO(AGR_DOP_Ctx_t* ctx, uint8_t pdo_num);
  * @param msg       SDO 메시지
  * @return 0=성공, <0=에러
  */
-int AGR_UDP_SendSDO(AGR_DOP_Ctx_t* ctx, uint8_t target_id,
+int32_t AGR_UDP_SendSDO(AGR_DOP_Ctx_t* ctx, uint8_t target_id,
                      const AGR_SDO_Msg_t* msg);
 
 /**
@@ -158,7 +158,7 @@ int AGR_UDP_SendSDO(AGR_DOP_Ctx_t* ctx, uint8_t target_id,
  * @param ctx DOP Context
  * @return 0=성공, <0=에러
  */
-int AGR_UDP_SendSYNC(AGR_DOP_Ctx_t* ctx);
+int32_t AGR_UDP_SendSYNC(AGR_DOP_Ctx_t* ctx);
 
 /**
  * @brief Emergency 메시지 전송
@@ -167,7 +167,7 @@ int AGR_UDP_SendSYNC(AGR_DOP_Ctx_t* ctx);
  * @param error_register Error Register (OD 0x1001, CiA 301 byte 2)
  * @return 0=성공, <0=에러
  */
-int AGR_UDP_SendEmergency(AGR_DOP_Ctx_t* ctx, uint16_t error_code,
+int32_t AGR_UDP_SendEmergency(AGR_DOP_Ctx_t* ctx, uint16_t error_code,
                            uint8_t error_register);
 
 /**
@@ -177,7 +177,7 @@ int AGR_UDP_SendEmergency(AGR_DOP_Ctx_t* ctx, uint16_t error_code,
  * @param len      payload 길이
  * @return 0=성공, <0=에러
  */
-int AGR_UDP_SendRawPDO(uint8_t pdo_type, const uint8_t* data, uint8_t len);
+int32_t AGR_UDP_SendRawPDO(uint8_t pdo_type, const uint8_t* data, uint8_t len);
 
 /**
  *-----------------------------------------------------------

@@ -29,7 +29,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **레포 역할** | 학생/연구자 대상 **공개 릴리즈** (SDK + 예제 + 문서) |
 | **개발 원본** | 사내 `ARC_ExtensionBoard` (private) — 본 레포는 동기화된 공개판 |
 | **License** | MIT |
-| **Latest** | [`v2.1.1`](https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.1.1) (Releases → `Rev2.0.zip` / `Rev1.1.zip` 다운로드) |
+| **Latest** | [`v2.2.0`](https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.2.0) (Releases → `Rev2.0.zip` / `Rev1.1.zip` 다운로드) |
 
 ---
 

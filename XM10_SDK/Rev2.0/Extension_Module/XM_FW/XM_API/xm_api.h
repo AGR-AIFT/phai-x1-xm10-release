@@ -30,6 +30,7 @@
 #include "xm_api_led_btn.h"     // 내장 LED 및 버튼 제어
 #include "xm_api_external_io.h" // 외부 확장 IO (GPIO/ADC)
 #include "xm_api_usb.h"         // USB 로깅 및 디버그
+#include "xm_api_user_custom.h" // Total Data 0x20 내 사용자 커스텀 슬롯
 #include "xm_api_memory.h"      // 메모리 영역 접근 (Workspace/PSRAM/DTCM/NV)
 #include "xm_api_rtc.h"         // RTC 날짜/시간 관리
 #include "xm_api_freertos.h"    // 백그라운드 태스크 (FreeRTOS 래퍼)

@@ -202,7 +202,7 @@ static void _SafetyShutdown(void);
 /**
  * @brief 사용자 초기 설정 — TSM 생성 및 상태 등록
  */
-void User_Setup(void)
+void Control_Setup(void)
 {
     // TSM 생성 (초기 상태: OFF — CM 연결 대기)
     s_tsm = XM_TSM_Create(XM_STATE_OFF);
@@ -253,7 +253,7 @@ void User_Setup(void)
 /**
  * @brief 메인 루프 — 1ms 주기로 호출됨
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
     // CM 연결 끊김 시 OFF 상태로 강제 전환 (안전 우선)
     if (!XM_IsCmConnected()) {
@@ -443,9 +443,11 @@ static void _RunHomingSequence(void)
             int16_t dist_lh = abs(target_angle - current_lh);
             uint16_t dur_rh = (uint16_t)(((float)dist_rh / (float)HOMING_SPEED) * 1000.0f);
             uint16_t dur_lh = (uint16_t)(((float)dist_lh / (float)HOMING_SPEED) * 1000.0f);
+            uint16_t homing_dur = (dur_rh > dur_lh) ? dur_rh : dur_lh;
+            if (homing_dur < 50) homing_dur = 50;
 
-            PVector_t pvec_rh = { .yd = target_angle, .L = dur_rh, .s0 = HOMING_ACCEL_S0, .sd = HOMING_ACCEL_SD };
-            PVector_t pvec_lh = { .yd = target_angle, .L = dur_lh, .s0 = HOMING_ACCEL_S0, .sd = HOMING_ACCEL_SD };
+            PVector_t pvec_rh = { .yd = target_angle, .L = homing_dur, .s0 = HOMING_ACCEL_S0, .sd = HOMING_ACCEL_SD };
+            PVector_t pvec_lh = { .yd = target_angle, .L = homing_dur, .s0 = HOMING_ACCEL_S0, .sd = HOMING_ACCEL_SD };
             XM_SendPVector(SYS_NODE_ID_RH, &pvec_rh);
             XM_SendPVector(SYS_NODE_ID_LH, &pvec_lh);
 

@@ -217,7 +217,7 @@ static void  _UpdateStreamData(void);
  *   발 접촉 이벤트가 전혀 발생하지 않아 보행 위상 추정이 불가능합니다.
  *   H10 설정을 반드시 확인하세요.
  */
-void User_Setup(void)
+void Control_Setup(void)
 {
     // TSM 생성 (초기 상태: OFF — CM 연결 대기)
     s_tsm = XM_TSM_Create(XM_STATE_OFF);
@@ -259,7 +259,7 @@ void User_Setup(void)
 /**
  * @brief 메인 루프 — 1ms 주기로 호출됨
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
     // CM 연결 끊김 시 OFF 상태로 강제 전환 (안전 우선)
     if (!XM_IsCmConnected()) {

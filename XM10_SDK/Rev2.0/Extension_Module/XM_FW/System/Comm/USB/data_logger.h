@@ -52,8 +52,10 @@
 
 /** @brief .bin 파일 매직넘버: 0xA1 'L' 'O' 'G' */
 #define LOG_FILE_MAGIC              0xA14C4F47
-/** @brief 파일 포맷 버전 (Phase 3b = 1) */
-#define LOG_FILE_FORMAT_VERSION     1
+/** @brief 파일 포맷 버전
+ *    v1 (Phase 3b): data block = 4096B + CRC 4B = 4100B (partial-sector tail 존재)
+ *    v2 (Step D 2026-04-18): data block = 4092B + CRC 4B = 4096B (sector-aligned) */
+#define LOG_FILE_FORMAT_VERSION     2
 /** @brief .bin 파일 풋터 매직넘버 (헤더 역순) */
 #define LOG_FILE_FOOTER_MAGIC       0x474F4CA1
 
@@ -96,6 +98,22 @@ typedef struct {
     uint32_t disk_free_mb;              /**< USB 잔여 용량 (MB, 캐시) */
     uint32_t disk_total_mb;             /**< USB 전체 용량 (MB) */
     uint32_t psram_write_retries;       /**< PSRAM write 재시도 횟수 */
+    /* [Diag 2026-04-17] USBH_MSC polling/write 실측 — dead code & tight spin 검증 */
+    uint32_t usbh_polling_entries;      /**< usbh_diskio polling loop 진입 횟수 (0=dead code) */
+    uint32_t usbh_polling_iters_max;    /**< 단일 loop 최대 iteration */
+    uint32_t usbh_write_us_max;         /**< USBH_MSC_Write 1회 최대 [µs] */
+    uint64_t usbh_write_us_sum;         /**< USBH_MSC_Write 누적 [µs] */
+    /* [Diag 2026-04-17] FDCAN Bus 세션 통계 — CAN 층 무결성 교차검증 */
+    uint8_t  fdcan_rec_end;             /**< 세션 종료 시 Rx Error Counter (0~255) */
+    uint8_t  fdcan_tec_end;             /**< 세션 종료 시 Tx Error Counter (0~255) */
+    uint8_t  fdcan_lec_last;            /**< 마지막 Last Error Code (0=None~7) */
+    uint8_t  fdcan_rx_fifo0_fill_max;   /**< RxFIFO0 최대 fill (overflow 근접 지표) */
+    uint32_t fdcan_bus_off_events;      /**< Bus-off 전이 발생 횟수 */
+    /* [Diag 2026-04-17 v2] OffloadTask 동작 진단 — Hot=99% + Cold=1% 미스터리 해결용.
+     * 기존 write_errors는 PSRAM+USB 혼재 → 아래 2필드로 층위 분리. */
+    uint32_t offload_success_count;     /**< Hot→Cold 전송 성공 횟수 (OffloadTask) */
+    uint32_t offload_psram_errors;      /**< Hot→Cold PSRAM QSPI write 실패 횟수 */
+    uint32_t usb_write_errors;          /**< Cold→USB f_write 실패 횟수 */
 } DataLogger_Stats_t;
 
 /**
@@ -254,5 +272,16 @@ uint32_t DataLogger_GetDiskTotalMB(void);
  * @note UserTask(2ms) 컨텍스트에서 안전하게 호출 가능 (Non-blocking).
  */
 bool DataLogger_InsertMarker(uint8_t marker_type, uint16_t data);
+
+/**
+ * @brief [Option A 2026-04-17] 현재/마지막 활성 세션 이름을 반환합니다.
+ * @details Emergency Stop 후 재시작 시 같은 세션 폴더에 이어쓰기 위한 용도.
+ *          예제 레벨에서 이 이름을 저장해 두었다가 XM_StartUsbDataLog()에 재전달하면
+ *          FW의 session_index 자동 증분 로직에 의해 같은 폴더에 data_001_*가 생성됨.
+ * @param[out] out_buf  세션 이름이 복사될 버퍼 (문자열)
+ * @param[in]  buf_size 버퍼 크기 (>= MAX_SESSION_NAME_SIZE+1 권장)
+ * @note 활성 세션이 없으면 빈 문자열("")을 반환합니다.
+ */
+void DataLogger_GetActiveSessionName(char* out_buf, uint32_t buf_size);
 
 #endif /* SYSTEM_COMM_USB_DATA_LOGGER_H_ */

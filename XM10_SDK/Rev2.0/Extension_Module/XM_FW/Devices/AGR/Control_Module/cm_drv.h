@@ -657,6 +657,46 @@ void CM_SendResistiveCompGain(SystemNodeID_t nodeId, float gain);
  */
 void CM_SendSetH10AssistExistingMode(bool H10AssistModeEnable);
 
+// --- PDO 진단 API (데이터 저장 시 CAN 수신 품질 교차검증용) ---
+/**
+ * @brief CM→XM PDO h10AssistModeLoopCnt 연속성 진단 통계.
+ * @details
+ *  normal : delta==1 (정상 1:1 동기)
+ *  dup    : delta==0 (XM이 같은 PDO 재수신 — 독립 클럭 phase drift, 무해)
+ *  gap    : delta >1 (H10 N사이클 중 중간 누락 — 실 데이터 손실)
+ *  wrap   : delta < 0 (H10 counter wrap/reset — 세션 경계)
+ *  missed_cycles : gap 발생 시 누락된 H10 사이클의 누적 합
+ */
+/* [방향3 2026-04-18] Gap burst 분포 — pdo_gap 총 수 대신 "큰 gap 얼마나 자주" 가 진짜 KPI.
+ *   bin 0 = 1-miss  (UserTask 1ms 지연, 보간 거의 완벽)
+ *   bin 1 = 2-miss  (2ms 지연)
+ *   bin 2 = 3-miss  (3ms 지연, critical 경계)
+ *   bin 3 = 4-miss  (4ms 지연, 보간 품질 떨어짐)
+ *   bin 4 = 5-miss 이상 (심각 — 현재 FW 구조상 거의 안 나옴)
+ */
+#define CM_PDO_GAP_HIST_BINS    5
+
+typedef struct {
+    uint32_t normal_count;
+    uint32_t dup_count;
+    uint32_t gap_count;
+    uint32_t wrap_count;
+    uint32_t missed_cycles;
+    uint32_t gap_max_burst;              /**< 단일 gap 최대 길이 (H10 cycles) */
+    uint32_t gap_hist[CM_PDO_GAP_HIST_BINS]; /**< gap 크기 분포 */
+} CM_PdoDiag_t;
+
+/**
+ * @brief PDO 진단 통계 스냅샷 읽기.
+ * @param[out] diag 통계가 복사될 구조체 포인터 (NULL 방어 포함).
+ */
+void CM_GetPdoDiag(CM_PdoDiag_t* diag);
+
+/**
+ * @brief PDO 진단 통계 초기화. 세션 시작 시 호출.
+ */
+void CM_ResetPdoDiag(void);
+
 // --- PDO 관련 API ---
 /**
  * @brief 지정된 관절(Node)의 보조 토크를 PDO 전송 대기열에 추가합니다.

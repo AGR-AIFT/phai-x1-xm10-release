@@ -68,7 +68,7 @@
 
 /* --- 공통 제어 상수 --- */
 #define PI_VALUE                3.14159265f
-#define CONTROL_DT              0.001f      /* User_Loop = 1ms (1kHz) */
+#define CONTROL_DT              0.001f      /* Control_Loop = 1ms (1kHz) */
 
 /* --- Alpha-Beta Tracker (전 모드 공통, LPF 대체) ---
  * 모델 의존성 제거: A21=0, B2=0 → 순수 측정 기반 속도 추정
@@ -244,7 +244,7 @@ static float _Clamp(float v, float lo, float hi);
  *-----------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     s_tsm = XM_TSM_Create(XM_STATE_OFF);
 
@@ -281,7 +281,7 @@ void User_Setup(void)
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_OFF);
@@ -448,11 +448,11 @@ static void _RunHoming(void)
         int16_t dist_l = abs(HOMING_TARGET_DEG10 - cur_l);
         uint16_t dur_r = (uint16_t)(((float)dist_r / (float)HOMING_SPEED_DPS) * 1000.0f);
         uint16_t dur_l = (uint16_t)(((float)dist_l / (float)HOMING_SPEED_DPS) * 1000.0f);
-        if (dur_r < 100) dur_r = 100;  /* 최소 100ms */
-        if (dur_l < 100) dur_l = 100;
+        uint16_t homing_dur = (dur_r > dur_l) ? dur_r : dur_l;
+        if (homing_dur < 100) homing_dur = 100;  /* 최소 100ms */
 
-        PVector_t pv_r = { .yd = HOMING_TARGET_DEG10, .L = dur_r, .s0 = HOMING_ACCEL_S0, .sd = HOMING_ACCEL_SD };
-        PVector_t pv_l = { .yd = HOMING_TARGET_DEG10, .L = dur_l, .s0 = HOMING_ACCEL_S0, .sd = HOMING_ACCEL_SD };
+        PVector_t pv_r = { .yd = HOMING_TARGET_DEG10, .L = homing_dur, .s0 = HOMING_ACCEL_S0, .sd = HOMING_ACCEL_SD };
+        PVector_t pv_l = { .yd = HOMING_TARGET_DEG10, .L = homing_dur, .s0 = HOMING_ACCEL_S0, .sd = HOMING_ACCEL_SD };
         XM_SendPVector(SYS_NODE_ID_RH, &pv_r);
         XM_SendPVector(SYS_NODE_ID_LH, &pv_l);
         XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);

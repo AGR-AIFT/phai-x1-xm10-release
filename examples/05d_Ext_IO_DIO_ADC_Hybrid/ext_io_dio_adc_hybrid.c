@@ -74,7 +74,7 @@ static void Run_Loop(void);
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /*
      * [Step 1] DIO 1~4를 ADC로 전환 (FSR 센서용)
@@ -120,7 +120,7 @@ void User_Setup(void)
     XM_TSM_AddState(s_tsm, &conf);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     XM_TSM_Run(s_tsm);
 }

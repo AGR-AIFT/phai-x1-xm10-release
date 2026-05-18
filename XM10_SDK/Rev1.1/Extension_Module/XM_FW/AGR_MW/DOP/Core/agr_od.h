@@ -61,7 +61,7 @@ const AGR_OD_Entry_t* AGR_OD_FindEntryEx(const AGR_OD_Table_t* od,
  * @param buf_len 버퍼 크기
  * @return 읽은 바이트 수, <0=에러 (-1=NULL, -2=no data, -3=write-only)
  */
-int AGR_OD_ReadValue(const AGR_OD_Entry_t* entry,
+int32_t AGR_OD_ReadValue(const AGR_OD_Entry_t* entry,
                      void* out_buf,
                      uint8_t buf_len);
 
@@ -72,7 +72,7 @@ int AGR_OD_ReadValue(const AGR_OD_Entry_t* entry,
  * @param in_len 데이터 길이
  * @return 0=성공, <0=에러 (-1=NULL, -2=no data, -3=read-only, -4=size overflow)
  */
-int AGR_OD_WriteValue(const AGR_OD_Entry_t* entry,
+int32_t AGR_OD_WriteValue(const AGR_OD_Entry_t* entry,
                       const void* in_buf,
                       uint8_t in_len);
 

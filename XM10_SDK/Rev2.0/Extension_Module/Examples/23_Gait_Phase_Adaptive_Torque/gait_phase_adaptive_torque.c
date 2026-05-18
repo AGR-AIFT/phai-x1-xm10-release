@@ -193,7 +193,7 @@ static void  _SetupBodyData(void);
  *-----------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* ⚠️ Body Data 필수 설정
      * footContact/forwardVelocity 정확도를 위해 반드시 호출
@@ -224,7 +224,7 @@ void User_Setup(void)
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_OFF);

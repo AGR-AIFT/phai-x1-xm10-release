@@ -187,11 +187,14 @@ typedef struct {
 } XmGrfData_t;
 
 /**
- * @brief [IMU Sensor] 외부 장착 정밀 IMU 데이터 (Xsens MTi)
+ * @brief [Ext IMU] External UART 장착 정밀 IMU 데이터 (현재 Xsens MTi-630)
+ * @details
+ *  - "ext_imu" prefix는 IMU Hub(CAN-FD 6축)와 명확히 구분하기 위함.
+ *  - 디바이스 교체(다른 UART IMU)에도 이름 그대로 유지됨.
  */
 typedef struct {
-    bool  is_connected; // XSENS IMU 모듈 연결 상태
-    uint32_t lastUpdateTick; // 데이터 수신 시각 (ms)
+    bool  is_connected;        // External IMU 연결 상태
+    uint32_t lastUpdateTick;   // 데이터 수신 시각 (ms)
 
     // --- 1. Orientation (Quaternion) ---
     float q_w, q_x, q_y, q_z;
@@ -201,7 +204,7 @@ typedef struct {
 
     // --- 3. Calibrated Gyroscope (deg/s or rad/s) ---
     float gyr_x, gyr_y, gyr_z;
-} XmImuData_t;
+} XmExtImuData_t;
 
 /**
  * @brief [IMU Hub Module] 6축 IMU 센서 허브 (EBIMU-9DOFV6 × 6)
@@ -241,13 +244,15 @@ typedef struct {
  * @brief [EMG Hub Module] sEMG 센서 허브 (DOP V2)
  * @details DOP V2 프로토콜로 연결된 EMG Hub Module 데이터
  *
- * [데이터 원본] EMG Hub TPDO1 (CAN ID 0x18A)
+ * [데이터 원본] EMG Hub TPDO1 (CAN ID 0x18F)
  * - 1kHz 샘플링, 신호처리 파이프라인 결과 포함
  * - HPF 20Hz → Rectification → RMS 200ms → Envelope 8Hz → MVC → Activation
  */
 typedef struct {
     bool     is_connected;        /**< EMG Hub Module 연결 상태 */
-    uint32_t lastUpdateTick;      /**< 데이터 수신 시각 (ms) */
+    uint32_t lastUpdateTick;      /**< Slave 제어 틱 (OD 0x6050 ctrl_tick_ms, 32-bit ms, wrap 49.7일).
+                                    *   연속 수신 간 delta 가 1 이 아니면 gap. 구 14B TPDO 포맷 수신 시
+                                    *   Metadata timestamp (24-bit) 로 fallback. */
 
     /* Raw & Processed EMG Data (float, 스케일링 복원 완료) */
     uint16_t raw_adc;             /**< ADC 원시값 (12-bit, HW OVS 16×) */
@@ -262,22 +267,29 @@ typedef struct {
 } XmEmgHubData_t;
 
 /**
- * @brief [FES Hub Module] 기능적 전기 자극 모듈 (DOP V2)
- * @details DOP V2 프로토콜로 연결된 FES Hub Module 데이터
+ * @brief [FES Hub Module] 기능적 전기 자극 모듈 (DOP V3 ES-vector)
+ * @details DOP V3 ES-vector 프로토콜로 연결된 FES Hub Module 데이터 (Node 0x0C)
  *
- * [데이터 원본] FES Hub TPDO1 (CAN ID 0x18B)
- * - 2채널 독립 자극, HV 전압 피드백, 채널별 상태/전류/Fault
+ * [데이터 원본] FES Hub TPDO1 (CAN ID 0x18C, 37B, 10ms 주기)
+ * - Legacy 16B: 2채널 ch_state/current/fault + HV 전압 + digipot + es_state_packed
+ * - KHJ 21B: FSM state + ISI flags + target amplitude + impedance + pulse count
+ *            + differential voltage (ES-vector 제어 상태 + 전극 접촉 판단)
+ * [명령 경로] XM → FES Hub SDO Download
+ * - 0x6300 (6B BLOB): ES-vector (ch_select, amplitude, duty, freq, burst)
+ * - 0x6310 (1B)    : Master Command (가상 ISI EXT7/EXT8 트리거)
  */
 #define XM_FES_HUB_CH_COUNT     2  /**< FES Hub 채널 수 */
 
 typedef struct {
     bool     is_connected;        /**< FES Hub Module 연결 상태 */
-    uint32_t lastUpdateTick;      /**< 데이터 수신 시각 (ms) */
+    uint32_t lastUpdateTick;      /**< 데이터 수신 시각 (ms, FES Slave 24-bit timestamp LE) */
+
+    /* ==== Legacy 16B (채널 상태 / 전류 / HV 등) ==== */
 
     /* 채널 상태 (0=IDLE, 1=READY, 2=STIMULATING, 3=FAULT) */
     uint8_t  ch_state[XM_FES_HUB_CH_COUNT];
 
-    /* 전류 피드백 (mA) */
+    /* 전류 피드백 (mA) — PID output */
     float    ch_current_mA[XM_FES_HUB_CH_COUNT];
 
     /* Fault 코드 (채널별) */
@@ -289,8 +301,35 @@ typedef struct {
     /* Digipot 위치 (0~127, 진폭 제어) */
     uint8_t  digipot_pos;
 
+    /* ES-vector state packed: [3:0]=CH0 ESState, [7:4]=CH1 ESState */
+    uint8_t  es_state_packed;
+
     /* Error Register */
     uint8_t  error_register;
+
+    /* ==== KHJ telemetry 확장 (TPDO 37B 중 21B) ==== */
+
+    /* FSM state (KHJ Control Task) */
+    uint8_t  fsm_state;              /**< 현재 FSM state */
+    uint8_t  fsm_state_prev;         /**< 직전 FSM state */
+
+    /* ISI flag bitmap — bit[N] = ISI[N]. EXT7(bit7)/EXT8(bit8) 로 Master Cmd 동작 증적. */
+    uint8_t  isi_packed;
+
+    /* ES-vector error code low byte (채널별, CiA 301 Abort 와 별개) */
+    uint8_t  ch_es_error_lo[XM_FES_HUB_CH_COUNT];
+
+    /* Target amplitude (mA) — Master 가 지시한 setpoint */
+    float    ch_target_amplitude_mA[XM_FES_HUB_CH_COUNT];
+
+    /* Filtered impedance (ohm) — 전극 접촉 상태 판단 지표 */
+    float    ch_impedance[XM_FES_HUB_CH_COUNT];
+
+    /* Burst pulse counter — 누적 자극 펄스 수 */
+    uint16_t ch_pulse_cnt[XM_FES_HUB_CH_COUNT];
+
+    /* Differential voltage (V) — 실제 자극 전압 */
+    float    ch_voltage_diff_V[XM_FES_HUB_CH_COUNT];
 } XmFesHubData_t;
 
 // [FSR Sensor]
@@ -304,7 +343,7 @@ typedef struct {
 typedef struct {
     XmH10Data_t     h10;      /**< H10 로봇 본체 데이터 (DOP V1) */
     XmGrfData_t     grf;      /**< GRF 족압 센서 데이터 */
-    XmImuData_t     imu;      /**< XSENS IMU 데이터 (외부 장착) */
+    XmExtImuData_t  ext_imu;  /**< External UART IMU 데이터 (Xsens MTi-630) */
     XmImuHubData_t  imu_hub;  /**< [신규] IMU Hub 센서 데이터 (DOP V2) ✅ */
     XmEmgHubData_t  emg_hub;  /**< [신규] EMG Hub 센서 데이터 (DOP V2) */
     XmFesHubData_t  fes_hub;  /**< [신규] FES Hub 자극 피드백 (DOP V2) */

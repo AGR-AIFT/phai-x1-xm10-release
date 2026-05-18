@@ -126,7 +126,7 @@ set(XM_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/libXM_Lib.a)
 
 # Application Layer (SDK 사용자 코드)
 set(APP_SRC
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_Apps/User_Algorithm/user_app.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_Apps/Control_Task/control_task.c
 )
 
 # boot_fw_info.c: .fw_header 섹션에 AGR_FwInfo_t를 배치하는 유일한 소스.
@@ -190,17 +190,17 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/XM_API
 
     # Application & IOIF
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_Apps/User_Algorithm
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_Apps/Control_Task
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/IOIF/Inc
 )
 
 # Add project symbols (macros)
-# NOTE: 아래 IOIF 매크로는 user_app.c 등 SDK 사용자 코드의 조건부 컴파일에만 영향을 줍니다.
+# NOTE: 아래 IOIF 매크로는 control_task.c 등 SDK 사용자 코드의 조건부 컴파일에만 영향을 줍니다.
 # libXM_Lib.a 내부의 IOIF 드라이버는 라이브러리 빌드 시점에 이미 활성화되어 있으므로,
 # 여기서 매크로를 변경해도 IOIF 드라이버 동작에는 영향이 없습니다.
 # IOIF 모듈 활성화/비활성화는 XM_FW/System/Config/ioif_conf.h에서 관리됩니다.
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
-    # IOIF Submodule: user_app.c에서 IOIF 헤더 조건부 include에 사용
+    # IOIF Submodule: control_task.c에서 IOIF 헤더 조건부 include에 사용
     AGRB_IOIF_FDCAN_ENABLE
     AGRB_IOIF_UART_ENABLE
     AGRB_IOIF_GPIO_ENABLE

@@ -11,6 +11,8 @@
 #ifndef AGR_MW_CONF_H_
 #define AGR_MW_CONF_H_
 
+#include <stdint.h>
+
 /* -----------------------------------------------------------------------
  * MCU Series Auto-Detection (from CubeMX-generated defines)
  * ----------------------------------------------------------------------- */
@@ -31,13 +33,31 @@
 #define AGR_MW_BOOT_ENABLE
 
 /* -----------------------------------------------------------------------
- * DOP Transport Selection (XM Rev2.0 — CAN-FD + UDP)
+ * DOP Transport Selection (XM Rev1.1 — CAN-FD only)
  * -----------------------------------------------------------------------
  * agr_dop_config.h가 이 파일을 include하므로 #ifndef 가드보다 먼저 적용.
  * - CAN-FD: IMU Hub, EMG Hub, FES Hub (PnP Master)
- * - UDP:    AM(Jetson) ↔ XM Ethernet 통신 (Rev2.0 전용)
  */
 #define AGR_DOP_TRANSPORT_CANFD     1
-#define AGR_DOP_TRANSPORT_UDP       1
+
+/* -----------------------------------------------------------------------
+ * API Contract — DO NOT MODIFY
+ * -----------------------------------------------------------------------
+ * These definitions implement the AGR_MW error return contract.
+ * See: docs/agr_mw_error_contract.md
+ *
+ * Convention:
+ *   int32_t rc = AGR_Module_DoThing(...);
+ *   if (!AGR_IsOk(rc)) { ... handle error ... }
+ *
+ *   rc == 0 : OK
+ *   rc <  0 : error (module-local typed enum negative values)
+ *   rc >  0 : reserved for future "ok-with-info"
+ *
+ * This macro must stay identical across all consumer modules. When syncing
+ * this template into your System/Config/agr_mw_conf.h, preserve this block
+ * verbatim.
+ * ----------------------------------------------------------------------- */
+#define AGR_IsOk(rc)  ((int32_t)(rc) >= 0)
 
 #endif /* AGR_MW_CONF_H_ */

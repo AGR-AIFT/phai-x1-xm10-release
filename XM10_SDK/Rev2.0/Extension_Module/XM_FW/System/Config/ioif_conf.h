@@ -49,6 +49,12 @@
  */
 #define IOIF_UART_RX_TASK_PRIORITY      (osPriorityRealtime7)  /**< 기본 50 → 55 */
 
+/* ===== IOIF Task Stack Size Override =====
+ * [2026-05-12 cross-port from 0428] vApplicationStackOverflowHook 으로
+ * "IOIF_UartRx" overflow 검출. 기본 512B 는 Xsens packet 파싱 + DataLake 갱신 +
+ * StreamBuffer 처리에 부족. 2048B 로 상향 (다른 시스템 task 와 동일 수준). */
+#define IOIF_UART_RX_TASK_STACK_SIZE    (2048U)
+
 /* ===== Production Modules (현재 ��용 중) ===== */
 #define AGRB_IOIF_FDCAN_ENABLE              /**< FDCAN (CAN FD) - DOP/PnP 통신 */
 #define AGRB_IOIF_UART_ENABLE               /**< UART - 센서/디버그 통신 */
@@ -56,6 +62,7 @@
 #define AGRB_IOIF_TIM_ENABLE                /**< Timer - 시스템 타이머 */
 #define AGRB_IOIF_DWT_ENABLE                /**< DWT - 고정밀 성능 측정 */
 #define AGRB_IOIF_USB_ENABLE                /**< USB - CDC 디버그, MSC 데이터 로깅 */
+#define AGRB_IOIF_USB_MODE_DRP              /**< Host MSC (USB 스틱) ↔ Device CDC 런타임 스위칭 */
 #define AGRB_IOIF_ADC_ENABLE                /**< ADC - 아날로그 센서 입력 */
 #define AGRB_IOIF_FILESYSTEM_ENABLE         /**< FatFs - USB MSC 파일 시스템 */
 
@@ -74,17 +81,23 @@
  */
 #define IOIF_DMA_POOL_SIZE          (1 * 1024)  /**< 1KB (기본 56KB → XM10 SPI용 축소) */
 #define IOIF_BDMA_POOL_SIZE         (256)       /**< 256B (기본 1KB → 최소) */
-/* ===== Phase 2: PSRAM Cold Buffer MDMA 활성화 =====
- * [AS-IS] 256B — QSPI MDMA가 IOC에 미설정, DMA pool fallback 발생
- * [TO-BE] 5KB — IOC에서 QUADSPI MDMA 활성화 후, ioif_dma.allocate()가
- *               hqspi->hmdma MDMA Instance 감지 → MDMA pool로 라우팅.
- *               PSRAM 4KB 청크 + 정렬 여유 = 5KB.
- * [Impact] MDMA pool = .RAM_D3_data (D3 64KB). 256B → 5KB (+4.75KB). */
+/* ===== [DEPRECATED 2026-04-18 C안] Phase 2: PSRAM Cold Buffer MDMA =====
+ * [현재] PSRAM Cold Buffer 폐기. data_logger.c Hot-only 회귀. data_logger.c:28 참조.
+ * [참고] 아래 매크로 값은 잠정 유지 — MDMA 인프라 자체는 IOC 활성 (stm32h7xx_hal_msp.c:627~).
+ *        Cold Buffer 외 다른 용도 (예: PSRAM 진단 자극) 에서 MDMA pool/청크 사용 가능.
+ *
+ * [이전 설계 — 참고]
+ *   [AS-IS] 256B — QSPI MDMA가 IOC에 미설정, DMA pool fallback 발생
+ *   [TO-BE] 5KB — IOC에서 QUADSPI MDMA 활성화 후, ioif_dma.allocate()가
+ *                 hqspi->hmdma MDMA Instance 감지 → MDMA pool로 라우팅.
+ *                 PSRAM 4KB 청크 + 정렬 여유 = 5KB.
+ *   [Impact] MDMA pool = .RAM_D3_data (D3 64KB). 256B → 5KB (+4.75KB).
+ */
 #define IOIF_MDMA_POOL_SIZE         (5 * 1024)
 
-/* PSRAM Offload 청크 크기 오버라이드: 128B → 4KB (Offload 1회 전송량 최적화)
- * ioif_agrb_psram.c 기본값(128B)을 프로젝트별 오버라이드.
- * 6KB 전송 시: 47회(128B) → 2회(4KB). MDMA 전송 오버헤드 대폭 감소. */
+/* [DEPRECATED 2026-04-18 C안 — Cold Buffer 폐기] PSRAM Offload 청크 크기.
+ * 매크로 자체는 PSRAM 진단/사용자 영역 다른 호출에서 잔존 사용 가능 (잠정 유지).
+ * 이전 설계: 128B → 4KB (Offload 1회 전송량 최적화). 6KB 전송 시 47회 → 2회. */
 #define IOIF_PSRAM_TRANSFER_CHUNK_SIZE_BYTES    (4U * 1024U)
 
 /**

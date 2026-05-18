@@ -160,7 +160,7 @@ static float _ClampFloat(float val, float min_val, float max_val);
  *-----------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* Body Data: 이 예제는 Body Data 없이 동작합니다.
      * 신체 파라미터(M_BODY_KG, L_EFF_M)를 매크로에서 직접 설정하세요. */
@@ -189,7 +189,7 @@ void User_Setup(void)
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_OFF);

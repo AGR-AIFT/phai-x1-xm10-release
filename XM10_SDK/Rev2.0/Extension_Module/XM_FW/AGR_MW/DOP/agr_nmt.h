@@ -15,30 +15,31 @@
  * - 타임아웃 기반 연결 감지 (Heartbeat 대용)
  * - 상태 변경 콜백
  * 
- * [사용 예시 - CAN 모듈]
+ * [사용 예시 - CAN 모듈 (PnP Device)]
  * ```c
  * static AGR_NMT_Inst_t s_nmt;
- * 
+ *
  * void CM_Init(void) {
- *     AGR_NMT_Init(&s_nmt, 1000);  // 1초 타임아웃
+ *     AGR_NMT_InitEx(&s_nmt, 1000, MY_NODE_ID,
+ *                    _OnStateChanged, _OnTimeout, &my_device_ctx);
  * }
- * 
+ *
  * void CM_OnPacketReceived(void) {
  *     AGR_NMT_UpdateActivity(&s_nmt, GetTick());
  * }
- * 
+ *
  * void CM_RunPeriodic(void) {
  *     AGR_NMT_CheckTimeout(&s_nmt, GetTick());
  * }
  * ```
- * 
- * [사용 예시 - UART 센서]
+ *
+ * [사용 예시 - UART 센서 (callback 불필요 시 NULL)]
  * ```c
  * static AGR_NMT_Inst_t s_nmt_L, s_nmt_R;
- * 
+ *
  * void GRF_Init(void) {
- *     AGR_NMT_Init(&s_nmt_L, 500);  // 500ms 타임아웃
- *     AGR_NMT_Init(&s_nmt_R, 500);
+ *     AGR_NMT_InitEx(&s_nmt_L, 500, GRF_L_NODE_ID, NULL, NULL, NULL);
+ *     AGR_NMT_InitEx(&s_nmt_R, 500, GRF_R_NODE_ID, NULL, NULL, NULL);
  * }
  * ```
  *
@@ -119,10 +120,15 @@ struct AGR_NMT_Inst {
  */
 
 /**
- * @brief NMT 인스턴스 초기화
+ * @brief NMT 인스턴스 초기화 (basic)
  * @param inst       인스턴스 포인터
  * @param timeout_ms 타임아웃 (ms), 0이면 타임아웃 검사 비활성화
  * @note  초기 상태는 AGR_NMT_BOOT_UP입니다.
+ *
+ * @deprecated  Use AGR_NMT_InitEx() with node_id and callbacks.
+ *              basic Init will be made internal in a future breaking release.
+ *              Currently no external callers use this form — see
+ *              docs/plan_tech_debt.md §T2.
  */
 void AGR_NMT_Init(AGR_NMT_Inst_t* inst, uint32_t timeout_ms);
 
@@ -213,7 +219,7 @@ void AGR_NMT_SetState(AGR_NMT_Inst_t* inst, AGR_NMT_State_t new_state);
  * }
  * ```
  */
-int AGR_NMT_ProcessMessage(AGR_NMT_Inst_t* inst, uint16_t can_id, const uint8_t* data, uint8_t len, uint32_t current_ms);
+int32_t AGR_NMT_ProcessMessage(AGR_NMT_Inst_t* inst, uint16_t can_id, const uint8_t* data, uint8_t len, uint32_t current_ms);
 
 /**
  * @brief NMT 명령 처리 (Master로부터 명령 수신 시)

@@ -80,6 +80,31 @@ AGRBStatusDef IOIF_SAI_Stop(IOIF_SAIx_t id);
 AGRBStatusDef IOIF_SAI_Reset(IOIF_SAIx_t id);
 size_t        IOIF_SAI_GetBufferCapacity(IOIF_SAIx_t id);
 
+/**
+ * @brief  DMA Circular 버퍼의 inactive half에 직접 쓰기
+ * @param  id      SAI 인스턴스 ID
+ * @param  event   IOIF_SAI_EVENT_HALF_COMPLETE 또는 IOIF_SAI_EVENT_COMPLETE
+ * @param  buffer  소스 데이터
+ * @param  length  바이트 수 (half_size 이하)
+ * @return AGRBStatus_OK on success
+ * @note   이벤트 기반 half 결정으로 sequence 불일치 방지:
+ *         HALF_COMPLETE → DMA가 2nd half 읽는 중 → 1st half(offset=0)에 쓰기
+ *         COMPLETE → DMA가 1st half 읽는 중 → 2nd half(offset=half_size)에 쓰기
+ */
+AGRBStatusDef IOIF_SAI_WriteInactiveHalf(IOIF_SAIx_t id, IOIF_SAI_Event_e event,
+                                          const void* buffer, size_t length);
+
+/**
+ * @brief 외부 버퍼에서 DMA_NORMAL 모드로 직접 전송 (CM-H10 AudioPlayer 패턴)
+ * @param id      SAI 인스턴스 ID
+ * @param buffer  전송할 버퍼 (Non-cacheable RAM_D2 권장, DMA 접근 가능해야 함)
+ * @param length  바이트 수
+ * @return AGRBStatus_OK on success
+ * @note Circular DMA 대신 블록 단위 DMA 전송. 완료 시 콜백으로 다음 블록 요청.
+ *       AudioPlayer의 Ring Queue 블록 직접 전송용.
+ */
+AGRBStatusDef IOIF_SAI_PlayDirect(IOIF_SAIx_t id, const void* buffer, size_t length);
+
 #endif /* AGRB_IOIF_SAI_ENABLE */
 
 #endif /* __IOIF_AGRB_SAI_H__ */

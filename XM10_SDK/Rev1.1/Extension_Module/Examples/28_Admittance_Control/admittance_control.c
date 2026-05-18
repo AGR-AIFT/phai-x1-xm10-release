@@ -170,7 +170,7 @@ static float _ClampFloat(float val, float min_val, float max_val);
  *-----------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* Body Data: 이 예제는 Body Data 없이 동작 가능
      * 측정 토크(rightHipTorque, leftHipTorque)를 외력으로 사용 */
@@ -199,7 +199,7 @@ void User_Setup(void)
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_OFF);

@@ -59,7 +59,7 @@ static bool s_is_logging = false;
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     XM_SetUsbLogSource(&s_snap, sizeof(SensorSnapshot_t));
 
@@ -67,7 +67,7 @@ void User_Setup(void)
     XM_SetUsbLogAutoTimestamp(false);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     if (!s_is_logging && XM_GetButtonEvent(XM_BTN_1) == XM_BTN_CLICK) {
         if (XM_IsUsbLogReady()) {

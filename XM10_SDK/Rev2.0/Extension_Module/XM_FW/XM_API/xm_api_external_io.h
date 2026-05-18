@@ -297,19 +297,32 @@ void XM_SetExtPowerVoltage(XmExtPwrVoltage_t voltage);
 
 /**
  * ============================================================================
- * [DEPRECATED — Rev2.0] UART4 동적 전환 API
- * Rev2.0에서 External UART는 USART2(PD5/PD6) 전용 포트로 대체됨.
+ * [Rev2.0] External UART 전용 디바이스 결합 API
+ * - External UART = USART2 (PD5/PD6, 921600 8N1, DMA Idle Event)
+ * - 사용자가 Control_Setup()에서 명시적 opt-in 호출 → 미사용 시 USART2는 향후
+ *   범용 Serial API(계획)로 자유롭게 활용 가능.
+ * - 함수명에 모델/벤더를 명시한 이유: 1:1 대응이 명확하고, 미래 다른 디바이스
+ *   결합 API가 추가되어도 충돌하지 않음.
  * ============================================================================
  */
 
 /**
- * @brief [DEPRECATED] Rev2.0에서 항상 false를 반환합니다.
- * @details Rev1.1에서는 PA0/PA1을 UART4로 전환하여 외부 IMU를 연결했으나,
- *          Rev2.0에서 External UART 전용 포트(USART2, PD5/PD6)가 추가되어
- *          이 함수는 더 이상 사용되지 않습니다.
- * @return 항상 false
+ * @brief Xsens MTi-630 IMU를 External UART(USART2)에 결합합니다.
+ * @details
+ *  - Control_Setup()에서 1회 호출. 호출 후 XM.status.ext_imu.* 로 데이터 접근.
+ *  - 센서 미연결 상태에서도 호출 안전. 케이블 결합 시 자동 OPERATIONAL 전환.
+ *  - 미호출 시 USART2 RX 콜백이 비어 있어 Xsens 데이터가 채워지지 않음.
  */
-bool XM_EnableExternalImu(void);
+void XM_AttachXsensMTi630(void);
+
+/**
+ * @brief Xsens MTi-630 Output Configuration 1회 송신 (1kHz Quat+Acc+Gyro).
+ * @details
+ *  - 신품/공장 초기화 센서에만 필요. EEPROM에 설정 보존된 센서면 호출 불필요.
+ *  - 블로킹 ~1초. Control_Setup() 또는 별도 명시 시점에 호출 (1kHz 루프 내 금지).
+ *  - XM_AttachXsensMTi630() 선행 호출 필수.
+ */
+void XM_ConfigureXsensMTi630(void);
 
 /**
  * ============================================================================

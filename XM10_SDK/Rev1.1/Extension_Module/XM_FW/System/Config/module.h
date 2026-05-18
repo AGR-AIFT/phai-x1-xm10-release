@@ -79,11 +79,10 @@
  *  55    UART RxTask          ioif_conf.h     event   센서 패킷 파싱 (DMA→파서)
  *  54    UserTask             main.c (IOC)    1ms     IPO Control Loop
  *  51    SDO Processor        module.h        event   PnP/설정 (비실시간)
- *  32    PSRAM Offload        module.h        20ms    Hot→Cold Buffer 전송
  *  25    PnP Manager          module.h        100ms   연결 관리
  *  24    USB Control          module.h        10ms    USB 모드 전환
+ *  24    DataLoggerTask       module.h        100ms   USB MSC f_write
  *  17    Button Control       module.h        event   버튼 입력
- *  16    DataLoggerTask       module.h        100ms   USB MSC f_write
  *   8    DefaultTask          main.c (IOC)    —       FreeRTOS idle (suspended)
  *
  *  [설계 원칙]
@@ -101,35 +100,22 @@
 
 /* ----- Non-Real-Time Services ----- */
 #define TASK_PRIO_PNP_MANAGER       osPriorityNormal1    /**< (25) PnP 연결 관리 */
-#define TASK_STACK_PNP_MANAGER      (512)
+/* [2026-05-12] 512 → 2048: vApplicationStackOverflowHook 으로 PnP_Task overflow 검출.
+ *  CM/IMU/EMG/FES Hub PnP + Heartbeat + Boot-up + NMT timeout + XsensMTi_RunPeriodic
+ *  까지 처리해서 512B 로는 부족. 작동 브랜치(5552725) 도 같은 값이라 같은 증상 보였음. */
+#define TASK_STACK_PNP_MANAGER      (2048)
 #define TASK_PERIOD_MS_PNP_MANAGER  100
 
 #define TASK_PRIO_USB_CONTROL       osPriorityNormal     /**< (24) USB 모드 전환 */
 #define TASK_STACK_USB_CONTROL      (1024)
 #define TASK_PERIOD_MS_USB_CONTROL  10
 
-/* ----- PSRAM Offload (Above Normal) ----- */
-/**
- * @brief PSRAM Cold Buffer Offload Task
- * @details Hot Buffer(D2) → Cold Buffer(PSRAM) 전송 담당.
- *          20ms 주기로 Hot Buffer의 데이터를 QSPI Indirect Write로 PSRAM에 쓴다.
- *          Priority: DataLogger(16) < Normal(24) < Offload(32) < Realtime(50+)
- *          실행 시간: ~300μs/20ms = 1.5% CPU. Normal 태스크 기아 없음.
- */
-#define TASK_PRIO_PSRAM_OFFLOAD     osPriorityAboveNormal   /**< PSRAM Cold Buffer Offload (32) */
-#define TASK_STACK_PSRAM_OFFLOAD    (2048)
-#define TASK_PERIOD_MS_OFFLOAD      20
-
 /* ----- Low Priority I/O ----- */
 #define TASK_PRIO_BTN_CONTROL       osPriorityBelowNormal7  /**< (17) 버튼 입력 */
 #define TASK_STACK_BTN_CONTROL      (512)
 
-#define TASK_PRIO_USB_SAVE          osPriorityBelowNormal   /**< (16) USB 데이터 저장 */
-/* [Phase 2 Fix] 16KB → 8KB: s_read_buf/s_offload_buf가 static으로 이동하고,
- * cmdBuffer도 static local로 변경하여 스택 부담 최소화.
- * AS-IS: (4096 * 4) = 16KB → OffloadTask 추가 후 heap 고갈, DataLoggerTask 생성 실패
- * TO-BE: (2048 * 4) = 8KB → heap ~8KB 절약, path 문자열+FatFS에 충분한 마진 */
-#define TASK_STACK_USB_SAVE         (2048 * 4)
+#define TASK_PRIO_USB_SAVE          osPriorityNormal        /**< (24) USB 데이터 저장 — Priority inversion 완화 */
+#define TASK_STACK_USB_SAVE         (4096 * 4)
 
 #endif  /* USE_FREERTOS */
 
@@ -161,5 +147,35 @@
 /* --- Communication Timeout --- */
 #define XM_FDCAN_RX_TIMEOUT_MS      100         /**< FDCAN 수신 타임아웃 */
 #define XM_HEARTBEAT_INTERVAL_MS    1000        /**< Heartbeat 전송 주기 */
+
+/**
+ *===========================================================================
+ * DIAGNOSTIC FEATURE FLAGS (Rev2.0 에서 Phase 1 계측 인프라 이식)
+ *===========================================================================
+ * - CMake 빌드: -DDIAG_PROFILE_ENABLED=ON / -DDIAG_KILL_DRAIN_WRITE=ON 로 지정 가능.
+ *   CMake 가 먼저 #define 하면 여기 #ifndef 가 skip 되어 중복 없음.
+ * - CubeIDE 빌드: CMake 없이 빌드 시 이 파일의 default 가 적용됨.
+ *
+ * 측정 워크플로우:
+ *   K1  : DIAG_PROFILE_ENABLED 만 활성 (drain write 정상)
+ *   K2a : 둘 다 활성 (drain write skip → tight spin 제거 측정)
+ *   완료: 둘 다 주석 처리 (zero-cost 복귀)
+ */
+
+/* UserTask jitter histogram + ISR breakdown + f_write/pdo_gap histogram 수집 활성화.
+ *  측정 종료 후 이 줄을 주석 처리하여 FW stub 상태로 복귀. */
+#ifndef DIAG_PROFILE_ENABLED
+#define DIAG_PROFILE_ENABLED
+#endif
+
+/* _WriteDataWithBlockCRC early-return 으로 drain write 전면 skip.
+ *  tight spin 제거 측정 시 uncomment, 측정 완료 후 comment 복귀. */
+/* #define DIAG_KILL_DRAIN_WRITE */
+
+/* [HardFault dump 인프라 round-trip 검증용]
+ *  boot 후 5초 지난 시점에 의도적 UsageFault (divide-by-zero) 발생 →
+ *  NVIC_SystemReset → 재마운트 → /LOGS/hardfault_<uptime>.txt 생성 확인.
+ *  검증 완료 후 반드시 comment 복귀 (production 안전). */
+/* #define XM_TEST_FAULT_AT_BOOT */
 
 #endif /* SYSTEM_CONFIG_MODULE_H_ */

@@ -205,7 +205,7 @@ set(SOURCES
     # XM_FW 소스 → libXM_Lib.a로 대체 (내부 구현 은닉)
     # boot_fw_info.c만 직접 컴파일 (.fw_header 섹션 — 링커 GC 회피)
     XM_FW/System/Boot/boot_fw_info.c
-    XM_Apps/User_Algorithm/user_app.c
+    XM_Apps/Control_Task/control_task.c
 )
 
 set(ASM_SOURCES
@@ -216,7 +216,7 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${ASM_SOURCES})
 
 # --- Include Paths ---
 target_include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_Apps/User_Algorithm
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_Apps/Control_Task
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/XM_API
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/System/Board/Button
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/System/Board/GPIO
@@ -291,7 +291,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 # XM_FW 정적 라이브러리 (내부 구현 은닉)
 set(XM_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/libXM_Lib.a)
 
-# NOTE: 아래 IOIF 매크로는 user_app.c 등 SDK 사용자 코드의 조건부 컴파일에만 영향을 줍니다.
+# NOTE: 아래 IOIF 매크로는 control_task.c 등 SDK 사용자 코드의 조건부 컴파일에만 영향을 줍니다.
 # libXM_Lib.a 내부의 IOIF 드라이버는 라이브러리 빌드 시점에 이미 활성화되어 있으므로,
 # 여기서 매크로를 변경해도 IOIF 드라이버 동작에는 영향이 없습니다.
 

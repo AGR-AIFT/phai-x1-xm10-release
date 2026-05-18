@@ -32,8 +32,8 @@
  * static AGR_PnP_Slave_t s_slave_pnp;
  *
  * void System_Init(void) {
- *     AGR_PnP_Slave_Init(&s_slave_pnp, AGR_NODE_ID_IMU_HUB,
- *                          AGR_NODE_ID_XM, 3000,
+ *     AGR_PnP_Slave_Init(&s_slave_pnp, MY_NODE_ID,
+ *                          MASTER_NODE_ID, 3000,
  *                          App_Fdcan_Transmit, IOIF_TIM_GetTick);
  *     XM_Drv_Init(tx_func, &s_slave_pnp);
  * }
@@ -126,7 +126,7 @@ typedef struct {
 
     /* Master 추적 */
     struct {
-        uint8_t              node_id;              /**< Master Node ID (e.g., AGR_NODE_ID_XM) */
+        uint8_t              node_id;              /**< Master Node ID (System Config 매크로) */
         AGR_NMT_Inst_t       nmt;                  /**< Master NMT (Heartbeat 기반 추적) */
         uint32_t             heartbeat_timeout_ms; /**< Master Heartbeat Timeout (ms) */
         uint32_t             last_heartbeat_rx_ms; /**< 마지막 Master Heartbeat 수신 시간 */
@@ -140,6 +140,8 @@ typedef struct {
 
     /* 상태 */
     bool                     is_initialized;       /**< 초기화 완료 여부 */
+    bool                     initial_bootup_sent;  /**< 첫 Boot-up 송신 완료 플래그
+                                                    *   (CiA 301: init 완료 시 즉시 1회 송신 필요) */
 } AGR_PnP_Slave_t;
 
 /**
@@ -152,8 +154,8 @@ typedef struct {
  * @brief Slave PnP 초기화
  *
  * @param slave          Slave 인스턴스 (System Layer에서 정적 할당)
- * @param my_node_id     나의 CANopen Node ID (e.g., AGR_NODE_ID_IMU_HUB)
- * @param master_node_id Master의 Node ID (e.g., AGR_NODE_ID_XM)
+ * @param my_node_id     나의 CANopen Node ID (System Config 에서 정의)
+ * @param master_node_id Master의 Node ID (System Config 에서 정의)
  * @param timeout_ms     Master Heartbeat Timeout (ms), 권장: 3000
  * @param tx_func        CAN 전송 함수 (Dependency Injection)
  * @param get_tick       Tick 함수
@@ -164,7 +166,7 @@ typedef struct {
  * - 초기 상태: my_nmt = BOOT_UP (Boot-up 전송은 RunPeriodic에서 자동)
  * - ❌ Init에서 Boot-up 전송 안함 (.cursorrules 금지사항)
  */
-int AGR_PnP_Slave_Init(AGR_PnP_Slave_t* slave,
+int32_t AGR_PnP_Slave_Init(AGR_PnP_Slave_t* slave,
                          uint8_t my_node_id,
                          uint8_t master_node_id,
                          uint32_t timeout_ms,
@@ -192,7 +194,7 @@ int AGR_PnP_Slave_Init(AGR_PnP_Slave_t* slave,
  * }
  * ```
  */
-int AGR_PnP_Slave_SetCallbacks(AGR_PnP_Slave_t* slave,
+int32_t AGR_PnP_Slave_SetCallbacks(AGR_PnP_Slave_t* slave,
                                 const AGR_PnP_Slave_Callbacks_t* callbacks);
 
 /**
@@ -279,7 +281,7 @@ AGR_NMT_Inst_t* AGR_PnP_Slave_GetMyNmt(AGR_PnP_Slave_t* slave);
  *
  * @warning 일반적으로 RunPeriodic()이 자동 전송합니다. 수동 호출 불필요.
  */
-int AGR_PnP_Slave_SendBootupNow(AGR_PnP_Slave_t* slave);
+int32_t AGR_PnP_Slave_SendBootupNow(AGR_PnP_Slave_t* slave);
 
 /**
  * @brief Heartbeat 메시지 즉시 전송 (테스트/디버깅용)
@@ -289,6 +291,6 @@ int AGR_PnP_Slave_SendBootupNow(AGR_PnP_Slave_t* slave);
  *
  * @warning 일반적으로 RunPeriodic()이 자동 전송합니다. 수동 호출 불필요.
  */
-int AGR_PnP_Slave_SendHeartbeatNow(AGR_PnP_Slave_t* slave);
+int32_t AGR_PnP_Slave_SendHeartbeatNow(AGR_PnP_Slave_t* slave);
 
 #endif /* AGR_PNP_SLAVE_H */

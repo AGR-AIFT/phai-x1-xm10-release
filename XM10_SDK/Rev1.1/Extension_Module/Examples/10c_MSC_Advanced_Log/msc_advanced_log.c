@@ -75,7 +75,7 @@ static void Active_Exit(void);
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     s_tsm = XM_TSM_Create(XM_STATE_STANDBY);
 
@@ -96,7 +96,7 @@ void User_Setup(void)
     XM_SetUsbLogRollingSize(5);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     XM_TSM_Run(s_tsm);
 }

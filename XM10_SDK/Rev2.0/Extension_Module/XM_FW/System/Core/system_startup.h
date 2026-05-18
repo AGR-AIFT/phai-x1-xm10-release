@@ -17,6 +17,8 @@
 
 #include "ioif_agrb_fdcan.h"
 #include "ioif_agrb_gpio.h"
+#include "ioif_agrb_spi.h"
+#include "ioif_agrb_uart.h"
 
 /**
  *-----------------------------------------------------------
@@ -89,17 +91,48 @@ int System_Fdcan2_Transmit(uint32_t can_id, const uint8_t* data, uint8_t len);
 
 /**
  * @brief CiA 301 SYNC를 FDCAN1(Ch1, XM↔CM)으로 전송합니다.
- * @details 1-byte rolling counter payload. TIM6 ISR(NVIC 4, 1kHz)에서 호출.
+ * @details 1-byte rolling counter payload. UserTask(1kHz)에서 호출.
  *          ISR-Safe: IOIF Tx Mutex 우회, HAL 직접 호출.
  *          PnP Operational 진입 후에만 호출할 것 (CM_Drv_IsConnected() 체크).
  */
 void System_SendSync_Ch1(void);
 
 /**
+ * @brief CiA 301 SYNC를 FDCAN2(Ch2, XM↔SM)으로 전송합니다.
+ * @details 1-byte rolling counter payload. UserTask(1kHz)에서 호출.
+ *          IOIF Tx 사용 (Ch2는 PnP/SDO 등 다중 Tx 소스, Mutex 보호).
+ *          최소 1개 SM이 Online일 때만 호출할 것.
+ */
+void System_SendSync_Ch2(void);
+
+/**
  * @brief EXT_PWR_SEL_5V(PE3)의 IOIF GPIO 핸들을 반환합니다.
  * @return IOIF_GPIOx_t 핸들.
  */
 IOIF_GPIOx_t System_GetExtPwrSelGpioId(void);
+
+/**
+ * @brief External UART(USART2, PD5/PD6)의 IOIF 핸들을 반환합니다.
+ * @details Application Layer Facade(예: XM_AttachXsensMTi630)에서 사용.
+ *          향후 범용 Serial API에서도 동일 핸들을 활용.
+ * @return IOIF_UARTx_t 핸들.
+ */
+IOIF_UARTx_t System_GetExternalUartId(void);
+
+/**
+ * @brief SPI2 (MCP79510 RTC, SW NSS)의 IOIF 핸들을 반환합니다.
+ * @details Rev2.0 전용. SI 검증 stimulus / 진단 도구에서 직접 SPI 토글이 필요할 때.
+ *          평시 driver path 는 MCP79510_Read/Write 사용.
+ * @return IOIF_SPIx_t 핸들 (미초기화 시 IOIF_SPI_ID_NOT_ALLOCATED).
+ */
+IOIF_SPIx_t System_GetSpi2RtcId(void);
+
+/**
+ * @brief SPI5 (PCA9957 LED Driver, SW NSS)의 IOIF 핸들을 반환합니다.
+ * @details Rev2.0 전용. SI 검증 stimulus 용. 평시는 PCA9957_* driver path.
+ * @return IOIF_SPIx_t 핸들 (미초기화 시 IOIF_SPI_ID_NOT_ALLOCATED).
+ */
+IOIF_SPIx_t System_GetSpi5LedDrvId(void);
 
 /**
  * @brief [RTOS 태스크] "강한(strong)" 정의의 StartupTask 구현부.

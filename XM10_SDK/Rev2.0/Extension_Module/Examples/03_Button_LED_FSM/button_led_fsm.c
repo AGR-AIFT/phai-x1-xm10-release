@@ -61,7 +61,7 @@ static void Active_Loop(void);
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     // TSM 생성 (초기 상태: STANDBY)
     s_tsm = XM_TSM_Create(XM_STATE_STANDBY);
@@ -83,7 +83,7 @@ void User_Setup(void)
     XM_TSM_AddState(s_tsm, &act_conf);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     XM_TSM_Run(s_tsm);
 }

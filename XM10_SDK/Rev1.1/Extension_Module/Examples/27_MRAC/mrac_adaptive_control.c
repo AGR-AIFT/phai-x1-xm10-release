@@ -160,7 +160,7 @@ static float _ClampFloat(float val, float min_val, float max_val);
  *-----------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* Body Data: 이 예제는 Body Data 없이 동작 가능
      * 보행 상태 감지 향상을 원하면 아래 주석 해제 후 값 설정 */
@@ -193,7 +193,7 @@ void User_Setup(void)
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_OFF);

@@ -495,6 +495,47 @@ AGRBStatusDef IOIF_ADC_AddChannel(
 );
 
 /**
+ * @brief [범용] CubeMX 초기화된 ADC 인스턴스를 IOIF 동적 채널 관리로 adopt.
+ * @details
+ *  - CubeMX `MX_ADCx_Init`로 초기화된 ADC를 IOIF가 동적 변경할 수 있도록 흡수.
+ *  - adopt 후에는 IOIF_ADC_RemoveChannel/AddChannel/ReconfigureChannels API가
+ *    정상 동작합니다 (이전엔 NOT_SUPPORTED 반환했음).
+ *  - **본 함수는 ADC 페리페럴 설정을 변경하지 않습니다** — CubeMX가 만든 채널
+ *    구성을 IOIF 메타데이터(s_manual_init_info[])에 등록만 합니다.
+ *
+ * @note 사용 시점: CubeMX MX_ADCx_Init() 직후 + IOIF_ADC_INITIALIZE() 직후 1회만 호출.
+ *       호출 후 CubeMX MX_ADCx_Init()이 다시 호출되면 IOIF 메타데이터와 어긋남.
+ *
+ * @param[in] id              IOIF_ADC_INITIALIZE로 부여된 ADC 인스턴스 ID
+ * @param[in] hadc            CubeMX hadc 핸들 (DeInit/Init 사이클의 baseline)
+ * @param[in] channels        채널 배열 (CubeMX rank 1~N 순서대로 ADC_CHANNEL_x)
+ * @param[in] sampling_times  각 채널의 sample_time 배열 (ADC_SAMPLETIME_x)
+ * @param[in] channel_count   채널 개수 (≤ IOIF_ADC_MAX_CHANNEL)
+ * @return AGRBStatus_OK         성공
+ *         AGRBStatus_PARAM_ERROR id/포인터/카운트 invalid
+ *         AGRBStatus_BUSY        이미 manual_init 상태 (중복 호출 방지)
+ *
+ * @example
+ * @code
+ * // ADC1: CubeMX 4채널 (PF11/PF12/PA0/PA1) adopt
+ * const uint32_t ch[]  = {ADC_CHANNEL_2,  ADC_CHANNEL_6,
+ *                         ADC_CHANNEL_16, ADC_CHANNEL_17};
+ * const uint32_t st[]  = {ADC_SAMPLETIME_810CYCLES_5, ADC_SAMPLETIME_810CYCLES_5,
+ *                         ADC_SAMPLETIME_387CYCLES_5, ADC_SAMPLETIME_387CYCLES_5};
+ * IOIF_ADC_INITIALIZE(s_adc1_id, &hadc1);
+ * IOIF_ADC_AdoptCubeMxInstance(s_adc1_id, &hadc1, ch, st, 4);
+ * // 이후 IOIF_ADC_RemoveChannel(s_adc1_id, ADC_CHANNEL_16) 정상 동작
+ * @endcode
+ */
+AGRBStatusDef IOIF_ADC_AdoptCubeMxInstance(
+    IOIF_ADCx_t id,
+    ADC_HandleTypeDef* hadc,
+    const uint32_t* channels,
+    const uint32_t* sampling_times,
+    uint8_t channel_count
+);
+
+/**
  * @brief [범용] ADC에서 특정 채널을 제거합니다 (범용 API).
  * @details 
  * - 이미 추가된 채널을 동적으로 제거합니다.
@@ -562,59 +603,7 @@ AGRBStatusDef IOIF_ADC_Calibrate(IOIF_ADCx_t id);
 
 /**
  * ============================================================================
- * [신규] 인터럽트 핸들러용 범용 헬퍼 함수 (System Layer ISR 전용)
- * ============================================================================
- */
-
-/**
- * @brief [범용] ADC HAL 핸들 포인터 반환 (IRQ Handler 전용)
- * @details 
- * - System Layer의 ISR에서만 사용합니다 (예: System_ISR_ADC3).
- * - ⚠️ 특정 ADC에 종속되지 않은 범용 API입니다.
- * - ⚠️ Application Layer에서 직접 호출 금지!
- * 
- * @deprecated 이 함수는 곧 제거됩니다. IOIF_ADC_HandleAdcIsr() 사용을 권장합니다.
- * 
- * @param id IOIF_ADCx_t 핸들 ID
- * @return ADC_HandleTypeDef* (NULL if invalid ID)
- * 
- * @usage (System Layer)
- * @code
- * void System_ISR_ADC3(void)
- * {
- *     ADC_HandleTypeDef* hadc = IOIF_ADC_GetHandleById(s_adc3_id);
- *     if (hadc != NULL) HAL_ADC_IRQHandler(hadc);
- * }
- * @endcode
- */
-ADC_HandleTypeDef* IOIF_ADC_GetHandleById(IOIF_ADCx_t id);
-
-/**
- * @brief [범용] ADC DMA 핸들 포인터 반환 (IRQ Handler 전용)
- * @details 
- * - System Layer의 DMA ISR에서만 사용합니다 (예: System_ISR_ADC3_DMA).
- * - ⚠️ 특정 ADC에 종속되지 않은 범용 API입니다.
- * - ⚠️ Application Layer에서 직접 호출 금지!
- * 
- * @deprecated 이 함수는 곧 제거됩니다. IOIF_ADC_HandleDmaIsr() 사용을 권장합니다.
- * 
- * @param id IOIF_ADCx_t 핸들 ID
- * @return DMA_HandleTypeDef* (NULL if invalid ID or not manual init)
- * 
- * @usage (System Layer)
- * @code
- * void System_ISR_ADC3_DMA(void)
- * {
- *     DMA_HandleTypeDef* hdma = IOIF_ADC_GetDmaHandleById(s_adc3_id);
- *     if (hdma != NULL) HAL_DMA_IRQHandler(hdma);
- * }
- * @endcode
- */
-DMA_HandleTypeDef* IOIF_ADC_GetDmaHandleById(IOIF_ADCx_t id);
-
-/**
- * ============================================================================
- * [신규] ISR 완전 캡슐화 API (HAL 타입 완전히 숨김, 권장)
+ * ISR 완전 캡슐화 API (HAL 타입 완전히 숨김)
  * ============================================================================
  */
 

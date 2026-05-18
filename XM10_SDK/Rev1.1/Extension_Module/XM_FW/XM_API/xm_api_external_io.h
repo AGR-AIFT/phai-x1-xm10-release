@@ -69,11 +69,11 @@ typedef enum {
  * @details ✅ ADC1/2/3 통합: DIO 핀도 ADC로 사용 가능
  */
 typedef enum {
-    /* ADC1 고정 핀 (Rev2.0: 전부 ADC1 16-bit, 항상 사용 가능) */
-    XM_EXT_ADC_1 = 0, // PB0  (ADC1_INP9)
-    XM_EXT_ADC_2,     // PB1  (ADC1_INP5)
-    XM_EXT_ADC_3,     // PF11 (ADC1_INP2)
-    XM_EXT_ADC_4,     // PF12 (ADC1_INP6)
+    /* ADC1/2 고정 핀 (항상 사용 가능) */
+    XM_EXT_ADC_1 = 0, // PA0 [Shared] ADC / UART4_TX (IMU 사용 시 GPIO 불가)
+    XM_EXT_ADC_2,     // PA0_C
+    XM_EXT_ADC_3,     // PA1 [Shared] ADC / UART4_RX (IMU 사용 시 GPIO 불가)
+    XM_EXT_ADC_4,     // PA1_C
     
     /* ADC3 동적 핀 (DIO → ADC 전환 필요) */
     XM_EXT_ADC_5,     // PF3 (DIO 1 → ADC3, XM_SwitchDioToAdc() 호출 필요)
@@ -108,14 +108,6 @@ typedef enum {
 } XmLogicLevel_t;
 
 /**
- * @brief 확장 포트 전원 전압 선택 (EXT_PWR_SEL_5V, PE3)
- */
-typedef enum {
-    XM_EXT_PWR_3V3 = 0, /**< 3.3V 출력 (기본값, Low) */
-    XM_EXT_PWR_5V  = 1  /**< 5V 출력 (High) */
-} XmExtPwrVoltage_t;
-
-/**
  *-----------------------------------------------------------
  * PUBLIC VARIABLES(extern)
  *-----------------------------------------------------------
@@ -136,7 +128,7 @@ typedef enum {
 
 /**
  * @brief [비실시간] 디지털 핀의 모드(입력/출력/풀업/풀다운)를 설정합니다.
- * @warning 2ms 실시간 루프 안에서 호출하지 마십시오. (HAL_GPIO_Init 호출로 인한 지연)
+ * @warning 1ms 실시간 루프 안에서 호출하지 마십시오. (HAL_GPIO_Init 호출로 인한 지연)
  * @param[in] pin   설정할 핀 (D0 ~ D7)
  * @param[in] mode  설정할 모드 (XM_INPUT, XM_OUTPUT 등)
  */
@@ -273,43 +265,34 @@ bool XM_IsDioSwitchedToAdc(XmDioPin_t pin);
 
 /**
  * ============================================================================
- * [Rev2.0] 확장 포트 전원 전압 선택 API (3.3V / 5V)
+ * [Rev1.1] External UART 디바이스 결합 API (PA0/PA1 → UART4 동적 전환)
+ *  - 사용자가 Control_Setup()에서 명시적 opt-in 호출 → 미사용 시 PA0/PA1은 ADC 그대로.
+ *  - 함수명에 모델/벤더 명시 (Rev2.0과 동일한 인터페이스, 내부 구현만 HW 매핑 다름).
+ *  - Rev2.0(USART2 PD5/PD6 전용 포트)과 동일한 사용자 코드 호환.
  * ============================================================================
  */
 
 /**
- * @brief [비실시간] 확장 포트의 공급 전압을 3.3V 또는 5V로 전환합니다.
+ * @brief Xsens MTi-630 IMU를 External UART(Rev1.1: PA0/PA1 → UART4)에 결합합니다.
  * @details
- * - PE3(EXT_PWR_SEL_5V) GPIO를 제어하여 전원 MUX를 전환합니다.
- * - 기본값은 3.3V (Low)이며, 5V 센서 사용 시 XM_EXT_PWR_5V로 전환하세요.
- *
- * @param[in] voltage 선택할 전압 (XM_EXT_PWR_3V3 또는 XM_EXT_PWR_5V)
- *
- * @warning 전환 시 확장 포트에 연결된 외부 디바이스의 전압 규격을 반드시 확인하세요.
- *
- * @code
- * void InitUserAlgorithm(void) {
- *     XM_SetExtPowerVoltage(XM_EXT_PWR_5V);   // 5V 센서 사용
- * }
- * @endcode
+ *  - Control_Setup()에서 1회 호출. 호출 후 XM.status.ext_imu.* 로 데이터 접근.
+ *  - **Rev1.1 동작**: 호출 시 ADC1에서 PA0/PA1 채널 제거 → UART4 InitManual →
+ *    파서/콜백 결합까지 한 번에 수행 (ExternalIO_SwitchToUartMode 내부 호출).
+ *  - 호출 후 PA0/PA1은 ADC로 사용 불가 (대신 PA0_C/PA1_C인 XM_EXT_ADC_2/_4 사용).
+ *  - 미호출 시 PA0/PA1은 ADC로 유지 (XM_EXT_ADC_1/_3 사용 가능).
+ *  - 센서 미연결 상태에서도 호출 안전. 케이블 결합 시 자동 OPERATIONAL 전환.
+ *  - Rev2.0과 인터페이스 동일 (HW 매핑만 다름) → 사용자 코드는 양 Rev에서 그대로 동작.
  */
-void XM_SetExtPowerVoltage(XmExtPwrVoltage_t voltage);
+void XM_AttachXsensMTi630(void);
 
 /**
- * ============================================================================
- * [DEPRECATED — Rev2.0] UART4 동적 전환 API
- * Rev2.0에서 External UART는 USART2(PD5/PD6) 전용 포트로 대체됨.
- * ============================================================================
+ * @brief Xsens MTi-630 Output Configuration 1회 송신 (1kHz Quat+Acc+Gyro).
+ * @details
+ *  - 신품/공장 초기화 센서에만 필요. EEPROM에 설정 보존된 센서면 호출 불필요.
+ *  - 블로킹 ~1초. Control_Setup() 또는 별도 명시 시점에 호출 (1kHz 루프 내 금지).
+ *  - XM_AttachXsensMTi630() 선행 호출 필수.
  */
-
-/**
- * @brief [DEPRECATED] Rev2.0에서 항상 false를 반환합니다.
- * @details Rev1.1에서는 PA0/PA1을 UART4로 전환하여 외부 IMU를 연결했으나,
- *          Rev2.0에서 External UART 전용 포트(USART2, PD5/PD6)가 추가되어
- *          이 함수는 더 이상 사용되지 않습니다.
- * @return 항상 false
- */
-bool XM_EnableExternalImu(void);
+void XM_ConfigureXsensMTi630(void);
 
 /**
  * ============================================================================

@@ -202,7 +202,7 @@ static void _DumpAndFreeEvents(void);
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* 단일 상태 TSM — 항상 동작 */
     s_tsm = XM_TSM_Create(XM_STATE_USER_START);
@@ -224,7 +224,7 @@ void User_Setup(void)
     XM_SendUsbDebugMessage("[MEM] BTN1=MemReport  BTN2=EventDump  BTN3=Reserved\r\n");
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     XM_TSM_Run(s_tsm);
 }

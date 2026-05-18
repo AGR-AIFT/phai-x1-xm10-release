@@ -18,11 +18,11 @@
  *     └─ 0x180: TPDO1 → EmgHub_Drv_ProcessCANMessage() [Device Driver]
  *
  * [통신 구조]
- * - EMG Hub Node ID: 0x0A
- * - TPDO1 (0x18A): Metadata(4B) + EMG Data(10B) = 14B
- * - SDO Request (0x60A): TPDO Mapping (0x2110)
- * - SDO Response (0x58A): 설정 확인
- * - Heartbeat (0x70A): PnP Master가 처리
+ * - EMG Hub Node ID: 0x0F (AGR_NODE_ID_EMG_HUB)
+ * - TPDO1 (0x18F): Metadata(4B) + EMG Data(10B) = 14B
+ * - SDO Request (0x60F): TPDO Mapping (0x2110)
+ * - SDO Response (0x58F): 설정 확인
+ * - Heartbeat (0x70F): PnP Master가 처리
  *
  * [PDO 데이터 구조 (EMG Hub xm_drv.h 기준)]
  * Metadata (4B): timestamp_low, timestamp_mid, timestamp_high, status_flags
@@ -72,12 +72,14 @@
 
 /**
  * @brief EMG Hub PDO 수신 데이터 (최종 처리 완료, int16 기반)
- * @details TPDO1 Metadata + EMG Data SubIndex 0x60 해석 결과
- * @note Timestamp는 24-bit 값이지만 uint32_t에 저장 (상위 8bit = 0)
+ * @details TPDO1 Metadata + EMG Data SubIndex 0x60 + ctrl_tick_ms 해석 결과
+ * @note Metadata timestamp 는 24-bit 값이지만 uint32_t 에 저장 (상위 8bit = 0).
+ *       ctrl_tick_ms 는 Slave 제어 루프 32-bit ms tick (wrap 49.7 일) — ground truth.
+ *       TPDO payload 18B = Metadata(4B) + EMG Data(10B) + ctrl_tick_ms(4B).
  */
 typedef struct __attribute__((packed)) {
     /* PDO Metadata (4B) */
-    uint32_t timestamp;           /**< Frame Timestamp (24-bit, ms) */
+    uint32_t timestamp;           /**< Frame Timestamp (24-bit, ms) — Slave 에서 조립한 Metadata */
     uint8_t  status_flags;        /**< Status Flags (bit0: ADC_OK, bit1: IS_ACTIVE, bit2: SATURATED) */
 
     /* EMG Sensor Data — SubIndex 0x60 (10B) */
@@ -87,6 +89,10 @@ typedef struct __attribute__((packed)) {
     int16_t  envelope_uv_x10;    /**< Envelope 값 (µV × 10) */
     uint8_t  mvc_percent;         /**< MVC 정규화 (0~100%) */
     uint8_t  is_active;           /**< 근수축 감지 (0/1) */
+
+    /* Slave 제어 틱 — OD 0x6050 (4B, 32-bit, LE) */
+    uint32_t ctrl_tick_ms;        /**< Slave Control Task 의 ms tick. 연속 수신 간 delta!=1 → gap.
+                                    *   Frame 이 14B (구 포맷) 면 timestamp 값으로 fallback. */
 } EmgHub_RxData_t;
 
 /** @brief EMG Hub Status Flag Bits (EMG Hub xm_drv.h와 동일) */

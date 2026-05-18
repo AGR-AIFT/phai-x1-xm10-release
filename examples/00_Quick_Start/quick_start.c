@@ -8,7 +8,7 @@
  * 외부 하드웨어 연결 없이 보드 단독으로 실행할 수 있습니다.
  *
  * [학습 목표]
- * - User_Setup() / User_Loop() 진입점 구조 이해
+ * - Control_Setup() / Control_Loop() 진입점 구조 이해
  * - Task State Machine(TSM) 기본 생성 및 실행
  * - LED, 버튼, USB CDC의 기초 동작 확인
  *
@@ -98,7 +98,7 @@ static void Run_Loop(void);
  * @brief  시스템 초기화 — 부팅 시 1회 호출
  * @details TSM 생성 및 상태 등록. 외부 하드웨어 설정 없음.
  */
-void User_Setup(void)
+void Control_Setup(void)
 {
     s_tsm = XM_TSM_Create(XM_STATE_USER_START);
 
@@ -113,7 +113,7 @@ void User_Setup(void)
 /**
  * @brief  메인 루프 — 1ms 주기로 반복 호출
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
     XM_TSM_Run(s_tsm);
 }

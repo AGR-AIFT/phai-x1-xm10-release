@@ -41,7 +41,7 @@
  *   이 예제에서 사용하는 rightThighAngle, leftThighAngle, rightKneeAngle,
  *   leftKneeAngle, isRightFootContact, isLeftFootContact 등의 동작 분석 추정치는
  *   H10 CM 내부에서 IMU + 역기구학으로 계산됩니다.
- *   올바른 추정을 위해 반드시 User_Setup()에서 XM_SendUserBodyData()를 호출하여
+ *   올바른 추정을 위해 반드시 Control_Setup()에서 XM_SendUserBodyData()를 호출하여
  *   착용자의 신체 정보(몸무게, 키, 분절 길이 등)를 설정해야 합니다.
  *   신체 정보가 미설정이면 무릎 각도, 허벅지 각도, 발 접지 감지가 부정확합니다.
  *
@@ -230,7 +230,7 @@ static void _UpdateLogData(void);
  * @brief 보행 의도 인식 예제를 초기화합니다.
  * @details 부팅 시 한 번 호출됩니다. TSM 생성, USB 스트리밍/로깅 소스를 등록합니다.
  */
-void User_Setup(void)
+void Control_Setup(void)
 {
     /*
      * [필수] 사용자 신체 정보 전송 — 동작 분석 추정치의 정확도에 직접 영향
@@ -285,7 +285,7 @@ void User_Setup(void)
 /**
  * @brief 매 제어 루프(1ms)마다 호출되는 메인 루프입니다.
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
     /* CM 연결이 끊기면 안전을 위해 OFF로 강제 전환 */
     if (!XM_IsCmConnected()) {

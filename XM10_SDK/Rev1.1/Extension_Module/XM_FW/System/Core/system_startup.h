@@ -16,7 +16,6 @@
 #define SYSTEM_CORE_INC_SYSTEM_STARTUP_H_
 
 #include "ioif_agrb_fdcan.h"
-#include "ioif_agrb_gpio.h"
 
 /**
  *-----------------------------------------------------------
@@ -55,21 +54,20 @@ void System_Startup(void);
 
 /**
  * @brief 초기화된 FDCAN1의 IOIF 핸들(ID)을 반환합니다.
- * @details 다른 시스템 모듈(예: canfd_rx_handler)이 IOIF 드라이버에 접근하기 위해 사용합니다.
+ * @details CM Bus (DOP V1) 접근용.
  * @return FDCAN1의 IOIF_FDCANx_t 핸들.
  */
 IOIF_FDCANx_t System_GetFDCAN1_Id(void);
 
 /**
  * @brief 초기화된 FDCAN2의 IOIF 핸들(ID)을 반환합니다.
- * @details Rev2.0 Ch2 (XM↔Sensor Module, DOP V2) 전용.
+ * @details Sensor Hub Bus (DOP V2) 접근용.
  * @return FDCAN2의 IOIF_FDCANx_t 핸들.
  */
 IOIF_FDCANx_t System_GetFDCAN2_Id(void);
 
 /**
- * @brief FDCAN1 채널(Ch1)을 통해 CAN 메시지를 전송하는 래퍼 함수.
- * @note  CM(DOP V1) 전용 채널. AGR_TxFunc_t / CM_TxFunc_t 타입과 호환.
+ * @brief FDCAN1 채널을 통해 CAN 메시지를 전송합니다 (CM Bus, DOP V1).
  * @param[in] can_id CAN ID (11-bit 또는 29-bit).
  * @param[in] data  전송할 데이터의 포인터 (const).
  * @param[in] len   전송할 데이터의 길이 (0~64 bytes).
@@ -78,8 +76,7 @@ IOIF_FDCANx_t System_GetFDCAN2_Id(void);
 int System_Fdcan1_Transmit(uint32_t can_id, const uint8_t* data, uint8_t len);
 
 /**
- * @brief FDCAN2 채널(Ch2)을 통해 CAN 메시지를 전송하는 래퍼 함수.
- * @note  Sensor Module(DOP V2) 전용 채널. AGR_TxFunc_t 타입과 호환.
+ * @brief FDCAN2 채널을 통해 CAN 메시지를 전송합니다 (Sensor Hub Bus, DOP V2).
  * @param[in] can_id CAN ID (11-bit 또는 29-bit).
  * @param[in] data  전송할 데이터의 포인터 (const).
  * @param[in] len   전송할 데이터의 길이 (0~64 bytes).
@@ -88,18 +85,18 @@ int System_Fdcan1_Transmit(uint32_t can_id, const uint8_t* data, uint8_t len);
 int System_Fdcan2_Transmit(uint32_t can_id, const uint8_t* data, uint8_t len);
 
 /**
- * @brief CiA 301 SYNC를 FDCAN1(Ch1, XM↔CM)으로 전송합니다.
- * @details 1-byte rolling counter payload. TIM6 ISR(NVIC 4, 1kHz)에서 호출.
- *          ISR-Safe: IOIF Tx Mutex 우회, HAL 직접 호출.
- *          PnP Operational 진입 후에만 호출할 것 (CM_Drv_IsConnected() 체크).
+ * @brief CiA 301 SYNC 메시지를 FDCAN1(Ch1: XM↔CM)으로 전송합니다.
+ * @details UserTask에서 _FetchAllInputs() 직후 호출.
+ *          Read↔SYNC가 같은 태스크에서 실행되어 phase drift 제거.
+ * @note HAL 직접 호출 (단일 Tx 경로, Mutex 불필요)
  */
 void System_SendSync_Ch1(void);
 
 /**
- * @brief EXT_PWR_SEL_5V(PE3)의 IOIF GPIO 핸들을 반환합니다.
- * @return IOIF_GPIOx_t 핸들.
+ * @brief [신규] Extension Port(PA0, PA1)를 ADC 모드에서 UART(IMU) 모드로 동적 전환합니다.
+ * @return 성공 시 true, 실패 시 false
  */
-IOIF_GPIOx_t System_GetExtPwrSelGpioId(void);
+bool System_Switch_To_IMU_Mode(void);
 
 /**
  * @brief [RTOS 태스크] "강한(strong)" 정의의 StartupTask 구현부.
@@ -107,5 +104,10 @@ IOIF_GPIOx_t System_GetExtPwrSelGpioId(void);
  * 시스템 초기화를 총괄하고, 완료되면 다른 태스크를 깨운 뒤 자신을 삭제합니다.
  */
 void StartStartupTask(void *argument);
+
+/* --- ISR Wrappers (For stm32h7xx_it.c) XM10-XSENS IMU 연결시 사용 --- */
+void System_ISR_DMA_UART4_RX_Manual(void);
+void System_ISR_DMA_UART4_TX_Manual(void);
+void System_ISR_UART4_Manual(void);
 
 #endif /* SYSTEM_CORE_INC_SYSTEM_STARTUP_H_ */

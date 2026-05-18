@@ -58,11 +58,6 @@ typedef uint32_t IOIF_TIMx_t;
  */
 typedef void (*IOIF_TIM_PeriodElapsedCallback_t)(void);
 
-typedef struct {
-    uint32_t                        period_ms;   // (참고용) 설정된 주기
-    IOIF_TIM_PeriodElapsedCallback_t callback;   // 주기마다 호출될 함수
-} IOIF_TIM_Config_t;
-
 /**
  *------------------------------------------------------------
  * PUBLIC FUNCTION PROTOTYPES
@@ -70,13 +65,16 @@ typedef struct {
  */
 
 /**
- * @brief  타이머 인스턴스를 할당하고 초기화합니다.
- * @param[out] id      할당된 IOIF 핸들 ID
- * @param[in]  htim    STM32 HAL TIM 핸들
- * @param[in]  config  초기화 설정 (콜백 포함)
- * @return AGRBStatus_OK 성공 시
+ * @brief  Timer 인스턴스를 IOIF 풀에 등록합니다 (단일 등록 API).
+ * @details
+ * - Base / Trigger / PWM 등 모든 사용처 공통.
+ * - callback 이 필요하면 등록 후 IOIF_TIM_SetCallback(id, cb) 호출.
+ *
+ * @param[out] id   할당된 IOIF 핸들 ID
+ * @param[in]  htim STM32 HAL TIM 핸들
+ * @return AGRBStatus_OK / AGRBStatus_PARAM_ERROR / AGRBStatus_NO_RESOURCE
  */
-AGRBStatusDef IOIF_TIM_Assign_Instance(IOIF_TIMx_t* id, TIM_HandleTypeDef* htim, IOIF_TIM_Config_t* config);
+AGRBStatusDef IOIF_TIM_Assign(IOIF_TIMx_t* id, TIM_HandleTypeDef* htim);
 
 /**
  * @brief  타이머 인터럽트(Base_IT)를 시작합니다.
@@ -110,52 +108,13 @@ void IOIF_TIM_Delay(uint32_t ms);
 
 /**
  * ============================================================================
- * [신규] 범용 Timer PWM Trigger API (ADC/DAC 트리거용, H7/G4 공용)
+ * Timer Base/Trigger Start-Stop API (ADC/DAC 트리거용, H7/G4 공용)
  * ============================================================================
+ * @details
+ *  - IOIF_TIM_Assign() 으로 등록된 Timer 를 Base 모드로 시작/정지합니다.
+ *  - ADC External Trigger (1kHz ~ 100kHz), DAC 파형 생성, Multi-channel 동기화 타이밍 등에 사용.
+ *  - CubeMX 에서 TIM 설정 (TRGO, Frequency) 이 완료되어야 합니다.
  */
-
-/**
- * @brief [범용] CubeMX 생성 Timer를 IOIF에 할당합니다.
- * @details 
- * - CubeMX에서 생성된 Timer HAL 핸들을 IOIF 관리로 전환합니다.
- * - System Layer는 ID만 사용하며 HAL 핸들을 직접 다루지 않습니다.
- * - 모든 STM32H7/G4 프로젝트에서 재사용 가능합니다.
- * 
- * @usage
- * - ADC External Trigger (1kHz ~ 100kHz)
- * - DAC 파형 생성
- * - Multi-channel 동기화 타이밍
- * 
- * @note
- * - ⚠️ 이 함수는 external_io.c 전용이 아닙니다! 범용 API입니다.
- * - ⚠️ 특정 사용 사례(ADC3 트리거)에 종속되지 않습니다.
- * - CubeMX에서 TIM 설정 (TRGO, Frequency)이 완료되어야 합니다.
- * 
- * @param tim_id (출력) 할당된 IOIF TIM ID
- * @param htim CubeMX에서 생성된 TIM_HandleTypeDef 포인터
- * @return AGRBStatusDef
- *         - AGRBStatus_OK: 성공
- *         - AGRBStatus_PARAM_ERROR: htim이 NULL
- *         - AGRBStatus_ERROR: 풀이 가득 참
- * 
- * @example
- * ```c
- * // ADC3를 10kHz로 트리거 (TIM2 사용)
- * @example
- * ```c
- * // system_startup.c (System Layer)
- * extern TIM_HandleTypeDef htim2;  // CubeMX 생성
- * static IOIF_TIMx_t s_tim2_id;
- * 
- * IOIF_TIM_AssignInstance(&s_tim2_id, &htim2);
- * IOIF_TIM_StartBase(s_tim2_id);  // ID로 시작
- * 
- * // external_io.c (System Layer)
- * extern IOIF_TIMx_t g_tim2_id;  // ID만 참조
- * IOIF_TIM_StopBase(g_tim2_id);  // HAL 핸들 몰라도 됨!
- * ```
- */
-AGRBStatusDef IOIF_TIM_AssignInstance(IOIF_TIMx_t* tim_id, TIM_HandleTypeDef* htim);
 
 /**
  * @brief [범용] IOIF 관리 Timer를 Base 모드로 시작합니다.
@@ -182,7 +141,7 @@ AGRBStatusDef IOIF_TIM_StopBase(IOIF_TIMx_t tim_id);
  * [사용 예시 — FES Hub H-Bridge 제어]
  * ```c
  * // system_startup.c (System Layer)
- * IOIF_TIM_AssignInstance(&s_tim1_id, &htim1);
+ * IOIF_TIM_Assign(&s_tim1_id, &htim1);
  *
  * // fes_stim_drv.c (Device Layer)
  * IOIF_TIM_PWM_Start(tim1_id, TIM_CHANNEL_1);
@@ -271,6 +230,22 @@ AGRBStatusDef IOIF_TIM_PWM_Start_IT(IOIF_TIMx_t tim_id, uint32_t channel);
  * @return AGRBStatusDef
  */
 AGRBStatusDef IOIF_TIM_PWMN_Start_IT(IOIF_TIMx_t tim_id, uint32_t channel);
+
+/**
+ * @brief PWM 출력 정지 + CC 인터럽트 비활성화 (CHx)
+ * @param tim_id IOIF TIM ID
+ * @param channel HAL 채널 (TIM_CHANNEL_1, TIM_CHANNEL_2, ...)
+ * @return AGRBStatusDef
+ */
+AGRBStatusDef IOIF_TIM_PWM_Stop_IT(IOIF_TIMx_t tim_id, uint32_t channel);
+
+/**
+ * @brief Complementary PWM 출력 정지 + CC 인터럽트 비활성화 (CHxN)
+ * @param tim_id IOIF TIM ID
+ * @param channel HAL 채널
+ * @return AGRBStatusDef
+ */
+AGRBStatusDef IOIF_TIM_PWMN_Stop_IT(IOIF_TIMx_t tim_id, uint32_t channel);
 
 /**
  * @brief Output Compare 시작 + CC 인터럽트 활성화

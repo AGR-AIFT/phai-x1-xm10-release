@@ -74,12 +74,23 @@ typedef struct {
 
 } IOIF_PSRAM_Benchmark_t;
 
+/**
+ * @brief IOIF 관측 QSPI/PSRAM 이벤트 누적 통계
+ * @details HAL_QSPI_ErrorCallback / HAL_QSPI_TimeOutCallback 이 관측한 누적 횟수.
+ *          텔레메트리/진단 용도. I2C 의 `get_last_error` 와 동등한 역할.
+ */
+typedef struct {
+    uint32_t error_count;        /**< HAL_QSPI_ErrorCallback 호출 누적 횟수 */
+    uint32_t timeout_count;      /**< HAL_QSPI_TimeOutCallback 호출 누적 횟수 */
+    uint32_t last_error_code;    /**< 마지막 HAL QSPI ErrorCode (HAL_QSPI_ERROR_* bitmask) */
+} IOIF_PSRAM_ErrorStats_t;
+
 typedef struct {
     AGRBStatusDef (*initialize)(IOIF_PSRAM_Initialize_t* config);
     IOIF_PSRAMx_t (*alloc)(size_t size);
 
-    bool (*write)(IOIF_PSRAMx_t id, void* data, size_t size);
-    bool (*write_offset)(IOIF_PSRAMx_t id, uint32_t offset, void* data, size_t size);
+    AGRBStatusDef (*write)(IOIF_PSRAMx_t id, void* data, size_t size);
+    AGRBStatusDef (*write_offset)(IOIF_PSRAMx_t id, uint32_t offset, void* data, size_t size);
     const void* (*get_mapped_address)(IOIF_PSRAMx_t id);
     void (*start_memory_mapped)(void);
     void (*stop_memory_mapped)(void);
@@ -88,6 +99,13 @@ typedef struct {
     size_t (*get_total_size)(void);
 
     void (*benchmark)(IOIF_PSRAM_Benchmark_t* report);
+
+    /**
+     * @brief 누적 QSPI 에러/타임아웃 통계 조회
+     * @param[out] stats 통계 구조체
+     * @return AGRBStatus_OK / AGRBStatus_PARAM_ERROR
+     */
+    AGRBStatusDef (*get_error_stats)(IOIF_PSRAM_ErrorStats_t* stats);
 
 } IOIF_PSRAM_Handle_t;
 

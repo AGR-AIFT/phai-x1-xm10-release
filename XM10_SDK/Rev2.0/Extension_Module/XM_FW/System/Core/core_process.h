@@ -57,10 +57,10 @@ extern "C" {
 /**
  * @brief  User Task의 진입점 (RTOS Task Function)
  * @details 
- * 1. User_Setup()을 1회 호출하여 사용자 초기화를 수행합니다.
+ * 1. Control_Setup()을 1회 호출하여 사용자 초기화를 수행합니다.
  * 2. 무한 루프에 진입하여 다음 과정을 2ms마다 반복합니다.
  * - [Input]  모든 센서/모듈 데이터 최신화 (_FetchAllInputs)
- * - [Logic]  User_Loop() 호출 (사용자 알고리즘)
+ * - [Logic]  Control_Loop() 호출 (사용자 알고리즘)
  * - [Output] 제어 명령 물리적 전송 (_FlushAllOutputs)
  * * @param argument RTOS 태스크 생성 시 전달되는 인자 (사용 안 함)
  */

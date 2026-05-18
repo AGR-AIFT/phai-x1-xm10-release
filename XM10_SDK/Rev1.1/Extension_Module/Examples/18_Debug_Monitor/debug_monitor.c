@@ -44,7 +44,7 @@
  *-----------------------------------------------------------
  */
 
-/** 루프 오버런 임계값 (ms) — XM10 User_Loop 주기는 1ms */
+/** 루프 오버런 임계값 (ms) — XM10 Control_Loop 주기는 1ms */
 #define LOOP_PERIOD_MS          (1U)
 
 /** Health 대시보드 출력 주기 (ms) */
@@ -134,7 +134,7 @@ static void _PrintSystemDump(void);
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* 단일 상태 TSM — 디버그 모니터는 항상 동작해야 함 */
     s_tsm = XM_TSM_Create(XM_STATE_USER_START);
@@ -156,7 +156,7 @@ void User_Setup(void)
     XM_SendUsbDebugMessage("[DEBUG] Monitor started. BTN1=Reset BTN2=Verbose BTN3(Long)=Dump\r\n");
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     /*
      * [실행 시간 측정 전략]

@@ -1,7 +1,30 @@
-
+/**
+ * @file  error_dictionary.h
+ * @brief DISABLED — redesigned under docs/plan_risk_mngr_v2.md
+ *
+ * @note  The previous contents contained 7 pairs of colliding 0x1000-0x1006
+ *        values (low-level control errors vs. system-management errors
+ *        sharing identical numeric codes). Rather than patch individual
+ *        collisions, the entire error-code scheme is being redesigned under
+ *        RiskMngr v2. Until v2 lands, this file is a deliberate no-op.
+ *
+ *        Consumers that previously #included this header still compile —
+ *        the include is a no-op. No consumer module references any of the
+ *        former macros (verified by grep across all AGR_MW-using repos,
+ *        2026-04-22).
+ */
 
 #ifndef RISK_MNGR_INC_ERROR_DICTIONARY_H_
 #define RISK_MNGR_INC_ERROR_DICTIONARY_H_
+
+#if 0
+/* ======================================================================
+ * LEGACY CONTENT — PRESERVED FOR REFERENCE ONLY
+ * ----------------------------------------------------------------------
+ * This block is excluded from compilation. Do NOT re-enable.
+ * RiskMngr v2 will define a new error-code namespace from scratch.
+ * See docs/plan_risk_mngr_v2.md.
+ * ====================================================================== */
 
 #define NO_ERROR						0x0000
 
@@ -52,6 +75,7 @@
 #define ERROR_LOW_LEVEL_CTRL_RT_BROKEN              0x1060
 
 /* SYSTEM MANAGEMENT ERROR - Error_Type[0] */
+/* NOTE: these values collide with the LOW_LEVEL block above (0x1000-0x1006). */
 #define I2C_INIT_ERROR                  0x1000
 #define I2C_COMMUNICATION_ERROR         0x1001
 #define BOARD_OVER_CURRENT              0x1002
@@ -94,5 +118,7 @@
 
 /* EXTERNAL DEVICE CONTROL ERROR - Error_Type[5] */
 #define MOTOR_OVER_TEMPERATURE          0x1500
+
+#endif /* #if 0 — legacy content */
 
 #endif /* RISK_MNGR_INC_ERROR_DICTIONARY_H_ */

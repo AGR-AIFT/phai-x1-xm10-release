@@ -92,7 +92,7 @@ uint32_t XM_GetUserWorkspaceSize(void);
  *       QSPI Memory-Mapped 초기화 후 사용 가능.
  *       AI/ML 모델 가중치, 대용량 Lookup Table, 장기 데이터 저장에 적합.
  * @warning PSRAM 초기화 전 접근 시 HardFault 발생.
- *          System Startup에서 자동 초기화되므로 User_Setup() 이후 안전.
+ *          System Startup에서 자동 초기화되므로 Control_Setup() 이후 안전.
  */
 void*    XM_GetUserPSRAM(void);
 

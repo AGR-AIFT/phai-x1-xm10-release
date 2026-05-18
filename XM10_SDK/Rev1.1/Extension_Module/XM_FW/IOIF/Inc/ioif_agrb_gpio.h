@@ -112,11 +112,11 @@ typedef uint32_t IOIF_GPIOx_t;
 
 /**
  * @brief [7] 핀의 현재 상태를 반환값으로 직접 읽습니다. (직관적 사용)
- * @details HAL_GPIO_ReadPin의 래퍼입니다. 조건문 등에서 바로 사용하기 좋습니다.
+ * @details 조건문에서 바로 사용하기 좋은 return-value 스타일.
  * @param id (입력) IOIF_GPIOx_t 핸들
- * @return GPIO_PinState (GPIO_PIN_SET=1, GPIO_PIN_RESET=0)
+ * @return bool (true=HIGH, false=LOW)
  */
-#define IOIF_GPIO_READ(id) ioif_gpio_read_pin((id))
+#define IOIF_GPIO_READ(id) ioif_gpio_read((id))
 
 /**
  *-----------------------------------------------------------
@@ -157,8 +157,10 @@ typedef enum
 
 /**
  * @brief EXTI 인터럽트 콜백 함수의 원형(prototype)
+ * @param id   EXTI 를 트리거한 GPIO 의 IOIF 핸들 ID
+ * @param ctx  등록 시 전달한 사용자 컨텍스트 포인터 (NULL 허용)
  */
-typedef void (*IOIF_GPIO_Callback_t)(void);
+typedef void (*IOIF_GPIO_Callback_t)(IOIF_GPIOx_t id, void* ctx);
 
 /**
  * @brief ioif_gpio_reinitialize 함수에 전달할 상세 설정 구조체
@@ -173,6 +175,7 @@ typedef struct
     struct {
         IOIF_GPIO_InterruptDetectionMode_e detection_mode;
         IOIF_GPIO_Callback_t callback; // 인터럽트 발생 시 호출될 함수
+        void* ctx;                     // 콜백에 전달될 사용자 컨텍스트 (NULL 허용)
     } interrupt;
 
 } IOIF_GPIO_Initialize_t;
@@ -231,11 +234,13 @@ AGRBStatusDef ioif_gpio_toggle(IOIF_GPIOx_t id);
 AGRBStatusDef ioif_gpio_get_state(IOIF_GPIOx_t id, bool* state);
 
 /**
- * @brief [추가] 핀의 상태를 즉시 반환합니다 (값 반환형).
- * @param id IOIF 핸들 ID
- * @return 1 (GPIO_PIN_SET) 또는 0 (GPIO_PIN_RESET)
+ * @brief [PUBLIC] 핀의 현재 입력 상태를 bool 로 직접 반환합니다.
+ * @details Return-value 스타일 — 조건문에서 바로 사용 가능.
+ *          에러 핸들링이 필요하면 `ioif_gpio_get_state(id, bool*)` 사용.
+ * @param id IOIF_GPIOx_t 핸들
+ * @return true (HIGH), false (LOW 또는 invalid id)
  */
-GPIO_PinState ioif_gpio_read_pin(IOIF_GPIOx_t id);
+bool ioif_gpio_read(IOIF_GPIOx_t id);
 
 /**
  * @brief [범용] GPIO 핀을 임시로 Output LOW 모드로 변경

@@ -56,12 +56,12 @@ static bool s_is_logging = false;
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     XM_SetUsbLogSource(&s_log, sizeof(BasicLog_t));
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     /* BTN1: 로깅 시작 */
     if (!s_is_logging && XM_GetButtonEvent(XM_BTN_1) == XM_BTN_CLICK) {

@@ -113,7 +113,7 @@ typedef struct {
  * @param sdo_write SOEM SDO Write 함수 (Dependency Injection)
  * @return 0=성공, <0=에러
  */
-int AGR_COE_Master_Init(AGR_COE_MasterCtx_t* mctx,
+int32_t AGR_COE_Master_Init(AGR_COE_MasterCtx_t* mctx,
                         AGR_DOP_Ctx_t* ctx,
                         const AGR_OD_Table_t* od,
                         uint8_t node_id,
@@ -168,7 +168,7 @@ void AGR_COE_Master_SetPDOExchange(AGR_COE_MasterCtx_t* mctx,
  *
  * @note Non-RT (PREOP/SAFEOP 단계에서 호출). RT Thread에서 사용 금지.
  */
-int AGR_COE_Master_SDORead(AGR_COE_MasterCtx_t* mctx,
+int32_t AGR_COE_Master_SDORead(AGR_COE_MasterCtx_t* mctx,
                            uint16_t slave,
                            uint16_t index,
                            uint8_t subindex,
@@ -187,7 +187,7 @@ int AGR_COE_Master_SDORead(AGR_COE_MasterCtx_t* mctx,
  *
  * @note Non-RT (PREOP/SAFEOP 단계에서 호출). RT Thread에서 사용 금지.
  */
-int AGR_COE_Master_SDOWrite(AGR_COE_MasterCtx_t* mctx,
+int32_t AGR_COE_Master_SDOWrite(AGR_COE_MasterCtx_t* mctx,
                             uint16_t slave,
                             uint16_t index,
                             uint8_t subindex,
@@ -211,7 +211,7 @@ int AGR_COE_Master_SDOWrite(AGR_COE_MasterCtx_t* mctx,
  * Slave가 보낸 TxPDO를 Master가 읽습니다 (Slave→Master 방향).
  * IOmap의 Input 영역에서 데이터를 언패킹하여 Master의 로컬 OD에 저장합니다.
  */
-int AGR_COE_Master_DecodeTxPDO(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_COE_Master_DecodeTxPDO(AGR_DOP_Ctx_t* ctx,
                                const uint8_t* iomap_region,
                                uint8_t size);
 
@@ -226,7 +226,7 @@ int AGR_COE_Master_DecodeTxPDO(AGR_DOP_Ctx_t* ctx,
  * Master가 Slave에게 보낼 RxPDO를 작성합니다 (Master→Slave 방향).
  * Master의 로컬 OD에서 데이터를 패킹하여 IOmap의 Output 영역에 씁니다.
  */
-int AGR_COE_Master_EncodeRxPDO(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_COE_Master_EncodeRxPDO(AGR_DOP_Ctx_t* ctx,
                                uint8_t* iomap_region,
                                uint8_t* size);
 
@@ -251,7 +251,7 @@ int AGR_COE_Master_EncodeRxPDO(AGR_DOP_Ctx_t* ctx,
  * WKC < expected_wkc  → 일부 Slave 미응답
  * WKC == 0            → 전체 통신 실패
  */
-int AGR_COE_Master_ExchangePDO(AGR_COE_MasterCtx_t* mctx,
+int32_t AGR_COE_Master_ExchangePDO(AGR_COE_MasterCtx_t* mctx,
                                int timeout_us);
 
 #endif /* AGR_DOP_TRANSPORT_COE */

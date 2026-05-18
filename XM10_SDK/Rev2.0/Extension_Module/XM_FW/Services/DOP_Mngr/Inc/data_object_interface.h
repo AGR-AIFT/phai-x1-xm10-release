@@ -10,7 +10,6 @@ extern "C"{
 #include <stddef.h>
 #include <string.h>
 
-#include "error_dictionary.h"
 #include "data_object.h"
 
 /**

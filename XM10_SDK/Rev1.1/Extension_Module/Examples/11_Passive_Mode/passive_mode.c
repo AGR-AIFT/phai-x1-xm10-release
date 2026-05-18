@@ -27,25 +27,28 @@
 
 // --- Homing 설정 값 ---
 #define HOMING_TRANSITION_DELAY_MS  50    // 각 단계 사이의 지연 시간 (50ms)
-#define HOMING_SPEED_RH             150   // 초당 이동 속도 (deg/s)
-#define HOMING_ACCEL_S0_RH          2     // 초기 가속도(deg/s^2)
-#define HOMING_ACCEL_SD_RH          2     // 말기 가속도(deg/s^2)
-#define HOMING_SPEED_LH             150   // 초당 이동 속도 (deg/s)
-#define HOMING_ACCEL_S0_LH          2     // 초기 가속도(deg/s^2)
-#define HOMING_ACCEL_SD_LH          2     // 말기 가속도(deg/s^2)
+#define HOMING_MIN_DURATION_MS      50    // P-Vector 최소 duration (L=0 방어 + HB 위상 offset)
+#define HOMING_SPEED_RH             250   // 초당 이동 속도 (deg/s)
+#define HOMING_ACCEL_S0_RH          1     // 초기 가속도(deg/s^2)
+#define HOMING_ACCEL_SD_RH          1     // 말기 가속도(deg/s^2)
+#define HOMING_SPEED_LH             250   // 초당 이동 속도 (deg/s)
+#define HOMING_ACCEL_S0_LH          1     // 초기 가속도(deg/s^2)
+#define HOMING_ACCEL_SD_LH          1     // 말기 가속도(deg/s^2)
 
 // --- Mode Change 설정 값 ---
 #define MODE_TRANSITION_DELAY_MS    500 // 모드 전환 지연 시간 (ms) 설정
-#define STOP_CMD_DELAY_MS           100 // P vector Reset 명령 후 정지 명령까지의 지연 시간 (ms)
 #define STOP_DURATION_MS            100 // 현재 위치에서 정지할 때까지 걸리는 시간 (ms)
 
 // --- PMode 설정 값 ---
-#define PM_SPEED_RH         250    // 초당 이동 속도 (deg/s)
+#define PM_SPEED_RH         500    // 초당 이동 속도 (deg/10 per s) → 실제 50°/s, 0.5Hz
 #define PM_ACCEL_S0_RH      1      // 초기 가속도(deg/s^2)
 #define PM_ACCEL_SD_RH      1      // 말기 가속도(deg/s^2)
-#define PM_SPEED_LH         250    // 초당 이동 속도 (deg/s)
+#define PM_SPEED_LH         500    // 초당 이동 속도 (deg/10 per s) → 실제 50°/s, 0.5Hz
 #define PM_ACCEL_S0_LH      1      // 초기 가속도(deg/s^2)
 #define PM_ACCEL_SD_LH      1      // 말기 가속도(deg/s^2)
+
+// --- FIFO 파이프라인 ---
+#define PM_FIFO_FALLBACK_MARGIN_PERCENT  50  // done 미수신 시 타이머 폴백 마진 (%)
 
 /**
  *-----------------------------------------------------------
@@ -70,19 +73,19 @@ typedef enum {
  */
 typedef enum {
     MODE_TRANSITION_IDLE,          // 평상시 (전환 없음)
-    MODE_TRANSITION_STOP_PENDING,  // 이전 궤적(P-Vector)의 정지 완료를 대기
     MODE_TRANSITION_STOP_COMPLETED,// 현재 위치 정지 완료 대기
     MODE_TRANSITION_DELAYING,      // 모드 변경 전/후의 안정화 지연
 } ModeTransitionState_t;
 
 /**
  * @brief Passive Mode 내부 동작 상태
+ * FIFO 파이프라인: START에서 3개 선행 충전 후 REPEATING에서 done/타이머 기반 보충.
+ * done SDO 유실 시에도 FIFO에 1~2개 잔여 → 모션 지속.
  */
 typedef enum {
     PASSIVE_STATE_SET_IMPEDANCE,    // 진입 초기 상태 (DOB, Impedance 설정)
-    PASSIVE_STATE_START_MOTION,     // 첫 왕복 운동 시작
-    PASSIVE_STATE_MOVING_TO_MAX,    // + 방향 최대각도로 이동
-    PASSIVE_STATE_MOVING_TO_MIN,    // - 방향 최대각도로 이동
+    PASSIVE_STATE_START_MOTION,     // 첫 왕복 운동 시작 (FIFO 3개 충전)
+    PASSIVE_STATE_REPEATING,        // FIFO 파이프라인 반복 (done/타이머 기반 보충)
 } PassiveState_t;
 
 typedef struct __attribute__((packed)) {
@@ -161,6 +164,9 @@ static XmH10Mode_t s_previousSuitMode = XM_H10_MODE_STANDBY;
 
 // --- Passive Mode ---
 static PassiveState_t s_passiveState = PASSIVE_STATE_SET_IMPEDANCE;
+static bool     s_nextIsMin = true;       // FIFO: 다음 큐잉할 방향 (true=MIN, false=MAX)
+static uint32_t s_lastQueueTick = 0;      // FIFO: 마지막 큐잉 시각 (done 미수신 폴백용)
+static uint16_t s_expectedDurationMs = 0; // FIFO: 예상 trajectory 소요 시간
 
 // --- For Dat Save ---
 static bool s_debug_USB_metData = false;
@@ -203,7 +209,7 @@ static void UpdatePassiveMode(void);
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     // 태스크를 생성하고 핸들을 받아옵니다. 
     // (Task 최대 생성 수 : 10)
@@ -258,7 +264,7 @@ void User_Setup(void)
  * @brief Active-Assist Mode 예제 애플리케이션을 주기적으로 실행합니다.
  * @details Main 태스크의 제어 루프(예: 1ms)에서 계속 호출되어야 합니다.
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
     // CM 연결 상태를 최우선으로 확인하여, 연결이 끊겼을 경우 OFF 상태로 강제 전환합니다.
     if (!XM_IsCmConnected()) {
@@ -427,12 +433,14 @@ static void InitHoming(void)
             // 이동할 각도 계산 (절대값)
             int16_t angleToMoveRH = abs(targetAngle - currentAngleRH_degx10);
             int16_t angleToMoveLH = abs(targetAngle - currentAngleLH_degx10);
-            // 이동 속도(HOMING_SPEED_RH/LH)를 기반으로 이동 시간(duration_RH/LH) 계산
+            // 이동 속도를 기반으로 이동 시간 계산 후 R/L 중 긴 쪽으로 통일 (동시 도착)
             uint16_t durationRH = (uint16_t)(((float)angleToMoveRH / (float)HOMING_SPEED_RH) * 1000.0f);
             uint16_t durationLH = (uint16_t)(((float)angleToMoveLH / (float)HOMING_SPEED_LH) * 1000.0f);
+            uint16_t homingDuration = (durationRH > durationLH) ? durationRH : durationLH;
+            if (homingDuration < HOMING_MIN_DURATION_MS) homingDuration = HOMING_MIN_DURATION_MS;
 
-            PVector_t homingVecRH = { .yd = targetAngle, .L = durationRH, .s0 = HOMING_ACCEL_S0_RH, .sd = HOMING_ACCEL_SD_RH };
-            PVector_t homingVecLH = { .yd = targetAngle, .L = durationLH, .s0 = HOMING_ACCEL_S0_LH, .sd = HOMING_ACCEL_SD_LH };
+            PVector_t homingVecRH = { .yd = targetAngle, .L = homingDuration, .s0 = HOMING_ACCEL_S0_RH, .sd = HOMING_ACCEL_SD_RH };
+            PVector_t homingVecLH = { .yd = targetAngle, .L = homingDuration, .s0 = HOMING_ACCEL_S0_LH, .sd = HOMING_ACCEL_SD_LH };
             XM_SendPVector(SYS_NODE_ID_RH, &homingVecRH);
             XM_SendPVector(SYS_NODE_ID_LH, &homingVecLH);
 
@@ -481,36 +489,24 @@ static void ManageModeTransition(void)
         case MODE_TRANSITION_IDLE:
             // 평상시에 모드 변경이 감지되었는지 확인합니다.
             if (currentSuitMode != s_previousSuitMode) {
-                
+
                 // Passive Mode -> Standby Mode 로의 전환
-                // P-Vector를 사용하던 Passive Mode를 안전하게 정지시키는 절차를 시작합니다.
+                // FIFO를 비우고 현재 위치에서 부드럽게 정지합니다.
                 if (s_previousSuitMode == XM_H10_MODE_ASSIST && currentSuitMode == XM_H10_MODE_STANDBY) {
-                    XM_SendPVectorReset(SYS_NODE_ID_RH);   // P-Vector 궤적 생성 취소 명령 전송
+                    XM_SendPVectorReset(SYS_NODE_ID_RH);   // FIFO 비우기
                     XM_SendPVectorReset(SYS_NODE_ID_LH);
-                    s_modeTransitionTimer = XM_GetTick();  // reset 지연 타이머 시작
-                    s_modeTransitionState = MODE_TRANSITION_STOP_PENDING; // 다음 상태로 전환
+                    StopMotorAndHold();                     // 즉시 현재 위치로 부드러운 정지 P-Vector 전송
+                    s_modeTransitionState = MODE_TRANSITION_STOP_COMPLETED;
                 }
             }
             break;
-        
-        case MODE_TRANSITION_STOP_PENDING:
-            // 취소 명령 후 지연 시간 지났는지 확인
-            if (XM_GetTick() - s_modeTransitionTimer >= STOP_CMD_DELAY_MS) {
-                // 현재 위치에 정지하도록 P-Vector 전송
-                StopMotorAndHold();
-
-                // 메인 지연 타이머 시작 및 다음 상태로 전환
-                s_modeTransitionTimer = XM_GetTick();
-                s_modeTransitionState = MODE_TRANSITION_STOP_COMPLETED;
-            }
 
         case MODE_TRANSITION_STOP_COMPLETED:
-            // P-Vector 정지 명령이 양쪽 모두 완료되었는지 확인합니다.
+            // 정지 P-Vector 완료 대기
             if (XM.status.h10.isPVectorRHDone && XM.status.h10.isPVectorLHDone) {
                 XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
                 XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
-                
-                // 2. 정지가 완료되면, 안정화 지연 단계로 넘어갑니다.
+
                 s_modeTransitionTimer = XM_GetTick();
                 s_modeTransitionState = MODE_TRANSITION_DELAYING;
             }
@@ -597,6 +593,9 @@ static void EnterStandbyMode(void)
 static void EnterPassiveMode(void)
 {
     s_passiveState = PASSIVE_STATE_SET_IMPEDANCE;
+    s_nextIsMin = true;
+    s_lastQueueTick = 0;
+    s_expectedDurationMs = 0;
 }
 
 /**
@@ -604,10 +603,6 @@ static void EnterPassiveMode(void)
  */
 static void UpdatePassiveMode(void)
 {
-    // XM.status.h10 캐시에서 현재 각도를 읽어옵니다.
-    int16_t currentAngleRH = (int16_t)round(XM.status.h10.rightHipMotorAngle * 10.0f);
-    int16_t currentAngleLH = (int16_t)round(XM.status.h10.leftHipMotorAngle * 10.0f);
-
     // 전체 ROM에 대한 duration (왕복 구간에서 공통 사용)
     int16_t fullRomAngle = abs(JOINT_ANGLE_MAX_ANGLE_INT16 - JOINT_ANGLE_MIN_ANGLE_INT16);
     uint16_t fullDurationRH = (uint16_t)(((float)fullRomAngle / (float)PM_SPEED_RH) * 1000.0f);
@@ -623,55 +618,63 @@ static void UpdatePassiveMode(void)
             break;
         }
         case PASSIVE_STATE_START_MOTION: {
-            // [1] 현재 위치 → MAX 궤적
-            int16_t angleToMoveRH = abs(JOINT_ANGLE_MAX_ANGLE_INT16 - currentAngleRH);
-            int16_t angleToMoveLH = abs(JOINT_ANGLE_MAX_ANGLE_INT16 - currentAngleLH);
-            uint16_t durationRH = (uint16_t)(((float)angleToMoveRH / (float)PM_SPEED_RH) * 1000.0f);
-            uint16_t durationLH = (uint16_t)(((float)angleToMoveLH / (float)PM_SPEED_LH) * 1000.0f);
-
-            PVector_t toMaxRH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = durationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
-            PVector_t toMaxLH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = durationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
+            // [1] 현재 위치 → MAX (fullDuration 사용: 첫 궤적 가속 완화)
+            PVector_t toMaxRH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = fullDurationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
+            PVector_t toMaxLH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = fullDurationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
             XM_SendPVector(SYS_NODE_ID_RH, &toMaxRH);
             XM_SendPVector(SYS_NODE_ID_LH, &toMaxLH);
 
-            // [2] MAX → MIN 궤적을 미리 큐에 추가 (pre-queue)
+            // [2] MAX → MIN (pre-queue)
             PVector_t toMinRH = { .yd = JOINT_ANGLE_MIN_ANGLE_INT16, .L = fullDurationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
             PVector_t toMinLH = { .yd = JOINT_ANGLE_MIN_ANGLE_INT16, .L = fullDurationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
             XM_SendPVector(SYS_NODE_ID_RH, &toMinRH);
             XM_SendPVector(SYS_NODE_ID_LH, &toMinLH);
 
-            s_passiveState = PASSIVE_STATE_MOVING_TO_MIN;
+            // [3] MIN → MAX (pre-queue, FIFO depth 3)
+            PVector_t toMax2RH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = fullDurationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
+            PVector_t toMax2LH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = fullDurationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
+            XM_SendPVector(SYS_NODE_ID_RH, &toMax2RH);
+            XM_SendPVector(SYS_NODE_ID_LH, &toMax2LH);
+
+            // FIFO 파이프라인 초기화: 다음 큐잉은 →MIN
+            s_nextIsMin = true;
+            s_expectedDurationMs = (fullDurationRH > fullDurationLH) ? fullDurationRH : fullDurationLH;
+            s_lastQueueTick = XM_GetTick();
+            XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
+            XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
+
+            s_passiveState = PASSIVE_STATE_REPEATING;
             break;
         }
 
-        case PASSIVE_STATE_MOVING_TO_MIN: {
-            // 첫 번째 궤적 완료 → 두 번째(→MIN) 이미 실행 중 → 세 번째(→MAX) 미리 큐잉
+        case PASSIVE_STATE_REPEATING: {
+            /*
+             * FIFO 파이프라인 반복:
+             * - done 도착 → 즉시 다음 궤적 큐잉 (정상 경로)
+             * - done 미도착 → 타이머 폴백으로 큐잉 (done SDO 유실 방어)
+             * MD FIFO(20 slots)에 항상 1~2개 잔여 → 모션 끊김 없음
+             */
+            bool shouldQueue = false;
+
             if (XM.status.h10.isPVectorRHDone && XM.status.h10.isPVectorLHDone) {
                 XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
                 XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
-
-                PVector_t toMaxRH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = fullDurationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
-                PVector_t toMaxLH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = fullDurationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
-                XM_SendPVector(SYS_NODE_ID_RH, &toMaxRH);
-                XM_SendPVector(SYS_NODE_ID_LH, &toMaxLH);
-
-                s_passiveState = PASSIVE_STATE_MOVING_TO_MAX;
+                shouldQueue = true;
             }
-            break;
-        }
+            else if ((XM_GetTick() - s_lastQueueTick) >
+                     (uint32_t)(s_expectedDurationMs + s_expectedDurationMs * PM_FIFO_FALLBACK_MARGIN_PERCENT / 100)) {
+                shouldQueue = true;
+            }
 
-        case PASSIVE_STATE_MOVING_TO_MAX: {
-            // →MIN 궤적 완료 → →MAX 이미 실행 중 → →MIN 미리 큐잉
-            if (XM.status.h10.isPVectorRHDone && XM.status.h10.isPVectorLHDone) {
-                XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
-                XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
+            if (shouldQueue) {
+                int16_t targetAngle = s_nextIsMin ? JOINT_ANGLE_MIN_ANGLE_INT16 : JOINT_ANGLE_MAX_ANGLE_INT16;
+                PVector_t vecRH = { .yd = targetAngle, .L = fullDurationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
+                PVector_t vecLH = { .yd = targetAngle, .L = fullDurationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
+                XM_SendPVector(SYS_NODE_ID_RH, &vecRH);
+                XM_SendPVector(SYS_NODE_ID_LH, &vecLH);
 
-                PVector_t toMinRH = { .yd = JOINT_ANGLE_MIN_ANGLE_INT16, .L = fullDurationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
-                PVector_t toMinLH = { .yd = JOINT_ANGLE_MIN_ANGLE_INT16, .L = fullDurationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
-                XM_SendPVector(SYS_NODE_ID_RH, &toMinRH);
-                XM_SendPVector(SYS_NODE_ID_LH, &toMinLH);
-
-                s_passiveState = PASSIVE_STATE_MOVING_TO_MIN;
+                s_nextIsMin = !s_nextIsMin;
+                s_lastQueueTick = XM_GetTick();
             }
             break;
         }

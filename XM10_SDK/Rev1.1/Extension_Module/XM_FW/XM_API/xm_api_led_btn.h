@@ -84,22 +84,6 @@ typedef enum {
     XM_LED_ONESHOT   = 4  /**< 설정한 시간만큼 한 번 켜졌다가 자동으로 꺼집니다. (알림용) */
 } XmLedMode_t;
 
-/* ======================== CHANNEL LED SECTION ======================== */
-/**
- * @brief PCA9957 채널 LED 식별자 (XM_API용)
- * @note led_manager.h의 ChannelLedId_t과 값 호환
- */
-typedef enum {
-    XM_CH_LED_EMG   = 0,   /**< EMG 모듈 LED */
-    XM_CH_LED_FES   = 1,   /**< FES 모듈 LED */
-    XM_CH_LED_IMU   = 2,   /**< IMU 모듈 LED */
-    XM_CH_LED_HMMG  = 3,   /**< HMMG 모듈 LED */
-    XM_CH_LED_GRF_L = 4,   /**< GRF 좌측 LED */
-    XM_CH_LED_GRF_R = 5,   /**< GRF 우측 LED */
-    XM_CH_LED_USB   = 6,   /**< USB LED */
-    XM_CH_LED_COUNT = 7
-} XmChannelLed_t;
-
 /* ======================== BUTTON SECTION ======================== */
 /**
  * @brief 버튼 이벤트 타입
@@ -180,26 +164,6 @@ XmBtnState_t XM_GetButtonState(XmBtnId_t btn_idx);
  * @endcode
  */
 XmBtnEvent_t XM_GetButtonEvent(XmBtnId_t btn_idx);
-
-/* ======================== CHANNEL LED SECTION ======================== */
-/**
- * @brief 채널 LED의 RGB 색상을 직접 설정합니다 (자동 상태 LED 오버라이드).
- * @details
- * - PCA9957 24ch LED 드라이버의 해당 채널에 RGB 값을 직접 기록합니다.
- * - 이 함수를 호출하면 시스템 자동 상태 LED가 해당 채널에서 비활성화됩니다.
- * - 시스템 자동 상태로 복구하려면 r=0, g=0, b=0으로 호출하세요.
- *
- * @param[in] ch  채널 LED ID (XM_CH_LED_EMG ~ XM_CH_LED_USB)
- * @param[in] r   Red PWM (0~255)
- * @param[in] g   Green PWM (0~255)
- * @param[in] b   Blue PWM (0~255)
- *
- * @code
- * XM_SetChannelLedRGB(XM_CH_LED_IMU, 255, 0, 0);  // IMU LED를 빨간색으로
- * XM_SetChannelLedRGB(XM_CH_LED_IMU, 0, 0, 0);     // 시스템 자동 제어 복구
- * @endcode
- */
-void XM_SetChannelLedRGB(XmChannelLed_t ch, uint8_t r, uint8_t g, uint8_t b);
 
 /* ======================== SYSTEM UPDATE SECTION ======================== */
 /**

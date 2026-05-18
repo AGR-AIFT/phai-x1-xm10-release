@@ -22,6 +22,11 @@
  * - User_Setup에서 채널 메타데이터(이름/단위) JSON 등록
  * - User_Loop에서 XM_SendUsbDataWithId()로 float[] 전송
  *
+ * @warning USB-CDC 포트는 단일 점유 자원입니다. 다른 시리얼 클라이언트
+ *          (PhAI Studio, PuTTY, RealTerm 등)와 동시에 열지 마십시오 —
+ *          같은 COM 포트 충돌로 접속 실패 또는 데이터 손실이 발생합니다.
+ *          이 예제는 PhAI Studio 단독 실행을 전제로 합니다.
+ *
  * @version 3.0  (Total Data Packet + User Custom API 적용)
  * @date    Mar 10, 2026
  *
@@ -91,7 +96,7 @@ static void Run_Loop(void);
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     s_tsm = XM_TSM_Create(XM_STATE_USER_START);
     XmStateConfig_t conf = { .id = XM_STATE_USER_START, .on_loop = Run_Loop };
@@ -121,7 +126,7 @@ void User_Setup(void)
         "{\"name\":\"Forward Velocity\",\"unit\":\"m/s\"}]");
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     XM_TSM_Run(s_tsm);
 }

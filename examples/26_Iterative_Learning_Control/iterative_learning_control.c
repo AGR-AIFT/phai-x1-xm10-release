@@ -199,7 +199,7 @@ static void  _SetupBodyData(void);
  *-----------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* ⚠️ Body Data 필수 — footContact 기반 보행 위상 추정이 ILC 위상 인덱스 소스 */
     _SetupBodyData();
@@ -232,7 +232,7 @@ void User_Setup(void)
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_OFF);

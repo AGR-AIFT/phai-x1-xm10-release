@@ -64,7 +64,7 @@ static void Error_Loop(void);
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     // 핀 설정
     XM_SetPinMode(XM_EXT_DIO_3, XM_EXT_DIO_MODE_INPUT_PULLUP); // 시작 버튼
@@ -82,7 +82,7 @@ void User_Setup(void)
     for(int i=0; i<3; i++) XM_TSM_AddState(s_tsm, &states[i]);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     XM_TSM_Run(s_tsm);
 }

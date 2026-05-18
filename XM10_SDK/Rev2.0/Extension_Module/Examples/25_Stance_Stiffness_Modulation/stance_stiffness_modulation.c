@@ -153,7 +153,7 @@ static void  _SetupBodyData(void);
  *-----------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* ⚠️ Body Data 필수 — footContact 미설정 시 입각/유각 구분 불가 */
     _SetupBodyData();
@@ -182,7 +182,7 @@ void User_Setup(void)
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_OFF);

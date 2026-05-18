@@ -206,7 +206,7 @@ static float         s_mgl_eff = MGL_EFF_INIT;
 static volatile uint32_t s_learn_epoch = 0;
 static volatile float    s_learn_loss  = 0.0f;
 static volatile bool     s_learn_done  = false;
-static XmBgTaskHandle_t  s_train_handle = NULL;
+static XmTaskHandle_t    s_train_handle = NULL;
 
 /**
  *-----------------------------------------------------------
@@ -254,7 +254,7 @@ static uint32_t _Rand(void) {
  *-----------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     s_tsm = XM_TSM_Create(XM_STATE_OFF);
 
@@ -275,7 +275,7 @@ void User_Setup(void)
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_OFF);
@@ -441,12 +441,19 @@ static void _Learn_Loop(void)
         s_learn_loss  = 0.0f;
         s_learn_done  = false;
         _NN_Init();
-        s_train_handle = XM_BgTask_Create("NN_Train", _BgTrainFunc, NULL, 2048);
+        /* [2026-05-13] XM_BgTask_Create → XM_Task_CreateOneShot 마이그레이션.
+         * prio_hint=XM_PRIO_BACKGROUND (default stack 8KB) 가 NN 학습 충분.
+         * 완료 후 _Task_Delete 호출하여 heap 누수 방지. */
+        s_train_handle = XM_Task_CreateOneShot("NN_Train", _BgTrainFunc, NULL,
+                                                XM_PRIO_BACKGROUND);
     }
 
     /* 학습 완료 대기 */
     if (s_learn_done) {
-        s_train_handle = NULL;
+        if (s_train_handle != NULL) {
+            XM_Task_Delete(s_train_handle);   /* heap 회수 — vPortFree */
+            s_train_handle = NULL;
+        }
         s_nn_trained = true;
         s_last_loss  = s_learn_loss;
 

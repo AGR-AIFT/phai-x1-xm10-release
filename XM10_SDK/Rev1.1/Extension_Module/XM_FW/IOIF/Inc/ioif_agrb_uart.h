@@ -153,6 +153,22 @@ AGRBStatusDef IOIF_UART_SetRxIdleCallback(IOIF_UARTx_t id, IOIF_UART_RxEventCall
 AGRBStatusDef IOIF_UART_Write_Polling(IOIF_UARTx_t id, const uint8_t* tx_buf, uint32_t size);
 
 /**
+ * @brief UART baud rate를 런타임에 변경합니다.
+ * @param id        UART Instance ID
+ * @param baudrate  새 baud rate enum 값
+ * @return AGRBStatus_OK=성공, AGRBStatus_ERROR=실패
+ *
+ * @details
+ * 1. 진행 중인 DMA RX/TX Abort
+ * 2. HAL UART baud rate 변경 + Re-Init
+ * 3. DMA RX 재시작 (기존 RxMode 유지)
+ *
+ * @note Device Layer에서 외부 센서의 baud rate 변경 후 MCU 측 동기 전환에 사용.
+ *       예: Xsens MTi-3 SetBaudRate(921600) 명령 후 STM32 UART 전환.
+ */
+AGRBStatusDef IOIF_UART_SetBaudrate(IOIF_UARTx_t id, IOIF_UART_Baudrate_e baudrate);
+
+/**
  * @brief UART 데이터 전송 (DMA 모드, Non-Blocking)
  * @param id UART Instance ID
  * @param tx_buf 전송할 데이터 버퍼

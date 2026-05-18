@@ -58,7 +58,7 @@
  * CAN-FD와 달리 tx_func이 불필요합니다 (Process Image 기반).
  * SOES가 EtherCAT 프레임 전송을 직접 담당합니다.
  */
-int AGR_COE_Init(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_COE_Init(AGR_DOP_Ctx_t* ctx,
                  const AGR_OD_Table_t* od,
                  uint8_t node_id);
 
@@ -88,7 +88,7 @@ void AGR_COE_Reset(AGR_DOP_Ctx_t* ctx);
  * 내부적으로 AGR_SDO_Decode → on_sdo_request 콜백 → AGR_SDO_ProcessRequest
  * → AGR_SDO_Encode 순서로 처리합니다.
  */
-int AGR_COE_ProcessSDORequest(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_COE_ProcessSDORequest(AGR_DOP_Ctx_t* ctx,
                               const uint8_t* req_data,
                               uint8_t req_len,
                               uint8_t* rsp_data,
@@ -109,7 +109,7 @@ int AGR_COE_ProcessSDORequest(AGR_DOP_Ctx_t* ctx,
  * @param out_len  데이터 길이 (출력)
  * @return 0=성공, <0=에러
  */
-int AGR_COE_SDORead(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_COE_SDORead(AGR_DOP_Ctx_t* ctx,
                     uint16_t index,
                     uint8_t subindex,
                     void* out_data,
@@ -124,7 +124,7 @@ int AGR_COE_SDORead(AGR_DOP_Ctx_t* ctx,
  * @param len      데이터 길이
  * @return 0=성공, <0=에러
  */
-int AGR_COE_SDOWrite(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_COE_SDOWrite(AGR_DOP_Ctx_t* ctx,
                      uint16_t index,
                      uint8_t subindex,
                      const void* data,
@@ -146,7 +146,7 @@ int AGR_COE_SDOWrite(AGR_DOP_Ctx_t* ctx,
  * @param size           인코딩된 바이트 수 (출력)
  * @return 0=성공, <0=에러
  */
-int AGR_COE_EncodeTxPDO(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_COE_EncodeTxPDO(AGR_DOP_Ctx_t* ctx,
                         uint8_t pdo_num,
                         uint8_t* process_image,
                         uint8_t* size);
@@ -159,7 +159,7 @@ int AGR_COE_EncodeTxPDO(AGR_DOP_Ctx_t* ctx,
  * @param size           데이터 크기
  * @return 0=성공, <0=에러
  */
-int AGR_COE_DecodeRxPDO(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_COE_DecodeRxPDO(AGR_DOP_Ctx_t* ctx,
                         uint8_t pdo_num,
                         const uint8_t* process_image,
                         uint8_t size);
@@ -176,7 +176,7 @@ int AGR_COE_DecodeRxPDO(AGR_DOP_Ctx_t* ctx,
  * TPDO1~4를 순서대로 Process Image에 연속 패킹합니다.
  * SYNC0 IRQ 핸들러에서 호출하여 SM3 Input 버퍼를 갱신합니다.
  */
-int AGR_COE_EncodeAllTxPDO(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_COE_EncodeAllTxPDO(AGR_DOP_Ctx_t* ctx,
                            uint8_t* process_image,
                            uint8_t buf_size,
                            uint8_t* out_size);
@@ -192,7 +192,7 @@ int AGR_COE_EncodeAllTxPDO(AGR_DOP_Ctx_t* ctx,
  * RPDO1~4를 순서대로 Process Image에서 연속 언패킹합니다.
  * SYNC0 IRQ 핸들러에서 호출하여 SM2 Output 버퍼를 읽습니다.
  */
-int AGR_COE_DecodeAllRxPDO(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_COE_DecodeAllRxPDO(AGR_DOP_Ctx_t* ctx,
                            const uint8_t* process_image,
                            uint8_t size);
 
@@ -246,7 +246,7 @@ uint8_t AGR_COE_GetRxProcessImageSize(const AGR_DOP_Ctx_t* ctx);
  * Emergency 데이터 포맷 (CiA 301, 8바이트):
  * [Error Code Lo][Error Code Hi][Error Register][Manufacturer Specific x 5]
  */
-int AGR_COE_PrepareEmergency(AGR_DOP_Ctx_t* ctx,
+int32_t AGR_COE_PrepareEmergency(AGR_DOP_Ctx_t* ctx,
                              uint16_t error_code,
                              uint8_t error_register,
                              uint8_t* out_data,

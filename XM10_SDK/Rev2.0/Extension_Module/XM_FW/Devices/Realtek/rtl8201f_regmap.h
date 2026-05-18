@@ -126,7 +126,9 @@
 #define RTL8201F_P7_RMSR_RX_TIMING_MASK ((uint16_t)0x00F0U)
 #define RTL8201F_P7_RMSR_SET_RMII_MODE  ((uint16_t)0x0008U)
 #define RTL8201F_P7_RMSR_TX_TIMING      ((uint16_t)0x0500U)
-#define RTL8201F_P7_RMSR_RX_TIMING      ((uint16_t)0x0040U)
+/* [Fix] 0x0040(WS5) → 0x00A0(XM10): BGA PA1_C 아날로그 스위치 REF_CLK delay 보상
+ * Dead zone = 4,5 (CRC 에러), 최적값 = 10 (0xA), 0% 손실 + 최소 jitter 실측 확인 */
+#define RTL8201F_P7_RMSR_RX_TIMING      ((uint16_t)0x00A0U)
 
 /* ===== Page 7: LED Mode Setting Register ===== */
 

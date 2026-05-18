@@ -30,10 +30,10 @@
 
 // --- Mode Change 설정 값 ---
 #define MODE_TRANSITION_DELAY_MS    500 // 모드 전환 지연 시간 (ms)
-#define STOP_CMD_DELAY_MS           100 // P vector Reset 명령 후 정지 명령까지의 지연 시간 (ms)
 
 // --- Homing 설정 값 ---
 #define HOMING_TRANSITION_DELAY_MS  50    // 각 단계 사이의 지연 시간 (50ms)
+#define HOMING_MIN_DURATION_MS      50    // P-Vector 최소 duration (L=0 방어)
 #define HOMING_SPEED_RH             150   // 초당 이동 속도 (deg/s)
 #define HOMING_ACCEL_S0_RH          2     // 초기 가속도(deg/s^2)
 #define HOMING_ACCEL_SD_RH          2     // 말기 가속도(deg/s^2)
@@ -67,7 +67,6 @@
  */
 typedef enum {
     MODE_TRANSITION_IDLE,          // 평상시 (전환 없음)
-    MODE_TRANSITION_STOP_PENDING,  // 이전 궤적(P-Vector)의 정지 완료를 대기
     MODE_TRANSITION_STOP_COMPLETED,// 현재 위치 정지 완료 대기
     MODE_TRANSITION_DELAYING,      // 모드 변경 전/후의 안정화 지연
 } ModeTransitionState_t;
@@ -218,13 +217,12 @@ static void UpdateSingleLegAssistLogic(ActiveAssistFsm_t* fsm, float currentThig
  * PUBLIC FUNCTIONS
  *------------------------------------------------------------
  */
-bool xsensIMUenableRes = false;
 /**
  * @brief Active-Assist Mode 예제 애플리케이션을 초기화합니다.
  * @details 시스템 부팅 시 Main 태스크에서 단 한 번만 호출되어야 합니다.
  * 내부적으로 Task State Machine을 생성하고 각 상태에 맞는 함수들을 등록합니다.
  */
-void User_Setup(void)
+void Control_Setup(void)
 {
     // 태스크를 생성하고 핸들을 받아옵니다. 
     // (Task 최대 생성 수 : 10)
@@ -257,14 +255,6 @@ void User_Setup(void)
     };
     XM_TSM_AddState(s_userHandle, &act_conf);
 
-    // 외부 XSENS IMU 사용 설정
-    if (XM_EnableExternalImu()) {
-        // IMU 활성화 성공! (이제 UART4로 데이터가 들어옴)
-        xsensIMUenableRes = true;
-    } else {
-        // 실패 처리 (이미 켜져있거나 하드웨어 오류)
-    }
-
     // 로깅할 때 'myData' 구조체를 저장하겠다!
     XM_SetUsbLogSource(&myData, sizeof(MyData_t));
     
@@ -276,7 +266,7 @@ void User_Setup(void)
  * @brief Active-Assist Mode 예제 애플리케이션을 주기적으로 실행합니다.
  * @details Main 태스크의 제어 루프(예: 1ms)에서 계속 호출되어야 합니다.
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
     // CM 연결 상태를 최우선으로 확인하여, 연결이 끊겼을 경우 OFF 상태로 강제 전환합니다.
     if (!XM_IsCmConnected()) {
@@ -414,10 +404,10 @@ static void ManageModeTransition(void)
                     // [CASE 1] Homing 중 P-Vector를 사용하던 AA Mode를 안전하게 정지시키는 절차를 시작합니다.
                     if (s_previoush10Mode == XM_H10_MODE_ASSIST && currenth10Mode == XM_H10_MODE_STANDBY
                         && s_aaGlobalState == AA_STATE_HOMING) {
-                        XM_SendPVectorReset(SYS_NODE_ID_RH);   // P-Vector 궤적 생성 취소 명령 전송
+                        XM_SendPVectorReset(SYS_NODE_ID_RH);   // FIFO 비우기
                         XM_SendPVectorReset(SYS_NODE_ID_LH);
-                        s_modeTransitionTimer = XM_GetTick();  // reset 지연 타이머 시작
-                        s_modeTransitionState = MODE_TRANSITION_STOP_PENDING; // 다음 상태로 전환
+                        StopMotorAndHold();                     // 즉시 부드러운 정지
+                        s_modeTransitionState = MODE_TRANSITION_STOP_COMPLETED;
                     }
                     // [CASE 2] Homing 중이 아닐 때, Active-Assist Mode -> Standby Mode로의 전환
                     else if (s_previoush10Mode == XM_H10_MODE_ASSIST && currenth10Mode == XM_H10_MODE_STANDBY) {
@@ -429,20 +419,6 @@ static void ManageModeTransition(void)
             }
             break;
         
-        case MODE_TRANSITION_STOP_PENDING: 
-            {
-                // 취소 명령 후 지연 시간 지났는지 확인
-                if (XM_GetTick() - s_modeTransitionTimer >= STOP_CMD_DELAY_MS) {
-                    // 현재 위치에 정지하도록 P-Vector 전송
-                    StopMotorAndHold();
-
-                    // 메인 지연 타이머 시작 및 다음 상태로 전환
-                    s_modeTransitionTimer = XM_GetTick();
-                    s_modeTransitionState = MODE_TRANSITION_STOP_COMPLETED;
-                }
-            }
-            break;
-            
         case MODE_TRANSITION_STOP_COMPLETED: 
             {
                 // P-Vector 정지 명령이 양쪽 모두 완료되었는지 확인합니다.
@@ -603,12 +579,14 @@ static void UpdateActiveAssistMode(void)
                     // 이동할 각도 계산 (절대값)
                     int16_t angleToMoveRH = abs(targetAngle - currentAngleRH_ForHoming);
                     int16_t angleToMoveLH = abs(targetAngle - currentAngleLH_ForHoming);
-                    // 이동 속도(HOMING_SPEED_RH/LH)를 기반으로 이동 시간(duration_RH/LH) 계산
+                    // 이동 시간 계산 후 R/L 중 긴 쪽으로 통일 (동시 도착)
                     uint16_t durationRH = (uint16_t)(((float)angleToMoveRH / (float)HOMING_SPEED_RH) * 1000.0f);
                     uint16_t durationLH = (uint16_t)(((float)angleToMoveLH / (float)HOMING_SPEED_RH) * 1000.0f);
+                    uint16_t homingDuration = (durationRH > durationLH) ? durationRH : durationLH;
+                    if (homingDuration < HOMING_MIN_DURATION_MS) homingDuration = HOMING_MIN_DURATION_MS;
 
-                    PVector_t pVecRH = { .yd = targetAngle, .L = durationRH, .s0 = HOMING_ACCEL_S0_RH, .sd = HOMING_ACCEL_SD_RH };
-                    PVector_t pVecLH = { .yd = targetAngle, .L = durationLH, .s0 = HOMING_ACCEL_S0_RH, .sd = HOMING_ACCEL_SD_RH };
+                    PVector_t pVecRH = { .yd = targetAngle, .L = homingDuration, .s0 = HOMING_ACCEL_S0_RH, .sd = HOMING_ACCEL_SD_RH };
+                    PVector_t pVecLH = { .yd = targetAngle, .L = homingDuration, .s0 = HOMING_ACCEL_S0_RH, .sd = HOMING_ACCEL_SD_RH };
                     XM_SendPVector(SYS_NODE_ID_RH, &pVecRH);
                     XM_SendPVector(SYS_NODE_ID_LH, &pVecLH);
                     s_homingState = HOMING_WAIT_FOR_DONE;

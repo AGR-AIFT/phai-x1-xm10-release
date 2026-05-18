@@ -56,7 +56,7 @@ static void Run_Loop(void);
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     // [설정] 핀 모드 초기화
     // Pin 3: 스위치 입력 (풀업 저항 활성화 -> 별도 저항 불필요!)
@@ -74,7 +74,7 @@ void User_Setup(void)
     XM_TSM_AddState(s_tsm, &conf);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     XM_TSM_Run(s_tsm);
 }

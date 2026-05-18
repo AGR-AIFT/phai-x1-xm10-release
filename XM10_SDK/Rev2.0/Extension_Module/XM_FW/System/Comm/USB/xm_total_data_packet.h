@@ -1,5 +1,5 @@
-/* AUTO-GENERATED from xm_total_data.yaml v2.5 — DO NOT EDIT MANUALLY */
-/* Generated: 2026-04-01 16:15:29 */
+/* AUTO-GENERATED from xm_total_data.yaml v2.6 — DO NOT EDIT MANUALLY */
+/* Generated: 2026-05-13 12:23:59 */
 
 #ifndef XM_TOTAL_DATA_PACKET_H
 #define XM_TOTAL_DATA_PACKET_H
@@ -133,8 +133,11 @@ typedef struct {
     uint8_t    fdcan2_rx_fifo0_fill;     /* offset: 335, unit: count */
     uint8_t    fdcan2_tx_fifo_free;      /* offset: 336, unit: count */
 
-    /* === Reserved_HMMG (28B) === */
-    uint8_t  rsv_hmmg[28];          /* offset: 337, Future HMMG module */
+    /* === User_Custom (28B) === */
+    float      user_f[4];                /* offset: 337, unit: user */
+    int16_t    user_i16[4];              /* offset: 353, unit: user */
+    uint16_t   user_flags;               /* offset: 361, unit: flags */
+    uint8_t    user_u8[2];               /* offset: 363, unit: user */
 
 } XM_TotalDataPacket_t;
 #pragma pack(pop)
@@ -144,6 +147,6 @@ _Static_assert(sizeof(XM_TotalDataPacket_t) == 365,
 
 #define XM_TOTAL_DATA_PAYLOAD_SIZE  sizeof(XM_TotalDataPacket_t)
 #define XM_TOTAL_DATA_MODULE_ID     0x20
-#define XM_TOTAL_DATA_NUM_CHANNELS  187   /* excluding reserved */
+#define XM_TOTAL_DATA_NUM_CHANNELS  198   /* excluding reserved */
 
 #endif /* XM_TOTAL_DATA_PACKET_H */

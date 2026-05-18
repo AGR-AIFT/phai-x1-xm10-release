@@ -231,7 +231,7 @@ static void  _SetupBodyData(void);
 /**
  * @brief 사용자 초기 설정 — TSM 생성 및 Body Data 전송
  */
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* ⚠️ Body Data 전제조건 (footContact 기반 보행 위상 추정 사용 시 필수)
      *
@@ -287,7 +287,7 @@ void User_Setup(void)
 /**
  * @brief 메인 루프 — 1ms 주기 호출
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
     /* CM 연결 끊김 시 OFF로 강제 전환 */
     if (!XM_IsCmConnected()) {

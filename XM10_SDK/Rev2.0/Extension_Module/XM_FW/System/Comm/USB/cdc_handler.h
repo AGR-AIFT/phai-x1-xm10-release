@@ -84,6 +84,17 @@ bool CdcStream_IsStreamingActive(void);
 void CdcStream_SetAutoStreamEnabled(bool enabled);
 
 /**
+ * @brief 스트리밍을 즉시 강제 중단합니다 (latch 해제 포함).
+ * @details SetAutoStreamEnabled(false) 는 "이후 DTR re-trigger 차단" 게이트일 뿐
+ *          이미 켜진 s_isStreamingActive 를 끄지 못합니다. PRODUCTION /
+ *          TERMINAL 모드 진입 직후 진행 중인 PhAI auto-pump 를 끊어야 할 때
+ *          이 함수를 호출. 호출 직후 다음 ProcessPeriodic tick 부터 PhAI
+ *          PacketBuild 가 호출되지 않습니다.
+ * @note 비차단. 진행 중인 USB Tx DMA 전송은 안전하게 완료됨 (중단되지 않음).
+ */
+void CdcStream_ForceStopStreaming(void);
+
+/**
  * @brief USB CDC 연결 상태 변경 시 호출 (usb_mode_handler에서 호출)
  * @details Auto-Stream 모드에서 연결/해제 시 스트리밍을 자동 제어합니다.
  */

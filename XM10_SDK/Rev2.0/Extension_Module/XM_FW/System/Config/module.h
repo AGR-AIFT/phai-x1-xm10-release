@@ -79,11 +79,11 @@
  *  55    UART RxTask          ioif_conf.h     event   센서 패킷 파싱 (DMA→파서)
  *  54    UserTask             main.c (IOC)    1ms     IPO Control Loop
  *  51    SDO Processor        module.h        event   PnP/설정 (비실시간)
- *  32    PSRAM Offload        module.h        20ms    Hot→Cold Buffer 전송
+ *  32    PSRAM Offload        module.h        20ms    [DEPRECATED 2026-04-18 C안 — 미사용]
  *  25    PnP Manager          module.h        100ms   연결 관리
  *  24    USB Control          module.h        10ms    USB 모드 전환
+ *  24    DataLoggerTask       module.h        100ms   USB MSC f_write
  *  17    Button Control       module.h        event   버튼 입력
- *  16    DataLoggerTask       module.h        100ms   USB MSC f_write
  *   8    DefaultTask          main.c (IOC)    —       FreeRTOS idle (suspended)
  *
  *  [설계 원칙]
@@ -101,22 +101,31 @@
 
 /* ----- Non-Real-Time Services ----- */
 #define TASK_PRIO_PNP_MANAGER       osPriorityNormal1    /**< (25) PnP 연결 관리 */
-#define TASK_STACK_PNP_MANAGER      (512)
+/* [2026-05-12 cross-port from 0428] 512 → 2048: vApplicationStackOverflowHook으로
+ *  PnP_Task overflow 검출. CM/IMU/EMG/FES Hub PnP + Heartbeat + Boot-up + NMT timeout
+ *  + XsensMTi_RunPeriodic 까지 처리해서 512B 로는 부족. silent corruption 위험. */
+#define TASK_STACK_PNP_MANAGER      (2048)
 #define TASK_PERIOD_MS_PNP_MANAGER  100
 
 #define TASK_PRIO_USB_CONTROL       osPriorityNormal     /**< (24) USB 모드 전환 */
-#define TASK_STACK_USB_CONTROL      (1024)
+/* [2026-05-14] 1024 → 2048: v2.1.1 release 무한리셋 진단의 1순위 의심
+ * ([[project_v211_cdc_reset_hang_diagnosis]]) — usbContolTask 가 mode 전환 시
+ * ioif_usb_device_init/host_init 호출하면 1KB 는 빠듯. 현 dev 에선 hook 가
+ * freeze 로 잡지만 발현 자체를 차단하기 위해 2KB 로 상향. core_process.c 의
+ * 5s watermark 모니터링으로 실측 마진 검증. */
+#define TASK_STACK_USB_CONTROL      (2048)
 #define TASK_PERIOD_MS_USB_CONTROL  10
 
-/* ----- PSRAM Offload (Above Normal) ----- */
+/* ----- PSRAM Offload (Above Normal) — [DEPRECATED 2026-04-18 C안] ----- */
 /**
- * @brief PSRAM Cold Buffer Offload Task
- * @details Hot Buffer(D2) → Cold Buffer(PSRAM) 전송 담당.
- *          20ms 주기로 Hot Buffer의 데이터를 QSPI Indirect Write로 PSRAM에 쓴다.
- *          Priority: DataLogger(16) < Normal(24) < Offload(32) < Realtime(50+)
- *          실행 시간: ~300μs/20ms = 1.5% CPU. Normal 태스크 기아 없음.
+ * @brief [DEPRECATED 2026-04-18 C안] PSRAM Cold Buffer Offload Task
+ * @details 현재 미사용. Rev1.1 방식 (Hot-only D2 128KB) 으로 회귀.
+ *          이전 설계 (참고): Hot Buffer(D2) → Cold Buffer(PSRAM) 전송 담당.
+ *          20ms vTaskDelayUntil 주기, while loop drain (Hot이 빌 때까지 16KB chunks).
+ *          Priority: DataLogger(24) = Normal(24) < Offload(32) < Realtime(50+)
+ *          매크로 자체는 잠정 유지 (참조 없음 확인 시 제거 가능).
  */
-#define TASK_PRIO_PSRAM_OFFLOAD     osPriorityAboveNormal   /**< PSRAM Cold Buffer Offload (32) */
+#define TASK_PRIO_PSRAM_OFFLOAD     osPriorityAboveNormal   /**< [DEPRECATED] PSRAM Cold Buffer Offload (32) */
 #define TASK_STACK_PSRAM_OFFLOAD    (2048)
 #define TASK_PERIOD_MS_OFFLOAD      20
 
@@ -124,7 +133,7 @@
 #define TASK_PRIO_BTN_CONTROL       osPriorityBelowNormal7  /**< (17) 버튼 입력 */
 #define TASK_STACK_BTN_CONTROL      (512)
 
-#define TASK_PRIO_USB_SAVE          osPriorityBelowNormal   /**< (16) USB 데이터 저장 */
+#define TASK_PRIO_USB_SAVE          osPriorityNormal        /**< (24) USB 데이터 저장 — Priority inversion 완화 */
 /* [Phase 2 Fix] 16KB → 8KB: s_read_buf/s_offload_buf가 static으로 이동하고,
  * cmdBuffer도 static local로 변경하여 스택 부담 최소화.
  * AS-IS: (4096 * 4) = 16KB → OffloadTask 추가 후 heap 고갈, DataLoggerTask 생성 실패
@@ -161,5 +170,39 @@
 /* --- Communication Timeout --- */
 #define XM_FDCAN_RX_TIMEOUT_MS      100         /**< FDCAN 수신 타임아웃 */
 #define XM_HEARTBEAT_INTERVAL_MS    1000        /**< Heartbeat 전송 주기 */
+
+/**
+ *===========================================================================
+ * DIAGNOSTIC FEATURE FLAGS (Step 0 of USB TightSpin Investigation Plan v1.5)
+ *===========================================================================
+ * - CMake 빌드: -DDIAG_PROFILE_ENABLED=ON / -DDIAG_KILL_DRAIN_WRITE=ON 로 지정 가능.
+ *   CMake 가 먼저 #define 하면 여기 #ifndef 가 skip 되어 중복 없음.
+ * - CubeIDE 빌드: CMake 없이 빌드 시 이 파일의 default 가 적용됨.
+ *
+ * Step 0 측정 워크플로우:
+ *   K1  : DIAG_PROFILE_ENABLED 만 활성 (drain write 정상)
+ *   K2a : 둘 다 활성 (drain write skip → tight spin 제거 측정)
+ *   완료: 둘 다 주석 처리 (zero-cost 복귀)
+ *
+ * 참조: docs/dev/REV2_USB_TightSpin_InvestigationPlan.md
+ */
+
+/* [Step 0] UserTask jitter histogram + p99 수집 활성화.
+ *  측정 종료 후 이 줄을 주석 처리하여 FW stub 상태로 복귀. */
+#ifndef DIAG_PROFILE_ENABLED
+#define DIAG_PROFILE_ENABLED
+#endif
+
+/* [Step 0 K2a / Step A-1 K2a] _WriteDataWithBlockCRC early-return 으로
+ *  drain write 전면 skip. K2a 측정 시 uncomment, 측정 완료 후 comment 복귀.
+ *  Step A-1 K2a 측정 완료 (2026-04-18) — production 안전 복귀. */
+/* #define DIAG_KILL_DRAIN_WRITE */
+
+/* [Step B 재설계 #1 — 인프라 round-trip 검증용]
+ *  boot 후 5초 지난 시점에 의도적 UsageFault (divide-by-zero) 발생 →
+ *  NVIC_SystemReset → 재마운트 → /LOGS/hardfault_<uptime>.txt 생성 확인.
+ *  2026-04-18 검증 완료 (D:/LOGS/hardfault_4915/5715/6815.txt 3회 생성, DIVBYZERO decode 정확).
+ *  이후 production 상태 복귀 — 실 크래시 때만 덤프 기록됨. */
+/* #define XM_TEST_FAULT_AT_BOOT */
 
 #endif /* SYSTEM_CONFIG_MODULE_H_ */
