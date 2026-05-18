@@ -29,8 +29,6 @@ docs/release-notes/*
 !docs/release-notes/README.md
 !docs/release-notes/v2.1.1.md
 !docs/release-notes/v2.2.0.md
-!docs/dev/
-!docs/dev/12_Task_Topology.md
 !docs/getting-started/
 docs/getting-started/*
 !docs/getting-started/00-claude-code-quickstart.md
@@ -47,6 +45,7 @@ docs/api-reference/*
 !docs/api-reference/06-usb-data-logging.md
 !docs/api-reference/07-memory-management.md
 !docs/api-reference/08-rtc-clock.md
+!docs/api-reference/09-background-task.md
 !docs/api-reference/README.md
 !docs/advanced/
 docs/advanced/*
