@@ -254,12 +254,8 @@ static void _GenerateSessionName(char* buf, uint32_t buf_size)
                  (unsigned)(rtc.year % 100), (unsigned)rtc.month, (unsigned)rtc.day,
                  (unsigned)rtc.hour, (unsigned)rtc.minute, (unsigned)rtc.second);
     } else {
-        /* RTC 미탑재 (Rev1.1) fallback — 빈 문자열 전달 시 FW 내부 boot count 기반
-         * B{boot:03d}_{seq:03d} 자동 세션명 생성 경로 사용. 재부팅 충돌 없음.
-         * Trade-off: Emergency Stop 후 재진입 시 같은 폴더 재사용 불가 — 매 재진입마다
-         *           FW session_index 이진 탐색으로 다음 seq 폴더가 할당됨. Rev2.0 RTC
-         *           경로는 같은 이름 재전달로 동일 폴더 유지. */
-        buf[0] = '\0';
+        /* RTC 미설정 fallback — 부팅 tick 기반 (재부팅 충돌 가능하나 개발용 OK) */
+        snprintf(buf, buf_size, "XM_%08lu", (unsigned long)osKernelGetTickCount());
     }
 }
 

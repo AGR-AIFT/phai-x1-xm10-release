@@ -11,7 +11,7 @@
 
 ## ⚙️ 동작 원리 (How it Works)
 
-* **데이터 등록:** `User_Setup()`에서 `BasicLog_t` 구조체(float 1개)를 등록합니다.
+* **데이터 등록:** `Control_Setup()`에서 `BasicLog_t` 구조체(float 1개)를 등록합니다.
 * **자동 타임스탬프:** 시스템이 매 레코드마다 4바이트 `tick_ms`를 자동으로 앞에 붙여 저장합니다. 사용자가 별도로 시간 관리를 할 필요가 없습니다.
 * **2ms 주기 저장:** 로깅이 시작되면, 제어 루프(2ms)마다 자동으로 구조체 내용을 USB 메모리에 기록합니다.
 * **세션 관리:** 저장이 끝나면 `/LOGS/BasicTest/` 폴더에 `metadata.txt`, `summary.txt`, `data_000_part_000.bin` 파일이 자동 생성됩니다.

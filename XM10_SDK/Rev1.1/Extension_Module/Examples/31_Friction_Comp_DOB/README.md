@@ -47,7 +47,7 @@ Stage 5    Shared Autonomy
 ### PhAI X1(H10+XM10)의 제어 계층
 
 ```
-[XM10 User_Loop 1kHz]
+[XM10 Control_Loop 1kHz]
   XM_SetAssistTorqueRH(τ)        ← 사용자가 명령하는 레벨
        ↓ DOP V3 (CAN-FD, ~0.5ms 지연)
 [H10 CM ~1kHz]
