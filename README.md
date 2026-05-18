@@ -88,7 +88,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 ## 시스템 큰 그림
 
 <p align="center">
-  <img width="1895" height="930" alt="XM10 FW Architecture" src="https://github.com/user-attachments/assets/6f3e0f15-6865-459b-9fe2-6bf2cff27103" />
+  <img width="1984" height="900" alt="xm10-system-architecture" src="https://github.com/user-attachments/assets/9fd4fc8b-6e4f-412e-aa83-3dff5f408362" />
 </p>
 
 내가 손대는 곳은 한 곳뿐입니다 — `XM_Apps/User_Algorithm/user_app.c`. 그 외 CAN 통신, USB 송수신, 외골격 데이터 파싱 같은 일은 모두 XM 라이브러리가 자동으로 처리합니다. 매 1 ms 마다 내 `User_Loop()` 가 호출되고, 그 안에서 `XM.status.h10.*` 로 센서를 읽고 `XM_SetAssistTorque*()` 같은 함수로 명령을 보내는 게 전부예요.
