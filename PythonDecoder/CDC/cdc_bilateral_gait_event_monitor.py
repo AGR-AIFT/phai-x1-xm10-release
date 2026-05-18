@@ -9,8 +9,8 @@ The script normalizes each FSR through a two-step calibration, converts the
 normalized values into four contact bits, maps the 4-bit pattern to a bilateral
 state, and emits a small public gait-event set:
 
-    L_STEP_START, R_STEP_START, L_SUPPORT_START, R_SUPPORT_START,
-    DOUBLE_SUPPORT, STANDING
+    L_HEEL_STRIKE, R_HEEL_STRIKE, L_TOE_OFF, R_TOE_OFF,
+    L_SUPPORT_START, R_SUPPORT_START, DOUBLE_SUPPORT, STANDING
 """
 
 import argparse
@@ -41,11 +41,23 @@ DEFAULT_ON_THRESHOLD = 0.35
 DEFAULT_OFF_THRESHOLD = 0.20
 DEFAULT_STANDING_DWELL_S = 0.7
 DEFAULT_MINIMUM_SPAN = 0.05
+DEFAULT_PLOT_HZ = 20.0
+DEFAULT_WINDOW_SEC = 6.0
+DEFAULT_MAX_PLOT_POINTS = 300
+DEFAULT_SAMPLE_DECIMATE = 2
+
+CONTACT_PRESETS = {
+    "Sensitive": (0.25, 0.12),
+    "Normal": (DEFAULT_ON_THRESHOLD, DEFAULT_OFF_THRESHOLD),
+    "Strict": (0.55, 0.35),
+}
 
 BITS = ("LH", "LT", "RH", "RT")
 EVENTS = (
-    "L_STEP_START",
-    "R_STEP_START",
+    "L_HEEL_STRIKE",
+    "R_HEEL_STRIKE",
+    "L_TOE_OFF",
+    "R_TOE_OFF",
     "L_SUPPORT_START",
     "R_SUPPORT_START",
     "DOUBLE_SUPPORT",
@@ -190,6 +202,17 @@ def lpf_alpha(cutoff_hz: float, sample_rate_hz: float) -> float:
     return float(1.0 - math.exp(-2.0 * math.pi * cutoff_hz / sample_rate_hz))
 
 
+def contact_membership(value: float, off_threshold: float, on_threshold: float) -> float:
+    """Linear contact membership used for visualization.
+
+    0 below OFF threshold, 1 above ON threshold, linear between them.
+    Hysteresis still decides the actual binary contact bit.
+    """
+    if on_threshold <= off_threshold:
+        return 1.0 if value >= on_threshold else 0.0
+    return max(0.0, min((float(value) - off_threshold) / (on_threshold - off_threshold), 1.0))
+
+
 @dataclass
 class Calibration:
     off: list[float]
@@ -286,11 +309,17 @@ class BilateralGaitDetector:
             right_contact_on = not prev_right and right
             left_heel_on = not (self.prev_mask & 0b1000) and bool(mask & 0b1000)
             right_heel_on = not (self.prev_mask & 0b0010) and bool(mask & 0b0010)
+            left_toe_off = bool(self.prev_mask & 0b0100) and not (mask & 0b0100)
+            right_toe_off = bool(self.prev_mask & 0b0001) and not (mask & 0b0001)
 
             if (left_heel_on or left_contact_on) and prev_right:
-                events.append("L_STEP_START")
+                events.append("L_HEEL_STRIKE")
             if (right_heel_on or right_contact_on) and prev_left:
-                events.append("R_STEP_START")
+                events.append("R_HEEL_STRIKE")
+            if left_toe_off:
+                events.append("L_TOE_OFF")
+            if right_toe_off:
+                events.append("R_TOE_OFF")
             if left and not right and prev_right:
                 events.append("L_SUPPORT_START")
             if right and not left and prev_left:
@@ -319,7 +348,16 @@ class BilateralGaitDetector:
         }
 
 
-def run_gui(port: str, baud: int, module_id: int, labels: list[str], window_sec: float, plot_hz: float):
+def run_gui(
+    port: str,
+    baud: int,
+    module_id: int,
+    labels: list[str],
+    window_sec: float,
+    plot_hz: float,
+    max_plot_points: int,
+    sample_decimate: int,
+):
     try:
         from PyQt5 import QtCore, QtWidgets
         import pyqtgraph as pg
@@ -415,6 +453,8 @@ def run_gui(port: str, baud: int, module_id: int, labels: list[str], window_sec:
                             continue
 
                         matched_count += 1
+                        if sample_decimate > 1 and (matched_count % sample_decimate) != 0:
+                            continue
                         t = now_abs - t0
                         rate_hz = matched_count / max(t, 1e-6)
                         self.sample.emit(t, seq_id, tuple(values[:4]), rate_hz, error_count)
@@ -426,7 +466,7 @@ def run_gui(port: str, baud: int, module_id: int, labels: list[str], window_sec:
         def __init__(self):
             super().__init__()
             self.setWindowTitle(f"XM10 Bilateral Gait Event Monitor - module {format_module(module_id)}")
-            self.resize(1280, 820)
+            self.resize(1280, 760)
 
             self.calibration = Calibration.default()
             self.contact_detector = ContactDetector()
@@ -438,6 +478,7 @@ def run_gui(port: str, baud: int, module_id: int, labels: list[str], window_sec:
             self.times = deque()
             self.raw_values = [deque() for _ in range(4)]
             self.norm_values = [deque() for _ in range(4)]
+            self.membership_values = [deque() for _ in range(4)]
             self.contact_history = [deque() for _ in range(4)]
             self.event_markers = deque()
             self.latest_raw = [0.0] * 4
@@ -526,6 +567,21 @@ def run_gui(port: str, baud: int, module_id: int, labels: list[str], window_sec:
             self.spin_off.valueChanged.connect(self.on_threshold_changed)
             controls.addWidget(self.spin_off)
 
+            preset_box = QtWidgets.QGroupBox("Presets")
+            preset_layout = QtWidgets.QHBoxLayout(preset_box)
+            preset_layout.setContentsMargins(6, 2, 6, 2)
+            for name, (on_thr, off_thr) in CONTACT_PRESETS.items():
+                btn = QtWidgets.QPushButton(name)
+                btn.setToolTip(
+                    f"contact threshold preset: ON={on_thr:.2f}, OFF={off_thr:.2f}"
+                )
+                btn.clicked.connect(
+                    lambda _checked=False, n=name, on=on_thr, off=off_thr:
+                    self.apply_contact_preset(n, on, off)
+                )
+                preset_layout.addWidget(btn)
+            controls.addWidget(preset_box)
+
             self.cb_lpf = QtWidgets.QCheckBox("LPF")
             self.cb_lpf.setChecked(True)
             self.cb_lpf.toggled.connect(lambda checked: setattr(self, "lpf_enabled", bool(checked)))
@@ -578,7 +634,7 @@ def run_gui(port: str, baud: int, module_id: int, labels: list[str], window_sec:
             self.plot.setLabel("left", "normalized load")
             self.plot.setYRange(0.0, 1.55)
             self.plot.addLegend(offset=(10, 10))
-            root.addWidget(self.plot, 1)
+            root.addWidget(self.plot, 2)
 
             colors = ["#d62728", "#ff7f0e", "#1f77b4", "#2ca02c"]
             self.curves = []
@@ -598,15 +654,34 @@ def run_gui(port: str, baud: int, module_id: int, labels: list[str], window_sec:
             self.plot.addItem(self.on_line)
             self.plot.addItem(self.off_line)
 
+            self.membership_plot = pg.PlotWidget(title="Contact Membership Functions")
+            self.membership_plot.setBackground("w")
+            self.membership_plot.showGrid(x=True, y=True, alpha=0.25)
+            self.membership_plot.setLabel("bottom", "time", units="s")
+            self.membership_plot.setLabel("left", "membership")
+            self.membership_plot.setYRange(0.0, 1.05)
+            self.membership_plot.addLegend(offset=(10, 10))
+            root.addWidget(self.membership_plot, 2)
+
+            self.membership_curves = []
+            for label, color in zip(labels, colors):
+                self.membership_curves.append(
+                    self.membership_plot.plot(
+                        [], [], pen=pg.mkPen(color=color, width=2), name=f"{label} μ"
+                    )
+                )
+
             lower = QtWidgets.QHBoxLayout()
             self.event_log = QtWidgets.QTableWidget(0, 4)
             self.event_log.setHorizontalHeaderLabels(["time", "event", "bits", "state"])
             self.event_log.horizontalHeader().setStretchLastSection(True)
-            self.event_log.setMinimumHeight(170)
+            self.event_log.setMinimumHeight(88)
+            self.event_log.setMaximumHeight(115)
             lower.addWidget(self.event_log, 2)
 
             self.info_label = QtWidgets.QLabel("")
             self.info_label.setMinimumWidth(360)
+            self.info_label.setMaximumHeight(115)
             self.info_label.setAlignment(QtCore.Qt.AlignTop)
             lower.addWidget(self.info_label, 1)
             root.addLayout(lower)
@@ -635,6 +710,15 @@ def run_gui(port: str, baud: int, module_id: int, labels: list[str], window_sec:
             self.contact_detector.off_threshold = float(self.spin_off.value())
             self.on_line.setValue(self.spin_on.value())
             self.off_line.setValue(self.spin_off.value())
+
+        def apply_contact_preset(self, name, on_threshold, off_threshold):
+            self.spin_on.setValue(float(on_threshold))
+            self.spin_off.setValue(float(off_threshold))
+            self.contact_detector.reset()
+            self.gait_detector.reset()
+            self.status_label.setText(
+                f"{name} preset applied: ON={on_threshold:.2f}, OFF={off_threshold:.2f}"
+            )
 
         def filtered_values(self, raw):
             if self.lpf_state is None:
@@ -747,6 +831,10 @@ def run_gui(port: str, baud: int, module_id: int, labels: list[str], window_sec:
                     self.finish_capture()
 
             norm = self.calibration.normalize(filt)
+            memberships = [
+                contact_membership(v, self.spin_off.value(), self.spin_on.value())
+                for v in norm
+            ]
             contacts = self.contact_detector.update(norm)
             info = self.gait_detector.update(t, contacts)
             self.latest_norm = norm
@@ -768,12 +856,18 @@ def run_gui(port: str, baud: int, module_id: int, labels: list[str], window_sec:
             for idx in range(4):
                 self.raw_values[idx].append(self.latest_raw[idx])
                 self.norm_values[idx].append(norm[idx])
+                self.membership_values[idx].append(memberships[idx])
                 self.contact_history[idx].append(1.0 if contacts[idx] else 0.0)
 
             cutoff = t - window_sec
             while self.times and self.times[0] < cutoff:
                 self.times.popleft()
-                for series in self.raw_values + self.norm_values + self.contact_history:
+                for series in (
+                    self.raw_values
+                    + self.norm_values
+                    + self.membership_values
+                    + self.contact_history
+                ):
                     series.popleft()
             while self.event_markers and self.event_markers[0][0] < cutoff:
                 self.event_markers.popleft()
@@ -782,13 +876,21 @@ def run_gui(port: str, baud: int, module_id: int, labels: list[str], window_sec:
             self.update_state_labels(seq_id, rate_hz, error_count)
 
         def update_plot(self, t):
-            xs = list(self.times)
+            xs_full = list(self.times)
+            if not xs_full:
+                return
+            stride = max(1, len(xs_full) // max(1, int(max_plot_points)))
+            xs = xs_full[::stride]
             for curve, series in zip(self.curves, self.norm_values):
-                curve.setData(xs, list(series))
+                curve.setData(xs, list(series)[::stride])
+            for curve, series in zip(self.membership_curves, self.membership_values):
+                curve.setData(xs, list(series)[::stride])
             if t > window_sec:
                 self.plot.setXRange(t - window_sec, t, padding=0)
+                self.membership_plot.setXRange(t - window_sec, t, padding=0)
             else:
                 self.plot.setXRange(0, window_sec, padding=0)
+                self.membership_plot.setXRange(0, window_sec, padding=0)
             cutoff = t - window_sec
             while self.marker_items and self.marker_items[0][0] < cutoff:
                 _old_t, item = self.marker_items.popleft()
@@ -936,8 +1038,12 @@ def main():
     parser.add_argument("--baud", type=int, default=DEFAULT_BAUD)
     parser.add_argument("--module", type=parse_module_id, default=DEFAULT_MODULE_ID)
     parser.add_argument("--labels", default=",".join(DEFAULT_LABELS))
-    parser.add_argument("--plot-hz", type=float, default=60.0)
-    parser.add_argument("--window", type=float, default=10.0, help="GUI time window in seconds")
+    parser.add_argument("--plot-hz", type=float, default=DEFAULT_PLOT_HZ)
+    parser.add_argument("--window", type=float, default=DEFAULT_WINDOW_SEC, help="GUI time window in seconds")
+    parser.add_argument("--max-points", type=int, default=DEFAULT_MAX_PLOT_POINTS,
+                        help="Maximum points drawn per curve in the GUI")
+    parser.add_argument("--sample-decimate", type=int, default=DEFAULT_SAMPLE_DECIMATE,
+                        help="Use every Nth matched CDC sample for GUI processing")
     parser.add_argument("--list-ports", action="store_true")
     args = parser.parse_args()
 
@@ -959,7 +1065,16 @@ def main():
         print("Run again with --port <PORT>.", file=sys.stderr)
         sys.exit(2)
 
-    run_gui(port, args.baud, args.module, labels, args.window, args.plot_hz)
+    run_gui(
+        port,
+        args.baud,
+        args.module,
+        labels,
+        args.window,
+        args.plot_hz,
+        args.max_points,
+        max(1, args.sample_decimate),
+    )
 
 
 if __name__ == "__main__":
