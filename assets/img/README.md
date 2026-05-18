@@ -12,12 +12,12 @@
 
 처음 보드를 받은 학생이 "내 보드가 작동한다" 를 시각적으로 확인하는 핵심 자리예요. 사진/GIF 가 없으면 학생이 "이게 정상인가?" 에서 막혀요.
 
-| 파일명 | 사용처 | 권장 형식 |
-|--------|--------|----------|
-| `boards/board-photo.png` | docs/hardware/README.md 보드 평면도 | 정면 사진 + 인터페이스 라벨 오버레이 |
-| `boards/rev1.1-photo.png` | docs/hardware/external-gpio-rev1.1.md | Rev 1.1 보드 정면 + 외부 GPIO 헤더 위치 |
-| `boards/rev2.0-photo.png` | docs/hardware/external-gpio-rev2.0.md | Rev 2.0 보드 정면 + 외부 GPIO 헤더 위치 |
-| `00_boot_sequence.gif` | Ex.00 Quick Start | 보드 부팅 → 3 LED 시퀀스 (3~5 초) |
+| 파일명 | 사용처 | 권장 형식 | 상태 |
+|--------|--------|----------|------|
+| `board-photo.png` | docs/hardware/README.md 보드 평면도 | 정면 사진 + 인터페이스 라벨 오버레이 | ✅ 등록됨 |
+| `rev1.1-photo.png` | docs/hardware/external-gpio-rev1.1.md | Rev 1.1 보드 정면 + 외부 GPIO 헤더 위치 | ✅ 등록됨 |
+| `rev2.0-photo.png` | docs/hardware/external-gpio-rev2.0.md | Rev 2.0 보드 정면 + 외부 GPIO 헤더 위치 | ✅ 등록됨 |
+| `00_boot_sequence.gif` | Ex.00 Quick Start | 보드 부팅 → 3 LED 시퀀스 (3~5 초) | — |
 | `01_btn_led_basic.gif` | Ex.01 Button & LED Basic | 버튼 누르면 LED 점등 (3 초) |
 | `02_button_event.gif` | Ex.02 Button & LED Event | BTN1 토글 + BTN2 원샷 효과 (5 초) |
 | `03_fsm_transition.gif` | Ex.03 Button & LED FSM | 4 모드 전환 (10 초) |
@@ -110,7 +110,7 @@ Stage 1~5 학습 흐름의 시각 자료. 학회 발표/논문급 자료. 우선
 
 - 소문자 + `_` 구분
 - 예제 이미지: `<번호>_<짧은_이름>.<확장자>` — 예제 README 의 placeholder 경로와 일치
-- 보드 사진: `boards/<리비전 또는 용도>.png`
+- 보드 사진: `<리비전 또는 용도>-photo.png` (예: `board-photo.png`, `rev2.0-photo.png`)
 - 권장 해상도: 가로 800~1200 px (GitHub 렌더링 최적)
 - GIF 파일은 5 MB 이하 권장 (긴 영상은 mp4 + 외부 호스팅 고려)
 

@@ -77,8 +77,11 @@ docs/hardware/*
 !docs/hardware/external-gpio-rev1.1.md
 !docs/hardware/external-gpio-rev2.0.md
 
-# assets/img/ 는 사용자가 채울 자료. README 만 추적 (가이드 문서)
+# assets/img/ 는 사용자가 채울 자료. README + 등록된 보드 사진만 추적
 assets/*
 !assets/img/
 assets/img/*
 !assets/img/README.md
+!assets/img/board-photo.png
+!assets/img/rev1.1-photo.png
+!assets/img/rev2.0-photo.png
