@@ -4,6 +4,14 @@ Release/
 build/
 !**/tools/build/
 
+# 패키징 산출물 — GitHub Release 에 업로드 후 로컬 보관 불필요
+# (tools/package_release.ps1 가 레포 루트에 생성)
+/Rev*.zip
+/AGR_Bootloader.bin
+/SUIT_*.bin
+/SUIT_*.zip
+/ContentsFiles_*.zip
+
 # Claude Code — 개발자 개인 설정 ignore, 학생용 공개 skill 만 추적
 .claude/*
 !.claude/skills/
