@@ -260,6 +260,7 @@ User Task의 무한 루프(`User_Loop` 또는 `TSM_Run` 내부)에서 주기적�
 | `GetButtonEvent` 가 같은 이벤트를 여러 번 반환 | Run_Loop 안에서 다른 곳에서도 `GetButtonEvent` 호출 (Read-Clear 동시 소비) | 한 이벤트 채널 = 한 곳에서만 읽기 |
 | `XM_BTN_LONG_PRESS` 가 트리거 안 됨 | 누르고 있는 시간 < 1초 | 1초 이상 유지 필요 |
 | `SetLedEffect` 후에 `SetLedState` 가 안 먹힘 | 효과 모드가 우선 — `SetLedState` 가 무시되거나 덮어써짐 | `SetLedEffect(LED, XM_LED_OFF, 0)` 으로 효과 해제 후 사용 |
+| 가운데/우측 버튼 누름이 안 잡히거나 엉뚱한 `XM_BTN_N` 으로 잡힘 | 보드 Rev 와 다른 ZIP 으로 빌드 — 내장 버튼 MCU 핀이 Rev 1.1 (PC10/11/12) 과 Rev 2.0 (PC11/12/13) 에서 한 칸 시프트되었기 때문 | 보드 라벨에서 본인 Rev 확인 후 같은 Rev 의 ZIP 으로 재 import ([보드 리비전 비교](../hardware/README.md#보드-리비전-비교)) |
 | Channel LED RGB 가 동작 안 함 | Rev1.1 사용 — PCA9957 미장착 | Rev2.0 전용 — Rev1.1 은 내장 LED 3개만 |
 | `ONESHOT` LED 가 1회 후에 다시 안 켜짐 | 의도된 동작 (One-shot) | 매번 다시 트리거하려면 이벤트마다 `SetLedEffect` 호출 |
 

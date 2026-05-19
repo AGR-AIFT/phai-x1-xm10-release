@@ -85,13 +85,15 @@ ST-Link V2/V3 디버거 연결용 4-pin 헤더. 펌웨어를 처음 올릴 때 +
 
 ### 버튼
 
-| 버튼 | 위치 | API |
-|------|------|-----|
-| BTN 1 | 좌측 | `XM_GetButtonEvent(XM_BTN_1)` |
-| BTN 2 | 중앙 | `XM_GetButtonEvent(XM_BTN_2)` |
-| BTN 3 | 우측 | `XM_GetButtonEvent(XM_BTN_3)` |
+| 버튼 | 위치 | API | MCU 핀 (Rev 1.1) | MCU 핀 (Rev 2.0) |
+|------|------|-----|------------------|------------------|
+| BTN 1 | 좌측 | `XM_GetButtonEvent(XM_BTN_1)` | PC10 | PC11 |
+| BTN 2 | 중앙 | `XM_GetButtonEvent(XM_BTN_2)` | PC11 | PC12 |
+| BTN 3 | 우측 | `XM_GetButtonEvent(XM_BTN_3)` | PC12 | PC13 |
 
 지원 이벤트: 눌림 (`XM_BTN_PRESSED`), 떼짐 (`XM_BTN_RELEASED`), 클릭 (`XM_BTN_CLICK`), 1 초 이상 길게 누름 (`XM_BTN_LONG_PRESS`).
+
+> ⚠️ Rev 1.1 → Rev 2.0 으로 가면서 내장 버튼 3 개가 한 핀씩 옮겨졌습니다 (PC10 자리는 Rev 2.0 에서 외장 SRAM (PSRAM) 용으로 빠졌습니다). API 이름 (`XM_BTN_1/2/3`) 은 양쪽에서 그대로 좌·중·우 의미를 유지하므로, **본인 보드와 같은 Rev 의 SDK ZIP** 만 쓰면 신경 쓸 필요 없습니다. 다른 Rev 의 ZIP 을 올리면 버튼 매핑이 한 칸씩 어긋납니다.
 
 ### LED
 
@@ -135,13 +137,18 @@ ST-Link V2/V3 디버거 연결용 4-pin 헤더. 펌웨어를 처음 올릴 때 +
 
 ## 보드 리비전 비교
 
-<!-- 사용자가 Rev 별 차이점 표 채울 예정 -->
+본인 보드가 어느 리비전인지부터 확인하세요. 보드 라벨에 `Rev 1.1` / `Rev 2.0` 표기가 있고, 외관상 가장 쉽게 구별되는 차이는 **RJ45 Ethernet 포트의 유무** (Rev 2.0 만 있음) 입니다.
 
 | 항목 | Rev 1.1 | Rev 2.0 |
 |------|---------|---------|
-| 외부 GPIO 커넥터 위치/라벨 | (사용자 추가) | (사용자 추가) |
-| 추가 인터페이스 | — | (사용자 확인 후 추가) |
-| 보드 크기 / 마운팅 홀 | (사용자 추가) | (사용자 추가) |
+| RJ45 Ethernet 포트 | 없음 | **있음** (외관 식별의 가장 빠른 지표) |
+| 채널 LED (RGB 7 개) | 없음 (내장 LED 3 개만) | **있음** (PCA9957, `XM_SetChannelLedRGB` API) |
+| 외장 SRAM (PSRAM) | 없음 | 있음 (MCU 핀 PC10 사용) |
+| 내장 버튼 MCU 핀 | PC10 / PC11 / PC12 | PC11 / PC12 / PC13 (한 핀 시프트) |
+| 외부 GPIO 커넥터 위치/라벨 | [Rev 1.1 핀맵](external-gpio-rev1.1.md) | [Rev 2.0 핀맵](external-gpio-rev2.0.md) |
+| 배포 ZIP | `Rev1.1.zip` | `Rev2.0.zip` |
+
+> 본인 보드의 Rev 와 다른 ZIP 을 풀어 빌드하면 — 빌드 자체는 통과하지만 — 내장 버튼/LED 의 MCU 핀 매핑이 한 칸씩 어긋나 동작하지 않습니다. 보드 라벨을 먼저 확인하세요.
 
 ---
 

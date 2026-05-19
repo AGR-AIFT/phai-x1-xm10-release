@@ -78,6 +78,45 @@ New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name
 
 ---
 
+## 보드 리비전 / SDK ZIP 불일치
+
+### 가운데·우측 버튼이 안 눌리거나, 누르지 않은 버튼이 항상 눌린 것으로 잡힘
+
+**증상:**
+- `XM_GetButtonEvent(XM_BTN_2)` 가 가운데 버튼을 눌러도 반응 없음
+- 한 버튼만 동작하고 나머지는 다른 ID 로 잡히거나 stuck (`XM_PRESSED` 가 고정)
+- `XM_GetButtonState` 와 HAL `HAL_GPIO_ReadPin` 비교 결과 매핑이 한 칸씩 어긋남
+
+**원인:** Rev 1.1 보드와 Rev 2.0 보드는 내장 버튼 3 개의 MCU 핀이 다릅니다 — Rev 2.0 으로 가면서 외장 SRAM (PSRAM) 자리를 만들기 위해 버튼 핀이 한 칸 시프트되었어요.
+
+| | BTN 1 (좌) | BTN 2 (중) | BTN 3 (우) |
+|---|---|---|---|
+| Rev 1.1 | PC10 | PC11 | PC12 |
+| Rev 2.0 | PC11 | PC12 | PC13 |
+
+API 이름 (`XM_BTN_1/2/3`) 은 양쪽 Rev 에서 좌·중·우 의미를 그대로 유지하지만, 그 안에서 어느 MCU 핀을 읽을지는 SDK 가 본인 Rev 의 `main.h` 핀 정의를 따라갑니다. 따라서 **보드 Rev 와 다른 ZIP 으로 빌드하면** 빌드는 통과해도 라이브러리가 잘못된 핀을 읽어 매핑이 어긋납니다.
+
+**해결:**
+1. 보드 라벨에서 `Rev 1.1` 또는 `Rev 2.0` 확인. 라벨이 모호하면 외관상 RJ45 Ethernet 포트의 유무로 구별 (Rev 2.0 만 있음). 자세한 비교는 [docs/hardware/README.md - 보드 리비전 비교](hardware/README.md#보드-리비전-비교).
+2. [Releases](https://github.com/AGR-EXO/Extension_Module/releases) 에서 본인 Rev 와 같은 ZIP 을 받아 STM32CubeIDE 에 다시 import.
+3. 재빌드·플래시 후 Ex.01 (Button & LED Basic) 의 세 버튼 모두 정상 동작 확인.
+
+**진단 코드 (선택사항):** 본인 보드의 실제 핀을 직접 확인하고 싶다면:
+
+```c
+// Run_Loop 안에서 PC10~PC13 을 동시에 읽어 비교
+uint8_t pc10 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_10);
+uint8_t pc11 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_11);
+uint8_t pc12 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_12);
+uint8_t pc13 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
+// 좌·중·우 버튼을 한 번씩 눌러 어느 핀이 떨어지는지 확인
+// → Rev 1.1 보드면 PC10/11/12, Rev 2.0 보드면 PC11/12/13 이 떨어짐
+```
+
+> ⚠️ HAL 로 직접 읽는 코드는 진단용입니다. 정상 동작이 확인되면 `XM_GetButtonEvent` / `XM_GetButtonState` 로 돌아오세요 — 디바운싱과 클릭/롱프레스 인식은 라이브러리가 처리합니다.
+
+---
+
 ## USB 연결 문제
 
 ### USB-CDC가 PC에서 인식되지 않음
