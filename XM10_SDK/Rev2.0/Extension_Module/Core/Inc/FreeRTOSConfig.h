@@ -122,6 +122,7 @@ to exclude the API function. */
 #define INCLUDE_xQueueGetMutexHolder         1
 #define INCLUDE_uxTaskGetStackHighWaterMark  1
 #define INCLUDE_xTaskGetCurrentTaskHandle    1
+#define INCLUDE_xTaskGetHandle               1
 #define INCLUDE_eTaskGetState                1
 
 /*

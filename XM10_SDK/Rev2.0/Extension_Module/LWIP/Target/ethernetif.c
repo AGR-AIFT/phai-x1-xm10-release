@@ -46,7 +46,7 @@
 #define ETHIF_TX_TIMEOUT (2000U)
 /* USER CODE BEGIN OS_THREAD_STACK_SIZE_WITH_RTOS */
 /* Stack size of the interface thread */
-#define INTERFACE_THREAD_STACK_SIZE ( 350 )
+#define INTERFACE_THREAD_STACK_SIZE ( 2048 )
 /* USER CODE END OS_THREAD_STACK_SIZE_WITH_RTOS */
 /* Network interface name */
 #define IFNAME0 's'
@@ -102,7 +102,7 @@ typedef struct
 LWIP_MEMPOOL_DECLARE(RX_POOL, ETH_RX_BUFFER_CNT, sizeof(RxBuff_t), "Zero-copy RX PBUF pool");
 
 /* Variable Definitions */
-static uint8_t RxAllocStatus;
+static volatile uint8_t RxAllocStatus;
 #if defined ( __ICCARM__ ) /*!< IAR Compiler */
 
 #pragma location=0x30000000
@@ -160,7 +160,10 @@ void pbuf_free_custom(struct pbuf *p);
   */
 void HAL_ETH_RxCpltCallback(ETH_HandleTypeDef *handlerEth)
 {
-  osSemaphoreRelease(RxPktSemaphore);
+  { extern volatile uint32_t g_diag_eth_rx_cnt; g_diag_eth_rx_cnt++; }
+  if (RxPktSemaphore != NULL) {
+    osSemaphoreRelease(RxPktSemaphore);
+  }
 }
 /**
   * @brief  Ethernet Tx Transfer completed callback
@@ -169,7 +172,10 @@ void HAL_ETH_RxCpltCallback(ETH_HandleTypeDef *handlerEth)
   */
 void HAL_ETH_TxCpltCallback(ETH_HandleTypeDef *handlerEth)
 {
-  osSemaphoreRelease(TxPktSemaphore);
+  { extern volatile uint32_t g_diag_eth_tx_cnt; g_diag_eth_tx_cnt++; }
+  if (TxPktSemaphore != NULL) {
+    osSemaphoreRelease(TxPktSemaphore);
+  }
 }
 /**
   * @brief  Ethernet DMA transfer error callback
@@ -178,14 +184,26 @@ void HAL_ETH_TxCpltCallback(ETH_HandleTypeDef *handlerEth)
   */
 void HAL_ETH_ErrorCallback(ETH_HandleTypeDef *handlerEth)
 {
+  { extern volatile uint32_t g_diag_eth_err_cnt; g_diag_eth_err_cnt++; }
   if((HAL_ETH_GetDMAError(handlerEth) & ETH_DMACSR_RBU) == ETH_DMACSR_RBU)
   {
-     osSemaphoreRelease(RxPktSemaphore);
+    if (RxPktSemaphore != NULL) {
+      osSemaphoreRelease(RxPktSemaphore);
+    }
   }
 }
 
 /* USER CODE BEGIN 4 */
+/* SI stimulus 용 MDIO ID getter — xm_periph_stimulus.c 가 평시 path 와 동일
+ * IOIF MDIO 인스턴스를 공유 (별도 assign 불필요). low_level_init 미완 / 실패
+ * 시 IOIF_ETH_MDIO_NOT_ALLOCATED 반환 → caller 가 skip. */
+IOIF_ETH_MDIOx_t XM_Ethernetif_GetMdioId(void) { return s_mdio_id; }
 
+/* [2026-05-14] LAN ping/ARP/평시 트래픽 수신 카운터 — RMII/MDIO stimulus 가
+ * polling 으로 "LAN 연결 + 트래픽 활동" 표시. ethernetif_input task 가 매번
+ * RX pbuf 처리 시 ++ (single writer). sensor-studio 가 1Hz polling 으로
+ * 이전 값 대비 증가 여부 확인 → "ping 응답 중" 직관 표시. */
+volatile uint32_t g_eth_rx_packet_count = 0u;
 /* USER CODE END 4 */
 
 /*******************************************************************************
@@ -228,6 +246,10 @@ static void low_level_init(struct netif *netif)
   /* USER CODE END MACADDRESS */
 
   hal_eth_init_status = HAL_ETH_Init(&heth);
+
+  /* [진단] MspInit→Init 직후 PMCR 캡처 */
+  extern volatile uint32_t g_diag_pmcr_after_mspinit;
+  g_diag_pmcr_after_mspinit = SYSCFG->PMCR;
 
   /* End ETH HAL Init */
 
@@ -293,13 +315,22 @@ static void low_level_init(struct netif *netif)
     ioif_eth_mdio.assign(&s_mdio_id, &mdio_init);
 
     /* 2. RTL8201F Init: SW Reset + Page 7 RMII 타이밍 + 2s 안정화 */
-    RTL8201F_Init(s_mdio_id);
+    int32_t phy_init_status = RTL8201F_Init(s_mdio_id);
+    { extern volatile int32_t g_diag_phy_init_status;
+      g_diag_phy_init_status = phy_init_status; }
 
 /* USER CODE END low_level_init Code 1 for User BSP */
 
   if (hal_eth_init_status == HAL_OK)
   {
 /* USER CODE BEGIN low_level_init Code 2 for User BSP */
+
+    /* PHY Init 실패 시 link down 처리 (MDIO 통신 오류 / PHYID 불일치 / Reset Timeout) */
+    if (phy_init_status != RTL8201F_STATUS_OK) {
+        netif_set_link_down(netif);
+        netif_set_down(netif);
+        /* 진단: g_diag_phy_init_status를 디버거로 확인 */
+    } else {
 
     /* Link state 확인 + MAC 설정 + ETH Start */
     int32_t PHYLinkState = RTL8201F_GetLinkState();
@@ -324,13 +355,25 @@ static void low_level_init(struct netif *netif)
         MACConf.DuplexMode = duplex;
         MACConf.Speed = speed;
         HAL_ETH_SetMACConfig(&heth, &MACConf);
+
+        /* PMCR 재보장 — RMII + PA1 Close + Booster */
+        SYSCFG->PMCR |= SYSCFG_PMCR_EPIS_SEL_2;
+        SYSCFG->PMCR &= ~((uint32_t)SYSCFG_PMCR_PA1SO);
+        SYSCFG->PMCR |= SYSCFG_PMCR_BOOSTEN;
+
         HAL_ETH_Start_IT(&heth);
+
+        { extern volatile uint32_t g_diag_pmcr_after_start;
+          g_diag_pmcr_after_start = SYSCFG->PMCR; }
+
         netif_set_up(netif);
         netif_set_link_up(netif);
     } else {
         netif_set_link_down(netif);
         netif_set_down(netif);
     }
+
+    } /* end: phy_init_status == OK */
 
 /* USER CODE END low_level_init Code 2 for User BSP */
 
@@ -448,6 +491,12 @@ static struct pbuf * low_level_input(struct netif *netif)
   if(RxAllocStatus == RX_ALLOC_OK)
   {
     HAL_ETH_ReadData(&heth, (void **)&p);
+    if (p != NULL) {
+      /* [2026-05-14] 정상 RX frame 카운트 — RMII stimulus 의 PC LAN 트래픽
+       * 활동 표시. USER CODE 4 의 g_eth_rx_packet_count 변수 사용. */
+      extern volatile uint32_t g_eth_rx_packet_count;
+      g_eth_rx_packet_count++;
+    }
   }
 
   return p;
@@ -476,6 +525,10 @@ void ethernetif_input(void* argument)
         p = low_level_input( netif );
         if (p != NULL)
         {
+          /* [2026-05-14] SI stimulus RX packet 카운터 (RMII/MDIO row 표시용).
+           * single writer (ethernetif_input task), single reader (sensor-studio
+           * polling) → 4B atomic, race 없음. ARP/ICMP/IP 모든 RX 포함. */
+          g_eth_rx_packet_count++;
           if (netif->input( p, netif) != ERR_OK )
           {
             pbuf_free(p);
@@ -674,8 +727,25 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef *heth)
         /* 7. ETH Interrupt (WS5 동일 — priority 5) */
         HAL_NVIC_SetPriority(ETH_IRQn, 5, 0);
         HAL_NVIC_EnableIRQ(ETH_IRQn);
+
+        /* 8. PMCR 강제 재설정 — RMII + PA1 스위치 Close + Booster
+         * 다른 HAL 초기화(I2C FMP 등)가 PMCR을 덮어쓸 수 있으므로
+         * MspInit 마지막에 한번 더 보장 */
+        SYSCFG->PMCR |= SYSCFG_PMCR_EPIS_SEL_2;               /* bit 23: RMII 모드 */
+        SYSCFG->PMCR &= ~((uint32_t)SYSCFG_PMCR_PA1SO);       /* bit 25: PA1_C↔PA1 Close */
+        SYSCFG->PMCR |= SYSCFG_PMCR_BOOSTEN;                  /* bit 8: 아날로그 스위치 부스터 — 50MHz REF_CLK via PA1_C */
     }
 }
+
+/* [진단] 디버거 Watch용 — 부팅 후 상태 확인 */
+volatile uint32_t g_diag_pmcr_after_mspinit = 0;
+volatile uint32_t g_diag_pmcr_after_start   = 0;
+volatile int32_t  g_diag_phy_init_status    = -99;   /* RTL8201F_Init 리턴값 (0=OK) */
+volatile int32_t  g_diag_phy_link_state     = -1;    /* GetLinkState 리턴값 */
+volatile uint32_t g_diag_eth_rx_cnt         = 0;     /* RX 인터럽트 카운터 */
+volatile uint32_t g_diag_eth_tx_cnt         = 0;     /* TX 인터럽트 카운터 */
+volatile uint32_t g_diag_eth_err_cnt        = 0;     /* Error 인터럽트 카운터 */
+volatile uint32_t g_diag_mmcrx_crc_err      = 0;     /* MMC RX CRC Error 카운터 */
 
 /* USER CODE END PHI IO Functions for User BSP */
 
@@ -698,6 +768,12 @@ void ethernet_link_thread(void* argument)
     /* RTL8201F Link state 폴링 (100ms 주기 — osDelay 아래)
      * IEEE 802.3 BSR latching-low → RTL8201F_GetLinkState 내부에서 2회 읽기 처리 */
     int32_t PHYLinkState = RTL8201F_GetLinkState();
+
+    /* [진단] link state + MMC CRC 에러 카운터 갱신 */
+    { extern volatile int32_t  g_diag_phy_link_state;
+      extern volatile uint32_t g_diag_mmcrx_crc_err;
+      g_diag_phy_link_state = PHYLinkState;
+      g_diag_mmcrx_crc_err  = heth.Instance->MMCRCRCEPR; }
 
     if (netif_is_link_up(netif) && (PHYLinkState <= RTL8201F_STATUS_LINK_DOWN)) {
         /* Link was UP → now DOWN */
@@ -725,7 +801,17 @@ void ethernet_link_thread(void* argument)
         MACConf.DuplexMode = duplex;
         MACConf.Speed = speed;
         HAL_ETH_SetMACConfig(&heth, &MACConf);
+
+        /* PMCR 재보장 — RMII + PA1 Close + Booster */
+        SYSCFG->PMCR |= SYSCFG_PMCR_EPIS_SEL_2;
+        SYSCFG->PMCR &= ~((uint32_t)SYSCFG_PMCR_PA1SO);
+        SYSCFG->PMCR |= SYSCFG_PMCR_BOOSTEN;
+
         HAL_ETH_Start_IT(&heth);
+
+        { extern volatile uint32_t g_diag_pmcr_after_start;
+          g_diag_pmcr_after_start = SYSCFG->PMCR; }
+
         netif_set_up(netif);
         netif_set_link_up(netif);
     }

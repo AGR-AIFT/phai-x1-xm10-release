@@ -205,6 +205,8 @@ set(SOURCES
     # XM_FW 소스 → libXM_Lib.a로 대체 (내부 구현 은닉)
     # boot_fw_info.c만 직접 컴파일 (.fw_header 섹션 — 링커 GC 회피)
     XM_FW/System/Boot/boot_fw_info.c
+    # cdc_dop_router.c — 라이브러리 sync 누락 임시 우회 (lib 재빌드 시 제거)
+    XM_FW/System/Comm/USB/cdc_dop_router.c
     XM_Apps/Control_Task/control_task.c
 )
 
@@ -250,6 +252,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/Services/DOP_Mngr/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/AGR_MW/RiskMngr/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/System/Boot
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/System/Diag
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/IOIF/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/Compatible
     ${CMAKE_CURRENT_SOURCE_DIR}/Compatible/FATFS/Target
