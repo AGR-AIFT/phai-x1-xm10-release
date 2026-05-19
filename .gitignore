@@ -37,6 +37,7 @@ docs/release-notes/*
 !docs/release-notes/README.md
 !docs/release-notes/v2.1.1.md
 !docs/release-notes/v2.2.0.md
+!docs/release-notes/v2.2.1.md
 !docs/getting-started/
 docs/getting-started/*
 !docs/getting-started/00-claude-code-quickstart.md
@@ -85,3 +86,4 @@ assets/img/*
 !assets/img/board-photo.png
 !assets/img/rev1.1-photo.png
 !assets/img/rev2.0-photo.png
+build_check/
