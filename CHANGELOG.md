@@ -4,6 +4,29 @@
 
 ---
 
+## [v2.2.1] — 2026-05-19
+
+> Rev 2.0 SDK 다운로드 직후 빌드 실패 (undefined reference 22 건) 수정. 사용자 코드 / API 변경 없음.
+
+### Fixed
+
+* **Rev 2.0 SDK link error 22 건** — 라이브러리 빌드 단계에서 CDC DOP 라우터 / AGR Serial 트랜스포트 / COBS 인코더 모듈의 소스가 누락되어 있던 문제. 새 `libXM_Lib.a` 로 교체, clean build 169/169 link 통과 확인.
+* **Rev 1.1 SDK 안정성 보강** — link 실패는 없었으나 같은 정합성 차원에서 `usbh_diskio.c` 의 USB MSC 진단 함수 정의 복원 + `FreeRTOSConfig.h` 의 `INCLUDE_xTaskGetHandle = 1` 매크로 추가.
+
+### Documentation
+
+* **보드 리비전 비교** — `docs/hardware/README.md` 의 비어 있던 비교 표를 채움 (RJ45 / 채널 LED / PSRAM / 내장 버튼 MCU 핀 / ZIP 매핑). 본인 보드와 다른 Rev 의 ZIP 으로 빌드하면 버튼/LED 핀이 한 칸 어긋난다는 점 명시.
+* **Troubleshooting 신규 섹션** — `docs/troubleshooting.md` 에 "보드 리비전 / SDK ZIP 불일치" 추가 (증상, 핀 표, 진단 코드, 해결 단계).
+* **흔한 실수 보강** — `examples/README.md`, `docs/api-reference/03-led-btn-control.md` 에 Rev mismatch 안내 추가.
+* **깨진 링크 정리** — `README.md` / `CLAUDE.md` / `docs/find-it.md` 의 `docs/architecture/` 비교표 참조를 새 `docs/hardware/README.md#보드-리비전-비교` 로 통일.
+
+### Compatibility
+
+* **사용자 코드** — v2.2.0 코드 그대로 빌드 가능. `Control_Setup` / `Control_Loop` / `XM_BTN_*` / `XM_Task_*` 등 모든 API 변경 없음.
+* **KIT H10 펌웨어** — v2.3.0 그대로. 동반 펌웨어 업데이트 불필요.
+
+---
+
 ## [v2.2.0] — 2026-05-15
 
 > 사용자 함수 이름 정리 + Rev 1.1 / Rev 2.0 Task API 평준화 + 학습 예제 2 개 추가.

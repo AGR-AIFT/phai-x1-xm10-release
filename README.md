@@ -4,7 +4,7 @@
   <img width="332" height="231" alt="XM10 Board" src="https://github.com/user-attachments/assets/871dc578-57ab-41ed-8d39-76a43e65f24d" />
 </p>
 <p align="center">
-  <a href="https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.2.0"><img src="https://img.shields.io/badge/Release-v2.2.0-brightgreen.svg" alt="Release"></a>
+  <a href="https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.2.1"><img src="https://img.shields.io/badge/Release-v2.2.1-brightgreen.svg" alt="Release"></a>
   <a href="#"><img src="https://img.shields.io/badge/Platform-STM32H7-blue.svg" alt="Platform"></a>
   <a href="#"><img src="https://img.shields.io/badge/OS-FreeRTOS-orange.svg" alt="OS"></a>
   <a href="#"><img src="https://img.shields.io/badge/Comm-CAN--FD-red.svg" alt="CAN-FD"></a>
@@ -31,7 +31,7 @@
 
 본 SDK 는 **GitHub Releases 에서 ZIP 으로 배포**됩니다. git clone 이 아닌 **본인 보드 리비전 ZIP 만 다운로드**하면 됩니다.
 
-📦 **다운로드**: [Releases v2.2.0](https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.2.0) → Assets 섹션
+📦 **다운로드**: [Releases v2.2.1](https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.2.1) → Assets 섹션
 - **Rev2.0 보드** → `Rev2.0.zip` (대부분 여기)
 - **Rev1.1 보드** → `Rev1.1.zip`
 - 보드 라벨로 본인 리비전 확인 후 선택. 모호하면 → [docs/hardware/README.md - 보드 리비전 비교](docs/hardware/README.md#보드-리비전-비교)
@@ -72,7 +72,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 단계별 상세: [docs/getting-started/](docs/getting-started/) (하드웨어 → 환경 구축 → 첫 빌드)
 
-> **H10 펌웨어 버전 확인**: XM v2.2.0 은 **KIT H10 v2.3.0** 과 짝입니다. 구버전이면 먼저 → [KIT H10 Firmware 가이드](docs/kit-h10-firmware/)
+> **H10 펌웨어 버전 확인**: XM v2.2.1 은 **KIT H10 v2.3.0** 과 짝입니다. 구버전이면 먼저 → [KIT H10 Firmware 가이드](docs/kit-h10-firmware/)
 
 ---
 

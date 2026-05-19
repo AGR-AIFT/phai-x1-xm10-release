@@ -4,6 +4,8 @@
 
 | 버전 | 날짜 | 노트 |
 |------|------|------|
+| [v2.2.1](v2.2.1.md) | 2026-05-19 | Rev 2.0 SDK 빌드 실패 22건 수정 + 보드 리비전 비교 문서 보강 |
+| [v2.2.0](v2.2.0.md) | 2026-05-15 | 사용자 함수 이름 정리 + Rev 1.1 / 2.0 Task API 평준화 + 학습 예제 2개 |
 | [v2.1.1](v2.1.1.md) | 2026-04-04 | AGR_BOOT V2 부트로더 도입 + Rev1.1/Rev2.0 듀얼 SDK + 예제 44 개 |
 
 요약 변경 이력은 [CHANGELOG](../../CHANGELOG.md) 를, 단계별 다운로드는 GitHub [Releases](https://github.com/AGR-EXO/Extension_Module/releases) 페이지를 보세요.
