@@ -87,7 +87,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 4. **HW Rev 호환**
    - `XM10_SDK/Rev1.1/` 와 `XM10_SDK/Rev2.0/` 은 HW 가 다른 **독립 SDK**.
-   - 본인 보드 리비전을 보드 라벨 또는 [docs/architecture/README.md](docs/architecture/README.md) 의 비교표로 확인 후 진입.
+   - 본인 보드 리비전을 보드 라벨 또는 [docs/hardware/README.md - 보드 리비전 비교](docs/hardware/README.md#보드-리비전-비교) 로 확인 후 진입. 다른 Rev 의 SDK 로 빌드 시 내장 버튼 MCU 핀이 한 칸 시프트되어 동작이 어긋남.
 
 5. **bootloader 영역 비건드림**
    - 부트로더 (별도 region) 는 학생이 직접 flash 하지 않습니다. SWD 로 한 번 설치 후, 이후 FW 업로드는 PhAI Studio USB FTP. ([docs/bootloader/](docs/bootloader/))

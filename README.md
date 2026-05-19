@@ -34,7 +34,7 @@
 📦 **다운로드**: [Releases v2.2.0](https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.2.0) → Assets 섹션
 - **Rev2.0 보드** → `Rev2.0.zip` (대부분 여기)
 - **Rev1.1 보드** → `Rev1.1.zip`
-- 보드 라벨로 본인 리비전 확인 후 선택. 모호하면 → [docs/architecture/](docs/architecture/) 비교표
+- 보드 라벨로 본인 리비전 확인 후 선택. 모호하면 → [docs/hardware/README.md - 보드 리비전 비교](docs/hardware/README.md#보드-리비전-비교)
 
 ### AI 와 함께 (가장 빠릅니다)
 

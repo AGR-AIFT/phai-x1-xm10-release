@@ -49,7 +49,7 @@
 | 보드에 뭐가 몇 개 있나 (LED / 버튼 / CAN / USB / UART) | [docs/hardware/README.md](hardware/README.md) |
 | 외부 GPIO 핀맵 (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | 외부 GPIO 핀맵 (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
-| 내 보드가 Rev 1.1 인지 Rev 2.0 인지 | [hardware/README.md - 리비전 식별 섹션](hardware/README.md) |
+| 내 보드가 Rev 1.1 인지 Rev 2.0 인지 | [hardware/README.md - 보드 리비전 비교](hardware/README.md#보드-리비전-비교) |
 | 41 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](../examples/README.md) (둘 다 동작, 외부 GPIO 핀맵만 다름) |
 
 ## 📥 펌웨어 업로드
