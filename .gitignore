@@ -88,3 +88,6 @@ assets/img/*
 !assets/img/rev1.1-photo.png
 !assets/img/rev2.0-photo.png
 build_check/
+
+# 릴리즈 패키징 임시 자산 (gh release upload 전 staging)
+/.release_assets_v*/
