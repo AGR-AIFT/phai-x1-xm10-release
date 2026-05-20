@@ -368,10 +368,14 @@ static float _ComputeRefAngle(float gait_phase_norm)
 }
 
 /**
- * @brief ILC 프로파일 업데이트 (주기 종료 시 호출)
+ * @brief ILC 프로파일 업데이트 (보행 주기 1회 종료 시 호출, ≈ 1 Hz)
  * @details
  * P-type ILC 업데이트: τ_{k+1}(i) = τ_k(i) + L·e_k(i)
  * 포화 적용으로 발산 방지
+ *
+ * @note 호출 빈도는 보행 주기(약 1 Hz) 단위 1회뿐이므로 본 함수 안의 snprintf
+ *       + XM_SendUsbDebugMessage 가 1 ms 제어 루프에 미치는 영향은 무시 가능.
+ *       만약 호출 빈도를 높이면 USB 디버그 출력을 별도 BgTask 로 옮기세요.
  */
 static void _UpdateIlcProfile(void)
 {

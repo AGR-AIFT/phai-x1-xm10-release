@@ -454,15 +454,21 @@ static void _RunCpgOscillator(void)
 {
     /* Step 1: 피드백 신호 및 예측 오차 계산 */
     float x_feedback = _GetFeedbackSignal();
-    float x_predicted = s_torque_amp * sinf(s_phase);   /* 현재 위상에서 예측값 */
+
+    /* φ[k] 에서 sin/cos 를 한 번만 계산해 Step 2/3 가 같은 시점의 위상을
+       사용하도록 한다 (Ronsse 2011 식의 동시 업데이트 보장) */
+    float sin_phi_k = sinf(s_phase);
+    float cos_phi_k = cosf(s_phase);
+    float x_predicted = s_torque_amp * sin_phi_k;
     float feedback_err = x_feedback - x_predicted;
 
-    /* Step 2: 위상 업데이트 (커플링 항 포함) */
-    float phase_dot = s_omega + s_epsilon * feedback_err * cosf(s_phase);
+    /* Step 2: 위상 업데이트 (커플링 항 포함) — φ[k+1] = φ[k] + dt·(ω+ε·F·cos φ[k]) */
+    float phase_dot = s_omega + s_epsilon * feedback_err * cos_phi_k;
     s_phase += CONTROL_DT * phase_dot;
 
-    /* Step 3: 주파수 자동 적응 (MIT Rule 기반) */
-    s_omega -= CONTROL_DT * s_epsilon * feedback_err * sinf(s_phase);
+    /* Step 3: 주파수 자동 적응 (MIT Rule 기반) — ω[k+1] = ω[k] - dt·ε·F·sin φ[k]
+       여기서 sin/cos 는 Step 2 이전의 φ[k] 값이어야 함. */
+    s_omega -= CONTROL_DT * s_epsilon * feedback_err * sin_phi_k;
 
     /* Step 4: 위상 정규화 (0 ~ 2π 유지) */
     s_phase = fmodf(s_phase, 2.0f * (float)M_PI);

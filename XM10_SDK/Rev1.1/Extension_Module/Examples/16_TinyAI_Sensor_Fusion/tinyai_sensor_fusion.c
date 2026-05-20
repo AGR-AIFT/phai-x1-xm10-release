@@ -729,13 +729,17 @@ static void _PrintDebugInfo(void)
         posture_name = s_posture_names[s_result.class_id];
     }
 
-    /* 형식: "AI | P:%.1f R:%.1f Class:%s Conf:%.1f%%\r\n" */
+    /* 형식: "AI | P:%.1f R:%.1f Class:%s Score:%.2f\r\n"
+     *
+     * NOTE — `confidence` 는 softmax 가 아닌 NN 의 최대 logit (raw score).
+     * 0~1 범위 보장이 없어 확률(%) 로 표기하면 학생이 오해할 수 있으므로
+     * `Score:` 로 라벨링하고 원본 단위 그대로 출력. */
     snprintf(msg, sizeof(msg),
-             "AI | P:%.1f R:%.1f Class:%s Conf:%.1f%%\r\n",
+             "AI | P:%.1f R:%.1f Class:%s Score:%.2f\r\n",
              s_pitch_deg,
              s_roll_deg,
              posture_name,
-             s_result.confidence * 100.0f);
+             s_result.confidence);
 
     XM_SendUsbDebugMessage(msg);
 }

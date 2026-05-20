@@ -193,7 +193,6 @@ static void  Active_Entry(void);
 static void  Active_Loop(void);
 static void  Active_Exit(void);
 
-static float _BezierBasis(uint8_t k, float s);
 static float _ComputeDesiredAngle(float s);
 static bool  _CheckStall(uint8_t gait_cycle);
 static void  _HandleButtonInput(void);
@@ -371,34 +370,39 @@ static void Active_Exit(void)
 }
 
 /**
- * @brief 5차 Bézier 기저 함수 B_{k,5}(s) 계산
- * @param k  제어점 인덱스 (0~5)
- * @param s  위상 변수 (0~1)
- */
-static float _BezierBasis(uint8_t k, float s)
-{
-    /* 이항 계수 C(5,k) = {1, 5, 10, 10, 5, 1} */
-    const float binom[BEZIER_CTRL_PTS] = {1.0f, 5.0f, 10.0f, 10.0f, 5.0f, 1.0f};
-    return binom[k] * powf(s, (float)k) * powf(1.0f - s, (float)(BEZIER_ORDER - k));
-}
-
-/**
  * @brief 5차 Bézier 다항식으로 목표 각도 계산
  * @param s 정규화 위상 (0~1)
  * @return 목표 각도 (deg)
+ *
+ * @details
+ * B_{k,5}(s) = C(5,k) · s^k · (1-s)^(5-k),  k = 0..5
+ * 1 kHz 루프에서 호출되므로 powf() 대신 곱셈 체인으로 s^0..s^5,
+ * (1-s)^0..(1-s)^5 를 직접 산출 (powf 12회 → 곱셈 ~14회).
  */
 static float _ComputeDesiredAngle(float s)
 {
     /* s 범위 제한 (수치 안정성) */
     s = _ClampFloat(s, 0.0f, 1.0f);
+    float t = 1.0f - s;
 
-    float result = 0.0f;
+    /* 거듭곱 미리 계산 — powf 회피 */
+    float s2 = s  * s;
+    float s3 = s2 * s;
+    float s4 = s3 * s;
+    float s5 = s4 * s;
+    float t2 = t  * t;
+    float t3 = t2 * t;
+    float t4 = t3 * t;
+    float t5 = t4 * t;
+
+    /* C(5,k) = {1, 5, 10, 10, 5, 1} — 이항 계수 직접 인라인 */
     const float *alpha = k_bezier_profiles[s_profile_idx];
-
-    for (uint8_t k = 0U; k <= (uint8_t)BEZIER_ORDER; k++) {
-        result += _BezierBasis(k, s) * alpha[k];
-    }
-    return result;
+    return         t5      * alpha[0]
+         +  5.0f * s  * t4 * alpha[1]
+         + 10.0f * s2 * t3 * alpha[2]
+         + 10.0f * s3 * t2 * alpha[3]
+         +  5.0f * s4 * t  * alpha[4]
+         +         s5      * alpha[5];
 }
 
 /**

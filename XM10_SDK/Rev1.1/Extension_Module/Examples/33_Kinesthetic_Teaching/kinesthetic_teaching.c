@@ -72,7 +72,8 @@
 // 20초 × 100Hz = 2000포인트
 // 메모리: 2000 × 8bytes(2×float) = 16KB → STM32H743 SRAM 여유 충분
 #define MAX_TEACH_POINTS        2000        // 최대 교시 포인트 수 (20초 @ 100Hz)
-#define RECORD_DOWNSAMPLE       10          // 다운샘플: 1kHz 루프에서 10ms마다 1회 기록
+#define RECORD_DOWNSAMPLE       10          // 기록 다운샘플 카운트: 1kHz 루프에서 10틱마다 1회 기록
+#define REPLAY_STEP_MS          10U         // 재생 인덱스 전진 주기 (ms) — 기록과 동일한 100Hz 재생
 
 // --- PD 재생 제어 파라미터 ---
 // Kp: 1.5 Nm/deg → 1도 오차 시 1.5Nm 토크 (적당한 추적, 충격 적음)
@@ -623,9 +624,9 @@ static void _RunReplayMode(void)
     XM_SetAssistTorqueRH(tau_out_r);
     XM_SetAssistTorqueLH(tau_out_l);
 
-    // --- 재생 인덱스 전진 (10ms마다 — 기록 주기와 동일) ---
+    // --- 재생 인덱스 전진 (REPLAY_STEP_MS 마다 — 기록 주기와 동일한 100Hz) ---
     uint32_t now = XM_GetTick();
-    if (now - s_replay_tick_last >= (uint32_t)(RECORD_DOWNSAMPLE)) {
+    if (now - s_replay_tick_last >= REPLAY_STEP_MS) {
         s_replay_tick_last = now;
         s_replay_idx++;
 

@@ -183,7 +183,7 @@ PC 와 실시간으로 메시지를 주고받거나 USB 메모리에 데이터�
 | [33](../../examples/33_Kinesthetic_Teaching/) | 직접 가르치기 + 재생 | ⭐⭐⭐ | 사람이 손으로 시연 → 보드가 그대로 재생 |
 | [34](../../examples/34_MSC_GaitAnalysis_Log/) | 보행 분석 데이터 로깅 | ⭐⭐ | H10 → USB 메모리 → Python → MATLAB |
 | [35](../../examples/35_MultiLayer_Transparent_Control/) | 다층 투명 제어 | ⭐⭐⭐ | 투명/벽/좌우 커플링 세 모드 실시간 전환 |
-| [36](../../examples/36_OnDevice_Kinesthetic_Learning/) | 보드 안에서 직접 학습 | ⭐⭐⭐ | 작은 신경망을 보드 위에서 학습 → LQR 재생 |
+| [36](../../examples/36_OnDevice_Kinesthetic_Learning/) | 보드 안에서 직접 학습 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 작은 신경망을 보드 위에서 학습 → LQR 재생 — Internal Flash UserNV API 가 Rev 2.0 만 지원 |
 
 ---
 

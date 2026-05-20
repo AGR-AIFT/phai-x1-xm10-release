@@ -117,6 +117,27 @@ uint8_t pc13 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
 
 ---
 
+## Ex.36 (OnDevice Kinesthetic Learning) — Rev 1.1 빌드 실패
+
+**증상:** Rev 1.1 SDK 에서 Ex.36 을 빌드하면 link 단계에서 다음 에러가 출력됨.
+
+```
+control_task.c:(.text.Active_Entry+0x2a): undefined reference to `XM_UserNV_Read'
+control_task.c:(.text.Active_Loop+0x284): undefined reference to `XM_UserNV_Erase'
+control_task.c:(.text.Active_Loop+0x292): undefined reference to `XM_UserNV_Write'
+collect2.exe: error: ld returned 1 exit status
+```
+
+**원인:** Ex.36 은 학습된 NN 가중치를 전원 OFF/ON 사이에 보존하기 위해 Internal Flash UserNV API (`XM_UserNV_Read/Write/Erase`) 를 사용합니다. 이 API 는 **Rev 2.0 SDK 의 `libXM_Lib.a` 에만 포함**되어 있고 Rev 1.1 lib 에는 아직 이식되지 않았습니다.
+
+**해결:**
+- **본인 보드가 Rev 2.0** → Rev 2.0 SDK ZIP 으로 다시 import 후 빌드.
+- **본인 보드가 Rev 1.1** → Ex.36 은 진행 불가. Ex.35 (`MultiLayer_Transparent_Control`) 까지 학습한 뒤, Rev 2.0 보드를 확보하면 Ex.36 로 넘어가세요. Ex.36 의 NN + LQR 부분만 보고 싶다면 BTN1 long-press (Flash 저장) 동작을 제거하고 RAM 상에서만 학습/재생하도록 임시 수정해 학습용으로 활용 가능.
+
+> 본인 보드 Rev 가 헷갈리면 라벨 또는 [docs/hardware/README.md - 보드 리비전 비교](hardware/README.md#보드-리비전-비교) 의 RJ45 / PSRAM / 버튼 핀 매핑 표로 구분.
+
+---
+
 ## USB 연결 문제
 
 ### USB-CDC가 PC에서 인식되지 않음

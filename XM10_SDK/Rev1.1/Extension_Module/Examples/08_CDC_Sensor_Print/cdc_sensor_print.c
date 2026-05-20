@@ -96,9 +96,9 @@ static void Run_Loop(void)
         float angle_rh = XM.status.h10.rightHipAngle;
         float angle_lh = XM.status.h10.leftHipAngle;
 
-        /* 문자열 포맷팅 (실수형 출력) */
+        /* 문자열 포맷팅 (실수형 출력) — snprintf 로 버퍼 오버런 방지 */
         char buf[64];
-        sprintf(buf, "Hip Angles -> RH: %.2f, LH: %.2f\r\n", angle_rh, angle_lh);
+        snprintf(buf, sizeof(buf), "Hip Angles -> RH: %.2f, LH: %.2f\r\n", angle_rh, angle_lh);
 
         /* 전송 */
         XM_SendUsbDebugMessage(buf);

@@ -660,18 +660,20 @@ static void _UpdateUsbDebug(float theta, float theta_dot)
         s_usb_debug_timer = now;
 
         // 고정소수점 변환 (snprintf float 대체 — 임베디드 안전)
+        // 부호는 "%s" 로 별도 prefix 처리 — |v|<1 음수에서 "-0.35" 가 "0.35" 로
+        // 표시되던 버그 회피.
         int th_int  = (int)(theta * 100.0f);
         int tg_int  = (int)(s_tau_gravity * 100.0f);
         int tp_int  = (int)(s_tau_pd * 100.0f);
         int tt_int  = (int)(s_tau_total * 100.0f);
 
-        char buf[80];
+        char buf[96];
         snprintf(buf, sizeof(buf),
-                 "IP | th:%d.%02d tg:%d.%02d tp:%d.%02d tau:%d.%02d\r\n",
-                 th_int / 100, abs(th_int) % 100,
-                 tg_int / 100, abs(tg_int) % 100,
-                 tp_int / 100, abs(tp_int) % 100,
-                 tt_int / 100, abs(tt_int) % 100);
+                 "IP | th:%s%d.%02d tg:%s%d.%02d tp:%s%d.%02d tau:%s%d.%02d\r\n",
+                 (th_int < 0) ? "-" : "", abs(th_int) / 100, abs(th_int) % 100,
+                 (tg_int < 0) ? "-" : "", abs(tg_int) / 100, abs(tg_int) % 100,
+                 (tp_int < 0) ? "-" : "", abs(tp_int) / 100, abs(tp_int) % 100,
+                 (tt_int < 0) ? "-" : "", abs(tt_int) / 100, abs(tt_int) % 100);
         XM_SendUsbDebugMessage(buf);
     }
 }

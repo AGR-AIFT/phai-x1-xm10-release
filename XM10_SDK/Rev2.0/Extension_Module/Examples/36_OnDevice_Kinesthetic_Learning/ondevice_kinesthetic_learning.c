@@ -26,6 +26,13 @@
  *   TEACH:  Gravity Comp (적응 MGL 추정) → 투명 느낌
  *   REPLAY: Gravity Comp + DOB + LQR-PD + NN Feedforward → 정밀 재현
  *
+ * @warning **본 예제는 XM10 Rev 2.0 전용** — Rev 1.1 SDK 에서는 link 실패.
+ *          XM_UserNV_Read/Write/Erase API 가 Rev 2.0 의 Internal Flash UserNV
+ *          영역에서만 제공되며 (`XM_FW/XM_API/xm_api_memory.c`),
+ *          Rev 1.1 lib 에는 해당 심볼이 없어 BTN1 long-press 의 NV 저장 기능을
+ *          포팅할 수 없습니다. 본인 보드가 Rev 1.1 이면 Ex.35 까지 진행하세요.
+ *          참고: docs/hardware/README.md - 보드 리비전 비교
+ *
  * @see     Ex.35 multilayer_transparent_ctrl.c (다층 제어)
  * @version 3.0
  * @date    Apr 03, 2026
@@ -202,11 +209,23 @@ static float         s_d_hat_l = 0.0f;
 /* 적응 중력보상 */
 static float         s_mgl_eff = MGL_EFF_INIT;
 
-/* 학습 진행 (백그라운드 태스크와 공유 → volatile) */
+/* 학습 진행 (백그라운드 태스크와 공유 → volatile)
+ *
+ * NOTE — volatile 한계: ARM Cortex-M7 의 normal memory 는 strongly-ordered
+ * 라 단일 워드(32bit) load/store 는 자연스레 atomic 이지만, 본 모듈처럼 BG
+ * task ↔ foreground 사이 다중 워드(예: float + epoch 동시 갱신)를 묶어
+ * 한 스냅샷으로 읽으려면 mutex 가 필요합니다 (Ex.38 패턴). 현재 코드는
+ * 학습 진행도 표시 용도로만 쓰여 한 워드 미세 어긋남이 시각적 영향만
+ * 주므로 mutex 를 생략했습니다. 학습값을 제어 루프에서 직접 활용하려면
+ * Ex.38 의 XM_Mutex_* 로 보호하세요. */
 static volatile uint32_t s_learn_epoch = 0;
 static volatile float    s_learn_loss  = 0.0f;
 static volatile bool     s_learn_done  = false;
 static XmTaskHandle_t    s_train_handle = NULL;
+
+/* ASSIST mode-loss watchdog (선언을 Active_Entry 보다 앞에 둠) */
+static uint32_t s_mode_lost_tick = 0;
+#define MODE_LOST_TIMEOUT_MS    500U  /* 500ms 연속 비정상이어야 종료 */
 
 /**
  *-----------------------------------------------------------
@@ -326,11 +345,12 @@ static void Active_Entry(void)
     s_d_hat_r  = 0.0f;
     s_d_hat_l  = 0.0f;
 
+    /* ASSIST mode-loss watchdog 도 재진입마다 초기화 — stale tick 으로 인한
+       즉시 STANDBY 천이 방지 */
+    s_mode_lost_tick = 0;
+
     _UpdateLeds();
 }
-
-static uint32_t s_mode_lost_tick = 0;
-#define MODE_LOST_TIMEOUT_MS    500  /* 500ms 연속 비정상이어야 종료 */
 
 static void Active_Loop(void)
 {
