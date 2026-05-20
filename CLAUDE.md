@@ -1,10 +1,10 @@
 # XM10 Extension Module — Claude Code Entry Point
 
-> 이 파일은 **Claude Code 가 자동으로 읽는 안내문** 입니다. 학생/개발자가 이 레포를 처음 받았다면, 레포 디렉토리에서 Claude Code 를 실행하기만 해도 본 안내가 자동 로드됩니다.
+> 이 파일은 **Claude Code 가 자동으로 읽는 안내문** 입니다. 본 레포를 처음 받으신 분이라면, 레포 디렉토리에서 Claude Code 를 실행하기만 해도 본 안내가 자동 로드됩니다.
 
 ---
 
-## 🚀 처음 시작하는 학생 — 한 줄 안내
+## 🚀 처음 시작하는 분 — 한 줄 안내
 
 Claude Code 에 다음 중 하나를 입력하세요:
 
@@ -26,7 +26,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **풀네임** | angel Robotics KIT H10 알고리즘 개발 플랫폼 |
 | **MCU** | STM32H743XIH6 (Cortex-M7, 480 MHz, BGA265) |
 | **OS** | FreeRTOS + CMSIS-OS2 |
-| **레포 역할** | 학생/연구자 대상 **공개 릴리즈** (SDK + 예제 + 문서) |
+| **레포 역할** | 사용자 (개발자/연구자/수강생) 대상 **공개 릴리즈** (SDK + 예제 + 문서) |
 | **개발 원본** | 사내 `ARC_ExtensionBoard` (private) — 본 레포는 동기화된 공개판 |
 | **License** | MIT |
 | **Latest** | [`v2.2.2`](https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.2.2) (Releases → `Rev2.0.zip` / `Rev1.1.zip` 다운로드) |
@@ -47,14 +47,14 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 ## AI 사용 안내 (Claude Code)
 
-본 레포에는 다음 학생용 스킬이 정의되어 있습니다 (`.claude/skills/`):
+본 레포에는 다음 사용자 안내 스킬이 정의되어 있습니다 (`.claude/skills/`):
 
-- **`student-onboard`** — 신규 학생 환경 구축 자동화 (Phase 1~6: 설치 → import → 빌드 → 플래시 → LED 확인 → 핸드오프)
+- **`student-onboard`** — 처음 시작하는 사용자의 환경 구축 자동화 (Phase 1~6: 설치 → import → 빌드 → 플래시 → LED 확인 → 핸드오프)
 - **`example-helper`** — "Ex.XX 빌드 안 돼" / "LED 안 켜져" 등 예제 트러블슈팅
 
 ### 트리거되는 문구
 
-학생이 다음 중 하나를 말하면 AI 가 자동으로 해당 스킬을 호출합니다:
+다음 중 하나를 말하면 AI 가 자동으로 해당 스킬을 호출합니다:
 
 | 의도 | 트리거 문구 예시 | 호출 스킬 |
 |------|-----------------|----------|
@@ -71,7 +71,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 ---
 
-## 절대 룰 (학생 / AI 모두 준수)
+## 절대 룰 (사용자 / AI 모두 준수)
 
 1. **한글·공백 경로 금지**
    - STM32CubeIDE 설치 경로, 본 레포 clone 경로 모두 영문/숫자/언더스코어만.
@@ -82,7 +82,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
    - 같은 COM 포트 충돌 → 접속 실패 / 데이터 손실. (`examples/07~09` 헤더 `@warning` 참조)
 
 3. **사용자 코드 영역**
-   - 학생이 수정하는 곳: `XM_Apps/User_Algorithm/` 또는 `examples/<번호>_<이름>/*.c`
+   - 사용자가 수정하는 곳: `XM_Apps/User_Algorithm/` 또는 `examples/<번호>_<이름>/*.c`
    - 라이브러리 (`XM_Lib`, `IOIF`, `AGR_MW`, 시스템 코드) 는 **봉인** — 수정 시 SDK 일관성 깨짐.
 
 4. **HW Rev 호환**
@@ -90,7 +90,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
    - 본인 보드 리비전을 보드 라벨 또는 [docs/hardware/README.md - 보드 리비전 비교](docs/hardware/README.md#보드-리비전-비교) 로 확인 후 진입. 다른 Rev 의 SDK 로 빌드 시 내장 버튼 MCU 핀이 한 칸 시프트되어 동작이 어긋남.
 
 5. **bootloader 영역 비건드림**
-   - 부트로더 (별도 region) 는 학생이 직접 flash 하지 않습니다. SWD 로 한 번 설치 후, 이후 FW 업로드는 PhAI Studio USB FTP. ([docs/bootloader/](docs/bootloader/))
+   - 부트로더 (별도 region) 는 사용자가 직접 flash 하지 않습니다. SWD 로 한 번 설치 후, 이후 FW 업로드는 PhAI Studio USB FTP. ([docs/bootloader/](docs/bootloader/))
 
 ---
 
@@ -116,7 +116,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 ## AI 동작 정책 (Claude Code 메타)
 
 본 레포에서 Claude Code 는:
-- 학생/개발자의 **사용자 코드 영역만** 수정합니다 (라이브러리 봉인).
+- 사용자의 **사용자 코드 영역만** 수정합니다 (라이브러리 봉인).
 - 빌드/플래시 명령은 **사용자 명시 호출 후에만** 실행합니다.
 - 외부 다운로드는 **권한 프롬프트 1회 후** 진행합니다.
 - 본 레포 외 외부 서비스 (GitHub, web)에 데이터를 전송하지 않습니다 — `WebFetch` 는 사용자 명시 요청 시에만.

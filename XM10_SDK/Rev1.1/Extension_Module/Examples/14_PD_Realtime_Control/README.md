@@ -3,7 +3,7 @@
 > 🎯 **학습 목표**:
 > - **PD (비례+미분)** 피드백 제어를 1 ms 루프에서 직접 구현.
 > - 이산 미분 근사 (Backward Difference) + 토크 포화 (Actuator Saturation) + 안전 Exit 패턴.
-> - 학생이 처음 짜는 **사용자 정의 제어 알고리즘** — 이후 Ex.15/20+ 의 출발점.
+> - 사용자가 처음 짜는 **사용자 정의 제어 알고리즘** — 이후 Ex.15/20+ 의 출발점.
 >
 > ⏱️ 권장 시간: 40분 | 🔧 난이도: ⭐⭐⭐
 > 🧰 사전 예제: [Ex.12 Active Assist](../12_Active_Assist_Mode/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)

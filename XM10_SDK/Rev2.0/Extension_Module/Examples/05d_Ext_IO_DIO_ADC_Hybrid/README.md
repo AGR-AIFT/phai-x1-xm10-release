@@ -27,7 +27,7 @@
 ## 2️⃣ 사전 지식 — 시작 전 알아둘 것
 
 - **핀 단위 독립 모드** — 같은 DIO 그룹 내에서도 핀별로 다른 모드 가능 (1~4 = ADC, 5~6 = GPIO).
-- **보호 장치 (Guard Mechanism)** — ADC 로 전환된 핀에 GPIO API (`XM_SetPinMode`, `XM_DigitalWrite`, `XM_DigitalRead`) 를 호출해도 안전하게 무시. 학생 실수 방지.
+- **보호 장치 (Guard Mechanism)** — ADC 로 전환된 핀에 GPIO API (`XM_SetPinMode`, `XM_DigitalWrite`, `XM_DigitalRead`) 를 호출해도 안전하게 무시. 사용자 실수 방지.
 - **Edge Detection** — `btn_now && !btn_prev` 패턴으로 "방금 막 눌린 순간" 한 번만 감지 (Leading Edge).
 
 ---
@@ -121,7 +121,7 @@ static void Run_Loop(void)
 |------|------|------|
 | 버튼 한 번 누름에 모드가 여러 번 바뀜 | Edge Detection 누락 | `btn_now && !s_btn_prev` 패턴 확인 |
 | `s_btn_prev` 가 매 호출 false 로 초기화 | `static` 누락 | `static bool s_btn_prev = false;` |
-| ADC 핀에 GPIO 코드 추가했더니 빌드는 됐는데 동작 이상 | 보호 장치가 무시했지만 학생 의도 X | 의도 확인 — ADC 핀은 ADC 만 사용 |
+| ADC 핀에 GPIO 코드 추가했더니 빌드는 됐는데 동작 이상 | 보호 장치가 무시했지만 사용자 의도 X | 의도 확인 — ADC 핀은 ADC 만 사용 |
 | 외부 LED 가 안 켜짐 | DIO_6 output 설정 누락 | `SetPinMode(LED_PIN, OUTPUT)` 확인 |
 | 측정 모드인데 LED 1 안 켜짐 | 임계치 (6000 mV = 6 V) 너무 높음 | FSR 4개 합산 평소 mV 측정 후 임계치 조정 |
 

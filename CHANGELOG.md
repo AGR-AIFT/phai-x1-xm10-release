@@ -6,7 +6,7 @@
 
 ## [v2.2.2] — 2026-05-20
 
-> SDK 안의 예제 코드 47 개를 다시 한 번 훑어 학생 혼선 포인트 9 건을 정리한 패치 릴리즈. Ex.36 이 Rev 2.0 전용임을 4 곳에 일관 표기. 사용자 코드 / API / KIT H10 펌웨어 변경 없음.
+> SDK 안의 예제 코드 47 개를 다시 한 번 훑어 사용자 혼선 포인트 9 건을 정리한 패치 릴리즈. Ex.36 이 Rev 2.0 전용임을 4 곳에 일관 표기. 사용자 코드 / API / KIT H10 펌웨어 변경 없음.
 
 ### Fixed (예제 코드 정리)
 
@@ -84,7 +84,7 @@
 
 ## [unreleased — 2026-05] — Docs UX Overhaul
 
-> 코드 변경 없음. 학생 친화 문서 전면 개편 + Claude Code 온보딩 인프라.
+> 코드 변경 없음. 사용자 친화 문서 전면 개편 + Claude Code 온보딩 인프라.
 
 ### Added
 
@@ -92,8 +92,8 @@
 * **`docs/getting-started/00-claude-code-quickstart.md`** — AI 자동 안내 진입 페이지
 * **`docs/hardware/`** — 보드 외부 인터페이스 통합 안내 + Rev 1.1 / Rev 2.0 별 외부 GPIO 핀맵
 * **`docs/advanced/ai-data-pipeline.md`** — 보드 데이터 → PyTorch / sklearn 학습 흐름 한 페이지 정리 (3 가지 길 + PhAI Studio 연동)
-* **`docs/tutorials/README.md` 16 주 수업 진도표** — 강사용 한 학기 운영 참고 진도표
-* **`docs/student-walkthrough-simulations.md`** — 가상 학생 5 명 UX 시뮬레이션 (강사·멘토용 체크리스트)
+* **`docs/tutorials/README.md` 16 주 수업 진도표** — 한 학기 수업 운영용 참고 진도표
+* **`docs/student-walkthrough-simulations.md`** — 가상 사용자 5 명 UX 시뮬레이션 (멘토·강사용 체크리스트)
 * **`docs/find-it.md`** — 키워드 → 페이지 빠른 찾기 인덱스 (자주 묻는 질문 통합)
 * **`docs/release-notes/`** — 버전별 첨부 파일 + 호환성 매트릭스 (루트 `RELEASE_v*.md` 이전 위치)
 * **`assets/img/README.md`** — 이미지 자료 우선순위 가이드 (Tier 1~6, 35 개 placeholder 목록)
@@ -101,9 +101,9 @@
 ### Changed
 
 * **41 개 예제 README 통일** — 5 단계 lab manual 포맷 (목표 / 사전 지식 / 핵심 코드 / 실험 / 다음 단계 + 흔한 실수)
-* **`docs/` 4-tier 재구성** — getting-started · tutorials · api-reference · architecture · advanced · bootloader · kit-h10-firmware · troubleshooting 학생 친화 톤
+* **`docs/` 4-tier 재구성** — getting-started · tutorials · api-reference · architecture · advanced · bootloader · kit-h10-firmware · troubleshooting 사용자 친화 톤
 * **루트 `README.md` 재설계** — Claude Code 우선 + 수동 3 단계 간단 명령
-* **학생 친화 용어 교체** — 내부 약어 (AGR DOP V2, IOIF V3.0, Facade Layer, RTOS Task, PI-Vector, TSM, PDO, CDC, MSC, Cortex-M7 등) → 학생이 이해할 수 있는 자연스러운 표현
+* **사용자 친화 용어 교체** — 내부 약어 (AGR DOP V2, IOIF V3.0, Facade Layer, RTOS Task, PI-Vector, TSM, PDO, CDC, MSC, Cortex-M7 등) → 처음 보는 사람도 이해할 수 있는 자연스러운 표현
 * **AI 틱한 표현 제거** — 📌/⏱️/🧰 메타 박스 + WHY/WHAT/HOW 영문 헤더 + 🧒 비유 박스 정리, 한국어 자연스러운 톤
 * **`examples/README.md`** — Rev 1.1 / Rev 2.0 호환성 통합 안내 (41 개 예제 모두 빌드 호환, 외부 GPIO 핀맵만 리비전별 확인)
 
@@ -115,7 +115,7 @@
 ### Moved
 
 * **`RELEASE_v2.1.1.md`** → **`docs/release-notes/v2.1.1.md`** (루트 정리, 향후 릴리즈도 동일 폴더로 일관성)
-* 루트 README 에 **폴더 구조 시각 가이드 + 길 찾기 박스** 추가 — 학생 "어디 가야 하지" 마찰 감소
+* 루트 README 에 **폴더 구조 시각 가이드 + 길 찾기 박스** 추가 — "어디부터 봐야 하지" 마찰 감소
 
 ---
 

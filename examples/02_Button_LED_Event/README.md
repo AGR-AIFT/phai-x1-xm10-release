@@ -25,7 +25,7 @@
 - **이벤트 vs 폴링** — Ex.01 의 폴링은 "현재 누름?" 만 알 수 있지만, 이벤트는 "방금 누르고 뗐다" 같은 **변화** 자체를 잡습니다.
 - **`XM_GetButtonEvent()` 는 read-clear** — 한 번 호출하면 이벤트가 소비됩니다. 다시 호출하면 새 이벤트만 보입니다.
 - **`XmBtnEvent_t`** 종류: `XM_BTN_NONE`, `XM_BTN_CLICK`, `XM_BTN_DOUBLE_CLICK`, `XM_BTN_LONG_PRESS`. ([api-ref](../../docs/api-reference/03-led-btn-control.md))
-- **`XM_LED_ONESHOT`** — 지정한 ms 동안 ON 후 자동 OFF. 학생이 별도 타이머 코드 안 짜도 됨.
+- **`XM_LED_ONESHOT`** — 지정한 ms 동안 ON 후 자동 OFF. 사용자가 별도 타이머 코드 안 짜도 됨.
 
 ---
 

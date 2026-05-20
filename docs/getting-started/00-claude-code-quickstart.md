@@ -2,13 +2,13 @@
 
 임베디드도, STM32CubeIDE 도 처음이어도 괜찮습니다. AI 가 설치부터 보드 LED 점등까지 옆에서 안내해줘요. 5 분만 읽으면 어떻게 시작하는지 감이 잡힙니다.
 
-> **SDK ZIP 을 아직 안 받은 상태여도 괜찮아요.** Claude Code 만 설치하고 임의의 빈 폴더에서 켠 다음, GitHub URL 만 알려주면 AI 가 ZIP 다운로드부터 같이 진행합니다. 자세한 흐름은 아래 [URL 만 받은 학생 (다운로드 전)](#url-만-받은-학생-다운로드-전) 섹션.
+> **SDK ZIP 을 아직 안 받은 상태여도 괜찮아요.** Claude Code 만 설치하고 임의의 빈 폴더에서 켠 다음, GitHub URL 만 알려주면 AI 가 ZIP 다운로드부터 같이 진행합니다. 자세한 흐름은 아래 [URL 만 받은 사용자 (다운로드 전)](#url-만-받은-사용자-다운로드-전) 섹션.
 
 ---
 
 ## 왜 AI 와 함께 진행하면 좋나
 
-수동 가이드 (`01-hardware-setup.md` → `02-software-setup.md` → `03-first-build.md`) 도 잘 정리되어 있긴 하지만, 학생 입장에서는 몇 가지 불편이 있습니다.
+수동 가이드 (`01-hardware-setup.md` → `02-software-setup.md` → `03-first-build.md`) 도 잘 정리되어 있긴 하지만, 사용자 입장에서는 몇 가지 불편이 있습니다.
 
 - 어느 단계까지 왔는지 스스로 챙겨야 합니다.
 - 에러가 나면 트러블슈팅 문서를 따로 찾아야 합니다.
@@ -82,7 +82,7 @@ cd C:\dev\Extension_Module
 claude
 ```
 
-Claude Code 가 켜지면 `CLAUDE.md` 가 자동 로드됩니다. 학생이 다음 중 하나를 입력:
+Claude Code 가 켜지면 `CLAUDE.md` 가 자동 로드됩니다. 사용자가 다음 중 하나를 입력:
 
 - `처음 시작할게`
 - `환경 구축 도와줘`
@@ -91,7 +91,7 @@ Claude Code 가 켜지면 `CLAUDE.md` 가 자동 로드됩니다. 학생이 다�
 
 → AI 가 Phase 0 부터 차례로 진행합니다. 매 단계 ✅ 체크포인트.
 
-### URL 만 받은 학생 (다운로드 전)
+### URL 만 받은 사용자 (다운로드 전)
 
 학교에서 GitHub URL (`https://github.com/AGR-EXO/Extension_Module`) 만 받은 상태라면:
 

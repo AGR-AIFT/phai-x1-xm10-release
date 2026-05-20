@@ -34,7 +34,7 @@ PhAI Studio 를 켜고 XM10 USB 를 연결하면:
 
 ## 2️⃣ 사전 지식 — 시작 전 알아둘 것
 
-- **Total Data Packet (0x20)** — System 이 425 B 의 H10/IMU/External IO 전체 상태를 1 kHz 로 자동 스트리밍. 학생 코드 0줄.
+- **Total Data Packet (0x20)** — System 이 425 B 의 H10/IMU/External IO 전체 상태를 1 kHz 로 자동 스트리밍. 사용자 코드 0줄.
 - **User Custom Channel (0xF0~0xFE)** — 알고리즘 내부 변수 (제어 출력, 추정치 등) 를 PhAI 에 노출. 채널당 별도 메타데이터 JSON 등록 필요.
 - **`XM_SetUsbCustomMeta(id, json)`** — Setup 단계 1회. JSON 배열로 채널별 `name` + `unit` 등록 → PhAI 에 자동 표시.
 - **`XM_SendUsbDataWithId(ptr, size, id)`** — non-blocking 전송. 버퍼 가득 차면 `false` 반환 + 해당 tick 드롭.

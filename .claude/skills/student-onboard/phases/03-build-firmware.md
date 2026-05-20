@@ -6,13 +6,13 @@
 
 ## 💡 WHY — 왜 빌드가 필요한가
 
-학생이 작성한 C 코드는 그냥 텍스트입니다. 보드의 MCU 는 텍스트를 못 읽고, **기계어 (binary)** 만 실행합니다. **빌드** 는 C → 기계어 변환 (컴파일 + 링크) 과정이고, 최종 산출물이 `.elf` (Executable and Linkable Format) 파일입니다.
+사용자가 작성한 C 코드는 그냥 텍스트입니다. 보드의 MCU 는 텍스트를 못 읽고, **기계어 (binary)** 만 실행합니다. **빌드** 는 C → 기계어 변환 (컴파일 + 링크) 과정이고, 최종 산출물이 `.elf` (Executable and Linkable Format) 파일입니다.
 
 > 🧒 비유: 한국어 책 (C 코드) 을 영어 책 (.elf) 으로 번역하는 작업. 보드는 영어만 읽음.
 
 ## 📖 WHAT — 무엇이 만들어지나
 
-- `Debug/Extension_Module.elf` — 디버그 정보 포함 (학생용 권장)
+- `Debug/Extension_Module.elf` — 디버그 정보 포함 (사용자용 권장)
 - `Debug/Extension_Module.bin` / `.hex` — 디버그 정보 없는 raw 바이너리 (양산 배포용)
 - Build console 로그 — 컴파일 에러/경고 + 메모리 사용량 (`text data bss`)
 

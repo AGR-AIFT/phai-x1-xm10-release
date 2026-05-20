@@ -18,7 +18,7 @@
 
 <p align="center">
   검증된 외골격 위에 자기 알고리즘을 자유롭게 올려보고, 센서를 붙이고, 데이터를 분석할 수 있습니다.<br>
-  대학·기업 연구원, 의료기기 엔지니어, 로봇 공학 전공 학생을 위한 부분 개방형 R&D 플랫폼.
+  대학·기업 연구원, 의료기기 엔지니어, 로봇 공학 전공 사용자를 위한 부분 개방형 R&D 플랫폼.
 </p>
 
 ---
@@ -114,12 +114,12 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 ## 폴더 구조 한눈에
 
-> 본 트리는 **GitHub 레포 전체 구조** (사내 개발 view). 학생이 받는 **ZIP 다운로더 (Rev1.1.zip / Rev2.0.zip)** 는 본인 Rev SDK 한 벌이 ZIP root 에 평탄화되어 있고, `docs/`, `examples/`, `.claude/`, `CLAUDE.md` (Rev 특화) 가 함께 들어있습니다. 학생은 압축 푼 폴더 안에서만 작업합니다.
+> 본 트리는 **GitHub 레포 전체 구조** (사내 개발 view). 사용자가 받는 **ZIP 다운로더 (Rev1.1.zip / Rev2.0.zip)** 는 본인 Rev SDK 한 벌이 ZIP root 에 평탄화되어 있고, `docs/`, `examples/`, `.claude/`, `CLAUDE.md` (Rev 특화) 가 함께 들어있습니다. 사용자는 압축 푼 폴더 안에서만 작업합니다.
 
 ```
 Extension_Module/
 ├── README.md              ← 지금 보는 페이지
-├── docs/                  ← 학생용 문서 (9 카테고리)
+├── docs/                  ← 사용자용 문서 (9 카테고리)
 │   ├── find-it.md         ← 🧭 빠른 찾기 인덱스 (먼저 가보세요)
 │   ├── getting-started/   ← 환경 구축 + 첫 빌드
 │   ├── hardware/          ← 보드 외부 인터페이스 + GPIO 핀맵
@@ -137,7 +137,7 @@ Extension_Module/
 │   └── Rev2.0/Extension_Module/  ← PCB Rev 2.0 용 (대부분 여기)
 ├── PythonDecoder/         ← USB 메모리 / 시리얼 디코더
 ├── assets/img/            ← 보드 사진 + 다이어그램 (사용자가 추가)
-├── .claude/skills/        ← Claude Code 학생 온보딩 / 예제 트러블슈팅 스킬
+├── .claude/skills/        ← Claude Code 사용자 온보딩 / 예제 트러블슈팅 스킬
 ├── CLAUDE.md / AGENTS.md  ← AI 코딩 도구 진입점 (Claude Code 등)
 ├── CHANGELOG.md           ← 버전별 변경 이력
 └── LICENSE

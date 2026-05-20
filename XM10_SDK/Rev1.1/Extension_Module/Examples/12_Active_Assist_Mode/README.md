@@ -125,7 +125,7 @@ s_lh_torque_smooth += (s_lh_torque_target - s_lh_torque_smooth) * TORQUE_SMOOTHI
 ## 5️⃣ 다음 단계
 
 - 저항 운동 (H10 내장 기능): [Ex.13 Resistive](../13_Resistive_Mode/)
-- 토크 직접 제어 (학생 PD 구현): [Ex.14 PD Realtime](../14_PD_Realtime_Control/)
+- 토크 직접 제어 (사용자 PD 구현): [Ex.14 PD Realtime](../14_PD_Realtime_Control/)
 - AI 의도 추정: [Ex.16 TinyAI](../16_TinyAI_Sensor_Fusion/)
 - 7-phase 보행 FSM: [Ex.17 FSM Gait Intent](../17_FSM_Gait_Intent/)
 - 보행 위상 적응 토크: [Ex.23 Gait Phase Adaptive](../23_Gait_Phase_Adaptive_Torque/)

@@ -129,9 +129,9 @@ static void Error_Loop(void)
 |------|------|------|
 | ACTIVE 진입 시 토크가 들쭉날쭉 | `static float torque` 미선언 → 매 호출 0 초기화 | `static` 필수 |
 | 리미트 트리거에도 ERROR 진입 안 함 | Active Low/High 혼동 | DIO_4 의 풀업/풀다운 + 스위치 동작 다시 확인 |
-| ERROR 에서 자동 복귀 | 학생이 `Error_Loop` 에 자동 transition 추가 | **금지**. E-Stop 은 항상 사용자 확인 후 |
+| ERROR 에서 자동 복귀 | 사용자가 `Error_Loop` 에 자동 transition 추가 | **금지**. E-Stop 은 항상 사용자 확인 후 |
 | H10 무반응 | `XM_SetControlMode(XM_CTRL_TORQUE)` 누락 또는 H10 미연결 | Entry 호출 확인 + CAN-FD 연결 |
 | 모든 상태에서 LED 1 만 깜빡 | Active_Entry 가 LED 1 도 건드림 (코드 오타) | LED 2 = ACTIVE, LED 1 = ERROR 표시 |
-| H10 토크가 너무 빠르게 증가 | `torque += 0.01f` 가 2 ms 주기 → 1초에 5 Nm | 학생 실험 안전을 위해 H10 분리 또는 ramp 속도 ↓ |
+| H10 토크가 너무 빠르게 증가 | `torque += 0.01f` 가 2 ms 주기 → 1초에 5 Nm | 사용자 실험 안전을 위해 H10 분리 또는 ramp 속도 ↓ |
 
 막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)

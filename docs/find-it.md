@@ -82,7 +82,7 @@
 | PhAI Studio 가 안 잡혀요 (CDC) | Ex.07~09 의 ⚠️ 흔한 실수 + `.c` 파일 헤더의 PhAI 동시점유 경고 |
 | 보드가 무한 리부팅 | [troubleshooting.md](troubleshooting.md) |
 | Body Data 가 뭐예요 (gaitCycle 등) | [api-reference/README.md - Body Data 전제조건](api-reference/README.md) |
-| 강사 / 멘토 입장에서 학생 막힘 예상 시나리오 | [docs/student-walkthrough-simulations.md](student-walkthrough-simulations.md) |
+| 강사 / 멘토 입장에서 사용자 막힘 예상 시나리오 | [docs/student-walkthrough-simulations.md](student-walkthrough-simulations.md) |
 | 버전별 알려진 이슈 | [docs/release-notes/](release-notes/) |
 
 ## 📖 메타 정보

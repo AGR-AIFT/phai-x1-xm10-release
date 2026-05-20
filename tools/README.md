@@ -2,7 +2,7 @@
 
 ## `package_release.ps1` — SDK ZIP 생성
 
-학생이 ZIP 한 번 풀면 그 폴더가 곧 STM32CubeIDE Import root + Claude Code 진입 폴더가 되도록
+사용자가 ZIP 한 번 풀면 그 폴더가 곧 STM32CubeIDE Import root + Claude Code 진입 폴더가 되도록
 **Option B 평탄 구조**로 `Rev1.1.zip` / `Rev2.0.zip` 을 생성합니다.
 
 ### 사용
@@ -25,7 +25,7 @@
 Rev1.1.zip (압축 풀면) → Extension_Module/
 ├── 🔧 SDK 코드   ← XM10_SDK/Rev1.1/Extension_Module/* 평탄화
 │   ├── XM_FW/ (헤더 + libXM_Lib.a + boot_fw_info.c)
-│   ├── XM_Apps/Control_Task/ (학생 코드 자리)
+│   ├── XM_Apps/Control_Task/ (사용자 코드 자리)
 │   ├── Core/, Drivers/, Compatible/, FATFS/, Middlewares/
 │   ├── .project, .cproject, *.ld, startup_*.s
 │   └── CMakeLists.txt
@@ -81,4 +81,4 @@ gh release edit v2.2.0 --draft=false
 | `CLAUDE.md`/`AGENTS.md` | ❌ | ✅ |
 | MAX_PATH 위험 | 가능 | 해소 |
 
-→ v2.2.0 부터 학생이 압축 풀자마자 Claude Code 가 학습 컨텍스트 전부 접근.
+→ v2.2.0 부터 사용자가 압축 풀자마자 Claude Code 가 학습 컨텍스트 전부 접근.

@@ -109,7 +109,7 @@ TSM을 실행합니다. **User Task의 무한 루프 내에서 반드시 호출*
 |------|------|------|
 | TSM 등록은 했는데 함수가 호출 안 됨 | `User_Loop` 안에서 `XM_TSM_Run(handle)` 누락 | `XM_TSM_Run` 가 매 주기 호출되어야 dispatch |
 | `TransitionTo` 호출했는데 즉시 안 바뀜 | 의도된 동작 — 다음 주기에 `Exit → Entry` 순으로 전환 | 정상. 즉시 전환 필요하면 별도 플래그 처리 |
-| Entry 가 매 주기 반복 호출됨 | 학생이 직접 `Entry()` 함수 호출 (TSM 가 자동 호출하는데 중복) | Entry 는 `TransitionTo` 시 1회만. 직접 호출 금지 |
+| Entry 가 매 주기 반복 호출됨 | 사용자가 직접 `Entry()` 함수 호출 (TSM 가 자동 호출하는데 중복) | Entry 는 `TransitionTo` 시 1회만. 직접 호출 금지 |
 | 상태 ID 충돌 (다른 상태가 같은 ID) | `AddState` 두 번 호출하며 동일 `id` 사용 | 표준 (`XM_STATE_*`) + 사용자 정의 (`XM_STATE_START` = 10) 충돌 회피 |
 | `XM_STATE_OFF` 에서 시작했는데 아무 동작 X | `XM_STATE_OFF` 의 `on_loop` 미등록 또는 의도된 idle 상태 | 첫 상태에서 `on_loop` 정의 또는 `TransitionTo` 호출 추가 |
 

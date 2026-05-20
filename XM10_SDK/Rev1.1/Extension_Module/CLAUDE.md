@@ -4,7 +4,7 @@
 
 ---
 
-## 🚀 처음 시작하는 학생 — 한 줄 안내
+## 🚀 처음 시작하는 사용자 — 한 줄 안내
 
 Claude Code 에 다음 중 하나를 입력하세요:
 
@@ -29,7 +29,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **OS** | FreeRTOS + CMSIS-OS2 |
 | **이 ZIP 의 출처** | https://github.com/AGR-EXO/Extension_Module/releases |
 | **License** | MIT |
-| **본 SDK 의 역할** | 학생/연구자용 공개 릴리즈 — 본인 알고리즘을 `XM_Apps/User_Algorithm/` 또는 `examples/` 에 작성 |
+| **본 SDK 의 역할** | 사용자/연구자용 공개 릴리즈 — 본인 알고리즘을 `XM_Apps/User_Algorithm/` 또는 `examples/` 에 작성 |
 
 ---
 
@@ -91,9 +91,9 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 ## AI 사용 안내 (Claude Code)
 
-본 SDK 에 다음 학생용 스킬이 정의되어 있습니다 (`.claude/skills/`):
+본 SDK 에 다음 사용자용 스킬이 정의되어 있습니다 (`.claude/skills/`):
 
-- **`student-onboard`** — 신규 학생 환경 구축 자동화 (Phase 1~6: 설치 → Import → 빌드 → 플래시 → LED 확인 → 핸드오프)
+- **`student-onboard`** — 신규 사용자 환경 구축 자동화 (Phase 1~6: 설치 → Import → 빌드 → 플래시 → LED 확인 → 핸드오프)
 - **`example-helper`** — "Ex.XX 빌드 안 돼" / "LED 안 켜져" / "CDC 연결 실패" 등 예제 트러블슈팅
 
 ### 트리거되는 문구
@@ -105,7 +105,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 ---
 
-## 절대 룰 (학생 / AI 모두 준수)
+## 절대 룰 (사용자 / AI 모두 준수)
 
 1. **한글·공백 경로 금지**
    - STM32CubeIDE 설치 경로, 본 ZIP 압축 해제 경로 모두 영문/숫자/언더스코어만.
@@ -116,7 +116,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
    - 같은 COM 포트 충돌 → 접속 실패 / 데이터 손실. (`examples/07~09` 헤더 `@warning` 참조)
 
 3. **사용자 코드 영역**
-   - 학생이 수정하는 곳: `XM_Apps/User_Algorithm/` 또는 `examples/<번호>_<이름>/*.c`
+   - 사용자가 수정하는 곳: `XM_Apps/User_Algorithm/` 또는 `examples/<번호>_<이름>/*.c`
    - 라이브러리 (`XM_FW`, `XM_Lib`, `Drivers/`, `Middlewares/`, `Compatible/`) 는 **봉인** — 수정 시 SDK 일관성 깨짐.
 
 4. **HW Rev 호환**
@@ -124,7 +124,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
    - 본인 보드 리비전은 PCB 라벨 또는 [docs/architecture/](docs/architecture/) 비교표로 확인.
 
 5. **bootloader 영역 비건드림**
-   - 부트로더 (별도 region, `0x08000000`) 는 학생이 직접 flash 하지 않습니다. SWD 로 한 번 설치 후, 이후 FW 업로드는 PhAI Studio USB FTP. ([docs/bootloader/](docs/bootloader/))
+   - 부트로더 (별도 region, `0x08000000`) 는 사용자가 직접 flash 하지 않습니다. SWD 로 한 번 설치 후, 이후 FW 업로드는 PhAI Studio USB FTP. ([docs/bootloader/](docs/bootloader/))
 
 6. **Rev 1.1 메모리 절약 습관**
    - 새 버퍼 추가 시 sizeof 확인 → `.map` 의 RAM_D2 잔여량 점검.
@@ -156,7 +156,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 ## AI 동작 정책 (Claude Code 메타)
 
 본 SDK 에서 Claude Code 는:
-- 학생/개발자의 **사용자 코드 영역만** 수정합니다 (라이브러리 봉인).
+- 사용자/개발자의 **사용자 코드 영역만** 수정합니다 (라이브러리 봉인).
 - 빌드/플래시 명령은 **사용자 명시 호출 후에만** 실행합니다.
 - 외부 다운로드는 **권한 프롬프트 1회 후** 진행합니다.
 - 본 SDK 외 외부 서비스 (GitHub, web)에 데이터를 전송하지 않습니다 — `WebFetch` 는 사용자 명시 요청 시에만 (예: 최신 release 확인).

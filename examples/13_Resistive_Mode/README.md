@@ -112,7 +112,7 @@ static void Active_Exit(void)
 ## 5️⃣ 다음 단계
 
 - 능동 의도 보조: [Ex.12 Active Assist](../12_Active_Assist_Mode/)
-- PD 토크 직접 제어 (학생 알고리즘): [Ex.14 PD Realtime](../14_PD_Realtime_Control/)
+- PD 토크 직접 제어 (사용자 알고리즘): [Ex.14 PD Realtime](../14_PD_Realtime_Control/)
 - 어드미턴스 제어 (힘 → 위치): [Ex.28 Admittance](../28_Admittance_Control/) (Phase 2D)
 
 ---

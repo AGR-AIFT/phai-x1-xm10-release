@@ -2,9 +2,9 @@
 
 > Codex / 보조 AI 진입점. **주 진입점은 [CLAUDE.md](CLAUDE.md)** — 이 파일은 essentials 미러입니다.
 
-## 빠른 안내 (학생용)
+## 빠른 안내 (처음 시작하는 분)
 
-이 레포는 angel Robotics XM10 보드의 알고리즘 개발 SDK + 예제 + 문서입니다. 처음 시작하는 학생은 다음을 입력하세요:
+이 레포는 angel Robotics XM10 보드의 알고리즘 개발 SDK + 예제 + 문서입니다. 처음 시작하는 분은 다음을 입력하세요:
 
 - `"처음 시작할게"` / `"환경 구축 도와줘"` / `"/student-onboard"`
 
@@ -28,7 +28,7 @@
 2. USB-CDC 단일 점유 — PhAI Studio 와 시리얼 터미널 동시 사용 금지
 3. 사용자 코드 영역: `XM_Apps/User_Algorithm/` 또는 `examples/*/` 만 수정. 라이브러리 (`XM_Lib`, `IOIF`, `AGR_MW`) 봉인.
 4. HW Rev 호환: `Rev1.1` vs `Rev2.0` 독립 SDK — 본인 보드 리비전 확인 필요
-5. 부트로더 영역은 SWD 로 1회 flash 이후 학생이 직접 건드리지 않음
+5. 부트로더 영역은 SWD 로 1회 flash 이후 사용자가 직접 건드리지 않음
 
 ## AI 정책
 
