@@ -178,9 +178,9 @@ static void Active_Loop(void)
         XM_SetResistiveCompGain(SYS_NODE_ID_LH, gain);
         XM_SetResistiveCompGain(SYS_NODE_ID_RH, gain);
         
-        // 디버깅 메시지
+        // 디버깅 메시지 — snprintf 로 버퍼 오버런 방지
         char msg[64];
-        sprintf(msg, "Level Changed: %d -> Gain: %.2f\r\n", current_level, gain);
+        snprintf(msg, sizeof(msg), "Level Changed: %d -> Gain: %.2f\r\n", current_level, gain);
         XM_SendUsbDebugMessage(msg);
 
         // 현재 상태 저장

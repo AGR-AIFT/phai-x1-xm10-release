@@ -4,7 +4,7 @@ XM10 Extension Module SDK release ZIP packager (Option B 평탄 구조).
 
 PowerShell 변형 (tools/package_release.ps1) 의 Python 포트.
 사용:
-    python tools/package_release.py --version 2.2.1 --rev all
+    python tools/package_release.py --version 2.2.2 --rev all
 """
 from __future__ import annotations
 

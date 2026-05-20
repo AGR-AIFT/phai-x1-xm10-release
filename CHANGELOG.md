@@ -4,6 +4,35 @@
 
 ---
 
+## [v2.2.2] — 2026-05-20
+
+> SDK 안의 예제 코드 47 개를 다시 한 번 훑어 학생 혼선 포인트 9 건을 정리한 패치 릴리즈. Ex.36 이 Rev 2.0 전용임을 4 곳에 일관 표기. 사용자 코드 / API / KIT H10 펌웨어 변경 없음.
+
+### Fixed (예제 코드 정리)
+
+* **Ex.31 Friction_Comp_DOB** — `MAX_TORQUE_NM` 이중 `#define` (`8.0f` → `5.0f`) 정리. 5.0 Nm 단일 정의로 통합, redefine 컴파일러 경고 제거.
+* **Ex.08 CDC_Sensor_Print · Ex.13 Resistive_Mode** — 64 byte 스택 버퍼의 `sprintf` → `snprintf(buf, sizeof(buf), ...)` 로 교체 (silent stack overflow 위험 차단).
+* **Ex.15 Inverted_Pendulum** — 디버그 라인의 고정소수점 출력에서 음수 부호가 사라지던 문제 (`-0.35` → `0.35` 로 표시되던) 수정. 부호를 `%s` prefix 로 분리.
+* **Ex.33 Kinesthetic_Teaching** — loop-count 매크로 `RECORD_DOWNSAMPLE` 를 ms 임계값으로 재활용하던 부분을 `REPLAY_STEP_MS = 10U` 매크로로 분리.
+* **Ex.36 OnDevice_Kinesthetic_Learning** — `Active_Entry` 에서 `s_mode_lost_tick` 워치도그 명시 리셋 (재진입 시 즉시 STANDBY 빠지던 가능성 차단) + BG task ↔ foreground 다중 워드 volatile 한계 헤더 주석 보강.
+* **Ex.22 CPG_Oscillator** — AFO frequency 적응 식이 phase advance 이후의 `sin(φ)` 를 쓰던 한 스텝 lag 수정 (`sin(φ[k]) / cos(φ[k])` 미리 계산).
+* **Ex.24 Virtual_Constraint** — 1 kHz 루프의 5 차 Bézier basis `powf` 12 회 호출 → 곱셈 체인으로 교체.
+* **Ex.26 ILC** — 보행 주기 1 회 (≈ 1 Hz) 단위 호출임을 헤더 주석으로 명시 (1 kHz 루프 부담 오해 차단).
+* **Ex.16 TinyAI Sensor_Fusion** — NN raw logit 을 `× 100` 으로 확률처럼 표시하던 부분 → 라벨 `Conf:%` → `Score:`, 단위 그대로 출력.
+
+### Documentation
+
+* **Ex.36 Rev 2.0 전용 표기** — 소스 헤더 `@warning` + `examples/36/README.md` 상단 🛑 배너 + `docs/troubleshooting.md` 신규 섹션 + `docs/tutorials/README.md` 41 예제 로드맵 표기. 4 곳 일관.
+* **release-notes** — `docs/release-notes/v2.2.2.md` 신규.
+
+### Compatibility
+
+* **사용자 코드** — v2.2.1 코드 그대로 빌드 가능. `Control_Setup` / `Control_Loop` / 모든 API 변경 없음.
+* **KIT H10 펌웨어** — v2.3.0 그대로.
+* **부트로더** — v1.1.0 그대로.
+
+---
+
 ## [v2.2.1] — 2026-05-19
 
 > Rev 2.0 SDK 다운로드 직후 빌드 실패 (undefined reference 22 건) 수정. 사용자 코드 / API 변경 없음.
