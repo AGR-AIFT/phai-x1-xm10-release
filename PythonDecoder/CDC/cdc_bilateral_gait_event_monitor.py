@@ -349,7 +349,7 @@ class BilateralGaitDetector:
 
 
 def run_gui(
-    port: str,
+    port: str | None,
     baud: int,
     module_id: int,
     labels: list[str],
@@ -371,8 +371,9 @@ def run_gui(
         sample = QtCore.pyqtSignal(float, int, tuple, float, int)
         status = QtCore.pyqtSignal(str)
 
-        def __init__(self):
+        def __init__(self, port_name):
             super().__init__()
+            self.port_name = port_name
             self._running = True
 
         def stop(self):
@@ -380,7 +381,7 @@ def run_gui(
 
         def run(self):
             try:
-                ser = serial.Serial(port, baud, timeout=0.02)
+                ser = serial.Serial(self.port_name, baud, timeout=0.02)
                 ser.dtr = True
                 ser.rts = True
                 ser.reset_input_buffer()
@@ -389,7 +390,7 @@ def run_gui(
                 self.status.emit(f"open failed: {exc}")
                 return
 
-            self.status.emit(f"connected: {port} @ {baud}")
+            self.status.emit(f"connected: {self.port_name} @ {baud}")
             wire_buf = bytearray()
             rx_bytes = 0
             decoded_count = 0
@@ -425,7 +426,7 @@ def run_gui(
                     wire_buf.extend(chunk)
                     if now_abs - last_status >= 0.5:
                         self.status.emit(
-                            f"connected: {port} @ {baud} | "
+                            f"connected: {self.port_name} @ {baud} | "
                             f"rx:{rx_bytes}B decoded:{decoded_count} "
                             f"matched:{matched_count} errors:{error_count}"
                         )
@@ -503,12 +504,13 @@ def run_gui(
             self.record_count = 0
             self.marker_items = deque()
             self.last_event = "-"
+            self.worker = None
 
-            self.worker = SerialWorker()
             self._build_ui()
-            self.worker.sample.connect(self.on_sample)
-            self.worker.status.connect(self.status_label.setText)
-            self.worker.start()
+            self.refresh_ports()
+            if port:
+                self.select_port(port)
+                self.connect_serial()
 
         def _build_ui(self):
             from PyQt5 import QtCore, QtWidgets
@@ -520,7 +522,27 @@ def run_gui(
             root.setSpacing(8)
 
             top = QtWidgets.QHBoxLayout()
-            self.status_label = QtWidgets.QLabel("opening serial port...")
+            top.addWidget(QtWidgets.QLabel("Port"))
+            self.port_combo = QtWidgets.QComboBox()
+            self.port_combo.setEditable(True)
+            self.port_combo.setMinimumWidth(260)
+            self.port_combo.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
+            top.addWidget(self.port_combo)
+
+            self.refresh_button = QtWidgets.QPushButton("Refresh")
+            self.refresh_button.clicked.connect(self.refresh_ports)
+            top.addWidget(self.refresh_button)
+
+            self.connect_button = QtWidgets.QPushButton("Connect")
+            self.connect_button.clicked.connect(self.connect_serial)
+            top.addWidget(self.connect_button)
+
+            self.disconnect_button = QtWidgets.QPushButton("Disconnect")
+            self.disconnect_button.clicked.connect(self.disconnect_serial)
+            self.disconnect_button.setEnabled(False)
+            top.addWidget(self.disconnect_button)
+
+            self.status_label = QtWidgets.QLabel("select a serial port")
             self.status_label.setMinimumHeight(24)
             top.addWidget(self.status_label, 1)
 
@@ -702,6 +724,109 @@ def run_gui(
             if active:
                 return f"background:{color}; color:white; border:2px solid {color}; padding:6px; font-weight:bold;"
             return "background:#eeeeee; color:#777; border:1px solid #c8c8c8; padding:6px;"
+
+        def refresh_ports(self):
+            selected = self.current_port_text()
+            self.port_combo.blockSignals(True)
+            self.port_combo.clear()
+            for item in serial.tools.list_ports.comports():
+                self.port_combo.addItem(f"{item.device} - {item.description}", item.device)
+            self.port_combo.blockSignals(False)
+            if selected:
+                self.select_port(selected)
+            elif self.port_combo.count() == 0:
+                self.port_combo.setEditText("")
+            self.status_label.setText(
+                f"{self.port_combo.count()} serial port(s) found"
+                if self.port_combo.count()
+                else "no serial ports found; type COM port manually"
+            )
+
+        def select_port(self, port_name):
+            for idx in range(self.port_combo.count()):
+                if self.port_combo.itemData(idx) == port_name:
+                    self.port_combo.setCurrentIndex(idx)
+                    return
+            self.port_combo.setEditText(port_name)
+
+        def current_port_text(self):
+            text = self.port_combo.currentText().strip()
+            if " - " in text:
+                text = text.split(" - ", 1)[0].strip()
+            data = self.port_combo.currentData()
+            if not text and data:
+                return str(data).strip()
+            return text
+
+        def connect_serial(self):
+            port_name = self.current_port_text()
+            if not port_name:
+                self.status_label.setText("select or type a serial port first")
+                return
+            if self.worker and self.worker.isRunning():
+                self.disconnect_serial()
+
+            self.reset_runtime_state()
+            self.worker = SerialWorker(port_name)
+            self.worker.sample.connect(self.on_sample)
+            self.worker.status.connect(self.status_label.setText)
+            self.worker.finished.connect(self.on_worker_finished)
+            self.worker.start()
+
+            self.port_combo.setEnabled(False)
+            self.refresh_button.setEnabled(False)
+            self.connect_button.setEnabled(False)
+            self.disconnect_button.setEnabled(True)
+            self.status_label.setText(f"opening {port_name} @ {baud}")
+
+        def disconnect_serial(self):
+            if self.worker:
+                self.worker.stop()
+                self.worker.wait(1000)
+                self.worker = None
+            self.on_worker_finished()
+
+        def on_worker_finished(self):
+            self.port_combo.setEnabled(True)
+            self.refresh_button.setEnabled(True)
+            self.connect_button.setEnabled(True)
+            self.disconnect_button.setEnabled(False)
+
+        def reset_runtime_state(self):
+            for _, item in list(self.marker_items):
+                self.plot.removeItem(item)
+            self.times.clear()
+            for series in (
+                self.raw_values
+                + self.norm_values
+                + self.membership_values
+                + self.contact_history
+            ):
+                series.clear()
+            self.event_markers.clear()
+            self.marker_items.clear()
+            self.latest_raw = [0.0] * 4
+            self.latest_norm = [0.0] * 4
+            self.latest_contacts = [False] * 4
+            self.latest_info = {
+                "bits": "0000",
+                "state": "-",
+                "high_level": "-",
+                "events": [],
+            }
+            self.last_plot_update = 0.0
+            self.recv_count = 0
+            self.last_event = "-"
+            self.lpf_state = None
+            self.capture_mode = None
+            self.capture_target = 0
+            self.capture_samples = []
+            self.contact_detector.reset()
+            self.gait_detector.reset()
+            self.event_log.setRowCount(0)
+            for curve in self.curves + self.membership_curves:
+                curve.setData([], [])
+            self.update_state_labels(0, 0.0, 0)
 
         def on_threshold_changed(self):
             if self.spin_off.value() >= self.spin_on.value():
@@ -1017,8 +1142,9 @@ def run_gui(
         def closeEvent(self, event):
             if self.record_file:
                 self.stop_recording()
-            self.worker.stop()
-            self.worker.wait(1000)
+            if self.worker:
+                self.worker.stop()
+                self.worker.wait(1000)
             event.accept()
 
     app = QtWidgets.QApplication(sys.argv)
@@ -1058,12 +1184,6 @@ def main():
         sys.exit(2)
 
     port = args.port or guess_port()
-    if not port:
-        print("Could not auto-detect a serial port. Available ports:", file=sys.stderr)
-        for item in list_ports():
-            print(f"  {item}", file=sys.stderr)
-        print("Run again with --port <PORT>.", file=sys.stderr)
-        sys.exit(2)
 
     run_gui(
         port,
