@@ -3,17 +3,160 @@
  * @file    Final_EMG.c
  * @brief   EMG proportional assist torque control using external ADC inputs.
  * @details
- * This user algorithm follows the same runtime structure as
- * pd_realtime_control.c, but converts biased analog EMG sensor signals to
- * proportional hip assist torque commands.
+ * ============================================================================
+ * 1. Purpose
+ * ============================================================================
+ * This file is a project backbone for designing EMG-based hip assistance.
+ * It reads up to four external analog EMG signals, extracts a smoothed muscle
+ * activation envelope, and converts the selected right/left EMG pair into
+ * proportional hip assist-torque commands.
  *
- * Signal chain per channel:
- *   raw ADC voltage -> bias removal -> pre-rectification LPF ->
- *   full-wave rectification -> envelope LPF -> deadband/gain/saturation.
+ * The default algorithm is intentionally simple so that students can observe
+ * each processing step and tune the response through STM32CubeIDE Live
+ * Expressions. Validate the signal quality and torque direction on a bench
+ * setup before wearing the device.
  *
- * Default EMG bias is 1.65 V for 0.0~3.3 V biased sensors.
- * BTN_1 measures resting bias, BTN_2 measures active full-scale envelope,
- * and BTN_3 resets calibration to defaults.
+ * ============================================================================
+ * 2. Sensor Mapping
+ * ============================================================================
+ * Four external ADC inputs are available:
+ *   PF3 = XM_EXT_ADC_5
+ *   PF4 = XM_EXT_ADC_6
+ *   PF5 = XM_EXT_ADC_7
+ *   PF6 = XM_EXT_ADC_8
+ *
+ * Select the EMG pair with torque_input_pair in Live Expressions:
+ *   torque_input_pair = 0: PF3 -> right hip, PF4 -> left hip (default)
+ *   torque_input_pair = 1: PF5 -> right hip, PF6 -> left hip
+ *
+ * The default sensor assumption is a 0.0~3.3 V biased raw-EMG output with a
+ * resting center voltage near 1.65 V. If the connected sensor already outputs
+ * a processed envelope, simplify the processing chain before using this file.
+ *
+ * ============================================================================
+ * 3. EMG Signal Processing Pipeline
+ * ============================================================================
+ * Each channel is processed independently:
+ *
+ *   raw ADC voltage
+ *   -> resting-bias removal
+ *   -> pre-rectification low-pass filter
+ *   -> full-wave rectification
+ *   -> envelope low-pass filter
+ *   -> deadband removal
+ *   -> active-effort normalization
+ *   -> proportional torque gain and saturation
+ *
+ * Default settings:
+ *   EMG_RAW_LPF_CUTOFF_HZ   = 80 Hz
+ *   EMG_ENV_LPF_CUTOFF_HZ   = 5 Hz
+ *   EMG_ENVELOPE_DEADBAND_V = 0.020 V
+ *   EMG_MAX_TORQUE_NM       = 2.5 Nm
+ *   emg_assist_scale        = 0.5 (default maximum output = 1.25 Nm)
+ *
+ * The resulting assist torque increases with the measured EMG envelope and is
+ * clamped to 0.0~(EMG_MAX_TORQUE_NM * emg_assist_scale).
+ *
+ * ============================================================================
+ * 4. Required Operating Procedure
+ * ============================================================================
+ * 1) Connect the EMG sensors and switch the H10 device to ASSIST mode.
+ * 2) Select torque_input_pair in STM32CubeIDE Live Expressions.
+ * 3) Relax the target muscles, press BTN1 once, and remain still for 3 seconds.
+ * 4) Contract the target muscles at a representative effort level, press BTN2
+ *    once, and maintain the contraction for 3 seconds.
+ * 5) Observe the raw, centered, envelope, and torque variables in Live
+ *    Expressions. Confirm that relaxed EMG produces approximately zero torque.
+ * 6) Validate the torque direction and amplitude on a bench setup.
+ * 7) Set control_ON = 1 in Live Expressions only after the bench validation.
+ *
+ * BTN3 resets the calibration values to the defaults. Repeat BTN1 and BTN2
+ * calibration after a reset, sensor repositioning, or electrode replacement.
+ *
+ * IMPORTANT CURRENT IMPLEMENTATION LIMITATION:
+ * This version does not block BTN2 before BTN1 and does not require completed
+ * calibration before control_ON enables torque. Always perform BTN1 and BTN2
+ * calibration in order before setting control_ON = 1.
+ *
+ * ============================================================================
+ * 5. Button Functions
+ * ============================================================================
+ *   BTN1 click: capture resting EMG bias for 3 seconds
+ *   BTN2 click: capture representative active-effort envelope for 3 seconds
+ *   BTN3 click: reset calibration values to defaults
+ *
+ * LED feedback:
+ *   LED1 fast blink: resting calibration is running
+ *   LED2 fast blink: active-effort calibration is running
+ *   LED3 one-shot  : calibration values were reset
+ *
+ * ============================================================================
+ * 6. Important Live Expressions Variables
+ * ============================================================================
+ * Write from debugger:
+ *   control_ON        : 0 = torque disabled, 1 = proportional torque enabled
+ *   torque_input_pair : 0 = PF3/PF4 pair, 1 = PF5/PF6 pair
+ *   emg_assist_scale  : output scale, clamped to 0.0~1.0 (default = 0.5)
+ *
+ * Observe only:
+ *   emg_pf3_raw_v .. emg_pf6_raw_v
+ *       Raw sensor voltages before signal processing.
+ *   emg_pf3_centered_v .. emg_pf6_centered_v
+ *       Raw voltages after resting-bias removal.
+ *   emg_pf3_envelope_v .. emg_pf6_envelope_v
+ *       Smoothed muscle-activation envelopes after rectification.
+ *   emg_pf3_torque_nm .. emg_pf6_torque_nm
+ *       Per-channel proportional torque values before pair selection.
+ *
+ * ============================================================================
+ * 7. USB CDC Custom Stream
+ * ============================================================================
+ * Module ID 0xF0 sends six float channels for PC-side live plotting or CSV
+ * logging. The selected pair follows torque_input_pair.
+ *
+ * Default Module ID 0xF0 CSV channel order:
+ *   1) Raw RH    : selected right-side raw EMG voltage
+ *   2) Raw LH    : selected left-side raw EMG voltage
+ *   3) Env RH    : selected right-side EMG envelope
+ *   4) Env LH    : selected left-side EMG envelope
+ *   5) Tau RH    : requested right-side assist torque
+ *   6) Tau LH    : requested left-side assist torque
+ *
+ * ============================================================================
+ * 8. Recommended Student Design Tasks
+ * ============================================================================
+ * Example A - Tune the envelope response:
+ *   Adjust EMG_ENV_LPF_CUTOFF_HZ and compare the envelope signal during a
+ *   repeated contraction task. A lower value is smoother but slower. A higher
+ *   value reacts faster but may produce more torque fluctuation.
+ *
+ * Example B - Tune the resting-noise rejection:
+ *   Adjust EMG_ENVELOPE_DEADBAND_V after measuring the relaxed envelope.
+ *   Increase it if residual noise produces unintended torque. Do not increase
+ *   it so far that intentional low-level contractions are ignored.
+ *
+ * Example C - Change the assist mapping:
+ *   Modify _EnvelopeToTorque() to compare linear, threshold-based, squared, or
+ *   piecewise torque mappings. Preserve the final torque clamp.
+ *
+ * Example D - Add a smooth torque profile:
+ *   Add a torque ramp or slew-rate limiter after _SelectTorquePair() to avoid
+ *   sudden torque changes when muscle activation rises quickly.
+ *
+ * Example E - Add a high-level assist condition:
+ *   Combine EMG activation with an FSR contact state or gait-phase detector so
+ *   that EMG-based torque is permitted only during the intended gait period.
+ *
+ * ============================================================================
+ * 9. Areas Students Should Not Modify Without Instructor Review
+ * ============================================================================
+ * Do not remove the final torque saturation in _EnvelopeToTorque(), the zero-
+ * torque commands during mode exit and calibration, or the low-level
+ * XM_SetControlMode() and XM_SetAssistTorqueLH/RH() calls.
+ *
+ * Start with low torque, validate the output on a bench setup, and increase the
+ * assist level gradually only after confirming the direction and signal
+ * quality.
  ******************************************************************************
  */
 
@@ -107,6 +250,7 @@ float emg_pf6_torque_nm;
 
 uint16_t control_ON;
 uint16_t torque_input_pair;  /* 0: PF3/PF4 -> RH/LH, 1: PF5/PF6 -> RH/LH */
+float emg_assist_scale = 0.5f;  /* 0.5: default maximum output is 1.25 Nm */
 
 /**
  *------------------------------------------------------------
@@ -619,7 +763,9 @@ static float _EnvelopeToTorque(int ch, float envelope_v)
     }
 
     float normalized = active_v / span;
-    float torque = normalized * EMG_MAX_TORQUE_NM;
+    float assist_scale = _ClampFloat(emg_assist_scale, 0.0f, 1.0f);
+    float scaled_max_torque = EMG_MAX_TORQUE_NM * assist_scale;
+    float torque = normalized * scaled_max_torque;
 
-    return _ClampFloat(torque, EMG_MIN_TORQUE_NM, EMG_MAX_TORQUE_NM);
+    return _ClampFloat(torque, EMG_MIN_TORQUE_NM, scaled_max_torque);
 }
