@@ -35,6 +35,12 @@
 // --- 제어 루프 타이밍 ---
 #define CONTROL_DT          0.001f  // 제어 주기 (1ms = 1kHz)
 
+// --- Fail-safe 토크 한계 ---
+//     control_ON 활성 시 raw ADC 전압이 토크 명령으로 직접 인가되므로,
+//     런어웨이/센서 고장 대비 안전 상한으로 클램프한다.
+//     (EMG 예제의 EMG_MAX_TORQUE_NM=2.5f 와 동일 기준)
+#define ASSIST_TORQUE_LIMIT_NM  2.5f
+
 // --- USB 디버그 출력 주기 ---
 #define USB_DEBUG_PERIOD_MS 500     // USB CDC 디버그 메시지 출력 주기 (ms)
 
@@ -88,7 +94,7 @@ static uint32_t s_phase_tick    = 0;                // 현재 위상 시작 시�
 static float s_torque_cmd       = 0.0f;             // 최종 토크 명령 (Nm)
 
 // --- ADC 채널 정의 (PF3~PF6, 모두 ADC3 16-bit) ---
-//     DIO_1~DIO_4 (PF3~PF6) 핀을 ADC3로 전환해서 사용 (User_Setup에서 전환)
+//     DIO_1~DIO_4 (PF3~PF6) 핀을 ADC3로 전환해서 사용 (Control_Setup에서 전환)
 #define ADC_CH_COUNT    4
 typedef enum {
     CH_PF3 = 0,    // EXT_ADC_5 (PF3 / DIO_1, ADC3, 16-bit)
@@ -115,8 +121,8 @@ float pf3_volt_cal;
 float pf4_volt_cal;
 float pf5_volt_cal;
 float pf6_volt_cal;
-uint16_t control_ON;
-uint16_t torque_input_pair;  // 0: PF3/PF4 -> RH/LH, 1: PF5/PF6 -> RH/LH
+uint16_t control_ON       = 0U;  // 0: 토크 출력 OFF(기본), 1: 출력 ON — 벤치에서 명시적으로 1로 설정
+uint16_t torque_input_pair = 0U; // 0: PF3/PF4 -> RH/LH, 1: PF5/PF6 -> RH/LH
 
 // --- Calibration 상태 ---
 typedef enum {
@@ -163,6 +169,9 @@ static void  _SampleAdcChannels(void);
 static void  _UpdateCalibration(void);
 static void  _StartCalibration(void);
 
+// --- 유틸 ---
+static float _ClampFloat(float x, float min_value, float max_value);
+
 /**
  *------------------------------------------------------------
  * PUBLIC FUNCTIONS
@@ -172,7 +181,7 @@ static void  _StartCalibration(void);
 /**
  * @brief 사용자 초기 설정 — TSM 생성 및 상태 등록
  */
-void User_Setup(void)
+void Control_Setup(void)
 {
     XM_SetExtPowerVoltage(XM_EXT_PWR_5V);
 
@@ -222,14 +231,23 @@ void User_Setup(void)
 /**
  * @brief 메인 루프 — 1ms 주기로 호출됨
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
+    // TSM 핸들 생성 실패 시 안전 정지 (NULL 역참조 HardFault 방지)
+    if (!s_tsm) {
+        return;
+    }
+
     // CM 연결 끊김 시 OFF 상태로 강제 전환 (안전 우선)
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_OFF);
     }
 
     XM_TSM_Run(s_tsm);
+
+    // [필수] 버튼 이벤트 디바운싱 + LED 효과 타이머 틱 (xm_api_led_btn.h).
+    // 호출하지 않으면 XM_GetButtonEvent() 가 항상 NONE → BTN1 캘리브레이션 동작 불가.
+    XM_IO_Update();
 }
 
 /**
@@ -324,13 +342,25 @@ static void Active_Loop(void)
     _UpdateStreamData();
 
     if (control_ON == 1)  {
+        float rh_cmd, lh_cmd;
         if (torque_input_pair == 1) {
-            XM_SetAssistTorqueRH(pf5_volt_cal);
-            XM_SetAssistTorqueLH(pf6_volt_cal);
+            rh_cmd = pf5_volt_cal;
+            lh_cmd = pf6_volt_cal;
         } else {
-            XM_SetAssistTorqueRH(pf3_volt_cal);
-            XM_SetAssistTorqueLH(pf4_volt_cal);
+            rh_cmd = pf3_volt_cal;
+            lh_cmd = pf4_volt_cal;
         }
+
+        // Fail-safe: 안전 한계 [-LIMIT, +LIMIT] 로 클램프 (런어웨이/센서 고장 방지)
+        rh_cmd = _ClampFloat(rh_cmd, -ASSIST_TORQUE_LIMIT_NM, ASSIST_TORQUE_LIMIT_NM);
+        lh_cmd = _ClampFloat(lh_cmd, -ASSIST_TORQUE_LIMIT_NM, ASSIST_TORQUE_LIMIT_NM);
+
+        XM_SetAssistTorqueRH(rh_cmd);
+        XM_SetAssistTorqueLH(lh_cmd);
+    } else {
+        // 출력 OFF — 명시적으로 0 토크 (이전 명령 잔류 방지)
+        XM_SetAssistTorqueRH(0.0f);
+        XM_SetAssistTorqueLH(0.0f);
     }
 
 }
@@ -544,4 +574,18 @@ static void _StartCalibration(void)
 
     XM_SetLedEffect(XM_LED_1, XM_LED_BLINK, 50);  // 50ms — 매우 빠른 깜빡임
     XM_SendUsbDebugMessage("[CAL] 시작 — 3초간 ADC bias 측정\r\n");
+}
+
+/**
+ * @brief float 값을 [min, max] 범위로 클램핑합니다.
+ */
+static float _ClampFloat(float x, float min_value, float max_value)
+{
+    if (x < min_value) {
+        return min_value;
+    }
+    if (x > max_value) {
+        return max_value;
+    }
+    return x;
 }
