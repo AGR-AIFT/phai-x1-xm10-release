@@ -27,6 +27,8 @@
 
 // --- Homing 설정 값 ---
 #define HOMING_TRANSITION_DELAY_MS  50    // 각 단계 사이의 지연 시간 (50ms)
+#define HOMING_WAIT_TIMEOUT_MS      3000  // Done 플래그 대기 최대 시간 (fail-safe — 무한 대기 방지)
+#define PVECTOR_MIN_DURATION_MS     10    // P-Vector 최소 이동 시간 (zero-duration 방지)
 #define HOMING_SPEED_RH             150   // 초당 이동 속도 (deg/s)
 #define HOMING_ACCEL_S0_RH          2     // 초기 가속도(deg/s^2)
 #define HOMING_ACCEL_SD_RH          2     // 말기 가속도(deg/s^2)
@@ -203,9 +205,9 @@ static void UpdatePassiveMode(void);
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
-    // 태스크를 생성하고 핸들을 받아옵니다. 
+    // 태스크를 생성하고 핸들을 받아옵니다.
     // (Task 최대 생성 수 : 10)
     // (States 최대 생성 수 : 64)
 
@@ -258,8 +260,13 @@ void User_Setup(void)
  * @brief Active-Assist Mode 예제 애플리케이션을 주기적으로 실행합니다.
  * @details Main 태스크의 제어 루프(예: 1ms)에서 계속 호출되어야 합니다.
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
+    // TSM 핸들 생성 실패 시 안전 정지 (NULL 역참조 HardFault 방지)
+    if (!s_userHandle) {
+        return;
+    }
+
     // CM 연결 상태를 최우선으로 확인하여, 연결이 끊겼을 경우 OFF 상태로 강제 전환합니다.
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_userHandle, XM_STATE_OFF);
@@ -431,11 +438,17 @@ static void InitHoming(void)
             uint16_t durationRH = (uint16_t)(((float)angleToMoveRH / (float)HOMING_SPEED_RH) * 1000.0f);
             uint16_t durationLH = (uint16_t)(((float)angleToMoveLH / (float)HOMING_SPEED_LH) * 1000.0f);
 
+            // 이미 목표(0도) 근처면 duration=0 → MD 가 zero-duration 궤적을 무시/오동작할 수 있으므로
+            // 최소 이동 시간으로 클램프 (Done 플래그 미수신으로 인한 무한 대기 방지)
+            if (durationRH < PVECTOR_MIN_DURATION_MS) durationRH = PVECTOR_MIN_DURATION_MS;
+            if (durationLH < PVECTOR_MIN_DURATION_MS) durationLH = PVECTOR_MIN_DURATION_MS;
+
             PVector_t homingVecRH = { .yd = targetAngle, .L = durationRH, .s0 = HOMING_ACCEL_S0_RH, .sd = HOMING_ACCEL_SD_RH };
             PVector_t homingVecLH = { .yd = targetAngle, .L = durationLH, .s0 = HOMING_ACCEL_S0_LH, .sd = HOMING_ACCEL_SD_LH };
             XM_SendPVector(SYS_NODE_ID_RH, &homingVecRH);
             XM_SendPVector(SYS_NODE_ID_LH, &homingVecLH);
 
+            homingTimer = XM_GetTick();  // Done 대기 타임아웃 기준 시각
             s_homingState = HOMING_WAIT_FOR_DONE;
             break;
         }
@@ -444,8 +457,16 @@ static void InitHoming(void)
             if (XM.status.h10.isPVectorRHDone && XM.status.h10.isPVectorLHDone) {
                 XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
                 XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
-                
+
                 homingTimer = XM_GetTick(); // 짧은 지연을 위한 타이머 시작
+                s_homingState = HOMING_FINALIZE_DELAY;
+            } else if (XM_GetTick() - homingTimer >= HOMING_WAIT_TIMEOUT_MS) {
+                // Fail-safe: Done 플래그가 끝내 도착하지 않으면(통신 누락/MD 미응답 등)
+                // 무한 대기에 빠지지 않도록 정리 단계로 진행한다.
+                XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
+                XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
+
+                homingTimer = XM_GetTick();
                 s_homingState = HOMING_FINALIZE_DELAY;
             }
             break;
@@ -503,6 +524,7 @@ static void ManageModeTransition(void)
                 s_modeTransitionTimer = XM_GetTick();
                 s_modeTransitionState = MODE_TRANSITION_STOP_COMPLETED;
             }
+            break;  // [fix] STOP_COMPLETED 로의 의도치 않은 fall-through 차단
 
         case MODE_TRANSITION_STOP_COMPLETED:
             // P-Vector 정지 명령이 양쪽 모두 완료되었는지 확인합니다.
@@ -628,6 +650,10 @@ static void UpdatePassiveMode(void)
             int16_t angleToMoveLH = abs(JOINT_ANGLE_MAX_ANGLE_INT16 - currentAngleLH);
             uint16_t durationRH = (uint16_t)(((float)angleToMoveRH / (float)PM_SPEED_RH) * 1000.0f);
             uint16_t durationLH = (uint16_t)(((float)angleToMoveLH / (float)PM_SPEED_LH) * 1000.0f);
+
+            // 이미 MAX 근처면 duration=0 → zero-duration 궤적 방지 (최소 이동 시간 클램프)
+            if (durationRH < PVECTOR_MIN_DURATION_MS) durationRH = PVECTOR_MIN_DURATION_MS;
+            if (durationLH < PVECTOR_MIN_DURATION_MS) durationLH = PVECTOR_MIN_DURATION_MS;
 
             PVector_t toMaxRH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = durationRH, .s0 = PM_ACCEL_S0_RH, .sd = PM_ACCEL_SD_RH };
             PVector_t toMaxLH = { .yd = JOINT_ANGLE_MAX_ANGLE_INT16, .L = durationLH, .s0 = PM_ACCEL_S0_LH, .sd = PM_ACCEL_SD_LH };
