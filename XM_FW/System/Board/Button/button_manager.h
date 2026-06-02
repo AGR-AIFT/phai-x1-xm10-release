@@ -50,9 +50,9 @@ typedef enum {
 
 /**
  * @brief  버튼 관리자 초기화
- * @param[in] btn1_id IOIF 핸들 (PC10)
- * @param[in] btn2_id IOIF 핸들 (PC11)
- * @param[in] btn3_id IOIF 핸들 (PC12)
+ * @param[in] btn1_id IOIF 핸들 (PC11)
+ * @param[in] btn2_id IOIF 핸들 (PC12)
+ * @param[in] btn3_id IOIF 핸들 (PC13)
  */
 void ButtonManager_Init(IOIF_GPIOx_t btn1_id, IOIF_GPIOx_t btn2_id, IOIF_GPIOx_t btn3_id);
 

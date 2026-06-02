@@ -97,9 +97,9 @@ IOIF_GPIOx_t  g_gpio_func_led2_id = IOIF_GPIO_NOT_INITIALIZED; // PB9
 IOIF_GPIOx_t  g_gpio_func_led3_id = IOIF_GPIO_NOT_INITIALIZED; // PB10
 
 // On-board Buttons
-IOIF_GPIOx_t  g_gpio_func_btn1_id = IOIF_GPIO_NOT_INITIALIZED; // PC10
-IOIF_GPIOx_t  g_gpio_func_btn2_id = IOIF_GPIO_NOT_INITIALIZED; // PC11
-IOIF_GPIOx_t  g_gpio_func_btn3_id = IOIF_GPIO_NOT_INITIALIZED; // PC12
+IOIF_GPIOx_t  g_gpio_func_btn1_id = IOIF_GPIO_NOT_INITIALIZED; // PC11
+IOIF_GPIOx_t  g_gpio_func_btn2_id = IOIF_GPIO_NOT_INITIALIZED; // PC12
+IOIF_GPIOx_t  g_gpio_func_btn3_id = IOIF_GPIO_NOT_INITIALIZED; // PC13
 
 /* 수동으로 관리할 UART4 핸들 */
 UART_HandleTypeDef huart4_manual;
@@ -429,14 +429,13 @@ void StartStartupTask(void *argument)
 static void _InitIoInterfaces(void)
 {
     // --- On-board Button IOIF 초기화 ---
-    // (누르면 HIGH이므로 PullDown 설정)
-	// TODO: 누르면 LOW이니 다시 수정해야함!
+    // Active-low button: released=HIGH, pressed=LOW.
     IOIF_GPIO_Initialize_t button_config = {
       .mode = IOIF_GPIO_Mode_Input,
-      .pull = IOIF_GPIO_PullDown, // Pull-down
+      .pull = IOIF_GPIO_PullUp,
     };
 
-    // Function Buttons (PC10, PC11, PC12)
+    // Function Buttons (PC11, PC12, PC13)
     IOIF_GPIO_INITIALIZE(g_gpio_func_btn1_id, FUNC_BTN_1_GPIO_Port, FUNC_BTN_1_Pin, IOIF_GPIO_Mode_Input);
     IOIF_GPIO_REINITIALIZE(g_gpio_func_btn1_id, &button_config);
     

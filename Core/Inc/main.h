@@ -62,7 +62,7 @@ void MX_USB_OTG_FS_HCD_Init(void);
 #define HMMG_PWR_EN_GPIO_Port GPIOG
 #define IMU__FAULT_Pin GPIO_PIN_9
 #define IMU__FAULT_GPIO_Port GPIOG
-#define FUNC_BTN_1_Pin GPIO_PIN_10
+#define FUNC_BTN_1_Pin GPIO_PIN_11
 #define FUNC_BTN_1_GPIO_Port GPIOC
 #define R_GRF_UART_TX_Pin GPIO_PIN_1
 #define R_GRF_UART_TX_GPIO_Port GPIOE
@@ -74,7 +74,7 @@ void MX_USB_OTG_FS_HCD_Init(void);
 #define HMMG__FAULT_GPIO_Port GPIOG
 #define USB_PWR_ON_Pin GPIO_PIN_6
 #define USB_PWR_ON_GPIO_Port GPIOD
-#define FUNC_BTN_2_Pin GPIO_PIN_11
+#define FUNC_BTN_2_Pin GPIO_PIN_12
 #define FUNC_BTN_2_GPIO_Port GPIOC
 #define DEBUG_SWCLK_Pin GPIO_PIN_14
 #define DEBUG_SWCLK_GPIO_Port GPIOA
@@ -86,7 +86,7 @@ void MX_USB_OTG_FS_HCD_Init(void);
 #define L_GRF_UART_RX_GPIO_Port GPIOB
 #define L_GRF_PWR_EN_Pin GPIO_PIN_12
 #define L_GRF_PWR_EN_GPIO_Port GPIOG
-#define FUNC_BTN_3_Pin GPIO_PIN_12
+#define FUNC_BTN_3_Pin GPIO_PIN_13
 #define FUNC_BTN_3_GPIO_Port GPIOC
 #define DEBUG_SWDIO_Pin GPIO_PIN_13
 #define DEBUG_SWDIO_GPIO_Port GPIOA
