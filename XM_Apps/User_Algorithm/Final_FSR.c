@@ -75,7 +75,7 @@ typedef struct {
 static XmTsmHandle_t s_tsm;
 
 // --- ADC 채널 정의 (PF3~PF6, 모두 ADC3 16-bit) ---
-//     DIO_1~DIO_4 (PF3~PF6) 핀을 ADC3로 전환해서 사용 (User_Setup에서 전환)
+//     DIO_1~DIO_4 (PF3~PF6) 핀을 ADC3로 전환해서 사용 (Control_Setup에서 전환)
 #define ADC_CH_COUNT    4
 typedef enum {
     CH_PF3 = 0,    // EXT_ADC_5 (PF3 / DIO_1, ADC3, 16-bit)
@@ -181,7 +181,7 @@ static float _LoadToTorque(float load);
 /**
  * @brief 사용자 초기 설정 — TSM 생성 및 상태 등록
  */
-void User_Setup(void)
+void Control_Setup(void)
 {
     XM_SetExtPowerVoltage(XM_EXT_PWR_5V);
 
@@ -231,14 +231,23 @@ void User_Setup(void)
 /**
  * @brief 메인 루프 — 1ms 주기로 호출됨
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
+    // TSM 핸들 생성 실패 시 안전 정지 (NULL 역참조 HardFault 방지)
+    if (!s_tsm) {
+        return;
+    }
+
     // CM 연결 끊김 시 OFF 상태로 강제 전환 (안전 우선)
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_OFF);
     }
 
     XM_TSM_Run(s_tsm);
+
+    // [필수] 버튼 이벤트 디바운싱 + LED 효과 타이머 틱 (xm_api_led_btn.h).
+    // 호출하지 않으면 XM_GetButtonEvent() 가 항상 NONE → BTN1/2/3 캘리브레이션 동작 불가.
+    XM_IO_Update();
 }
 
 /**

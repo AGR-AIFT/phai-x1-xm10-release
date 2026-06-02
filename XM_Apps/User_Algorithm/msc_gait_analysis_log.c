@@ -81,7 +81,7 @@ extern FDCAN_HandleTypeDef hfdcan1;
  * 그대로 전달됩니다. 변수명 변경 시 metadata 문자열도 반드시 동기화하세요.
  *
  * auto_timestamp = OFF (수동 count 필드로 대체)
- * 패킷 크기: 108 bytes
+ * 패킷 크기: 118 bytes (아래 _Static_assert 로 강제)
  */
 typedef struct __attribute__((packed)) {
     /* --- MATLAB RT 필수 채널 (10ch) --- */
@@ -215,7 +215,7 @@ static void _UpdateLogData(void);
 /**
  * @brief 초기 설정 (1회 호출)
  */
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* TSM: STANDBY ↔ ACTIVE */
     s_tsm = XM_TSM_Create(XM_STATE_STANDBY);
@@ -247,10 +247,15 @@ void User_Setup(void)
 }
 
 /**
- * @brief 주기 루프 (2ms)
+ * @brief 주기 루프 (1ms / 1kHz)
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
+    /* TSM 핸들 생성 실패 시 안전 정지 (NULL 역참조 HardFault 방지) */
+    if (!s_tsm) {
+        return;
+    }
+
     XM_TSM_Run(s_tsm);
     XM_IO_Update();
 }

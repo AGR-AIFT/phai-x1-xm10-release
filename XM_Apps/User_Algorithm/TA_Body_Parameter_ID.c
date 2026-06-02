@@ -1,6 +1,6 @@
 /**
  ******************************************************************************
- * @file    torque_ramp_profile.c
+ * @file    TA_Body_Parameter_ID.c
  * @author  JIMIN
  * @brief   [중급] 시간 기반 사다리꼴 토크 프로파일 제어
  * @details
@@ -13,7 +13,7 @@
  *   → Phase 0으로 복귀하여 무한 반복
  *
  * [동작 방식]
- *   - User_Loop()가 1ms 주기로 호출됨 (1kHz)
+ *   - Control_Loop()가 1ms 주기로 호출됨 (1kHz)
  *   - BTN1 클릭: 프로파일 시작/정지 토글
  *   - BTN2 클릭: 목표 전류 0.5A 단위로 증가 (0.5 ~ 3.0A, 래핑)
  *   - ASSIST 모드 해제 시 안전 정지
@@ -130,7 +130,7 @@ static void  _UpdateStreamData(void);
 /**
  * @brief 사용자 초기 설정 - TSM 생성 및 상태 등록
  */
-void User_Setup(void)
+void Control_Setup(void)
 {
     // TSM 생성 (초기 상태: OFF - CM 연결 대기)
     s_tsm = XM_TSM_Create(XM_STATE_OFF);
@@ -172,14 +172,23 @@ void User_Setup(void)
 /**
  * @brief 메인 루프 - 1ms 주기로 호출됨
  */
-void User_Loop(void)
+void Control_Loop(void)
 {
+    // TSM 핸들 생성 실패 시 안전 정지 (NULL 역참조 HardFault 방지)
+    if (!s_tsm) {
+        return;
+    }
+
     // CM 연결 끊김 시 OFF 상태로 강제 전환 (안전 우선)
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_OFF);
     }
 
     XM_TSM_Run(s_tsm);
+
+    // [필수] 버튼 이벤트 디바운싱 + LED 효과 타이머 틱 (xm_api_led_btn.h).
+    // 호출하지 않으면 XM_GetButtonEvent() 가 항상 NONE → BTN1(시작/정지)·BTN2(전류조절) 동작 불가.
+    XM_IO_Update();
 }
 
 /**

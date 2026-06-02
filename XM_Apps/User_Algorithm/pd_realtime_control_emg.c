@@ -175,7 +175,7 @@ static float _EnvelopeToTorque(float envelope_v);
  *------------------------------------------------------------
  */
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     XM_SetExtPowerVoltage(XM_EXT_PWR_5V);
 
@@ -217,13 +217,22 @@ void User_Setup(void)
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
-void User_Loop(void)
+void Control_Loop(void)
 {
+    /* TSM 핸들 생성 실패 시 안전 정지 (NULL 역참조 HardFault 방지) */
+    if (!s_tsm) {
+        return;
+    }
+
     if (!XM_IsCmConnected()) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_OFF);
     }
 
     XM_TSM_Run(s_tsm);
+
+    /* [필수] 버튼 이벤트 디바운싱 + LED 효과 타이머 틱 (xm_api_led_btn.h).
+     * 호출하지 않으면 XM_GetButtonEvent() 가 항상 NONE → 캘리브레이션 동작 불가. */
+    XM_IO_Update();
 }
 
 /**
