@@ -107,6 +107,16 @@
  * @version 1.0
  * @date    Mar 09, 2026
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
+ *
+ * ============================================================================
+ * 8. Quick Code Map (Approximate Line Numbers)
+ * ============================================================================
+ * Line numbers may move slightly after edits. Search the function name first.
+ *   approx. 203-230 : public FSR values, torque values, and control_ON
+ *   approx. 414-459 : Active_Loop() safety checks and torque command routing
+ *   approx. 534-559 : _SampleAdcChannels() raw ADC sampling and low-pass filter
+ *   approx. 560-652 : _UpdateCalibration() BTN1/BTN2 calibration sequence
+ *   approx. 742-753 : _LoadToTorque() proportional mapping and final clamp
  ******************************************************************************
  */
 

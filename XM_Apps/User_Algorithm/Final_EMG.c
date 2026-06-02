@@ -157,6 +157,17 @@
  * Start with low torque, validate the output on a bench setup, and increase the
  * assist level gradually only after confirming the direction and signal
  * quality.
+ *
+ * ============================================================================
+ * 10. Quick Code Map (Approximate Line Numbers)
+ * ============================================================================
+ * Line numbers may move slightly after edits. Search the function name first.
+ *   approx. 260-302 : Live Expressions controls and EMG runtime variables
+ *   approx. 519-533 : _SampleAdcChannels() raw ADC voltage sampling
+ *   approx. 534-646 : _UpdateCalibration() BTN1/BTN2 calibration sequence
+ *   approx. 656-685 : EMG filtering, rectification, and envelope extraction
+ *   approx. 686-717 : _SelectTorquePair() selected right/left command routing
+ *   approx. 764-787 : _EnvelopeToTorque() proportional mapping and clamp
  ******************************************************************************
  */
 

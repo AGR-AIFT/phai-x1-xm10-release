@@ -173,6 +173,16 @@
  * Do not remove the safety gate at the beginning of _UpdateAssistTorque(), the
  * HARD_MAX_ASSIST_TORQUE_NM clamp, or the XM_SetControlMode() and
  * XM_SetAssistTorqueLH/RH() calls without instructor review.
+ *
+ * ============================================================================
+ * 9. Quick Code Map (Approximate Line Numbers)
+ * ============================================================================
+ * Line numbers may move slightly after edits. Search the function name first.
+ *   approx. 248-271 : student tuning parameters and Live Expressions controls
+ *   approx. 345-357 : _SampleEncoder() raw and corrected encoder angles
+ *   approx. 386-466 : _UpdateAssistTorque() safety gate and pulse rule
+ *   approx. 414-452 : threshold trigger, pulse duration, and rearm condition
+ *   approx. 486-499 : _SendStream() CDC data update and transmission
  ******************************************************************************
  */
 

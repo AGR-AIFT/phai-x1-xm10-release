@@ -163,6 +163,17 @@
  * Do not redesign _UpdateCalibration(), _ResetCalibration(), the safety gate
  * at the beginning of _UpdateAssistTorque(), or the XM_SetControlMode() and
  * XM_SetAssistTorqueLH/RH() calls without instructor review.
+ *
+ * ============================================================================
+ * 8. Quick Code Map (Approximate Line Numbers)
+ * ============================================================================
+ * Line numbers may move slightly after edits. Search the function name first.
+ *   approx. 313-349 : student thresholds, torque settings, and control_ON
+ *   approx. 439-465 : _SampleFsr() ADC sampling and low-pass filtering
+ *   approx. 466-579 : _UpdateCalibration() BTN1/BTN2 calibration sequence
+ *   approx. 591-648 : _UpdateFootDetector() fuzzy gait-phase estimation
+ *   approx. 650-705 : _UpdateAssistTorque() safety gate and torque pulse output
+ *   approx. 720-733 : _SendStream() CDC data update and transmission
  ******************************************************************************
  */
 
