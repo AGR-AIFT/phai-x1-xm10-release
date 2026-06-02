@@ -205,7 +205,7 @@ static void UpdatePassiveMode(void);
  *------------------------------------------------------------
  */
 
-void Control_Setup(void)
+void User_Setup(void)
 {
     // 태스크를 생성하고 핸들을 받아옵니다.
     // (Task 최대 생성 수 : 10)
@@ -260,7 +260,7 @@ void Control_Setup(void)
  * @brief Active-Assist Mode 예제 애플리케이션을 주기적으로 실행합니다.
  * @details Main 태스크의 제어 루프(예: 1ms)에서 계속 호출되어야 합니다.
  */
-void Control_Loop(void)
+void User_Loop(void)
 {
     // TSM 핸들 생성 실패 시 안전 정지 (NULL 역참조 HardFault 방지)
     if (!s_userHandle) {

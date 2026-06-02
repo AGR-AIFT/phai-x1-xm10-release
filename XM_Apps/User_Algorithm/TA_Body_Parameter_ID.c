@@ -13,7 +13,7 @@
  *   → Phase 0으로 복귀하여 무한 반복
  *
  * [동작 방식]
- *   - Control_Loop()가 1ms 주기로 호출됨 (1kHz)
+ *   - User_Loop()가 1ms 주기로 호출됨 (1kHz)
  *   - BTN1 클릭: 프로파일 시작/정지 토글
  *   - BTN2 클릭: 목표 전류 0.5A 단위로 증가 (0.5 ~ 3.0A, 래핑)
  *   - ASSIST 모드 해제 시 안전 정지
@@ -130,7 +130,7 @@ static void  _UpdateStreamData(void);
 /**
  * @brief 사용자 초기 설정 - TSM 생성 및 상태 등록
  */
-void Control_Setup(void)
+void User_Setup(void)
 {
     // TSM 생성 (초기 상태: OFF - CM 연결 대기)
     s_tsm = XM_TSM_Create(XM_STATE_OFF);
@@ -172,7 +172,7 @@ void Control_Setup(void)
 /**
  * @brief 메인 루프 - 1ms 주기로 호출됨
  */
-void Control_Loop(void)
+void User_Loop(void)
 {
     // TSM 핸들 생성 실패 시 안전 정지 (NULL 역참조 HardFault 방지)
     if (!s_tsm) {

@@ -65,13 +65,13 @@ static void Active_Exit(void);
  */
 
 /* =================================================================
- * [필수 구현 1] 초기화 함수 예시 (Control_Setup)
+ * [필수 구현 1] 초기화 함수 예시 (User_Setup)
  * - 전원 인가 후 딱 한 번 실행됩니다.
  * - TSM 생성, 변수 초기화, LED/Button 초기 설정 등을 수행합니다.
  * - 함수 이름을 수정하거나 삭제하면 동작하지 않습니다.
- *   (2026-05-15 이후 SDK 진입점은 Control_Setup / Control_Loop 입니다)
+ *   (SDK 진입점은 User_Setup / User_Loop 입니다)
  * ================================================================= */
-void Control_Setup(void)
+void User_Setup(void)
 {
     // 1. TSM 생성 (초기 상태: OFF)
     s_user_tsm = XM_TSM_Create(XM_STATE_OFF);
@@ -101,7 +101,7 @@ void Control_Setup(void)
 }
 
 /* =================================================================
- * [필수 구현 2] 반복 루프 함수 예시 (Control_Loop)
+ * [필수 구현 2] 반복 루프 함수 예시 (User_Loop)
  * - 1ms(1kHz) 주기로 계속 호출됩니다.
  * - 제어 알고리즘, TSM 실행 로직을 여기에 작성합니다.
  * - 내부 IPO(Input-Process-Output)모델이 적용되어 있습니다.
@@ -111,7 +111,7 @@ void Control_Setup(void)
  * - 실시간 제어 모드에서는 H10으로 Torque input을 1ms 주기로 전송합니다.
  * - 함수 이름을 수정하거나 삭제하면 동작하지 않습니다.
  * ================================================================= */
-void Control_Loop(void)
+void User_Loop(void)
 {
     // TSM 핸들 생성 실패 시 안전 정지 (NULL 역참조 HardFault 방지)
     if (!s_user_tsm) {

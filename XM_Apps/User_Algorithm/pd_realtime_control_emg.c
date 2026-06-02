@@ -175,7 +175,7 @@ static float _EnvelopeToTorque(float envelope_v);
  *------------------------------------------------------------
  */
 
-void Control_Setup(void)
+void User_Setup(void)
 {
     XM_SetExtPowerVoltage(XM_EXT_PWR_5V);
 
@@ -217,7 +217,7 @@ void Control_Setup(void)
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
-void Control_Loop(void)
+void User_Loop(void)
 {
     /* TSM 핸들 생성 실패 시 안전 정지 (NULL 역참조 HardFault 방지) */
     if (!s_tsm) {
