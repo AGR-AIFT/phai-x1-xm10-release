@@ -63,6 +63,9 @@ static uint32_t s_stream_src_size = 0;
 // PhAI V2: 스트리밍 Module ID (User가 변경 가능, 기본 COMBINED)
 static uint8_t s_stream_module_id = PHAI_MODULE_COMBINED;
 
+// System Total Data (0x20) auto-stream. Enabled by default for dashboard compatibility.
+static bool s_total_data_stream_enabled = true;
+
 // User Custom Metadata (Module ID 0xEF, 연결 시 1회 전송)
 static const char* s_custom_meta_json = NULL;
 static uint8_t     s_custom_meta_target_id = 0;
@@ -227,6 +230,11 @@ void XM_SetUsbAutoStream(bool enabled)
     CdcStream_SetAutoStreamEnabled(enabled);
 }
 
+void XM_SetUsbTotalDataStream(bool enabled)
+{
+    s_total_data_stream_enabled = enabled;
+}
+
 void XM_SetUsbStreamModuleId(uint8_t module_id)
 {
     s_stream_module_id = module_id;
@@ -297,10 +305,12 @@ void XM_USB_ProcessPeriodic(void)
             }
         }
 
-        /* 2-2. System Total Data — 매 tick 자동 전송 (Module ID 0x20) */
-        uint32_t total_size;
-        const XM_TotalDataPacket_t* pkt = XM_TotalData_GetLatest(&total_size);
-        PhAI_PacketBuild(pkt, total_size, PHAI_MODULE_TOTAL_DATA);
+        /* 2-2. System Total Data — optional auto-stream (Module ID 0x20) */
+        if (s_total_data_stream_enabled) {
+            uint32_t total_size;
+            const XM_TotalDataPacket_t* pkt = XM_TotalData_GetLatest(&total_size);
+            PhAI_PacketBuild(pkt, total_size, PHAI_MODULE_TOTAL_DATA);
+        }
 
         /* 2-3. Legacy user stream source (과도기 호환, deprecated) */
         if (s_stream_src_ptr != NULL && s_stream_src_size > 0) {

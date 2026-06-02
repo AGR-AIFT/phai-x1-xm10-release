@@ -2,11 +2,106 @@
  ******************************************************************************
  * @file    Final_FSR.c
  * @author  HyundoKim
- * @brief   FSR proportional assist torque control using external ADC inputs.
+ * @brief   FSR proportional assist torque-control project backbone.
  * @details
- * BTN_1 measures unloaded/off voltage, BTN_2 measures loaded/on voltage,
- * and BTN_3 resets calibration to defaults. Calibrated normalized FSR loads
- * are converted to bounded proportional hip assist torque commands.
+ * ============================================================================
+ * 1. Purpose
+ * ============================================================================
+ * This file is a project backbone for pressure-proportional hip assistance.
+ * It reads four FSR channels through external ADC inputs, calibrates each
+ * channel, converts normalized pressure into bounded torque commands, and
+ * sends selected signals to a PC through USB CDC for live monitoring and CSV
+ * logging.
+ *
+ * This is NOT a fuzzy-logic gait-phase detector. Torque magnitude increases
+ * continuously with normalized FSR load. Use Final_FSR_Fuzzy_Logic.c when the
+ * project requires left/right gait-event detection and phase-triggered pulses.
+ *
+ * ============================================================================
+ * 2. Sensor Mapping and Torque Routing
+ * ============================================================================
+ * ADC input mapping:
+ *   PF3 = EXT_ADC_5 / DIO_1
+ *   PF4 = EXT_ADC_6 / DIO_2
+ *   PF5 = EXT_ADC_7 / DIO_3
+ *   PF6 = EXT_ADC_8 / DIO_4
+ *
+ * torque_input_pair selects the sensor pair routed to the H10:
+ *   0 = PF3 -> right hip, PF4 -> left hip
+ *   1 = PF5 -> right hip, PF6 -> left hip
+ *
+ * Signal-processing path:
+ *   ADC voltage -> 20 Hz low-pass filter -> calibration normalization
+ *   -> load clamp -> contact hysteresis -> proportional torque clamp
+ *
+ * ============================================================================
+ * 3. Required Operating Procedure
+ * ============================================================================
+ * 1) Put on the shoes and switch the H10 device to ASSIST mode.
+ * 2) Keep all FSRs unloaded, click BTN1, and remain still for 3 seconds.
+ * 3) Apply a representative full load, click BTN2, and hold it for 3 seconds.
+ * 4) Select torque_input_pair in STM32CubeIDE Live Expressions.
+ * 5) Validate the torque direction and amplitude on a bench setup.
+ * 6) Set control_ON = 1 only after validation.
+ *
+ * BTN3 restores default calibration values.
+ *
+ * Important: this legacy proportional example does not enforce BTN1-before-BTN2
+ * ordering and does not expose a calibration_ready safety gate. Complete both
+ * calibration steps manually before setting control_ON = 1.
+ *
+ * ============================================================================
+ * 4. Important Live Expressions Variables
+ * ============================================================================
+ * Write from debugger:
+ *   control_ON          : 0 = torque disabled, 1 = proportional torque enabled
+ *   torque_input_pair   : 0 = PF3/PF4 pair, 1 = PF5/PF6 pair
+ *
+ * Observe only:
+ *   pf3_volt .. pf6_volt         : raw sensor voltages
+ *   pf3_volt_cal .. pf6_volt_cal : filtered voltages after bias removal
+ *   pf3_load .. pf6_load         : calibrated normalized loads
+ *   pf3_contact .. pf6_contact   : hysteresis-based contact states
+ *   pf3_torque_nm .. pf6_torque_nm : calculated proportional torques
+ *
+ * ============================================================================
+ * 5. USB CDC Data Logging
+ * ============================================================================
+ * Module ID 0xF0 sends four float channels every control loop for PC-side CSV
+ * logging and live plotting:
+ *   1) PF3 Load = pf3_load
+ *   2) PF4 Load = pf4_load
+ *   3) PF5 Load = pf5_load
+ *   4) PF6 Load = pf6_load
+ *
+ * The current implementation sends CDC data at the 1 kHz control-loop rate.
+ * For a student project, reduce the send rate before adding more channels.
+ *
+ * ============================================================================
+ * 6. Recommended Student Design Tasks (High-Level Only)
+ * ============================================================================
+ * Example A - Change proportional gain:
+ *   Adjust FSR_MAX_TORQUE_NM conservatively. Start low and validate direction
+ *   on a bench setup before a wearable test.
+ *
+ * Example B - Change the torque curve:
+ *   Modify _LoadToTorque() to compare linear, dead-zone, or smooth nonlinear
+ *   pressure-to-torque mappings. Preserve the final torque clamp.
+ *
+ * Example C - Tune contact detection:
+ *   Adjust FSR_ON_THRESHOLD and FSR_OFF_THRESHOLD while observing
+ *   pf3_contact .. pf6_contact. Keep ON_THRESHOLD above OFF_THRESHOLD.
+ *
+ * Example D - Select data for logging:
+ *   Update RampStreamData_t, the XM_SetUsbCustomMeta() channel list, and
+ *   _UpdateStreamData() together. Keep the same field order in all three.
+ *
+ * ============================================================================
+ * 7. Areas Students Should Not Modify
+ * ============================================================================
+ * Do not remove torque clearing in Active_Exit(), the ASSIST-mode exit check,
+ * or the final clamp in _LoadToTorque(). Do not modify low-level ADC, USB, or
+ * XM_SetAssistTorqueRH/LH() APIs without instructor review.
  *
  * @see     docs/api-reference/XM_Control.md
  * @version 1.0

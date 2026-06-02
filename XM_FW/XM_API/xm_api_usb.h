@@ -261,6 +261,14 @@ bool XM_IsUsbStreamingActive(void);
 void XM_SetUsbAutoStream(bool enabled);
 
 /**
+ * @brief System Total Data(Module ID 0x20) 자동 전송 여부를 설정합니다.
+ * @details 기본값은 true입니다. 필요한 Custom Data만 낮은 주기로 전송하려면
+ *          User_Setup()에서 false로 설정하여 CDC 부하를 줄일 수 있습니다.
+ * @param[in] enabled true: Total Data 자동 전송, false: Total Data 전송 중지
+ */
+void XM_SetUsbTotalDataStream(bool enabled);
+
+/**
  * @brief [실시간] USB CDC로 데이터를 PhAI 패킷으로 래핑하여 전송합니다.
  * @deprecated XM_SendUsbDataWithId()로 대체됨. Module ID를 명시적으로 지정하세요.
  * @details 1ms 주기 내에서 안전하게 호출 가능 (Non-blocking).

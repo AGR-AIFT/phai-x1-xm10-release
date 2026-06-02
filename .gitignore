@@ -3,6 +3,11 @@ Debug/
 Release/
 build/
 
+# OS / Python generated files
+.DS_Store
+__pycache__/
+*.pyc
+
 # Claude Code
 .claude/
 

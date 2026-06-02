@@ -9,6 +9,10 @@
  * This file is a project backbone for designing gait-event-based assistance.
  * It measures two FSRs per foot, identifies each foot's gait phase with fuzzy
  * logic, and applies an optional torque pulse according to a high-level rule.
+ * It also sends selected experiment variables to a PC through USB CDC so that
+ * students can monitor the signals live and save the received data as CSV for
+ * offline analysis. Before an experiment, select only the variables needed for
+ * the project in the "STUDENT CDC STREAM CONFIGURATION" block below.
  *
  * Students should modify only the high-level parameters and assist rules
  * described in section 6. Keep the calibration sequence, safety gate, torque
@@ -54,9 +58,12 @@
  *   fuzzy_heel_threshold       : normalized heel-load decision boundary
  *   fuzzy_toe_threshold        : normalized toe-load decision boundary
  *   fuzzy_sensitivity          : tanh slope; larger values make transitions sharp
- *   left_push_off_torque_nm    : left assist pulse amplitude in Nm
- *   right_push_off_torque_nm   : right assist pulse amplitude in Nm
+ *   left_push_off_torque_nm    : requested left pulse amplitude; start low
+ *   right_push_off_torque_nm   : requested right pulse amplitude; start low
+ *   assist_torque_limit_nm     : project torque limit; increase gradually
  *   push_off_pulse_ms          : pulse duration in milliseconds
+ *   cdc_stream_enable          : 0 = custom CDC off, 1 = custom CDC on
+ *   cdc_stream_period_ms       : custom CDC period; default 10 ms = 100 Hz
  *
  * Observe only:
  *   assist_enable              : 1 only while torque mode is actually active
@@ -70,6 +77,43 @@
  *   left_assist_torque_nm      : torque currently commanded to the left side
  *   right_assist_torque_nm     : torque currently commanded to the right side
  *
+ * USB CDC custom stream:
+ *   This is the experiment-data output path for PC-side CSV logging and live
+ *   plotting. Select the variables needed for the experiment and keep the
+ *   stream period as slow as the analysis permits to reduce USB CDC load.
+ *   Module ID 0xF0 sends 16 float channels at 100 Hz: raw voltages, normalized
+ *   loads, left/right gait phases, commanded torques, calibration_ready,
+ *   control_ON, assist_enable, and assist_mode_active. The large system Total
+ *   Data stream is disabled in this backbone to keep the CDC load low.
+ *
+ *   Default Module ID 0xF0 CSV channel order:
+ *    1) PF3 V       = pf3_volt
+ *    2) PF4 V       = pf4_volt
+ *    3) PF5 V       = pf5_volt
+ *    4) PF6 V       = pf6_volt
+ *    5) LT Load     = fsr_lt_load
+ *    6) LH Load     = fsr_lh_load
+ *    7) RT Load     = fsr_rt_load
+ *    8) RH Load     = fsr_rh_load
+ *    9) L Gait      = left_gait_phase
+ *   10) R Gait      = right_gait_phase
+ *   11) L Torque    = left_assist_torque_nm
+ *   12) R Torque    = right_assist_torque_nm
+ *   13) Cal Ready   = calibration_ready
+ *   14) Control Req = control_ON
+ *   15) Assist On   = assist_enable
+ *   16) H10 Assist  = assist_mode_active
+ *
+ * CDC stream customization:
+ *   1) Find the "STUDENT CDC STREAM CONFIGURATION" block below.
+ *   2) Keep the first CDC_STREAM_FIRST() row and add, remove, or reorder only
+ *      the CDC_STREAM_NEXT() rows to choose the variables sent to the PC.
+ *   3) Each row defines: field_name, display_name, unit, source_expression.
+ *   4) Use cdc_stream_enable and cdc_stream_period_ms in Live Expressions to
+ *      turn the custom stream on/off or change its period without rebuilding.
+ *   5) Keep the metadata JSON below 512 bytes. The build checks this limit.
+ *   6) Run a PC-side CDC receiver/logger and save Module ID 0xF0 data as CSV.
+ *
  * ============================================================================
  * 5. Safety Gate
  * ============================================================================
@@ -79,9 +123,13 @@
  *   calibration_full_load_done == 1
  *   H10 mode == ASSIST
  *
- * The final command is also limited by MAX_ASSIST_TORQUE_NM. Do not remove
- * these checks for a student project. Start with a low amplitude and verify
- * torque direction before any wearable test.
+ * Torque amplitude has two limits:
+ *   assist_torque_limit_nm      : student-adjustable project limit
+ *   HARD_MAX_ASSIST_TORQUE_NM   : absolute instructor safety limit
+ *
+ * The final command cannot exceed either limit. Do not remove these checks for
+ * a student project. Start with 0.5 Nm or less, verify torque direction on a
+ * bench setup, and increase assist_torque_limit_nm gradually only if needed.
  *
  * ============================================================================
  * 6. Recommended Student Design Tasks (High-Level Only)
@@ -96,7 +144,7 @@
  * Example B - Change the assist torque profile:
  *   In _UpdateAssistTorque(), replace the constant torque during the remaining
  *   pulse time with a high-level profile such as a ramp, triangle, or smooth
- *   half-sine curve. Preserve the safety gate and MAX_ASSIST_TORQUE_NM clamp.
+ *   half-sine curve. Preserve the safety gate and torque-limit clamp.
  *
  * Example C - Tune gait detection:
  *   Adjust fuzzy_heel_threshold, fuzzy_toe_threshold, and fuzzy_sensitivity
@@ -122,7 +170,6 @@
 
 #include <math.h>
 #include <stdbool.h>
-#include <stdio.h>
 #include <string.h>
 
 #define FSR_COUNT                 4
@@ -130,11 +177,9 @@
 #define LPF_CUTOFF_HZ             8.0f
 #define MINIMUM_SPAN_V            0.05f
 #define CALIBRATION_DURATION_MS   1000U
-#define STREAM_PERIOD_MS          2U
-#define DEBUG_PERIOD_MS           500U
 #define USB_MODULE_ID             0xF0U
 #define FUZZY_PHASE_COUNT         4
-#define MAX_ASSIST_TORQUE_NM      2.5f
+#define HARD_MAX_ASSIST_TORQUE_NM 2.5f
 
 typedef enum {
     FSR_LT = 0,
@@ -172,24 +217,50 @@ typedef struct {
     bool initialized;
 } FootFuzzyDetector_t;
 
+/*
+ * ============================================================================
+ * STUDENT CDC STREAM CONFIGURATION (100Hz)
+ * ============================================================================
+ * Keep the CDC_STREAM_FIRST() row. Add, remove, or reorder CDC_STREAM_NEXT()
+ * rows to select the variables sent to the PC. The metadata and payload are
+ * generated from this single list, so no other CDC code needs to be edited.
+ *
+ * Format:
+ *   CDC_STREAM_NEXT(field_name, "Display Name", "unit", source_expression)
+ */
+#define CDC_STREAM_CHANNELS(CDC_STREAM_FIRST, CDC_STREAM_NEXT)                  \
+    CDC_STREAM_FIRST(pf3_volt,       "PF3 V",       "V",    pf3_volt)         \
+    CDC_STREAM_NEXT (pf4_volt,       "PF4 V",       "V",    pf4_volt)         \
+    CDC_STREAM_NEXT (pf5_volt,       "PF5 V",       "V",    pf5_volt)         \
+    CDC_STREAM_NEXT (pf6_volt,       "PF6 V",       "V",    pf6_volt)         \
+    CDC_STREAM_NEXT (lt_load,        "LT Load",     "-",    fsr_lt_load)      \
+    CDC_STREAM_NEXT (lh_load,        "LH Load",     "-",    fsr_lh_load)      \
+    CDC_STREAM_NEXT (rt_load,        "RT Load",     "-",    fsr_rt_load)      \
+    CDC_STREAM_NEXT (rh_load,        "RH Load",     "-",    fsr_rh_load)      \
+    CDC_STREAM_NEXT (left_phase,     "L Gait",      "id",   left_gait_phase)  \
+    CDC_STREAM_NEXT (right_phase,    "R Gait",      "id",   right_gait_phase) \
+    CDC_STREAM_NEXT (left_torque,    "L Torque",    "Nm",   left_assist_torque_nm)  \
+    CDC_STREAM_NEXT (right_torque,   "R Torque",    "Nm",   right_assist_torque_nm) \
+    CDC_STREAM_NEXT (cal_ready,      "Cal Ready",   "bool", calibration_ready) \
+    CDC_STREAM_NEXT (control_req,    "Control Req", "bool", control_ON)       \
+    CDC_STREAM_NEXT (assist_on,      "Assist On",   "bool", assist_enable)    \
+    CDC_STREAM_NEXT (h10_assist,     "H10 Assist",  "bool", assist_mode_active)
+
+#define CDC_DECLARE_FIELD(field, name, unit, source) float field;
 typedef struct {
-    float lt_load;
-    float lh_load;
-    float rt_load;
-    float rh_load;
-    float left_phase;
-    float right_phase;
-    float left_events;
-    float right_events;
-    float left_mu_hs;
-    float left_mu_lr;
-    float left_mu_ts;
-    float left_mu_swing;
-    float right_mu_hs;
-    float right_mu_lr;
-    float right_mu_ts;
-    float right_mu_swing;
+    CDC_STREAM_CHANNELS(CDC_DECLARE_FIELD, CDC_DECLARE_FIELD)
 } GaitStreamData_t;
+#undef CDC_DECLARE_FIELD
+
+#define CDC_META_FIRST(field, name, unit, source) "[{\"name\":\"" name "\",\"unit\":\"" unit "\"}"
+#define CDC_META_NEXT(field, name, unit, source)  ",{\"name\":\"" name "\",\"unit\":\"" unit "\"}"
+static const char s_cdc_stream_meta[] =
+    CDC_STREAM_CHANNELS(CDC_META_FIRST, CDC_META_NEXT) "]";
+#undef CDC_META_FIRST
+#undef CDC_META_NEXT
+
+_Static_assert(sizeof(s_cdc_stream_meta) <= 513U,
+               "CDC metadata exceeds the XM_SetUsbCustomMeta 512-byte limit");
 
 static const XmAdcPin_t s_adc_pins[FSR_COUNT] = {
     XM_EXT_ADC_5, XM_EXT_ADC_6, XM_EXT_ADC_7, XM_EXT_ADC_8
@@ -211,10 +282,7 @@ static bool s_full_load_captured;
 
 static FootFuzzyDetector_t s_left;
 static FootFuzzyDetector_t s_right;
-static uint16_t s_stream_left_events;
-static uint16_t s_stream_right_events;
 static uint32_t s_stream_tick;
-static uint32_t s_debug_tick;
 static uint32_t s_left_push_off_remaining_ms;
 static uint32_t s_right_push_off_remaining_ms;
 static bool s_torque_mode_active;
@@ -230,15 +298,24 @@ float fuzzy_toe_threshold = 0.35f;
 float fuzzy_sensitivity = 12.0f;
 
 /*
- * Optional assist controls. Set control_ON to 1 only after torque direction and
- * amplitude have been validated on a bench setup. assist_enable reports whether
- * torque control is actually active after all safety conditions are satisfied.
+ * STUDENT ASSIST-TORQUE CONFIGURATION
+ *
+ * Adjust the left/right requested torque and project limit below, or change
+ * them through STM32CubeIDE Live Expressions. Start at 0.5 Nm or less.
+ * assist_torque_limit_nm is also clamped by HARD_MAX_ASSIST_TORQUE_NM above.
+ *
+ * Set control_ON to 1 only after torque direction and amplitude have been
+ * validated on a bench setup. assist_enable reports whether torque control is
+ * actually active after all safety conditions are satisfied.
  */
 uint16_t assist_enable = 0U;
 uint16_t control_ON = 0U;
 uint16_t push_off_pulse_ms = 100U;
-float left_push_off_torque_nm = 1.0f;
-float right_push_off_torque_nm = 1.0f;
+uint16_t cdc_stream_enable = 1U;
+uint16_t cdc_stream_period_ms = 10U;
+float left_push_off_torque_nm = 0.5f;
+float right_push_off_torque_nm = 0.5f;
+float assist_torque_limit_nm = 1.0f;
 
 /* Public runtime signals for STM32CubeIDE Live Expressions. */
 float pf3_volt;
@@ -279,7 +356,6 @@ static uint16_t _UpdateFootDetector(FootFuzzyDetector_t *detector,
 static void _UpdateAssistTorque(void);
 static void _UpdatePublicSignals(void);
 static void _SendStream(void);
-static void _SendDebug(void);
 static float _ClampFloat(float value, float min_value, float max_value);
 static float _MembershipLarge(float value, float threshold, float sensitivity);
 
@@ -293,28 +369,12 @@ void User_Setup(void)
 
     XM_SetControlMode(XM_CTRL_MONITOR);
     XM_SetH10AssistExistingMode(true);
+    XM_SetUsbTotalDataStream(false);
 
-    XM_SetUsbCustomMeta(USB_MODULE_ID,
-        "[{\"name\":\"LT Load\",\"unit\":\"-\"},"
-        "{\"name\":\"LH Load\",\"unit\":\"-\"},"
-        "{\"name\":\"RT Load\",\"unit\":\"-\"},"
-        "{\"name\":\"RH Load\",\"unit\":\"-\"},"
-        "{\"name\":\"L Phase\",\"unit\":\"id\"},"
-        "{\"name\":\"R Phase\",\"unit\":\"id\"},"
-        "{\"name\":\"L Events\",\"unit\":\"bits\"},"
-        "{\"name\":\"R Events\",\"unit\":\"bits\"},"
-        "{\"name\":\"L mu HS\",\"unit\":\"-\"},"
-        "{\"name\":\"L mu LR\",\"unit\":\"-\"},"
-        "{\"name\":\"L mu TS\",\"unit\":\"-\"},"
-        "{\"name\":\"L mu SW\",\"unit\":\"-\"},"
-        "{\"name\":\"R mu HS\",\"unit\":\"-\"},"
-        "{\"name\":\"R mu LR\",\"unit\":\"-\"},"
-        "{\"name\":\"R mu TS\",\"unit\":\"-\"},"
-        "{\"name\":\"R mu SW\",\"unit\":\"-\"}]");
+    XM_SetUsbCustomMeta(USB_MODULE_ID, s_cdc_stream_meta);
 
     _ResetCalibration();
     s_stream_tick = XM_GetTick();
-    s_debug_tick = XM_GetTick();
     XM_SendUsbDebugMessage("[FUZZY GAIT] bilateral heel/toe monitor ready\r\n");
 }
 
@@ -355,8 +415,6 @@ void User_Loop(void)
             s_right.phase == GAIT_PHASE_SWING) {
             s_right_push_off_remaining_ms = push_off_pulse_ms;
         }
-        s_stream_left_events |= left_gait_event_flags;
-        s_stream_right_events |= right_gait_event_flags;
     } else {
         memset(s_load, 0, sizeof(s_load));
         _ResetDetectors();
@@ -365,7 +423,6 @@ void User_Loop(void)
     _UpdateAssistTorque();
     _UpdatePublicSignals();
     _SendStream();
-    _SendDebug();
 }
 
 static void _SampleFsr(void)
@@ -469,8 +526,6 @@ static void _StartCalibration(CalibrationState_t state)
     } else {
         s_full_load_captured = false;
     }
-    s_stream_left_events = GAIT_EVENT_NONE;
-    s_stream_right_events = GAIT_EVENT_NONE;
     XM_SetLedEffect((state == CAL_OFF_RUNNING) ? XM_LED_1 : XM_LED_2,
                     XM_LED_BLINK, 100);
 }
@@ -507,8 +562,6 @@ static void _ResetDetectors(void)
     right_gait_phase = GAIT_PHASE_SWING;
     left_gait_event_flags = GAIT_EVENT_NONE;
     right_gait_event_flags = GAIT_EVENT_NONE;
-    s_stream_left_events = GAIT_EVENT_NONE;
-    s_stream_right_events = GAIT_EVENT_NONE;
     s_left_push_off_remaining_ms = 0U;
     s_right_push_off_remaining_ms = 0U;
 }
@@ -585,6 +638,8 @@ static uint16_t _UpdateFootDetector(FootFuzzyDetector_t *detector,
 
 static void _UpdateAssistTorque(void)
 {
+    float torque_limit_nm = _ClampFloat(assist_torque_limit_nm,
+                                        0.0f, HARD_MAX_ASSIST_TORQUE_NM);
     bool assist_requested = (control_ON == 1U) &&
                             s_zero_captured &&
                             s_full_load_captured &&
@@ -616,12 +671,12 @@ static void _UpdateAssistTorque(void)
     left_assist_torque_nm =
         (s_left_push_off_remaining_ms > 0U)
             ? _ClampFloat(left_push_off_torque_nm,
-                          -MAX_ASSIST_TORQUE_NM, MAX_ASSIST_TORQUE_NM)
+                          -torque_limit_nm, torque_limit_nm)
             : 0.0f;
     right_assist_torque_nm =
         (s_right_push_off_remaining_ms > 0U)
             ? _ClampFloat(right_push_off_torque_nm,
-                          -MAX_ASSIST_TORQUE_NM, MAX_ASSIST_TORQUE_NM)
+                          -torque_limit_nm, torque_limit_nm)
             : 0.0f;
 
     XM_SetAssistTorqueLH(left_assist_torque_nm);
@@ -654,47 +709,17 @@ static void _UpdatePublicSignals(void)
 static void _SendStream(void)
 {
     uint32_t now = XM_GetTick();
-    if ((now - s_stream_tick) < STREAM_PERIOD_MS) {
+    if (cdc_stream_enable != 1U || cdc_stream_period_ms == 0U ||
+        (now - s_stream_tick) < cdc_stream_period_ms) {
         return;
     }
     s_stream_tick = now;
 
-    s_stream.lt_load = fsr_lt_load;
-    s_stream.lh_load = fsr_lh_load;
-    s_stream.rt_load = fsr_rt_load;
-    s_stream.rh_load = fsr_rh_load;
-    s_stream.left_phase = (float)left_gait_phase;
-    s_stream.right_phase = (float)right_gait_phase;
-    s_stream.left_events = (float)s_stream_left_events;
-    s_stream.right_events = (float)s_stream_right_events;
-    s_stream.left_mu_hs = s_left.mu[GAIT_PHASE_HEEL_STRIKE];
-    s_stream.left_mu_lr = s_left.mu[GAIT_PHASE_LOAD_RESPONSE];
-    s_stream.left_mu_ts = s_left.mu[GAIT_PHASE_TERMINAL_STANCE];
-    s_stream.left_mu_swing = s_left.mu[GAIT_PHASE_SWING];
-    s_stream.right_mu_hs = s_right.mu[GAIT_PHASE_HEEL_STRIKE];
-    s_stream.right_mu_lr = s_right.mu[GAIT_PHASE_LOAD_RESPONSE];
-    s_stream.right_mu_ts = s_right.mu[GAIT_PHASE_TERMINAL_STANCE];
-    s_stream.right_mu_swing = s_right.mu[GAIT_PHASE_SWING];
+#define CDC_ASSIGN_FIELD(field, name, unit, source) s_stream.field = (float)(source);
+    CDC_STREAM_CHANNELS(CDC_ASSIGN_FIELD, CDC_ASSIGN_FIELD)
+#undef CDC_ASSIGN_FIELD
+
     XM_SendUsbDataWithId(&s_stream, sizeof(s_stream), USB_MODULE_ID);
-    s_stream_left_events = GAIT_EVENT_NONE;
-    s_stream_right_events = GAIT_EVENT_NONE;
-}
-
-static void _SendDebug(void)
-{
-    uint32_t now = XM_GetTick();
-    if ((now - s_debug_tick) < DEBUG_PERIOD_MS) {
-        return;
-    }
-    s_debug_tick = now;
-
-    char buf[160];
-    snprintf(buf, sizeof(buf),
-             "FUZZY | LT/LH %.2f/%.2f RT/RH %.2f/%.2f | L ph:%u ev:%02X R ph:%u ev:%02X\r\n",
-             fsr_lt_load, fsr_lh_load, fsr_rt_load, fsr_rh_load,
-             (unsigned int)left_gait_phase, (unsigned int)left_gait_event_flags,
-             (unsigned int)right_gait_phase, (unsigned int)right_gait_event_flags);
-    XM_SendUsbDebugMessage(buf);
 }
 
 static float _ClampFloat(float value, float min_value, float max_value)
