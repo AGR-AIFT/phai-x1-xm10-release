@@ -1,0 +1,5 @@
+- Scenario difficulty: Appropriate if the box load and torque limits stay low.
+
+- Recommended example code: Use `Final_Encoder_ex01.c`; add `Final_EMG.c` or `Final_Compensation_AddOn.c` if needed.
+
+- Evaluation metric appropriateness: The proposed direction is appropriate; recommended metrics are normalized EMG RMS reduction, trigger timing error, encoder-based hip smoothness, and robot torque smoothness.

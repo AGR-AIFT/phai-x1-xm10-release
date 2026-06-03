@@ -1,0 +1,5 @@
+- Scenario difficulty: Appropriate if they focus on the stair-ascent scenario first; heart-rate evaluation should be removed because extra HR sensors are not allowed for fairness.
+
+- Recommended example code: Use `Final_FSR_Fuzzy_Logic.c`; add `Final_Encoder_ex01.c` if hip-angle triggering is easier, and refer to `examples/17_FSM_Gait_Intent` for FSM structure.
+
+- Evaluation metric appropriateness: Timing, commanded torque, encoder-based hip motion, and normalized EMG RMS are appropriate; replace heart-rate metrics with EMG or robot-data metrics.

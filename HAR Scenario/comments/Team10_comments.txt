@@ -1,0 +1,5 @@
+- Scenario difficulty: Feasible at low speed; retro-walking just needs a simpler, retuned gait logic.
+
+- Recommended example code: Use `Final_FSR_Fuzzy_Logic.c`; fallback to `Final_Encoder_ex01.c` if FSR timing is unreliable.
+
+- Evaluation metric appropriateness: Normalized EMG RMS reduction, torque timing error, and encoder/internal-IMU gait timing are appropriate.

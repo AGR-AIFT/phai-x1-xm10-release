@@ -1,0 +1,5 @@
+- Scenario difficulty: I recommend changing to a safer and simpler scenario; vertical jump is hard to support with the allowed sensors and robot, and cable disconnection or sensor-wire issues may occur during jumping.
+
+- Recommended example code: Rescope to sit-to-stand, squat-rise, or walking/running initiation, then use `Final_Encoder_ex01.c`.
+
+- Evaluation metric appropriateness: Revise the metrics because jump height/hang time need extra measurement; recommended replacement metrics are normalized EMG RMS, trigger timing error, robot torque smoothness, or encoder-based hip velocity. It is OK to proceed after changing to one of the recommended safer scenarios.

@@ -1,0 +1,5 @@
+- Scenario difficulty: Feasible if simplified; start with a smaller FSR-based gait event setup, since shuffle gait can make contact timing less clear and high-resolution pressure insoles should not be used.
+
+- Recommended example code: Use `Final_FSR_Fuzzy_Logic.c`; if unstable, use `Final_Encoder_ex01.c` with FSR as a contact/safety gate.
+
+- Evaluation metric appropriateness: Mostly appropriate; recommended metrics are FSR phase stability, false-trigger count, robot torque smoothness, and normalized EMG RMS reduction.

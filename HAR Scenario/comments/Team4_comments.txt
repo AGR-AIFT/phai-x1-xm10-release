@@ -1,0 +1,5 @@
+- Scenario difficulty: Appropriate; I recommend focusing on sit-to-stand/rising first and keeping any loaded lifting conservative.
+
+- Recommended example code: Use `Final_Encoder_ex01.c`; add `Final_EMG.c` for effort evaluation or proportional scaling.
+
+- Evaluation metric appropriateness: Normalized EMG RMS, repetition time, detection success rate, encoder-based hip trajectory, and robot torque smoothness are appropriate; do not use heart-rate metrics because extra HR sensors are not allowed for fairness.

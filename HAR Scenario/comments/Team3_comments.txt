@@ -1,0 +1,5 @@
+- Scenario difficulty: Feasible if you keep the evaluation simple; inverse-dynamics or energy estimation can be replaced with easier robot/EMG metrics.
+
+- Recommended example code: Use `Final_FSR_Fuzzy_Logic.c`; add `Final_EMG.c` only for effort modulation or evaluation.
+
+- Evaluation metric appropriateness: Normalized EMG RMS reduction is appropriate; recommended replacement metrics are robot torque smoothness, phase timing error, or FSR/encoder-based step variability instead of raw force/inverse-dynamics metrics. (For inverse dynamics, accurate GRF/external force is needed, but FSR cannot measure GRF accurately.)
