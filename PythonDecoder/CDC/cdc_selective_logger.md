@@ -45,15 +45,34 @@ until the user explicitly selects a preset.
 Available presets:
 
 ```text
-Generic ch0...
-Final_FSR_Fuzzy_Logic
-Final_EMG
-Final_Encoder_ex01
+Generic ch0...          -> raw channel order, no FW-specific names
+Final_FSR_Fuzzy_Logic   -> Final_FSR_Fuzzy_Logic.c CDC_STREAM_CHANNELS
+Final_EMG               -> Final_EMG.c XM_SetUsbCustomMeta / EmgStreamData_t
+Final_Encoder_ex01      -> Final_Encoder_ex01.c CDC_STREAM_CHANNELS
 ```
 
 Confirm that the selected preset matches the firmware flashed on the board.
 The GUI rejects a preset when its channel count differs from the received
 packet.
+
+Preset channel orders:
+
+```text
+Final_FSR_Fuzzy_Logic:
+PF3 V, PF4 V, PF5 V, PF6 V,
+LT Load, LH Load, RT Load, RH Load,
+L Gait, R Gait, L Torque, R Torque,
+Cal Ready, Control Req, Assist On, H10 Assist
+
+Final_EMG:
+Raw RH, Raw LH, Env RH, Env LH, Tau RH, Tau LH
+
+Final_Encoder_ex01:
+L Encoder, R Encoder, L Angle, R Angle,
+L Pulse, R Pulse, L Torque, R Torque,
+Threshold, Control Req, Assist On, H10 Assist,
+L Current, R Current
+```
 
 Metadata is sent once when the firmware observes a USB connection. If the
 board was already connected and streaming before the logger opened the serial

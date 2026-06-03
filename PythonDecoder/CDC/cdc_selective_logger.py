@@ -1,12 +1,105 @@
 """
-XM10 USB-CDC selective CSV logger.
+XM10 USB-CDC Selective CSV Logger
+=================================
 
-The GUI opens before any serial connection is made. The user selects a COM
-port (or /dev/tty.* device), connects, chooses a detected module, renames the
-received float channels if needed, and records only the checked channels.
+This script receives PhAI V2.2 float data from an XM10 board over USB-CDC and
+saves only the channels checked by the user to CSV.
 
-PhAI V2.2 packets do not contain variable names. They contain a module ID and
-an array of floats, so channel labels are intentionally editable in the GUI.
+How to run
+----------
+Run this script from the folder that contains it.
+
+    cd "/Users/gunhee/Downloads/HAR 2026/Extension_Module/PythonDecoder/CDC"
+    python3 cdc_selective_logger.py
+
+Required package:
+
+    python3 -m pip install pyserial
+
+`tkinter` is included in most standard Python installations.
+
+GUI workflow
+------------
+1. Connect the board over USB.
+2. Select the COM port or `/dev/tty.*` port from the `Port` dropdown.
+   The tool does not auto-connect, so the user must choose the port.
+3. Click `Connect`.
+4. Select the received module when it appears under `Detected module`.
+   Most student FW examples send custom data as module `0xF0`.
+5. The default channel names are always `ch0`, `ch1`, ...
+6. Select the `Channel name preset` that matches the flashed FW.
+7. Check only the channels to save. The `Name` cells remain editable.
+8. Click `Start recording` and choose the CSV file path.
+9. Click `Stop recording` when the experiment is finished.
+
+FW presets
+----------
+Presets only rename channels on the PC side. The actual data order must match
+the struct passed to `XM_SendUsbDataWithId()` in the FW.
+
+Supported presets:
+
+* `Generic ch0...`
+  - Works with any received packet
+  - Displays channels as `ch0`, `ch1`, ...
+
+* `Final_FSR_Fuzzy_Logic`
+  - FW file:
+    `Extension_Module/XM_Apps/User_Algorithm/Final_FSR_Fuzzy_Logic.c`
+  - Module ID: `0xF0`
+  - Channel count: 16 floats
+  - Order:
+    `PF3 V`, `PF4 V`, `PF5 V`, `PF6 V`,
+    `LT Load`, `LH Load`, `RT Load`, `RH Load`,
+    `L Gait`, `R Gait`, `L Torque`, `R Torque`,
+    `Cal Ready`, `Control Req`, `Assist On`, `H10 Assist`
+
+* `Final_EMG`
+  - FW file:
+    `Extension_Module/XM_Apps/User_Algorithm/Final_EMG.c`
+  - Module ID: `0xF0`
+  - Channel count: 6 floats
+  - Order:
+    `Raw RH`, `Raw LH`, `Env RH`, `Env LH`, `Tau RH`, `Tau LH`
+
+* `Final_Encoder_ex01`
+  - FW file:
+    `Extension_Module/XM_Apps/User_Algorithm/Final_Encoder_ex01.c`
+  - Module ID: `0xF0`
+  - Channel count: 14 floats
+  - Order:
+    `L Encoder`, `R Encoder`, `L Angle`, `R Angle`,
+    `L Pulse`, `R Pulse`, `L Torque`, `R Torque`,
+    `Threshold`, `Control Req`, `Assist On`, `H10 Assist`,
+    `L Current`, `R Current`
+
+Why the default is ch0, ch1
+---------------------------
+Normal PhAI V2.2 data packets do not contain variable names. They contain only
+`module_id`, `status`, `seq_id`, and a float array. The meaning of each float
+must therefore be checked against the FW stream struct or `CDC_STREAM_CHANNELS()`
+definition.
+
+Some FW examples can send a `0xEF` metadata packet via `XM_SetUsbCustomMeta()`,
+but this tool keeps the default display as `ch0`, `ch1`, ... so the user
+explicitly chooses the FW preset.
+
+CSV format
+----------
+The CSV contains metadata columns followed by the checked channels.
+
+    pc_time_s,seq_id,module_id,status,tx_drops,<selected channels...>
+
+Example:
+
+    pc_time_s,seq_id,module_id,status,tx_drops,PF3 V,LT Load,L Gait
+    0.012345,100,0xF0,0x00,0,1.23456789,0.45678901,2.00000000
+
+Important
+---------
+If a FW CDC stream layout changes, update `CHANNEL_PRESETS` in this file with
+the same order. If the preset channel count differs from the received packet
+count, the GUI warns the user and returns to `Generic ch0...`.
 """
 
 from __future__ import annotations
@@ -42,21 +135,33 @@ QUEUE_LIMIT = 50000
 STREAM_START_COMMAND = b"AGRB MON START\r\n"
 USER_META_MODULE_ID = 0xEF
 
-# Labels are PC-side presets selected explicitly by the user.
+# The CDC data packet only contains float values. These presets are therefore
+# PC-side labels that must stay in the exact same order as each FW stream struct.
+# Keep "Generic ch0..." as the default so students can see the raw channel order
+# before applying a FW-specific name preset.
 CHANNEL_PRESETS = {
     "Generic ch0...": None,
+    # Matches:
+    # Extension_Module/XM_Apps/User_Algorithm/Final_FSR_Fuzzy_Logic.c
+    # CDC_STREAM_CHANNELS(...)
     "Final_FSR_Fuzzy_Logic": [
         "PF3 V", "PF4 V", "PF5 V", "PF6 V",
         "LT Load", "LH Load", "RT Load", "RH Load",
         "L Gait", "R Gait", "L Torque", "R Torque",
         "Cal Ready", "Control Req", "Assist On", "H10 Assist",
     ],
+    # Matches:
+    # Extension_Module/XM_Apps/User_Algorithm/Final_EMG.c
+    # XM_SetUsbCustomMeta(0xF0, ...)
     "Final_EMG": [
         "Raw RH", "Raw LH", "Env RH", "Env LH", "Tau RH", "Tau LH",
     ],
+    # Matches:
+    # Extension_Module/XM_Apps/User_Algorithm/Final_Encoder_ex01.c
+    # CDC_STREAM_CHANNELS(...)
     "Final_Encoder_ex01": [
         "L Encoder", "R Encoder", "L Angle", "R Angle",
-        "L Threshold", "R Threshold", "L Torque", "R Torque",
+        "L Pulse", "R Pulse", "L Torque", "R Torque",
         "Threshold", "Control Req", "Assist On", "H10 Assist",
         "L Current", "R Current",
     ],
@@ -79,6 +184,11 @@ class Metadata:
 
 
 def parse_phai_payload_frame(frame: bytes) -> tuple[int, int, int, bytes] | None:
+    """Decode the PhAI/COBS envelope and return the raw payload bytes.
+
+    Normal user streams reinterpret this payload as float32 values. The 0xEF
+    metadata stream uses the same envelope but stores JSON bytes instead.
+    """
     decoded = cobs_decode(frame)
     if len(decoded) < PHAI_HEADER_SIZE + PHAI_CRC_SIZE or decoded[0] != PHAI_SOF:
         return None
@@ -95,6 +205,11 @@ def parse_phai_payload_frame(frame: bytes) -> tuple[int, int, int, bytes] | None
 
 
 def parse_metadata(payload: bytes) -> Metadata:
+    """Parse optional 0xEF JSON metadata from FW.
+
+    The GUI intentionally does not auto-apply these names. Students choose the
+    preset explicitly so the displayed labels are tied to the FW file they use.
+    """
     if not payload:
         raise ValueError("empty metadata payload")
     target_module_id = payload[0]
@@ -106,6 +221,7 @@ def parse_metadata(payload: bytes) -> Metadata:
 
 
 def default_labels(module_id: int, count: int) -> list[str]:
+    """Return raw channel names when no preset is selected."""
     return [f"ch{i}" for i in range(count)]
 
 
@@ -172,6 +288,9 @@ class SerialReader(threading.Thread):
 
                     seq_id, module_id, status, payload = parsed
                     if module_id == USER_META_MODULE_ID:
+                        # FW may send label metadata once after USB connection.
+                        # Store it for status/debug only; do not rename channels
+                        # until the user selects one of the visible presets.
                         try:
                             self.packets.put_nowait(parse_metadata(payload))
                         except (UnicodeDecodeError, ValueError, KeyError, TypeError, queue.Full):
@@ -281,8 +400,8 @@ class SelectiveLoggerApp:
         ttk.Label(
             channels,
             text=(
-                "기본값은 ch0, ch1 ... 입니다. 사용하는 FW와 맞는 preset을 선택하거나 "
-                "Name을 직접 수정하세요."
+                "Default names are ch0, ch1, ... Select the preset that matches "
+                "the flashed FW, or edit the Name cells manually."
             ),
         ).pack(fill="x", pady=(7, 5))
 
@@ -429,6 +548,7 @@ class SelectiveLoggerApp:
             enabled.set(selected)
 
     def _selected_preset_labels(self, count: int) -> list[str]:
+        """Return labels for the current preset, falling back to ch0... on mismatch."""
         names = CHANNEL_PRESETS[self.preset_var.get()]
         if names is None or len(names) != count:
             return default_labels(self.active_module_id or 0, count)
@@ -440,6 +560,7 @@ class SelectiveLoggerApp:
             self.preset_var.set("Generic ch0...")
 
     def apply_selected_preset(self):
+        """Apply the selected FW preset to the editable Name column."""
         if self.active_module_id is None:
             return
         names = CHANNEL_PRESETS[self.preset_var.get()]
@@ -447,8 +568,8 @@ class SelectiveLoggerApp:
         if names is not None and len(names) != count:
             messagebox.showwarning(
                 "Preset mismatch",
-                f"{self.preset_var.get()} preset은 {len(names)}채널용입니다. "
-                f"현재 수신 데이터는 {count}채널입니다.",
+                f"{self.preset_var.get()} is a {len(names)}-channel preset. "
+                f"The current packet has {count} channels.",
             )
             self.preset_var.set("Generic ch0...")
         self._rebuild_channel_rows(self.active_module_id)
@@ -491,6 +612,8 @@ class SelectiveLoggerApp:
             return
 
         self.record_writer = csv.writer(self.record_file)
+        # Freeze the checked channel indices and current editable names at the
+        # moment recording starts. Later GUI edits do not change an open CSV.
         channel_names = [self.channel_rows[index][1].get().strip() or f"ch{index}" for index in indices]
         self.record_writer.writerow(
             ["pc_time_s", "seq_id", "module_id", "status", "tx_drops", *channel_names]
@@ -549,6 +672,7 @@ class SelectiveLoggerApp:
                     latest.configure(text=f"{packet.values[index]:.6f}")
 
         if self.record_writer is not None and packet.module_id == self.record_module_id:
+            # Record only the channels checked when Start recording was pressed.
             self.record_writer.writerow(
                 [
                     f"{packet.recv_t:.6f}",
