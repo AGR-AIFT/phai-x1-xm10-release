@@ -62,8 +62,8 @@
 extern XmRobot_t XM; // 전역 인스턴스 정의
 
 /* 사용자가 작성할 함수들 (링커가 찾을 수 있도록 extern 선언) */
-extern void User_Setup(void);
-extern void User_Loop(void);
+extern void Control_Setup(void);
+extern void Control_Loop(void);
 
 /**
  *------------------------------------------------------------
@@ -93,7 +93,7 @@ void StartUserTask(void *argument)
 {
     /* 1. User Initialization (1회 실행) */
     // End User가 작성한 초기화 코드 실행 (TSM 생성, 초기값 설정 등)
-    User_Setup();
+    Control_Setup();
 
     /* 2. Timing Initialization */
     TickType_t xLastWakeTime = xTaskGetTickCount();
@@ -125,7 +125,7 @@ void StartUserTask(void *argument)
 
         /* [Step 2: Process] User Algorithm */
         // End User가 작성한 제어 로직 실행 (TSM_Run 등)
-        User_Loop();
+        Control_Loop();
 
         /* [Step 3: Output] Command Flushing */
         // User가 구조체(XM.command)에 쓴 값을 실제 하드웨어로 전송
