@@ -1,0 +1,223 @@
+Final_FSR.c Usage Guide
+=======================
+
+English
+-------
+
+1. What this code does
+
+Final_FSR.c is a proportional FSR assist example. It reads four FSR analog
+inputs, normalizes each FSR signal with manual calibration, converts the
+selected sensor pair into proportional torque commands, and sends the four
+normalized loads to the PC through USB CDC.
+
+This is not a fuzzy gait-phase detector. Use Final_FSR_Fuzzy_Logic.c when the
+project needs gait-event or phase-based assistance.
+
+2. Sensor mapping
+
+PF3 = EXT_ADC_5 / DIO_1
+PF4 = EXT_ADC_6 / DIO_2
+PF5 = EXT_ADC_7 / DIO_3
+PF6 = EXT_ADC_8 / DIO_4
+
+torque_input_pair selects which pair controls the H10:
+
+0 = PF3 -> right hip, PF4 -> left hip
+1 = PF5 -> right hip, PF6 -> left hip
+
+3. Button functions
+
+BTN1 click:
+  Start unloaded/off calibration. Keep all FSRs unloaded for 3 seconds.
+
+BTN2 click:
+  Start full-load/on calibration. Apply the representative load and hold it
+  for 3 seconds.
+
+BTN3 click:
+  Reset calibration to defaults. The defaults are off = 0.0 V and on = 1.0 V.
+
+4. Required operating procedure
+
+1) Put on the shoes and switch the H10 device to ASSIST mode.
+2) Keep all FSRs unloaded.
+3) Click BTN1 and stay still for 3 seconds.
+4) Apply a representative full load to the target FSRs.
+5) Click BTN2 and hold the load for 3 seconds.
+6) Select torque_input_pair in STM32CubeIDE Live Expressions.
+7) Validate torque direction and amplitude on a bench setup.
+8) Set control_ON = 1 only after validation.
+
+Important: this legacy proportional example does not expose a
+calibration_ready safety gate. The code will not force students to complete
+BTN1 and BTN2 before control_ON is set. Complete both calibration steps
+manually before enabling torque.
+
+5. Important Live Expressions variables
+
+Writable variables:
+
+control_ON
+  0 = torque disabled
+  1 = proportional torque enabled
+
+torque_input_pair
+  0 = PF3/PF4 pair
+  1 = PF5/PF6 pair
+
+Observe-only variables:
+
+pf3_volt .. pf6_volt
+  Raw FSR voltages in volts.
+
+pf3_volt_cal .. pf6_volt_cal
+  Filtered voltages after subtracting the off-calibration value.
+
+pf3_load .. pf6_load
+  Calibrated normalized loads.
+  load = (filtered_voltage - off_voltage) / (on_voltage - off_voltage)
+  The value is clamped from 0.0 to 1.5.
+
+pf3_contact .. pf6_contact
+  Contact states after hysteresis thresholding.
+
+pf3_torque_nm .. pf6_torque_nm
+  Per-channel proportional torque values.
+
+6. USB CDC data
+
+Module ID:
+  0xF0
+
+CDC payload:
+  Four float32 channels are sent every control loop.
+
+Default CSV/channel order:
+
+1) PF3 Load = pf3_load
+2) PF4 Load = pf4_load
+3) PF5 Load = pf5_load
+4) PF6 Load = pf6_load
+
+Note: the CDC stream sends normalized load values, not raw voltages. If the GUI
+shows a maximum of 1.5, that is expected because the firmware clamps load to
+0.0~1.5.
+
+7. Student-safe modification points
+
+Adjust FSR_MAX_TORQUE_NM conservatively.
+Modify _LoadToTorque() to test a different pressure-to-torque curve.
+Tune FSR_ON_THRESHOLD and FSR_OFF_THRESHOLD while observing contact variables.
+If CDC channels are changed, update RampStreamData_t, XM_SetUsbCustomMeta(),
+and _UpdateStreamData() together.
+
+
+Korean / 한국어
+--------------
+
+1. 이 코드는 무엇을 하나요?
+
+Final_FSR.c는 FSR 압력에 비례해서 보조 토크를 주는 예제입니다. 4개의 FSR
+아날로그 입력을 읽고, 수동 캘리브레이션으로 정규화한 뒤, 선택된 센서 쌍을
+H10 오른쪽/왼쪽 보조 토크로 변환합니다. PC에는 USB CDC로 4개의 정규화된
+load 값을 보냅니다.
+
+이 코드는 fuzzy gait-phase detector가 아닙니다. 보행 이벤트나 보행 phase
+기반 보조가 필요하면 Final_FSR_Fuzzy_Logic.c를 사용하세요.
+
+2. 센서 매핑
+
+PF3 = EXT_ADC_5 / DIO_1
+PF4 = EXT_ADC_6 / DIO_2
+PF5 = EXT_ADC_7 / DIO_3
+PF6 = EXT_ADC_8 / DIO_4
+
+torque_input_pair로 어떤 센서 쌍을 H10에 연결할지 선택합니다.
+
+0 = PF3 -> 오른쪽 hip, PF4 -> 왼쪽 hip
+1 = PF5 -> 오른쪽 hip, PF6 -> 왼쪽 hip
+
+3. 버튼 기능
+
+BTN1 클릭:
+  unloaded/off 캘리브레이션 시작. 모든 FSR을 누르지 않은 상태로 3초 유지합니다.
+
+BTN2 클릭:
+  full-load/on 캘리브레이션 시작. 기준 하중을 준 상태로 3초 유지합니다.
+
+BTN3 클릭:
+  캘리브레이션 기본값으로 리셋합니다. 기본값은 off = 0.0 V, on = 1.0 V입니다.
+
+4. 사용 순서
+
+1) 신발을 착용하고 H10을 ASSIST mode로 전환합니다.
+2) 모든 FSR을 누르지 않은 상태로 둡니다.
+3) BTN1을 클릭하고 3초 동안 가만히 있습니다.
+4) 목표 FSR에 기준 하중을 줍니다.
+5) BTN2를 클릭하고 3초 동안 하중을 유지합니다.
+6) STM32CubeIDE Live Expressions에서 torque_input_pair를 선택합니다.
+7) 벤치 환경에서 토크 방향과 크기를 확인합니다.
+8) 확인이 끝난 뒤 control_ON = 1로 설정합니다.
+
+중요: 이 legacy proportional 예제는 calibration_ready safety gate가 없습니다.
+BTN1과 BTN2를 완료하지 않아도 control_ON을 1로 만들 수 있습니다. 반드시 두
+단계 캘리브레이션을 수동으로 완료한 뒤 토크를 켜세요.
+
+5. 주요 Live Expressions 변수
+
+쓰기 가능한 변수:
+
+control_ON
+  0 = 토크 비활성화
+  1 = 비례 토크 활성화
+
+torque_input_pair
+  0 = PF3/PF4 쌍
+  1 = PF5/PF6 쌍
+
+관찰용 변수:
+
+pf3_volt .. pf6_volt
+  FSR raw 전압입니다.
+
+pf3_volt_cal .. pf6_volt_cal
+  off calibration 값을 뺀 필터링 전압입니다.
+
+pf3_load .. pf6_load
+  캘리브레이션된 정규화 load입니다.
+  load = (filtered_voltage - off_voltage) / (on_voltage - off_voltage)
+  값은 0.0~1.5로 제한됩니다.
+
+pf3_contact .. pf6_contact
+  hysteresis threshold를 거친 접촉 상태입니다.
+
+pf3_torque_nm .. pf6_torque_nm
+  채널별 비례 토크 값입니다.
+
+6. USB CDC 데이터
+
+Module ID:
+  0xF0
+
+CDC payload:
+  제어 루프마다 float32 4채널을 전송합니다.
+
+기본 CSV/채널 순서:
+
+1) PF3 Load = pf3_load
+2) PF4 Load = pf4_load
+3) PF5 Load = pf5_load
+4) PF6 Load = pf6_load
+
+주의: CDC로 보내는 값은 raw voltage가 아니라 normalized load입니다. GUI에서
+최대값이 1.5로 보이면 펌웨어에서 load를 0.0~1.5로 제한하기 때문입니다.
+
+7. 학생이 수정하기 좋은 부분
+
+FSR_MAX_TORQUE_NM을 보수적으로 조정합니다.
+_LoadToTorque()에서 압력-토크 변환 곡선을 바꿔볼 수 있습니다.
+pf3_contact .. pf6_contact를 보면서 FSR_ON_THRESHOLD와 FSR_OFF_THRESHOLD를
+조정할 수 있습니다.
+CDC 채널을 바꾸려면 RampStreamData_t, XM_SetUsbCustomMeta(),
+_UpdateStreamData()의 순서를 함께 맞춰 수정해야 합니다.

@@ -1,0 +1,344 @@
+Final_FSR_Fuzzy_Logic.c Usage Guide
+===================================
+
+English
+-------
+
+1. What this code does
+
+Final_FSR_Fuzzy_Logic.c is a bilateral two-FSR-per-foot fuzzy gait-phase
+monitor and assist-control backbone. It reads toe and heel FSRs, normalizes
+them through calibration, estimates the left and right gait phases, and can
+apply a short push-off torque pulse according to a high-level rule.
+
+The default rule applies assistance when TERMINAL_STANCE changes to SWING
+(toe-off). Students can modify the high-level rule and tuning parameters while
+keeping the calibration, safety gate, torque limit, and low-level XM API calls.
+
+2. Sensor mapping
+
+PF3 = left toe
+PF4 = left heel
+PF5 = right toe
+PF6 = right heel
+
+Gait phase values:
+
+0 = HEEL_STRIKE
+1 = LOAD_RESPONSE
+2 = TERMINAL_STANCE
+3 = SWING / toe-off
+
+3. Button functions
+
+BTN1 pressed:
+  Start zero/off calibration. Keep the feet unloaded for 1 second.
+
+BTN2 pressed:
+  Start full-load/on calibration. This is accepted only after BTN1 calibration
+  has completed. Apply a representative full load and hold it for 1 second.
+
+BTN3 pressed:
+  Reset calibration. Repeat BTN1 and BTN2 after reset.
+
+4. Required operating procedure
+
+1) Put on the shoes and switch the H10 device to ASSIST mode.
+2) Keep the feet unloaded.
+3) Press BTN1 and remain still for 1 second.
+4) Apply a representative full load.
+5) Press BTN2 and hold the load for 1 second.
+6) Confirm calibration_ready == 1 in STM32CubeIDE Live Expressions.
+7) Validate torque direction and amplitude on a bench setup.
+8) Set control_ON = 1 in Live Expressions to request torque control.
+9) Confirm assist_enable == 1.
+
+If assist_enable remains 0, one of the safety conditions is not satisfied.
+
+5. Safety gate for torque output
+
+Torque output is permitted only when all conditions are true:
+
+control_ON == 1
+calibration_zero_done == 1
+calibration_full_load_done == 1
+H10 mode == ASSIST
+
+The requested torque is also limited by both assist_torque_limit_nm and
+HARD_MAX_ASSIST_TORQUE_NM. Start with low torque and verify the direction on a
+bench setup before any wearable test.
+
+6. Important Live Expressions variables
+
+Writable variables:
+
+control_ON
+  0 = torque disabled
+  1 = request torque control
+
+fuzzy_heel_threshold
+  Normalized heel-load decision boundary.
+
+fuzzy_toe_threshold
+  Normalized toe-load decision boundary.
+
+fuzzy_sensitivity
+  Tanh slope. Larger values make phase transitions sharper.
+
+left_push_off_torque_nm
+  Requested left push-off pulse amplitude.
+
+right_push_off_torque_nm
+  Requested right push-off pulse amplitude.
+
+assist_torque_limit_nm
+  Student-adjustable torque limit.
+
+push_off_pulse_ms
+  Pulse duration in milliseconds.
+
+cdc_stream_enable
+  0 = custom CDC off
+  1 = custom CDC on
+
+cdc_stream_period_ms
+  CDC period. The default is 10 ms, or 100 Hz.
+
+Observe-only variables:
+
+assist_enable
+  1 only while torque mode is actually active.
+
+calibration_zero_done
+  1 after BTN1 calibration completes.
+
+calibration_full_load_done
+  1 after BTN2 calibration completes.
+
+calibration_ready
+  1 only after both calibration steps complete.
+
+assist_mode_active
+  1 while H10 ASSIST mode is active.
+
+pf3_volt .. pf6_volt
+  Raw FSR voltages.
+
+fsr_lt_load .. fsr_rh_load
+  Calibrated normalized loads. These values are clamped to 0.0~1.5.
+
+L_gait_event, R_gait_event
+  Current left and right gait phases.
+
+left_assist_torque_nm, right_assist_torque_nm
+  Torque currently commanded to each side.
+
+7. USB CDC data
+
+Module ID:
+  0xF0
+
+CDC payload:
+  16 float32 channels, default 100 Hz.
+
+Default CSV/channel order:
+
+1)  PF3 V       = pf3_volt
+2)  PF4 V       = pf4_volt
+3)  PF5 V       = pf5_volt
+4)  PF6 V       = pf6_volt
+5)  LT Load     = fsr_lt_load
+6)  LH Load     = fsr_lh_load
+7)  RT Load     = fsr_rt_load
+8)  RH Load     = fsr_rh_load
+9)  L Gait      = left_gait_phase
+10) R Gait      = right_gait_phase
+11) L Torque    = left_assist_torque_nm
+12) R Torque    = right_assist_torque_nm
+13) Cal Ready   = calibration_ready
+14) Control Req = control_ON
+15) Assist On   = assist_enable
+16) H10 Assist  = assist_mode_active
+
+Raw voltage channels can exceed 1.5 V. Load channels are normalized and clamped
+to 0.0~1.5.
+
+8. Student-safe modification points
+
+Change fuzzy thresholds and sensitivity in Live Expressions.
+Change left/right requested torque and pulse duration conservatively.
+Modify the high-level phase-transition rule in User_Loop().
+Customize the CDC stream only in the STUDENT CDC STREAM CONFIGURATION block.
+Do not remove the calibration sequence, safety gate, or torque clamps.
+
+
+Korean / 한국어
+--------------
+
+1. 이 코드는 무엇을 하나요?
+
+Final_FSR_Fuzzy_Logic.c는 발당 toe/heel FSR 2개를 사용하는 fuzzy gait-phase
+monitor와 보조 제어용 backbone입니다. FSR 값을 캘리브레이션으로 정규화하고,
+왼쪽/오른쪽 보행 phase를 추정하며, high-level rule에 따라 짧은 push-off
+토크 pulse를 줄 수 있습니다.
+
+기본 rule은 TERMINAL_STANCE에서 SWING으로 바뀌는 순간, 즉 toe-off 시점에
+보조를 주는 구조입니다. 학생은 high-level rule과 튜닝 파라미터를 수정하되,
+캘리브레이션, safety gate, torque limit, low-level XM API 호출은 유지해야
+합니다.
+
+2. 센서 매핑
+
+PF3 = 왼쪽 toe
+PF4 = 왼쪽 heel
+PF5 = 오른쪽 toe
+PF6 = 오른쪽 heel
+
+보행 phase 값:
+
+0 = HEEL_STRIKE
+1 = LOAD_RESPONSE
+2 = TERMINAL_STANCE
+3 = SWING / toe-off
+
+3. 버튼 기능
+
+BTN1 누름:
+  zero/off 캘리브레이션 시작. 발을 unloaded 상태로 1초 유지합니다.
+
+BTN2 누름:
+  full-load/on 캘리브레이션 시작. BTN1 캘리브레이션이 끝난 뒤에만 동작합니다.
+  기준 full load를 주고 1초 유지합니다.
+
+BTN3 누름:
+  캘리브레이션 리셋. 리셋 후 BTN1과 BTN2를 다시 수행해야 합니다.
+
+4. 사용 순서
+
+1) 신발을 착용하고 H10을 ASSIST mode로 전환합니다.
+2) 발을 unloaded 상태로 둡니다.
+3) BTN1을 누르고 1초 동안 가만히 있습니다.
+4) 기준 full load를 줍니다.
+5) BTN2를 누르고 1초 동안 하중을 유지합니다.
+6) STM32CubeIDE Live Expressions에서 calibration_ready == 1인지 확인합니다.
+7) 벤치 환경에서 토크 방향과 크기를 확인합니다.
+8) Live Expressions에서 control_ON = 1로 설정합니다.
+9) assist_enable == 1인지 확인합니다.
+
+assist_enable이 계속 0이면 safety 조건 중 하나가 만족되지 않은 것입니다.
+
+5. 토크 출력 safety gate
+
+아래 조건이 모두 참일 때만 토크가 출력됩니다.
+
+control_ON == 1
+calibration_zero_done == 1
+calibration_full_load_done == 1
+H10 mode == ASSIST
+
+요청 토크는 assist_torque_limit_nm과 HARD_MAX_ASSIST_TORQUE_NM으로 한 번 더
+제한됩니다. 착용 테스트 전에 반드시 낮은 토크부터 시작하고 벤치에서 방향을
+확인하세요.
+
+6. 주요 Live Expressions 변수
+
+쓰기 가능한 변수:
+
+control_ON
+  0 = 토크 비활성화
+  1 = 토크 제어 요청
+
+fuzzy_heel_threshold
+  정규화된 heel load 판정 기준입니다.
+
+fuzzy_toe_threshold
+  정규화된 toe load 판정 기준입니다.
+
+fuzzy_sensitivity
+  tanh 기울기입니다. 값이 클수록 phase 전환이 더 날카로워집니다.
+
+left_push_off_torque_nm
+  왼쪽 push-off pulse 토크 요청값입니다.
+
+right_push_off_torque_nm
+  오른쪽 push-off pulse 토크 요청값입니다.
+
+assist_torque_limit_nm
+  학생이 조정할 수 있는 토크 제한값입니다.
+
+push_off_pulse_ms
+  pulse 지속 시간입니다.
+
+cdc_stream_enable
+  0 = custom CDC 끔
+  1 = custom CDC 켬
+
+cdc_stream_period_ms
+  CDC 전송 주기입니다. 기본값은 10 ms, 즉 100 Hz입니다.
+
+관찰용 변수:
+
+assist_enable
+  실제 토크 모드가 활성화되었을 때만 1입니다.
+
+calibration_zero_done
+  BTN1 캘리브레이션 완료 후 1입니다.
+
+calibration_full_load_done
+  BTN2 캘리브레이션 완료 후 1입니다.
+
+calibration_ready
+  두 캘리브레이션이 모두 완료되면 1입니다.
+
+assist_mode_active
+  H10 ASSIST mode일 때 1입니다.
+
+pf3_volt .. pf6_volt
+  FSR raw 전압입니다.
+
+fsr_lt_load .. fsr_rh_load
+  캘리브레이션된 정규화 load입니다. 0.0~1.5로 제한됩니다.
+
+L_gait_event, R_gait_event
+  현재 왼쪽/오른쪽 gait phase입니다.
+
+left_assist_torque_nm, right_assist_torque_nm
+  각 side에 현재 명령 중인 토크입니다.
+
+7. USB CDC 데이터
+
+Module ID:
+  0xF0
+
+CDC payload:
+  float32 16채널, 기본 100 Hz입니다.
+
+기본 CSV/채널 순서:
+
+1)  PF3 V       = pf3_volt
+2)  PF4 V       = pf4_volt
+3)  PF5 V       = pf5_volt
+4)  PF6 V       = pf6_volt
+5)  LT Load     = fsr_lt_load
+6)  LH Load     = fsr_lh_load
+7)  RT Load     = fsr_rt_load
+8)  RH Load     = fsr_rh_load
+9)  L Gait      = left_gait_phase
+10) R Gait      = right_gait_phase
+11) L Torque    = left_assist_torque_nm
+12) R Torque    = right_assist_torque_nm
+13) Cal Ready   = calibration_ready
+14) Control Req = control_ON
+15) Assist On   = assist_enable
+16) H10 Assist  = assist_mode_active
+
+raw voltage 채널은 1.5 V를 넘을 수 있습니다. Load 채널은 정규화된 값이라
+0.0~1.5로 제한됩니다.
+
+8. 학생이 수정하기 좋은 부분
+
+Live Expressions에서 fuzzy threshold와 sensitivity를 조정합니다.
+왼쪽/오른쪽 요청 토크와 pulse duration을 보수적으로 조정합니다.
+User_Loop()에서 high-level phase-transition rule을 수정할 수 있습니다.
+CDC stream은 STUDENT CDC STREAM CONFIGURATION block 안에서만 수정하세요.
+캘리브레이션 순서, safety gate, torque clamp는 제거하지 마세요.

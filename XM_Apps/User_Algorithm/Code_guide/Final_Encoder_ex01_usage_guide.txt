@@ -1,0 +1,353 @@
+Final_Encoder_ex01.c Usage Guide
+================================
+
+English
+-------
+
+1. What this code does
+
+Final_Encoder_ex01.c is an encoder-angle-triggered assist-pulse example. It
+reads left and right hip motor encoder angles, applies offset and sign
+correction, detects a threshold crossing, and commands a short torque pulse on
+each side independently.
+
+This code uses a software-generated torque pulse through XM_SetAssistTorqueLH()
+and XM_SetAssistTorqueRH(). It does not use a lower-level FVector_t command.
+
+2. Encoder signal definition
+
+Raw encoder variables:
+
+XM.status.h10.leftHipMotorAngle
+XM.status.h10.rightHipMotorAngle
+
+Corrected control angle:
+
+control_angle = encoder_sign * (raw_encoder_angle - encoder_offset)
+
+Validate the sign, offset, and torque direction on a bench setup before
+enabling torque.
+
+3. Default assist rule
+
+If control_angle crosses assist_angle_threshold_deg while the trigger is armed,
+the code commands requested torque for assist_pulse_duration_ms.
+
+When control_angle falls back to or below assist_rearm_angle_deg, the next
+pulse is armed again.
+
+The left and right sides are evaluated independently. Holding the angle above
+the threshold does not repeatedly trigger pulses.
+
+4. Button functions
+
+BTN1 pressed:
+  Toggle control_ON, but only while H10 is in ASSIST mode.
+
+BTN2 pressed:
+  Reserved for student extension in this example.
+
+BTN3 pressed:
+  Force control_ON back to 0 and disable torque output.
+
+5. Required operating procedure
+
+1) Validate encoder signs, offsets, and torque directions on a bench setup.
+2) Switch the H10 device to ASSIST mode.
+3) Confirm assist_mode_active == 1 in STM32CubeIDE Live Expressions.
+4) Press BTN1 once to request torque control.
+5) Confirm control_ON == 1 and assist_enable == 1.
+6) Move each side and observe encoder angle, pulse state, and torque.
+7) Press BTN1 again to disable torque output, or press BTN3 to force it off.
+
+6. Safety gate for torque output
+
+Torque output is permitted only when both conditions are true:
+
+control_ON == 1
+H10 mode == ASSIST
+
+The H10 built-in assist algorithm is disabled so measured assistance comes only
+from this user algorithm. Torque is limited by both assist_torque_limit_nm and
+HARD_MAX_ASSIST_TORQUE_NM. Start with 0.5 Nm or less and verify torque
+directions before any wearable test.
+
+7. Important Live Expressions variables
+
+Writable variables:
+
+control_ON
+  0 = disabled
+  1 = request torque control
+
+encoder_offset_lh_deg, encoder_offset_rh_deg
+  Left/right neutral-position offsets.
+
+encoder_sign_lh, encoder_sign_rh
+  Left/right angle signs. Usually +1 or -1.
+
+assist_angle_threshold_deg
+  Pulse trigger threshold. Default is 20 deg.
+
+assist_rearm_angle_deg
+  Rearm threshold for the next pulse. Default is 15 deg.
+
+assist_pulse_duration_ms
+  Torque pulse duration. Default is 120 ms.
+
+left_requested_torque_nm, right_requested_torque_nm
+  Requested left/right pulse torques. Start low.
+
+assist_torque_limit_nm
+  Student-adjustable torque limit.
+
+cdc_stream_enable
+  0 = custom CDC off
+  1 = custom CDC on
+
+cdc_stream_period_ms
+  CDC period. The default is 10 ms, or 100 Hz.
+
+Observe-only variables:
+
+assist_enable
+  1 only while torque mode is actually active.
+
+assist_mode_active
+  1 while H10 ASSIST mode is active.
+
+btn1_state .. btn3_state
+  Current physical button states.
+
+btn1_last_event .. btn3_last_event
+  Last detected button events.
+
+left_encoder_angle_deg, right_encoder_angle_deg
+  Raw left/right hip motor encoder angles.
+
+left_control_angle_deg, right_control_angle_deg
+  Corrected angles used by the assist rule.
+
+left_threshold_active, right_threshold_active
+  1 while each corrected angle meets the threshold.
+
+left_pulse_active, right_pulse_active
+  1 while each torque pulse is active.
+
+left_trigger_armed, right_trigger_armed
+  1 when the next pulse may be triggered.
+
+left_assist_torque_nm, right_assist_torque_nm
+  Current commanded torque.
+
+left_motor_current_a, right_motor_current_a
+  Measured left/right motor current from H10.
+
+8. USB CDC data
+
+Module ID:
+  0xF0
+
+CDC payload:
+  14 float32 channels, default 100 Hz.
+
+Default CSV/channel order:
+
+1)  L Encoder   = left_encoder_angle_deg
+2)  R Encoder   = right_encoder_angle_deg
+3)  L Angle     = left_control_angle_deg
+4)  R Angle     = right_control_angle_deg
+5)  L Pulse     = left_pulse_active
+6)  R Pulse     = right_pulse_active
+7)  L Torque    = left_assist_torque_nm
+8)  R Torque    = right_assist_torque_nm
+9)  Threshold   = assist_angle_threshold_deg
+10) Control Req = control_ON
+11) Assist On   = assist_enable
+12) H10 Assist  = assist_mode_active
+13) L Current   = left_motor_current_a
+14) R Current   = right_motor_current_a
+
+9. Student-safe modification points
+
+Tune assist_angle_threshold_deg, assist_rearm_angle_deg, and
+assist_pulse_duration_ms in Live Expressions.
+Tune left_requested_torque_nm and right_requested_torque_nm conservatively.
+Modify the trigger and rearm comparisons in _UpdateAssistTorque() to design a
+different rule.
+Customize the CDC stream only in the STUDENT CDC STREAM CONFIGURATION block.
+Do not remove the safety gate, torque clamps, or low-level XM torque API calls.
+
+
+Korean / 한국어
+--------------
+
+1. 이 코드는 무엇을 하나요?
+
+Final_Encoder_ex01.c는 encoder angle threshold 기반 보조 pulse 예제입니다.
+왼쪽/오른쪽 hip motor encoder angle을 읽고, offset과 sign 보정을 적용한 뒤,
+threshold crossing을 감지해서 각 side에 짧은 토크 pulse를 독립적으로 명령합니다.
+
+이 코드는 XM_SetAssistTorqueLH()와 XM_SetAssistTorqueRH()를 사용해서 software
+torque pulse를 만듭니다. lower-level FVector_t 명령을 사용하는 예제가 아닙니다.
+
+2. Encoder 신호 정의
+
+raw encoder 변수:
+
+XM.status.h10.leftHipMotorAngle
+XM.status.h10.rightHipMotorAngle
+
+보정된 control angle:
+
+control_angle = encoder_sign * (raw_encoder_angle - encoder_offset)
+
+토크를 켜기 전에 벤치 환경에서 sign, offset, torque direction을 반드시 확인하세요.
+
+3. 기본 보조 rule
+
+control_angle이 assist_angle_threshold_deg를 넘고 trigger가 armed 상태이면,
+assist_pulse_duration_ms 동안 requested torque를 명령합니다.
+
+control_angle이 assist_rearm_angle_deg 이하로 다시 내려가면 다음 pulse가 다시
+armed 됩니다.
+
+왼쪽과 오른쪽은 독립적으로 판단됩니다. 각도가 threshold 위에 계속 머물러도
+pulse가 반복해서 계속 발생하지는 않습니다.
+
+4. 버튼 기능
+
+BTN1 누름:
+  H10이 ASSIST mode일 때 control_ON을 toggle합니다.
+
+BTN2 누름:
+  이 예제에서는 학생 확장용으로 예약되어 있습니다.
+
+BTN3 누름:
+  control_ON을 0으로 강제로 내리고 토크 출력을 비활성화합니다.
+
+5. 사용 순서
+
+1) 벤치 환경에서 encoder sign, offset, torque direction을 확인합니다.
+2) H10을 ASSIST mode로 전환합니다.
+3) STM32CubeIDE Live Expressions에서 assist_mode_active == 1인지 확인합니다.
+4) BTN1을 한 번 눌러 토크 제어를 요청합니다.
+5) control_ON == 1, assist_enable == 1인지 확인합니다.
+6) 각 side를 움직이며 encoder angle, pulse state, torque를 관찰합니다.
+7) BTN1을 다시 눌러 토크를 끄거나, BTN3으로 강제로 끕니다.
+
+6. 토크 출력 safety gate
+
+아래 두 조건이 모두 참일 때만 토크가 출력됩니다.
+
+control_ON == 1
+H10 mode == ASSIST
+
+H10 built-in assist algorithm은 비활성화되어 이 user algorithm의 보조력만 측정되도록
+되어 있습니다. 토크는 assist_torque_limit_nm과 HARD_MAX_ASSIST_TORQUE_NM으로
+제한됩니다. 0.5 Nm 이하부터 시작하고 착용 테스트 전에 토크 방향을 확인하세요.
+
+7. 주요 Live Expressions 변수
+
+쓰기 가능한 변수:
+
+control_ON
+  0 = 비활성화
+  1 = 토크 제어 요청
+
+encoder_offset_lh_deg, encoder_offset_rh_deg
+  왼쪽/오른쪽 neutral-position offset입니다.
+
+encoder_sign_lh, encoder_sign_rh
+  왼쪽/오른쪽 angle sign입니다. 보통 +1 또는 -1입니다.
+
+assist_angle_threshold_deg
+  pulse trigger threshold입니다. 기본값은 20 deg입니다.
+
+assist_rearm_angle_deg
+  다음 pulse를 준비하는 rearm threshold입니다. 기본값은 15 deg입니다.
+
+assist_pulse_duration_ms
+  토크 pulse 지속 시간입니다. 기본값은 120 ms입니다.
+
+left_requested_torque_nm, right_requested_torque_nm
+  왼쪽/오른쪽 pulse 요청 토크입니다. 낮은 값부터 시작하세요.
+
+assist_torque_limit_nm
+  학생이 조정할 수 있는 토크 제한값입니다.
+
+cdc_stream_enable
+  0 = custom CDC 끔
+  1 = custom CDC 켬
+
+cdc_stream_period_ms
+  CDC 전송 주기입니다. 기본값은 10 ms, 즉 100 Hz입니다.
+
+관찰용 변수:
+
+assist_enable
+  실제 토크 모드가 활성화되었을 때만 1입니다.
+
+assist_mode_active
+  H10 ASSIST mode일 때 1입니다.
+
+btn1_state .. btn3_state
+  현재 물리 버튼 상태입니다.
+
+btn1_last_event .. btn3_last_event
+  마지막으로 감지된 버튼 이벤트입니다.
+
+left_encoder_angle_deg, right_encoder_angle_deg
+  raw 왼쪽/오른쪽 hip motor encoder angle입니다.
+
+left_control_angle_deg, right_control_angle_deg
+  보조 rule에 사용하는 보정된 angle입니다.
+
+left_threshold_active, right_threshold_active
+  각 보정 angle이 threshold 조건을 만족할 때 1입니다.
+
+left_pulse_active, right_pulse_active
+  각 torque pulse가 활성화되어 있을 때 1입니다.
+
+left_trigger_armed, right_trigger_armed
+  다음 pulse가 발생할 수 있는 준비 상태일 때 1입니다.
+
+left_assist_torque_nm, right_assist_torque_nm
+  현재 명령 중인 토크입니다.
+
+left_motor_current_a, right_motor_current_a
+  H10에서 측정한 왼쪽/오른쪽 motor current입니다.
+
+8. USB CDC 데이터
+
+Module ID:
+  0xF0
+
+CDC payload:
+  float32 14채널, 기본 100 Hz입니다.
+
+기본 CSV/채널 순서:
+
+1)  L Encoder   = left_encoder_angle_deg
+2)  R Encoder   = right_encoder_angle_deg
+3)  L Angle     = left_control_angle_deg
+4)  R Angle     = right_control_angle_deg
+5)  L Pulse     = left_pulse_active
+6)  R Pulse     = right_pulse_active
+7)  L Torque    = left_assist_torque_nm
+8)  R Torque    = right_assist_torque_nm
+9)  Threshold   = assist_angle_threshold_deg
+10) Control Req = control_ON
+11) Assist On   = assist_enable
+12) H10 Assist  = assist_mode_active
+13) L Current   = left_motor_current_a
+14) R Current   = right_motor_current_a
+
+9. 학생이 수정하기 좋은 부분
+
+Live Expressions에서 assist_angle_threshold_deg, assist_rearm_angle_deg,
+assist_pulse_duration_ms를 조정합니다.
+left_requested_torque_nm과 right_requested_torque_nm을 보수적으로 조정합니다.
+_UpdateAssistTorque()의 trigger/rearm 비교식을 수정해서 다른 rule을 만들 수 있습니다.
+CDC stream은 STUDENT CDC STREAM CONFIGURATION block 안에서만 수정하세요.
+safety gate, torque clamp, low-level XM 토크 API 호출은 제거하지 마세요.
