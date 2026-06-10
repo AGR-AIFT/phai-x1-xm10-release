@@ -36,3 +36,15 @@
 
 /* 코드 복사 버튼·링크 가독성 미세 조정 */
 .md-typeset a { font-weight: 500; }
+
+/* 그림 캡션 — 라이트/다크 양쪽에서 가독성 보장 (테마 인식 토큰)
+ * 기존 검은색 고정 캡션이 다크 모드에서 묻히던 문제 해결. */
+.md-typeset figure { margin: 1.2em auto; text-align: center; }
+.md-typeset figure img { border-radius: 10px; }
+.md-typeset figcaption {
+  margin-top: 0.6em;
+  max-width: 100%;
+  font-size: 0.82em;
+  font-weight: 600;
+  color: var(--md-default-fg-color--light);
+}
