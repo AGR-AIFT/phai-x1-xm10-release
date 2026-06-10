@@ -1,0 +1,38 @@
+/* =============================================================================
+ * XM10 문서 사이트 — ONE PhAI Design System 토큰 적용 (onephai.com)
+ * Primary #003F87 (phai-blue-700) · 헤딩/본문 Noto Sans KR · accent #427DFF
+ * ========================================================================== */
+
+:root {
+  --md-primary-fg-color:        #003F87; /* phai-blue-700 */
+  --md-primary-fg-color--light: #1a5aa6;
+  --md-primary-fg-color--dark:  #002B6B; /* phai-blue-900 */
+  --md-primary-bg-color:        #ffffff;
+  --md-primary-bg-color--light: #ffffffb3;
+
+  --md-accent-fg-color:         #427DFF; /* 링크 hover·강조 */
+  --md-accent-fg-color--transparent: #427dff1a;
+
+  --md-typeset-a-color:         #003F87; /* 본문 링크 */
+}
+
+/* 라이트 스킴 — ONE PhAI 본문/배경 톤 */
+[data-md-color-scheme="default"] {
+  --md-default-bg-color: #ffffff;
+  --md-default-fg-color: #2d3748;             /* phai-text */
+  --md-default-fg-color--light:  #2d3748b3;
+  --md-code-bg-color:    #f5f7fa;             /* phai secondary bg */
+}
+
+/* 상단 헤더/탭 — 브랜드 네이비 */
+.md-header { background-color: var(--md-primary-fg-color); }
+.md-tabs   { background-color: var(--md-primary-fg-color--dark); }
+
+/* 라운드 — ONE PhAI radius(~10px) 결 */
+.md-typeset pre > code,
+.md-typeset .admonition,
+.md-typeset details,
+.md-typeset table:not([class]) { border-radius: 10px; }
+
+/* 코드 복사 버튼·링크 가독성 미세 조정 */
+.md-typeset a { font-weight: 500; }

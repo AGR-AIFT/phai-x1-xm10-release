@@ -78,6 +78,9 @@ docs/hardware/*
 !docs/hardware/README.md
 !docs/hardware/external-gpio-rev1.1.md
 !docs/hardware/external-gpio-rev2.0.md
+!docs/stylesheets/
+docs/stylesheets/*
+!docs/stylesheets/extra.css
 
 # assets/img/ 는 사용자가 채울 자료. README + 등록된 보드 사진만 추적
 assets/*
