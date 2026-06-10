@@ -89,6 +89,7 @@ typedef enum {
 #### `XmLedMode_t`
 
 LED의 동작 패턴을 결정합니다.
+
 | Mode | Description |
 | :--- | :--- |
 | **`XM_LED_OFF`** | LED를 끕니다. |
@@ -100,6 +101,7 @@ LED의 동작 패턴을 결정합니다.
 #### `XmBtnEvent_t`
 
 버튼 조작을 분석하여 생성된 고수준 이벤트입니다.
+
 | Event | Description |
 | :--- | :--- |
 | `XM_BTN_NONE` | 발생한 이벤트 없음 |

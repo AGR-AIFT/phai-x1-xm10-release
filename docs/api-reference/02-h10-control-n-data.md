@@ -179,6 +179,7 @@ typedef struct {
 ```
 
 강조 표시한 데이터는 현재 받고 있는 데이터 입니다. 추후 추가되거나 수정될 수 있습니다.
+
 | Field Name | Type | Unit | Description |
 | :--- | :--- | :--- | :--- |
 | **`is_connected`** | `bool` | - | H10와의 통신 연결 여부 (`true`: 정상) |
@@ -260,6 +261,7 @@ typedef struct {
 ```
 
 강조 표시한 데이터는 현재 받고 있는 데이터 입니다.
+
 | Field Name | Type | Unit | Description |
 | :--- | :--- | :--- | :--- |
 | **`is_left_grf_connected`** | `bool` | - | 왼쪽 GRF 모듈 연결 상태 |
@@ -299,6 +301,7 @@ typedef struct {
 ```
 
 강조 표시한 데이터는 현재 받고 있는 데이터 입니다.
+
 | Field Name | Type | Unit | Description |
 | :--- | :--- | :--- | :--- |
 | **`is_connected`** | `bool` | - | XSENS IMU 모듈 연결 상태 |
@@ -487,7 +490,7 @@ void Off_Entry(void) {
 ## 데이터 송신 (Data Outputs, Control inputs)
 
 `P-Vector`, `I-Vector`, `F-Vector` (PIF-Vectors)와 다양한 제어 명령을 통해 `KIT H10`의 움직임을 정밀하게 설계할 수 있습니다.
-**PIF-Vector와 같은 사전정의 된 제어 기법의 자세한 내용에 대해서는 `[angel Robotics-Control Algorithm]`(작성 예정)에서 확인할 수 있습니다.**
+**PIF-Vector와 같은 사전정의 된 제어 기법의 자세한 내용에 대해서는 `angel Robotics-Control Algorithm`(작성 예정)에서 확인할 수 있습니다.**
 
 ### `XM_SendPVector()`
 
@@ -495,10 +498,10 @@ void Off_Entry(void) {
 **반드시, `I-Vector`에 의해 사전에 임피던스 제어 파라미터가 설정되어 있어야 합니다.**
 **`P-Vector` 전송시, 모터드라이버에서 5차 polynomial 형태의 위치 궤적을 생성합니다.**
 
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/ebd67c3d-2b5d-4453-b081-c20d8750204d" width="90%" />
-    <p><b>▲ Figure 1. P-Vector 기반 위치 궤적 생성 예시</b></p>
-</div>
+<figure markdown="span">
+  ![P-Vector 기반 위치 궤적](https://github.com/user-attachments/assets/ebd67c3d-2b5d-4453-b081-c20d8750204d){ width="90%" }
+  <figcaption>▲ Figure 1. P-Vector 기반 위치 궤적 생성 예시</figcaption>
+</figure>
 
 
 **Syntax**
@@ -514,6 +517,7 @@ void XM_SendPVector(SystemNodeID_t nodeId, const PVector_t* pVector);
 없음.
 
 **`pVector` 구조체 주요 멤버:**
+
 | 멤버 | 설명 | 단위 | 타입 |
 | :--- | :--- | :--- | :--- |
 | `yd` | 목표 위치 | degree, scaled by 100 | int16_t |
@@ -566,10 +570,10 @@ static void UpdatePassiveMode(void)
 사전에 `kp`와 `kd`의 최대값을 `KIT H10`의 **구동기 최대 토크인 10Nm**와 전체 시스템의 동작을 보면서 **신중히 튜닝**해야 합니다. (`XM_SendIVectorKpKdMax()`)
 **구동기 최대 전류는 14A이고, 모터드라이버 내부 임피던스 제어 입력 생성시 최대 10A에서 Saturation을 수행하도록 되어 있습니다.**
 
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/abd3a1e3-55cd-4f33-b103-52c22d88a4a2" width="90%"/>
-    <p><b>▲ Figure 2. I-Vector(빨강)와 P-Vector(파랑)를 통한 위치 기반 제어 시뮬레이션 예시</b></p>
-</div>
+<figure markdown="span">
+  ![I-Vector·P-Vector 시뮬레이션](https://github.com/user-attachments/assets/abd3a1e3-55cd-4f33-b103-52c22d88a4a2){ width="90%" }
+  <figcaption>▲ Figure 2. I-Vector(빨강)와 P-Vector(파랑)를 통한 위치 기반 제어 시뮬레이션 예시</figcaption>
+</figure>
 
 
 **Syntax**
@@ -585,6 +589,7 @@ void XM_SendIVector(SystemNodeID_t nodeId, const IVector_t* iVector);
 없음.
 
 **`iVector` 구조체 주요 멤버:**
+
 | 멤버 | 설명 | 단위 | 타입 |
 | :--- | :--- | :--- | :--- |
 | `epsilon` | 코리더(Corridor)의 절반 폭 | degree, scaled by 10 | uint8_t |
@@ -610,11 +615,11 @@ static void EnterStandbyMode(void)
 
 **힘 기반 궤적**(`F-Vector`)을 전송하여, **지정된 시간 동안 사전 정의된 토크 궤적을 생성**하도록 명령합니다.
 
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/a39ffb45-f10f-4e61-a1c7-b0f235dbc0c7" width="90%"/>
-    <img src="https://github.com/user-attachments/assets/3560f9a4-d9fa-407e-b9cd-eb24faae42c9" width="90%"/>
-    <p><b>▲ Figure 3. -Vector 기반 힘 궤적 생성 예시</b></p>
-</div>
+<figure markdown="span">
+  ![F-Vector 기반 힘 궤적 1](https://github.com/user-attachments/assets/a39ffb45-f10f-4e61-a1c7-b0f235dbc0c7){ width="90%" }
+  ![F-Vector 기반 힘 궤적 2](https://github.com/user-attachments/assets/3560f9a4-d9fa-407e-b9cd-eb24faae42c9){ width="90%" }
+  <figcaption>▲ Figure 3. F-Vector 기반 힘 궤적 생성 예시</figcaption>
+</figure>
 
 **Syntax**
 ```c
@@ -629,6 +634,7 @@ void XM_SendFVector(SystemNodeID_t nodeId, const FVector_t* fVector);
 없음.
 
 **`fVector` 구조체 주요 멤버:**
+
 | 멤버 | 설명 | 단위 | 타입 |
 | :--- | :--- | :--- | :--- |
 | `modeIdx` | 토크 프로파일 인덱스 | Index (0.1 ~ 10) | uint16_t |
@@ -787,7 +793,7 @@ XM_SetVelocityLimit(SYS_NODE_ID_LH, 100.0f, -100.0f);
 
 사용자가 가하는 힘이나 예상치 못한 외부 힘(외란)을 추정하고 보상하여, 더 부드럽고 안정적인 움직임을 만들어내는 `KIT H10`에 내장된 고급 제어 루틴입니다.
 **`DOB` 기능을 사용하기 위해서는 `KIT H10`의 구동기가 `DOB`기능에 대한 식별(`System Identification`)이 진행되어 모터드라이버의 `DOB` 식별 정보 기록 여부를 확인해야 합니다.(현재 `KIT H10`은 `DOB` 식별을 진행하지 않았음, 추후 변경 예정)**
-**`KIT H10`의 DOB에 대해서는 [`angel Robotics-Control Algorithm`](작성 예정)에서 확인할 수 있습니다.**
+**`KIT H10`의 DOB에 대해서는 `angel Robotics-Control Algorithm`(작성 예정)에서 확인할 수 있습니다.**
 
 **Syntax**
 ```c
@@ -808,7 +814,7 @@ XM_SetDOBRoutine(SYS_NODE_ID_RH, true);
 #### 3. 보상 게인 설정 (Compensation Gain)
 
 `KIT H10`에 내장된 기본 중력/속도 보상 모드의 강도를 조절합니다.
-**`KIT H10`의 보상에 대해서는 [`angel Robotics-Compensation`](작성 예정)에서 확인할 수 있습니다.**
+**`KIT H10`의 보상에 대해서는 `angel Robotics-Compensation`(작성 예정)에서 확인할 수 있습니다.**
 
 **Syntax**
 ```c
@@ -834,10 +840,11 @@ XM_SetResistiveCompGain(SYS_NODE_ID_RH, strongResistance);
 
 ### `XM_SendUserBodyData()`
 
-사용자의 신체 정보(몸무게, 키, 분절 길이 등)를 `KIT H10`로 전송합니다. `KIT H10`은 이 정보를 바탕으로 실시간 동작 분석을 수행하며 더 정확하고 개인화된 보행 데이터 및 운동 역학 데이터를 계산하여 XM10으로 보내줍니다. **`KIT H10`의 실시간 동작 분석의 자세한 내용은 [`GaitAnalysis`](작성 예정)에서 확인할 수 있습니다.**
+사용자의 신체 정보(몸무게, 키, 분절 길이 등)를 `KIT H10`로 전송합니다. `KIT H10`은 이 정보를 바탕으로 실시간 동작 분석을 수행하며 더 정확하고 개인화된 보행 데이터 및 운동 역학 데이터를 계산하여 XM10으로 보내줍니다. **`KIT H10`의 실시간 동작 분석의 자세한 내용은 `GaitAnalysis`(작성 예정)에서 확인할 수 있습니다.**
 **사용자가 직접 신체 정보를 측정하여 `KIT H10`으로 전송해야 합니다.**
 
 **`RxData_t` 구조체 중 신체 정보 기반 데이터:**
+
 | PDO데이터 | 설명 | 단위 | 타입 |
 | :--- | :--- | :--- | :-- |
 | `leftKneeAngle` | **추정된** 왼쪽 무릎 각도 | degree | float |
@@ -855,6 +862,7 @@ void XM_SendUserBodyData(const uint32_t bodyData[8]);
 **Parameters**
 
 `bodyData` 8개의 `uint32_t` 신체 정보를 담은 배열:
+
 | 인덱스 | 설명 | 단위 | 타입 |
 | :--- | :--- | :--- | :-- |
 | `0` | 착용자 몸무게 | g | uint32_t |

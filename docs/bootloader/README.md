@@ -36,6 +36,7 @@ XM10 Extension Module은 **AGR_BOOT V2** 부트로더를 탑재하여 USB를 통
 - Rev1.1 / Rev2.0 **단일 부트로더 바이너리**로 양쪽 HW 지원 (GPIO 자동 감지)
 
 ### 필요한 도구
+
 | 도구 | 용도 | 다운로드 |
 |------|------|----------|
 | **STM32CubeProgrammer** | 부트로더 최초 설치 (SWD/JTAG) | [st.com](https://www.st.com/en/development-tools/stm32cubeprog.html) |

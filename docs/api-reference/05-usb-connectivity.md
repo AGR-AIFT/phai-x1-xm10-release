@@ -321,6 +321,7 @@ PhAI Studio Custom 모드 사용 시, Module ID와 JSON 메타데이터를 등�
 ## 관련 예제
 
 ### CDC (시리얼 통신)
+
 | 예제 | 난이도 | CDC 활용 |
 |------|--------|---------|
 | [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) | 입문 | 디버그 메시지 전송 |
@@ -330,6 +331,7 @@ PhAI Studio Custom 모드 사용 시, Module ID와 JSON 메타데이터를 등�
 | [18_Debug_Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) | 중급 | Health 대시보드 |
 
 ### MSC (데이터 로깅)
+
 | 예제 | 난이도 | MSC 활용 |
 |------|--------|---------|
 | [10_MSC_Manual_log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10_MSC_Manual_log/) | 레거시 | 기본 로깅 (10a 참조) |

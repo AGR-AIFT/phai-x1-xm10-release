@@ -37,10 +37,10 @@ XM10 과 KIT H10 은 통신으로 묶여 있어서 양쪽 펌웨어 버전이 �
 
 KIT H10 의 좌측 구동기 어패럴 안쪽에 숨겨진 **확장 케이블** 을 XM10 의 메인 커넥터에 꽂습니다. 이 한 가닥에 전원 + CAN-FD 통신이 모두 들어있습니다.
 
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/cac2643d-532b-41a6-a680-7fb57d69d2af" width="90%" />
-    <p><b>Figure 1. KIT H10 ↔ XM10 연결</b></p>
-</div>
+<figure markdown="span">
+  ![KIT H10 ↔ XM10 연결](https://github.com/user-attachments/assets/cac2643d-532b-41a6-a680-7fb57d69d2af){ width="90%" }
+  <figcaption>Figure 1. KIT H10 ↔ XM10 연결</figcaption>
+</figure>
 
 **커넥터 핀맵 (Molex 1053081206):**
 
@@ -62,10 +62,10 @@ KIT H10 의 좌측 구동기 어패럴 안쪽에 숨겨진 **확장 케이블** 
 1. ST-Link 디버거 ↔ PC USB 연결
 2. ST-Link 의 SWD 출력 ↔ XM10 의 4-pin SWD 포트 (변환 보드 + SWD 케이블)
 
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/a0fccf85-d6af-4efe-b6ab-615710f34cec" width="60%" />
-    <p><b>Figure 2. ST-Link SWD 핀맵</b></p>
-</div>
+<figure markdown="span">
+  ![ST-Link SWD 핀맵](https://github.com/user-attachments/assets/a0fccf85-d6af-4efe-b6ab-615710f34cec){ width="60%" }
+  <figcaption>Figure 2. ST-Link SWD 핀맵</figcaption>
+</figure>
 
 ✅ 체크: 장치 관리자에서 `STMicroelectronics STLink` 가 인식되는지
 
