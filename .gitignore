@@ -73,6 +73,7 @@ docs/kit-h10-firmware/*
 !docs/bootloader/
 docs/bootloader/*
 !docs/bootloader/README.md
+!docs/bootloader/XM10_부트로더_업로드방법.md
 !docs/hardware/
 docs/hardware/*
 !docs/hardware/README.md
