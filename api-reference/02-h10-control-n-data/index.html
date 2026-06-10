@@ -1716,7 +1716,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../bootloader/XM10_부트로더_업로드방법.md" class="md-nav__link">
+      <a href="../../bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/" class="md-nav__link">
         
   
   
@@ -2785,45 +2785,235 @@ XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 �
 <a id="__codelineno-5-59" name="__codelineno-5-59" href="#__codelineno-5-59"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrZ</span><span class="p">;</span>
 <a id="__codelineno-5-60" name="__codelineno-5-60" href="#__codelineno-5-60"></a><span class="p">}</span><span class="w"> </span><span class="n">XmH10Data_t</span><span class="p">;</span>
 </code></pre></div>
-<p>강조 표시한 데이터는 현재 받고 있는 데이터 입니다. 추후 추가되거나 수정될 수 있습니다.
-| Field Name | Type | Unit | Description |
-| :--- | :--- | :--- | :--- |
-| <strong><code>is_connected</code></strong> | <code>bool</code> | - | H10와의 통신 연결 여부 (<code>true</code>: 정상) |
-| <strong><code>h10AssistModeLoopCnt</code></strong> | <code>uint32_t</code> | - | H10 보조 모드 루프 카운트 |
-| <strong><code>h10Mode</code></strong> | <code>XmH10Mode_t</code> | - | 현재 H10 동작 모드 (<code>STANDBY</code> / <code>ASSIST</code>) |
-| <strong><code>h10AssistLevel</code></strong> | <code>uint8_t</code> | 1\~9 | H10에 설정된 보조 강도 레벨 |
-| <strong><code>isPVectorRHDone</code></strong> | <code>bool</code> | - | RH의 P vector가 완료되었음을 알리는 플래스 |
-| <strong><code>isPVectorLHDone</code></strong> | <code>bool</code> | - | LH의 P vector가 완료되었음을 알리는 플래스 |
-| <strong><code>leftHipAngle</code></strong> | <code>float</code> | deg | 왼쪽 고관절 각도 (Extension \&lt; 0 \&lt; Flexion) |
-| <strong><code>rightHipAngle</code></strong> | <code>float</code> | deg | 오른쪽 고관절 각도 |
-| <strong><code>leftThighAngle</code></strong> | <code>float</code> | deg | 왼쪽 허벅지 절대 각도 (수직 기준) |
-| <strong><code>rightThighAngle</code></strong> | <code>float</code> | deg | 오른쪽 허벅지 절대 각도 |
-| <strong><code>leftKneeAngle</code></strong> | <code>float</code> | deg | 왼쪽 무릎 각도 (추청지) |
-| <strong><code>rightKneeAngle</code></strong> | <code>float</code> | deg | 오른쪽 무릎 각도 (추청지) |
-| <strong><code>pelvicAngle</code></strong> | <code>float</code> | deg | 골반 좌우 기울기 (Tilt) |
-| <strong><code>isLeftFootContact</code></strong> | <code>bool</code> | - | 왼쪽 발 착지 여부 (<code>true</code>: 지면 접촉) |
-| <strong><code>isRightFootContact</code></strong> | <code>bool</code> | - | 오른쪽 발 착지 여부 |
-| <strong><code>forwardVelocity</code></strong> | <code>float</code> | m/s | 전방 속도 (추정치) |
-| <strong><code>leftHipTorque</code></strong> | <code>float</code> | A | 왼쪽 모터 전류 — 필드명과 달리 단위는 <strong>A</strong> (토크 환산 ×1.594 ≈ Nm) |
-| <strong><code>rightHipTorque</code></strong> | <code>float</code> | A | 오른쪽 모터 전류 — 필드명과 달리 단위는 <strong>A</strong> (토크 환산 ×1.594 ≈ Nm) |
-| <strong><code>leftHipMotorAngle</code></strong> | <code>float</code> | deg | 왼쪽 모터 현재 엔코더 각도 (Feedback) |
-| <strong><code>rightHipMotorAngle</code></strong> | <code>float</code> | deg | 오른쪽 모터 현재 엔코더 각도 (Feedback) |
-| <code>leftHipImuFrontalRoll</code> | <code>float</code> | deg | 왼쪽 고관절 IMU Frontal Roll 각도 |
-| <code>rightHipImuFrontalRoll</code> | <code>float</code> | deg | 오른쪽 고관절 IMU Frontal Roll 각도 |
-| <code>leftHipImuSagittalPitch</code> | <code>float</code> | deg | 왼쪽 고관절 IMU Sagittal Pitch 각도 |
-| <code>rightHipImuSagittalPitch</code> | <code>float</code> | deg | 오른쪽 고관절 IMU Sagittal Pitch 각도 |
-| <strong><code>leftHipImuGlobalAccX</code></strong> | <code>float</code> | m/s^2 | 왼쪽 고관절 IMU Global 가속도 X |
-| <strong><code>leftHipImuGlobalAccY</code></strong> | <code>float</code> | m/s^2 | 왼쪽 고관절 IMU Global 가속도 Y |
-| <strong><code>leftHipImuGlobalAccZ</code></strong> | <code>float</code> | m/s^2 | 왼쪽 고관절 IMU Global 가속도 Z |
-| <strong><code>rightHipImuGlobalAccX</code></strong> | <code>float</code> | m/s^2 | 오른쪽 고관절 IMU Global 가속도 X |
-| <strong><code>rightHipImuGlobalAccY</code></strong> | <code>float</code> | m/s^2 | 오른쪽 고관절 IMU Global 가속도 Y |
-| <strong><code>rightHipImuGlobalAccZ</code></strong> | <code>float</code> | m/s^2 | 오른쪽 고관절 IMU Global 가속도 Z |
-| <strong><code>leftHipImuGlobalGyrX</code></strong> | <code>float</code> | deg/s | 왼쪽 고관절 IMU Global 자이로 X |
-| <strong><code>leftHipImuGlobalGyrY</code></strong> | <code>float</code> | deg/s | 왼쪽 고관절 IMU Global 자이로 Y |
-| <strong><code>leftHipImuGlobalGyrZ</code></strong> | <code>float</code> | deg/s | 왼쪽 고관절 IMU Global 자이로 Z |
-| <strong><code>rightHipImuGlobalGyrX</code></strong> | <code>float</code> | deg/s | 오른쪽 고관절 IMU Global 자이로 X |
-| <strong><code>rightHipImuGlobalGyrY</code></strong> | <code>float</code> | deg/s | 오른쪽 고관절 IMU Global 자이로 Y |
-| <strong><code>rightHipImuGlobalGyrZ</code></strong> | <code>float</code> | deg/s | 오른쪽 고관절 IMU Global 자이로 Z |</p>
+<p>강조 표시한 데이터는 현재 받고 있는 데이터 입니다. 추후 추가되거나 수정될 수 있습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field Name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Unit</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>is_connected</code></strong></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">H10와의 통신 연결 여부 (<code>true</code>: 정상)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>h10AssistModeLoopCnt</code></strong></td>
+<td style="text-align: left;"><code>uint32_t</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">H10 보조 모드 루프 카운트</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>h10Mode</code></strong></td>
+<td style="text-align: left;"><code>XmH10Mode_t</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">현재 H10 동작 모드 (<code>STANDBY</code> / <code>ASSIST</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>h10AssistLevel</code></strong></td>
+<td style="text-align: left;"><code>uint8_t</code></td>
+<td style="text-align: left;">1\~9</td>
+<td style="text-align: left;">H10에 설정된 보조 강도 레벨</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>isPVectorRHDone</code></strong></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">RH의 P vector가 완료되었음을 알리는 플래스</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>isPVectorLHDone</code></strong></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">LH의 P vector가 완료되었음을 알리는 플래스</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftHipAngle</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">왼쪽 고관절 각도 (Extension \&lt; 0 \&lt; Flexion)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightHipAngle</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">오른쪽 고관절 각도</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftThighAngle</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">왼쪽 허벅지 절대 각도 (수직 기준)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightThighAngle</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">오른쪽 허벅지 절대 각도</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftKneeAngle</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">왼쪽 무릎 각도 (추청지)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightKneeAngle</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">오른쪽 무릎 각도 (추청지)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>pelvicAngle</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">골반 좌우 기울기 (Tilt)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>isLeftFootContact</code></strong></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">왼쪽 발 착지 여부 (<code>true</code>: 지면 접촉)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>isRightFootContact</code></strong></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">오른쪽 발 착지 여부</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>forwardVelocity</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">m/s</td>
+<td style="text-align: left;">전방 속도 (추정치)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftHipTorque</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">왼쪽 모터 전류 — 필드명과 달리 단위는 <strong>A</strong> (토크 환산 ×1.594 ≈ Nm)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightHipTorque</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">오른쪽 모터 전류 — 필드명과 달리 단위는 <strong>A</strong> (토크 환산 ×1.594 ≈ Nm)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftHipMotorAngle</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">왼쪽 모터 현재 엔코더 각도 (Feedback)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightHipMotorAngle</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">오른쪽 모터 현재 엔코더 각도 (Feedback)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>leftHipImuFrontalRoll</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">왼쪽 고관절 IMU Frontal Roll 각도</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>rightHipImuFrontalRoll</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">오른쪽 고관절 IMU Frontal Roll 각도</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>leftHipImuSagittalPitch</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">왼쪽 고관절 IMU Sagittal Pitch 각도</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>rightHipImuSagittalPitch</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">오른쪽 고관절 IMU Sagittal Pitch 각도</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftHipImuGlobalAccX</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">m/s^2</td>
+<td style="text-align: left;">왼쪽 고관절 IMU Global 가속도 X</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftHipImuGlobalAccY</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">m/s^2</td>
+<td style="text-align: left;">왼쪽 고관절 IMU Global 가속도 Y</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftHipImuGlobalAccZ</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">m/s^2</td>
+<td style="text-align: left;">왼쪽 고관절 IMU Global 가속도 Z</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightHipImuGlobalAccX</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">m/s^2</td>
+<td style="text-align: left;">오른쪽 고관절 IMU Global 가속도 X</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightHipImuGlobalAccY</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">m/s^2</td>
+<td style="text-align: left;">오른쪽 고관절 IMU Global 가속도 Y</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightHipImuGlobalAccZ</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">m/s^2</td>
+<td style="text-align: left;">오른쪽 고관절 IMU Global 가속도 Z</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftHipImuGlobalGyrX</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg/s</td>
+<td style="text-align: left;">왼쪽 고관절 IMU Global 자이로 X</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftHipImuGlobalGyrY</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg/s</td>
+<td style="text-align: left;">왼쪽 고관절 IMU Global 자이로 Y</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftHipImuGlobalGyrZ</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg/s</td>
+<td style="text-align: left;">왼쪽 고관절 IMU Global 자이로 Z</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightHipImuGlobalGyrX</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg/s</td>
+<td style="text-align: left;">오른쪽 고관절 IMU Global 자이로 X</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightHipImuGlobalGyrY</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg/s</td>
+<td style="text-align: left;">오른쪽 고관절 IMU Global 자이로 Y</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightHipImuGlobalGyrZ</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg/s</td>
+<td style="text-align: left;">오른쪽 고관절 IMU Global 자이로 Z</td>
+</tr>
+</tbody>
+</table>
 <h3 id="xm_grf_space_e"><code>XM_GRF_SPACE_e</code><a class="headerlink" href="#xm_grf_space_e" title="Permanent link">&para;</a></h3>
 <p>GRF Module의 왼쪽/오른쪽 연결 id입니다.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
@@ -2857,23 +3047,103 @@ XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 �
 <a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">rightStatusFlags</span><span class="p">;</span>
 <a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="p">}</span><span class="w"> </span><span class="n">XmGrfData_t</span><span class="p">;</span>
 </code></pre></div>
-<p>강조 표시한 데이터는 현재 받고 있는 데이터 입니다.
-| Field Name | Type | Unit | Description |
-| :--- | :--- | :--- | :--- |
-| <strong><code>is_left_grf_connected</code></strong> | <code>bool</code> | - | 왼쪽 GRF 모듈 연결 상태 |
-| <strong><code>is_right_grf_connected</code></strong> | <code>bool</code> | - | 오른쪽 GRF 모듈 연결 상태 |
-| <strong><code>leftLastUpdateTick</code></strong> | <code>uint32_t</code> | ms | 왼쪽 데이터 수신 시각 |
-| <strong><code>leftSensorSpace</code></strong> | <code>XM_GRF_SPACE_e</code> | - | 1=왼발, 2=오른발 |
-| <strong><code>leftRollingIndex</code></strong> | <code>uint8_t</code> | - | 왼쪽 0-199 패킷 시퀀스 |
-| <strong><code>leftSensorData[14]</code></strong> | <code>uint8_t</code> | - | 왼쪽 14개 채널 값 (0~255 Raw Value) |
-| <strong><code>leftBatteryLevel</code></strong> | <code>uint8_t</code> | - | 왼쪽 배터리 잔량 (0~100) |
-| <strong><code>leftStatusFlags</code></strong> | <code>uint8_t</code> | - | 왼쪽 상태 플래그 |
-| <strong><code>rightLastUpdateTick</code></strong> | <code>uint32_t</code> | ms | 오른쪽 데이터 수신 시각 |
-| <strong><code>rightSensorSpace</code></strong> | <code>XM_GRF_SPACE_e</code> | - | 1=왼발, 2=오른발 |
-| <strong><code>rightRollingIndex</code></strong> | <code>uint8_t</code> | - | 오른쪽 0-199 패킷 시퀀스 |
-| <strong><code>rightSensorData[14]</code></strong> | <code>uint8_t</code> | - | 오른쪽 14개 채널 값 (0~255 Raw Value) |
-| <strong><code>rightBatteryLevel</code></strong> | <code>uint8_t</code> | - | 오른쪽 배터리 잔량 (0~100)) |
-| <strong><code>rightStatusFlags</code></strong> | <code>uint8_t</code> | - | 오른쪽 상태 플래그 |</p>
+<p>강조 표시한 데이터는 현재 받고 있는 데이터 입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field Name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Unit</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>is_left_grf_connected</code></strong></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">왼쪽 GRF 모듈 연결 상태</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>is_right_grf_connected</code></strong></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">오른쪽 GRF 모듈 연결 상태</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftLastUpdateTick</code></strong></td>
+<td style="text-align: left;"><code>uint32_t</code></td>
+<td style="text-align: left;">ms</td>
+<td style="text-align: left;">왼쪽 데이터 수신 시각</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftSensorSpace</code></strong></td>
+<td style="text-align: left;"><code>XM_GRF_SPACE_e</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">1=왼발, 2=오른발</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftRollingIndex</code></strong></td>
+<td style="text-align: left;"><code>uint8_t</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">왼쪽 0-199 패킷 시퀀스</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftSensorData[14]</code></strong></td>
+<td style="text-align: left;"><code>uint8_t</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">왼쪽 14개 채널 값 (0~255 Raw Value)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftBatteryLevel</code></strong></td>
+<td style="text-align: left;"><code>uint8_t</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">왼쪽 배터리 잔량 (0~100)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>leftStatusFlags</code></strong></td>
+<td style="text-align: left;"><code>uint8_t</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">왼쪽 상태 플래그</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightLastUpdateTick</code></strong></td>
+<td style="text-align: left;"><code>uint32_t</code></td>
+<td style="text-align: left;">ms</td>
+<td style="text-align: left;">오른쪽 데이터 수신 시각</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightSensorSpace</code></strong></td>
+<td style="text-align: left;"><code>XM_GRF_SPACE_e</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">1=왼발, 2=오른발</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightRollingIndex</code></strong></td>
+<td style="text-align: left;"><code>uint8_t</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">오른쪽 0-199 패킷 시퀀스</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightSensorData[14]</code></strong></td>
+<td style="text-align: left;"><code>uint8_t</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">오른쪽 14개 채널 값 (0~255 Raw Value)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightBatteryLevel</code></strong></td>
+<td style="text-align: left;"><code>uint8_t</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">오른쪽 배터리 잔량 (0~100))</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rightStatusFlags</code></strong></td>
+<td style="text-align: left;"><code>uint8_t</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">오른쪽 상태 플래그</td>
+</tr>
+</tbody>
+</table>
 <h3 id="xmextimudata_t"><code>XmExtImuData_t</code><a class="headerlink" href="#xmextimudata_t" title="Permanent link">&para;</a></h3>
 <p>XSENS IMU(mti-630)의 데이터입니다. <code>XM_AttachXsensMTi630()</code> (필요 시 <code>XM_ConfigureXsensMTi630()</code>) 를 호출해야 사용할 수 있습니다. (하드웨어 연결 필수)
 Rev 1.1 에서는 결합 시 <code>XM_EXT_ADC_1</code>/<code>XM_EXT_ADC_3</code> 핀이 UART 로 전환됩니다. Rev 2.0 은 전용 USART2 포트를 사용하므로 ADC 핀 점유가 없습니다. 자세한 내용은 <a href="../04-external-io/">외부 IO 문서</a> 의 §3.5 를 참고하세요.</p>
@@ -2891,21 +3161,91 @@ Rev 1.1 에서는 결합 시 <code>XM_EXT_ADC_1</code>/<code>XM_EXT_ADC_3</code>
 <a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">gyr_x</span><span class="p">,</span><span class="w"> </span><span class="n">gyr_y</span><span class="p">,</span><span class="w"> </span><span class="n">gyr_z</span><span class="p">;</span>
 <a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="p">}</span><span class="w"> </span><span class="n">XmExtImuData_t</span><span class="p">;</span>
 </code></pre></div>
-<p>강조 표시한 데이터는 현재 받고 있는 데이터 입니다.
-| Field Name | Type | Unit | Description |
-| :--- | :--- | :--- | :--- |
-| <strong><code>is_connected</code></strong> | <code>bool</code> | - | XSENS IMU 모듈 연결 상태 |
-| <strong><code>lastUpdateTick</code></strong> | <code>uint32_t</code> | ms | 데이터 수신 시각 |
-| <strong><code>q_w</code></strong> | <code>float</code> | - | Orientation (Quaternion) w |
-| <strong><code>q_x</code></strong> | <code>float</code> | - | Orientation (Quaternion) x |
-| <strong><code>q_y</code></strong> | <code>float</code> | - | Orientation (Quaternion) y |
-| <strong><code>q_z</code></strong> | <code>float</code> | - | Orientation (Quaternion) z |
-| <strong><code>acc_x</code></strong> | <code>float</code> | m/s^2  | Calibrated Acceleration x |
-| <strong><code>acc_y</code></strong> | <code>float</code> | m/s^2  | Calibrated Acceleration y |
-| <strong><code>acc_z</code></strong> | <code>float</code> | m/s^2 | Calibrated Acceleration z |
-| <strong><code>gyr_x</code></strong> | <code>float</code> | deg/s | Calibrated Gyroscope x |
-| <strong><code>gyr_y</code></strong> | <code>float</code> | deg/s | Calibrated Gyroscope y |
-| <strong><code>gyr_z</code></strong> | <code>float</code> | deg/s | Calibrated Gyroscope z |</p>
+<p>강조 표시한 데이터는 현재 받고 있는 데이터 입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field Name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Unit</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>is_connected</code></strong></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">XSENS IMU 모듈 연결 상태</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>lastUpdateTick</code></strong></td>
+<td style="text-align: left;"><code>uint32_t</code></td>
+<td style="text-align: left;">ms</td>
+<td style="text-align: left;">데이터 수신 시각</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>q_w</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Orientation (Quaternion) w</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>q_x</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Orientation (Quaternion) x</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>q_y</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Orientation (Quaternion) y</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>q_z</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Orientation (Quaternion) z</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>acc_x</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">m/s^2</td>
+<td style="text-align: left;">Calibrated Acceleration x</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>acc_y</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">m/s^2</td>
+<td style="text-align: left;">Calibrated Acceleration y</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>acc_z</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">m/s^2</td>
+<td style="text-align: left;">Calibrated Acceleration z</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>gyr_x</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg/s</td>
+<td style="text-align: left;">Calibrated Gyroscope x</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>gyr_y</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg/s</td>
+<td style="text-align: left;">Calibrated Gyroscope y</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>gyr_z</code></strong></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">deg/s</td>
+<td style="text-align: left;">Calibrated Gyroscope z</td>
+</tr>
+</tbody>
+</table>
 <h3 id="xminput_t"><code>XmInput_t</code><a class="headerlink" href="#xminput_t" title="Permanent link">&para;</a></h3>
 <p>로봇 상태 통합 구조체로서 XM.status를 통해 이 구조체에 접근합니다.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
@@ -3078,16 +3418,16 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 <hr />
 <h2 id="데이터-송신-data-outputs-control-inputs">데이터 송신 (Data Outputs, Control inputs)<a class="headerlink" href="#데이터-송신-data-outputs-control-inputs" title="Permanent link">&para;</a></h2>
 <p><code>P-Vector</code>, <code>I-Vector</code>, <code>F-Vector</code> (PIF-Vectors)와 다양한 제어 명령을 통해 <code>KIT H10</code>의 움직임을 정밀하게 설계할 수 있습니다.
-<strong>PIF-Vector와 같은 사전정의 된 제어 기법의 자세한 내용에 대해서는 <code>[angel Robotics-Control Algorithm]</code>(작성 예정)에서 확인할 수 있습니다.</strong></p>
+<strong>PIF-Vector와 같은 사전정의 된 제어 기법의 자세한 내용에 대해서는 <code>angel Robotics-Control Algorithm</code>(작성 예정)에서 확인할 수 있습니다.</strong></p>
 <h3 id="xm_sendpvector"><code>XM_SendPVector()</code><a class="headerlink" href="#xm_sendpvector" title="Permanent link">&para;</a></h3>
 <p><strong>위치 기반 궤적</strong>(<code>P-Vector</code>)을 전송하여, 지정된 시간 동안 목표 위치까지 부드러운 궤적을 그리며 움직이도록 명령합니다.
 <strong>반드시, <code>I-Vector</code>에 의해 사전에 임피던스 제어 파라미터가 설정되어 있어야 합니다.</strong>
 <strong><code>P-Vector</code> 전송시, 모터드라이버에서 5차 polynomial 형태의 위치 궤적을 생성합니다.</strong></p>
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/ebd67c3d-2b5d-4453-b081-c20d8750204d" width="90%" />
-    <p><b>▲ Figure 1. P-Vector 기반 위치 궤적 생성 예시</b></p>
-</div>
-
+<figure>
+  <img alt="P-Vector 기반 위치 궤적" src="https://github.com/user-attachments/assets/ebd67c3d-2b5d-4453-b081-c20d8750204d" width="90%" />
+<br />
+<figcaption>▲ Figure 1. P-Vector 기반 위치 궤적 생성 예시</figcaption>
+</figure>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendPVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">PVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">pVector</span><span class="p">);</span>
 </code></pre></div></p>
@@ -3096,13 +3436,43 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 - <code>pVector</code>: 목표 위치(<code>yd</code>), 이동 시간(<code>L</code>), 시작 가속도(<code>s0</code>), 끝 감속도(<code>sd</code>) 정보가 담긴 <code>PVector_t</code> 구조체의 포인터.</p>
 <p><strong>Returns</strong>
 없음.</p>
-<p><strong><code>pVector</code> 구조체 주요 멤버:</strong>
-| 멤버 | 설명 | 단위 | 타입 |
-| :--- | :--- | :--- | :--- |
-| <code>yd</code> | 목표 위치 | degree, scaled by 100 | int16_t |
-| <code>L</code> | 이동 시간 | ms | uint16_t |
-| <code>s0</code>| 시작 가속도 | deg/s^2 | uint8_t |
-| <code>sd</code> | 끝 감속도 | deg/s^2 | uint8_t |</p>
+<p><strong><code>pVector</code> 구조체 주요 멤버:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">멤버</th>
+<th style="text-align: left;">설명</th>
+<th style="text-align: left;">단위</th>
+<th style="text-align: left;">타입</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>yd</code></td>
+<td style="text-align: left;">목표 위치</td>
+<td style="text-align: left;">degree, scaled by 100</td>
+<td style="text-align: left;">int16_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>L</code></td>
+<td style="text-align: left;">이동 시간</td>
+<td style="text-align: left;">ms</td>
+<td style="text-align: left;">uint16_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>s0</code></td>
+<td style="text-align: left;">시작 가속도</td>
+<td style="text-align: left;">deg/s^2</td>
+<td style="text-align: left;">uint8_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>sd</code></td>
+<td style="text-align: left;">끝 감속도</td>
+<td style="text-align: left;">deg/s^2</td>
+<td style="text-align: left;">uint8_t</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Example</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdatePassiveMode</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
 <a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="p">{</span>
@@ -3144,11 +3514,11 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 <p><strong>임피던스 제어 파라미터</strong>(<code>I-Vector</code>)를 전송하여, 로봇 관절이 마치 용수철이나 댐퍼처럼 동작하도록 설정합니다.
 사전에 <code>kp</code>와 <code>kd</code>의 최대값을 <code>KIT H10</code>의 <strong>구동기 최대 토크인 10Nm</strong>와 전체 시스템의 동작을 보면서 <strong>신중히 튜닝</strong>해야 합니다. (<code>XM_SendIVectorKpKdMax()</code>)
 <strong>구동기 최대 전류는 14A이고, 모터드라이버 내부 임피던스 제어 입력 생성시 최대 10A에서 Saturation을 수행하도록 되어 있습니다.</strong></p>
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/abd3a1e3-55cd-4f33-b103-52c22d88a4a2" width="90%"/>
-    <p><b>▲ Figure 2. I-Vector(빨강)와 P-Vector(파랑)를 통한 위치 기반 제어 시뮬레이션 예시</b></p>
-</div>
-
+<figure>
+  <img alt="I-Vector·P-Vector 시뮬레이션" src="https://github.com/user-attachments/assets/abd3a1e3-55cd-4f33-b103-52c22d88a4a2" width="90%" />
+<br />
+<figcaption>▲ Figure 2. I-Vector(빨강)와 P-Vector(파랑)를 통한 위치 기반 제어 시뮬레이션 예시</figcaption>
+</figure>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendIVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">IVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">iVector</span><span class="p">);</span>
 </code></pre></div></p>
@@ -3157,14 +3527,49 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 - <code>iVector</code>: 임피던스 파라미터(Stiffness <code>kP</code>, Damping <code>kD</code> 등)가 담긴 <code>IVector_t</code> 구조체의 포인터.</p>
 <p><strong>Returns</strong>
 없음.</p>
-<p><strong><code>iVector</code> 구조체 주요 멤버:</strong>
-| 멤버 | 설명 | 단위 | 타입 |
-| :--- | :--- | :--- | :--- |
-| <code>epsilon</code> | 코리더(Corridor)의 절반 폭 | degree, scaled by 10 | uint8_t |
-| <code>kp</code> | 가상 스프링 강도 | % | uint8_t |
-| <code>kd</code>| 가상 댐퍼 강도 | % | uint8_t |
-| <code>lambda</code> | 임피던스 비율 | ratio, scaled by 100 | uint8_t |
-| <code>duration</code>| 전환 시간 | ms | uint16_t |</p>
+<p><strong><code>iVector</code> 구조체 주요 멤버:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">멤버</th>
+<th style="text-align: left;">설명</th>
+<th style="text-align: left;">단위</th>
+<th style="text-align: left;">타입</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>epsilon</code></td>
+<td style="text-align: left;">코리더(Corridor)의 절반 폭</td>
+<td style="text-align: left;">degree, scaled by 10</td>
+<td style="text-align: left;">uint8_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>kp</code></td>
+<td style="text-align: left;">가상 스프링 강도</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: left;">uint8_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>kd</code></td>
+<td style="text-align: left;">가상 댐퍼 강도</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: left;">uint8_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>lambda</code></td>
+<td style="text-align: left;">임피던스 비율</td>
+<td style="text-align: left;">ratio, scaled by 100</td>
+<td style="text-align: left;">uint8_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>duration</code></td>
+<td style="text-align: left;">전환 시간</td>
+<td style="text-align: left;">ms</td>
+<td style="text-align: left;">uint16_t</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Example</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">EnterStandbyMode</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
 <a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="p">{</span>
@@ -3178,12 +3583,12 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 </code></pre></div></p>
 <h3 id="xm_sendfvector"><code>XM_SendFVector()</code><a class="headerlink" href="#xm_sendfvector" title="Permanent link">&para;</a></h3>
 <p><strong>힘 기반 궤적</strong>(<code>F-Vector</code>)을 전송하여, <strong>지정된 시간 동안 사전 정의된 토크 궤적을 생성</strong>하도록 명령합니다.</p>
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/a39ffb45-f10f-4e61-a1c7-b0f235dbc0c7" width="90%"/>
-    <img src="https://github.com/user-attachments/assets/3560f9a4-d9fa-407e-b9cd-eb24faae42c9" width="90%"/>
-    <p><b>▲ Figure 3. -Vector 기반 힘 궤적 생성 예시</b></p>
-</div>
-
+<figure>
+  <img alt="F-Vector 기반 힘 궤적 1" src="https://github.com/user-attachments/assets/a39ffb45-f10f-4e61-a1c7-b0f235dbc0c7" width="90%" />
+  <img alt="F-Vector 기반 힘 궤적 2" src="https://github.com/user-attachments/assets/3560f9a4-d9fa-407e-b9cd-eb24faae42c9" width="90%" />
+<br />
+<figcaption>▲ Figure 3. F-Vector 기반 힘 궤적 생성 예시</figcaption>
+</figure>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendFVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">FVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">fVector</span><span class="p">);</span>
 </code></pre></div></p>
@@ -3192,13 +3597,43 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 - <code>fVector</code>: 목표 토크(<code>tauMax</code>), 모드(<code>modeIdx</code>) 등의 정보가 담긴 <code>FVector_t</code> 구조체의 포인터.</p>
 <p><strong>Returns</strong>
 없음.</p>
-<p><strong><code>fVector</code> 구조체 주요 멤버:</strong>
-| 멤버 | 설명 | 단위 | 타입 |
-| :--- | :--- | :--- | :--- |
-| <code>modeIdx</code> | 토크 프로파일 인덱스 | Index (0.1 ~ 10) | uint16_t |
-| <code>tauMax</code> | 최대 토크 | A, scaled by 100    | int16_t |
-| <code>delay</code>| 초기 지연 시간 | ms | uint16_t |
-| <code>zero</code> | 리셋을 위한 더미 데이터 | - | uint16_t |</p>
+<p><strong><code>fVector</code> 구조체 주요 멤버:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">멤버</th>
+<th style="text-align: left;">설명</th>
+<th style="text-align: left;">단위</th>
+<th style="text-align: left;">타입</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>modeIdx</code></td>
+<td style="text-align: left;">토크 프로파일 인덱스</td>
+<td style="text-align: left;">Index (0.1 ~ 10)</td>
+<td style="text-align: left;">uint16_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tauMax</code></td>
+<td style="text-align: left;">최대 토크</td>
+<td style="text-align: left;">A, scaled by 100</td>
+<td style="text-align: left;">int16_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>delay</code></td>
+<td style="text-align: left;">초기 지연 시간</td>
+<td style="text-align: left;">ms</td>
+<td style="text-align: left;">uint16_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>zero</code></td>
+<td style="text-align: left;">리셋을 위한 더미 데이터</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">uint16_t</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Example</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">(</span><span class="n">작성</span><span class="w"> </span><span class="n">예정</span><span class="p">)</span>
 </code></pre></div></p>
@@ -3314,7 +3749,7 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 <h4 id="2-외란-관측기-disturbance-observer">2. 외란 관측기 (Disturbance Observer)<a class="headerlink" href="#2-외란-관측기-disturbance-observer" title="Permanent link">&para;</a></h4>
 <p>사용자가 가하는 힘이나 예상치 못한 외부 힘(외란)을 추정하고 보상하여, 더 부드럽고 안정적인 움직임을 만들어내는 <code>KIT H10</code>에 내장된 고급 제어 루틴입니다.
 <strong><code>DOB</code> 기능을 사용하기 위해서는 <code>KIT H10</code>의 구동기가 <code>DOB</code>기능에 대한 식별(<code>System Identification</code>)이 진행되어 모터드라이버의 <code>DOB</code> 식별 정보 기록 여부를 확인해야 합니다.(현재 <code>KIT H10</code>은 <code>DOB</code> 식별을 진행하지 않았음, 추후 변경 예정)</strong>
-<strong><code>KIT H10</code>의 DOB에 대해서는 <a href="작성 예정"><code>angel Robotics-Control Algorithm</code></a>에서 확인할 수 있습니다.</strong></p>
+<strong><code>KIT H10</code>의 DOB에 대해서는 <code>angel Robotics-Control Algorithm</code>(작성 예정)에서 확인할 수 있습니다.</strong></p>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDOBRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
 </code></pre></div></p>
@@ -3327,7 +3762,7 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 <hr />
 <h4 id="3-보상-게인-설정-compensation-gain">3. 보상 게인 설정 (Compensation Gain)<a class="headerlink" href="#3-보상-게인-설정-compensation-gain" title="Permanent link">&para;</a></h4>
 <p><code>KIT H10</code>에 내장된 기본 중력/속도 보상 모드의 강도를 조절합니다.
-<strong><code>KIT H10</code>의 보상에 대해서는 <a href="작성 예정"><code>angel Robotics-Compensation</code></a>에서 확인할 수 있습니다.</strong></p>
+<strong><code>KIT H10</code>의 보상에 대해서는 <code>angel Robotics-Compensation</code>(작성 예정)에서 확인할 수 있습니다.</strong></p>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="c1">// 일반 보상 게인 설정 (중력 보상 등)</span>
 <a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetNormalCompGain</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">gain</span><span class="p">);</span>
@@ -3345,32 +3780,122 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 </code></pre></div></p>
 <hr />
 <h3 id="xm_senduserbodydata"><code>XM_SendUserBodyData()</code><a class="headerlink" href="#xm_senduserbodydata" title="Permanent link">&para;</a></h3>
-<p>사용자의 신체 정보(몸무게, 키, 분절 길이 등)를 <code>KIT H10</code>로 전송합니다. <code>KIT H10</code>은 이 정보를 바탕으로 실시간 동작 분석을 수행하며 더 정확하고 개인화된 보행 데이터 및 운동 역학 데이터를 계산하여 XM10으로 보내줍니다. <strong><code>KIT H10</code>의 실시간 동작 분석의 자세한 내용은 <a href="작성 예정"><code>GaitAnalysis</code></a>에서 확인할 수 있습니다.</strong>
+<p>사용자의 신체 정보(몸무게, 키, 분절 길이 등)를 <code>KIT H10</code>로 전송합니다. <code>KIT H10</code>은 이 정보를 바탕으로 실시간 동작 분석을 수행하며 더 정확하고 개인화된 보행 데이터 및 운동 역학 데이터를 계산하여 XM10으로 보내줍니다. <strong><code>KIT H10</code>의 실시간 동작 분석의 자세한 내용은 <code>GaitAnalysis</code>(작성 예정)에서 확인할 수 있습니다.</strong>
 <strong>사용자가 직접 신체 정보를 측정하여 <code>KIT H10</code>으로 전송해야 합니다.</strong></p>
-<p><strong><code>RxData_t</code> 구조체 중 신체 정보 기반 데이터:</strong>
-| PDO데이터 | 설명 | 단위 | 타입 |
-| :--- | :--- | :--- | :-- |
-| <code>leftKneeAngle</code> | <strong>추정된</strong> 왼쪽 무릎 각도 | degree | float |
-| <code>rightKneeAngle</code> | <strong>추정된</strong> 오른쪽 무릎 각도 | degree | float |
-| <code>isLeftFootContact</code>| 왼쪽 발 접지 여부 | - | bool |
-| <code>isRightFootContact</code> | 오른쪽 발 접지 여부 | - | bool |
-| <code>forwardVelocity</code>| <strong>추정된</strong> 전진 속도 | m/s | float |
-...</p>
+<p><strong><code>RxData_t</code> 구조체 중 신체 정보 기반 데이터:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">PDO데이터</th>
+<th style="text-align: left;">설명</th>
+<th style="text-align: left;">단위</th>
+<th style="text-align: left;">타입</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>leftKneeAngle</code></td>
+<td style="text-align: left;"><strong>추정된</strong> 왼쪽 무릎 각도</td>
+<td style="text-align: left;">degree</td>
+<td style="text-align: left;">float</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>rightKneeAngle</code></td>
+<td style="text-align: left;"><strong>추정된</strong> 오른쪽 무릎 각도</td>
+<td style="text-align: left;">degree</td>
+<td style="text-align: left;">float</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>isLeftFootContact</code></td>
+<td style="text-align: left;">왼쪽 발 접지 여부</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">bool</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>isRightFootContact</code></td>
+<td style="text-align: left;">오른쪽 발 접지 여부</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">bool</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>forwardVelocity</code></td>
+<td style="text-align: left;"><strong>추정된</strong> 전진 속도</td>
+<td style="text-align: left;">m/s</td>
+<td style="text-align: left;">float</td>
+</tr>
+<tr>
+<td style="text-align: left;">...</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendUserBodyData</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">bodyData</span><span class="p">[</span><span class="mi">8</span><span class="p">]);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong></p>
-<p><code>bodyData</code> 8개의 <code>uint32_t</code> 신체 정보를 담은 배열:
-| 인덱스 | 설명 | 단위 | 타입 |
-| :--- | :--- | :--- | :-- |
-| <code>0</code> | 착용자 몸무게 | g | uint32_t |
-| <code>1</code> | 착용자 키 | mm | uint32_t |
-| <code>2</code>| 착용자 오른쪽 허벅지 분절 길이 | mm | uint32_t |
-| <code>3</code> | 착용자 왼쪽 허벅지 분절 길이 | mm | uint32_t |
-| <code>4</code>| 착용자 오른쪽 종아리 분절 길이 | mm | uint32_t |
-| <code>5</code> | 착용자 왼쪽 종아리 분절 길이 | mm | uint32_t |
-| <code>6</code>| 착용자 오른쪽 발목 분절 길이 | mm | uint32_t |
-| <code>7</code> | 착용자 왼쪽 종아리 분절 길이 | mm | uint32_t |</p>
+<p><code>bodyData</code> 8개의 <code>uint32_t</code> 신체 정보를 담은 배열:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">인덱스</th>
+<th style="text-align: left;">설명</th>
+<th style="text-align: left;">단위</th>
+<th style="text-align: left;">타입</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;">착용자 몸무게</td>
+<td style="text-align: left;">g</td>
+<td style="text-align: left;">uint32_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>1</code></td>
+<td style="text-align: left;">착용자 키</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">uint32_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>2</code></td>
+<td style="text-align: left;">착용자 오른쪽 허벅지 분절 길이</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">uint32_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>3</code></td>
+<td style="text-align: left;">착용자 왼쪽 허벅지 분절 길이</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">uint32_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>4</code></td>
+<td style="text-align: left;">착용자 오른쪽 종아리 분절 길이</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">uint32_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>5</code></td>
+<td style="text-align: left;">착용자 왼쪽 종아리 분절 길이</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">uint32_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>6</code></td>
+<td style="text-align: left;">착용자 오른쪽 발목 분절 길이</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">uint32_t</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>7</code></td>
+<td style="text-align: left;">착용자 왼쪽 종아리 분절 길이</td>
+<td style="text-align: left;">mm</td>
+<td style="text-align: left;">uint32_t</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Example</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="c1">// 신체 정보를 입력하고 CM에 전송합니다.</span>
 <a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">73000</span><span class="p">;</span><span class="w"> </span><span class="c1">// 73kg</span>

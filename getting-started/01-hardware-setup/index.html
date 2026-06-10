@@ -1317,7 +1317,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../bootloader/XM10_부트로더_업로드방법.md" class="md-nav__link">
+      <a href="../../bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/" class="md-nav__link">
         
   
   
@@ -1895,11 +1895,11 @@
 <h2 id="연결-순서">연결 순서<a class="headerlink" href="#연결-순서" title="Permanent link">&para;</a></h2>
 <h3 id="1-kit-h10--xm10">1. KIT H10 ↔ XM10<a class="headerlink" href="#1-kit-h10--xm10" title="Permanent link">&para;</a></h3>
 <p>KIT H10 의 좌측 구동기 어패럴 안쪽에 숨겨진 <strong>확장 케이블</strong> 을 XM10 의 메인 커넥터에 꽂습니다. 이 한 가닥에 전원 + CAN-FD 통신이 모두 들어있습니다.</p>
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/cac2643d-532b-41a6-a680-7fb57d69d2af" width="90%" />
-    <p><b>Figure 1. KIT H10 ↔ XM10 연결</b></p>
-</div>
-
+<figure>
+  <img alt="KIT H10 ↔ XM10 연결" src="https://github.com/user-attachments/assets/cac2643d-532b-41a6-a680-7fb57d69d2af" width="90%" />
+<br />
+<figcaption>Figure 1. KIT H10 ↔ XM10 연결</figcaption>
+</figure>
 <p><strong>커넥터 핀맵 (Molex 1053081206):</strong></p>
 <table>
 <thead>
@@ -1942,11 +1942,11 @@
 <li>ST-Link 디버거 ↔ PC USB 연결</li>
 <li>ST-Link 의 SWD 출력 ↔ XM10 의 4-pin SWD 포트 (변환 보드 + SWD 케이블)</li>
 </ol>
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/a0fccf85-d6af-4efe-b6ab-615710f34cec" width="60%" />
-    <p><b>Figure 2. ST-Link SWD 핀맵</b></p>
-</div>
-
+<figure>
+  <img alt="ST-Link SWD 핀맵" src="https://github.com/user-attachments/assets/a0fccf85-d6af-4efe-b6ab-615710f34cec" width="60%" />
+<br />
+<figcaption>Figure 2. ST-Link SWD 핀맵</figcaption>
+</figure>
 <p>✅ 체크: 장치 관리자에서 <code>STMicroelectronics STLink</code> 가 인식되는지</p>
 <h3 id="3-센서-허브-선택">3. 센서 허브 (선택)<a class="headerlink" href="#3-센서-허브-선택" title="Permanent link">&para;</a></h3>
 <p>EMG, 발 접지 (GRF), FSR 같은 센서를 쓰려면 센서 허브 보드를 XM10 의 확장 포트에 추가로 연결합니다. Ex.07 이전까지는 없어도 됩니다.</p>

@@ -1541,7 +1541,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../bootloader/XM10_부트로더_업로드방법.md" class="md-nav__link">
+      <a href="../../bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/" class="md-nav__link">
         
   
   
@@ -2338,23 +2338,69 @@ XM10 펌웨어는 사용자가 복잡한 타이머 인터럽트나 디바운싱(
 <hr />
 <h3 id="23-modes--events-모드-및-이벤트">2.3. Modes &amp; Events (모드 및 이벤트)<a class="headerlink" href="#23-modes--events-모드-및-이벤트" title="Permanent link">&para;</a></h3>
 <h4 id="xmledmode_t"><code>XmLedMode_t</code><a class="headerlink" href="#xmledmode_t" title="Permanent link">&para;</a></h4>
-<p>LED의 동작 패턴을 결정합니다.
-| Mode | Description |
-| :--- | :--- |
-| <strong><code>XM_LED_OFF</code></strong> | LED를 끕니다. |
-| <strong><code>XM_LED_SOLID</code></strong> | LED를 계속 켭니다. |
-| <strong><code>XM_LED_BLINK</code></strong> | 일정 주기(Period)로 깜빡입니다. (50% Duty) |
-| <strong><code>XM_LED_HEARTBEAT</code></strong> | 심장 박동처럼 두 번 빠르게 깜빡입니다. (두근-두근) |
-| <strong><code>XM_LED_ONESHOT</code></strong> | 설정한 시간만큼 한 번 켜졌다가 자동으로 꺼집니다. (알림용) |</p>
+<p>LED의 동작 패턴을 결정합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Mode</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>XM_LED_OFF</code></strong></td>
+<td style="text-align: left;">LED를 끕니다.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>XM_LED_SOLID</code></strong></td>
+<td style="text-align: left;">LED를 계속 켭니다.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>XM_LED_BLINK</code></strong></td>
+<td style="text-align: left;">일정 주기(Period)로 깜빡입니다. (50% Duty)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>XM_LED_HEARTBEAT</code></strong></td>
+<td style="text-align: left;">심장 박동처럼 두 번 빠르게 깜빡입니다. (두근-두근)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>XM_LED_ONESHOT</code></strong></td>
+<td style="text-align: left;">설정한 시간만큼 한 번 켜졌다가 자동으로 꺼집니다. (알림용)</td>
+</tr>
+</tbody>
+</table>
 <h4 id="xmbtnevent_t"><code>XmBtnEvent_t</code><a class="headerlink" href="#xmbtnevent_t" title="Permanent link">&para;</a></h4>
-<p>버튼 조작을 분석하여 생성된 고수준 이벤트입니다.
-| Event | Description |
-| :--- | :--- |
-| <code>XM_BTN_NONE</code> | 발생한 이벤트 없음 |
-| <code>XM_BTN_PRESSED</code> | 버튼을 막 누른 순간 (Rising Edge) |
-| <code>XM_BTN_RELEASED</code> | 버튼을 막 뗀 순간 (Falling Edge) |
-| <strong><code>XM_BTN_CLICK</code></strong> | 짧게 눌렀다 뗌 (클릭) |
-| <strong><code>XM_BTN_LONG_PRESS</code></strong> | 1초 이상 길게 누름 (모드 변경 등에 사용) |</p>
+<p>버튼 조작을 분석하여 생성된 고수준 이벤트입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Event</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>XM_BTN_NONE</code></td>
+<td style="text-align: left;">발생한 이벤트 없음</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>XM_BTN_PRESSED</code></td>
+<td style="text-align: left;">버튼을 막 누른 순간 (Rising Edge)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>XM_BTN_RELEASED</code></td>
+<td style="text-align: left;">버튼을 막 뗀 순간 (Falling Edge)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>XM_BTN_CLICK</code></strong></td>
+<td style="text-align: left;">짧게 눌렀다 뗌 (클릭)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>XM_BTN_LONG_PRESS</code></strong></td>
+<td style="text-align: left;">1초 이상 길게 누름 (모드 변경 등에 사용)</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="3-함수-상세-function-reference">3. 함수 상세 (Function Reference)<a class="headerlink" href="#3-함수-상세-function-reference" title="Permanent link">&para;</a></h2>
 <h3 id="31-led-control-functions">3.1. LED Control Functions<a class="headerlink" href="#31-led-control-functions" title="Permanent link">&para;</a></h3>

@@ -127,6 +127,13 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/bootloader/"/>
     </url>
     <url>
+        <loc>https://agr-exo.github.io/Extension_Module/bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/</loc>
+        <lastmod>2026-06-10</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/"/>
+    </url>
+    <url>
         <loc>https://agr-exo.github.io/Extension_Module/getting-started/00-claude-code-quickstart/</loc>
         <lastmod>2026-06-10</lastmod>
         <changefreq>daily</changefreq>
@@ -349,6 +356,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/bootloader/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/bootloader/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/</loc>
+        <lastmod>2026-06-10</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/getting-started/00-claude-code-quickstart/</loc>
