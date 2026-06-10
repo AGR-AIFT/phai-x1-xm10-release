@@ -15,8 +15,8 @@ Ex.00 (Quick Start) 은 그 사이클을 가장 짧게 도는 예제입니다. �
 
 | 위치 | 역할 | 사용자 수정 |
 |------|------|----------|
-| `XM_Apps/User_Algorithm/user_app.c` | 메인 사용자 코드 (`User_Setup()` + `User_Loop()`) | ✅ 자유롭게 수정 |
-| `examples/<번호>_<이름>/*.c` | 학습용 예제 (40개+) | ✅ 복사해서 user_app.c 자리에 붙여넣기 |
+| `XM_Apps/Control_Task/control_task.c` | 메인 사용자 코드 (`Control_Setup()` + `Control_Loop()`) | ✅ 자유롭게 수정 |
+| `examples/<번호>_<이름>/*.c` | 학습용 예제 (40개+) | ✅ 복사해서 control_task.c 자리에 붙여넣기 |
 | `XM_FW/XM_API/` | 공개 API 헤더 (`xm_api.h` umbrella) | ❌ 봉인 (호출만) |
 | `XM_Lib/`, `Drivers/`, `Middlewares/` | 라이브러리 | ❌ 봉인 |
 
@@ -30,9 +30,9 @@ C:\dev\Extension_Module\examples\00_Quick_Start\quick_start.c
 
 또는 CubeIDE Project Explorer 에서 동일 경로 탐색.
 
-### 2. user_app.c 에 적용
+### 2. control_task.c 에 적용
 
-Ex.00 의 `User_Setup()` + `User_Loop()` 본문을 복사해서 `XM_Apps/User_Algorithm/user_app.c` 에 붙여넣기.
+Ex.00 의 `Control_Setup()` + `Control_Loop()` 본문을 복사해서 `XM_Apps/Control_Task/control_task.c` 에 붙여넣기.
 (또는 `examples/00_Quick_Start/` 폴더 자체를 CubeIDE 빌드 대상으로 추가 — 자세한 방법은 예제 README 참조)
 
 ### 3. 빌드 + 플래시 사이클 (Phase 3 + 4 반복)

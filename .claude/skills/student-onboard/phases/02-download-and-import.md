@@ -27,7 +27,7 @@ ZIP 안에는 **본인 Rev SDK 한 벌이 ZIP root 에 평탄화** 되어 있습
 먼저 본인 보드의 리비전을 확인하세요:
 - **보드 라벨**: PCB 표면 또는 박스 라벨에 `Rev 1.1` 또는 `Rev 2.0` 표기
 - **외관 차이**: RJ45 Ethernet 포트가 있으면 Rev 2.0, 없으면 Rev 1.1
-- 모호하면 → [docs/architecture/](../../../docs/architecture/) Rev 비교표
+- 모호하면 → [docs/hardware/README.md - 보드 리비전 비교](../../../docs/hardware/README.md#보드-리비전-비교)
 
 ### 2. SDK ZIP 다운로드
 
