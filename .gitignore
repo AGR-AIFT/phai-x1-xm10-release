@@ -83,6 +83,40 @@ docs/hardware/*
 docs/stylesheets/*
 !docs/stylesheets/extra.css
 
+# 영문 번역본 (.en.md) — i18n 한/영 토글용. 위 .md 화이트리스트와 동일 정책.
+!docs/README.en.md
+!docs/find-it.en.md
+!docs/troubleshooting.en.md
+!docs/getting-started/00-claude-code-quickstart.en.md
+!docs/getting-started/01-hardware-setup.en.md
+!docs/getting-started/02-software-setup.en.md
+!docs/getting-started/03-first-build.en.md
+!docs/hardware/README.en.md
+!docs/hardware/external-gpio-rev1.1.en.md
+!docs/hardware/external-gpio-rev2.0.en.md
+!docs/tutorials/README.en.md
+!docs/api-reference/README.en.md
+!docs/api-reference/01-task-state-machine.en.md
+!docs/api-reference/02-h10-control-n-data.en.md
+!docs/api-reference/03-led-btn-control.en.md
+!docs/api-reference/04-external-io.en.md
+!docs/api-reference/05-usb-connectivity.en.md
+!docs/api-reference/06-usb-data-logging.en.md
+!docs/api-reference/07-memory-management.en.md
+!docs/api-reference/08-rtc-clock.en.md
+!docs/api-reference/09-task-creation.en.md
+!docs/architecture/README.en.md
+!docs/kit-h10-firmware/README.en.md
+!docs/bootloader/README.en.md
+!docs/bootloader/XM10_부트로더_업로드방법.en.md
+!docs/advanced/README.en.md
+!docs/advanced/ai-data-pipeline.en.md
+!docs/release-notes/README.en.md
+!docs/release-notes/v2.1.1.en.md
+!docs/release-notes/v2.2.0.en.md
+!docs/release-notes/v2.2.1.en.md
+!docs/release-notes/v2.2.2.en.md
+
 # assets/img/ 는 사용자가 채울 자료. README + 등록된 보드 사진만 추적
 assets/*
 !assets/img/

@@ -73,6 +73,38 @@ plugins:
         - locale: en
           name: English
           build: true
+          # 사이드바/탭 라벨 영문화 (.en.md 본문 번역과 별개로 nav 제목 매핑)
+          nav_translations:
+            홈: Home
+            빠른 찾기: Quick Find
+            시작하기: Getting Started
+            하드웨어 연결: Hardware Setup
+            개발 환경 구축: Development Setup
+            첫 빌드: First Build
+            Claude Code 와 함께 시작: Start with Claude Code
+            하드웨어: Hardware
+            개요: Overview
+            외부 GPIO (Rev 1.1): External GPIO (Rev 1.1)
+            외부 GPIO (Rev 2.0): External GPIO (Rev 2.0)
+            튜토리얼: Tutorials
+            API 레퍼런스: API Reference
+            상태 머신 (TSM): State Machine (TSM)
+            KIT H10 제어·데이터: KIT H10 Control & Data
+            LED·버튼: LED & Button
+            외부 IO: External IO
+            USB 시리얼: USB Serial
+            USB 메모리 로깅: USB Storage Logging
+            메모리 영역: Memory Regions
+            실시간 시계 (RTC): Real-Time Clock (RTC)
+            보조 태스크: Auxiliary Tasks
+            아키텍처: Architecture
+            KIT H10 펌웨어: KIT H10 Firmware
+            부트로더: Bootloader
+            업로드 방법: Upload Guide
+            심화: Advanced
+            AI 데이터 파이프라인: AI Data Pipeline
+            문제 해결: Troubleshooting
+            릴리스 노트: Release Notes
 
 markdown_extensions:
   - admonition
