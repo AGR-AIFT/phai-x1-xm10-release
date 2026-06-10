@@ -1,8 +1,8 @@
 # 03 — 첫 빌드 & 실행
 
-마지막 단계입니다. 20 분 정도면 보드에서 첫 펌웨어가 돌면서 LED 가 깜빡이는 걸 볼 수 있어요. [01 하드웨어 연결](01-hardware-setup.md) + [02 환경 구축](02-software-setup.md) 이 끝났다는 전제.
+마지막 단계입니다. 20 분 정도면 보드에서 첫 펌웨어가 돌면서 LED 가 깜빡이는 걸 볼 수 있습니다. [01 하드웨어 연결](01-hardware-setup.md) + [02 환경 구축](02-software-setup.md) 이 끝났다는 전제.
 
-내가 작성한 C 코드는 그저 텍스트입니다. 보드 안의 프로세서는 텍스트를 읽지 못하고 기계어만 실행할 수 있어요. 그래서 두 단계가 필요합니다.
+내가 작성한 C 코드는 그저 텍스트입니다. 보드 안의 프로세서는 텍스트를 읽지 못하고 기계어만 실행할 수 있습니다. 그래서 두 단계가 필요합니다.
 
 - **빌드 (Build)** — C 코드를 기계어 (`.elf`) 로 번역
 - **플래시 (Flash)** — 그 기계어를 보드 메모리에 써넣기
@@ -40,8 +40,8 @@ CubeIDE 가 자동으로 만들어 줍니다.
 
 기본 상태 그대로 빌드해도 보드는 부팅합니다 (LED 1 이 두근두근 깜빡임). 직접 예제 코드를 시험하려면:
 
-- **옵션 A (권장)** — `examples/00_Quick_Start/quick_start.c` 같은 예제의 내용을 통째로 복사해서 `XM_Apps/User_Algorithm/user_app.c` 에 붙여넣기
-- **옵션 B** — 예제 `.c` 파일을 `User_Algorithm` 폴더로 옮기고 기존 `user_app.c` 는 삭제
+- **옵션 A (권장)** — `examples/00_Quick_Start/quick_start.c` 같은 예제의 내용을 통째로 복사해서 `XM_Apps/Control_Task/control_task.c` 에 붙여넣기
+- **옵션 B** — 예제 `.c` 파일을 `Control_Task` 폴더로 옮기고 기존 `control_task.c` 는 삭제
 
 ### 3. 빌드
 
@@ -84,7 +84,7 @@ XM10 보드의 LED 1 이 1 초 주기로 두근-두근 깜빡이면 → 펌웨�
 
 - **`fatal error: 'xxx.h' file not found`** — Include Path 가 빠졌습니다. Project Properties → C/C++ Build → Settings 에서 확인.
 - **`undefined reference to 'xxx'`** — 라이브러리 (`.a`) 파일이 없습니다. SDK 폴더가 손상됐을 가능성 — 02 단계부터 다시 ZIP 다운로드 + 압축 해제.
-- **`region 'RAM' overflowed by N bytes`** — 코드가 메모리 한계를 넘었어요. 큰 배열·구조체부터 줄여보세요.
+- **`region 'RAM' overflowed by N bytes`** — 코드가 메모리 한계를 넘었습니다. 큰 배열·구조체부터 줄여보세요.
 - **빌드가 너무 느립니다** — 백신이 임시 파일을 계속 스캔하는 경우. CubeIDE workspace 폴더를 백신 예외에 등록하세요.
 - **`1 errors`** — Console 상단의 빨간 에러 메시지를 통째로 AI 에게 붙여넣고 물어보세요.
 
@@ -105,8 +105,8 @@ XM10 보드의 LED 1 이 1 초 주기로 두근-두근 깜빡이면 → 펌웨�
 
 ## 다음으로
 
-환경 구축 끝났습니다. 이제 본격적으로 코드 작성으로 넘어가요.
+환경 구축 끝났습니다. 이제 본격적으로 코드 작성으로 넘어갑니다.
 
 - 첫 예제 → [Ex.00 Quick Start](../../examples/00_Quick_Start/README.md) (보드 동작 확인용)
-- 학습 경로 → [tutorials/README.md](../tutorials/README.md) (41 예제 + 추천 순서)
+- 학습 경로 → [tutorials/README.md](../tutorials/README.md) (47 예제 + 추천 순서)
 - 추천 시작: Ex.00 → Ex.01 → Ex.02 → Ex.03 (버튼 + LED 4 종, ⭐~⭐⭐)

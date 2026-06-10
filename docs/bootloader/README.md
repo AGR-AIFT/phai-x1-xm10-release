@@ -267,37 +267,37 @@ PhAI Studio에서 FW Upload 시작
 
 ## 8. 문제 해결 (Troubleshooting)
 
-### "부트로더를 설치했는데 앱이 실행되지 않아요"
+### "부트로더를 설치했는데 앱이 실행되지 않습니다"
 
 **원인**: 앱 펌웨어가 없거나 유효하지 않습니다.
 1. STM32CubeIDE에서 빌드 후 Debug(F11)로 앱 업로드
 2. 또는 PhAI Studio에서 `XM10_X_X_X_X.bin` 업로드
 
-### "SWD 디버깅 후 부트로더가 사라졌어요"
+### "SWD 디버깅 후 부트로더가 사라졌습니다"
 
 **원인**: Debug Configuration의 Start address가 `0x08000000`으로 되어 있었습니다.
 1. `0x08040000`으로 수정 (섹션 4 참조)
 2. 부트로더 재설치 필요 (섹션 3 참조)
 
-### "PhAI Studio에서 디바이스를 못 찾아요"
+### "PhAI Studio에서 디바이스를 찾지 못합니다"
 
 1. USB 케이블 연결 확인
 2. Windows 장치 관리자에서 COM 포트 확인
 3. 부트로더가 FTP 모드인지 확인 (앱 실행 중이면 PhAI Studio에서 "Enter Bootloader" 먼저 실행)
 
-### "FW 업로드 후 부팅이 반복되다가 이전 버전으로 돌아갔어요"
+### "FW 업로드 후 부팅이 반복되다가 이전 버전으로 돌아갔습니다"
 
 **원인**: 새 펌웨어에서 `AGR_Boot_ConfirmBoot()`가 호출되지 않아 3회 부팅 후 자동 롤백.
 - `system_startup.c`에서 부팅 직후 `AGR_Boot_ConfirmBoot()` 호출이 포함되어 있는지 확인
 - SDK 기본 코드에는 이미 포함되어 있으므로, 사용자가 `system_startup.c`를 수정하지 않았는지 확인
 
-### "빌드는 되는데 XM10_X_X_X_X.bin이 생성되지 않아요"
+### "빌드는 되는데 XM10_X_X_X_X.bin이 생성되지 않습니다"
 
 1. Python 3.x 설치 확인: `python --version`
 2. Post-Build 스크립트 콘솔 출력 확인 (Build Console에 에러 메시지)
 3. `tools/build/` 폴더에 스크립트 파일이 있는지 확인
 
-### "STM32CubeProgrammer에서 Read 하면 0x08040000에 데이터가 없어요"
+### "STM32CubeProgrammer에서 Read 하면 0x08040000에 데이터가 없습니다"
 
 **원인**: SWD 디버깅이 아닌 STM32CubeProgrammer로 직접 `.bin`을 업로드할 때 주소를 잘못 설정한 경우.
 - `.bin` 파일 업로드 시 Start address: `0x08040000`

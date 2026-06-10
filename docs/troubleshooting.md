@@ -87,7 +87,7 @@ New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name
 - 한 버튼만 동작하고 나머지는 다른 ID 로 잡히거나 stuck (`XM_PRESSED` 가 고정)
 - `XM_GetButtonState` 와 HAL `HAL_GPIO_ReadPin` 비교 결과 매핑이 한 칸씩 어긋남
 
-**원인:** Rev 1.1 보드와 Rev 2.0 보드는 내장 버튼 3 개의 MCU 핀이 다릅니다 — Rev 2.0 으로 가면서 외장 SRAM (PSRAM) 자리를 만들기 위해 버튼 핀이 한 칸 시프트되었어요.
+**원인:** Rev 1.1 보드와 Rev 2.0 보드는 내장 버튼 3 개의 MCU 핀이 다릅니다 — Rev 2.0 으로 가면서 외장 SRAM (PSRAM) 자리를 만들기 위해 버튼 핀이 한 칸 시프트되었습니다.
 
 | | BTN 1 (좌) | BTN 2 (중) | BTN 3 (우) |
 |---|---|---|---|
@@ -229,7 +229,7 @@ static void Run_Loop(void) {
 
 **증상:** Add_State 등록했는데 `on_loop` 함수가 호출 안 됨
 
-**해결:** `User_Loop()` 안에서 반드시 `XM_TSM_Run(handle);` 호출.
+**해결:** `Control_Loop()` 안에서 반드시 `XM_TSM_Run(handle);` 호출.
 
 #### Active Low vs Active High 혼동
 
@@ -288,7 +288,7 @@ if (pressed) { /* 1회만 실행 */ }
 - CAN-FD HIGH/LOW 핀 거꾸로 → 핀맵 ([01-hardware-setup.md Figure 1](getting-started/01-hardware-setup.md)) 확인
 - KIT H10 FW v2.3.0 미만 → [kit-h10-firmware/](kit-h10-firmware/) 가이드
 
-#### `gaitCycle`, `forwardVelocity`, `footContact` 가 항상 0
+#### `forwardVelocity`, `footContact` 등 보행 분석 데이터가 항상 0
 
 **원인:** Body Data 전제조건 미충족 — `XM_SendUserBodyData()` 미호출
 
@@ -311,7 +311,7 @@ if (pressed) { /* 1회만 실행 */ }
 Expand-Archive -Path "$HOME\Downloads\Rev2.0.zip" -DestinationPath C:\dev\ -Force
 ```
 
-#### 클라우드 동기화 폴더 (OneDrive, iCloud) 에 clone
+#### 클라우드 동기화 폴더 (OneDrive, iCloud) 에 압축 해제
 
 **증상:** 빌드 중 파일 잠금 충돌, 동기화 충돌 파일 생성
 

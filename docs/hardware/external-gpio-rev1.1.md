@@ -1,6 +1,6 @@
 # 외부 GPIO 핀맵 — Rev 1.1
 
-XM10 Rev 1.1 보드의 외부 확장 헤더 핀맵입니다. 디지털 입출력 (DIO) 8 핀 + 아날로그 입력 (ADC) 4 핀이 기본으로 제공되고, DIO 핀은 필요 시 ADC 로 동적 전환해서 최대 12 채널 ADC 까지 확보할 수 있습니다.
+XM10 Rev 1.1 보드의 외부 확장 헤더 핀맵입니다. 디지털 입출력 (DIO) 8 핀 + 아날로그 입력 (ADC) 4 핀이 기본으로 제공되고, DIO 핀은 필요 시 ADC 로 동적 전환하여 최대 12 채널 ADC 까지 확보할 수 있습니다.
 
 > 핀 사용법 (함수 호출) 은 [외부 IO API](../api-reference/04-external-io.md) 참고. 이 페이지는 **보드 핀 배치** 중심입니다.
 
@@ -53,7 +53,7 @@ Rev 1.1 보드의 외부 GPIO 헤더 (DIO 8 + ADC 4) 가 보드의 어느 위치
 
 ## DIO → ADC 동적 전환 (추가 8 채널)
 
-DIO 핀을 런타임에 ADC 모드로 바꾸면 최대 12 채널 ADC 까지 확보할 수 있어요. `XM_SwitchDioToAdc()` 호출 후 `XM_AnalogRead(XM_DIO_TO_ADC_PIN(dio))` 로 읽습니다.
+DIO 핀을 런타임에 ADC 모드로 바꾸면 최대 12 채널 ADC 까지 확보할 수 있습니다. `XM_SwitchDioToAdc()` 호출 후 `XM_AnalogRead(XM_DIO_TO_ADC_PIN(dio))` 로 읽습니다.
 
 | 전환 후 API | 원래 DIO |
 |------------|---------|
@@ -72,7 +72,7 @@ DIO 핀을 런타임에 ADC 모드로 바꾸면 최대 12 채널 ADC 까지 확�
 
 ## 외부 IMU 사용 시 주의
 
-외부 IMU (XSENS MTi 등) 를 `XM_EnableExternalImu()` 로 활성화하면 일부 핀이 UART 로 전환됩니다.
+외부 IMU (XSENS MTi 등) 를 `XM_AttachXsensMTi630()` 로 활성화하면 일부 핀이 UART 로 전환됩니다.
 
 <!-- 사용자가 Rev 1.1 의 IMU 활성화 시 점유 핀 정확히 채움 -->
 

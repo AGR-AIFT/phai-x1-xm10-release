@@ -55,7 +55,7 @@ Rev 2.0 보드의 외부 GPIO 헤더 (DIO 8 + ADC 4) 가 보드의 어느 위치
 
 ## DIO → ADC 동적 전환 (추가 8 채널)
 
-DIO 핀을 런타임에 ADC 모드로 바꾸면 최대 12 채널 ADC 까지 확보할 수 있어요. `XM_SwitchDioToAdc()` 호출 후 `XM_AnalogRead(XM_DIO_TO_ADC_PIN(dio))` 로 읽습니다.
+DIO 핀을 런타임에 ADC 모드로 바꾸면 최대 12 채널 ADC 까지 확보할 수 있습니다. `XM_SwitchDioToAdc()` 호출 후 `XM_AnalogRead(XM_DIO_TO_ADC_PIN(dio))` 로 읽습니다.
 
 | 전환 후 API | 원래 DIO |
 |------------|---------|
@@ -74,7 +74,7 @@ DIO 핀을 런타임에 ADC 모드로 바꾸면 최대 12 채널 ADC 까지 확�
 
 ## 외부 IMU 사용 시 주의
 
-외부 IMU (XSENS MTi 등) 를 `XM_EnableExternalImu()` 로 활성화하면 일부 핀이 UART 로 전환됩니다.
+외부 IMU (XSENS MTi 등) 를 `XM_AttachXsensMTi630()` 로 활성화합니다. Rev 2.0 은 전용 USART2 포트를 사용하므로 외부 ADC 핀 점유가 없습니다.
 
 <!-- 사용자가 Rev 2.0 의 IMU 활성화 시 점유 핀 정확히 채움 (Rev 1.1 과 다를 수 있음) -->
 

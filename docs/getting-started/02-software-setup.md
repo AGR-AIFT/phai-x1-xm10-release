@@ -2,7 +2,7 @@
 
 STM32CubeIDE 설치와 SDK ZIP 다운로드까지. 다운로드 시간 포함해 20 분 정도 걸립니다. [01 하드웨어 연결](01-hardware-setup.md) 이 끝났다는 전제로 시작합니다.
 
-XM10 보드의 프로세서는 PC 와 종류가 다르기 때문에, C 코드를 보드용 기계어 (`.elf`) 로 바꿔주는 컴파일러 + 보드에 쓸 수 있는 드라이버 + 코드 편집기가 필요합니다. 이 세트를 통째로 묶어주는 게 ST 사의 무료 IDE 인 **STM32CubeIDE** 예요. 이거 하나만 깔면 끝납니다.
+XM10 보드의 프로세서는 PC 와 종류가 다르기 때문에, C 코드를 보드용 기계어 (`.elf`) 로 바꿔주는 컴파일러 + 보드에 쓸 수 있는 드라이버 + 코드 편집기가 필요합니다. 이 세트를 통째로 묶어주는 것이 ST 사의 무료 IDE 인 **STM32CubeIDE** 입니다. 이거 하나만 깔면 끝납니다.
 
 > Claude Code 사용자는 `"환경 구축 도와줘"` 한 줄로 이 페이지의 전 과정을 AI 가 자동 안내합니다 → [Claude Code 와 함께 시작](00-claude-code-quickstart.md)
 
@@ -46,7 +46,7 @@ where STM32CubeIDE.exe
 **a. 본인 보드 Rev 확인**:
 - 보드 라벨 또는 박스에 `Rev 1.1` / `Rev 2.0` 표기
 - 외관: RJ45 Ethernet 포트가 있으면 Rev 2.0, 없으면 Rev 1.1
-- 모호하면 → [docs/architecture/](../architecture/) Rev 비교표
+- 모호하면 → [docs/hardware/README.md](../hardware/README.md#보드-리비전-비교) Rev 비교표
 
 **b. Release 페이지에서 다운로드**:
 
@@ -79,7 +79,7 @@ Test-Path C:\dev\Extension_Module\CLAUDE.md     # AI 진입점
 | `.project`, `.cproject`, `*.ld`, `startup_*.s` | CubeIDE 프로젝트 + 빌드 설정 |
 | `CLAUDE.md` | AI 도구 자동 안내 진입점 (Rev 특화) |
 | `.claude/skills/` | Claude Code 사용자 온보딩/예제 트러블 스킬 |
-| `docs/`, `examples/` | 학습 문서 + 41 개 실습 예제 |
+| `docs/`, `examples/` | 학습 문서 + 47 개 실습 예제 |
 | `Drivers/`, `XM_API/`, `XM_Apps/`, `XM_FW/`, `XM_Lib/` | SDK 코드 |
 | `Middlewares/`, `FATFS/`, `LWIP/` (Rev 2.0 만) | HAL/CMSIS/STM32 미들웨어 |
 
@@ -87,7 +87,7 @@ Test-Path C:\dev\Extension_Module\CLAUDE.md     # AI 진입점
 
 ### 3. VS Code settings.json 적용 (선택)
 
-VS Code + clangd 환경을 쓰는 경우에만. 본 SDK 에는 `.vscode/settings.json.template` 가 포함되어 있어요 (개발자 PC 의 절대경로가 노출되지 않도록).
+VS Code + clangd 환경을 쓰는 경우에만. 본 SDK 에는 `.vscode/settings.json.template` 가 포함되어 있습니다 (개발자 PC 의 절대경로가 노출되지 않도록).
 
 ```powershell
 Copy-Item C:\dev\Extension_Module\.vscode\settings.json.template `
@@ -121,8 +121,8 @@ Copy-Item C:\dev\Extension_Module\.vscode\settings.json.template `
 ### 설치 / 다운로드
 
 - **ST 다운로드 페이지에서 "no eligible files"** — ST 계정 로그인 안 됨. 학교 이메일로 무료 가입 가능합니다.
-- **설치 중 백신이 차단합니다** — 백신을 잠시 끄고 재시도.
-- **`where STM32CubeIDE.exe` 가 못 찾습니다** — PATH 등록이 안 된 상태. 시작 메뉴에서 한 번 실행한 뒤 다시 시도.
+- **설치 중 백신이 차단합니다** — 백신을 잠시 끄고 재시도합니다.
+- **`where STM32CubeIDE.exe` 가 못 찾습니다** — PATH 등록이 안 된 상태입니다. 시작 메뉴에서 한 번 실행한 뒤 다시 시도합니다.
 - **GitHub Releases 페이지가 안 열림** — 사내 프록시·방화벽이 차단. 다른 네트워크에서 시도하거나 IT 부서에 `github.com` 허용 요청.
 - **`Expand-Archive` 가 일부 파일 누락 / 멈춤** — Windows 내장 압축 도구가 큰 ZIP 에서 깨질 수 있음. [7-Zip](https://www.7-zip.org/) 으로 압축 해제 재시도 권장.
 - **잘못된 Rev ZIP 다운로드** — 보드 라벨 재확인 후 올바른 ZIP 재다운로드. Rev 끼리 호환되지 않습니다.

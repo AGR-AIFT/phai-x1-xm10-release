@@ -1,6 +1,6 @@
 # AI 학습 데이터 파이프라인
 
-XM10 보드에서 모은 외골격 데이터를 PyTorch / scikit-learn 같은 학습 프레임워크로 가져가는 흐름을 한 페이지에 정리했어요. AI 모델 학습이 목표라면 이 페이지를 흐름표로 두고 작업하세요.
+XM10 보드에서 모은 외골격 데이터를 PyTorch / scikit-learn 같은 학습 프레임워크로 가져가는 흐름을 한 페이지에 정리했습니다. AI 모델 학습이 목표라면 이 페이지를 흐름표로 두고 작업하세요.
 
 ---
 
@@ -14,7 +14,7 @@ KIT H10 착용  →  USB 메모리 기록     →  Python 디코더    →  PyTo
                   스트리밍
 ```
 
-세 가지 길이 있어요. 목적에 따라 골라가세요.
+세 가지 길이 있습니다. 목적에 따라 골라가세요.
 
 | 길 | 적합한 상황 | 데이터량 | 지연 |
 |----|-----------|---------|------|
@@ -28,7 +28,7 @@ KIT H10 착용  →  USB 메모리 기록     →  Python 디코더    →  PyTo
 
 ### 1. 보드 측 — 데이터 기록
 
-`examples/10c_MSC_Advanced_Log/` 또는 `examples/34_MSC_GaitAnalysis_Log/` 패턴을 사용해요.
+`examples/10c_MSC_Advanced_Log/` 또는 `examples/34_MSC_GaitAnalysis_Log/` 패턴을 사용합니다.
 
 핵심 호출 3 가지:
 
@@ -48,11 +48,11 @@ if (status.elapsed_sec > 600) XM_NewUsbLogFile();
 
 ### 2. 파일 회수
 
-USB 메모리를 PC 에 꽂으면 `.bin` 또는 `.csv` 파일이 보여요. 권장은 `.bin` (디코더가 처리).
+USB 메모리를 PC 에 꽂으면 `.bin` 또는 `.csv` 파일이 보입니다. 권장은 `.bin` (디코더가 처리).
 
 ### 3. PythonDecoder 로 변환
 
-`PythonDecoder/` 폴더의 USB MSC 디코더가 `.bin` → `.csv` 또는 `.npy` 로 변환해줘요.
+`PythonDecoder/` 폴더의 USB MSC 디코더가 `.bin` → `.csv` 또는 `.npy` 로 변환합니다.
 
 ```bash
 cd PythonDecoder
@@ -107,16 +107,16 @@ clf.fit(X, y)
 
 ## 길 B — PhAI Studio 실시간 스트리밍
 
-짧은 세션 + 시각 검증이 목적이면 이쪽이 빨라요.
+짧은 세션 + 시각 검증이 목적이면 이쪽이 빠릅니다.
 
 ### 1. 보드 측 — 커스텀 채널 등록
 
 ```c
-void User_Setup(void) {
+void Control_Setup(void) {
     XM_SetUsbCustomMeta(0xF0, "my_signal", "v");  // 채널 0xF0, 단위 V
 }
 
-void User_Loop(void) {
+void Control_Loop(void) {
     float my_value = read_my_sensor();
     XM_SendUsbDataWithId(0xF0, &my_value, sizeof(my_value));
 }
@@ -153,7 +153,7 @@ PyTorch / TensorFlow 모델을 STM32 가 다룰 수 있도록 변환.
 핵심 패턴:
 
 ```c
-void User_Loop(void) {
+void Control_Loop(void) {
     float input[3] = { imu_ax, imu_ay, imu_az };
     float output[5];
 
@@ -174,7 +174,7 @@ void User_Loop(void) {
 
 - **로그 파일이 너무 큼** — 1 ms × 1 시간 = 360 만 샘플. 다 필요 없으면 `XM_WriteUsbLogData` 호출 빈도를 낮추거나 (예: 10 ms 마다 = 100 Hz), 관심 필드만 골라 작은 구조체로 저장.
 - **CSV 가 너무 느림** — 큰 데이터셋은 `.npy` 또는 `.parquet` 로. CSV 는 사람 확인용으로만.
-- **타임스탬프가 안 맞아요** — `Ex.10b` 패턴의 수동 타임스탬프 사용. 자동 모드는 파일 단위만 기록.
+- **타임스탬프가 안 맞음** — `Ex.10b` 패턴의 수동 타임스탬프 사용. 자동 모드는 파일 단위만 기록.
 - **NaN / Inf 값** — 보드 측에서 `assert(isfinite(value))` 추가. 학습 직전에 `np.isfinite()` 로 필터링.
 - **클래스 불균형** — Stance/Swing 같은 보행 phase 는 7:3 정도로 비균등. `class_weight` 옵션 또는 SMOTE 사용.
 - **보드에서 추론이 1 ms 를 넘김** — 모델 양자화 (int8) 또는 layer 수 감소. STM32H7 의 FPU 활용 확인.
