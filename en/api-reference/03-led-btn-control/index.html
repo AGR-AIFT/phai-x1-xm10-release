@@ -1,0 +1,2696 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서">
+      
+      
+      
+        <link rel="canonical" href="https://agr-exo.github.io/Extension_Module/en/api-reference/03-led-btn-control/">
+      
+      
+        <link rel="prev" href="../02-h10-control-n-data/">
+      
+      
+        <link rel="next" href="../04-external-io/">
+      
+      
+        
+          <link rel="alternate" href="../../../api-reference/03-led-btn-control/" hreflang="ko">
+        
+          <link rel="alternate" href="./" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>LED·버튼 - XM10 Extension Module</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-reference-led--button-control" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../" title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XM10 Extension Module
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              LED·버튼
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../api-reference/03-led-btn-control/" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AGR-EXO/Extension_Module" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../" title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    XM10 Extension Module
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AGR-EXO/Extension_Module" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    홈
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../find-it/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠른 찾기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    시작하기
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    시작하기
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/01-hardware-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    하드웨어 연결
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/02-software-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    개발 환경 구축
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/03-first-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    첫 빌드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code 와 함께 시작
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../hardware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    하드웨어
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    하드웨어
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/external-gpio-rev1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 GPIO (Rev 1.1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/external-gpio-rev2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 GPIO (Rev 2.0)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    튜토리얼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API 레퍼런스
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-task-state-machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    상태 머신 (TSM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-h10-control-n-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 제어·데이터
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED·버튼
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED·버튼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-동작-원리-operating-principle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 동작 원리 (Operating Principle)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 동작 원리 (Operating Principle)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-core-engine-xm_io_update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Core Engine: XM_IO_Update()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-데이터-구조-enumerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 데이터 구조 (Enumerations)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 데이터 구조 (Enumerations)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-identifiers-식별자" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Identifiers (식별자)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1. Identifiers (식별자)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmledid_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLedId_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmbtnid_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmBtnId_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-state-types-상태-정의" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. State Types (상태 정의)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2. State Types (상태 정의)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmstate_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmState_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmbtnstate_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmBtnState_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-modes--events-모드-및-이벤트" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Modes &amp; Events (모드 및 이벤트)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3. Modes &amp; Events (모드 및 이벤트)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmledmode_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLedMode_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmbtnevent_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmBtnEvent_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-함수-상세-function-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 함수 상세 (Function Reference)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 함수 상세 (Function Reference)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-led-control-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. LED Control Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1. LED Control Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setledstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetLedState
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setledeffect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetLedEffect
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-button-control-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Button Control Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2. Button Control Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_getbuttonstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetButtonState
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getbuttonevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetButtonEvent
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-channel-led-rev20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Channel LED (Rev2.0 전용)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3. Channel LED (Rev2.0 전용)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setchannelledrgb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetChannelLedRGB
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-system-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4. System Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4. System Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_io_update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IO_Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-흔한-실수" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ 흔한 실수
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-예제" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 예제
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-usb-connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 시리얼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리 로깅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-memory-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리 영역
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-rtc-clock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실시간 시계 (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-task-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    보조 태스크
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    아키텍처
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kit-h10-firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 펌웨어
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../bootloader/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    부트로더
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    부트로더
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bootloader/XM10_부트로더_업로드방법.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    업로드 방법
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    심화
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    심화
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 데이터 파이프라인
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    문제 해결
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../release-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    릴리스 노트
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    릴리스 노트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-동작-원리-operating-principle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 동작 원리 (Operating Principle)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 동작 원리 (Operating Principle)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-core-engine-xm_io_update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Core Engine: XM_IO_Update()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-데이터-구조-enumerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 데이터 구조 (Enumerations)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 데이터 구조 (Enumerations)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-identifiers-식별자" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Identifiers (식별자)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1. Identifiers (식별자)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmledid_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLedId_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmbtnid_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmBtnId_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-state-types-상태-정의" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. State Types (상태 정의)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2. State Types (상태 정의)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmstate_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmState_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmbtnstate_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmBtnState_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-modes--events-모드-및-이벤트" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Modes &amp; Events (모드 및 이벤트)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3. Modes &amp; Events (모드 및 이벤트)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmledmode_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLedMode_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmbtnevent_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmBtnEvent_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-함수-상세-function-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 함수 상세 (Function Reference)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 함수 상세 (Function Reference)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-led-control-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. LED Control Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1. LED Control Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setledstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetLedState
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setledeffect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetLedEffect
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-button-control-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Button Control Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2. Button Control Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_getbuttonstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetButtonState
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getbuttonevent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetButtonEvent
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-channel-led-rev20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Channel LED (Rev2.0 전용)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3. Channel LED (Rev2.0 전용)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setchannelledrgb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetChannelLedRGB
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-system-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4. System Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4. System Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_io_update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IO_Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-흔한-실수" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ 흔한 실수
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-예제" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 예제
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="api-reference-led--button-control">API Reference: LED &amp; Button Control<a class="headerlink" href="#api-reference-led--button-control" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>📌 <strong>이 페이지를 읽고 나면</strong>: 내장 LED 3개 + 버튼 3개를 폴링/이벤트 양방향 모두 제어할 수 있습니다.
+⏱️ 예상 학습 시간: 15분
+🧰 사전 지식: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/01_Button_LED_Basic/">Ex.01</a> (폴링) + <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/02_Button_LED_Event/">Ex.02</a> (이벤트) + <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/03_Button_LED_FSM/">Ex.03</a> (롱프레스)
+🎯 핵심 함수: <code>XM_SetLedState</code> / <code>XM_SetLedEffect</code> / <code>XM_GetButtonState</code> / <code>XM_GetButtonEvent</code> / <code>XM_SetChannelLedRGB</code> (Rev2.0)</p>
+</blockquote>
+<p><code>xm_api_led_btn.h</code>에 정의된 <strong>내장 UI(LED, Button) 제어 API</strong>에 대한 상세 레퍼런스입니다.
+XM10 펌웨어는 사용자가 복잡한 타이머 인터럽트나 디바운싱(Debouncing) 로직을 직접 구현할 필요 없이, 직관적인 함수 호출만으로 <strong>깜빡임(Blink)</strong>, <strong>클릭(Click)</strong>, <strong>롱 프레스(Long Press)</strong> 등의 고급 입출력 기능을 구현할 수 있도록 돕습니다.</p>
+<hr />
+<h2 id="1-동작-원리-operating-principle">1. 동작 원리 (Operating Principle)<a class="headerlink" href="#1-동작-원리-operating-principle" title="Permanent link">&para;</a></h2>
+<p>이 모듈은 시간 기반(Time-driven)으로 동작하며, 이를 위해 시스템 내부의 <strong>Manager</strong>들이 백그라운드에서 열심히 일하고 있습니다.</p>
+<h3 id="the-core-engine-xm_io_update">The Core Engine: <code>XM_IO_Update()</code><a class="headerlink" href="#the-core-engine-xm_io_update" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>역할:</strong> LED의 깜빡임 타이밍을 계산하고, 버튼의 신호를 분석하여 노이즈를 제거(Debouncing)하고 이벤트를 생성하는 <strong>엔진</strong>입니다.</li>
+<li><strong>구동:</strong> <code>core_process</code>에 의해 <strong>2ms(500Hz) 주기</strong>로 자동 호출되므로, 사용자가 직접 호출할 필요는 없으나 그 존재와 역할은 이해하고 있어야 합니다.</li>
+<li><strong>흐름:</strong><ol>
+<li>사용자가 <code>XM_SetLedEffect</code> 호출 -&gt; 설정값 저장.</li>
+<li><code>XM_IO_Update</code> 주기적 실행 -&gt; 시간이 흐름에 따라 LED ON/OFF 토글.</li>
+<li>사용자가 버튼 누름 -&gt; <code>XM_IO_Update</code>가 시간 측정 -&gt; '클릭' 또는 '롱 프레스' 판단 후 이벤트 큐에 저장.</li>
+<li>사용자가 <code>XM_GetButtonEvent</code> 호출 -&gt; 큐에서 꺼내서 반환.</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h2 id="2-데이터-구조-enumerations">2. 데이터 구조 (Enumerations)<a class="headerlink" href="#2-데이터-구조-enumerations" title="Permanent link">&para;</a></h2>
+<p>사용 편의성을 위해 모든 식별자와 상태 값은 <strong>Enum</strong>으로 정의되어 있습니다. 숫자(0, 1, 2...) 대신 이 상수를 사용하세요.</p>
+<h3 id="21-identifiers-식별자">2.1. Identifiers (식별자)<a class="headerlink" href="#21-identifiers-식별자" title="Permanent link">&para;</a></h3>
+<h4 id="xmledid_t"><code>XmLedId_t</code><a class="headerlink" href="#xmledid_t" title="Permanent link">&para;</a></h4>
+<p>제어할 Function LED의 번호입니다.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="n">XM_LED_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="cm">/**&lt; 왼쪽 LED */</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">XM_LED_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="cm">/**&lt; 가운데 LED */</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="n">XM_LED_3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w">  </span><span class="cm">/**&lt; 오른쪽 LED */</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">}</span><span class="w"> </span><span class="n">XmLedId_t</span><span class="p">;</span>
+</code></pre></div>
+<h4 id="xmbtnid_t"><code>XmBtnId_t</code><a class="headerlink" href="#xmbtnid_t" title="Permanent link">&para;</a></h4>
+<p>입력을 확인할 Function Button의 번호입니다.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">XM_BTN_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="cm">/**&lt; 왼쪽 버튼 */</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">XM_BTN_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="cm">/**&lt; 가운데 버튼 */</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">XM_BTN_3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w">  </span><span class="cm">/**&lt; 오른쪽 버튼 */</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span><span class="w"> </span><span class="n">XmBtnId_t</span><span class="p">;</span>
+</code></pre></div>
+<hr />
+<h3 id="22-state-types-상태-정의">2.2. State Types (상태 정의)<a class="headerlink" href="#22-state-types-상태-정의" title="Permanent link">&para;</a></h3>
+<h4 id="xmstate_t"><code>XmState_t</code><a class="headerlink" href="#xmstate_t" title="Permanent link">&para;</a></h4>
+<p>LED 등의 논리적인 On/Off 상태를 표현합니다.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="n">XM_OFF</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="cm">/**&lt; 끄기 (Logic Low) */</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">XM_ON</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">  </span><span class="cm">/**&lt; 켜기 (Logic High) */</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">}</span><span class="w"> </span><span class="n">XmState_t</span><span class="p">;</span>
+</code></pre></div>
+<h4 id="xmbtnstate_t"><code>XmBtnState_t</code><a class="headerlink" href="#xmbtnstate_t" title="Permanent link">&para;</a></h4>
+<p>버튼의 현재 물리적 눌림 상태를 표현합니다. (회로의 Active-High/Low 여부와 상관없이 추상화됨)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="n">XM_RELEASED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="cm">/**&lt; 버튼이 떨어져 있음 (안 눌림) */</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="n">XM_PRESSED</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">  </span><span class="cm">/**&lt; 버튼이 눌려 있음 */</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">}</span><span class="w"> </span><span class="n">XmBtnState_t</span><span class="p">;</span>
+</code></pre></div>
+<hr />
+<h3 id="23-modes--events-모드-및-이벤트">2.3. Modes &amp; Events (모드 및 이벤트)<a class="headerlink" href="#23-modes--events-모드-및-이벤트" title="Permanent link">&para;</a></h3>
+<h4 id="xmledmode_t"><code>XmLedMode_t</code><a class="headerlink" href="#xmledmode_t" title="Permanent link">&para;</a></h4>
+<p>LED의 동작 패턴을 결정합니다.
+| Mode | Description |
+| :--- | :--- |
+| <strong><code>XM_LED_OFF</code></strong> | LED를 끕니다. |
+| <strong><code>XM_LED_SOLID</code></strong> | LED를 계속 켭니다. |
+| <strong><code>XM_LED_BLINK</code></strong> | 일정 주기(Period)로 깜빡입니다. (50% Duty) |
+| <strong><code>XM_LED_HEARTBEAT</code></strong> | 심장 박동처럼 두 번 빠르게 깜빡입니다. (두근-두근) |
+| <strong><code>XM_LED_ONESHOT</code></strong> | 설정한 시간만큼 한 번 켜졌다가 자동으로 꺼집니다. (알림용) |</p>
+<h4 id="xmbtnevent_t"><code>XmBtnEvent_t</code><a class="headerlink" href="#xmbtnevent_t" title="Permanent link">&para;</a></h4>
+<p>버튼 조작을 분석하여 생성된 고수준 이벤트입니다.
+| Event | Description |
+| :--- | :--- |
+| <code>XM_BTN_NONE</code> | 발생한 이벤트 없음 |
+| <code>XM_BTN_PRESSED</code> | 버튼을 막 누른 순간 (Rising Edge) |
+| <code>XM_BTN_RELEASED</code> | 버튼을 막 뗀 순간 (Falling Edge) |
+| <strong><code>XM_BTN_CLICK</code></strong> | 짧게 눌렀다 뗌 (클릭) |
+| <strong><code>XM_BTN_LONG_PRESS</code></strong> | 1초 이상 길게 누름 (모드 변경 등에 사용) |</p>
+<hr />
+<h2 id="3-함수-상세-function-reference">3. 함수 상세 (Function Reference)<a class="headerlink" href="#3-함수-상세-function-reference" title="Permanent link">&para;</a></h2>
+<h3 id="31-led-control-functions">3.1. LED Control Functions<a class="headerlink" href="#31-led-control-functions" title="Permanent link">&para;</a></h3>
+<h4 id="xm_setledstate"><code>XM_SetLedState</code><a class="headerlink" href="#xm_setledstate" title="Permanent link">&para;</a></h4>
+<p>LED를 단순히 켜거나 끕니다. 가장 직관적인 제어 함수입니다.</p>
+<ul>
+<li><strong>Syntax</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetLedState</span><span class="p">(</span><span class="n">XmLedId_t</span><span class="w"> </span><span class="n">led_id</span><span class="p">,</span><span class="w"> </span><span class="n">XmState_t</span><span class="w"> </span><span class="n">state</span><span class="p">);</span>
+</code></pre></div></li>
+<li><strong>Parameters</strong><ul>
+<li><code>led_id</code>: 제어할 LED (<code>XM_LED_1</code> \~ <code>3</code>)</li>
+<li><code>state</code>: 목표 상태 (<code>XM_ON</code>, <code>XM_OFF</code>)</li>
+</ul>
+</li>
+<li><strong>Example</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// 1번 LED 켜기</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">XM_SetLedState</span><span class="p">(</span><span class="n">XM_LED_1</span><span class="p">,</span><span class="w"> </span><span class="n">XM_ON</span><span class="p">);</span>
+</code></pre></div></li>
+</ul>
+<h4 id="xm_setledeffect"><code>XM_SetLedEffect</code><a class="headerlink" href="#xm_setledeffect" title="Permanent link">&para;</a></h4>
+<p>LED에 특수 효과(깜빡임 등)를 설정합니다. 설정 후에는 <code>XM_IO_Update()</code>에 의해 자동으로 동작하므로, 별도의 타이머 코드를 작성할 필요가 없습니다.</p>
+<ul>
+<li><strong>Syntax</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetLedEffect</span><span class="p">(</span><span class="n">XmLedId_t</span><span class="w"> </span><span class="n">led_id</span><span class="p">,</span><span class="w"> </span><span class="n">XmLedMode_t</span><span class="w"> </span><span class="n">mode</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">period_ms</span><span class="p">);</span>
+</code></pre></div></li>
+<li><strong>Parameters</strong><ul>
+<li><code>led_id</code>: 제어할 LED</li>
+<li><code>mode</code>: 동작 모드 (<code>XM_LED_BLINK</code>, <code>XM_LED_HEARTBEAT</code> 등)</li>
+<li><code>period_ms</code>: 효과의 주기 또는 지속 시간 (밀리초 단위)<ul>
+<li><code>BLINK</code>: 깜빡임 주기 (예: 500 = 0.5초 간격)</li>
+<li><code>ONESHOT</code>: 켜져 있는 시간 (예: 200 = 0.2초간 점등 후 소등)</li>
+<li><code>SOLID</code>/<code>OFF</code>: 무시됨 (0 입력 권장)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Example</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">// 2번 LED를 0.5초 간격으로 깜빡이게 설정</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">XM_SetLedEffect</span><span class="p">(</span><span class="n">XM_LED_2</span><span class="p">,</span><span class="w"> </span><span class="n">XM_LED_BLINK</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">);</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1">// 3번 LED를 심장 박동 모드로 설정 (1초 주기)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">XM_SetLedEffect</span><span class="p">(</span><span class="n">XM_LED_3</span><span class="p">,</span><span class="w"> </span><span class="n">XM_LED_HEARTBEAT</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h3 id="32-button-control-functions">3.2. Button Control Functions<a class="headerlink" href="#32-button-control-functions" title="Permanent link">&para;</a></h3>
+<h4 id="xm_getbuttonstate"><code>XM_GetButtonState</code><a class="headerlink" href="#xm_getbuttonstate" title="Permanent link">&para;</a></h4>
+<p>버튼의 <strong>현재 물리적 상태</strong>를 실시간으로 확인합니다. (Polling 방식)</p>
+<ul>
+<li><strong>Syntax</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">XmBtnState_t</span><span class="w"> </span><span class="nf">XM_GetButtonState</span><span class="p">(</span><span class="n">XmBtnId_t</span><span class="w"> </span><span class="n">btn_id</span><span class="p">);</span>
+</code></pre></div></li>
+<li><strong>Parameters</strong><ul>
+<li><code>btn_id</code>: 확인할 버튼 (<code>XM_BTN_1</code> \~ <code>3</code>)</li>
+</ul>
+</li>
+<li><strong>Returns</strong>: <code>XM_PRESSED</code> (눌림) 또는 <code>XM_RELEASED</code> (안 눌림)</li>
+<li><strong>Example</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1">// 버튼 1을 누르고 있는 동안만 실행</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_GetButtonState</span><span class="p">(</span><span class="n">XM_BTN_1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_PRESSED</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="c1">// ... 동작 수행 ...</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">}</span>
+</code></pre></div></li>
+</ul>
+<h4 id="xm_getbuttonevent"><code>XM_GetButtonEvent</code><a class="headerlink" href="#xm_getbuttonevent" title="Permanent link">&para;</a></h4>
+<p>버튼에서 발생한 <strong>최신 이벤트</strong>를 가져옵니다. (Event-Driven 방식)
+이벤트를 한 번 읽으면 내부 큐에서 사라집니다 (<strong>Read-Clear</strong>). 따라서 변수에 저장해서 사용하거나 <code>switch</code> 문에서 사용하는 것이 좋습니다.</p>
+<ul>
+<li><strong>Syntax</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">XmBtnEvent_t</span><span class="w"> </span><span class="nf">XM_GetButtonEvent</span><span class="p">(</span><span class="n">XmBtnId_t</span><span class="w"> </span><span class="n">btn_id</span><span class="p">);</span>
+</code></pre></div></li>
+<li><strong>Parameters</strong><ul>
+<li><code>btn_id</code>: 확인할 버튼</li>
+</ul>
+</li>
+<li><strong>Returns</strong>: 감지된 이벤트 (<code>XM_BTN_CLICK</code>, <code>XM_BTN_LONG_PRESS</code> 등)</li>
+<li><strong>Example</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">XmBtnEvent_t</span><span class="w"> </span><span class="n">evt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_GetButtonEvent</span><span class="p">(</span><span class="n">XM_BTN_1</span><span class="p">);</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">evt</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_BTN_CLICK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="c1">// 버튼 1이 &#39;딸깍&#39; 클릭되었을 때 1회 실행</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="n">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="s">&quot;Button 1 Clicked!</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="p">}</span><span class="w"> </span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">evt</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_BTN_LONG_PRESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="c1">// 버튼 1이 &#39;꾸욱&#39; 눌렸을 때 1회 실행</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">    </span><span class="n">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="s">&quot;Button 1 Long Pressed!</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="p">}</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h3 id="33-channel-led-rev20-전용">3.3. Channel LED (Rev2.0 전용)<a class="headerlink" href="#33-channel-led-rev20-전용" title="Permanent link">&para;</a></h3>
+<h4 id="xm_setchannelledrgb"><code>XM_SetChannelLedRGB</code><a class="headerlink" href="#xm_setchannelledrgb" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p><strong>Rev2.0 전용</strong> — Rev1.1에서는 사용할 수 없습니다.</p>
+</blockquote>
+<p>PCA9957 기반의 채널별 RGB LED를 제어합니다. 센서 모듈 연결 상태를 시각적으로 표시하는 데 사용합니다.</p>
+<ul>
+<li><strong>Syntax</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetChannelLedRGB</span><span class="p">(</span><span class="n">XmChannelLed_t</span><span class="w"> </span><span class="n">ch</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+</code></pre></div></li>
+<li>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ch</code></td>
+<td>채널 식별자 (<code>XM_CH_LED_EMG</code>, <code>XM_CH_LED_FES</code>, <code>XM_CH_LED_IMU</code>, <code>XM_CH_LED_HMMG</code>, <code>XM_CH_LED_GRF_L</code>, <code>XM_CH_LED_GRF_R</code>, <code>XM_CH_LED_USB</code>)</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>Red 밝기 (0~255)</td>
+</tr>
+<tr>
+<td><code>g</code></td>
+<td>Green 밝기 (0~255)</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>Blue 밝기 (0~255)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>Note</strong>: <code>r=0, g=0, b=0</code>으로 설정하면 시스템 자동 제어로 복구됩니다.</p>
+</li>
+<li>
+<p><strong>Example</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">XM_SetChannelLedRGB</span><span class="p">(</span><span class="n">XM_CH_LED_IMU</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// IMU LED를 빨간색으로</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">XM_SetChannelLedRGB</span><span class="p">(</span><span class="n">XM_CH_LED_IMU</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">     </span><span class="c1">// 시스템 자동 제어 복구</span>
+</code></pre></div></p>
+</li>
+</ul>
+<hr />
+<h3 id="34-system-functions">3.4. System Functions<a class="headerlink" href="#34-system-functions" title="Permanent link">&para;</a></h3>
+<h4 id="xm_io_update"><code>XM_IO_Update</code><a class="headerlink" href="#xm_io_update" title="Permanent link">&para;</a></h4>
+<p><strong>[시스템 필수]</strong> LED와 버튼의 상태를 업데이트하는 구동 함수입니다.
+User Task의 무한 루프(<code>Control_Loop</code> 또는 <code>TSM_Run</code> 내부)에서 주기적으로 호출되어야 <code>Blink</code>나 <code>Long Press</code> 기능이 정상 동작합니다.</p>
+<ul>
+<li><strong>Syntax</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_IO_Update</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div></li>
+<li><strong>Note</strong>: <code>core_process.c</code>가 <code>_FetchAllInputs</code> 과정에서 자동으로 호출해주므로, 일반적인 경우 <strong>End User가 직접 호출할 필요는 없습니다.</strong></li>
+</ul>
+<hr />
+<h2 id="-흔한-실수">⚠️ 흔한 실수<a class="headerlink" href="#-흔한-실수" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LED 가 깜빡 모드 설정했는데 동작 안 함</td>
+<td><code>XM_IO_Update</code> 가 호출 안 됨 (User Task 가 멈췄거나 <code>XM_TSM_Run</code> 누락)</td>
+<td><code>core_process</code> 가 자동 호출하므로 사용자 코드가 무한 루프에 빠지지 않았는지 확인</td>
+</tr>
+<tr>
+<td><code>GetButtonEvent</code> 가 같은 이벤트를 여러 번 반환</td>
+<td>Run_Loop 안에서 다른 곳에서도 <code>GetButtonEvent</code> 호출 (Read-Clear 동시 소비)</td>
+<td>한 이벤트 채널 = 한 곳에서만 읽기</td>
+</tr>
+<tr>
+<td><code>XM_BTN_LONG_PRESS</code> 가 트리거 안 됨</td>
+<td>누르고 있는 시간 &lt; 1초</td>
+<td>1초 이상 유지 필요</td>
+</tr>
+<tr>
+<td><code>SetLedEffect</code> 후에 <code>SetLedState</code> 가 안 먹힘</td>
+<td>효과 모드가 우선 — <code>SetLedState</code> 가 무시되거나 덮어써짐</td>
+<td><code>SetLedEffect(LED, XM_LED_OFF, 0)</code> 으로 효과 해제 후 사용</td>
+</tr>
+<tr>
+<td>가운데/우측 버튼 누름이 안 잡히거나 엉뚱한 <code>XM_BTN_N</code> 으로 잡힘</td>
+<td>보드 Rev 와 다른 ZIP 으로 빌드 — 내장 버튼 MCU 핀이 Rev 1.1 (PC10/11/12) 과 Rev 2.0 (PC11/12/13) 에서 한 칸 시프트되었기 때문</td>
+<td>보드 라벨에서 본인 Rev 확인 후 같은 Rev 의 ZIP 으로 재 import (<a href="../../hardware/#보드-리비전-비교">보드 리비전 비교</a>)</td>
+</tr>
+<tr>
+<td>Channel LED RGB 가 동작 안 함</td>
+<td>Rev1.1 사용 — PCA9957 미장착</td>
+<td>Rev2.0 전용 — Rev1.1 은 내장 LED 3개만</td>
+</tr>
+<tr>
+<td><code>ONESHOT</code> LED 가 1회 후에 다시 안 켜짐</td>
+<td>의도된 동작 (One-shot)</td>
+<td>매번 다시 트리거하려면 이벤트마다 <code>SetLedEffect</code> 호출</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="관련-예제">관련 예제<a class="headerlink" href="#관련-예제" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>예제</th>
+<th>난이도</th>
+<th>LED/버튼 활용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/">00_Quick_Start</a></td>
+<td>입문</td>
+<td>부팅 시퀀스 + 토글</td>
+</tr>
+<tr>
+<td><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/01_Button_LED_Basic/">01_Button_LED_Basic</a></td>
+<td>초급</td>
+<td>폴링 상태 미러링</td>
+</tr>
+<tr>
+<td><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/02_Button_LED_Event/">02_Button_LED_Event</a></td>
+<td>초급</td>
+<td>이벤트 + ONESHOT</td>
+</tr>
+<tr>
+<td><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/03_Button_LED_FSM/">03_Button_LED_FSM</a></td>
+<td>중급</td>
+<td>롱프레스 + Heartbeat/Blink</td>
+</tr>
+<tr>
+<td><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/">18_Debug_Monitor</a></td>
+<td>중급</td>
+<td>진단 LED 패턴</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../02-h10-control-n-data/" class="md-footer__link md-footer__link--prev" aria-label="Previous: KIT H10 제어·데이터">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                KIT H10 제어·데이터
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../04-external-io/" class="md-footer__link md-footer__link--next" aria-label="Next: 외부 IO">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                외부 IO
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

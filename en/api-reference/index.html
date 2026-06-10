@@ -1,0 +1,2278 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서">
+      
+      
+      
+        <link rel="canonical" href="https://agr-exo.github.io/Extension_Module/en/api-reference/">
+      
+      
+        <link rel="prev" href="../tutorials/">
+      
+      
+        <link rel="next" href="01-task-state-machine/">
+      
+      
+        
+          <link rel="alternate" href="../../api-reference/" hreflang="ko">
+        
+          <link rel="alternate" href="./" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>개요 - XM10 Extension Module</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-참고서" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../" title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XM10 Extension Module
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              개요
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../api-reference/" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AGR-EXO/Extension_Module" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../" title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    XM10 Extension Module
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AGR-EXO/Extension_Module" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    홈
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../find-it/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠른 찾기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    시작하기
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    시작하기
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/01-hardware-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    하드웨어 연결
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/02-software-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    개발 환경 구축
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/03-first-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    첫 빌드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code 와 함께 시작
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../hardware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    하드웨어
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    하드웨어
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/external-gpio-rev1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 GPIO (Rev 1.1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/external-gpio-rev2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 GPIO (Rev 2.0)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    튜토리얼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="./" class="md-nav__link md-nav__link--active">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link md-nav__link--active" for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API 레퍼런스
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="01-task-state-machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    상태 머신 (TSM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="02-h10-control-n-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 제어·데이터
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="03-led-btn-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED·버튼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="04-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="05-usb-connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 시리얼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리 로깅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="07-memory-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리 영역
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="08-rtc-clock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실시간 시계 (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="09-task-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    보조 태스크
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    아키텍처
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kit-h10-firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 펌웨어
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../bootloader/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    부트로더
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    부트로더
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../bootloader/XM10_부트로더_업로드방법.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    업로드 방법
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    심화
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    심화
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 데이터 파이프라인
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    문제 해결
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../release-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    릴리스 노트
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    릴리스 노트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#함수-그룹" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 그룹
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#body-data--보행-분석-데이터를-쓰려면-먼저-읽어주세요" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body Data — 보행 분석 데이터를 쓰려면 먼저 읽어주세요
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body Data — 보행 분석 데이터를 쓰려면 먼저 읽어주세요">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#어떤-데이터" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        어떤 데이터?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#미설정-시-증상" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        미설정 시 증상
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#설정-방법" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        설정 방법
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#예제별-필요-여부" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        예제별 필요 여부
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#자주-쓰는-함수-빠른-참조" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        자주 쓰는 함수 빠른 참조
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="자주 쓰는 함수 빠른 참조">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#외골격-센서-데이터" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        외골격 센서 데이터
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#토크-제어" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        토크 제어
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#사전-정의-움직임-명령-p-vector--i-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        사전 정의 움직임 명령 (P-Vector / I-Vector)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#제어-시스템-한눈에" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        제어 시스템 한눈에
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#토크-제어-예제-한눈-정리" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        토크 제어 예제 한눈 정리
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="토크 제어 예제 한눈 정리">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#외골격-기본-모드-ex1113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        외골격 기본 모드 (Ex.11~13)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#토크-제어-입문-ex1415" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        토크 제어 입문 (Ex.14~15)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#제어-연구-시리즈-ex2030" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        제어 연구 시리즈 (Ex.20~30)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-문서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 문서
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="api-참고서">API 참고서<a class="headerlink" href="#api-참고서" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>상위: <a href="../">문서 인덱스</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md">예제 가이드</a></p>
+</blockquote>
+<p>알고리즘을 작성하면서 옆에 두고 보는 함수 명세입니다. 처음부터 다 읽을 필요는 없고, 필요할 때 해당 그룹만 펴보세요.</p>
+<hr />
+<h2 id="함수-그룹">함수 그룹<a class="headerlink" href="#함수-그룹" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>문서</th>
+<th>내용</th>
+<th>자주 쓰는 함수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td><a href="01-task-state-machine/">상태 머신 (TSM)</a></td>
+<td>상태별 동작 분리 + 전이</td>
+<td><code>XM_TSM_Create</code>, <code>XM_TSM_AddState</code>, <code>XM_TSM_Run</code>, <code>XM_TSM_TransitionTo</code></td>
+</tr>
+<tr>
+<td>02</td>
+<td><a href="02-h10-control-n-data/">KIT H10 제어 + 데이터</a></td>
+<td>외골격 센서 읽기 + 토크/위치 명령</td>
+<td><code>XM.status.h10.*</code>, <code>XM_SetAssistTorque</code>, <code>XM_SendPVector</code>, <code>XM_SendIVector</code></td>
+</tr>
+<tr>
+<td>03</td>
+<td><a href="03-led-btn-control/">LED + 버튼</a></td>
+<td>보드 LED 효과, 버튼 이벤트</td>
+<td><code>XM_SetLedEffect</code>, <code>XM_SetLedState</code>, <code>XM_GetButtonEvent</code>, <code>XM_SetChannelLedRGB</code></td>
+</tr>
+<tr>
+<td>04</td>
+<td><a href="04-external-io/">외부 IO</a></td>
+<td>확장 포트 GPIO/ADC</td>
+<td><code>XM_SetPinMode</code>, <code>XM_DigitalRead/Write</code>, <code>XM_AnalogReadMillivolts</code></td>
+</tr>
+<tr>
+<td>05</td>
+<td><a href="05-usb-connectivity/">USB 시리얼 통신</a></td>
+<td>PC 로 텍스트/바이너리 전송</td>
+<td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code>, <code>XM_SetUsbCustomMeta</code></td>
+</tr>
+<tr>
+<td>06</td>
+<td><a href="06-usb-data-logging/">USB 메모리 로깅</a></td>
+<td>USB 메모리에 자동 저장</td>
+<td><code>XM_SetUsbLogSource</code>, <code>XM_StartUsbDataLog</code>, <code>XM_StopUsbDataLog</code></td>
+</tr>
+<tr>
+<td>07</td>
+<td><a href="07-memory-management/">메모리 영역</a></td>
+<td>빠른 메모리 + 비휘발성 저장소</td>
+<td><code>XM_GetUserWorkspace</code>, <code>XM_GetUserPSRAM</code>, <code>XM_UserNV_Read/Write</code></td>
+</tr>
+<tr>
+<td>08</td>
+<td><a href="08-rtc-clock/">실시간 시계</a></td>
+<td>날짜/시간 읽기·쓰기</td>
+<td><code>XM_RTC_SetDateTime</code>, <code>XM_RTC_GetDateTime</code>, <code>XM_RTC_IsRunning</code></td>
+</tr>
+<tr>
+<td>09</td>
+<td><a href="09-task-creation/">보조 task + 데이터 공유</a></td>
+<td>1 kHz 제어 루프와 별도 작업 + 안전한 데이터 공유</td>
+<td><code>XM_Task_CreateOneShot/Periodic</code>, <code>XM_Mutex_Lock/Unlock</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="body-data--보행-분석-데이터를-쓰려면-먼저-읽어주세요">Body Data — 보행 분석 데이터를 쓰려면 먼저 읽어주세요<a class="headerlink" href="#body-data--보행-분석-데이터를-쓰려면-먼저-읽어주세요" title="Permanent link">&para;</a></h2>
+<p>KIT H10 중앙 모듈은 1 kHz 로 사용자 보행을 분석해서 다음과 같은 데이터를 추정합니다. 그런데 이 분석은 사용자 신체 정보 (체중, 신장, 다리 길이) 가 있어야 정확합니다. 이 데이터를 쓰는 예제 (특히 Ex.23 이상) 에서는 <code>Control_Setup()</code> 에 <code>XM_SendUserBodyData()</code> 호출이 반드시 필요합니다.</p>
+<h3 id="어떤-데이터">어떤 데이터?<a class="headerlink" href="#어떤-데이터" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>데이터</th>
+<th>API 경로</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isRightFootContact</code></td>
+<td><code>XM.status.h10.isRightFootContact</code></td>
+<td>우측 족저 접촉 여부</td>
+</tr>
+<tr>
+<td><code>isLeftFootContact</code></td>
+<td><code>XM.status.h10.isLeftFootContact</code></td>
+<td>좌측 족저 접촉 여부</td>
+</tr>
+<tr>
+<td><code>forwardVelocity</code></td>
+<td><code>XM.status.h10.forwardVelocity</code></td>
+<td>전진 속도 (m/s) — Body Data 설정 시 정확도 향상</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>보행 위상(gaitCycle / gaitState)은 현재 공개 구조체 <code>XmH10Data_t</code> 에 직접 노출되지 않습니다.</strong> 보행 주기가 필요하면 <code>forwardVelocity</code> 와 발 접지(<code>isLeftFootContact</code> / <code>isRightFootContact</code>)로 직접 산출합니다 (Ex.23 방식).</p>
+</blockquote>
+<h3 id="미설정-시-증상">미설정 시 증상<a class="headerlink" href="#미설정-시-증상" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>forwardVelocity</code> 기반 보행 위상 추정이 부정확해서 위상 동기가 어긋남</li>
+<li><code>footContact</code> 이 항상 0 — 입각/유각 구분 불가</li>
+<li><code>forwardVelocity</code> 값이 부정확</li>
+</ul>
+<h3 id="설정-방법">설정 방법<a class="headerlink" href="#설정-방법" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="c1">// ⚠️ H10 보행 분석 정확도를 위해 반드시 설정</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="c1">// 실측값 우선. 불가 시 표준체형 근사치 사용 가능.</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">body_data</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="mi">70000</span><span class="p">,</span><span class="w">  </span><span class="c1">// [0] 체중 (g)           — 예: 70 kg</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">        </span><span class="mi">1750</span><span class="p">,</span><span class="w">   </span><span class="c1">// [1] 신장 (mm)          — 예: 175 cm</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">        </span><span class="mi">450</span><span class="p">,</span><span class="w">    </span><span class="c1">// [2] 우측 대퇴 길이 (mm)</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="mi">450</span><span class="p">,</span><span class="w">    </span><span class="c1">// [3] 좌측 대퇴 길이 (mm)</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">        </span><span class="mi">420</span><span class="p">,</span><span class="w">    </span><span class="c1">// [4] 우측 하퇴 길이 (mm)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">        </span><span class="mi">420</span><span class="p">,</span><span class="w">    </span><span class="c1">// [5] 좌측 하퇴 길이 (mm)</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">        </span><span class="mi">60</span><span class="p">,</span><span class="w">     </span><span class="c1">// [6] 우측 발목 높이 (mm)</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">        </span><span class="mi">60</span><span class="p">,</span><span class="w">     </span><span class="c1">// [7] 좌측 발목 높이 (mm)</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="n">XM_SendUserBodyData</span><span class="p">(</span><span class="n">body_data</span><span class="p">);</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="예제별-필요-여부">예제별 필요 여부<a class="headerlink" href="#예제별-필요-여부" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>예제</th>
+<th style="text-align: center;">Body Data</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00~19</td>
+<td style="text-align: center;">대부분 불필요</td>
+<td>기본 입출력, USB, 단순 제어</td>
+</tr>
+<tr>
+<td>20 임피던스</td>
+<td style="text-align: center;">✗</td>
+<td>관절각·토크 피드백만 사용</td>
+</tr>
+<tr>
+<td>21 중력 보상</td>
+<td style="text-align: center;">✗</td>
+<td>관절각 기반 중력 계산</td>
+</tr>
+<tr>
+<td>22 CPG 진동자</td>
+<td style="text-align: center;">△</td>
+<td><code>gaitCycle</code> 모드 시 필요, 각도 피드백 모드로 대체 가능</td>
+</tr>
+<tr>
+<td>23 보행 위상 적응</td>
+<td style="text-align: center;">✔ 필수</td>
+<td><code>gaitCycle</code> 이 토크 프로파일의 위상 소스</td>
+</tr>
+<tr>
+<td>24 가상 구속 (HZD)</td>
+<td style="text-align: center;">✔ 필수</td>
+<td><code>gaitCycle</code> 이 위상 변수의 유일한 소스</td>
+</tr>
+<tr>
+<td>25 입각기 가변 강성</td>
+<td style="text-align: center;">✔ 필수</td>
+<td><code>footContact</code> 없이 입각/유각 구분 불가</td>
+</tr>
+<tr>
+<td>26 ILC</td>
+<td style="text-align: center;">✔ 필수</td>
+<td><code>gaitCycle</code> 이 학습 인덱스 소스</td>
+</tr>
+<tr>
+<td>27 MRAC</td>
+<td style="text-align: center;">✗</td>
+<td>관절각 직접 피드백</td>
+</tr>
+<tr>
+<td>28 어드미턴스</td>
+<td style="text-align: center;">✗</td>
+<td>측정 토크 피드백만 사용</td>
+</tr>
+<tr>
+<td>29 좌우 협응</td>
+<td style="text-align: center;">△</td>
+<td>각도 기반 동작, Body Data 로 정확도 향상</td>
+</tr>
+<tr>
+<td>30 FF+FB 혼합</td>
+<td style="text-align: center;">✗</td>
+<td>모델 파라미터 매크로로 직접 설정</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>gaitCycle</code> 이나 <code>footContact</code> 없이 보행 위상이 필요하면 IMU Hub 나 GRF 슈즈 같은 외부 센서로 독립 계측해서 쓸 수도 있습니다.</p>
+</blockquote>
+<hr />
+<h2 id="자주-쓰는-함수-빠른-참조">자주 쓰는 함수 빠른 참조<a class="headerlink" href="#자주-쓰는-함수-빠른-참조" title="Permanent link">&para;</a></h2>
+<h3 id="외골격-센서-데이터">외골격 센서 데이터<a class="headerlink" href="#외골격-센서-데이터" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// 고관절 각도</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kt">float</span><span class="w"> </span><span class="n">angle_r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">rightHipMotorAngle</span><span class="p">;</span><span class="w">   </span><span class="c1">// 우측 (deg)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kt">float</span><span class="w"> </span><span class="n">angle_l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">leftHipMotorAngle</span><span class="p">;</span><span class="w">    </span><span class="c1">// 좌측 (deg)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1">// 고관절 모터 전류 (필드명은 Torque 지만 단위는 A — 토크 환산 ×1.594 ≈ Nm)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="kt">float</span><span class="w"> </span><span class="n">cur_r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">rightHipTorque</span><span class="p">;</span><span class="w">         </span><span class="c1">// 우측 (A)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="kt">float</span><span class="w"> </span><span class="n">cur_l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">leftHipTorque</span><span class="p">;</span><span class="w">          </span><span class="c1">// 좌측 (A)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1">// 보행 분석 데이터 (Body Data 설정 시 정확도 향상)</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="kt">bool</span><span class="w">    </span><span class="n">right_gnd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">isRightFootContact</span><span class="p">;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="kt">bool</span><span class="w">    </span><span class="n">left_gnd</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">isLeftFootContact</span><span class="p">;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="kt">float</span><span class="w">   </span><span class="n">fwd_vel</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">forwardVelocity</span><span class="p">;</span><span class="w">  </span><span class="c1">// m/s</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1">// gaitCycle 은 공개 필드가 아닙니다 — fwd_vel + footContact 로 직접 산출 (Ex.23)</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="c1">// IMU (전처리된 자세 각도)</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="kt">float</span><span class="w"> </span><span class="n">pitch_r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">rightHipImuSagittalPitch</span><span class="p">;</span><span class="w"> </span><span class="c1">// 시상면 피치 (deg)</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="kt">float</span><span class="w"> </span><span class="n">roll_r</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">rightHipImuFrontalRoll</span><span class="p">;</span><span class="w">   </span><span class="c1">// 전두면 롤 (deg)</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="c1">// H10 동작 모드</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="kt">bool</span><span class="w"> </span><span class="n">is_assist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">h10Mode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_H10_MODE_ASSIST</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="토크-제어">토크 제어<a class="headerlink" href="#토크-제어" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// 제어 모드 설정</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_MONITOR</span><span class="p">);</span><span class="w">  </span><span class="c1">// 모니터링 전용 (기본)</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_TORQUE</span><span class="p">);</span><span class="w">   </span><span class="c1">// 직접 토크 제어 활성화</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1">// 토크 명령 (CTRL_TORQUE 모드에서만 유효)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">XM_SetAssistTorqueRH</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">torque_nm</span><span class="p">);</span><span class="w">          </span><span class="c1">// 우측</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">XM_SetAssistTorqueLH</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">torque_nm</span><span class="p">);</span><span class="w">          </span><span class="c1">// 좌측</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">XM_SetAssistTorque</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">rh_nm</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lh_nm</span><span class="p">);</span><span class="w">   </span><span class="c1">// 양측</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1">// 안전 해제 패턴 (Active_Exit에서 항상 수행)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="n">XM_SetAssistTorqueRH</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">);</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="n">XM_SetAssistTorqueLH</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">);</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_MONITOR</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="사전-정의-움직임-명령-p-vector--i-vector">사전 정의 움직임 명령 (P-Vector / I-Vector)<a class="headerlink" href="#사전-정의-움직임-명령-p-vector--i-vector" title="Permanent link">&para;</a></h3>
+<p>직접 토크 계산 대신 "이 위치로 이 시간 안에 가" 같은 한 줄 명령으로 외골격을 움직이는 방식입니다.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// 위치 명령 — 목표 각도까지 정해진 시간 안에 이동</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">PVector_t</span><span class="w"> </span><span class="n">pv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">yd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-250</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">s0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">sd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1">// yd = 목표각 × 10 (deg × 10),  L = 소요 시간 (ms)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">XM_SendPVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pv</span><span class="p">);</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1">// 임피던스 명령 — 가상 스프링-댐퍼처럼 동작</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">IVector_t</span><span class="w"> </span><span class="n">iv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">epsilon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1">// kp / kd: 0~100 (%)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">iv</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h2 id="제어-시스템-한눈에">제어 시스템 한눈에<a class="headerlink" href="#제어-시스템-한눈에" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>┌─────────────────────────────────────────────────────┐
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>│  KIT H10 중앙 모듈                                   │
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>│  실시간 보행 분석 (1 kHz)                            │
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>│  ┌──────────────┐   Body Data 설정 필요             │
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>│  │ gaitCycle    │← XM_SendUserBodyData()            │
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>│  │ footContact  │                                    │
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>│  │ forwardVel   │                                    │
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>│  └──────────────┘                                   │
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>│  고관절 모터 각도 / 추정 토크                          │
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>└──────────────────┬──────────────────────────────────┘
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>                   │ CAN-FD (1 ms 주기 센서 데이터)
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>┌──────────────────▼──────────────────────────────────┐
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>│  XM10                                               │
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>│  ┌───────────────────────────────────────────────┐  │
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>│  │  Control_Loop() — 매 1 ms 호출                    │  │
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>│  │                                               │  │
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>│  │  XM.status.h10.* 읽기                         │  │
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>│  │      ↓                                        │  │
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>│  │  내 알고리즘 계산 (예: τ = K·e + B·ė)         │  │
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>│  │      ↓                                        │  │
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>│  │  XM_SetAssistTorque(RH, LH) 전송              │  │
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>│  └───────────────────────────────────────────────┘  │
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>└─────────────────────────────────────────────────────┘
+</code></pre></div>
+<hr />
+<h2 id="토크-제어-예제-한눈-정리">토크 제어 예제 한눈 정리<a class="headerlink" href="#토크-제어-예제-한눈-정리" title="Permanent link">&para;</a></h2>
+<h3 id="외골격-기본-모드-ex1113">외골격 기본 모드 (Ex.11~13)<a class="headerlink" href="#외골격-기본-모드-ex1113" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>예제</th>
+<th>제어 방식</th>
+<th style="text-align: center;">Body Data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11 Passive</td>
+<td>사전 정의 움직임 명령 (P/I-Vector)</td>
+<td style="text-align: center;">✗</td>
+</tr>
+<tr>
+<td>12 Active Assist</td>
+<td>의도 감지 + 단계 토크</td>
+<td style="text-align: center;">✗</td>
+</tr>
+<tr>
+<td>13 Resistive</td>
+<td>τ = −B·ω (속도 저항)</td>
+<td style="text-align: center;">✗</td>
+</tr>
+</tbody>
+</table>
+<h3 id="토크-제어-입문-ex1415">토크 제어 입문 (Ex.14~15)<a class="headerlink" href="#토크-제어-입문-ex1415" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>예제</th>
+<th>제어 방식</th>
+<th style="text-align: center;">Body Data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>14 PD 제어</td>
+<td>τ = Kp·e + Kd·ė</td>
+<td style="text-align: center;">✗</td>
+</tr>
+<tr>
+<td>15 역진자 모델</td>
+<td>τ = Mgl·sin(θ) + PD</td>
+<td style="text-align: center;">✗</td>
+</tr>
+</tbody>
+</table>
+<h3 id="제어-연구-시리즈-ex2030">제어 연구 시리즈 (Ex.20~30)<a class="headerlink" href="#제어-연구-시리즈-ex2030" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>예제</th>
+<th>제어 방식</th>
+<th style="text-align: center;">Body Data</th>
+<th>논문</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20 임피던스</td>
+<td>τ = K·(θ_d−θ) + B·θ̇</td>
+<td style="text-align: center;">✗</td>
+<td>Hogan 1985</td>
+</tr>
+<tr>
+<td>21 중력 보상</td>
+<td>τ = α·(Mgl·cos θ + B_f·θ̇)</td>
+<td style="text-align: center;">✗</td>
+<td>Just 2018</td>
+</tr>
+<tr>
+<td>22 CPG 진동자</td>
+<td>φ̇ = ω + ε·F·cosφ</td>
+<td style="text-align: center;">△</td>
+<td>Ronsse 2011</td>
+</tr>
+<tr>
+<td>23 보행 위상 적응</td>
+<td>τ(φ) = A·sin(π·φ) 구간별</td>
+<td style="text-align: center;">✔</td>
+<td>Quinlivan 2017</td>
+</tr>
+<tr>
+<td>24 가상 구속 (HZD)</td>
+<td>θ_d(s) = Bézier(s)</td>
+<td style="text-align: center;">✔</td>
+<td>Westervelt 2003</td>
+</tr>
+<tr>
+<td>25 입각기 가변 강성</td>
+<td>K_stance / K_swing 전환</td>
+<td style="text-align: center;">✔</td>
+<td>Collins 2015</td>
+</tr>
+<tr>
+<td>26 ILC</td>
+<td>τ_{k+1} = τ_k + L·e_k</td>
+<td style="text-align: center;">✔</td>
+<td>Emken 2007</td>
+</tr>
+<tr>
+<td>27 MRAC</td>
+<td>MIT Rule 적응 게인</td>
+<td style="text-align: center;">✗</td>
+<td>Slotine 1991</td>
+</tr>
+<tr>
+<td>28 어드미턴스</td>
+<td>τ_ext → 가상 동역학 → θ_ref</td>
+<td style="text-align: center;">✗</td>
+<td>Keemink 2018</td>
+</tr>
+<tr>
+<td>29 좌우 협응</td>
+<td>τ_R = −K_c·(θ_R+θ_L)</td>
+<td style="text-align: center;">△</td>
+<td>Duschau-Wicke 2010</td>
+</tr>
+<tr>
+<td>30 FF+FB 혼합</td>
+<td>τ = τ_ff(모델) + τ_fb(PD)</td>
+<td style="text-align: center;">✗</td>
+<td>Slotine 1991 Ch.6</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="관련-문서">관련 문서<a class="headerlink" href="#관련-문서" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../getting-started/">Getting Started</a> — 환경 구축 + 첫 빌드</li>
+<li><a href="../architecture/">Architecture</a> — 시스템 큰 그림</li>
+<li><a href="../kit-h10-firmware/">KIT H10 Firmware</a> — 펌웨어 호환성</li>
+<li><a href="../tutorials/">Tutorials</a> — 예제 학습 경로</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../tutorials/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 튜토리얼">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                튜토리얼
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="01-task-state-machine/" class="md-footer__link md-footer__link--next" aria-label="Next: 상태 머신 (TSM)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                상태 머신 (TSM)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
