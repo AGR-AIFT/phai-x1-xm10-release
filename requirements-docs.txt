@@ -1,0 +1,4 @@
+# XM10 문서 사이트(MkDocs) 빌드 의존성 — PoC
+# 로컬 미리보기: pip install -r requirements-docs.txt && mkdocs serve
+mkdocs-material>=9.5,<10
+mkdocs-static-i18n>=1.2,<2

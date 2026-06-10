@@ -1,0 +1,38 @@
+# XM10 문서 사이트 빌드·배포 (GitHub Pages) — PoC
+# docs/ 또는 mkdocs.yml 변경이 Develop 에 푸시되면 사이트를 다시 빌드해
+# gh-pages 브랜치로 배포합니다. 최초 1회 레포 Settings > Pages 에서
+# Source 를 "Deploy from a branch: gh-pages" 로 지정해야 합니다.
+name: Deploy Docs (PoC)
+
+on:
+  push:
+    branches: [Develop]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'requirements-docs.txt'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docs-pages
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements-docs.txt
+      - name: Build & deploy to gh-pages
+        run: mkdocs gh-deploy --force --branch gh-pages

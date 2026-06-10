@@ -1,0 +1,142 @@
+# =============================================================================
+# XM10 Extension Module — 문서 사이트 (MkDocs Material) PoC
+# -----------------------------------------------------------------------------
+# 기존 docs/*.md 를 그대로 입력으로 받아 검색·사이드바·한/영 토글이 있는
+# 정적 사이트로 빌드합니다. 로컬 미리보기:
+#     pip install -r requirements-docs.txt
+#     mkdocs serve            # http://127.0.0.1:8000
+# GitHub Pages 배포는 .github/workflows/docs.yml 가 자동 수행합니다.
+#
+# [PoC 한계] 일부 문서가 docs/ 밖(../examples/, ../README.md, ../XM10_SDK/)을
+# 상대경로로 링크합니다. 사이트에서는 그 링크가 404 가 되므로(아래 validation 으로
+# 빌드는 통과), 정식 적용 시 (a) 소스 링크를 GitHub 절대 URL 로 바꾸거나
+# (b) examples 설명을 docs/ 안으로 옮기는 후속 정리가 필요합니다.
+# =============================================================================
+
+site_name: XM10 Extension Module
+site_description: angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서
+site_url: https://agr-exo.github.io/Extension_Module/
+repo_url: https://github.com/AGR-EXO/Extension_Module
+repo_name: AGR-EXO/Extension_Module
+edit_uri: edit/Develop/docs/
+docs_dir: docs
+
+theme:
+  name: material
+  language: ko
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: cyan
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: 다크 모드로 전환
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: cyan
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: 라이트 모드로 전환
+
+plugins:
+  - search:
+      lang:
+        - ko
+        - en
+  # 한/영 토글 — 번역본(.en.md)이 없으면 한국어 본문으로 자동 폴백.
+  # 영문 콘텐츠는 docs/<경로>.en.md 로 추가하면 토글에 자동 반영됩니다.
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: ko
+          default: true
+          name: 한국어
+          build: true
+        - locale: en
+          name: English
+          build: true
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+
+# docs/ 밖을 가리키는 상대링크 때문에 빌드가 깨지지 않도록 완화(PoC).
+validation:
+  nav:
+    omitted_files: info
+    not_found: warn
+  links:
+    not_found: warn
+    absolute_links: ignore
+    unrecognized_links: ignore
+
+nav:
+  - 홈: README.md
+  - 빠른 찾기: find-it.md
+  - 시작하기:
+      - 하드웨어 연결: getting-started/01-hardware-setup.md
+      - 개발 환경 구축: getting-started/02-software-setup.md
+      - 첫 빌드: getting-started/03-first-build.md
+      - Claude Code 와 함께 시작: getting-started/00-claude-code-quickstart.md
+  - 하드웨어:
+      - 개요: hardware/README.md
+      - 외부 GPIO (Rev 1.1): hardware/external-gpio-rev1.1.md
+      - 외부 GPIO (Rev 2.0): hardware/external-gpio-rev2.0.md
+  - 튜토리얼: tutorials/README.md
+  - API 레퍼런스:
+      - 개요: api-reference/README.md
+      - 상태 머신 (TSM): api-reference/01-task-state-machine.md
+      - KIT H10 제어·데이터: api-reference/02-h10-control-n-data.md
+      - LED·버튼: api-reference/03-led-btn-control.md
+      - 외부 IO: api-reference/04-external-io.md
+      - USB 시리얼: api-reference/05-usb-connectivity.md
+      - USB 메모리 로깅: api-reference/06-usb-data-logging.md
+      - 메모리 영역: api-reference/07-memory-management.md
+      - 실시간 시계 (RTC): api-reference/08-rtc-clock.md
+      - 보조 태스크: api-reference/09-task-creation.md
+  - 아키텍처: architecture/README.md
+  - KIT H10 펌웨어: kit-h10-firmware/README.md
+  - 부트로더:
+      - 개요: bootloader/README.md
+      - 업로드 방법: bootloader/XM10_부트로더_업로드방법.md
+  - 심화:
+      - 개요: advanced/README.md
+      - AI 데이터 파이프라인: advanced/ai-data-pipeline.md
+  - 문제 해결: troubleshooting.md
+  - 릴리스 노트:
+      - 개요: release-notes/README.md
+      - v2.2.2: release-notes/v2.2.2.md
+      - v2.2.1: release-notes/v2.2.1.md
+      - v2.2.0: release-notes/v2.2.0.md
+      - v2.1.1: release-notes/v2.1.1.md
