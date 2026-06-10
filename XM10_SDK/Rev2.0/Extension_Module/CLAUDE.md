@@ -29,7 +29,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **OS** | FreeRTOS + CMSIS-OS2 |
 | **이 ZIP 의 출처** | https://github.com/AGR-EXO/Extension_Module/releases |
 | **License** | MIT |
-| **본 SDK 의 역할** | 사용자/연구자용 공개 릴리즈 — 본인 알고리즘을 `XM_Apps/User_Algorithm/` 또는 `examples/` 에 작성 |
+| **본 SDK 의 역할** | 사용자/연구자용 공개 릴리즈 — 본인 알고리즘을 `XM_Apps/Control_Task/` 또는 `examples/` 에 작성 |
 
 ---
 
@@ -58,7 +58,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 1. **[처음 시작 (AI 자동 안내)](docs/getting-started/00-claude-code-quickstart.md)** — Claude Code 가 환경 구축까지 동반
 2. **[Ex.00 Quick Start](examples/00_Quick_Start/)** — 보드 smoke test (⭐)
 3. **[Ex.01~03 Button & LED](examples/01_Button_LED_Basic/)** — 디지털 IO 기본 (⭐~⭐⭐)
-4. **[전체 학습 로드맵](docs/tutorials/README.md)** — 41 예제 트랙
+4. **[전체 학습 로드맵](docs/tutorials/README.md)** — 47 예제 트랙
 5. **[Rev 2.0 전용 예제]** — Ethernet (`05_USB_Connectivity` 외), PSRAM (`19_Memory_*`), RTC 활용
 
 ---
@@ -101,12 +101,12 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
    - 같은 COM 포트 충돌 → 접속 실패 / 데이터 손실. (`examples/07~09` 헤더 `@warning` 참조)
 
 3. **사용자 코드 영역**
-   - 사용자가 수정하는 곳: `XM_Apps/User_Algorithm/` 또는 `examples/<번호>_<이름>/*.c`
+   - 사용자가 수정하는 곳: `XM_Apps/Control_Task/` 또는 `examples/<번호>_<이름>/*.c`
    - 라이브러리 (`XM_FW`, `XM_Lib`, `Drivers/`, `Middlewares/`, `LWIP/`, `Compatible/`) 는 **봉인** — 수정 시 SDK 일관성 깨짐.
 
 4. **HW Rev 호환**
    - 본 SDK 는 **Rev 2.0 전용** 입니다. Rev 1.1 보드에 본 SDK 빌드 결과물을 플래시하지 마세요.
-   - 본인 보드 리비전은 PCB 라벨 또는 [docs/architecture/](docs/architecture/) 비교표로 확인.
+   - 본인 보드 리비전은 PCB 라벨 또는 [docs/hardware/README.md](docs/hardware/README.md#보드-리비전-비교) 비교표로 확인.
 
 5. **bootloader 영역 비건드림**
    - 부트로더 (별도 region, `0x08000000`) 는 사용자가 직접 flash 하지 않습니다. SWD 로 한 번 설치 후, 이후 FW 업로드는 PhAI Studio USB FTP. ([docs/bootloader/](docs/bootloader/))

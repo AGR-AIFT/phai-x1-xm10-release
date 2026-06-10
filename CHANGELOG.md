@@ -66,7 +66,7 @@
 * **Rev 1.1 에도 보조 task API 추가** — `XM_Task_CreateOneShot/Periodic`, `XM_Task_IsComplete/Delete`, `XM_Mutex_*` (Rev 2.0 와 동일)
 * **`Examples/38_Periodic_Background_Task/`** — `Control_Loop`(1 kHz) + 보조 task(100 Hz) 데이터 공유 패턴 데모
 * **`Examples/39_Task_Lifecycle/`** — OneShot task Create → Complete → Delete 사이클 데모
-* **`docs/dev/12_Task_Topology.md`** — 시스템 task 인벤토리 + prio_hint 가이드 + 데이터 흐름 다이어그램
+* **`docs/api-reference/09-task-creation.md`** — 시스템 task 인벤토리 + prio_hint 가이드 + 데이터 흐름 다이어그램
 * **`docs/release-notes/v2.2.0.md`** — 본 릴리즈 노트
 
 ### Changed

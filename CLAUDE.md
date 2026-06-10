@@ -41,7 +41,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 2. **[하드웨어 셋업](docs/getting-started/01-hardware-setup.md)** → **[소프트웨어 셋업](docs/getting-started/02-software-setup.md)** → **[첫 빌드](docs/getting-started/03-first-build.md)** — 수동 절차
 3. **[Ex.00 Quick Start](examples/00_Quick_Start/)** — 보드 smoke test (⭐)
 4. **[Ex.01~03 Button & LED](examples/01_Button_LED_Basic/)** — 디지털 IO 기본 (⭐~⭐⭐)
-5. **[전체 학습 로드맵](docs/tutorials/README.md)** — 41 예제 트랙 (난이도 별 표시)
+5. **[전체 학습 로드맵](docs/tutorials/README.md)** — 47 예제 트랙 (난이도 별 표시)
 
 ---
 
@@ -82,7 +82,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
    - 같은 COM 포트 충돌 → 접속 실패 / 데이터 손실. (`examples/07~09` 헤더 `@warning` 참조)
 
 3. **사용자 코드 영역**
-   - 사용자가 수정하는 곳: `XM_Apps/User_Algorithm/` 또는 `examples/<번호>_<이름>/*.c`
+   - 사용자가 수정하는 곳: `XM_Apps/Control_Task/` 또는 `examples/<번호>_<이름>/*.c`
    - 라이브러리 (`XM_Lib`, `IOIF`, `AGR_MW`, 시스템 코드) 는 **봉인** — 수정 시 SDK 일관성 깨짐.
 
 4. **HW Rev 호환**

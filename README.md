@@ -8,7 +8,7 @@
   <a href="#"><img src="https://img.shields.io/badge/Platform-STM32H7-blue.svg" alt="Platform"></a>
   <a href="#"><img src="https://img.shields.io/badge/OS-FreeRTOS-orange.svg" alt="OS"></a>
   <a href="#"><img src="https://img.shields.io/badge/Comm-CAN--FD-red.svg" alt="CAN-FD"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Examples-41-success.svg" alt="Examples"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Examples-47-success.svg" alt="Examples"></a>
   <a href="/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
 </p>
 
@@ -23,7 +23,7 @@
 
 ---
 
-> **🧭 길 찾기** — 뭘 찾는지는 알겠는데 어디 있는지 모르겠다면 **[docs/find-it.md](docs/find-it.md)** 한 페이지에 다 있어요. "버튼 제어 API 어디?", "Ex.07 안 돼", "보드 핀맵" 같은 자주 묻는 키워드 → 정답 페이지 직행.
+> **🧭 길 찾기** — 뭘 찾는지는 알겠는데 어디 있는지 모르겠다면 **[docs/find-it.md](docs/find-it.md)** 한 페이지에 다 있습니다. "버튼 제어 API 어디?", "Ex.07 안 돼", "보드 핀맵" 같은 자주 묻는 키워드 → 정답 페이지 직행.
 
 ---
 
@@ -91,7 +91,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
   <img width="1984" height="900" alt="xm10-system-architecture" src="https://github.com/user-attachments/assets/9fd4fc8b-6e4f-412e-aa83-3dff5f408362" />
 </p>
 
-내가 손대는 곳은 한 곳뿐입니다 — `XM_Apps/ 영역`. 그 외 CAN 통신, USB 송수신, 외골격 데이터 파싱 같은 일은 모두 XM 라이브러리가 자동으로 처리합니다. 매 1 ms 마다 `Control_Loop()` 가 호출되고, 그 안에서 `XM.status.h10.*` 로 센서를 읽고 `XM_SetAssistTorque*()` 같은 함수로 명령을 보내는 게 전부예요.
+내가 손대는 곳은 한 곳뿐입니다 — `XM_Apps/ 영역`. 그 외 CAN 통신, USB 송수신, 외골격 데이터 파싱 같은 일은 모두 XM 라이브러리가 자동으로 처리합니다. 매 1 ms 마다 `Control_Loop()` 가 호출되고, 그 안에서 `XM.status.h10.*` 로 센서를 읽고 `XM_SetAssistTorque*()` 같은 함수로 명령을 보내는 것이 전부입니다.
 
 > 자세한 흐름 (1 ms 제어 루프, 시작 시퀀스, 내 코드 위치): **[docs/architecture/](docs/architecture/)**
 
@@ -99,7 +99,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 ## 학습 경로
 
-41 개의 예제 모두 같은 형식으로 정돈되어 있어요 — 목표, 사전 지식, 핵심 코드, 실험, 흔한 실수. 한 예제는 30 분 안에 끝낼 수 있도록 설계했습니다.
+47 개의 예제 모두 같은 형식으로 정돈되어 있습니다 — 목표, 사전 지식, 핵심 코드, 실험, 흔한 실수. 기초 예제 (Ex.10 이하)는 30 분 안에 끝낼 수 있도록 설계했습니다.
 
 | 수준 | 추천 순서 | 시간 |
 | :--- | :--- | :--- |
@@ -123,7 +123,7 @@ Extension_Module/
 │   ├── find-it.md         ← 🧭 빠른 찾기 인덱스 (먼저 가보세요)
 │   ├── getting-started/   ← 환경 구축 + 첫 빌드
 │   ├── hardware/          ← 보드 외부 인터페이스 + GPIO 핀맵
-│   ├── tutorials/         ← 41 개 예제 학습 흐름 + 16 주 진도표
+│   ├── tutorials/         ← 47 개 예제 학습 흐름 + 16 주 진도표
 │   ├── api-reference/     ← XM 함수 전체 명세
 │   ├── architecture/      ← 내 코드가 언제·어디서 동작하는지
 │   ├── advanced/          ← AI 데이터 파이프라인 + 심화 트랙
@@ -131,7 +131,7 @@ Extension_Module/
 │   ├── kit-h10-firmware/  ← H10 외골격 펌웨어 호환성
 │   ├── release-notes/     ← 버전별 첨부 파일 + 호환성 매트릭스
 │   └── troubleshooting.md ← 자주 마주치는 문제 모음
-├── examples/              ← 41 개 실습 예제 (각 폴더에 README)
+├── examples/              ← 47 개 실습 예제 (각 폴더에 README)
 ├── XM10_SDK/              ← STM32CubeIDE 프로젝트
 │   ├── Rev1.1/Extension_Module/  ← PCB Rev 1.1 용
 │   └── Rev2.0/Extension_Module/  ← PCB Rev 2.0 용 (대부분 여기)
@@ -143,7 +143,7 @@ Extension_Module/
 └── LICENSE
 ```
 
-내가 손대는 코드 위치: `XM_Apps/User_Algorithm/user_app.c` (ZIP 압축 푼 폴더 기준). 그 외는 라이브러리가 알아서.
+내가 손대는 코드 위치: `XM_Apps/Control_Task/control_task.c` (ZIP 압축 푼 폴더 기준). 그 외는 라이브러리가 알아서.
 
 ## 전체 문서
 
@@ -152,14 +152,14 @@ Extension_Module/
 | **[🧭 빠른 찾기](docs/find-it.md)** | **"어디 가야 하지" 막힐 때 첫 번째 출구** |
 | [Getting Started](docs/getting-started/) | 하드웨어 연결, 환경 구축, 첫 빌드 — 3 단계 |
 | [Hardware](docs/hardware/) | 보드 외부 인터페이스 + 외부 GPIO 핀맵 (Rev 별) |
-| [Tutorials](docs/tutorials/) | 41 개 예제 학습 로드맵 + 한 학기 진도표 |
+| [Tutorials](docs/tutorials/) | 47 개 예제 학습 로드맵 + 한 학기 진도표 |
 | [API Reference](docs/api-reference/) | XM 함수 전체 명세 + 흔한 실수 |
 | [Architecture](docs/architecture/) | 내 코드가 어디서 어떻게 동작하는지 |
 | [KIT H10 Firmware](docs/kit-h10-firmware/) | H10 펌웨어/컨텐츠 호환성 + 업데이트 |
 | [Bootloader](docs/bootloader/) | 펌웨어 업로드 방법 (SWD 직접 / USB) |
 | [Advanced Topics](docs/advanced/) | AI 데이터 파이프라인 + 관심 분야별 자기주도 학습 |
 | [Troubleshooting](docs/troubleshooting.md) | 자주 마주치는 문제 정리 |
-| [Examples](examples/) | 41 개 예제 (각 폴더에 5 단계 README) |
+| [Examples](examples/) | 47 개 예제 (각 폴더에 5 단계 README) |
 | [Python Tools](PythonDecoder/) | USB 시리얼/메모리 디코더, MATLAB 변환 |
 | [Release Notes](docs/release-notes/) | 버전별 첨부 파일 + 호환성 매트릭스 |
 | [Changelog](CHANGELOG.md) | 버전별 변경 이력 요약 |
