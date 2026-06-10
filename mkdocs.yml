@@ -30,7 +30,6 @@ theme:
   icon:
     repo: fontawesome/brands/github
   features:
-    - navigation.instant
     - navigation.tracking
     - navigation.sections
     - navigation.top
@@ -90,6 +89,9 @@ markdown_extensions:
       alternate_style: true
   - toc:
       permalink: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
 
 extra_css:
   - stylesheets/extra.css
