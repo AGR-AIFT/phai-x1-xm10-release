@@ -193,14 +193,14 @@ static void Run_Loop(void)                                          // ⑥ 매 1
 
 | 증상 | 원인 | 해결 |
 |------|------|------|
-| `_Pool_Alloc` 가 항상 NULL 반환 | `_Pool_Init` 호출 누락 → `is_used[]` 가 garbage | `User_Setup` 에서 `_Pool_Init(&s_pool)` 호출 확인 |
+| `_Pool_Alloc` 가 항상 NULL 반환 | `_Pool_Init` 호출 누락 → `is_used[]` 가 garbage | `Control_Setup` 에서 `_Pool_Init(&s_pool)` 호출 확인 |
 | Filtered Angle 이 Raw 와 동일 | 첫 호출에서 count=1 → 평균 = raw | 정상. 50 cycle 지나면 안정 |
 | 갑자기 Filtered 가 점프 | Ring Buffer Push 시 `count` 갱신 누락 | Push 후 `p->count++` 필수 |
 | Pool 가득 찼는데 LED 3 안 켜짐 | `_Pool_Alloc` 반환값 NULL 체크 누락 | `if (!slot) XM_SetLedEffect(LED_3, BLINK, 200)` |
 | Free 후에도 슬롯 사용 중으로 표시 | `_Pool_Free` 호출 시 잘못된 포인터 | 풀 범위 검사 (`>= pool[0] && <= pool[POOL_SIZE-1]`) 확인 |
 | MemoryReport sizeof 가 예상보다 큼 | 컴파일러 alignment 패딩 (`uint8_t` + `float` → 3 B 패딩) | 정상. 큰 필드를 먼저 선언하면 줄어듦 |
 | 이동 평균이 너무 느림 (지연 큼) | 윈도우 50 = 50 ms 지연 | `RING_BUF_SIZE` 10 으로 줄임 (트레이드오프) |
-| `XM_SendUsbDataWithId` 가 데이터 안 보냄 | `XM_SetUsbCustomMeta(0xF0, ...)` 누락 | `User_Setup` 에서 메타 등록 필수 |
+| `XM_SendUsbDataWithId` 가 데이터 안 보냄 | `XM_SetUsbCustomMeta(0xF0, ...)` 누락 | `Control_Setup` 에서 메타 등록 필수 |
 | `malloc` 쓰면 안 되나? | XM 양산 규칙 — heap fragmentation 위험 | 항상 정적 배열 + flag 패턴 사용 |
 
 막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)

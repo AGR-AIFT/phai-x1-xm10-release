@@ -1,7 +1,7 @@
 # Ex.00 — Quick Start (보드 동작 확인)
 
 > 🎯 **학습 목표**:
-> - `User_Setup()` / `User_Loop()` 진입점 구조를 이해합니다.
+> - `Control_Setup()` / `Control_Loop()` 진입점 구조를 이해합니다.
 > - TSM 1개 상태 생성 → LED · 버튼 · USB CDC 기초 동작을 한 번에 체험합니다.
 >
 > ⏱️ 권장 시간: 30분 | 🔧 난이도: ⭐ (사전지식 0)
@@ -25,7 +25,7 @@ XM10 보드 단독으로 다음을 확인합니다 (외부 HW 불필요):
 
 ## 2️⃣ 사전 지식 — 시작 전 알아둘 것
 
-- **User_Setup / User_Loop** — 부팅 시 1회 호출 + 매 2 ms (500 Hz) 반복 호출. ([architecture](../../docs/architecture/))
+- **Control_Setup / Control_Loop** — 부팅 시 1회 호출 + 매 2 ms (500 Hz) 반복 호출. ([architecture](../../docs/architecture/))
 - **TSM (Task State Machine)** — 상태 + 콜백 (`on_entry` / `on_loop`) 구조의 마이크로 FSM. 본 예제는 단일 상태만 사용. (참고: [Ex.03 FSM](../03_Button_LED_FSM/) 에서 멀티 상태로 확장)
 - **USB CDC** — XM10 ↔ PC 시리얼 가상 포트. 텍스트 또는 바이너리 전송.
 
@@ -36,7 +36,7 @@ XM10 보드 단독으로 다음을 확인합니다 (외부 HW 불필요):
 ## 3️⃣ 핵심 코드 — 무엇이 어디서 일어나나
 
 ```c
-void User_Setup(void)                                     // ① 부팅 시 1회
+void Control_Setup(void)                                     // ① 부팅 시 1회
 {
     s_tsm = XM_TSM_Create(XM_STATE_USER_START);            // ② TSM 핸들 생성
     XmStateConfig_t conf = {
@@ -47,7 +47,7 @@ void User_Setup(void)                                     // ① 부팅 시 1회
     XM_TSM_AddState(s_tsm, &conf);
 }
 
-void User_Loop(void)                                      // ⑤ 매 2 ms System 호출
+void Control_Loop(void)                                      // ⑤ 매 2 ms System 호출
 {
     XM_TSM_Run(s_tsm);                                     // ⑥ TSM 디스패치
 }

@@ -43,7 +43,7 @@ static bool s_btn_prev = false;
 static uint16_t s_fsr_mv[4];
 static uint32_t s_total_pressure_mv;
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     XM_SetAnalogReadResolution(12);
 

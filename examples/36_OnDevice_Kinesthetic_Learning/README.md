@@ -1,11 +1,13 @@
 # Ex.36 — On-Device Kinesthetic Learning (MCU 위 Tiny NN 실시간 학습 + LQR 재생)
 
+> 🛑 **Rev 2.0 전용 예제** — Internal Flash UserNV API (`XM_UserNV_Read/Write/Erase`) 가 Rev 2.0 SDK 의 `libXM_Lib.a` 에만 포함되어 있어, **Rev 1.1 SDK 에서는 link 단계에서 실패**합니다. 본인 보드가 Rev 1.1 이면 Ex.35 까지 진행하세요. 보드 확인 방법은 [보드 리비전 비교](../../docs/hardware/README.md#보드-리비전-비교) 참고.
+
 > 🎯 **학습 목표**:
 > - **On-Device Learning** — MCU 위에서 forward + backward pass 모두 수행 (Ex.16 = inference only).
 > - **교시 → NN 학습 → LQR 재생** 3단계 자동 워크플로우.
 > - **Flash 저장** (BTN1 길게) → 전원 OFF/ON 후 재현 → 영속 학습.
 >
-> ⏱️ 권장 시간: 60분 | 🔧 난이도: ⭐⭐⭐
+> ⏱️ 권장 시간: 60분 | 🔧 난이도: ⭐⭐⭐ | 🧰 대상 보드: **Rev 2.0 전용**
 > 🧰 사전 예제: [Ex.16 TinyAI Sensor Fusion](../16_TinyAI_Sensor_Fusion/) + [Ex.33 Kinesthetic Teaching](../33_Kinesthetic_Teaching/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [Memory](../../docs/api-reference/07-memory-management.md)
 
 > ⚠️ **Flash 마모 주의** — BTN1 롱프레스 = Flash NV 쓰기. 매 cycle 호출 금지 (10,000 cycle 마모 한계).

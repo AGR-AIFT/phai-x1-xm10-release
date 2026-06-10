@@ -40,7 +40,7 @@ USB-CDC 포트는 **한 번에 한 클라이언트만** 점유할 수 있습니�
 ## 3️⃣ 핵심 코드 — 무엇이 어디서 일어나나
 
 ```c
-void User_Setup(void)
+void Control_Setup(void)
 {
     s_tsm = XM_TSM_Create(XM_STATE_USER_START);
     XmStateConfig_t conf = { .id = XM_STATE_USER_START, .on_loop = Run_Loop };

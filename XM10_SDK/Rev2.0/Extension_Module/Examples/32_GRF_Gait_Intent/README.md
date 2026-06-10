@@ -207,7 +207,7 @@ PhAI Studio에서 다음을 확인하세요:
 ## 실행 방법
 
 1. **H10 설정 확인 필수**: H10 소프트웨어에서 **Body Data 전송 활성화**. 비활성화 시 `isRightFootContact`/`isLeftFootContact`가 항상 `false`.
-2. `grf_gait_intent.c`를 `user_app.c`로 복사 후 빌드하여 XM10에 플래시합니다.
+2. `grf_gait_intent.c`를 `control_task.c`로 복사 후 빌드하여 XM10에 플래시합니다.
 3. H10 전원 ON → ASSIST MODE 전환.
 4. USB CDC 터미널에서 `[GRF] ACTIVE 진입` 메시지 확인.
 5. 걷기 시작 → Heel Strike 이벤트 감지 후 보행 위상 추정 시작.

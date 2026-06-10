@@ -223,7 +223,7 @@ target = prev_target + delta;
 
 ## 실행 방법
 
-1. `kinesthetic_teaching.c`를 `user_app.c`로 복사 후 빌드하여 XM10에 플래시합니다.
+1. `kinesthetic_teaching.c`를 `control_task.c`로 복사 후 빌드하여 XM10에 플래시합니다.
 2. H10 전원 ON → ASSIST MODE 전환.
 3. USB CDC 터미널에서 `[KT] 운동감각 교시 시스템 준비 완료` 메시지 확인.
 4. **BTN1** — 교시 시작. LED2 점등과 함께 투명 모드 활성화.

@@ -51,7 +51,7 @@
 static uint16_t s_fsr[FSR_COUNT];
 static uint8_t  s_pressed_count;
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     XM_SetAnalogReadResolution(FSR_RESOLUTION);                   // ① 12-bit 정규화
     XM_SwitchAllDioToAdc();                                        // ② DIO 1~8 일괄 ADC

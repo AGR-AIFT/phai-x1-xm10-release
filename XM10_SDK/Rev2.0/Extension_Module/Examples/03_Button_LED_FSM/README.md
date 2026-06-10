@@ -41,7 +41,7 @@
 ## 3️⃣ 핵심 코드 — 무엇이 어디서 일어나나
 
 ```c
-void User_Setup(void)                                     // ① 부팅 시 1회
+void Control_Setup(void)                                     // ① 부팅 시 1회
 {
     s_tsm = XM_TSM_Create(XM_STATE_STANDBY);               // ② 초기 상태 = STANDBY
 

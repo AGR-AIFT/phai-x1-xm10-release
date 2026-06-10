@@ -57,7 +57,7 @@ if (s_heavy != NULL && XM_Task_IsComplete(s_heavy)) {
 > "Delete 후 같은 변수에 다시 Create 했는데 동작 안 해요."
 > → Delete 직후 `s_heavy = NULL` 안 했을 가능성. 가드 O 가 차단 (false 반환).
 
-> "버튼 한 번 눌렀는데 task 가 여러 개 생성됐어요."
+> "버튼 한 번 눌렀는데 task 가 여러 개 생성됩니다."
 > → 가드 B 가 4개에서 거부합니다. 본 예제처럼 `s_heavy == NULL` 가드 필수.
 
 ## API contract 가드 (자동 적용)

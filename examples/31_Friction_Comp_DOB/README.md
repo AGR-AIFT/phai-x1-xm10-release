@@ -223,7 +223,7 @@ f_c > 159 Hz → α_q < 0 → IIR 발산 ❌
 
 ## 실행 방법
 
-1. `friction_comp_dob.c`를 `user_app.c`로 복사 후 빌드하여 XM10에 플래시합니다.
+1. `friction_comp_dob.c`를 `control_task.c`로 복사 후 빌드하여 XM10에 플래시합니다.
 2. H10 전원 ON → ASSIST MODE 전환.
 3. LED1 빠른 깜빡임(200ms) → ACTIVE 진입 확인.
 4. PhAI Studio에서 Module ID `0xF1` 채널을 열어 4개 채널을 실시간 모니터링합니다.

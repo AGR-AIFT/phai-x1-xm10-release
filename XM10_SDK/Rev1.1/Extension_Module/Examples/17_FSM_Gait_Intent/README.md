@@ -15,7 +15,7 @@
 
 본 예제의 `rightThighAngle / leftThighAngle / rightKneeAngle / leftKneeAngle / isRightFootContact / isLeftFootContact` 는 H10 CM 내부에서 **IMU + 역기구학** 으로 계산됩니다.
 
-**올바른 추정을 위해** `User_Setup()` 에서 반드시 `XM_SendUserBodyData(bodyData)` 호출:
+**올바른 추정을 위해** `Control_Setup()` 에서 반드시 `XM_SendUserBodyData(bodyData)` 호출:
 
 ```c
 uint32_t bodyData[8] = { 700, 1750, 0, 0, 0, 0, 0, 0 };  // 70.0kg, 175.0cm
@@ -96,7 +96,7 @@ typedef struct {
 static GaitLegFsm_t s_gait_rh;                                 // ① 좌·우 독립 FSM
 static GaitLegFsm_t s_gait_lh;
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* ② Body Data 필수 — 미설정 시 추정 정확도 ↓ */
     uint32_t bodyData[8] = { 700, 1750, 0, 0, 0, 0, 0, 0 };

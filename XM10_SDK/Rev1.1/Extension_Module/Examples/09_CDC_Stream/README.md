@@ -24,7 +24,7 @@ PhAI Studio 를 켜고 XM10 USB 를 연결하면:
 |:---:|------|:---:|------|
 | **0x20** | System 자동 | 1 kHz | Total Data Packet 425 B (H10 PDO + GRF + IMU Hub + External IO 전체) |
 | **0xEF** | System 자동 | 연결 시 1회 | User Meta JSON |
-| **0xF0** | 본 예제 (User_Loop) | 가변 | 16 B (H10 연결 / 좌·우 고관절 각도 / 전방 보행 속도) |
+| **0xF0** | 본 예제 (Control_Loop) | 가변 | 16 B (H10 연결 / 좌·우 고관절 각도 / 전방 보행 속도) |
 
 → PhAI Studio 에서 `0xF0` 채널 선택 시 본 예제가 전송한 4 변수의 실시간 그래프가 그려집니다.
 
@@ -54,7 +54,7 @@ typedef struct {
 
 static UserDebugData_t s_debug;
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* TSM 등록 생략 */
 

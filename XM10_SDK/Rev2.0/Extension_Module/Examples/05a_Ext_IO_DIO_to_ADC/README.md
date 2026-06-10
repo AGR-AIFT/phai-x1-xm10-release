@@ -27,7 +27,7 @@ DIO 1 (PF3) 에 **FSR (압력 센서)** 를 연결하고, 압력이 일정 수�
 
 - **DIO 와 ADC 핀 번호가 다름** — DIO_1 (PF3) ↔ ADC_5 매핑. (DIO_n ↔ ADC_(n+4))
 - **`XM_DIO_TO_ADC_PIN()` 매크로** — DIO 번호에서 ADC 번호로 변환. 사용자 친화 헬퍼.
-- **전환은 비실시간** — `User_Setup()` 에서 1회만. **재부팅 전까지 GPIO 로 복구 불가**.
+- **전환은 비실시간** — `Control_Setup()` 에서 1회만. **재부팅 전까지 GPIO 로 복구 불가**.
 - **FSR 분압 회로** — FSR 한쪽 = 3.3 V, 반대쪽 = DIO_1 + 10 kΩ 풀다운 저항 → GND. 누르면 저항이 감소해 분압 증가.
 
 ### DIO → ADC 매핑 표
@@ -49,7 +49,7 @@ DIO 1 (PF3) 에 **FSR (압력 센서)** 를 연결하고, 압력이 일정 수�
 #define FSR_PIN          XM_EXT_DIO_1
 #define FSR_THRESHOLD_MV 500
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     XM_SwitchDioToAdc(FSR_PIN);                                   // ① DIO_1 → ADC 전환
 

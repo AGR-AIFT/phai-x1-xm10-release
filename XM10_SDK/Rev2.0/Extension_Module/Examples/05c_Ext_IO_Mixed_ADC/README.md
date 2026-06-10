@@ -47,7 +47,7 @@ typedef struct {
 } SensorData_t;
 static SensorData_t s_data;
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* ① 네이티브 Resolution 확인 (디버깅) */
     uint8_t res1 = XM_GetAnalogResolution(XM_EXT_ADC_1);   // 12

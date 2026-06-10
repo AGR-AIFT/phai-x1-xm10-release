@@ -10,7 +10,7 @@
  * ┌─────────────────────────────────────────────────────────────────┐
  * │  Module ID 0x20  │ Total Data Packet  │ System 자동 (1ms 주기) │
  * │  Module ID 0xEF  │ User Meta (JSON)   │ System — 연결 시 1회   │
- * │  Module ID 0xF0  │ User Custom Data   │ User_Loop에서 호출     │
+ * │  Module ID 0xF0  │ User Custom Data   │ Control_Loop에서 호출     │
  * └─────────────────────────────────────────────────────────────────┘
  *
  * [Total Data Packet (0x20)]
@@ -19,8 +19,8 @@
  *
  * [User Custom (0xF0~0xFE)]
  * - 알고리즘 디버그 채널을 추가하고 싶을 때 사용
- * - User_Setup에서 채널 메타데이터(이름/단위) JSON 등록
- * - User_Loop에서 XM_SendUsbDataWithId()로 float[] 전송
+ * - Control_Setup에서 채널 메타데이터(이름/단위) JSON 등록
+ * - Control_Loop에서 XM_SendUsbDataWithId()로 float[] 전송
  *
  * @warning USB-CDC 포트는 단일 점유 자원입니다. 다른 시리얼 클라이언트
  *          (PhAI Studio, PuTTY, RealTerm 등)와 동시에 열지 마십시오 —
@@ -116,7 +116,7 @@ void Control_Setup(void)
      * [2] User Custom Data (Module ID 0xF0) — 선택적 추가 채널
      *
      * Total Data에 없는 알고리즘 변수를 추가로 전송할 때 사용합니다.
-     * User_Setup에서 채널 이름/단위를 JSON으로 등록하면
+     * Control_Setup에서 채널 이름/단위를 JSON으로 등록하면
      * PhAI Studio에 "User Custom" 그룹으로 자동 표시됩니다.
      */
     XM_SetUsbCustomMeta(0xF0,

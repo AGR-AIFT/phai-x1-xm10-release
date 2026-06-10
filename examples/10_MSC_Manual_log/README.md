@@ -54,7 +54,7 @@ typedef struct {
 
 static MiniLog_t myLog;
 
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* TSM (STANDBY/ACTIVE) 등록 생략 */
     XM_SetUsbLogSource(&myLog, sizeof(MiniLog_t));                      // ② 데이터 소스 등록

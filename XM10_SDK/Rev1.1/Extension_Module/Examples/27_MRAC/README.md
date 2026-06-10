@@ -150,7 +150,7 @@ static void _HandleButtons(void)
 10. **변형 2 — Projection 끄기**: `_ClampFloat` 호출 제거 → θ̂ 점점 발산
 11. **변형 3 — 참조 모델 시정수**: `AM_REF` 0.99 → 0.95 (빠른 응답 50 ms) vs 0.999 (느림 1초)
 12. **변형 4 — PD 와 비교**: [Ex.14](../14_PD_Realtime_Control/) 와 동일 r 로 응답 비교
-13. **변형 5 — 외란 추가**: User_Loop 에 인위적 `theta += sinf(t * 0.01f)` → MRAC 대응 관찰
+13. **변형 5 — 외란 추가**: Control_Loop 에 인위적 `theta += sinf(t * 0.01f)` → MRAC 대응 관찰
 
 ---
 

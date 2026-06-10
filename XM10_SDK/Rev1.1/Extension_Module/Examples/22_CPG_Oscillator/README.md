@@ -14,7 +14,7 @@
 ## ⚠️ Body Data 전제조건 (default 모드 사용 시)
 
 기본 `USE_GAIT_CYCLE_FEEDBACK` 모드는 `footContact` + `forwardVelocity` 를 사용 → **Body Data 필수**.
-`User_Setup()` 에 `XM_SendUserBodyData(bodyData)` 호출. 또는 매크로 전환:
+`Control_Setup()` 에 `XM_SendUserBodyData(bodyData)` 호출. 또는 매크로 전환:
 
 ```c
 /* #define USE_GAIT_CYCLE_FEEDBACK */   // 기본 — Body Data 필요

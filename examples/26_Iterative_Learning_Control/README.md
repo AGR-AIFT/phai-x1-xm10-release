@@ -13,7 +13,7 @@
 
 ## ⚠️ Body Data 전제조건 — 필수
 
-ILC 학습 인덱스 = gaitCycle/100. **gaitCycle 부정확 시 학습 붕괴**. `User_Setup` 에서 `XM_SendUserBodyData(bodyData)` 필수.
+ILC 학습 인덱스 = gaitCycle/100. **gaitCycle 부정확 시 학습 붕괴**. `Control_Setup` 에서 `XM_SendUserBodyData(bodyData)` 필수.
 
 > [examples/README.md — Body Data 안내](../README.md#part-5)
 

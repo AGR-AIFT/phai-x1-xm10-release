@@ -55,7 +55,7 @@
  *
  *  방법 1: user_app.c에 복사
  *    - 이 파일의 내용을 user_app.c에 통째로 복사
- *    - Control_Setup/User_Loop가 그대로 동작
+ *    - Control_Setup/Control_Loop가 그대로 동작
  *
  *  방법 2: user_app.c에서 호출
  *    - user_app.c의 Control_Setup()에서 Ex_FES_Setup() 호출

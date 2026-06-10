@@ -40,7 +40,7 @@ XM 보드의 **고정 아날로그 핀 ADC_1 (PA0) 에 가변저항** 을 연결
 ## 3️⃣ 핵심 코드 — 무엇이 어디서 일어나나
 
 ```c
-void User_Setup(void)
+void Control_Setup(void)
 {
     s_tsm = XM_TSM_Create(XM_STATE_USER_START);                  // ① TSM 만 등록 — ADC 별도 초기화 X
     XmStateConfig_t conf = { .id = XM_STATE_USER_START, .on_loop = Run_Loop };

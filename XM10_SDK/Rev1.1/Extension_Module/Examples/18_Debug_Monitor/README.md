@@ -75,7 +75,7 @@ typedef struct {                                                   // ① 통계
 static LoopStats_t s_stats;
 static uint32_t    s_loop_count = 0, s_overrun_count = 0;
 
-void User_Loop(void)
+void Control_Loop(void)
 {
     uint32_t start_tick = XM_GetTick();                            // ② 시작 시각
     XM_TSM_Run(s_tsm);
@@ -137,7 +137,7 @@ static void _UpdateDiagnosticLeds(void)                            // ⑥ LED = 
 7. **BTN 1 클릭** → ✅ `[BTN1] Stats reset complete.` + Loops/Overrun 카운터 0 으로 리셋
 8. **BTN 2 클릭** → ✅ Verbose 모드 ON. 추가로 `[DETAIL]` 줄 (각도, 토크, ADC 4ch) 출력
 9. **BTN 3 1초 이상 꾸욱** → ✅ `========== SYSTEM DUMP ==========` 종합 출력
-10. **변형 1 — 오버런 임계치 강제 trigger**: `User_Loop` 안에서 `for (volatile int i=0; i<100000; i++);` 추가 → ✅ Overrun 카운터 증가, LED 1 빠른 Blink
+10. **변형 1 — 오버런 임계치 강제 trigger**: `Control_Loop` 안에서 `for (volatile int i=0; i<100000; i++);` 추가 → ✅ Overrun 카운터 증가, LED 1 빠른 Blink
 11. **변형 2 — Stale 타임아웃 단축**: `STALE_DATA_TIMEOUT_MS` 5000 → 1000 (1초). 빠른 trigger 가능
 12. **변형 3 — Health 출력 주기**: `HEALTH_REPORT_INTERVAL` 1000 → 100 (10 Hz). USB 부하 관찰
 13. **변형 4 — 추가 모니터링 항목**: `_PrintHealthDashboard` 에 IMU 각속도 / 토크 누적 등 추가

@@ -34,7 +34,7 @@
 ## 3️⃣ 핵심 코드 — 무엇이 어디서 일어나나
 
 ```c
-void User_Setup(void)
+void Control_Setup(void)
 {
     XM_SetPinMode(XM_EXT_DIO_3, XM_EXT_DIO_MODE_INPUT_PULLUP);  // ① 외부 스위치: 풀업 입력
     XM_SetPinMode(XM_EXT_DIO_4, XM_EXT_DIO_MODE_OUTPUT);        // ② 외부 LED: 출력

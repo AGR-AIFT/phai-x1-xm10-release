@@ -36,7 +36,7 @@
 ## 3️⃣ 핵심 코드 — 무엇이 어디서 일어나나
 
 ```c
-void User_Setup(void)
+void Control_Setup(void)
 {
     /* ① 핀 설정 */
     XM_SetPinMode(XM_EXT_DIO_3, XM_EXT_DIO_MODE_INPUT_PULLUP);    // 시작 버튼

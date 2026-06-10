@@ -14,7 +14,7 @@
 ## ⚠️ Body Data 전제조건 — 필수
 
 `s = gaitCycle / 100` 이 Bézier 입력이므로 **gaitCycle 정확도가 모든 것**.
-`User_Setup()` 에 반드시 `XM_SendUserBodyData(bodyData)` 호출.
+`Control_Setup()` 에 반드시 `XM_SendUserBodyData(bodyData)` 호출.
 
 > [examples/README.md — Body Data 안내](../README.md#part-5)
 
