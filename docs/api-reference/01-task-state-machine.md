@@ -2,7 +2,7 @@
 
 > 📌 **이 페이지를 읽고 나면**: TSM 로 상태 기반 제어 알고리즘을 작성할 수 있습니다.
 > ⏱️ 예상 학습 시간: 15분
-> 🧰 사전 지식: [Ex.00 Quick Start](../../examples/00_Quick_Start/) 의 단일 상태 TSM
+> 🧰 사전 지식: [Ex.00 Quick Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) 의 단일 상태 TSM
 > 🎯 핵심 함수: `XM_TSM_Create` / `XM_TSM_AddState` / `XM_TSM_Run` / `XM_TSM_TransitionTo`
 
 `xm_api_tsm.h`에 정의된 태스크 상태 머신 API입니다. 복잡한 제어 로직을 **상태(State)** 단위로 나누어 직관적으로 구현할 수 있도록 돕습니다.
@@ -115,11 +115,11 @@ TSM을 실행합니다. **User Task의 무한 루프 내에서 반드시 호출*
 
 | 예제 | 난이도 | TSM 활용 |
 |------|--------|----------|
-| [00_Quick_Start](../../examples/00_Quick_Start/) | 입문 | 단일 상태 TSM |
-| [01_Button_LED_Basic](../../examples/01_Button_LED_Basic/) | 초급 | 단일 상태 기본 |
-| [03_Button_LED_FSM](../../examples/03_Button_LED_FSM/) | 중급 | STANDBY ↔ ACTIVE 전환 |
-| [06_Ext_IO_Safety_Switch](../../examples/06_Ext_IO_Safety_Switch/) | 중급 | 3상태 + ERROR 처리 |
-| [10c_MSC_Advanced_Log](../../examples/10c_MSC_Advanced_Log/) | 고급 | TSM + 에러 복구 |
-| [11_Passive_Mode](../../examples/11_Passive_Mode/) | 고급 | Homing + 모드 전환 |
-| [12_Active_Assist_Mode](../../examples/12_Active_Assist_Mode/) | 고급 | 계층적 FSM |
-| [17_FSM_Gait_Intent](../../examples/17_FSM_Gait_Intent/) | 고급 | 보행 7단계 FSM |
+| [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) | 입문 | 단일 상태 TSM |
+| [01_Button_LED_Basic](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/01_Button_LED_Basic/) | 초급 | 단일 상태 기본 |
+| [03_Button_LED_FSM](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/03_Button_LED_FSM/) | 중급 | STANDBY ↔ ACTIVE 전환 |
+| [06_Ext_IO_Safety_Switch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/) | 중급 | 3상태 + ERROR 처리 |
+| [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | 고급 | TSM + 에러 복구 |
+| [11_Passive_Mode](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/) | 고급 | Homing + 모드 전환 |
+| [12_Active_Assist_Mode](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/12_Active_Assist_Mode/) | 고급 | 계층적 FSM |
+| [17_FSM_Gait_Intent](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/17_FSM_Gait_Intent/) | 고급 | 보행 7단계 FSM |

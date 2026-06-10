@@ -13,7 +13,7 @@
 | URL 만 받았는데 어떻게 진행 | [00 페이지 - ZIP 받기 전 OK 박스](getting-started/00-claude-code-quickstart.md) |
 | 환경 구축 단계가 막혔습니다 | [02 환경 구축](getting-started/02-software-setup.md) → [troubleshooting.md](troubleshooting.md) |
 | 첫 빌드가 안 됩니다 | [03 첫 빌드](getting-started/03-first-build.md) + [troubleshooting.md](troubleshooting.md) |
-| LED 가 안 켜집니다 | [Ex.00 Quick Start README](../examples/00_Quick_Start/) |
+| LED 가 안 켜집니다 | [Ex.00 Quick Start README](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) |
 
 ## 🛠️ 코드 작성
 
@@ -35,12 +35,12 @@
 
 | 상황 | 어디로 |
 |------|--------|
-| 47 개 예제 전체 인덱스 | [examples/README.md](../examples/README.md) |
+| 47 개 예제 전체 인덱스 | [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) |
 | 난이도별·트랙별 학습 경로 | [docs/tutorials/README.md](tutorials/README.md) |
 | 한 학기 수업 진도표 (16 주) | [tutorials/README.md - 한 학기 진도표 섹션](tutorials/README.md#한-학기-16-주-수업-진도표-예시) |
 | Ex.XX 예제가 잘 안 됩니다 | 해당 `examples/XX_*/README.md` 의 "⚠️ 흔한 실수" 섹션 |
-| 입문자가 첫 30 분 동선 | [examples/README.md - 처음 오신 분](../examples/README.md#처음-오신-분--첫-30-분-동선) |
-| PD 제어 / 임피던스 / CPG 등 알고리즘 예제 | examples/14, 15, 20~30 (자세한 매핑은 [examples/README.md](../examples/README.md)) |
+| 입문자가 첫 30 분 동선 | [examples/README.md - 처음 오신 분](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md#처음-오신-분--첫-30-분-동선) |
+| PD 제어 / 임피던스 / CPG 등 알고리즘 예제 | examples/14, 15, 20~30 (자세한 매핑은 [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md)) |
 
 ## 🔌 하드웨어
 
@@ -50,7 +50,7 @@
 | 외부 GPIO 핀맵 (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | 외부 GPIO 핀맵 (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | 내 보드가 Rev 1.1 인지 Rev 2.0 인지 | [hardware/README.md - 보드 리비전 비교](hardware/README.md#보드-리비전-비교) |
-| 47 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](../examples/README.md) (둘 다 동작, 외부 GPIO 핀맵만 다름) |
+| 47 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) (둘 다 동작, 외부 GPIO 핀맵만 다름) |
 
 ## 📥 펌웨어 업로드
 
@@ -68,7 +68,7 @@
 |------|--------|
 | 외골격 데이터로 AI 모델 학습 | [docs/advanced/ai-data-pipeline.md](advanced/ai-data-pipeline.md) |
 | 보드 안에서 Tiny NN 추론 | Ex.16, Ex.36 + [advanced/README.md](advanced/README.md) |
-| Python 디코더 사용법 | [PythonDecoder/](../PythonDecoder/) |
+| Python 디코더 사용법 | [PythonDecoder/](https://github.com/AGR-EXO/Extension_Module/tree/Develop/PythonDecoder/) |
 | PhAI Studio 사용법 | 각 예제 README 의 4 단계 실험 부분 + [studio.onephai.com](https://studio.onephai.com) |
 | 내 알고리즘을 1 ms 안에 끝내고 싶음 | Ex.18 Debug Monitor + Ex.19 Memory Aware Design |
 | 자기주도 학습 트랙 (관심 분야별) | [advanced/README.md - 자기주도 학습 경로](advanced/README.md#자기주도-학습-권장-경로) |
@@ -89,9 +89,9 @@
 
 | 상황 | 어디로 |
 |------|--------|
-| 버전 / 변경 이력 | [CHANGELOG.md](../CHANGELOG.md) |
+| 버전 / 변경 이력 | [CHANGELOG.md](https://github.com/AGR-EXO/Extension_Module/blob/Develop/CHANGELOG.md) |
 | 릴리즈 첨부 파일 / 호환성 매트릭스 | [docs/release-notes/](release-notes/) |
-| 라이선스 | [LICENSE](../LICENSE) |
+| 라이선스 | [LICENSE](https://github.com/AGR-EXO/Extension_Module/blob/Develop/LICENSE) |
 | 시스템 아키텍처 큰 그림 | [docs/architecture/README.md](architecture/README.md) |
 | 이 레포 전체 문서 인덱스 | [docs/README.md](README.md) |
 

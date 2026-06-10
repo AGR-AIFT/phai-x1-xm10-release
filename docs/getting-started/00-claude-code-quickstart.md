@@ -118,4 +118,4 @@ Claude Code 가 켜지면 `CLAUDE.md` 가 자동 로드됩니다. 사용자가 �
 
 - AI 와 함께 진행: Claude Code 실행 후 `"처음 시작할게"` 입력
 - 수동 진행: [01 하드웨어 연결](01-hardware-setup.md) → [02 환경 구축](02-software-setup.md) → [03 첫 빌드](03-first-build.md)
-- 환경 구축 끝났다면: [Ex.00 Quick Start](../../examples/00_Quick_Start/) → [학습 경로](../tutorials/README.md)
+- 환경 구축 끝났다면: [Ex.00 Quick Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) → [학습 경로](../tutorials/README.md)

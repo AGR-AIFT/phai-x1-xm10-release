@@ -7,7 +7,7 @@
 >
 > 📌 **이 페이지를 읽고 나면**: 등록 기반 USB 자동 로깅 + 에러 모니터링 + 파일 롤링 + 세션 마커를 활용할 수 있습니다.
 > ⏱️ 예상 학습 시간: 30분
-> 🧰 사전 지식: [Ex.10a~10c](../../examples/10a_MSC_Basic_Log/) MSC 시리즈 + FAT32 / 32KB cluster USB 메모리
+> 🧰 사전 지식: [Ex.10a~10c](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10a_MSC_Basic_Log/) MSC 시리즈 + FAT32 / 32KB cluster USB 메모리
 > 🎯 핵심 함수: `XM_SetUsbLogSource` / `XM_StartUsbDataLog` / `XM_StopUsbDataLog` / `XM_GetUsbLogStatus` / `XM_InsertUsbLogMarker`
 
 ---
@@ -59,7 +59,7 @@ typedef struct {
     uint32_t write_errors;         // 쓰기 실패 횟수
     uint32_t duration_ms;          // 세션 경과 시간 (ms)
     uint8_t  hot_buffer_percent;   // Hot Buffer 피크 사용률 (0~100)
-    uint8_t  cold_buffer_percent;  // Cold Buffer 피크 사용률 (0~100)
+    uint8_t  cold_buffer_percent;  // (레거시 — 현재 Hot-only 구조에서 미사용, 항상 0)
     uint32_t disk_free_mb;         // USB 잔여 용량 (MB)
     uint32_t disk_total_mb;        // USB 전체 용량 (MB)
 } XmLogStats_t;

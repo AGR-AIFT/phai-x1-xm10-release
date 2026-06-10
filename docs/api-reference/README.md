@@ -1,6 +1,6 @@
 # API 참고서
 
-> 상위: [문서 인덱스](../README.md) · [예제 가이드](../../examples/README.md)
+> 상위: [문서 인덱스](../README.md) · [예제 가이드](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md)
 
 알고리즘을 작성하면서 옆에 두고 보는 함수 명세입니다. 처음부터 다 읽을 필요는 없고, 필요할 때 해당 그룹만 펴보세요.
 

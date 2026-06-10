@@ -2,7 +2,7 @@
 
 XM10 기능을 단계적으로 익힐 수 있도록 47 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.10 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.
 
-예제 전체 카탈로그는 [examples/README.md](../../examples/README.md) 에 있고, 막히면 각 README 맨 아래의 "흔한 실수" 섹션을 먼저 보세요. Claude Code 사용자라면 `"Ex.XX 가 안 돼"` 라고만 말해도 `example-helper` 가 해당 예제의 흔한 실수 + 트러블슈팅 문서를 인용해 답해줍니다.
+예제 전체 카탈로그는 [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) 에 있고, 막히면 각 README 맨 아래의 "흔한 실수" 섹션을 먼저 보세요. Claude Code 사용자라면 `"Ex.XX 가 안 돼"` 라고만 말해도 `example-helper` 가 해당 예제의 흔한 실수 + 트러블슈팅 문서를 인용해 답해줍니다.
 
 ---
 
@@ -57,7 +57,7 @@ XM10 기능을 단계적으로 익힐 수 있도록 47 개 예제를 준비했�
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [00](../../examples/00_Quick_Start/) | 보드 동작 확인 | ⭐ | 상태 머신 + LED + USB 시리얼 — 외부 하드웨어 없이 |
+| [00](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) | 보드 동작 확인 | ⭐ | 상태 머신 + LED + USB 시리얼 — 외부 하드웨어 없이 |
 
 ---
 
@@ -69,21 +69,21 @@ XM10 기능을 단계적으로 익힐 수 있도록 47 개 예제를 준비했�
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [01](../../examples/01_Button_LED_Basic/) | 버튼 + LED 기초 | ⭐ | 버튼 상태를 매번 확인해서 LED 제어 |
-| [02](../../examples/02_Button_LED_Event/) | 이벤트 + 특수 효과 | ⭐⭐ | 클릭 이벤트 감지, 한 번만 깜빡이는 LED |
-| [03](../../examples/03_Button_LED_FSM/) | 상태 머신 (FSM) | ⭐⭐ | 길게 누르기로 모드 전환, 상태별 동작 분리 |
+| [01](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/01_Button_LED_Basic/) | 버튼 + LED 기초 | ⭐ | 버튼 상태를 매번 확인해서 LED 제어 |
+| [02](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/02_Button_LED_Event/) | 이벤트 + 특수 효과 | ⭐⭐ | 클릭 이벤트 감지, 한 번만 깜빡이는 LED |
+| [03](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/03_Button_LED_FSM/) | 상태 머신 (FSM) | ⭐⭐ | 길게 누르기로 모드 전환, 상태별 동작 분리 |
 
 ### External I/O — GPIO & ADC (Ex.04 ~ 06)
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [04](../../examples/04_Ext_IO_Basic/) | 외부 디지털 제어 | ⭐⭐ | 확장 포트 외부 스위치/LED |
-| [05](../../examples/05_Ext_IO_analog/) | 아날로그 센서 입문 | ⭐⭐ | 고정 ADC 핀 전압 측정 |
-| [05a](../../examples/05a_Ext_IO_DIO_to_ADC/) | DIO→ADC 동적 전환 | ⭐⭐ | DIO 핀을 ADC 모드로 FSR 읽기 |
-| [05b](../../examples/05b_Ext_IO_FSR_8ch/) | FSR 8채널 일괄 | ⭐⭐ | 8 채널 + Resolution 설정 |
-| [05c](../../examples/05c_Ext_IO_Mixed_ADC/) | 혼합 ADC 12채널 | ⭐⭐⭐ | 고정 4 + DIO→ADC 8 |
-| [05d](../../examples/05d_Ext_IO_DIO_ADC_Hybrid/) | DIO/ADC 하이브리드 | ⭐⭐⭐ | 디지털 + 아날로그 동시 |
-| [06](../../examples/06_Ext_IO_Safety_Switch/) | 안전 상태 머신 | ⭐⭐ | 리미트 스위치 기반 FSM |
+| [04](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/) | 외부 디지털 제어 | ⭐⭐ | 확장 포트 외부 스위치/LED |
+| [05](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05_Ext_IO_analog/) | 아날로그 센서 입문 | ⭐⭐ | 고정 ADC 핀 전압 측정 |
+| [05a](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/) | DIO→ADC 동적 전환 | ⭐⭐ | DIO 핀을 ADC 모드로 FSR 읽기 |
+| [05b](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05b_Ext_IO_FSR_8ch/) | FSR 8채널 일괄 | ⭐⭐ | 8 채널 + Resolution 설정 |
+| [05c](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/) | 혼합 ADC 12채널 | ⭐⭐⭐ | 고정 4 + DIO→ADC 8 |
+| [05d](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/) | DIO/ADC 하이브리드 | ⭐⭐⭐ | 디지털 + 아날로그 동시 |
+| [06](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/) | 안전 상태 머신 | ⭐⭐ | 리미트 스위치 기반 FSM |
 
 > **ADC 시리즈 권장 순서:** Ex.05 → 05a → 05b → 05c → 05d (점진 난이도)
 
@@ -99,18 +99,18 @@ PC 와 실시간으로 메시지를 주고받거나 USB 메모리에 데이터�
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [07](../../examples/07_CDC_Basic_Print/) | USB 시리얼 기초 | ⭐⭐ | PC 터미널로 텍스트 메시지 |
-| [08](../../examples/08_CDC_Sensor_Print/) | 센서 데이터 모니터링 | ⭐⭐ | 실시간 데이터 sprintf 출력 |
-| [09](../../examples/09_CDC_Stream/) | 고속 바이너리 스트리밍 | ⭐⭐⭐ | PhAI Studio 호환 프로토콜, 500 Hz 전송 |
+| [07](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) | USB 시리얼 기초 | ⭐⭐ | PC 터미널로 텍스트 메시지 |
+| [08](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) | 센서 데이터 모니터링 | ⭐⭐ | 실시간 데이터 sprintf 출력 |
+| [09](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | 고속 바이너리 스트리밍 | ⭐⭐⭐ | PhAI Studio 호환 프로토콜, 500 Hz 전송 |
 
 ### USB 메모리 로깅 — Ex.10 ~ 10c
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [10](../../examples/10_MSC_Manual_log/) | 수동 로깅 (구버전) | ⭐⭐ | 10a/10b/10c 권장 |
-| [10a](../../examples/10a_MSC_Basic_Log/) | 등록만 하면 자동 저장 | ⭐⭐ | 구조체 한 번 등록하면 알아서 기록 |
-| [10b](../../examples/10b_MSC_Custom_Struct/) | 커스텀 구조체 | ⭐⭐⭐ | 내 데이터 + 직접 시각 찍기 |
-| [10c](../../examples/10c_MSC_Advanced_Log/) | 고급 로깅 | ⭐⭐⭐ | 파일 분할 (롤링), 에러 모니터링, LED 피드백 |
+| [10](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10_MSC_Manual_log/) | 수동 로깅 (구버전) | ⭐⭐ | 10a/10b/10c 권장 |
+| [10a](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10a_MSC_Basic_Log/) | 등록만 하면 자동 저장 | ⭐⭐ | 구조체 한 번 등록하면 알아서 기록 |
+| [10b](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10b_MSC_Custom_Struct/) | 커스텀 구조체 | ⭐⭐⭐ | 내 데이터 + 직접 시각 찍기 |
+| [10c](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | 고급 로깅 | ⭐⭐⭐ | 파일 분할 (롤링), 에러 모니터링, LED 피드백 |
 
 > 권장 순서: Ex.10a → 10b → 10c (10 은 구버전, 새로 시작하면 10a 부터).
 
@@ -122,9 +122,9 @@ PC 와 실시간으로 메시지를 주고받거나 USB 메모리에 데이터�
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [11](../../examples/11_Passive_Mode/) | Passive (수동 모드) | ⭐⭐⭐ | 사전 정의 움직임 명령으로 자동 왕복 |
-| [12](../../examples/12_Active_Assist_Mode/) | Active Assist (능동 보조) | ⭐⭐⭐ | 사용자 의도 감지 후 보조 토크 |
-| [13](../../examples/13_Resistive_Mode/) | Resistive (저항 모드) | ⭐⭐ | H10 내장 모드 — 물속 걷기 같은 저항감 |
+| [11](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/) | Passive (수동 모드) | ⭐⭐⭐ | 사전 정의 움직임 명령으로 자동 왕복 |
+| [12](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/12_Active_Assist_Mode/) | Active Assist (능동 보조) | ⭐⭐⭐ | 사용자 의도 감지 후 보조 토크 |
+| [13](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/13_Resistive_Mode/) | Resistive (저항 모드) | ⭐⭐ | H10 내장 모드 — 물속 걷기 같은 저항감 |
 
 ---
 
@@ -134,12 +134,12 @@ PC 와 실시간으로 메시지를 주고받거나 USB 메모리에 데이터�
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [14](../../examples/14_PD_Realtime_Control/) | PD 실시간 토크 제어 | ⭐⭐⭐ | PD 수식, 이산 미분, 토크 포화 |
-| [15](../../examples/15_Inverted_Pendulum_Control/) | 역진자 모델 보행 보조 | ⭐⭐⭐ | 중력 보상 MgL·sin(θ) + Lyapunov 안정성 |
-| [16](../../examples/16_TinyAI_Sensor_Fusion/) | Tiny AI 센서 퓨전 | ⭐⭐⭐ | 보드 안에서 3-layer 신경망 추론 |
-| [17](../../examples/17_FSM_Gait_Intent/) | 보행 의도 인식 (FSM) | ⭐⭐⭐ | 보행 7 단계 상태 머신 + 단계별 토크 |
-| [18](../../examples/18_Debug_Monitor/) | 시스템 디버깅 모니터 | ⭐⭐ | 루프 실행 시간 측정, 상태 대시보드 |
-| [19](../../examples/19_Memory_Aware_Design/) | 메모리 인식 설계 | ⭐⭐⭐ | 링 버퍼, 풀 할당자, malloc 없이 구현 |
+| [14](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/14_PD_Realtime_Control/) | PD 실시간 토크 제어 | ⭐⭐⭐ | PD 수식, 이산 미분, 토크 포화 |
+| [15](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/15_Inverted_Pendulum_Control/) | 역진자 모델 보행 보조 | ⭐⭐⭐ | 중력 보상 MgL·sin(θ) + Lyapunov 안정성 |
+| [16](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) | Tiny AI 센서 퓨전 | ⭐⭐⭐ | 보드 안에서 3-layer 신경망 추론 |
+| [17](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/17_FSM_Gait_Intent/) | 보행 의도 인식 (FSM) | ⭐⭐⭐ | 보행 7 단계 상태 머신 + 단계별 토크 |
+| [18](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) | 시스템 디버깅 모니터 | ⭐⭐ | 루프 실행 시간 측정, 상태 대시보드 |
+| [19](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/) | 메모리 인식 설계 | ⭐⭐⭐ | 링 버퍼, 풀 할당자, malloc 없이 구현 |
 
 ---
 
@@ -149,12 +149,12 @@ PC 와 실시간으로 메시지를 주고받거나 USB 메모리에 데이터�
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [20](../../examples/20_Impedance_Control/) | Hogan 임피던스 제어 | ⭐⭐⭐ | 가상 스프링-댐퍼 상호작용 (Hogan 1985) |
-| [21](../../examples/21_Gravity_Compensation/) | 중력 보상 (투명 모드) | ⭐⭐⭐ | Mgl·sin(θ) + 마찰 보상 + 점진 활성화 |
-| [22](../../examples/22_CPG_Oscillator/) | CPG 적응 진동자 | ⭐⭐⭐ | 보행 리듬 자동 동기화 (Ronsse 2011) |
-| [23](../../examples/23_Gait_Phase_Adaptive_Torque/) | 보행 위상 적응 토크 | ⭐⭐⭐ | 4 구간 정현파 토크 (Quinlivan 2017) |
-| [24](../../examples/24_Virtual_Constraint/) | 가상 구속 (HZD) | ⭐⭐⭐ | 5 차 Bézier 궤도 (Westervelt 2003) |
-| [25](../../examples/25_Stance_Stiffness_Modulation/) | 입각기 가변 강성 | ⭐⭐⭐ | 입각/유각 부드러운 전환 (Collins 2015) |
+| [20](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/20_Impedance_Control/) | Hogan 임피던스 제어 | ⭐⭐⭐ | 가상 스프링-댐퍼 상호작용 (Hogan 1985) |
+| [21](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/21_Gravity_Compensation/) | 중력 보상 (투명 모드) | ⭐⭐⭐ | Mgl·sin(θ) + 마찰 보상 + 점진 활성화 |
+| [22](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/22_CPG_Oscillator/) | CPG 적응 진동자 | ⭐⭐⭐ | 보행 리듬 자동 동기화 (Ronsse 2011) |
+| [23](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/23_Gait_Phase_Adaptive_Torque/) | 보행 위상 적응 토크 | ⭐⭐⭐ | 4 구간 정현파 토크 (Quinlivan 2017) |
+| [24](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/24_Virtual_Constraint/) | 가상 구속 (HZD) | ⭐⭐⭐ | 5 차 Bézier 궤도 (Westervelt 2003) |
+| [25](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/25_Stance_Stiffness_Modulation/) | 입각기 가변 강성 | ⭐⭐⭐ | 입각/유각 부드러운 전환 (Collins 2015) |
 
 ---
 
@@ -164,11 +164,11 @@ PC 와 실시간으로 메시지를 주고받거나 USB 메모리에 데이터�
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [26](../../examples/26_Iterative_Learning_Control/) | 반복 학습 제어 (ILC) | ⭐⭐⭐ | 주기마다 토크 프로파일 학습 (Emken 2007) |
-| [27](../../examples/27_MRAC/) | 모델 참조 적응 제어 | ⭐⭐⭐ | MIT Rule 로 게인 온라인 적응 (Slotine 1991) |
-| [28](../../examples/28_Admittance_Control/) | 어드미턴스 제어 | ⭐⭐⭐ | 힘 입력 → 위치 출력 (임피던스의 짝, Keemink 2018) |
-| [29](../../examples/29_Bilateral_Coordination/) | 좌·우 협응 제어 | ⭐⭐⭐ | 역위상 대칭 + 약측 강화 (재활용) |
-| [30](../../examples/30_FF_FB_Hybrid_Control/) | FF + FB 혼합 제어 | ⭐⭐⭐ | 모델 기반 사전 보상 + PD 피드백 |
+| [26](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/26_Iterative_Learning_Control/) | 반복 학습 제어 (ILC) | ⭐⭐⭐ | 주기마다 토크 프로파일 학습 (Emken 2007) |
+| [27](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/27_MRAC/) | 모델 참조 적응 제어 | ⭐⭐⭐ | MIT Rule 로 게인 온라인 적응 (Slotine 1991) |
+| [28](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/28_Admittance_Control/) | 어드미턴스 제어 | ⭐⭐⭐ | 힘 입력 → 위치 출력 (임피던스의 짝, Keemink 2018) |
+| [29](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/29_Bilateral_Coordination/) | 좌·우 협응 제어 | ⭐⭐⭐ | 역위상 대칭 + 약측 강화 (재활용) |
+| [30](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/30_FF_FB_Hybrid_Control/) | FF + FB 혼합 제어 | ⭐⭐⭐ | 모델 기반 사전 보상 + PD 피드백 |
 
 ---
 
@@ -178,15 +178,15 @@ PC 와 실시간으로 메시지를 주고받거나 USB 메모리에 데이터�
 
 | 예제 | 제목 | 난이도 | 학습 내용 |
 | :---: | :--- | :---: | :--- |
-| [31](../../examples/31_Friction_Comp_DOB/) | 외란 관측기 (DOB) | ⭐⭐⭐ | 남은 외란까지 추정해서 진정한 투명 모드 |
-| [32](../../examples/32_GRF_Gait_Intent/) | 발 접지로 의도 감지 | ⭐⭐⭐ | Heel Strike 이벤트로 보행 위상 추정 |
-| [33](../../examples/33_Kinesthetic_Teaching/) | 직접 가르치기 + 재생 | ⭐⭐⭐ | 사람이 손으로 시연 → 보드가 그대로 재생 |
-| [34](../../examples/34_MSC_GaitAnalysis_Log/) | 보행 분석 데이터 로깅 | ⭐⭐ | H10 → USB 메모리 → Python → MATLAB |
-| [35](../../examples/35_MultiLayer_Transparent_Control/) | 다층 투명 제어 | ⭐⭐⭐ | 투명/벽/좌우 커플링 세 모드 실시간 전환 |
-| [36](../../examples/36_OnDevice_Kinesthetic_Learning/) | 보드 안에서 직접 학습 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 작은 신경망을 보드 위에서 학습 → LQR 재생 — Internal Flash UserNV API 가 Rev 2.0 만 지원 |
-| [37](../../examples/37_FES_Hub_Module_Ctrl/) | FES Hub 모듈 제어 | ⭐⭐⭐ | CAN-FD 로 FES Hub 연결, 채널별 전기 자극 파라미터 제어 |
-| [38](../../examples/38_Periodic_Background_Task/) | 주기적 백그라운드 태스크 | ⭐⭐ | 저주기 보조 작업 분리, 제어 루프 지터 최소화 |
-| [39](../../examples/39_Task_Lifecycle/) | 태스크 생명주기 관리 | ⭐⭐⭐ | 태스크 생성·일시정지·종료, RTOS 태스크 상태 머신 패턴 |
+| [31](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/31_Friction_Comp_DOB/) | 외란 관측기 (DOB) | ⭐⭐⭐ | 남은 외란까지 추정해서 진정한 투명 모드 |
+| [32](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/32_GRF_Gait_Intent/) | 발 접지로 의도 감지 | ⭐⭐⭐ | Heel Strike 이벤트로 보행 위상 추정 |
+| [33](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/33_Kinesthetic_Teaching/) | 직접 가르치기 + 재생 | ⭐⭐⭐ | 사람이 손으로 시연 → 보드가 그대로 재생 |
+| [34](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) | 보행 분석 데이터 로깅 | ⭐⭐ | H10 → USB 메모리 → Python → MATLAB |
+| [35](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/35_MultiLayer_Transparent_Control/) | 다층 투명 제어 | ⭐⭐⭐ | 투명/벽/좌우 커플링 세 모드 실시간 전환 |
+| [36](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) | 보드 안에서 직접 학습 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 작은 신경망을 보드 위에서 학습 → LQR 재생 — Internal Flash UserNV API 가 Rev 2.0 만 지원 |
+| [37](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/37_FES_Hub_Module_Ctrl/) | FES Hub 모듈 제어 | ⭐⭐⭐ | CAN-FD 로 FES Hub 연결, 채널별 전기 자극 파라미터 제어 |
+| [38](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/38_Periodic_Background_Task/) | 주기적 백그라운드 태스크 | ⭐⭐ | 저주기 보조 작업 분리, 제어 루프 지터 최소화 |
+| [39](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/39_Task_Lifecycle/) | 태스크 생명주기 관리 | ⭐⭐⭐ | 태스크 생성·일시정지·종료, RTOS 태스크 상태 머신 패턴 |
 
 ---
 

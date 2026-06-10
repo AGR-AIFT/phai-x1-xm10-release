@@ -2,7 +2,7 @@
 
 > 📌 **이 페이지를 읽고 나면**: USB-CDC 텍스트/바이너리 송수신 + USB-MSC 로깅 등록을 모두 다룰 수 있습니다.
 > ⏱️ 예상 학습 시간: 25분
-> 🧰 사전 지식: [Ex.07~09](../../examples/07_CDC_Basic_Print/) CDC + [Ex.10~10c](../../examples/10a_MSC_Basic_Log/) MSC
+> 🧰 사전 지식: [Ex.07~09](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) CDC + [Ex.10~10c](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10a_MSC_Basic_Log/) MSC
 > 🎯 핵심 함수: `XM_SendUsbDebugMessage` / `XM_SetUsbCustomMeta` / `XM_SendUsbDataWithId` / `XM_SetUsbLogSource` / `XM_StartUsbDataLog`
 >
 > ⚠️ **USB-CDC 단일 점유**: PhAI Studio 와 시리얼 터미널 (PuTTY/RealTerm 등) 을 같은 COM 포트로 **동시 사용 금지** — COM 포트 충돌로 데이터 손실.
@@ -323,20 +323,20 @@ PhAI Studio Custom 모드 사용 시, Module ID와 JSON 메타데이터를 등�
 ### CDC (시리얼 통신)
 | 예제 | 난이도 | CDC 활용 |
 |------|--------|---------|
-| [00_Quick_Start](../../examples/00_Quick_Start/) | 입문 | 디버그 메시지 전송 |
-| [07_CDC_Basic_Print](../../examples/07_CDC_Basic_Print/) | 초급 | 텍스트 메시지 |
-| [08_CDC_Sensor_Print](../../examples/08_CDC_Sensor_Print/) | 초급 | sprintf 포맷팅 |
-| [09_CDC_Stream](../../examples/09_CDC_Stream/) | 중급 | PhAI V2 바이너리 스트리밍 |
-| [18_Debug_Monitor](../../examples/18_Debug_Monitor/) | 중급 | Health 대시보드 |
+| [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) | 입문 | 디버그 메시지 전송 |
+| [07_CDC_Basic_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) | 초급 | 텍스트 메시지 |
+| [08_CDC_Sensor_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) | 초급 | sprintf 포맷팅 |
+| [09_CDC_Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | 중급 | PhAI V2 바이너리 스트리밍 |
+| [18_Debug_Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) | 중급 | Health 대시보드 |
 
 ### MSC (데이터 로깅)
 | 예제 | 난이도 | MSC 활용 |
 |------|--------|---------|
-| [10_MSC_Manual_log](../../examples/10_MSC_Manual_log/) | 레거시 | 기본 로깅 (10a 참조) |
-| [10a_MSC_Basic_Log](../../examples/10a_MSC_Basic_Log/) | 초급 | 최소 구조체 + 자동 타임스탬프 |
-| [10b_MSC_Custom_Struct](../../examples/10b_MSC_Custom_Struct/) | 중급 | 다중 타입 + 수동 타임스탬프 |
-| [10c_MSC_Advanced_Log](../../examples/10c_MSC_Advanced_Log/) | 고급 | TSM + 에러 복구 + 파일 롤링 |
-| [19_Memory_Aware_Design](../../examples/19_Memory_Aware_Design/) | 중급 | 메모리 효율적 데이터 관리 |
+| [10_MSC_Manual_log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10_MSC_Manual_log/) | 레거시 | 기본 로깅 (10a 참조) |
+| [10a_MSC_Basic_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10a_MSC_Basic_Log/) | 초급 | 최소 구조체 + 자동 타임스탬프 |
+| [10b_MSC_Custom_Struct](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10b_MSC_Custom_Struct/) | 중급 | 다중 타입 + 수동 타임스탬프 |
+| [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | 고급 | TSM + 에러 복구 + 파일 롤링 |
+| [19_Memory_Aware_Design](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/) | 중급 | 메모리 효율적 데이터 관리 |
 
 ---
 

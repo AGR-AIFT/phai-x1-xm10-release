@@ -292,7 +292,7 @@ if (pressed) { /* 1회만 실행 */ }
 
 **원인:** Body Data 전제조건 미충족 — `XM_SendUserBodyData()` 미호출
 
-**해결:** [examples/README.md — Body Data 안내](../examples/README.md#part-5) 참조.
+**해결:** [examples/README.md — Body Data 안내](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md#part-5) 참조.
 
 #### `SetAssistTorque` 호출했는데 H10 안 움직임
 

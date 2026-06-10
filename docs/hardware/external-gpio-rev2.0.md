@@ -110,4 +110,4 @@ DIO 핀을 런타임에 ADC 모드로 바꾸면 최대 12 채널 ADC 까지 확�
 - 통합 하드웨어 개요: [hardware/README.md](README.md)
 - Rev 1.1 핀맵: [external-gpio-rev1.1.md](external-gpio-rev1.1.md)
 - 함수 사용법: [외부 IO API](../api-reference/04-external-io.md)
-- 실습 예제: [Ex.04 ~ 05d Ext IO 시리즈](../../examples/04_Ext_IO_Basic/)
+- 실습 예제: [Ex.04 ~ 05d Ext IO 시리즈](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/)

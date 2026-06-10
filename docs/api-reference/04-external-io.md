@@ -303,13 +303,13 @@ DIO 핀 번호를 ADC 핀 번호로 변환하는 매크로입니다. `XM_SwitchD
 
 | 예제 | 난이도 | 외부 I/O 활용 |
 |------|--------|-------------|
-| [04_Ext_IO_Basic](../../examples/04_Ext_IO_Basic/) | 초급 | DIO 입출력 |
-| [05_Ext_IO_analog](../../examples/05_Ext_IO_analog/) | 초급 | 고정 ADC 전압 읽기 |
-| [05a_Ext_IO_DIO_to_ADC](../../examples/05a_Ext_IO_DIO_to_ADC/) | 초급 | DIO→ADC 단일 전환 |
-| [05b_Ext_IO_FSR_8ch](../../examples/05b_Ext_IO_FSR_8ch/) | 중급 | 8채널 일괄 전환 + Resolution |
-| [05c_Ext_IO_Mixed_ADC](../../examples/05c_Ext_IO_Mixed_ADC/) | 중급 | 고정 + 동적 ADC 혼합 |
-| [05d_Ext_IO_DIO_ADC_Hybrid](../../examples/05d_Ext_IO_DIO_ADC_Hybrid/) | 응용 | GPIO + ADC 혼합 모드 |
-| [06_Ext_IO_Safety_Switch](../../examples/06_Ext_IO_Safety_Switch/) | 중급 | 안전 스위치 인터록 |
+| [04_Ext_IO_Basic](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/) | 초급 | DIO 입출력 |
+| [05_Ext_IO_analog](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05_Ext_IO_analog/) | 초급 | 고정 ADC 전압 읽기 |
+| [05a_Ext_IO_DIO_to_ADC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/) | 초급 | DIO→ADC 단일 전환 |
+| [05b_Ext_IO_FSR_8ch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05b_Ext_IO_FSR_8ch/) | 중급 | 8채널 일괄 전환 + Resolution |
+| [05c_Ext_IO_Mixed_ADC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/) | 중급 | 고정 + 동적 ADC 혼합 |
+| [05d_Ext_IO_DIO_ADC_Hybrid](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/) | 응용 | GPIO + ADC 혼합 모드 |
+| [06_Ext_IO_Safety_Switch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/) | 중급 | 안전 스위치 인터록 |
 
 ---
 

@@ -2,7 +2,7 @@
 
 > 📌 **이 페이지를 읽고 나면**: 내장 LED 3개 + 버튼 3개를 폴링/이벤트 양방향 모두 제어할 수 있습니다.
 > ⏱️ 예상 학습 시간: 15분
-> 🧰 사전 지식: [Ex.01](../../examples/01_Button_LED_Basic/) (폴링) + [Ex.02](../../examples/02_Button_LED_Event/) (이벤트) + [Ex.03](../../examples/03_Button_LED_FSM/) (롱프레스)
+> 🧰 사전 지식: [Ex.01](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/01_Button_LED_Basic/) (폴링) + [Ex.02](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/02_Button_LED_Event/) (이벤트) + [Ex.03](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/03_Button_LED_FSM/) (롱프레스)
 > 🎯 핵심 함수: `XM_SetLedState` / `XM_SetLedEffect` / `XM_GetButtonState` / `XM_GetButtonEvent` / `XM_SetChannelLedRGB` (Rev2.0)
 
 `xm_api_led_btn.h`에 정의된 **내장 UI(LED, Button) 제어 API**에 대한 상세 레퍼런스입니다.
@@ -270,8 +270,8 @@ User Task의 무한 루프(`Control_Loop` 또는 `TSM_Run` 내부)에서 주기�
 
 | 예제 | 난이도 | LED/버튼 활용 |
 |------|--------|-------------|
-| [00_Quick_Start](../../examples/00_Quick_Start/) | 입문 | 부팅 시퀀스 + 토글 |
-| [01_Button_LED_Basic](../../examples/01_Button_LED_Basic/) | 초급 | 폴링 상태 미러링 |
-| [02_Button_LED_Event](../../examples/02_Button_LED_Event/) | 초급 | 이벤트 + ONESHOT |
-| [03_Button_LED_FSM](../../examples/03_Button_LED_FSM/) | 중급 | 롱프레스 + Heartbeat/Blink |
-| [18_Debug_Monitor](../../examples/18_Debug_Monitor/) | 중급 | 진단 LED 패턴 |
+| [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) | 입문 | 부팅 시퀀스 + 토글 |
+| [01_Button_LED_Basic](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/01_Button_LED_Basic/) | 초급 | 폴링 상태 미러링 |
+| [02_Button_LED_Event](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/02_Button_LED_Event/) | 초급 | 이벤트 + ONESHOT |
+| [03_Button_LED_FSM](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/03_Button_LED_FSM/) | 중급 | 롱프레스 + Heartbeat/Blink |
+| [18_Debug_Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) | 중급 | 진단 LED 패턴 |

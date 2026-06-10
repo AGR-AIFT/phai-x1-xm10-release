@@ -104,9 +104,9 @@ ST-Link SWD 직접 업로드 + PhAI Studio USB 업로드 두 가지 방법 + 부
 ## 추가 자료
 
 - [🧭 find-it.md](find-it.md) — 키워드 → 페이지 빠른 찾기
-- [Examples](../examples/) — 47 개 예제 소스 코드 (각 폴더에 5 단계 README 포함)
-- [Python Tools](../PythonDecoder/) — USB 시리얼 수신기, USB 메모리 디코더
+- [Examples](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/) — 47 개 예제 소스 코드 (각 폴더에 5 단계 README 포함)
+- [Python Tools](https://github.com/AGR-EXO/Extension_Module/tree/Develop/PythonDecoder/) — USB 시리얼 수신기, USB 메모리 디코더
 - [Release Notes](release-notes/) — 버전별 첨부 파일 + 호환성 매트릭스
-- [Changelog](../CHANGELOG.md) — 버전별 변경 이력 요약
-- [XM10 SDK](../XM10_SDK/) — Rev1.1 / Rev2.0 SDK 프로젝트
+- [Changelog](https://github.com/AGR-EXO/Extension_Module/blob/Develop/CHANGELOG.md) — 버전별 변경 이력 요약
+- [XM10 SDK](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM10_SDK/) — Rev1.1 / Rev2.0 SDK 프로젝트
 - [사용자 5 명 가상 시뮬레이션](student-walkthrough-simulations.md) — 강사·멘토용 UX 검증 워크스루

@@ -2,7 +2,7 @@
 
 > 📌 **이 페이지를 읽고 나면**: XM10 의 4개 메모리 영역 (RAM_D1 / PSRAM / DTCM / Flash NV) 을 용도별로 골라 쓸 수 있습니다.
 > ⏱️ 예상 학습 시간: 15분
-> 🧰 사전 지식: [Ex.19 Memory Aware Design](../../examples/19_Memory_Aware_Design/) 의 정적 자료구조 패턴
+> 🧰 사전 지식: [Ex.19 Memory Aware Design](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/) 의 정적 자료구조 패턴
 > 🎯 핵심: `XM_RAMFUNC` / `XM_DTCM_VAR` 매크로 + `XM_UserNV_Read/Write/Erase` Flash API
 
 > **헤더 파일**: `xm_api_memory.h`
@@ -255,6 +255,6 @@ void SaveSettings(const UserSettings_t* s) {
 
 | 예제 | 난이도 | 메모리 활용 |
 |------|--------|------------|
-| [16_TinyAI_Sensor_Fusion](../../examples/16_TinyAI_Sensor_Fusion/) | 고급 | NN 가중치 (작은 모델은 .rodata, 큰 모델은 PSRAM) |
-| [19_Memory_Aware_Design](../../examples/19_Memory_Aware_Design/) | 고급 | Ring Buffer + Pool Allocator (.bss 정적) |
-| [10c_MSC_Advanced_Log](../../examples/10c_MSC_Advanced_Log/) | 고급 | 사용자 설정 영속화 (Flash NV) 패턴 |
+| [16_TinyAI_Sensor_Fusion](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) | 고급 | NN 가중치 (작은 모델은 .rodata, 큰 모델은 PSRAM) |
+| [19_Memory_Aware_Design](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/) | 고급 | Ring Buffer + Pool Allocator (.bss 정적) |
+| [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | 고급 | 사용자 설정 영속화 (Flash NV) 패턴 |

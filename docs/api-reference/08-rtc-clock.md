@@ -123,5 +123,5 @@ void Control_Setup(void) {
 
 | 예제 | 활용 |
 |------|------|
-| [10_MSC_Manual_log](../../examples/10_MSC_Manual_log/) | 로그 파일명에 timestamp 사용 (`/LOGS/20260512_143000.bin`) |
-| [10c_MSC_Advanced_Log](../../examples/10c_MSC_Advanced_Log/) | summary.txt 에 시작/종료 시각 기록 |
+| [10_MSC_Manual_log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10_MSC_Manual_log/) | 로그 파일명에 timestamp 사용 (`/LOGS/20260512_143000.bin`) |
+| [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | summary.txt 에 시작/종료 시각 기록 |
