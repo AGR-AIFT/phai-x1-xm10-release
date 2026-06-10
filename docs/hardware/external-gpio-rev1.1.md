@@ -8,7 +8,7 @@ XM10 Rev 1.1 보드의 외부 확장 헤더 핀맵입니다. 디지털 입출력
 
 ## 헤더 위치
 
-![XM10 Rev 1.1 보드 외관 — 외부 GPIO 헤더 위치](../../assets/img/rev1.1-photo.png)
+![XM10 Rev 1.1 보드 외관 — 외부 GPIO 헤더 위치](https://raw.githubusercontent.com/AGR-EXO/Extension_Module/Develop/assets/img/rev1.1-photo.png)
 
 Rev 1.1 보드의 외부 GPIO 헤더 (DIO 8 + ADC 4) 가 보드의 어느 위치에 있는지, 1 번 핀이 어느 방향인지를 위 사진으로 확인하세요. 핀별 기능은 아래 표를 따릅니다.
 
