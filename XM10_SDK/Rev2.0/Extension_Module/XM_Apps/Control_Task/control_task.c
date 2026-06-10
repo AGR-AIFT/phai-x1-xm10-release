@@ -10,10 +10,9 @@
  *
  * 명명 안내 (2026-05-15):
  *   기존 User_Setup() / User_Loop() 는 Control_Setup() / Control_Loop() 로
- *   통일되었습니다. 기존 자산이 있다면 함수명만 바꾸시면 동일하게 동작합니다.
- *   1 릴리즈 동안은 weak shim (XM_FW/System/Core/user_compat.c) 이 자동
- *   호환을 제공하지만, 다음 major 릴리즈에서 제거 예정이니 가능한 빨리
- *   마이그레이션 권장.
+ *   통일되었습니다. 예전 이름(User_Setup/User_Loop)은 더 이상 지원되지 않으므로,
+ *   기존 자산이 있다면 함수명을 Control_Setup/Control_Loop 로 변경해야
+ *   정상 동작합니다.
  *
  * @version 0.2
  * @date    2026-05-15
