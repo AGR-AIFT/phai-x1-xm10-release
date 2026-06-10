@@ -24,6 +24,9 @@ docs_dir: docs
 theme:
   name: material
   language: ko
+  font:
+    text: Noto Sans KR
+    code: Roboto Mono
   icon:
     repo: fontawesome/brands/github
   features:
@@ -41,15 +44,12 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: cyan
-      accent: cyan
+      # 브랜드 색은 stylesheets/extra.css 의 ONE PhAI 토큰(#003F87)으로 지정
       toggle:
         icon: material/brightness-7
         name: 다크 모드로 전환
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: cyan
-      accent: cyan
       toggle:
         icon: material/brightness-4
         name: 라이트 모드로 전환
@@ -91,7 +91,10 @@ markdown_extensions:
   - toc:
       permalink: true
 
-# docs/ 밖을 가리키는 상대링크 때문에 빌드가 깨지지 않도록 완화(PoC).
+extra_css:
+  - stylesheets/extra.css
+
+# docs/ 밖 링크는 절대 GitHub URL 로 전환됨. 남은 내부 링크 점검용 완화 설정.
 validation:
   nav:
     omitted_files: info
