@@ -18,7 +18,7 @@ XM10 USB Data Logging API는 1ms 실시간 제어루프의 성능을 보장하�
 대용량 센서 데이터를 USB 플래시 드라이브에 안전하게 저장합니다.
 
 **주요 특징:**
-- **3단계 비동기 파이프라인**: UserTask(1ms) → Hot Buffer(128KB) → Cold Buffer(PSRAM 4MB) → USB
+- **논블로킹 백그라운드 기록**: 1 ms 제어 루프를 막지 않고 백그라운드에서 USB 메모리에 안전하게 저장
 - **자동 파일 포맷**: 32-byte 파일 헤더 + 4KB 블록 CRC + 12-byte 풋터 (Self-describing)
 - **RTC 타임스탬프**: 파일 생성 시각이 실제 시계 기반으로 자동 기록
 - **이벤트 마커**: 로깅 중 모드 전환/에러 등 특정 시점을 표시
@@ -88,7 +88,7 @@ typedef enum {
 
 #### `XM_SetUsbLogSource()`
 
-로깅할 데이터 소스를 등록합니다. `User_Setup()`에서 1회 호출합니다.
+로깅할 데이터 소스를 등록합니다. `Control_Setup()`에서 1회 호출합니다.
 
 ```c
 void XM_SetUsbLogSource(void* data_ptr, uint32_t size);
@@ -107,7 +107,7 @@ void XM_SetUsbLogSource(void* data_ptr, uint32_t size);
 
   MyLogData_t myData;
 
-  void User_Setup(void) {
+  void Control_Setup(void) {
       XM_SetUsbLogSource(&myData, sizeof(myData));
   }
   ```
@@ -122,7 +122,7 @@ void XM_SetUsbLogAutoTimestamp(bool enabled);
 
 - **Parameters**
   - `enabled` — `true`: 매 레코드 앞에 tick 자동 삽입 (기본값). `false`: 비활성화.
-- **Note** `User_Setup()`에서 `XM_StartUsbDataLog()` 호출 전에 설정하세요.
+- **Note** `Control_Setup()`에서 `XM_StartUsbDataLog()` 호출 전에 설정하세요.
 
 #### `XM_SetUsbLogRollingSize()`
 

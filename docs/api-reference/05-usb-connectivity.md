@@ -23,7 +23,7 @@ USB 모듈은 사용자의 개입을 최소화하기 위해 **설정(Setup) 후 
 
 ### The Automation Cycle
 
-1.  **등록 (Registration):** 사용자가 `User_Setup()`에서 저장하고 싶은 데이터 구조체(예: `MyData`)의 주소를 시스템에 알려줍니다.
+1.  **등록 (Registration):** 사용자가 `Control_Setup()`에서 저장하고 싶은 데이터 구조체(예: `MyData`)의 주소를 시스템에 알려줍니다.
 2.  **제어 (Control):** 사용자가 `XM_StartUsbDataLog()`나 시리얼 통신으로 `AGRB MON START`을 호출하여 기능을 켭니다.
 3.  **자동 처리 (Processing):** `core_process` 엔진이 2ms마다 `XM_USB_ProcessPeriodic()`을 호출합니다.
       * 이때 시스템은 등록된 구조체의 데이터를 **자동으로 복사**하여 USB 메모리에 쓰거나 PC로 전송합니다.
@@ -35,7 +35,7 @@ USB 모듈은 사용자의 개입을 최소화하기 위해 **설정(Setup) 후 
 
 ### 2.1. Status Types
 
-#### `XmUsbStatus_t` (권장)
+#### `XmLogStatus_e` (권장)
 
 함수 실행 결과를 명확히 알리기 위한 반환 타입입니다.
 
@@ -43,8 +43,9 @@ USB 모듈은 사용자의 개입을 최소화하기 위해 **설정(Setup) 후 
 typedef enum {
     XM_LOG_STATUS_IDLE,      // 중지됨 (초기 상태)
     XM_LOG_STATUS_LOGGING,   // 정상 로깅 중
-    XM_LOG_STATUS_WARNING_QUEUE_FULL, // 큐가 90% 참 (f_write 멈춤 발생 중)
-    XM_LOG_STATUS_ERROR_STOPPED,    // 큐 오버플로우로 로깅이 강제 중지됨
+    XM_LOG_STATUS_WARNING_QUEUE_FULL, // 버퍼 사용률 높음 (f_write 지연 발생 중)
+    XM_LOG_STATUS_WARNING_DISK_LOW,   // USB 디스크 잔여 용량 50MB 미만
+    XM_LOG_STATUS_ERROR_STOPPED,    // 에러로 로깅이 강제 중지됨
 } XmLogStatus_e;
 ```
 
@@ -72,7 +73,7 @@ typedef enum {
     typedef struct { uint32_t time; float angle; } MyLog_t;
     MyLog_t myLog;
 
-    void User_Setup() {
+    void Control_Setup() {
         // 이 구조체를 매 주기마다 파일에 저장하겠다고 등록
         XM_SetUsbLogSource(&myLog, sizeof(MyLog_t));
     }
@@ -89,7 +90,7 @@ typedef enum {
   * **Parameters**
       * `data_ptr`: 전송할 구조체의 주소
       * `size`: 구조체의 크기
-  * **Note**: 이 함수로 등록된 데이터는 `XM_StartUsbStream()` 호출 시 **바이너리(Binary)** 형태로 PC에 전송됩니다. (Serial Plotter 등에 적합)
+  * **Note**: 이 함수로 등록된 데이터는 스트리밍이 활성화되면 (`XM_SetUsbAutoStream(true)` 또는 PC 측 스트림 시작 시) **바이너리(Binary)** 형태로 PC에 전송됩니다. (Serial Plotter 등에 적합)
 
 -----
 
@@ -153,10 +154,10 @@ USB 메모리가 인식되었고 파일 시스템이 준비되었는지 확인�
 
   * **Syntax**
     ```c
-    void XM_SetUsbLogAutoTimestamp(bool enable);
+    void XM_SetUsbLogAutoTimestamp(bool enabled);
     ```
   * **Parameters**
-      * `enable`: `true`이면 각 샘플에 시스템 시간(ms)을 자동 삽입
+      * `enabled`: `true`이면 각 샘플에 시스템 시간(ms)을 자동 삽입
 
 #### `XM_SetUsbLogRollingSize` *(v2.0.0 신규)*
 
@@ -164,10 +165,10 @@ USB 메모리가 인식되었고 파일 시스템이 준비되었는지 확인�
 
   * **Syntax**
     ```c
-    void XM_SetUsbLogRollingSize(uint32_t bytes);
+    void XM_SetUsbLogRollingSize(uint32_t size_mb);
     ```
   * **Parameters**
-      * `bytes`: 파일 분할 크기 (바이트). 0이면 롤링 비활성화
+      * `size_mb`: 파일 분할 크기 (MB). 범위 1~100, 기본값 10
 
 -----
 

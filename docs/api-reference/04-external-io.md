@@ -1,6 +1,6 @@
 # 외부 IO 제어 API
 
-`xm_api_external_io.h` 의 확장 포트 (Extension Port) 제어 함수들. 아두이노와 비슷한 방식으로 외부 센서 값을 읽거나 디지털 장치를 제어할 수 있어요. DIO 8 + ADC 4 가 기본이고, 필요하면 DIO 를 ADC 로 동적 전환해서 최대 12 채널 ADC 까지 확장됩니다.
+`xm_api_external_io.h` 의 확장 포트 (Extension Port) 제어 함수들. 아두이노와 비슷한 방식으로 외부 센서 값을 읽거나 디지털 장치를 제어할 수 있습니다. DIO 8 + ADC 4 가 기본이고, 필요하면 DIO 를 ADC 로 동적 전환해서 최대 12 채널 ADC 까지 확장됩니다.
 
 > **보드 핀 위치·라벨**은 보드 리비전마다 다를 수 있으니 [하드웨어 핀맵 — Rev 1.1](../hardware/external-gpio-rev1.1.md) / [Rev 2.0](../hardware/external-gpio-rev2.0.md) 을 참고하세요. 이 페이지는 **함수 사용법** 중심입니다.
 
@@ -20,7 +20,7 @@
 
 ## 외부 IMU 사용 시 주의
 
-`XM_EnableExternalImu()` 를 호출해 외부 IMU (XSENS MTi 등) 를 켜면 일부 ADC 핀이 UART 통신용으로 전환됩니다. 어떤 핀이 점유되는지는 보드 리비전마다 다르므로 해당 [핀맵 문서](../hardware/) 의 "외부 IMU 사용 시 주의" 섹션을 보세요.
+`XM_AttachXsensMTi630()` 를 호출해 외부 IMU (XSENS MTi-630) 를 켜면, Rev 1.1 에서는 일부 ADC 핀이 UART 통신용으로 전환됩니다 (Rev 2.0 은 전용 USART2 포트를 사용해 ADC 핀 점유가 없습니다). 어떤 핀이 점유되는지는 보드 리비전마다 다르므로 해당 [핀맵 문서](../hardware/) 의 "외부 IMU 사용 시 주의" 섹션을 보세요.
 
 ---
 
@@ -110,23 +110,19 @@ typedef enum {
 
   * **Syntax**
     ```c
-    bool XM_SetPinMode(XmDioPin_t pin, XmPinMode_t mode);
+    void XM_SetPinMode(XmDioPin_t pin, XmPinMode_t mode);
     ```
   * **Parameters**
-      * `pin`: 설정할 핀 번호 (`XM_EXT_DIO_1` \~ `4`)
-      * `mode`: 동작 모드 (`XM_EXT_DIO_MODE_INPUT`, `XM_EXT_DIO_MODE_INPUT_PULLUP`, `XM_EXT_DIO_MODE_INPUT_PULLDOWN` 등)
-  * **Returns**:
-      * `true`: 설정 성공
-      * `false`: 실패 (잘못된 핀 번호, 또는 **IMU와 자원 충돌 발생**)
+      * `pin`: 설정할 핀 번호 (`XM_EXT_DIO_1` \~ `8`)
+      * `mode`: 동작 모드 (`XM_EXT_DIO_MODE_INPUT`, `XM_EXT_DIO_MODE_INPUT_PULLUP`, `XM_EXT_DIO_MODE_INPUT_PULLDOWN`, `XM_EXT_DIO_MODE_OUTPUT`)
+  * **주의**: 비실시간 함수입니다. 내부에서 `HAL_GPIO_Init` 을 호출하므로 2 ms 실시간 제어 루프 안에서 호출하지 말고 `Control_Setup()` 에서 한 번 설정하세요.
   * **Example**
     ```c
     // 3번 핀을 풀업 입력으로 설정 (스위치 연결용)
     XM_SetPinMode(XM_EXT_DIO_3, XM_EXT_DIO_MODE_INPUT_PULLUP);
 
     // 1번 핀을 풀다운 입력으로 설정
-    if (!XM_SetPinMode(XM_EXT_DIO_1, XM_EXT_DIO_MODE_INPUT_PULLDOWN)) {
-        XM_SendUsbDebugMessage("Error: PIN 1 is busy!\r\n");
-    }
+    XM_SetPinMode(XM_EXT_DIO_1, XM_EXT_DIO_MODE_INPUT_PULLDOWN);
     ```
 
 -----
@@ -135,7 +131,7 @@ typedef enum {
 
 #### `XM_DigitalWrite`
 
-디지털 핀에 전압(High/Low)을 출력합니다. (`XM_IO_OUTPUT` 모드일 때만 동작)
+디지털 핀에 전압(High/Low)을 출력합니다. (`XM_EXT_DIO_MODE_OUTPUT` 모드일 때만 동작)
 
   * **Syntax**
     ```c
@@ -188,7 +184,7 @@ typedef enum {
 
   * **Syntax**
     ```c
-    uint32_t XM_AnalogReadMillivolts(XmAdcPin_t pin);
+    uint16_t XM_AnalogReadMillivolts(XmAdcPin_t pin);
     ```
   * **Returns**: 0 ~ 3300 (mV)
 
@@ -290,15 +286,16 @@ DIO 핀 번호를 ADC 핀 번호로 변환하는 매크로입니다. `XM_SwitchD
 
 ### 3.5. 외부 IMU 제어
 
-#### `XM_EnableExternalImu`
+#### `XM_AttachXsensMTi630` / `XM_ConfigureXsensMTi630`
 
-외부 IMU(XSENS MTi-630) 사용을 활성화합니다. 활성화 시 ADC_1/ADC_3 핀이 UART4 TX/RX로 전환됩니다.
+외부 IMU(XSENS MTi-630) 를 External UART(USART2)에 결합합니다. 결합 후 `XM.status.ext_imu.*` 로 데이터에 접근합니다.
 
   * **Syntax**
     ```c
-    void XM_EnableExternalImu(void);
+    void XM_AttachXsensMTi630(void);     // IMU 를 USART2 에 결합 (Control_Setup 에서 1회 호출)
+    void XM_ConfigureXsensMTi630(void);  // 신품/공장초기화 센서에만 필요한 1회 설정 송신 (블로킹 ~1초, Attach 선행 필수)
     ```
-  * **Note**: 이 함수 호출 후 `XM_EXT_ADC_1`, `XM_EXT_ADC_3`은 ADC로 사용할 수 없습니다.
+  * **Note**: `XM_AttachXsensMTi630()` 는 센서 미연결 상태에서도 호출이 안전하며, 케이블 결합 시 자동으로 동작합니다. Rev 1.1 에서는 결합 시 `XM_EXT_ADC_1`/`XM_EXT_ADC_3` 핀이 UART 로 전환되어 ADC 로 쓸 수 없습니다 (Rev 2.0 은 전용 USART2 포트라 ADC 핀 점유 없음).
 
 ---
 
@@ -320,7 +317,7 @@ DIO 핀 번호를 ADC 핀 번호로 변환하는 매크로입니다. `XM_SwitchD
 
 | 증상 | 원인 | 해결 |
 |------|------|------|
-| `XM_EXT_ADC_1` 또는 `_3` 가 0 mV 만 반환 | `XM_EnableExternalImu()` 활성화로 UART 가 핀 점유 | Rev1.1: `XM_EXT_ADC_2/4` (PA0_C/PA1_C) 사용. Rev2.0: 별도 UART 포트라 무관 |
+| `XM_EXT_ADC_1` 또는 `_3` 가 0 mV 만 반환 | `XM_AttachXsensMTi630()` 활성화로 UART 가 핀 점유 (Rev 1.1) | Rev1.1: `XM_EXT_ADC_2/4` (PA0_C/PA1_C) 사용. Rev2.0: 별도 USART2 포트라 무관 |
 | `SwitchDioToAdc` 후 GPIO 로 복구 안 됨 | ADC 전환은 재부팅 전 영구 (의도된 동작) | 보드 리셋 또는 전원 재인가 |
 | `DigitalWrite(ADC 전환된 DIO, ...)` 가 무시됨 | 보호 장치 (Guard Mechanism) — 의도된 동작 | ADC 핀은 ADC API 로만 사용 |
 | 8-bit Resolution 인데 raw 값이 256+ | `SetAnalogReadResolution` 호출 누락 또는 mV API 사용 (Resolution 무관) | Setup 에서 `SetAnalogReadResolution(8)` 호출 |

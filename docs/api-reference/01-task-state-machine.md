@@ -22,7 +22,7 @@ XM10의 TSM은 진입(Entry) -\> 반복(Loop) -\> 종료(Exit)의 3단계 생명
 
 ```c
 typedef struct {
-    uint32_t id;             // 상태 ID (예: XM_STATE_STANDBY)
+    XmStateId_e id;          // 상태 ID (예: XM_STATE_STANDBY)
     XmStateFunc_t on_entry;  // [진입] 상태 진입 시 1회 실행
     XmStateFunc_t on_loop;   // [반복] 상태 유지 중 매 주기마다 실행
     XmStateFunc_t on_exit;   // [종료] 상태 탈출 시 1회 실행
@@ -38,7 +38,7 @@ typedef struct {
   * `XM_STATE_ACTIVE` (2): 동작 중
   * `XM_STATE_ERROR` (3): 에러 발생
   * ...
-  * `XM_STATE_START` (10): 사용자가 임의로 정한 STATE
+  * `XM_STATE_USER_START` (10): 사용자 정의 상태 시작 번호
 
 ### `XmTsmHandle_t`
 
@@ -46,15 +46,11 @@ typedef struct {
 현재 상태와 현재 상태에서의 실행 단계, 이전 상태와 이전 상태에서의 실행 단계를 정의해준 'yourTask'를 Live Experssion에서 확인할 수 있습니다.
 
 ```c
-typedef struct {
-    /* --- Monitoring Area (Live Expression에서 보임) --- */
-    XmStateId_e currentStateId; /**< 현재 상태 ID */
-    XmLifecycle_t currentStep;  /**< 현재 실행 단계 */
-
-    XmStateId_e prevStateId; /**< 이전 상태 ID */
-    XmLifecycle_t prevStep;  /**< 이전 실행 단계 */
-} XmTsmHandle_t;
+// 핸들은 상태 머신 태스크(XmTask_t)를 가리키는 포인터입니다.
+typedef XmTask_t* XmTsmHandle_t;
 ```
+
+> 핸들이 가리키는 `XmTask_t` 안에는 모니터링 필드 (`currentStateId`, `currentStep`, `prevStateId`, `prevStep`) 가 들어 있어, STM32CubeIDE 의 Live Expression 에서 `*yourTask` 로 현재/이전 상태를 확인할 수 있습니다.
 
 ---
 
@@ -65,7 +61,7 @@ typedef struct {
 새로운 상태 머신 인스턴스를 생성합니다.
 
   * **Parameters**
-      * `uint32_t initial_state_id`: 초기 시작 상태의 ID
+      * `uint8_t initial_state_id`: 초기 시작 상태의 ID
   * **Return**: `XmTsmHandle_t` (생성된 핸들)
 
 ### `XM_TSM_AddState`
@@ -99,7 +95,7 @@ TSM을 실행합니다. **User Task의 무한 루프 내에서 반드시 호출*
 
   * **Parameters**
       * `XmTsmHandle_t handle`: TSM 핸들
-      * `uint32_t next_state_id`: 이동할 다음 상태 ID
+      * `uint8_t next_state_id`: 이동할 다음 상태 ID
 
 ---
 
@@ -107,10 +103,10 @@ TSM을 실행합니다. **User Task의 무한 루프 내에서 반드시 호출*
 
 | 증상 | 원인 | 해결 |
 |------|------|------|
-| TSM 등록은 했는데 함수가 호출 안 됨 | `User_Loop` 안에서 `XM_TSM_Run(handle)` 누락 | `XM_TSM_Run` 가 매 주기 호출되어야 dispatch |
+| TSM 등록은 했는데 함수가 호출 안 됨 | `Control_Loop` 안에서 `XM_TSM_Run(handle)` 누락 | `XM_TSM_Run` 가 매 주기 호출되어야 dispatch |
 | `TransitionTo` 호출했는데 즉시 안 바뀜 | 의도된 동작 — 다음 주기에 `Exit → Entry` 순으로 전환 | 정상. 즉시 전환 필요하면 별도 플래그 처리 |
 | Entry 가 매 주기 반복 호출됨 | 사용자가 직접 `Entry()` 함수 호출 (TSM 가 자동 호출하는데 중복) | Entry 는 `TransitionTo` 시 1회만. 직접 호출 금지 |
-| 상태 ID 충돌 (다른 상태가 같은 ID) | `AddState` 두 번 호출하며 동일 `id` 사용 | 표준 (`XM_STATE_*`) + 사용자 정의 (`XM_STATE_START` = 10) 충돌 회피 |
+| 상태 ID 충돌 (다른 상태가 같은 ID) | `AddState` 두 번 호출하며 동일 `id` 사용 | 표준 (`XM_STATE_*`) + 사용자 정의 (`XM_STATE_USER_START` = 10) 충돌 회피 |
 | `XM_STATE_OFF` 에서 시작했는데 아무 동작 X | `XM_STATE_OFF` 의 `on_loop` 미등록 또는 의도된 idle 상태 | 첫 상태에서 `on_loop` 정의 또는 `TransitionTo` 호출 추가 |
 
 ---

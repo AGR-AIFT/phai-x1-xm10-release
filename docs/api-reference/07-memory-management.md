@@ -87,7 +87,7 @@ PSRAM 사용자 영역의 시작 주소(0x90700000)를 반환합니다.
 - QSPI Memory-Mapped 초기화 후 사용 가능
 - AI/ML 모델 가중치, 대용량 Lookup Table에 적합
 
-> **주의**: `User_Setup()` 이후부터 안전하게 접근 가능합니다. 이전 접근 시 HardFault 발생.
+> **주의**: `Control_Setup()` 이후부터 안전하게 접근 가능합니다. 이전 접근 시 HardFault 발생.
 
 ### `XM_GetUserPSRAMSize()`
 
@@ -239,11 +239,11 @@ void SaveSettings(const UserSettings_t* s) {
 
 | 증상 | 원인 | 해결 |
 |------|------|------|
-| `XM_GetUserPSRAM()` 결과 접근 시 HardFault | `User_Setup()` 이전 (QSPI Memory-Mapped 초기화 전) 접근 | PSRAM 사용 코드는 `User_Setup` 이후로만 |
+| `XM_GetUserPSRAM()` 결과 접근 시 HardFault | `Control_Setup()` 이전 (QSPI Memory-Mapped 초기화 전) 접근 | PSRAM 사용 코드는 `Control_Setup` 이후로만 |
 | `XM_UserNV_Write` 가 `-2` 반환 | Erase 안 한 상태에서 Write (Flash 는 1→0 만 가능) | 먼저 `XM_UserNV_Erase()` 호출 |
 | Flash 가 빠르게 마모됨 | 매 cycle 또는 매 초마다 Write | 부팅 시 1회 Read + 종료/설정 변경 시 1회 Write 패턴 |
 | DTCM 변수에 DMA 가 동작 안 함 | DTCM 은 CPU 전용, DMA 접근 불가 | RAM_D1 또는 SRAM 으로 변경 |
-| `XM_DTCM_VAR` 변수가 0 이 아닌 garbage | DTCM `.bss` 가 zero-init 되지 않는 케이스 | 명시적 `= 0` 초기화 또는 `User_Setup` 에서 `memset` |
+| `XM_DTCM_VAR` 변수가 0 이 아닌 garbage | DTCM `.bss` 가 zero-init 되지 않는 케이스 | 명시적 `= 0` 초기화 또는 `Control_Setup` 에서 `memset` |
 | `XM_RAMFUNC` 함수에서 큰 배열 선언 | ITCM 은 크기 제한 (64 KB) | 큰 데이터는 RAM_D1, 함수만 ITCM |
 | PSRAM 에 AI 가중치 쓰고 결과가 이상 | Write-Through cache 미일치 (PSRAM 은 캐시됨) | DMA 사용 시 D-Cache Clean/Invalidate 필요 |
 | `XM_UserNV_Read` 가 모두 0xFF | Erase 만 하고 Write 안 함 (Erased = 0xFF) | `XM_UserNV_IsErased()` 로 사전 확인 + 기본값 로드 |

@@ -83,7 +83,7 @@ RTC 오실레이터가 동작 중인지 확인합니다.
 ## 사용 예시
 
 ```c
-void User_Setup(void) {
+void Control_Setup(void) {
     // RTC 동작 확인 및 시간 설정
     if (!XM_RTC_IsRunning()) {
         XmDateTime_t dt = {
@@ -110,7 +110,7 @@ void User_Setup(void) {
 |------|------|------|
 | `XM_RTC_GetDateTime` 가 항상 false | SPI 통신 실패 (배선 불량 또는 CS 누락) | 하드웨어 점검 + `XM_RTC_IsRunning()` 으로 동작 확인 |
 | `XM_RTC_IsRunning` 가 false | RTC 백업 배터리 방전 (코인셀 CR1220) | 배터리 교체 + `XM_RTC_SetDateTime` 으로 시간 재설정 |
-| `year = 1970` 또는 2000 | 첫 전원 인가 후 시간 설정 안 함 | `User_Setup` 에서 `IsRunning` 체크 후 `SetDateTime` |
+| `year = 1970` 또는 2000 | 첫 전원 인가 후 시간 설정 안 함 | `Control_Setup` 에서 `IsRunning` 체크 후 `SetDateTime` |
 | `year = 2100` 등 범위 초과 | `SetDateTime` 에 잘못된 값 전달 | `year` 는 2000~2099 (MCP79510 2-digit) |
 | 매 cycle `GetDateTime` 호출하니 느려짐 | SPI 통신은 ms 단위 비용 | 1초마다 한 번만 호출 (timestamp 캐싱) |
 | Weekday 값이 안 맞음 | 1=월요일 ~ 7=일요일 규칙 미숙지 | 표준 ISO 8601 `1=Mon ... 7=Sun` 준수 |

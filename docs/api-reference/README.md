@@ -24,28 +24,28 @@
 
 ## Body Data — 보행 분석 데이터를 쓰려면 먼저 읽어주세요
 
-KIT H10 중앙 모듈은 1 kHz 로 사용자 보행을 분석해서 다음과 같은 데이터를 추정합니다. 그런데 이 분석은 사용자 신체 정보 (체중, 신장, 다리 길이) 가 있어야 정확합니다. 이 데이터를 쓰는 예제 (특히 Ex.23 이상) 에서는 `User_Setup()` 에 `XM_SendUserBodyData()` 호출이 반드시 필요해요.
+KIT H10 중앙 모듈은 1 kHz 로 사용자 보행을 분석해서 다음과 같은 데이터를 추정합니다. 그런데 이 분석은 사용자 신체 정보 (체중, 신장, 다리 길이) 가 있어야 정확합니다. 이 데이터를 쓰는 예제 (특히 Ex.23 이상) 에서는 `Control_Setup()` 에 `XM_SendUserBodyData()` 호출이 반드시 필요합니다.
 
 ### 어떤 데이터?
 
 | 데이터 | API 경로 | 설명 |
 |--------|----------|------|
-| `gaitCycle` | `XM.status.h10.gaitCycle` | 보행 주기 (0~100%) |
 | `isRightFootContact` | `XM.status.h10.isRightFootContact` | 우측 족저 접촉 여부 |
 | `isLeftFootContact` | `XM.status.h10.isLeftFootContact` | 좌측 족저 접촉 여부 |
-| `forwardVelocity` | `XM.status.h10.forwardVelocity` | 전진 속도 (m/s) |
-| `gaitState` | `XM.status.h10.gaitState` | 보행 상태 비트마스크 |
+| `forwardVelocity` | `XM.status.h10.forwardVelocity` | 전진 속도 (m/s) — Body Data 설정 시 정확도 향상 |
+
+> **보행 위상(gaitCycle / gaitState)은 현재 공개 구조체 `XmH10Data_t` 에 직접 노출되지 않습니다.** 보행 주기가 필요하면 `forwardVelocity` 와 발 접지(`isLeftFootContact` / `isRightFootContact`)로 직접 산출합니다 (Ex.23 방식).
 
 ### 미설정 시 증상
 
-- `gaitCycle` 이 부정확해서 보행 위상 추정이 어긋남
+- `forwardVelocity` 기반 보행 위상 추정이 부정확해서 위상 동기가 어긋남
 - `footContact` 이 항상 0 — 입각/유각 구분 불가
 - `forwardVelocity` 값이 부정확
 
 ### 설정 방법
 
 ```c
-void User_Setup(void)
+void Control_Setup(void)
 {
     // ⚠️ H10 보행 분석 정확도를 위해 반드시 설정
     // 실측값 우선. 불가 시 표준체형 근사치 사용 가능.
@@ -94,15 +94,15 @@ void User_Setup(void)
 float angle_r = XM.status.h10.rightHipMotorAngle;   // 우측 (deg)
 float angle_l = XM.status.h10.leftHipMotorAngle;    // 좌측 (deg)
 
-// 고관절 추정 토크
-float torque_r = XM.status.h10.rightHipTorque;      // 우측 (Nm)
-float torque_l = XM.status.h10.leftHipTorque;       // 좌측 (Nm)
+// 고관절 모터 전류 (필드명은 Torque 지만 단위는 A — 토크 환산 ×1.594 ≈ Nm)
+float cur_r = XM.status.h10.rightHipTorque;         // 우측 (A)
+float cur_l = XM.status.h10.leftHipTorque;          // 좌측 (A)
 
-// 보행 분석 데이터 (Body Data 설정 필요)
-uint8_t gait_pct  = XM.status.h10.gaitCycle;        // 0~100 (%)
+// 보행 분석 데이터 (Body Data 설정 시 정확도 향상)
 bool    right_gnd = XM.status.h10.isRightFootContact;
 bool    left_gnd  = XM.status.h10.isLeftFootContact;
 float   fwd_vel   = XM.status.h10.forwardVelocity;  // m/s
+// gaitCycle 은 공개 필드가 아닙니다 — fwd_vel + footContact 로 직접 산출 (Ex.23)
 
 // IMU (전처리된 자세 각도)
 float pitch_r = XM.status.h10.rightHipImuSagittalPitch; // 시상면 피치 (deg)
@@ -132,7 +132,7 @@ XM_SetControlMode(XM_CTRL_MONITOR);
 
 ### 사전 정의 움직임 명령 (P-Vector / I-Vector)
 
-직접 토크 계산 대신 "이 위치로 이 시간 안에 가" 같은 한 줄 명령으로 외골격을 움직이는 방식이에요.
+직접 토크 계산 대신 "이 위치로 이 시간 안에 가" 같은 한 줄 명령으로 외골격을 움직이는 방식입니다.
 
 ```c
 // 위치 명령 — 목표 각도까지 정해진 시간 안에 이동
@@ -165,7 +165,7 @@ XM_SendIVector(SYS_NODE_ID_RH, &iv);
 ┌──────────────────▼──────────────────────────────────┐
 │  XM10                                               │
 │  ┌───────────────────────────────────────────────┐  │
-│  │  User_Loop() — 매 1 ms 호출                    │  │
+│  │  Control_Loop() — 매 1 ms 호출                    │  │
 │  │                                               │  │
 │  │  XM.status.h10.* 읽기                         │  │
 │  │      ↓                                        │  │

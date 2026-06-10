@@ -25,7 +25,7 @@ XM10의 제어 시스템은 엄격한 **IPO (Input-Process-Output)** 모델을 �
 
 2.  **Process (User Loop):**
 
-      * 사용자가 작성한 `User_Loop()`(또는 TSM Loop)가 실행됩니다.
+      * 사용자가 작성한 `Control_Loop()`(또는 TSM Loop)가 실행됩니다.
       * 사용자는 `XM.status`를 읽어 현재 상태를 판단하고, 제어 알고리즘을 수행합니다.
       * 계산된 제어 명령(토크 등)은 **`XM_Set...`** 함수를 통해 **`XM.command`** 구조체에 기록(Staging)됩니다.
 
@@ -121,10 +121,13 @@ typedef struct {
 
     // --- Info & State ---
     uint32_t h10AssistModeLoopCnt;  // H10 보조 모드 루프 카운트 (Assist Mode시작시 count)
+    uint32_t h10PostProcessingCnt;  // GaitAnalysis Post-Processing 샘플 카운트 (0~30000)
     XmH10Mode_t h10Mode;    // H10 동작 모드 (Assist(1)<->Standby(0))
     uint8_t h10AssistLevel; // H10 보조 레벨 (0~10)
+    uint8_t h10FSMcurrentState; // H10 현재 FSM 상태
     bool isPVectorRHDone;   // RH Pvector Complete Flag
     bool isPVectorLHDone;   // LH Pvector Complete Flag
+    bool h10IsNeutralPosSet; // H10 중립각도 설정 완료 상태
 
     // --- Kinematics Data (운동학 정보) ---
     float leftHipAngle;     // 왼쪽 고관절 각도 (Degree)
@@ -134,18 +137,17 @@ typedef struct {
     float leftKneeAngle;    // 왼쪽 무릎 각도 (추정치)
     float rightKneeAngle;   // 오른쪽 무릎 각도 (추정치)
     float pelvicAngle;      // 골반 각도 (Tilt)
-    float pelvicVelY;       // 골반 각속도
 
     // --- Gait Data (보행 정보) ---
     bool isLeftFootContact;  // 왼쪽 발 착지 여부
     bool isRightFootContact; // 오른쪽 발 착지 여부
-    bool gaitState;         // 보행 상태 (boolean)
-    uint8_t gaitCycle;      // 보행 주기 (%)
     float forwardVelocity;  // 전방 보행 속도 (m/s)
 
     // --- Motor Data (모터 상태) ---
-    float leftHipTorque;      // 왼쪽 출력 토크 (Nm)
-    float rightHipTorque;     // 오른쪽 출력 토크
+    // [주의] leftHipTorque / rightHipTorque 는 필드명과 달리 모터 전류(A)입니다.
+    //        관절 토크 환산: τ_joint[Nm] ≈ Kt(0.085) × gear(18.75) × hipTorque[A] ≈ 1.594 × hipTorque
+    float leftHipTorque;      // 왼쪽 모터 전류 (A) — 단위는 Nm이 아닌 A
+    float rightHipTorque;     // 오른쪽 모터 전류 (A) — 단위는 Nm이 아닌 A
     float leftHipMotorAngle;  // 왼쪽 모터 엔코더 각도 (Degree)
     float rightHipMotorAngle; // 오른쪽 모터 엔코더 각도
 
@@ -155,6 +157,8 @@ typedef struct {
     float rightHipImuFrontalRoll;
     float leftHipImuSagittalPitch;  // 왼쪽 고관절 IMU Sagittal Pitch 각도 (Degree)
     float rightHipImuSagittalPitch;
+    float leftHipImuTransverseYaw;  // 왼쪽 고관절 IMU Transverse Yaw 각도 (Degree)
+    float rightHipImuTransverseYaw;
     
     // Global Acceleration (m/s^2)
     float leftHipImuGlobalAccX;	// 왼쪽 고관절 IMU Global 가속도
@@ -190,14 +194,11 @@ typedef struct {
 | **`leftKneeAngle`** | `float` | deg | 왼쪽 무릎 각도 (추청지) |
 | **`rightKneeAngle`** | `float` | deg | 오른쪽 무릎 각도 (추청지) |
 | **`pelvicAngle`** | `float` | deg | 골반 좌우 기울기 (Tilt) |
-| `pelvicVelY` | `float` | deg/s | 골반 회전 각속도 |
 | **`isLeftFootContact`** | `bool` | - | 왼쪽 발 착지 여부 (`true`: 지면 접촉) |
 | **`isRightFootContact`** | `bool` | - | 오른쪽 발 착지 여부 |
-| **`gaitState`** | `uint8_t` | - | 보행 중 여부 (`0` / `1`) |
-| **`gaitCycle`** | `uint8_t` | % | 보행 주기 진행률 (0 \~ 100) |
 | **`forwardVelocity`** | `float` | m/s | 전방 속도 (추정치) |
-| **`leftHipTorque`** | `float` | Nm | 왼쪽 모터 현재 출력 토크 (Feedback) |
-| **`rightHipTorque`** | `float` | Nm | 오른쪽 모터 현재 출력 토크 (Feedback) |
+| **`leftHipTorque`** | `float` | A | 왼쪽 모터 전류 — 필드명과 달리 단위는 **A** (토크 환산 ×1.594 ≈ Nm) |
+| **`rightHipTorque`** | `float` | A | 오른쪽 모터 전류 — 필드명과 달리 단위는 **A** (토크 환산 ×1.594 ≈ Nm) |
 | **`leftHipMotorAngle`** | `float` | deg | 왼쪽 모터 현재 엔코더 각도 (Feedback) |
 | **`rightHipMotorAngle`** | `float` | deg | 오른쪽 모터 현재 엔코더 각도 (Feedback) |
 | `leftHipImuFrontalRoll` | `float` | deg | 왼쪽 고관절 IMU Frontal Roll 각도 |
@@ -276,10 +277,10 @@ typedef struct {
 | **`rightBatteryLevel`** | `uint8_t` | - | 오른쪽 배터리 잔량 (0~100)) |
 | **`rightStatusFlags`** | `uint8_t` | - | 오른쪽 상태 플래그 |
 
-### `XmImuData_t`
+### `XmExtImuData_t`
 
-XSENS IMU(mti-630)의 데이터입니다. `XM_EnableExternalImu` 함수를 호출해야 사용할 수 있습니다. (하드웨어 연결 필수)
-`XM_EnableExternalImu`함수 호출 시 `XM_EXT_ADC_1`(PA0) -> UART Tx / `XM_EXT_ADC_3`(PA1) -> UART Rx로 변경됩니다.
+XSENS IMU(mti-630)의 데이터입니다. `XM_AttachXsensMTi630()` (필요 시 `XM_ConfigureXsensMTi630()`) 를 호출해야 사용할 수 있습니다. (하드웨어 연결 필수)
+Rev 1.1 에서는 결합 시 `XM_EXT_ADC_1`/`XM_EXT_ADC_3` 핀이 UART 로 전환됩니다. Rev 2.0 은 전용 USART2 포트를 사용하므로 ADC 핀 점유가 없습니다. 자세한 내용은 [외부 IO 문서](04-external-io.md) 의 §3.5 를 참고하세요.
 
 ```c
 typedef struct {
@@ -294,7 +295,7 @@ typedef struct {
 
     // --- 3. Calibrated Gyroscope (deg/s or rad/s) ---
     float gyr_x, gyr_y, gyr_z;
-} XmImuData_t;
+} XmExtImuData_t;
 ```
 
 강조 표시한 데이터는 현재 받고 있는 데이터 입니다.
@@ -319,9 +320,12 @@ typedef struct {
 
 ```c
 typedef struct {
-    XmH10Data_t h10;
-    XmGrfData_t grf;
-    XmImuData_t imu;
+    XmH10Data_t     h10;      // H10 로봇 본체 데이터
+    XmGrfData_t     grf;      // GRF 족압 센서 데이터
+    XmExtImuData_t  ext_imu;  // External UART IMU (Xsens MTi-630)
+    XmImuHubData_t  imu_hub;  // IMU Hub 센서 (CAN-FD)
+    XmEmgHubData_t  emg_hub;  // EMG Hub 센서 (CAN-FD)
+    XmFesHubData_t  fes_hub;  // FES Hub 자극 피드백 (CAN-FD)
 } XmInput_t;
 ```
 ### `XmOutput_t`
@@ -354,9 +358,9 @@ typedef struct {
 
   * **주요 필드 접근:**
       * `XM.status.h10.leftHipAngle`: 왼쪽 고관절 각도 (Degree)
-      * `XM.status.h10.rightHipTorque`: 오른쪽 현재 토크 (Nm)
+      * `XM.status.h10.rightHipTorque`: 오른쪽 모터 전류 (A) — 필드명과 달리 단위는 A
       * `XM.status.grf.leftSensorData`: 왼쪽 FSR 센서 배열
-      * `XM.status.imu.acc_z`: IMU 수직 가속도
+      * `XM.status.ext_imu.acc_z`: External IMU 수직 가속도
       * ...
 
 -----
@@ -403,7 +407,7 @@ CM_NmtState_t XM_GetXMNmtState(void);
 |------|------|
 | **설명** | CM과의 DOP V3 PnP(NMT) 상태를 반환합니다. |
 | **반환값** | `CM_NmtState_t` 열거형 — 현재 NMT 상태 |
-| **호출 위치** | `User_Loop()` |
+| **호출 위치** | `Control_Loop()` |
 
 **NMT 상태 값:**
 
@@ -657,7 +661,7 @@ void XM_SendPVectorReset(SystemNodeID_t nodeId);
 static void ManageModeTransition(void)
 {
     // 현재 모드 값 가져오기
-    SuitMode_t currentSuitMode  = XM.status.h10.h10Mode;
+    XmH10Mode_t currentSuitMode  = XM.status.h10.h10Mode;
 
     switch (s_modeTransitionState) {
         case MODE_TRANSITION_IDLE:
@@ -840,8 +844,6 @@ XM_SetResistiveCompGain(SYS_NODE_ID_RH, strongResistance);
 | `rightKneeAngle` | **추정된** 오른쪽 무릎 각도 | degree | float |
 | `isLeftFootContact`| 왼쪽 발 접지 여부 | - | bool |
 | `isRightFootContact` | 오른쪽 발 접지 여부 | - | bool |
-| `gaitState`| 보행 상태 | state | uint8_t |
-| `gaitCycle` | 현재 보행 주기 | % | uint8_t |
 | `forwardVelocity`| **추정된** 전진 속도 | m/s | float |
 ...
 
@@ -959,7 +961,7 @@ uint32_t XM_GetTick(void);
 ```c
 static void ManageModeTransition(void)
 {
-    SuitMode_t currentSuitMode = XM.status.h10.h10Mode;
+    XmH10Mode_t currentSuitMode = XM.status.h10.h10Mode;
 
     switch (s_modeTransitionState) {
         case MODE_TRANSITION_IDLE:
@@ -968,7 +970,7 @@ static void ManageModeTransition(void)
                 
                 // Active-Assist Mode -> Standby Mode 로의 전환
                 // [CASE 1] Homing 중 P-Vector를 사용하던 AA Mode를 안전하게 정지시키는 절차를 시작합니다.
-                if (s_previousSuitMode == XM_H10_MODE_ASSIST && currentSuitMode == H10_STANDBY_MODE 
+                if (s_previousSuitMode == XM_H10_MODE_ASSIST && currentSuitMode == XM_H10_MODE_STANDBY 
                     && s_aaGlobalState == AA_STATE_HOMING) {
                     XM_SendPVectorReset(SYS_NODE_ID_RH);   // P-Vector 궤적 생성 취소 명령 전송
                     XM_SendPVectorReset(SYS_NODE_ID_LH);
@@ -1035,6 +1037,6 @@ void Active_Loop(void) {
 | `XM.status.h10.is_connected` 가 false | CAN-FD 케이블 헐겁거나 H10 본체 전원 OFF | KIT H10 24 V 입력 + 깊은 커넥터 삽입 |
 | `SetAssistTorque` 호출했는데 토크 0 | `XM_SetControlMode(XM_CTRL_TORQUE)` 미호출 | Active 진입 시 1회 모드 설정 필요 |
 | 토크 명령은 보내지는데 H10 안 움직임 | KIT H10 FW < v2.3.0 (XM v2.0.0 이상 비호환) | [kit-h10-firmware/](../kit-h10-firmware/) 가이드로 업데이트 |
-| `gaitCycle`, `forwardVelocity` 등이 항상 0 | `XM_SendUserBodyData()` 미호출 (Body Data 전제조건) | [examples/README.md](../../examples/README.md#part-5) Body Data 안내 참조 |
-| IPO 사이클이 어긋남 / Tick 누락 | `User_Loop` 안에서 blocking 호출 (osDelay 등) | `XM_GetTick()` + 논블로킹 패턴 사용 ([Ex.08](../../examples/08_CDC_Sensor_Print/)) |
+| 무릎 각도·전진 속도 등 추정 데이터가 항상 0 | `XM_SendUserBodyData()` 미호출 (Body Data 전제조건) | [examples/README.md](../../examples/README.md#part-5) Body Data 안내 참조 |
+| IPO 사이클이 어긋남 / Tick 누락 | `Control_Loop` 안에서 blocking 호출 (osDelay 등) | `XM_GetTick()` + 논블로킹 패턴 사용 ([Ex.08](../../examples/08_CDC_Sensor_Print/)) |
 | `XM.command` 직접 쓰기 시 효과 없음 | `XM.command` 는 Staging 영역 — `XM_Set*` 함수가 dirty flag 설정 | 반드시 setter 함수 (`XM_SetAssistTorque` 등) 사용 |

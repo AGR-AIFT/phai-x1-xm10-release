@@ -242,7 +242,7 @@ PCA9957 기반의 채널별 RGB LED를 제어합니다. 센서 모듈 연결 상
 #### `XM_IO_Update`
 
 **[시스템 필수]** LED와 버튼의 상태를 업데이트하는 구동 함수입니다.
-User Task의 무한 루프(`User_Loop` 또는 `TSM_Run` 내부)에서 주기적으로 호출되어야 `Blink`나 `Long Press` 기능이 정상 동작합니다.
+User Task의 무한 루프(`Control_Loop` 또는 `TSM_Run` 내부)에서 주기적으로 호출되어야 `Blink`나 `Long Press` 기능이 정상 동작합니다.
 
   * **Syntax**
     ```c
