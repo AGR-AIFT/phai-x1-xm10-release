@@ -1,6 +1,6 @@
-# Tutorials — Learning Through 47 Examples
+# Tutorials — Learning Through 48 Examples
 
-XM10's features are covered through 47 progressively structured examples. Each folder contains source code and a README, and every README follows the same format: Goal → Prerequisites → Key Code → Experiments → Next Steps + Common Mistakes. The introductory examples (Ex.10 and below) are designed to complete in under 30 minutes. Control and advanced examples (Ex.11 and above) may take anywhere from 45 minutes to several weeks, depending on difficulty.
+XM10's features are covered through 48 progressively structured examples. Each folder contains source code and a README, and every README follows the same format: Goal → Prerequisites → Key Code → Experiments → Next Steps + Common Mistakes. The introductory examples (Ex.10 and below) are designed to complete in under 30 minutes. Control and advanced examples (Ex.11 and above) may take anywhere from 45 minutes to several weeks, depending on difficulty.
 
 The full example catalog is at [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md). If you get stuck, check the "Common Mistakes" section at the bottom of each README first. Claude Code users can simply say `"Ex.XX isn't working"` and the `example-helper` skill will respond with the relevant common mistakes and troubleshooting documentation.
 
@@ -49,7 +49,7 @@ Teaching tips:
 - The Week 8 mini project is effective for maintaining motivation. Run it as an open-ended prompt like "build anything using what you've learned from Ex.05–10a."
 - For Week 16, teams of 3–4 are recommended. Teams that dive deep into the Physical AI application track (Ex.21, 31, 32, 33) at the end tend to produce the strongest final projects.
 
-Examples not in this schedule (Ex.05d, 15, 22, 24, 28–39) are naturally left for self-directed study or a follow-on course in the next semester.
+Examples not in this schedule (Ex.05d, 15, 22, 24, 28–40) are naturally left for self-directed study or a follow-on course in the next semester.
 
 ---
 
@@ -187,6 +187,7 @@ The key stages of Physical AI — transparency → intent detection → learning
 | [37](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/37_FES_Hub_Module_Ctrl/) | FES Hub module control | ⭐⭐⭐ | Connect FES Hub over CAN-FD, control per-channel electrical stimulation parameters |
 | [38](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/38_Periodic_Background_Task/) | Periodic background task | ⭐⭐ | Offload low-frequency auxiliary work, minimize control loop jitter |
 | [39](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/39_Task_Lifecycle/) | Task lifecycle management | ⭐⭐⭐ | Create, suspend, and terminate tasks; RTOS task state machine pattern |
+| [40](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/40_EMG_Proportional_Assist/) | EMG proportional assist 🛑 **Rev 2.0 only** | ⭐⭐⭐⭐ | External 4-channel ADC EMG → envelope → proportional torque, button calibration + PhAI Studio 0xF0 streaming (EMG competition foundation) |
 
 ---
 
