@@ -115,7 +115,7 @@ typedef enum {
   * **Parameters**
       * `pin`: 설정할 핀 번호 (`XM_EXT_DIO_1` \~ `8`)
       * `mode`: 동작 모드 (`XM_EXT_DIO_MODE_INPUT`, `XM_EXT_DIO_MODE_INPUT_PULLUP`, `XM_EXT_DIO_MODE_INPUT_PULLDOWN`, `XM_EXT_DIO_MODE_OUTPUT`)
-  * **주의**: 비실시간 함수입니다. 내부에서 `HAL_GPIO_Init` 을 호출하므로 2 ms 실시간 제어 루프 안에서 호출하지 말고 `Control_Setup()` 에서 한 번 설정하세요.
+  * **주의**: 비실시간 함수입니다. 내부에서 `HAL_GPIO_Init` 을 호출하므로 1 ms 실시간 제어 루프 (1 kHz) 안에서 호출하지 말고 `Control_Setup()` 에서 한 번 설정하세요.
   * **Example**
     ```c
     // 3번 핀을 풀업 입력으로 설정 (스위치 연결용)
@@ -241,10 +241,10 @@ DIO 핀을 런타임에 ADC 모드로 전환하여, 8개 DIO + 4개 ADC = 최대
 
   * **Syntax**
     ```c
-    bool XM_SwitchDioToAdc(XmDioPin_t dio_pin);
+    bool XM_SwitchDioToAdc(XmDioPin_t pin);
     ```
   * **Parameters**
-      * `dio_pin`: ADC로 전환할 DIO 핀
+      * `pin`: ADC로 전환할 DIO 핀
   * **Returns**: `true` (전환 성공), `false` (지원되지 않는 핀)
   * **Example**
     ```c
@@ -296,6 +296,32 @@ DIO 핀 번호를 ADC 핀 번호로 변환하는 매크로입니다. `XM_SwitchD
     void XM_ConfigureXsensMTi630(void);  // 신품/공장초기화 센서에만 필요한 1회 설정 송신 (블로킹 ~1초, Attach 선행 필수)
     ```
   * **Note**: `XM_AttachXsensMTi630()` 는 센서 미연결 상태에서도 호출이 안전하며, 케이블 결합 시 자동으로 동작합니다. Rev 1.1 에서는 결합 시 `XM_EXT_ADC_1`/`XM_EXT_ADC_3` 핀이 UART 로 전환되어 ADC 로 쓸 수 없습니다 (Rev 2.0 은 전용 USART2 포트라 ADC 핀 점유 없음).
+
+---
+
+### 3.6. 확장 포트 전원 전압 (Extension Port Power) *(Rev 2.0)*
+
+확장 포트의 **센서 공급 전원**을 3.3V 또는 5V 로 전환합니다 (보드 신호 `EXT_PWR_SEL_5V`, PE3). 5V 로 동작하는 외부 센서(일부 EMG 모듈 등)를 쓰려면 `Control_Setup()` 에서 5V 로 전환하세요. **기본값은 3.3V** 입니다.
+
+> ⚠️ 이 전압은 센서를 **구동(공급)** 하는 전원입니다. **ADC 신호 입력 범위는 전원과 무관하게 항상 0~3.3V** 입니다. 5V 로 구동한 센서의 **출력(신호)** 이 3.3V 를 넘으면 ADC 핀이 손상될 수 있으니, 신호 라인은 0~3.3V 범위인지 확인하고 필요하면 분압하세요.
+
+#### `XM_SetExtPowerVoltage`
+
+  * **Syntax**
+    ```c
+    void XM_SetExtPowerVoltage(XmExtPwrVoltage_t voltage);
+    ```
+  * **Parameters**
+      * `voltage`: `XM_EXT_PWR_3V3` (3.3V, 기본값) 또는 `XM_EXT_PWR_5V` (5V)
+  * **Example**
+    ```c
+    void Control_Setup(void) {
+        XM_SetExtPowerVoltage(XM_EXT_PWR_5V);   // 5V 센서 구동
+        XM_SwitchDioToAdc(XM_EXT_DIO_1);        // DIO_1 → ADC (XM_EXT_ADC_5)
+        // 이후 XM_AnalogReadMillivolts(XM_EXT_ADC_5) 로 센서 전압(mV)을 읽음
+    }
+    ```
+  * **Note**: 확장 포트 전원 전압 전환은 Rev 2.0 에서 확인된 기능입니다.
 
 ---
 

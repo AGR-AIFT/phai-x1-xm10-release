@@ -2,7 +2,7 @@
 
 > 📌 **이 페이지를 읽고 나면**: `XM.status` 로 H10 상태를 읽고 `XM_Set*` 로 토크/PI Vector 명령을 보낼 수 있습니다.
 > ⏱️ 예상 학습 시간: 30분
-> 🧰 사전 지식: IPO 모델 (Input → Process → Output 2ms 사이클) + [Ex.11~14](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/)
+> 🧰 사전 지식: IPO 모델 (Input → Process → Output 1ms 사이클) + [Ex.11~14](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/)
 > 🎯 핵심 객체: `XM.status` (읽기) / `XM.command` (Staging 명령) / `XM_SetControlMode` / `XM_SetAssistTorque` / `XM_SendPVector`
 
 `XM10`의 핵심 가치중 하나는 `KIT H10` 로봇을 직접 설계한 알고리즘으로 제어하는 것입니다. 본 API는 KIT H10과의 연결 상태를 확인하고, 로봇의 현재 상태 데이터를 실시간으로 수신하며, `PIF-Vectors`, `Aux inputs`와 같은 제어 명령을 전송하여 로봇의 움직임을 제어하는 데 필요한 기능을 제공합니다.
@@ -13,9 +13,9 @@ XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 �
 
 ## 📌 동작 원리 (Operating Principle)
 
-XM10의 제어 시스템은 엄격한 **IPO (Input-Process-Output)** 모델을 따르며, 이는 시스템 내부의 **`core_process`** 엔진에 의해 2ms(500Hz) 주기로 정확하게 수행됩니다.
+XM10의 제어 시스템은 엄격한 **IPO (Input-Process-Output)** 모델을 따르며, 이는 시스템 내부의 **`core_process`** 엔진에 의해 1ms(1kHz) 주기로 정확하게 수행됩니다.
 
-### The IPO Cycle (2ms Loop)
+### The IPO Cycle (1ms Loop)
 
 1.  **Input (Data Gathering):**
 
@@ -37,8 +37,8 @@ XM10의 제어 시스템은 엄격한 **IPO (Input-Process-Output)** 모델을 �
 4.	**Data Logging(MSC) or Streaming(CDC):**
 
       * Input Data, Process, Output Data가 처리된 후 Data Logging or Data Streaming을 수행합니다.
-      * USB Memory가 연결된 경우 사용자 정의 데이터를 2ms 마다 Memory에 저장합니다.
-      * PC와 USB로 연결되어 시리얼 포트로 `AGRB MON START`문자열을 XM10으로 전송하면 사용자 정의 데이터를 2ms마다 터미널로 전달합니다. `AGRB MON STOP`을 입력하면 전송을 중단합니다.
+      * USB Memory가 연결된 경우 사용자 정의 데이터를 1ms 마다 Memory에 저장합니다.
+      * PC와 USB로 연결되어 시리얼 포트로 `AGRB MON START`문자열을 XM10으로 전송하면 사용자 정의 데이터를 1ms마다 터미널로 전달합니다. `AGRB MON STOP`을 입력하면 전송을 중단합니다.
 
 > **Note:** 사용자는 데이터를 수신(Receive)하거나 전송(Flush)하는 함수를 직접 호출할 필요가 없습니다. 오직 데이터를 읽고(Read), 설정(Set)하기만 하면 됩니다.
 > **Note:** 데이터를 저장시에 데이터 저장을 위한 복잡한 로직을 수행할 필요가 없습니다. 저장할 데이터 구조체 정의 및 데이터 전송 API 함수를 호출하기만 하면 됩니다.
@@ -73,7 +73,7 @@ typedef enum {
 
 ### `PVector_t`
 
-H10 슈트의 현재 동작 상태입니다.
+위치 기반 궤적 명령 벡터입니다.
 
 ```c
 typedef struct {
@@ -86,7 +86,7 @@ typedef struct {
 
 ### `IVector_t`
 
-H10 슈트의 현재 동작 상태입니다.
+임피던스 제어 파라미터 벡터입니다.
 
 ```c
 typedef struct {
@@ -100,7 +100,7 @@ typedef struct {
 
 ### `FVector_t`
 
-H10의 현재 동작 상태입니다.
+힘 기반 궤적 명령 벡터입니다.
 
 ```c
 typedef struct {
@@ -185,7 +185,7 @@ typedef struct {
 | **`is_connected`** | `bool` | - | H10와의 통신 연결 여부 (`true`: 정상) |
 | **`h10AssistModeLoopCnt`** | `uint32_t` | - | H10 보조 모드 루프 카운트 |
 | **`h10Mode`** | `XmH10Mode_t` | - | 현재 H10 동작 모드 (`STANDBY` / `ASSIST`) |
-| **`h10AssistLevel`** | `uint8_t` | 1\~9 | H10에 설정된 보조 강도 레벨 |
+| **`h10AssistLevel`** | `uint8_t` | 0\~10 | H10 보조 강도 다이얼. 보조 토크에 `h10AssistLevel/10.0` 을 곱해 반영 권장 (레벨 0 → 토크 0). `XM_SetAssistTorque` 항목 참조 |
 | **`isPVectorRHDone`** | `bool` | - | RH의 P vector가 완료되었음을 알리는 플래스 |
 | **`isPVectorLHDone`** | `bool` | - | LH의 P vector가 완료되었음을 알리는 플래스 |
 | **`leftHipAngle`** | `float` | deg | 왼쪽 고관절 각도 (Extension \< 0 \< Flexion) |
@@ -416,12 +416,12 @@ CM_NmtState_t XM_GetXMNmtState(void);
 
 | 상태 | 값 | 설명 |
 |------|-----|------|
-| `NMT_STATE_BOOT_UP` | 0 | 부팅 중 (Boot-up 메시지 미수신) |
-| `NMT_STATE_PRE_OPERATIONAL` | 1 | SDO 통신 가능, PDO 비활성 |
-| `NMT_STATE_OPERATIONAL` | 2 | 모든 통신 활성 (정상 상태) |
-| `NMT_STATE_STOPPED` | 3 | 통신 중단됨 |
+| `CM_NMT_INITIALISING` | 0 | 부팅 중 (Boot-up 메시지 미수신) |
+| `CM_NMT_PRE_OPERATIONAL` | 1 | SDO 통신 가능, PDO 비활성 |
+| `CM_NMT_OPERATIONAL` | 2 | 모든 통신 활성 (정상 상태) |
+| `CM_NMT_STOPPED` | 3 | 통신 중단됨 |
 
-> **참고**: `XM_IsCmConnected()`는 내부적으로 `XM_GetXMNmtState() == NMT_STATE_OPERATIONAL`을 확인합니다.
+> **참고**: `XM_IsCmConnected()`는 내부적으로 `XM_GetXMNmtState() == CM_NMT_OPERATIONAL`을 확인합니다.
 > NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 사용하세요.
 
 ---
@@ -892,7 +892,7 @@ XM_SendUserBodyData(&bodyData[0]);
 
 ## 실시간 제어(Real-time Control)
 
-**2ms** 제어 루프 내에서 실시간으로 토크를 인가하는 데 사용되는 핵심 함수들입니다.
+**1ms** 제어 루프 내에서 실시간으로 토크를 인가하는 데 사용되는 핵심 함수들입니다.
 데이터를 읽는 것은 구조체 접근만으로 가능하지만, **제어 명령(Output)을 내릴 때는 반드시 아래의 Helper 함수들을 사용해야 합니다.** 이 함수들은 내부적으로 **Dirty Flag**를 관리하여 변경된 데이터만 효율적으로 전송하도록 돕습니다.
 
 ### `XM_SetAssistTorque`
@@ -903,14 +903,22 @@ XM_SendUserBodyData(&bodyData[0]);
 
 **Syntax**
 ```c
-void XM_SetAssistTorque(float r, float l);
+void XM_SetAssistTorque(float rh, float lh);
 ```
 
 **Parameters**
-  * `r`: 오른쪽 고관절 보조 토크 (**Unit: Nm**)
-  * `l`: 왼쪽 고관절 보조 토크 (**Unit: Nm**)
+  * `rh`: 오른쪽(RH) 고관절 보조 토크 (**Unit: Nm**) — **첫 번째 인자**
+  * `lh`: 왼쪽(LH) 고관절 보조 토크 (**Unit: Nm**) — **두 번째 인자**
+
+> ⚠️ 인자 순서는 **`(오른쪽 rh, 왼쪽 lh)`** 입니다. 좌우를 바꿔 넣으면 보조가 반대 다리로 들어가니, 헷갈리면 한쪽씩 지정하는 `XM_SetAssistTorqueRH()` / `XM_SetAssistTorqueLH()` 를 사용하세요.
 
 **Returns**: None
+
+**부호 · 단위 · 한계 (필독)**
+  * **부호 규약**: **양수(+) = Flexion(굴곡) 방향 보조, 음수(−) = Extension(신전) 방향 보조** (각도 규약 `Extension < 0 < Flexion` 과 동일).
+  * **단위 사슬**: 입력은 관절 토크[Nm]. 내부에서 모터 전류로 환산되어 구동됩니다 — `τ_joint[Nm] = Kt(0.085) × Gear(18.75) × I[A] ≈ 1.594 × I[A]`. 피드백 `XM.status.h10.*HipTorque`(단위 **A**)와 비교할 때 이 환산을 적용하세요.
+  * **하드 한계 (±10 Nm)**: 입력 토크는 XM10 내부 라이브러리(`CM_StageAuxTorque`, `libXM_Lib.a`)에서 **±10 Nm 로 클램프**된 뒤 CAN 으로 전송됩니다. 예제가 아닌 내부 코드라 사용자가 바꿀 수 없으며, 그 이상 입력해도 ±10 Nm 에서 포화됩니다. (모터드라이버단 추가 보호: 최대 전류 14A / 임피던스 입력 10A Saturation)
+  * **보조 레벨 반영**: 슈트 보조 강도 다이얼(`XM.status.h10.h10AssistLevel`, 0~10)을 반영하려면 토크에 `h10AssistLevel / 10.0f` 를 곱하세요 — 레벨 0 이면 출력이 0 이 됩니다.
 
 **Operating Principle**
   * 입력된 값을 `XM.command` 구조체에 저장하고, `torque_updated` 플래그를 세팅합니다.
@@ -936,12 +944,12 @@ void Active_Loop(void) {
 
 **Syntax**
 ```c
-void XM_SetAssistTorqueRH(float r);
-void XM_SetAssistTorqueLH(float l);
+void XM_SetAssistTorqueRH(float rh);
+void XM_SetAssistTorqueLH(float lh);
 ```
 
 **Parameters**
-  * `r` / `l`: 해당 관절의 보조 토크 (**Unit: Nm**)
+  * `rh` / `lh`: 해당 관절의 보조 토크 (**Unit: Nm**)
 
 **Example**
 ```c

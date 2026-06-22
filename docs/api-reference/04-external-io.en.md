@@ -115,7 +115,7 @@ Sets the operating mode (input / output / analog) of a pin. Must be called befor
   * **Parameters**
       * `pin`: Pin to configure (`XM_EXT_DIO_1` \~ `8`)
       * `mode`: Operating mode (`XM_EXT_DIO_MODE_INPUT`, `XM_EXT_DIO_MODE_INPUT_PULLUP`, `XM_EXT_DIO_MODE_INPUT_PULLDOWN`, `XM_EXT_DIO_MODE_OUTPUT`)
-  * **Note**: This is a non-real-time function. It calls `HAL_GPIO_Init` internally, so do **not** call it inside the 2 ms real-time control loop. Configure pins once in `Control_Setup()`.
+  * **Note**: This is a non-real-time function. It calls `HAL_GPIO_Init` internally, so do **not** call it inside the 1 ms real-time control loop (1 kHz). Configure pins once in `Control_Setup()`.
   * **Example**
     ```c
     // Configure pin 3 as pull-up input (for a switch)
@@ -241,10 +241,10 @@ Switches a specific DIO pin to ADC mode.
 
   * **Syntax**
     ```c
-    bool XM_SwitchDioToAdc(XmDioPin_t dio_pin);
+    bool XM_SwitchDioToAdc(XmDioPin_t pin);
     ```
   * **Parameters**
-      * `dio_pin`: DIO pin to switch to ADC
+      * `pin`: DIO pin to switch to ADC
   * **Returns**: `true` (switch successful), `false` (pin not supported)
   * **Example**
     ```c
@@ -296,6 +296,32 @@ Attaches an external IMU (XSENS MTi-630) to the External UART (USART2). After at
     void XM_ConfigureXsensMTi630(void);  // Send one-time configuration to a brand-new or factory-reset sensor (blocking ~1 s; call Attach first)
     ```
   * **Note**: `XM_AttachXsensMTi630()` is safe to call even when no sensor is connected — it activates automatically once the cable is plugged in. On Rev 1.1, attaching the IMU reassigns `XM_EXT_ADC_1` and `XM_EXT_ADC_3` to UART, making them unavailable for ADC use. (Rev 2.0 uses a dedicated USART2 port, so no ADC pins are affected.)
+
+---
+
+### 3.6. Extension Port Power (3.3V / 5V) *(Rev 2.0)*
+
+Switches the **sensor supply voltage** of the extension port between 3.3V and 5V (board signal `EXT_PWR_SEL_5V`, PE3). To use an external sensor that runs on 5V (e.g. some EMG modules), switch to 5V in `Control_Setup()`. **The default is 3.3V.**
+
+> ⚠️ This voltage **powers** the sensor. The **ADC signal input range is always 0~3.3V**, independent of the supply. If the **output (signal)** of a 5V-powered sensor exceeds 3.3V it can damage the ADC pin — keep the signal line within 0~3.3V and add a voltage divider if needed.
+
+#### `XM_SetExtPowerVoltage`
+
+  * **Syntax**
+    ```c
+    void XM_SetExtPowerVoltage(XmExtPwrVoltage_t voltage);
+    ```
+  * **Parameters**
+      * `voltage`: `XM_EXT_PWR_3V3` (3.3V, default) or `XM_EXT_PWR_5V` (5V)
+  * **Example**
+    ```c
+    void Control_Setup(void) {
+        XM_SetExtPowerVoltage(XM_EXT_PWR_5V);   // power a 5V sensor
+        XM_SwitchDioToAdc(XM_EXT_DIO_1);        // DIO_1 -> ADC (XM_EXT_ADC_5)
+        // then read with XM_AnalogReadMillivolts(XM_EXT_ADC_5) in mV
+    }
+    ```
+  * **Note**: Extension-port voltage switching is confirmed on Rev 2.0.
 
 ---
 

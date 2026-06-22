@@ -2,7 +2,7 @@
 
 > 📌 **After reading this page** you will be able to read the H10 state via `XM.status` and send torque / PI Vector commands using `XM_Set*`.
 > ⏱️ Estimated reading time: 30 minutes
-> 🧰 Prerequisites: IPO model (Input → Process → Output 2 ms cycle) + [Ex.11~14](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/)
+> 🧰 Prerequisites: IPO model (Input → Process → Output 1 ms cycle) + [Ex.11~14](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/)
 > 🎯 Key objects: `XM.status` (read) / `XM.command` (staging commands) / `XM_SetControlMode` / `XM_SetAssistTorque` / `XM_SendPVector`
 
 One of the core values of `XM10` is controlling the `KIT H10` exoskeleton with algorithms you design yourself. This API provides everything you need to check the connection status to KIT H10, receive the robot's live state data, and send control commands — such as `PIF-Vectors` and `Aux inputs` — to drive the robot's motion.
@@ -13,9 +13,9 @@ The XM10 firmware implements a **Facade pattern** so users can read robot state 
 
 ## 📌 Operating Principle
 
-The XM10 control system follows a strict **IPO (Input-Process-Output)** model, executed precisely on a 2 ms (500 Hz) cycle by the internal **`core_process`** engine.
+The XM10 control system follows a strict **IPO (Input-Process-Output)** model, executed precisely on a 1 ms (1 kHz) cycle by the internal **`core_process`** engine.
 
-### The IPO Cycle (2 ms Loop)
+### The IPO Cycle (1 ms Loop)
 
 1.  **Input (Data Gathering):**
 
@@ -37,8 +37,8 @@ The XM10 control system follows a strict **IPO (Input-Process-Output)** model, e
 4.	**Data Logging (MSC) or Streaming (CDC):**
 
       * After Input, Process, and Output are complete, data logging or streaming is performed.
-      * If a USB memory device is connected, user-defined data is saved to it every 2 ms.
-      * If XM10 is connected to a PC via USB and the string `AGRB MON START` is sent over the serial port, user-defined data is forwarded to the terminal every 2 ms. Send `AGRB MON STOP` to halt streaming.
+      * If a USB memory device is connected, user-defined data is saved to it every 1 ms.
+      * If XM10 is connected to a PC via USB and the string `AGRB MON START` is sent over the serial port, user-defined data is forwarded to the terminal every 1 ms. Send `AGRB MON STOP` to halt streaming.
 
 > **Note:** Users never need to call receive or flush functions manually. Simply read data and set commands.
 > **Note:** No complex logic is required to save data. Just define the data struct you want to log and call the data-transmission API function.
@@ -186,7 +186,7 @@ Bold fields are currently being received. Additional fields may be added or modi
 | **`is_connected`** | `bool` | - | H10 communication link status (`true`: connected) |
 | **`h10AssistModeLoopCnt`** | `uint32_t` | - | H10 assist mode loop counter |
 | **`h10Mode`** | `XmH10Mode_t` | - | Current H10 operating mode (`STANDBY` / `ASSIST`) |
-| **`h10AssistLevel`** | `uint8_t` | 1\~9 | Assist level configured on H10 |
+| **`h10AssistLevel`** | `uint8_t` | 0\~10 | H10 assist-strength dial. Recommended: multiply assist torque by `h10AssistLevel/10.0` to reflect the dial (level 0 → torque 0). See `XM_SetAssistTorque`. |
 | **`isPVectorRHDone`** | `bool` | - | Flag indicating the right-hip (RH) P-Vector has completed |
 | **`isPVectorLHDone`** | `bool` | - | Flag indicating the left-hip (LH) P-Vector has completed |
 | **`leftHipAngle`** | `float` | deg | Left hip joint angle (Extension \< 0 \< Flexion) |
@@ -418,12 +418,12 @@ CM_NmtState_t XM_GetXMNmtState(void);
 
 | State | Value | Description |
 |------|-----|------|
-| `NMT_STATE_BOOT_UP` | 0 | Booting (boot-up message not yet received) |
-| `NMT_STATE_PRE_OPERATIONAL` | 1 | SDO communication available; PDO inactive |
-| `NMT_STATE_OPERATIONAL` | 2 | All communication active (normal state) |
-| `NMT_STATE_STOPPED` | 3 | Communication halted |
+| `CM_NMT_INITIALISING` | 0 | Booting (boot-up message not yet received) |
+| `CM_NMT_PRE_OPERATIONAL` | 1 | SDO communication available; PDO inactive |
+| `CM_NMT_OPERATIONAL` | 2 | All communication active (normal state) |
+| `CM_NMT_STOPPED` | 3 | Communication halted |
 
-> **Note:** `XM_IsCmConnected()` internally checks `XM_GetXMNmtState() == NMT_STATE_OPERATIONAL`.
+> **Note:** `XM_IsCmConnected()` internally checks `XM_GetXMNmtState() == CM_NMT_OPERATIONAL`.
 > Use this function directly when you need finer-grained branching based on NMT state.
 
 ---
@@ -894,7 +894,7 @@ XM_SendUserBodyData(&bodyData[0]);
 
 ## Real-Time Control
 
-These are the core functions used to apply torque in real time within the **2 ms** control loop.
+These are the core functions used to apply torque in real time within the **1 ms** control loop.
 Reading data is done by accessing the struct fields directly, but **all control outputs must be issued through the helper functions below.** These functions manage **dirty flags** internally to ensure only changed values are transmitted efficiently.
 
 ### `XM_SetAssistTorque`
@@ -905,14 +905,22 @@ Users only need to compute the desired torque and set it through this function.
 
 **Syntax**
 ```c
-void XM_SetAssistTorque(float r, float l);
+void XM_SetAssistTorque(float rh, float lh);
 ```
 
 **Parameters**
-  * `r`: Right hip joint assist torque (**Unit: Nm**)
-  * `l`: Left hip joint assist torque (**Unit: Nm**)
+  * `rh`: Right hip joint assist torque (**Unit: Nm**)
+  * `lh`: Left hip joint assist torque (**Unit: Nm**)
+
+> ⚠️ The argument order is **`(right rh, left lh)`**. Swapping them sends assistance to the wrong leg; when in doubt, set one side at a time with `XM_SetAssistTorqueRH()` / `XM_SetAssistTorqueLH()`.
 
 **Returns**: None
+
+**Sign · Unit · Limit (must read)**
+  * **Sign convention**: **positive(+) = Flexion assist, negative(−) = Extension assist** (matches the angle convention `Extension < 0 < Flexion`).
+  * **Unit chain**: the input is joint torque [Nm]. Internally it is converted to motor current — `τ_joint[Nm] = Kt(0.085) × Gear(18.75) × I[A] ≈ 1.594 × I[A]`. Apply this conversion when comparing with the feedback `XM.status.h10.*HipTorque` (unit **A**).
+  * **Hard limit (±10 Nm)**: the input torque is **clamped to ±10 Nm** inside the XM10 library (`CM_StageAuxTorque`, `libXM_Lib.a`) before it goes out on CAN. This is internal code, not the example, so users cannot change it; larger inputs saturate at ±10 Nm. (Motor-driver side: 14A max / 10A impedance saturation.)
+  * **Assist level**: to reflect the suit assist-strength dial (`XM.status.h10.h10AssistLevel`, 0~10), multiply the torque by `h10AssistLevel / 10.0f` — at level 0 the output is 0.
 
 **Operating Principle**
   * Stores the values in the `XM.command` struct and sets the `torque_updated` dirty flag.
@@ -938,12 +946,12 @@ Sets the torque for a single leg independently. The opposite leg's torque value 
 
 **Syntax**
 ```c
-void XM_SetAssistTorqueRH(float r);
-void XM_SetAssistTorqueLH(float l);
+void XM_SetAssistTorqueRH(float rh);
+void XM_SetAssistTorqueLH(float lh);
 ```
 
 **Parameters**
-  * `r` / `l`: Assist torque for the respective joint (**Unit: Nm**)
+  * `rh` / `lh`: Assist torque for the respective joint (**Unit: Nm**)
 
 **Example**
 ```c

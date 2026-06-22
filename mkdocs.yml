@@ -103,6 +103,7 @@ plugins:
             업로드 방법: Upload Guide
             심화: Advanced
             AI 데이터 파이프라인: AI Data Pipeline
+            안전: Safety
             문제 해결: Troubleshooting
             릴리스 노트: Release Notes
 
@@ -170,6 +171,7 @@ nav:
   - 심화:
       - 개요: advanced/README.md
       - AI 데이터 파이프라인: advanced/ai-data-pipeline.md
+  - 안전: safety/wearable-safety.md
   - 문제 해결: troubleshooting.md
   - 릴리스 노트:
       - 개요: release-notes/README.md

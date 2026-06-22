@@ -33,15 +33,17 @@ Use the `examples/10c_MSC_Advanced_Log/` or `examples/34_MSC_GaitAnalysis_Log/` 
 Three key calls:
 
 ```c
-// 1. Set the logging source (Total Data auto / custom struct manual)
-XM_SetUsbLogSource(USB_LOG_SOURCE_TOTAL_DATA);
+// 1. Register the log source once (in Control_Setup) — the registered struct is logged automatically
+XM_SetUsbLogSource(&my_data, sizeof(my_data));
 
-// 2. Write data every loop
-XM_WriteUsbLogData(&my_data, sizeof(my_data));
+// 2. Start the session once (from a state-transition function — NOT inside the 1ms control loop)
+//    Passing NULL as sessionName auto-numbers S_001, S_002 ...
+XM_StartUsbDataLog(NULL, "hip_L(float), hip_R(float)");
 
-// 3. Roll the file for long sessions (new file every 10 minutes)
-XM_GetUsbLogStatus(&status);
-if (status.elapsed_sec > 600) XM_NewUsbLogFile();
+// 3. Recording is automatic in the background every loop — there is no per-loop write call
+//    File split size:  XM_SetUsbLogRollingSize(MB)  (default 10MB)
+//    Status check:     XmLogStatus_e st = XM_GetUsbLogStatus();
+//    Stop session:     XM_StopUsbDataLog();   // also outside the 1ms loop
 ```
 
 Full API reference: [docs/api-reference/06-usb-data-logging.md](../api-reference/06-usb-data-logging.md).
@@ -52,11 +54,11 @@ Plug the USB drive into a PC. You will see `.bin` or `.csv` files. The recommend
 
 ### 3. Converting with PythonDecoder
 
-The USB MSC decoder in the `PythonDecoder/` folder converts `.bin` → `.csv` or `.npy`.
+The USB MSC decoder in the `PythonDecoder/` folder converts the session folder and produces `decoded_output.csv`.
 
 ```bash
-cd PythonDecoder
-python usb_msc_decoder.py --input my_log.bin --output my_log.csv
+cd PythonDecoder/MSC
+python data_decoder_xm10.py /LOGS/S_001        # pass the session folder
 ```
 
 Output formats:
@@ -114,12 +116,12 @@ Use this path when you need short sessions with visual verification.
 
 ```c
 void Control_Setup(void) {
-    XM_SetUsbCustomMeta(0xF0, "my_signal", "v");  // channel 0xF0, unit V
+    XM_SetUsbCustomMeta(0xF0, "[{\"name\":\"my_signal\",\"unit\":\"V\"}]");  // channel 0xF0, unit V
 }
 
 void Control_Loop(void) {
     float my_value = read_my_sensor();
-    XM_SendUsbDataWithId(0xF0, &my_value, sizeof(my_value));
+    XM_SendUsbDataWithId(&my_value, sizeof(my_value), 0xF0);  // arg order: (data, len, module_id)
 }
 ```
 
@@ -173,7 +175,7 @@ Measure inference time using the loop profiling pattern from `Ex.18 Debug Monito
 
 ## Common Pitfalls
 
-- **Log files are too large** — At 1 ms × 1 hour, you get 3.6 million samples. If you don't need all of them, reduce the `XM_WriteUsbLogData` call rate (e.g., every 10 ms = 100 Hz) or save only the fields you care about in a smaller struct.
+- **Log files are too large** — At 1 ms × 1 hour, you get 3.6 million samples. The registered struct is logged automatically every loop, so if you don't need all of it, save only the fields you care about in a **smaller struct**, or split files with `XM_SetUsbLogRollingSize`.
 - **CSV is too slow** — For large datasets, use `.npy` or `.parquet`. Keep CSV for human inspection only.
 - **Timestamps are misaligned** — Use the manual timestamp pattern from `Ex.10b`. The automatic mode only records per-file timestamps.
 - **NaN / Inf values** — Add `assert(isfinite(value))` on the board side. Filter with `np.isfinite()` just before training.
