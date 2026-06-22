@@ -79,6 +79,12 @@ docs/hardware/*
 !docs/hardware/README.md
 !docs/hardware/external-gpio-rev1.1.md
 !docs/hardware/external-gpio-rev2.0.md
+
+!docs/safety/
+docs/safety/*
+!docs/safety/wearable-safety.md
+!docs/safety/wearable-safety.en.md
+
 !docs/stylesheets/
 docs/stylesheets/*
 !docs/stylesheets/extra.css
