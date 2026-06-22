@@ -1277,6 +1277,34 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#36-확장-포트-전원-전압-extension-port-power-rev-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6. 확장 포트 전원 전압 (Extension Port Power) (Rev 2.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6. 확장 포트 전원 전압 (Extension Port Power) (Rev 2.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setextpowervoltage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetExtPowerVoltage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1729,6 +1757,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    안전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../troubleshooting/" class="md-nav__link">
         
   
@@ -1783,7 +1838,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1805,14 +1860,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2326,6 +2381,34 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#36-확장-포트-전원-전압-extension-port-power-rev-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6. 확장 포트 전원 전압 (Extension Port Power) (Rev 2.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6. 확장 포트 전원 전압 (Extension Port Power) (Rev 2.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setextpowervoltage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetExtPowerVoltage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2503,7 +2586,7 @@
 <li><code>mode</code>: 동작 모드 (<code>XM_EXT_DIO_MODE_INPUT</code>, <code>XM_EXT_DIO_MODE_INPUT_PULLUP</code>, <code>XM_EXT_DIO_MODE_INPUT_PULLDOWN</code>, <code>XM_EXT_DIO_MODE_OUTPUT</code>)</li>
 </ul>
 </li>
-<li><strong>주의</strong>: 비실시간 함수입니다. 내부에서 <code>HAL_GPIO_Init</code> 을 호출하므로 2 ms 실시간 제어 루프 안에서 호출하지 말고 <code>Control_Setup()</code> 에서 한 번 설정하세요.</li>
+<li><strong>주의</strong>: 비실시간 함수입니다. 내부에서 <code>HAL_GPIO_Init</code> 을 호출하므로 1 ms 실시간 제어 루프 (1 kHz) 안에서 호출하지 말고 <code>Control_Setup()</code> 에서 한 번 설정하세요.</li>
 <li><strong>Example</strong>
     <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// 3번 핀을 풀업 입력으로 설정 (스위치 연결용)</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">XM_SetPinMode</span><span class="p">(</span><span class="n">XM_EXT_DIO_3</span><span class="p">,</span><span class="w"> </span><span class="n">XM_EXT_DIO_MODE_INPUT_PULLUP</span><span class="p">);</span>
@@ -2605,10 +2688,10 @@
 <p>특정 DIO 핀을 ADC 모드로 전환합니다.</p>
 <ul>
 <li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SwitchDioToAdc</span><span class="p">(</span><span class="n">XmDioPin_t</span><span class="w"> </span><span class="n">dio_pin</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SwitchDioToAdc</span><span class="p">(</span><span class="n">XmDioPin_t</span><span class="w"> </span><span class="n">pin</span><span class="p">);</span>
 </code></pre></div></li>
 <li><strong>Parameters</strong><ul>
-<li><code>dio_pin</code>: ADC로 전환할 DIO 핀</li>
+<li><code>pin</code>: ADC로 전환할 DIO 핀</li>
 </ul>
 </li>
 <li><strong>Returns</strong>: <code>true</code> (전환 성공), <code>false</code> (지원되지 않는 핀)</li>
@@ -2651,6 +2734,30 @@
 <a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_ConfigureXsensMTi630</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w">  </span><span class="c1">// 신품/공장초기화 센서에만 필요한 1회 설정 송신 (블로킹 ~1초, Attach 선행 필수)</span>
 </code></pre></div></li>
 <li><strong>Note</strong>: <code>XM_AttachXsensMTi630()</code> 는 센서 미연결 상태에서도 호출이 안전하며, 케이블 결합 시 자동으로 동작합니다. Rev 1.1 에서는 결합 시 <code>XM_EXT_ADC_1</code>/<code>XM_EXT_ADC_3</code> 핀이 UART 로 전환되어 ADC 로 쓸 수 없습니다 (Rev 2.0 은 전용 USART2 포트라 ADC 핀 점유 없음).</li>
+</ul>
+<hr />
+<h3 id="36-확장-포트-전원-전압-extension-port-power-rev-20">3.6. 확장 포트 전원 전압 (Extension Port Power) <em>(Rev 2.0)</em><a class="headerlink" href="#36-확장-포트-전원-전압-extension-port-power-rev-20" title="Permanent link">&para;</a></h3>
+<p>확장 포트의 <strong>센서 공급 전원</strong>을 3.3V 또는 5V 로 전환합니다 (보드 신호 <code>EXT_PWR_SEL_5V</code>, PE3). 5V 로 동작하는 외부 센서(일부 EMG 모듈 등)를 쓰려면 <code>Control_Setup()</code> 에서 5V 로 전환하세요. <strong>기본값은 3.3V</strong> 입니다.</p>
+<blockquote>
+<p>⚠️ 이 전압은 센서를 <strong>구동(공급)</strong> 하는 전원입니다. <strong>ADC 신호 입력 범위는 전원과 무관하게 항상 0~3.3V</strong> 입니다. 5V 로 구동한 센서의 <strong>출력(신호)</strong> 이 3.3V 를 넘으면 ADC 핀이 손상될 수 있으니, 신호 라인은 0~3.3V 범위인지 확인하고 필요하면 분압하세요.</p>
+</blockquote>
+<h4 id="xm_setextpowervoltage"><code>XM_SetExtPowerVoltage</code><a class="headerlink" href="#xm_setextpowervoltage" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Syntax</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetExtPowerVoltage</span><span class="p">(</span><span class="n">XmExtPwrVoltage_t</span><span class="w"> </span><span class="n">voltage</span><span class="p">);</span>
+</code></pre></div></li>
+<li><strong>Parameters</strong><ul>
+<li><code>voltage</code>: <code>XM_EXT_PWR_3V3</code> (3.3V, 기본값) 또는 <code>XM_EXT_PWR_5V</code> (5V)</li>
+</ul>
+</li>
+<li><strong>Example</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="n">XM_SetExtPowerVoltage</span><span class="p">(</span><span class="n">XM_EXT_PWR_5V</span><span class="p">);</span><span class="w">   </span><span class="c1">// 5V 센서 구동</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="n">XM_SwitchDioToAdc</span><span class="p">(</span><span class="n">XM_EXT_DIO_1</span><span class="p">);</span><span class="w">        </span><span class="c1">// DIO_1 → ADC (XM_EXT_ADC_5)</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="c1">// 이후 XM_AnalogReadMillivolts(XM_EXT_ADC_5) 로 센서 전압(mV)을 읽음</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="p">}</span>
+</code></pre></div></li>
+<li><strong>Note</strong>: 확장 포트 전원 전압 전환은 Rev 2.0 에서 확인된 기능입니다.</li>
 </ul>
 <hr />
 <h2 id="관련-예제">관련 예제<a class="headerlink" href="#관련-예제" title="Permanent link">&para;</a></h2>

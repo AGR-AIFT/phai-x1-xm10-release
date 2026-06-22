@@ -16,7 +16,7 @@
         <link rel="prev" href="../">
       
       
-        <link rel="next" href="../../troubleshooting/">
+        <link rel="next" href="../../safety/wearable-safety/">
       
       
         
@@ -1545,6 +1545,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../troubleshooting/" class="md-nav__link">
         
   
@@ -1599,7 +1626,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1621,14 +1648,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2051,23 +2078,25 @@
 <h3 id="1-board-side--recording-data">1. Board Side — Recording Data<a class="headerlink" href="#1-board-side--recording-data" title="Permanent link">&para;</a></h3>
 <p>Use the <code>examples/10c_MSC_Advanced_Log/</code> or <code>examples/34_MSC_GaitAnalysis_Log/</code> pattern.</p>
 <p>Three key calls:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// 1. Set the logging source (Total Data auto / custom struct manual)</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">XM_SetUsbLogSource</span><span class="p">(</span><span class="n">USB_LOG_SOURCE_TOTAL_DATA</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// 1. Register the log source once (in Control_Setup) — the registered struct is logged automatically</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">XM_SetUsbLogSource</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_data</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">my_data</span><span class="p">));</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">// 2. Write data every loop</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">XM_WriteUsbLogData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_data</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">my_data</span><span class="p">));</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1">// 3. Roll the file for long sessions (new file every 10 minutes)</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">XM_GetUsbLogStatus</span><span class="p">(</span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">elapsed_sec</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">600</span><span class="p">)</span><span class="w"> </span><span class="n">XM_NewUsbLogFile</span><span class="p">();</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">// 2. Start the session once (from a state-transition function — NOT inside the 1ms control loop)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1">//    Passing NULL as sessionName auto-numbers S_001, S_002 ...</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">XM_StartUsbDataLog</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hip_L(float), hip_R(float)&quot;</span><span class="p">);</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1">// 3. Recording is automatic in the background every loop — there is no per-loop write call</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1">//    File split size:  XM_SetUsbLogRollingSize(MB)  (default 10MB)</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1">//    Status check:     XmLogStatus_e st = XM_GetUsbLogStatus();</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1">//    Stop session:     XM_StopUsbDataLog();   // also outside the 1ms loop</span>
 </code></pre></div>
 <p>Full API reference: <a href="../../api-reference/06-usb-data-logging/">docs/api-reference/06-usb-data-logging.md</a>.</p>
 <h3 id="2-retrieving-the-files">2. Retrieving the Files<a class="headerlink" href="#2-retrieving-the-files" title="Permanent link">&para;</a></h3>
 <p>Plug the USB drive into a PC. You will see <code>.bin</code> or <code>.csv</code> files. The recommended format is <code>.bin</code> — the decoder handles the conversion.</p>
 <h3 id="3-converting-with-pythondecoder">3. Converting with PythonDecoder<a class="headerlink" href="#3-converting-with-pythondecoder" title="Permanent link">&para;</a></h3>
-<p>The USB MSC decoder in the <code>PythonDecoder/</code> folder converts <code>.bin</code> → <code>.csv</code> or <code>.npy</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">cd</span><span class="w"> </span>PythonDecoder
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>usb_msc_decoder.py<span class="w"> </span>--input<span class="w"> </span>my_log.bin<span class="w"> </span>--output<span class="w"> </span>my_log.csv
+<p>The USB MSC decoder in the <code>PythonDecoder/</code> folder converts the session folder and produces <code>decoded_output.csv</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">cd</span><span class="w"> </span>PythonDecoder/MSC
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>data_decoder_xm10.py<span class="w"> </span>/LOGS/S_001<span class="w">        </span><span class="c1"># pass the session folder</span>
 </code></pre></div>
 <p>Output formats:</p>
 <ul>
@@ -2112,12 +2141,12 @@
 <p>Use this path when you need short sessions with visual verification.</p>
 <h3 id="1-board-side--registering-custom-channels">1. Board Side — Registering Custom Channels<a class="headerlink" href="#1-board-side--registering-custom-channels" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my_signal&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v&quot;</span><span class="p">);</span><span class="w">  </span><span class="c1">// channel 0xF0, unit V</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;[{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">my_signal</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">unit</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">V</span><span class="se">\&quot;</span><span class="s">}]&quot;</span><span class="p">);</span><span class="w">  </span><span class="c1">// channel 0xF0, unit V</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">}</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">my_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_my_sensor</span><span class="p">();</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="n">XM_SendUsbDataWithId</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">my_value</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">my_value</span><span class="p">));</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="n">XM_SendUsbDataWithId</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_value</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">my_value</span><span class="p">),</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">);</span><span class="w">  </span><span class="c1">// arg order: (data, len, module_id)</span>
 <a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="2-phai-studio-side--live-graph--recording">2. PhAI Studio Side — Live Graph + Recording<a class="headerlink" href="#2-phai-studio-side--live-graph--recording" title="Permanent link">&para;</a></h3>
@@ -2174,7 +2203,7 @@
 <hr />
 <h2 id="common-pitfalls">Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Log files are too large</strong> — At 1 ms × 1 hour, you get 3.6 million samples. If you don't need all of them, reduce the <code>XM_WriteUsbLogData</code> call rate (e.g., every 10 ms = 100 Hz) or save only the fields you care about in a smaller struct.</li>
+<li><strong>Log files are too large</strong> — At 1 ms × 1 hour, you get 3.6 million samples. The registered struct is logged automatically every loop, so if you don't need all of it, save only the fields you care about in a <strong>smaller struct</strong>, or split files with <code>XM_SetUsbLogRollingSize</code>.</li>
 <li><strong>CSV is too slow</strong> — For large datasets, use <code>.npy</code> or <code>.parquet</code>. Keep CSV for human inspection only.</li>
 <li><strong>Timestamps are misaligned</strong> — Use the manual timestamp pattern from <code>Ex.10b</code>. The automatic mode only records per-file timestamps.</li>
 <li><strong>NaN / Inf values</strong> — Add <code>assert(isfinite(value))</code> on the board side. Filter with <code>np.isfinite()</code> just before training.</li>
@@ -2242,13 +2271,13 @@
         
         
           
-          <a href="../../troubleshooting/" class="md-footer__link md-footer__link--next" aria-label="Next: Troubleshooting">
+          <a href="../../safety/wearable-safety/" class="md-footer__link md-footer__link--next" aria-label="Next: Safety">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Troubleshooting
+                Safety
               </div>
             </div>
             <div class="md-footer__button md-icon">

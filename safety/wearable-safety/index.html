@@ -10,19 +10,19 @@
       
       
       
-        <link rel="canonical" href="https://agr-exo.github.io/Extension_Module/advanced/ai-data-pipeline/">
+        <link rel="canonical" href="https://agr-exo.github.io/Extension_Module/safety/wearable-safety/">
       
       
-        <link rel="prev" href="../">
+        <link rel="prev" href="../../advanced/ai-data-pipeline/">
       
       
-        <link rel="next" href="../../safety/wearable-safety/">
+        <link rel="next" href="../../troubleshooting/">
       
       
         
           <link rel="alternate" href="./" hreflang="ko">
         
-          <link rel="alternate" href="../../en/advanced/ai-data-pipeline/" hreflang="en">
+          <link rel="alternate" href="../../en/safety/wearable-safety/" hreflang="en">
         
       
       
@@ -31,7 +31,7 @@
     
     
       
-        <title>AI 데이터 파이프라인 - XM10 Extension Module</title>
+        <title>안전 - XM10 Extension Module</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ai-학습-데이터-파이프라인" class="md-skip">
+        <a href="#착용형-안전-1-페이지--emg-기반-phai-x1-보조제어" class="md-skip">
           콘텐츠로 이동
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              AI 데이터 파이프라인
+              안전
             
           </span>
         </div>
@@ -173,7 +173,7 @@
           </li>
         
           <li class="md-select__item">
-            <a href="../../en/advanced/ai-data-pipeline/" hreflang="en" class="md-select__link">
+            <a href="../../en/safety/wearable-safety/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -1189,8 +1189,6 @@
       
   
   
-    
-  
   
   
     
@@ -1211,15 +1209,15 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../advanced/" class="md-nav__link ">
               
   
   
@@ -1243,7 +1241,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1258,6 +1256,41 @@
             
               
                 
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 데이터 파이프라인
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
   
   
     
@@ -1279,7 +1312,7 @@
   <span class="md-ellipsis">
     
   
-    AI 데이터 파이프라인
+    안전
   
 
     
@@ -1297,7 +1330,7 @@
   <span class="md-ellipsis">
     
   
-    AI 데이터 파이프라인
+    안전
   
 
     
@@ -1323,10 +1356,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#큰-그림" class="md-nav__link">
+  <a href="#0-한-줄-원칙" class="md-nav__link">
     <span class="md-ellipsis">
       
-        큰 그림
+        0. 한 줄 원칙
       
     </span>
   </a>
@@ -1334,177 +1367,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#길-a--usb-메모리-로깅-가장-일반적" class="md-nav__link">
+  <a href="#1-벤치-우선-착용-전-필수-검증" class="md-nav__link">
     <span class="md-ellipsis">
       
-        길 A — USB 메모리 로깅 (가장 일반적)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="길 A — USB 메모리 로깅 (가장 일반적)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-보드-측--데이터-기록" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. 보드 측 — 데이터 기록
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-파일-회수" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. 파일 회수
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-pythondecoder-로-변환" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. PythonDecoder 로 변환
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-학습-프레임워크에서-로드" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. 학습 프레임워크에서 로드
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="4. 학습 프레임워크에서 로드">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pytorch-예시" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PyTorch 예시
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#scikit-learn-예시-간단-분류" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        scikit-learn 예시 (간단 분류)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#길-b--phai-studio-실시간-스트리밍" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        길 B — PhAI Studio 실시간 스트리밍
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="길 B — PhAI Studio 실시간 스트리밍">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-보드-측--커스텀-채널-등록" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. 보드 측 — 커스텀 채널 등록
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-phai-studio-측--실시간-그래프--녹화" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. PhAI Studio 측 — 실시간 그래프 + 녹화
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#길-c--보드-내-추론-학습된-모델-배포" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        길 C — 보드 내 추론 (학습된 모델 배포)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="길 C — 보드 내 추론 (학습된 모델 배포)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-모델-경량화" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. 모델 경량화
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-보드에서-추론" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. 보드에서 추론
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#자주-막히는-부분" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        자주 막히는 부분
+        1. 벤치 우선 (착용 전 필수 검증)
       
     </span>
   </a>
@@ -1512,10 +1378,54 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#다음" class="md-nav__link">
+  <a href="#2-토크-한계-넘기지-말-것" class="md-nav__link">
     <span class="md-ellipsis">
       
-        다음
+        2. 토크 한계 (넘기지 말 것)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-비상-정지-경로-외우기" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 비상 정지 경로 (외우기)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-제거하면-안-되는-코드-4종" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 제거하면 안 되는 코드 4종
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-착용-전-체크리스트-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 착용 전 체크리스트 ✅
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-착용-중-모니터링" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 착용 중 모니터링
       
     </span>
   </a>
@@ -1526,41 +1436,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../safety/wearable-safety/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    안전
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1813,10 +1688,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#큰-그림" class="md-nav__link">
+  <a href="#0-한-줄-원칙" class="md-nav__link">
     <span class="md-ellipsis">
       
-        큰 그림
+        0. 한 줄 원칙
       
     </span>
   </a>
@@ -1824,177 +1699,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#길-a--usb-메모리-로깅-가장-일반적" class="md-nav__link">
+  <a href="#1-벤치-우선-착용-전-필수-검증" class="md-nav__link">
     <span class="md-ellipsis">
       
-        길 A — USB 메모리 로깅 (가장 일반적)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="길 A — USB 메모리 로깅 (가장 일반적)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-보드-측--데이터-기록" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. 보드 측 — 데이터 기록
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-파일-회수" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. 파일 회수
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-pythondecoder-로-변환" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. PythonDecoder 로 변환
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-학습-프레임워크에서-로드" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. 학습 프레임워크에서 로드
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="4. 학습 프레임워크에서 로드">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pytorch-예시" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PyTorch 예시
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#scikit-learn-예시-간단-분류" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        scikit-learn 예시 (간단 분류)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#길-b--phai-studio-실시간-스트리밍" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        길 B — PhAI Studio 실시간 스트리밍
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="길 B — PhAI Studio 실시간 스트리밍">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-보드-측--커스텀-채널-등록" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. 보드 측 — 커스텀 채널 등록
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-phai-studio-측--실시간-그래프--녹화" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. PhAI Studio 측 — 실시간 그래프 + 녹화
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#길-c--보드-내-추론-학습된-모델-배포" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        길 C — 보드 내 추론 (학습된 모델 배포)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="길 C — 보드 내 추론 (학습된 모델 배포)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-모델-경량화" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. 모델 경량화
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-보드에서-추론" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. 보드에서 추론
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#자주-막히는-부분" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        자주 막히는 부분
+        1. 벤치 우선 (착용 전 필수 검증)
       
     </span>
   </a>
@@ -2002,10 +1710,54 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#다음" class="md-nav__link">
+  <a href="#2-토크-한계-넘기지-말-것" class="md-nav__link">
     <span class="md-ellipsis">
       
-        다음
+        2. 토크 한계 (넘기지 말 것)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-비상-정지-경로-외우기" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 비상 정지 경로 (외우기)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-제거하면-안-되는-코드-4종" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 제거하면 안 되는 코드 4종
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-착용-전-체크리스트-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 착용 전 체크리스트 ✅
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-착용-중-모니터링" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 착용 중 모니터링
       
     </span>
   </a>
@@ -2032,192 +1784,103 @@
   
 
 
-<h1 id="ai-학습-데이터-파이프라인">AI 학습 데이터 파이프라인<a class="headerlink" href="#ai-학습-데이터-파이프라인" title="Permanent link">&para;</a></h1>
-<p>XM10 보드에서 모은 외골격 데이터를 PyTorch / scikit-learn 같은 학습 프레임워크로 가져가는 흐름을 한 페이지에 정리했습니다. AI 모델 학습이 목표라면 이 페이지를 흐름표로 두고 작업하세요.</p>
+<h1 id="착용형-안전-1-페이지--emg-기반-phai-x1-보조제어">착용형 안전 1-페이지 — EMG 기반 PhAI-X1 보조제어<a class="headerlink" href="#착용형-안전-1-페이지--emg-기반-phai-x1-보조제어" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>대상</strong>: PhAI-X1(H10 + XM10)을 <strong>사람이 착용</strong>한 상태에서, 직접 작성한 EMG→토크 코드로 <strong>실제 보조력</strong>을 인가하는 모든 팀.
+<strong>원칙</strong>: 알고리즘 설계는 자유지만, 아래 가드레일은 <strong>반드시</strong> 지킵니다. 보조력은 사람 다리에 직접 들어갑니다.</p>
+</blockquote>
 <hr />
-<h2 id="큰-그림">큰 그림<a class="headerlink" href="#큰-그림" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>[보드 동작]                [수집]                  [변환]                    [학습]
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  ↓                          ↓                      ↓                        ↓
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>KIT H10 착용  →  USB 메모리 기록     →  Python 디코더    →  PyTorch DataLoader
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>              또는 PhAI Studio 실시간     CSV / npy 출력         또는 sklearn
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                  스트리밍
-</code></pre></div>
-<p>세 가지 길이 있습니다. 목적에 따라 골라가세요.</p>
+<h2 id="0-한-줄-원칙">0. 한 줄 원칙<a class="headerlink" href="#0-한-줄-원칙" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>벤치에서 검증되지 않은 코드는 절대 착용 상태로 돌리지 않는다.</strong></p>
+</blockquote>
+<hr />
+<h2 id="1-벤치-우선-착용-전-필수-검증">1. 벤치 우선 (착용 전 필수 검증)<a class="headerlink" href="#1-벤치-우선-착용-전-필수-검증" title="Permanent link">&para;</a></h2>
+<p>토크 출력을 끈 상태(<code>control_ON = 0</code> 또는 <code>XM_CTRL_MONITOR</code>)로 먼저 <strong>신호·방향·크기</strong>를 확인합니다.</p>
+<ol>
+<li>EMG 센서를 연결하고 PhAI Studio(또는 Live Expressions)로 <strong>raw / envelope</strong> 신호를 본다.</li>
+<li>근육 이완 → 안정 캘리브(BTN1), 대표 수축 → 활성 캘리브(BTN2). <strong>순서 반드시 BTN1 → BTN2.</strong></li>
+<li>이완 시 envelope가 ~0, 수축 시 상승하는지 확인(노이즈가 크면 deadband 상향).</li>
+<li><strong>방향 확인</strong>: 의도한 근육 수축이 의도한 관절 방향(굴곡/신전)으로 매핑되는지 — 부호 규약은 <strong>양수(+) = Flexion(굴곡), 음수(−) = Extension(신전)</strong>.</li>
+<li><strong>좌우 확인</strong>: <code>XM_SetAssistTorque(R, L)</code> 는 <strong>오른쪽 먼저</strong>. 헷갈리면 <code>XM_SetAssistTorqueRH/LH()</code> 사용. 좌우 반대로 들어가면 낙상 위험.</li>
+<li>토크를 아주 작은 값부터(예: 0.2~0.5 Nm) 올리며 모터 반응을 <strong>거치 상태</strong>에서 확인.</li>
+<li>이완 상태에서 토크가 거의 0 인지 재확인 → 그 다음에만 <code>control_ON = 1</code>.</li>
+</ol>
+<hr />
+<h2 id="2-토크-한계-넘기지-말-것">2. 토크 한계 (넘기지 말 것)<a class="headerlink" href="#2-토크-한계-넘기지-말-것" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>길</th>
-<th>적합한 상황</th>
-<th>데이터량</th>
-<th>지연</th>
+<th>구분</th>
+<th>값</th>
+<th>성격</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>A. USB 메모리 로깅</td>
-<td>오프라인 학습 (대부분)</td>
-<td>시간 단위</td>
-<td>—</td>
+<td>EMG 예제 기본 출력</td>
+<td><strong>1.25 Nm</strong> (<code>EMG_MAX_TORQUE_NM 2.5 × scale 0.5</code>)</td>
+<td>보수적 시작값 — 여기서 출발 권장</td>
 </tr>
 <tr>
-<td>B. PhAI Studio 스트리밍</td>
-<td>실시간 시각화 + 짧은 세션</td>
-<td>분 단위</td>
-<td>&lt; 100 ms</td>
+<td>예제 소프트 상한</td>
+<td>2.5 Nm</td>
+<td>예제 코드 내 saturation</td>
 </tr>
 <tr>
-<td>C. 보드 내 추론</td>
-<td>학습된 모델을 보드로 배포</td>
-<td>—</td>
-<td>1 ms</td>
+<td><strong>XM10 내부 하드 클램프</strong></td>
+<td><strong>±10 Nm</strong></td>
+<td>라이브러리(<code>libXM_Lib.a</code>) 내부 — <strong>사용자가 바꿀 수 없음</strong>, 그 이상 입력해도 포화</td>
+</tr>
+<tr>
+<td>모터드라이버단 보호</td>
+<td>14A / 임피던스 10A</td>
+<td>H10 측 추가 포화</td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p>착용자·목적에 맞게 <strong>보수적으로</strong> 설정하세요. 처음부터 큰 값으로 시작하지 않습니다.</p>
+</blockquote>
 <hr />
-<h2 id="길-a--usb-메모리-로깅-가장-일반적">길 A — USB 메모리 로깅 (가장 일반적)<a class="headerlink" href="#길-a--usb-메모리-로깅-가장-일반적" title="Permanent link">&para;</a></h2>
-<h3 id="1-보드-측--데이터-기록">1. 보드 측 — 데이터 기록<a class="headerlink" href="#1-보드-측--데이터-기록" title="Permanent link">&para;</a></h3>
-<p><code>examples/10c_MSC_Advanced_Log/</code> 또는 <code>examples/34_MSC_GaitAnalysis_Log/</code> 패턴을 사용합니다.</p>
-<p>핵심 호출 3 가지:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// 1. 로깅 소스 등록 (Control_Setup 에서 1회) — 등록한 구조체가 자동 기록됨</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">XM_SetUsbLogSource</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_data</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">my_data</span><span class="p">));</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">// 2. 세션 시작 (상태 전이 함수에서 1회 — 1ms 제어 루프 안에서는 호출 금지)</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1">//    sessionName 에 NULL 을 주면 S_001, S_002 ... 자동 넘버링</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">XM_StartUsbDataLog</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hip_L(float), hip_R(float)&quot;</span><span class="p">);</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1">// 3. 기록은 매 루프 백그라운드 자동 — 별도의 per-loop write 호출이 없음</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1">//    파일 분할 크기:  XM_SetUsbLogRollingSize(MB)  (기본 10MB)</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1">//    상태 확인:       XmLogStatus_e st = XM_GetUsbLogStatus();</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1">//    세션 종료:       XM_StopUsbDataLog();   // 역시 1ms 루프 밖에서</span>
-</code></pre></div>
-<p>자세한 API: <a href="../../api-reference/06-usb-data-logging/">docs/api-reference/06-usb-data-logging.md</a>.</p>
-<h3 id="2-파일-회수">2. 파일 회수<a class="headerlink" href="#2-파일-회수" title="Permanent link">&para;</a></h3>
-<p>USB 메모리를 PC 에 꽂으면 <code>.bin</code> 또는 <code>.csv</code> 파일이 보입니다. 권장은 <code>.bin</code> (디코더가 처리).</p>
-<h3 id="3-pythondecoder-로-변환">3. PythonDecoder 로 변환<a class="headerlink" href="#3-pythondecoder-로-변환" title="Permanent link">&para;</a></h3>
-<p><code>PythonDecoder/MSC/</code> 의 디코더가 세션 폴더의 <code>.bin</code> → <code>decoded_output.csv</code> 로 변환합니다.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">cd</span><span class="w"> </span>PythonDecoder/MSC
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>data_decoder_xm10.py<span class="w"> </span>/LOGS/S_001<span class="w">        </span><span class="c1"># 세션 폴더를 인자로 전달</span>
-</code></pre></div>
-<p>산출물:
-- <code>.csv</code> — 사람이 보기 좋음, pandas 로 바로 읽기
-- <code>.npy</code> — PyTorch / numpy 빠른 로드
-- <code>.mat</code> — MATLAB 사용자용</p>
-<h3 id="4-학습-프레임워크에서-로드">4. 학습 프레임워크에서 로드<a class="headerlink" href="#4-학습-프레임워크에서-로드" title="Permanent link">&para;</a></h3>
-<h4 id="pytorch-예시">PyTorch 예시<a class="headerlink" href="#pytorch-예시" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataLoader</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">XM10Dataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npy_path</span><span class="p">):</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">npy_path</span><span class="p">)</span>  <span class="c1"># shape (N, features)</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">100</span>  <span class="c1"># 100-step window</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span> <span class="p">:</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">100</span><span class="p">]</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># 다음 스텝의 첫 채널 예측</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">XM10Dataset</span><span class="p">(</span><span class="s2">&quot;my_log.npy&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="n">loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></div>
-<h4 id="scikit-learn-예시-간단-분류">scikit-learn 예시 (간단 분류)<a class="headerlink" href="#scikit-learn-예시-간단-분류" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;my_log.csv&quot;</span><span class="p">)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;imu_ax&quot;</span><span class="p">,</span> <span class="s2">&quot;imu_ay&quot;</span><span class="p">,</span> <span class="s2">&quot;imu_az&quot;</span><span class="p">,</span> <span class="s2">&quot;knee_angle&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;gait_phase&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-</code></pre></div>
-<hr />
-<h2 id="길-b--phai-studio-실시간-스트리밍">길 B — PhAI Studio 실시간 스트리밍<a class="headerlink" href="#길-b--phai-studio-실시간-스트리밍" title="Permanent link">&para;</a></h2>
-<p>짧은 세션 + 시각 검증이 목적이면 이쪽이 빠릅니다.</p>
-<h3 id="1-보드-측--커스텀-채널-등록">1. 보드 측 — 커스텀 채널 등록<a class="headerlink" href="#1-보드-측--커스텀-채널-등록" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="c1">// 채널 메타데이터(JSON): 인자는 module_id, json_str 2개</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;[{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">my_signal</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">unit</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">V</span><span class="se">\&quot;</span><span class="s">}]&quot;</span><span class="p">);</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">}</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">my_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_my_sensor</span><span class="p">();</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="n">XM_SendUsbDataWithId</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_value</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">my_value</span><span class="p">),</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">);</span><span class="w">  </span><span class="c1">// (data, len, id) 순서</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="p">}</span>
-</code></pre></div>
-<h3 id="2-phai-studio-측--실시간-그래프--녹화">2. PhAI Studio 측 — 실시간 그래프 + 녹화<a class="headerlink" href="#2-phai-studio-측--실시간-그래프--녹화" title="Permanent link">&para;</a></h3>
-<p>PhAI Studio 에서 USB 연결 → 채널 <code>0xF0</code> 선택 → 그래프 보면서 동시에 녹화 버튼.</p>
-<p>녹화된 데이터는 PhAI Studio 의 export 기능으로 <code>.csv</code> 출력 가능. 이후 길 A 의 PyTorch / sklearn 단계로 동일하게 진행.</p>
-<p>자세한 PhAI Studio 사용법은 별도 자료.</p>
-<hr />
-<h2 id="길-c--보드-내-추론-학습된-모델-배포">길 C — 보드 내 추론 (학습된 모델 배포)<a class="headerlink" href="#길-c--보드-내-추론-학습된-모델-배포" title="Permanent link">&para;</a></h2>
-<p>길 A 로 학습한 모델을 보드에 다시 올려서 1 ms 루프 안에서 추론.</p>
-<h3 id="1-모델-경량화">1. 모델 경량화<a class="headerlink" href="#1-모델-경량화" title="Permanent link">&para;</a></h3>
-<p>PyTorch / TensorFlow 모델을 STM32 가 다룰 수 있도록 변환.</p>
-<table>
-<thead>
-<tr>
-<th>도구</th>
-<th>변환 결과</th>
-<th>적합한 모델</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://www.tensorflow.org/lite/microcontrollers">TensorFlow Lite Micro</a></td>
-<td><code>.tflite</code></td>
-<td>작은 CNN, MLP</td>
-</tr>
-<tr>
-<td><a href="https://www.st.com/en/embedded-software/x-cube-ai.html">STM32Cube.AI</a></td>
-<td>C 코드 자동 생성</td>
-<td>TF/PyTorch/ONNX 모두</td>
-</tr>
-<tr>
-<td>직접 구현</td>
-<td>사람이 C 로 forward 작성</td>
-<td>매우 작은 NN (3-layer 이하)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="2-보드에서-추론">2. 보드에서 추론<a class="headerlink" href="#2-보드에서-추론" title="Permanent link">&para;</a></h3>
-<p><code>Ex.16 TinyAI Sensor Fusion</code> 이 직접 구현 (3-layer NN) 예시. <code>Ex.36 OnDevice Kinesthetic Learning</code> 은 온디바이스 학습까지 다룹니다.</p>
-<p>핵심 패턴:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">input</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">imu_ax</span><span class="p">,</span><span class="w"> </span><span class="n">imu_ay</span><span class="p">,</span><span class="w"> </span><span class="n">imu_az</span><span class="w"> </span><span class="p">};</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">output</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="n">my_nn_forward</span><span class="p">(</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">);</span><span class="w">  </span><span class="c1">// 사용자 정의 추론 함수</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">gait_phase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argmax</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">gait_phase</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">STANCE_PHASE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="n">XM_SetAssistTorqueRH</span><span class="p">(</span><span class="n">assist_table</span><span class="p">[</span><span class="n">gait_phase</span><span class="p">]);</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="p">}</span>
-</code></pre></div>
-<p>추론 시간 측정은 <code>Ex.18 Debug Monitor</code> 의 루프 프로파일링 패턴 사용 → 1 ms 안에 끝나는지 확인.</p>
-<hr />
-<h2 id="자주-막히는-부분">자주 막히는 부분<a class="headerlink" href="#자주-막히는-부분" title="Permanent link">&para;</a></h2>
+<h2 id="3-비상-정지-경로-외우기">3. 비상 정지 경로 (외우기)<a class="headerlink" href="#3-비상-정지-경로-외우기" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>로그 파일이 너무 큼</strong> — 1 ms × 1 시간 = 360 만 샘플. 등록한 구조체가 매 루프 자동 기록되므로, 다 필요 없으면 <strong>관심 필드만 골라 작은 구조체로</strong> 저장하거나 파일 분할(<code>XM_SetUsbLogRollingSize</code>)로 나누세요.</li>
-<li><strong>CSV 가 너무 느림</strong> — 큰 데이터셋은 <code>.npy</code> 또는 <code>.parquet</code> 로. CSV 는 사람 확인용으로만.</li>
-<li><strong>타임스탬프가 안 맞음</strong> — <code>Ex.10b</code> 패턴의 수동 타임스탬프 사용. 자동 모드는 파일 단위만 기록.</li>
-<li><strong>NaN / Inf 값</strong> — 보드 측에서 <code>assert(isfinite(value))</code> 추가. 학습 직전에 <code>np.isfinite()</code> 로 필터링.</li>
-<li><strong>클래스 불균형</strong> — Stance/Swing 같은 보행 phase 는 7:3 정도로 비균등. <code>class_weight</code> 옵션 또는 SMOTE 사용.</li>
-<li><strong>보드에서 추론이 1 ms 를 넘김</strong> — 모델 양자화 (int8) 또는 layer 수 감소. STM32H7 의 FPU 활용 확인.</li>
+<li><strong>슈트 STANDBY 버튼</strong> — H10 본체 물리 버튼. STANDBY 로 바꾸면 즉시 영-토크 + 부드러운 정지 후 대기. <strong>가장 빠른 정지.</strong></li>
+<li><strong>확장 케이블 분리 / CM 연결 끊김</strong> — <code>XM_IsCmConnected()</code> 가 false 가 되면 펌웨어가 <strong>자동으로 OFF</strong> 전환(토크 0).</li>
+<li><strong>전원 차단</strong> — 최후 수단.</li>
+</ul>
+<blockquote>
+<p>⚠️ XM10 펌웨어에는 하드웨어 워치독이 없습니다. 따라서 <strong>이상 시 사람이 위 경로로 직접 정지</strong>시키는 것이 1차 안전망입니다. 착용자와 별도로 <strong>정지 담당(보조자)</strong> 이 항상 손이 닿는 곳에 대기하세요.</p>
+</blockquote>
+<hr />
+<h2 id="4-제거하면-안-되는-코드-4종">4. 제거하면 안 되는 코드 4종<a class="headerlink" href="#4-제거하면-안-되는-코드-4종" title="Permanent link">&para;</a></h2>
+<p>EMG 예제에서 알고리즘을 바꿔도 <strong>다음은 그대로 둡니다</strong>:</p>
+<ol>
+<li><strong>최종 토크 saturation</strong> — 출력 직전 한계 클램프.</li>
+<li><strong>캘리브레이션 중 zero-torque</strong> — 캘리브 동안 토크 0 강제.</li>
+<li><strong>모드 종료 시 zero-torque</strong> — <code>Active_Exit</code> 에서 토크 0 + <code>XM_SetControlMode(XM_CTRL_MONITOR)</code> 복귀.</li>
+<li><strong><code>XM_SetControlMode</code></strong> — <code>XM_CTRL_TORQUE</code> 진입/<code>MONITOR</code> 복귀 게이트.</li>
+</ol>
+<hr />
+<h2 id="5-착용-전-체크리스트-">5. 착용 전 체크리스트 ✅<a class="headerlink" href="#5-착용-전-체크리스트-" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] 벤치에서 1~7 단계 통과(방향·좌우·크기 확인)</li>
+<li>[ ] 보조 토크 시작값이 보수적(≈1 Nm 이하)</li>
+<li>[ ] 비상 정지 경로(슈트 STANDBY) 위치 확인 + <strong>정지 담당 대기</strong></li>
+<li>[ ] 제거 금지 코드 4종 그대로 유지</li>
+<li>[ ] 캘리브레이션 순서 BTN1 → BTN2 숙지</li>
+<li>[ ] 착용 후 첫 동작은 <strong>작은 토크 / 천천히</strong></li>
 </ul>
 <hr />
-<h2 id="다음">다음<a class="headerlink" href="#다음" title="Permanent link">&para;</a></h2>
+<h2 id="6-착용-중-모니터링">6. 착용 중 모니터링<a class="headerlink" href="#6-착용-중-모니터링" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>Ex.10c MSC Advanced Log</code> 로 로깅 패턴 익히기</li>
-<li><code>Ex.34 MSC GaitAnalysis Log</code> 로 보행 분석 데이터 직접 수집</li>
-<li><code>Ex.16 TinyAI Sensor Fusion</code> → <code>Ex.36 OnDevice Kinesthetic Learning</code> 으로 보드 내 추론 학습</li>
-<li>학습 모델을 보드에 올린 뒤에는 <code>Ex.33 Kinesthetic Teaching</code> 처럼 전문가 시연 → 모델 학습 → 재생 의 전체 사이클 시도</li>
+<li>PhAI Studio 로 <strong>envelope · 출력 토크 · 관절각</strong>을 실시간으로 보며 진행.</li>
+<li>토크가 의도와 다르게 튀거나 이완 시 0 으로 안 떨어지면 <strong>즉시 슈트 STANDBY</strong>.</li>
 </ul>
-<p>PhAI Studio + Python 후처리에 대한 더 자세한 내용이 필요하면 GitHub Issues 에 요청해주세요.</p>
+<hr />
+<blockquote>
+<p>이 문서는 안전 가드레일만 정의합니다. <strong>어떤 근육에서 어떤 의도를 읽고 얼마의 보조를 줄지</strong>는 팀이 설계할 영역입니다.</p>
+</blockquote>
 
 
 
@@ -2253,7 +1916,7 @@
       <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
         
           
-          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="이전: 개요">
+          <a href="../../advanced/ai-data-pipeline/" class="md-footer__link md-footer__link--prev" aria-label="이전: AI 데이터 파이프라인">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -2263,20 +1926,20 @@
                 이전
               </span>
               <div class="md-ellipsis">
-                개요
+                AI 데이터 파이프라인
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../safety/wearable-safety/" class="md-footer__link md-footer__link--next" aria-label="다음: 안전">
+          <a href="../../troubleshooting/" class="md-footer__link md-footer__link--next" aria-label="다음: 문제 해결">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 다음
               </span>
               <div class="md-ellipsis">
-                안전
+                문제 해결
               </div>
             </div>
             <div class="md-footer__button md-icon">

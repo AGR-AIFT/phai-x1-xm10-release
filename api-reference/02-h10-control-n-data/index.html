@@ -877,10 +877,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-ipo-cycle-2ms-loop" class="md-nav__link">
+  <a href="#the-ipo-cycle-1ms-loop" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The IPO Cycle (2ms Loop)
+        The IPO Cycle (1ms Loop)
       
     </span>
   </a>
@@ -1855,6 +1855,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    안전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../troubleshooting/" class="md-nav__link">
         
   
@@ -1909,7 +1936,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1931,14 +1958,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2108,10 +2135,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-ipo-cycle-2ms-loop" class="md-nav__link">
+  <a href="#the-ipo-cycle-1ms-loop" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The IPO Cycle (2ms Loop)
+        The IPO Cycle (1ms Loop)
       
     </span>
   </a>
@@ -2629,7 +2656,7 @@
 <blockquote>
 <p>📌 <strong>이 페이지를 읽고 나면</strong>: <code>XM.status</code> 로 H10 상태를 읽고 <code>XM_Set*</code> 로 토크/PI Vector 명령을 보낼 수 있습니다.
 ⏱️ 예상 학습 시간: 30분
-🧰 사전 지식: IPO 모델 (Input → Process → Output 2ms 사이클) + <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/">Ex.11~14</a>
+🧰 사전 지식: IPO 모델 (Input → Process → Output 1ms 사이클) + <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/">Ex.11~14</a>
 🎯 핵심 객체: <code>XM.status</code> (읽기) / <code>XM.command</code> (Staging 명령) / <code>XM_SetControlMode</code> / <code>XM_SetAssistTorque</code> / <code>XM_SendPVector</code></p>
 </blockquote>
 <p><code>XM10</code>의 핵심 가치중 하나는 <code>KIT H10</code> 로봇을 직접 설계한 알고리즘으로 제어하는 것입니다. 본 API는 KIT H10과의 연결 상태를 확인하고, 로봇의 현재 상태 데이터를 실시간으로 수신하며, <code>PIF-Vectors</code>, <code>Aux inputs</code>와 같은 제어 명령을 전송하여 로봇의 움직임을 제어하는 데 필요한 기능을 제공합니다.
@@ -2637,8 +2664,8 @@
 XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 신경 쓰지 않고, 직관적인 전역 객체(<code>XM</code>)를 통해 로봇의 상태를 읽고 명령을 내릴 수 있도록 <strong>파사드(Facade) 패턴</strong>을 제공합니다.</p>
 <hr />
 <h2 id="-동작-원리-operating-principle">📌 동작 원리 (Operating Principle)<a class="headerlink" href="#-동작-원리-operating-principle" title="Permanent link">&para;</a></h2>
-<p>XM10의 제어 시스템은 엄격한 <strong>IPO (Input-Process-Output)</strong> 모델을 따르며, 이는 시스템 내부의 <strong><code>core_process</code></strong> 엔진에 의해 2ms(500Hz) 주기로 정확하게 수행됩니다.</p>
-<h3 id="the-ipo-cycle-2ms-loop">The IPO Cycle (2ms Loop)<a class="headerlink" href="#the-ipo-cycle-2ms-loop" title="Permanent link">&para;</a></h3>
+<p>XM10의 제어 시스템은 엄격한 <strong>IPO (Input-Process-Output)</strong> 모델을 따르며, 이는 시스템 내부의 <strong><code>core_process</code></strong> 엔진에 의해 1ms(1kHz) 주기로 정확하게 수행됩니다.</p>
+<h3 id="the-ipo-cycle-1ms-loop">The IPO Cycle (1ms Loop)<a class="headerlink" href="#the-ipo-cycle-1ms-loop" title="Permanent link">&para;</a></h3>
 <ol>
 <li>
 <p><strong>Input (Data Gathering):</strong></p>
@@ -2667,8 +2694,8 @@ XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 �
 <p><strong>Data Logging(MSC) or Streaming(CDC):</strong></p>
 <ul>
 <li>Input Data, Process, Output Data가 처리된 후 Data Logging or Data Streaming을 수행합니다.</li>
-<li>USB Memory가 연결된 경우 사용자 정의 데이터를 2ms 마다 Memory에 저장합니다.</li>
-<li>PC와 USB로 연결되어 시리얼 포트로 <code>AGRB MON START</code>문자열을 XM10으로 전송하면 사용자 정의 데이터를 2ms마다 터미널로 전달합니다. <code>AGRB MON STOP</code>을 입력하면 전송을 중단합니다.</li>
+<li>USB Memory가 연결된 경우 사용자 정의 데이터를 1ms 마다 Memory에 저장합니다.</li>
+<li>PC와 USB로 연결되어 시리얼 포트로 <code>AGRB MON START</code>문자열을 XM10으로 전송하면 사용자 정의 데이터를 1ms마다 터미널로 전달합니다. <code>AGRB MON STOP</code>을 입력하면 전송을 중단합니다.</li>
 </ul>
 </li>
 </ol>
@@ -2694,7 +2721,7 @@ XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 �
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">}</span><span class="w"> </span><span class="n">XmH10Mode_t</span><span class="p">;</span>
 </code></pre></div>
 <h3 id="pvector_t"><code>PVector_t</code><a class="headerlink" href="#pvector_t" title="Permanent link">&para;</a></h3>
-<p>H10 슈트의 현재 동작 상태입니다.</p>
+<p>위치 기반 궤적 명령 벡터입니다.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="kt">int16_t</span><span class="w">  </span><span class="n">yd</span><span class="p">;</span><span class="w"> </span><span class="c1">// Desired Position (unit: deg, scaled by 100)</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">L</span><span class="p">;</span><span class="w">  </span><span class="c1">// Trajectory Duration (ms)</span>
@@ -2703,7 +2730,7 @@ XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 �
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">}</span><span class="w"> </span><span class="n">PVector_t</span><span class="p">;</span>
 </code></pre></div>
 <h3 id="ivector_t"><code>IVector_t</code><a class="headerlink" href="#ivector_t" title="Permanent link">&para;</a></h3>
-<p>H10 슈트의 현재 동작 상태입니다.</p>
+<p>임피던스 제어 파라미터 벡터입니다.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">epsilon</span><span class="p">;</span><span class="w">   </span><span class="c1">// Half width of Corridor (deg, scaled by 10)</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">kp</span><span class="p">;</span><span class="w">        </span><span class="c1">// Virtual Spring Magnitude (%)</span>
@@ -2713,7 +2740,7 @@ XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 �
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">}</span><span class="w"> </span><span class="n">IVector_t</span><span class="p">;</span>
 </code></pre></div>
 <h3 id="fvector_t"><code>FVector_t</code><a class="headerlink" href="#fvector_t" title="Permanent link">&para;</a></h3>
-<p>H10의 현재 동작 상태입니다.</p>
+<p>힘 기반 궤적 명령 벡터입니다.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">modeIdx</span><span class="p">;</span><span class="w">   </span><span class="c1">// Torque Profile Index, Tp : 0.1 ~ 10</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="kt">int16_t</span><span class="w">  </span><span class="n">tauMax</span><span class="p">;</span><span class="w">    </span><span class="c1">// Max Torque (A, scaled by 100)</span>
@@ -2817,8 +2844,8 @@ XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 �
 <tr>
 <td style="text-align: left;"><strong><code>h10AssistLevel</code></strong></td>
 <td style="text-align: left;"><code>uint8_t</code></td>
-<td style="text-align: left;">1\~9</td>
-<td style="text-align: left;">H10에 설정된 보조 강도 레벨</td>
+<td style="text-align: left;">0\~10</td>
+<td style="text-align: left;">H10 보조 강도 다이얼. 보조 토크에 <code>h10AssistLevel/10.0</code> 을 곱해 반영 권장 (레벨 0 → 토크 0). <code>XM_SetAssistTorque</code> 항목 참조</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>isPVectorRHDone</code></strong></td>
@@ -3347,29 +3374,29 @@ Rev 1.1 에서는 결합 시 <code>XM_EXT_ADC_1</code>/<code>XM_EXT_ADC_3</code>
 </thead>
 <tbody>
 <tr>
-<td><code>NMT_STATE_BOOT_UP</code></td>
+<td><code>CM_NMT_INITIALISING</code></td>
 <td>0</td>
 <td>부팅 중 (Boot-up 메시지 미수신)</td>
 </tr>
 <tr>
-<td><code>NMT_STATE_PRE_OPERATIONAL</code></td>
+<td><code>CM_NMT_PRE_OPERATIONAL</code></td>
 <td>1</td>
 <td>SDO 통신 가능, PDO 비활성</td>
 </tr>
 <tr>
-<td><code>NMT_STATE_OPERATIONAL</code></td>
+<td><code>CM_NMT_OPERATIONAL</code></td>
 <td>2</td>
 <td>모든 통신 활성 (정상 상태)</td>
 </tr>
 <tr>
-<td><code>NMT_STATE_STOPPED</code></td>
+<td><code>CM_NMT_STOPPED</code></td>
 <td>3</td>
 <td>통신 중단됨</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p><strong>참고</strong>: <code>XM_IsCmConnected()</code>는 내부적으로 <code>XM_GetXMNmtState() == NMT_STATE_OPERATIONAL</code>을 확인합니다.
+<p><strong>참고</strong>: <code>XM_IsCmConnected()</code>는 내부적으로 <code>XM_GetXMNmtState() == CM_NMT_OPERATIONAL</code>을 확인합니다.
 NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 사용하세요.</p>
 </blockquote>
 <hr />
@@ -3910,19 +3937,27 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 </code></pre></div></p>
 <hr />
 <h2 id="실시간-제어real-time-control">실시간 제어(Real-time Control)<a class="headerlink" href="#실시간-제어real-time-control" title="Permanent link">&para;</a></h2>
-<p><strong>2ms</strong> 제어 루프 내에서 실시간으로 토크를 인가하는 데 사용되는 핵심 함수들입니다.
+<p><strong>1ms</strong> 제어 루프 내에서 실시간으로 토크를 인가하는 데 사용되는 핵심 함수들입니다.
 데이터를 읽는 것은 구조체 접근만으로 가능하지만, <strong>제어 명령(Output)을 내릴 때는 반드시 아래의 Helper 함수들을 사용해야 합니다.</strong> 이 함수들은 내부적으로 <strong>Dirty Flag</strong>를 관리하여 변경된 데이터만 효율적으로 전송하도록 돕습니다.</p>
 <h3 id="xm_setassisttorque"><code>XM_SetAssistTorque</code><a class="headerlink" href="#xm_setassisttorque" title="Permanent link">&para;</a></h3>
 <p>왼쪽과 오른쪽 다리의 보조 토크를 동시에 설정합니다.
 토크를 실제로 전송(<code>Output</code>)하는 것은 <code>Core Process</code>에서 내부적으로 IPO 모델에 따라 처리하고 있습니다.
 사용자는 알고리즘 계산을 통해 목표 토크를 해당 함수를 통해 설정하기만 하면 됩니다.</p>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorque</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">l</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorque</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">rh</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lh</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
-  * <code>r</code>: 오른쪽 고관절 보조 토크 (<strong>Unit: Nm</strong>)
-  * <code>l</code>: 왼쪽 고관절 보조 토크 (<strong>Unit: Nm</strong>)</p>
+  * <code>rh</code>: 오른쪽(RH) 고관절 보조 토크 (<strong>Unit: Nm</strong>) — <strong>첫 번째 인자</strong>
+  * <code>lh</code>: 왼쪽(LH) 고관절 보조 토크 (<strong>Unit: Nm</strong>) — <strong>두 번째 인자</strong></p>
+<blockquote>
+<p>⚠️ 인자 순서는 <strong><code>(오른쪽 rh, 왼쪽 lh)</code></strong> 입니다. 좌우를 바꿔 넣으면 보조가 반대 다리로 들어가니, 헷갈리면 한쪽씩 지정하는 <code>XM_SetAssistTorqueRH()</code> / <code>XM_SetAssistTorqueLH()</code> 를 사용하세요.</p>
+</blockquote>
 <p><strong>Returns</strong>: None</p>
+<p><strong>부호 · 단위 · 한계 (필독)</strong>
+  * <strong>부호 규약</strong>: <strong>양수(+) = Flexion(굴곡) 방향 보조, 음수(−) = Extension(신전) 방향 보조</strong> (각도 규약 <code>Extension &lt; 0 &lt; Flexion</code> 과 동일).
+  * <strong>단위 사슬</strong>: 입력은 관절 토크[Nm]. 내부에서 모터 전류로 환산되어 구동됩니다 — <code>τ_joint[Nm] = Kt(0.085) × Gear(18.75) × I[A] ≈ 1.594 × I[A]</code>. 피드백 <code>XM.status.h10.*HipTorque</code>(단위 <strong>A</strong>)와 비교할 때 이 환산을 적용하세요.
+  * <strong>하드 한계 (±10 Nm)</strong>: 입력 토크는 XM10 내부 라이브러리(<code>CM_StageAuxTorque</code>, <code>libXM_Lib.a</code>)에서 <strong>±10 Nm 로 클램프</strong>된 뒤 CAN 으로 전송됩니다. 예제가 아닌 내부 코드라 사용자가 바꿀 수 없으며, 그 이상 입력해도 ±10 Nm 에서 포화됩니다. (모터드라이버단 추가 보호: 최대 전류 14A / 임피던스 입력 10A Saturation)
+  * <strong>보조 레벨 반영</strong>: 슈트 보조 강도 다이얼(<code>XM.status.h10.h10AssistLevel</code>, 0~10)을 반영하려면 토크에 <code>h10AssistLevel / 10.0f</code> 를 곱하세요 — 레벨 0 이면 출력이 0 이 됩니다.</p>
 <p><strong>Operating Principle</strong>
   * 입력된 값을 <code>XM.command</code> 구조체에 저장하고, <code>torque_updated</code> 플래그를 세팅합니다.
   * 실제 전송은 현재 제어 주기의 끝(<code>_FlushAllOutputs</code>)에서 이루어집니다.</p>
@@ -3940,11 +3975,11 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 <h3 id="xm_setassisttorquerh--xm_setassisttorquelh"><code>XM_SetAssistTorqueRH</code> / <code>XM_SetAssistTorqueLH</code><a class="headerlink" href="#xm_setassisttorquerh--xm_setassisttorquelh" title="Permanent link">&para;</a></h3>
 <p>한쪽 다리의 토크만 개별적으로 설정합니다. 반대쪽 다리의 토크 값은 이전 상태를 유지합니다.</p>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorqueRH</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">);</span>
-<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorqueLH</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">l</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorqueRH</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">rh</span><span class="p">);</span>
+<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorqueLH</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">lh</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
-  * <code>r</code> / <code>l</code>: 해당 관절의 보조 토크 (<strong>Unit: Nm</strong>)</p>
+  * <code>rh</code> / <code>lh</code>: 해당 관절의 보조 토크 (<strong>Unit: Nm</strong>)</p>
 <p><strong>Example</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="c1">// 오른쪽 다리만 5.0Nm로 설정 (왼쪽은 기존 값 유지)</span>
 <a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="n">XM_SetAssistTorqueRH</span><span class="p">(</span><span class="mf">5.0f</span><span class="p">);</span>

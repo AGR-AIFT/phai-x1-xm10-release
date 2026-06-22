@@ -1277,6 +1277,34 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#36-extension-port-power-33v--5v-rev-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6. Extension Port Power (3.3V / 5V) (Rev 2.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6. Extension Port Power (3.3V / 5V) (Rev 2.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setextpowervoltage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetExtPowerVoltage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1729,6 +1757,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../troubleshooting/" class="md-nav__link">
         
   
@@ -1783,7 +1838,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1805,14 +1860,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2326,6 +2381,34 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#36-extension-port-power-33v--5v-rev-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6. Extension Port Power (3.3V / 5V) (Rev 2.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6. Extension Port Power (3.3V / 5V) (Rev 2.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setextpowervoltage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetExtPowerVoltage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2503,7 +2586,7 @@
 <li><code>mode</code>: Operating mode (<code>XM_EXT_DIO_MODE_INPUT</code>, <code>XM_EXT_DIO_MODE_INPUT_PULLUP</code>, <code>XM_EXT_DIO_MODE_INPUT_PULLDOWN</code>, <code>XM_EXT_DIO_MODE_OUTPUT</code>)</li>
 </ul>
 </li>
-<li><strong>Note</strong>: This is a non-real-time function. It calls <code>HAL_GPIO_Init</code> internally, so do <strong>not</strong> call it inside the 2 ms real-time control loop. Configure pins once in <code>Control_Setup()</code>.</li>
+<li><strong>Note</strong>: This is a non-real-time function. It calls <code>HAL_GPIO_Init</code> internally, so do <strong>not</strong> call it inside the 1 ms real-time control loop (1 kHz). Configure pins once in <code>Control_Setup()</code>.</li>
 <li><strong>Example</strong>
     <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// Configure pin 3 as pull-up input (for a switch)</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">XM_SetPinMode</span><span class="p">(</span><span class="n">XM_EXT_DIO_3</span><span class="p">,</span><span class="w"> </span><span class="n">XM_EXT_DIO_MODE_INPUT_PULLUP</span><span class="p">);</span>
@@ -2605,10 +2688,10 @@
 <p>Switches a specific DIO pin to ADC mode.</p>
 <ul>
 <li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SwitchDioToAdc</span><span class="p">(</span><span class="n">XmDioPin_t</span><span class="w"> </span><span class="n">dio_pin</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SwitchDioToAdc</span><span class="p">(</span><span class="n">XmDioPin_t</span><span class="w"> </span><span class="n">pin</span><span class="p">);</span>
 </code></pre></div></li>
 <li><strong>Parameters</strong><ul>
-<li><code>dio_pin</code>: DIO pin to switch to ADC</li>
+<li><code>pin</code>: DIO pin to switch to ADC</li>
 </ul>
 </li>
 <li><strong>Returns</strong>: <code>true</code> (switch successful), <code>false</code> (pin not supported)</li>
@@ -2651,6 +2734,30 @@
 <a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_ConfigureXsensMTi630</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w">  </span><span class="c1">// Send one-time configuration to a brand-new or factory-reset sensor (blocking ~1 s; call Attach first)</span>
 </code></pre></div></li>
 <li><strong>Note</strong>: <code>XM_AttachXsensMTi630()</code> is safe to call even when no sensor is connected — it activates automatically once the cable is plugged in. On Rev 1.1, attaching the IMU reassigns <code>XM_EXT_ADC_1</code> and <code>XM_EXT_ADC_3</code> to UART, making them unavailable for ADC use. (Rev 2.0 uses a dedicated USART2 port, so no ADC pins are affected.)</li>
+</ul>
+<hr />
+<h3 id="36-extension-port-power-33v--5v-rev-20">3.6. Extension Port Power (3.3V / 5V) <em>(Rev 2.0)</em><a class="headerlink" href="#36-extension-port-power-33v--5v-rev-20" title="Permanent link">&para;</a></h3>
+<p>Switches the <strong>sensor supply voltage</strong> of the extension port between 3.3V and 5V (board signal <code>EXT_PWR_SEL_5V</code>, PE3). To use an external sensor that runs on 5V (e.g. some EMG modules), switch to 5V in <code>Control_Setup()</code>. <strong>The default is 3.3V.</strong></p>
+<blockquote>
+<p>⚠️ This voltage <strong>powers</strong> the sensor. The <strong>ADC signal input range is always 0~3.3V</strong>, independent of the supply. If the <strong>output (signal)</strong> of a 5V-powered sensor exceeds 3.3V it can damage the ADC pin — keep the signal line within 0~3.3V and add a voltage divider if needed.</p>
+</blockquote>
+<h4 id="xm_setextpowervoltage"><code>XM_SetExtPowerVoltage</code><a class="headerlink" href="#xm_setextpowervoltage" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Syntax</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetExtPowerVoltage</span><span class="p">(</span><span class="n">XmExtPwrVoltage_t</span><span class="w"> </span><span class="n">voltage</span><span class="p">);</span>
+</code></pre></div></li>
+<li><strong>Parameters</strong><ul>
+<li><code>voltage</code>: <code>XM_EXT_PWR_3V3</code> (3.3V, default) or <code>XM_EXT_PWR_5V</code> (5V)</li>
+</ul>
+</li>
+<li><strong>Example</strong>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="n">XM_SetExtPowerVoltage</span><span class="p">(</span><span class="n">XM_EXT_PWR_5V</span><span class="p">);</span><span class="w">   </span><span class="c1">// power a 5V sensor</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="n">XM_SwitchDioToAdc</span><span class="p">(</span><span class="n">XM_EXT_DIO_1</span><span class="p">);</span><span class="w">        </span><span class="c1">// DIO_1 -&gt; ADC (XM_EXT_ADC_5)</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="c1">// then read with XM_AnalogReadMillivolts(XM_EXT_ADC_5) in mV</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="p">}</span>
+</code></pre></div></li>
+<li><strong>Note</strong>: Extension-port voltage switching is confirmed on Rev 2.0.</li>
 </ul>
 <hr />
 <h2 id="related-examples">Related Examples<a class="headerlink" href="#related-examples" title="Permanent link">&para;</a></h2>
