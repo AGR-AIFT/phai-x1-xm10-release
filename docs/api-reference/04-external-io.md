@@ -299,6 +299,32 @@ DIO 핀 번호를 ADC 핀 번호로 변환하는 매크로입니다. `XM_SwitchD
 
 ---
 
+### 3.6. 확장 포트 전원 전압 (Extension Port Power) *(Rev 2.0)*
+
+확장 포트의 **센서 공급 전원**을 3.3V 또는 5V 로 전환합니다 (보드 신호 `EXT_PWR_SEL_5V`, PE3). 5V 로 동작하는 외부 센서(일부 EMG 모듈 등)를 쓰려면 `Control_Setup()` 에서 5V 로 전환하세요. **기본값은 3.3V** 입니다.
+
+> ⚠️ 이 전압은 센서를 **구동(공급)** 하는 전원입니다. **ADC 신호 입력 범위는 전원과 무관하게 항상 0~3.3V** 입니다. 5V 로 구동한 센서의 **출력(신호)** 이 3.3V 를 넘으면 ADC 핀이 손상될 수 있으니, 신호 라인은 0~3.3V 범위인지 확인하고 필요하면 분압하세요.
+
+#### `XM_SetExtPowerVoltage`
+
+  * **Syntax**
+    ```c
+    void XM_SetExtPowerVoltage(XmExtPwrVoltage_t voltage);
+    ```
+  * **Parameters**
+      * `voltage`: `XM_EXT_PWR_3V3` (3.3V, 기본값) 또는 `XM_EXT_PWR_5V` (5V)
+  * **Example**
+    ```c
+    void Control_Setup(void) {
+        XM_SetExtPowerVoltage(XM_EXT_PWR_5V);   // 5V 센서 구동
+        XM_SwitchDioToAdc(XM_EXT_DIO_1);        // DIO_1 → ADC (XM_EXT_ADC_5)
+        // 이후 XM_AnalogReadMillivolts(XM_EXT_ADC_5) 로 센서 전압(mV)을 읽음
+    }
+    ```
+  * **Note**: 확장 포트 전원 전압 전환은 Rev 2.0 에서 확인된 기능입니다.
+
+---
+
 ## 관련 예제
 
 | 예제 | 난이도 | 외부 I/O 활용 |

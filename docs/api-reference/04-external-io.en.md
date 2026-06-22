@@ -299,6 +299,32 @@ Attaches an external IMU (XSENS MTi-630) to the External UART (USART2). After at
 
 ---
 
+### 3.6. Extension Port Power (3.3V / 5V) *(Rev 2.0)*
+
+Switches the **sensor supply voltage** of the extension port between 3.3V and 5V (board signal `EXT_PWR_SEL_5V`, PE3). To use an external sensor that runs on 5V (e.g. some EMG modules), switch to 5V in `Control_Setup()`. **The default is 3.3V.**
+
+> ⚠️ This voltage **powers** the sensor. The **ADC signal input range is always 0~3.3V**, independent of the supply. If the **output (signal)** of a 5V-powered sensor exceeds 3.3V it can damage the ADC pin — keep the signal line within 0~3.3V and add a voltage divider if needed.
+
+#### `XM_SetExtPowerVoltage`
+
+  * **Syntax**
+    ```c
+    void XM_SetExtPowerVoltage(XmExtPwrVoltage_t voltage);
+    ```
+  * **Parameters**
+      * `voltage`: `XM_EXT_PWR_3V3` (3.3V, default) or `XM_EXT_PWR_5V` (5V)
+  * **Example**
+    ```c
+    void Control_Setup(void) {
+        XM_SetExtPowerVoltage(XM_EXT_PWR_5V);   // power a 5V sensor
+        XM_SwitchDioToAdc(XM_EXT_DIO_1);        // DIO_1 -> ADC (XM_EXT_ADC_5)
+        // then read with XM_AnalogReadMillivolts(XM_EXT_ADC_5) in mV
+    }
+    ```
+  * **Note**: Extension-port voltage switching is confirmed on Rev 2.0.
+
+---
+
 ## Related Examples
 
 | Example | Difficulty | External I/O Usage |
