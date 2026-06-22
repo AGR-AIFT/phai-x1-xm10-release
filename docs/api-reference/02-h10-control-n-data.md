@@ -73,7 +73,7 @@ typedef enum {
 
 ### `PVector_t`
 
-H10 슈트의 현재 동작 상태입니다.
+위치 기반 궤적 명령 벡터입니다.
 
 ```c
 typedef struct {
@@ -86,7 +86,7 @@ typedef struct {
 
 ### `IVector_t`
 
-H10 슈트의 현재 동작 상태입니다.
+임피던스 제어 파라미터 벡터입니다.
 
 ```c
 typedef struct {
@@ -100,7 +100,7 @@ typedef struct {
 
 ### `FVector_t`
 
-H10의 현재 동작 상태입니다.
+힘 기반 궤적 명령 벡터입니다.
 
 ```c
 typedef struct {
@@ -416,12 +416,12 @@ CM_NmtState_t XM_GetXMNmtState(void);
 
 | 상태 | 값 | 설명 |
 |------|-----|------|
-| `NMT_STATE_BOOT_UP` | 0 | 부팅 중 (Boot-up 메시지 미수신) |
-| `NMT_STATE_PRE_OPERATIONAL` | 1 | SDO 통신 가능, PDO 비활성 |
-| `NMT_STATE_OPERATIONAL` | 2 | 모든 통신 활성 (정상 상태) |
-| `NMT_STATE_STOPPED` | 3 | 통신 중단됨 |
+| `CM_NMT_INITIALISING` | 0 | 부팅 중 (Boot-up 메시지 미수신) |
+| `CM_NMT_PRE_OPERATIONAL` | 1 | SDO 통신 가능, PDO 비활성 |
+| `CM_NMT_OPERATIONAL` | 2 | 모든 통신 활성 (정상 상태) |
+| `CM_NMT_STOPPED` | 3 | 통신 중단됨 |
 
-> **참고**: `XM_IsCmConnected()`는 내부적으로 `XM_GetXMNmtState() == NMT_STATE_OPERATIONAL`을 확인합니다.
+> **참고**: `XM_IsCmConnected()`는 내부적으로 `XM_GetXMNmtState() == CM_NMT_OPERATIONAL`을 확인합니다.
 > NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 사용하세요.
 
 ---
@@ -903,14 +903,14 @@ XM_SendUserBodyData(&bodyData[0]);
 
 **Syntax**
 ```c
-void XM_SetAssistTorque(float r, float l);
+void XM_SetAssistTorque(float rh, float lh);
 ```
 
 **Parameters**
-  * `r`: 오른쪽(RH) 고관절 보조 토크 (**Unit: Nm**) — **첫 번째 인자**
-  * `l`: 왼쪽(LH) 고관절 보조 토크 (**Unit: Nm**) — **두 번째 인자**
+  * `rh`: 오른쪽(RH) 고관절 보조 토크 (**Unit: Nm**) — **첫 번째 인자**
+  * `lh`: 왼쪽(LH) 고관절 보조 토크 (**Unit: Nm**) — **두 번째 인자**
 
-> ⚠️ 인자 순서는 **`(오른쪽 r, 왼쪽 l)`** 입니다. 좌우를 바꿔 넣으면 보조가 반대 다리로 들어가니, 헷갈리면 한쪽씩 지정하는 `XM_SetAssistTorqueRH()` / `XM_SetAssistTorqueLH()` 를 사용하세요.
+> ⚠️ 인자 순서는 **`(오른쪽 rh, 왼쪽 lh)`** 입니다. 좌우를 바꿔 넣으면 보조가 반대 다리로 들어가니, 헷갈리면 한쪽씩 지정하는 `XM_SetAssistTorqueRH()` / `XM_SetAssistTorqueLH()` 를 사용하세요.
 
 **Returns**: None
 
@@ -944,12 +944,12 @@ void Active_Loop(void) {
 
 **Syntax**
 ```c
-void XM_SetAssistTorqueRH(float r);
-void XM_SetAssistTorqueLH(float l);
+void XM_SetAssistTorqueRH(float rh);
+void XM_SetAssistTorqueLH(float lh);
 ```
 
 **Parameters**
-  * `r` / `l`: 해당 관절의 보조 토크 (**Unit: Nm**)
+  * `rh` / `lh`: 해당 관절의 보조 토크 (**Unit: Nm**)
 
 **Example**
 ```c

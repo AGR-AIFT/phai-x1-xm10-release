@@ -418,12 +418,12 @@ CM_NmtState_t XM_GetXMNmtState(void);
 
 | State | Value | Description |
 |------|-----|------|
-| `NMT_STATE_BOOT_UP` | 0 | Booting (boot-up message not yet received) |
-| `NMT_STATE_PRE_OPERATIONAL` | 1 | SDO communication available; PDO inactive |
-| `NMT_STATE_OPERATIONAL` | 2 | All communication active (normal state) |
-| `NMT_STATE_STOPPED` | 3 | Communication halted |
+| `CM_NMT_INITIALISING` | 0 | Booting (boot-up message not yet received) |
+| `CM_NMT_PRE_OPERATIONAL` | 1 | SDO communication available; PDO inactive |
+| `CM_NMT_OPERATIONAL` | 2 | All communication active (normal state) |
+| `CM_NMT_STOPPED` | 3 | Communication halted |
 
-> **Note:** `XM_IsCmConnected()` internally checks `XM_GetXMNmtState() == NMT_STATE_OPERATIONAL`.
+> **Note:** `XM_IsCmConnected()` internally checks `XM_GetXMNmtState() == CM_NMT_OPERATIONAL`.
 > Use this function directly when you need finer-grained branching based on NMT state.
 
 ---
@@ -905,14 +905,14 @@ Users only need to compute the desired torque and set it through this function.
 
 **Syntax**
 ```c
-void XM_SetAssistTorque(float r, float l);
+void XM_SetAssistTorque(float rh, float lh);
 ```
 
 **Parameters**
-  * `r`: Right hip joint assist torque (**Unit: Nm**)
-  * `l`: Left hip joint assist torque (**Unit: Nm**)
+  * `rh`: Right hip joint assist torque (**Unit: Nm**)
+  * `lh`: Left hip joint assist torque (**Unit: Nm**)
 
-> ⚠️ The argument order is **`(right r, left l)`**. Swapping them sends assistance to the wrong leg; when in doubt, set one side at a time with `XM_SetAssistTorqueRH()` / `XM_SetAssistTorqueLH()`.
+> ⚠️ The argument order is **`(right rh, left lh)`**. Swapping them sends assistance to the wrong leg; when in doubt, set one side at a time with `XM_SetAssistTorqueRH()` / `XM_SetAssistTorqueLH()`.
 
 **Returns**: None
 
@@ -946,12 +946,12 @@ Sets the torque for a single leg independently. The opposite leg's torque value 
 
 **Syntax**
 ```c
-void XM_SetAssistTorqueRH(float r);
-void XM_SetAssistTorqueLH(float l);
+void XM_SetAssistTorqueRH(float rh);
+void XM_SetAssistTorqueLH(float lh);
 ```
 
 **Parameters**
-  * `r` / `l`: Assist torque for the respective joint (**Unit: Nm**)
+  * `rh` / `lh`: Assist torque for the respective joint (**Unit: Nm**)
 
 **Example**
 ```c

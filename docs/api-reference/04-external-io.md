@@ -115,7 +115,7 @@ typedef enum {
   * **Parameters**
       * `pin`: 설정할 핀 번호 (`XM_EXT_DIO_1` \~ `8`)
       * `mode`: 동작 모드 (`XM_EXT_DIO_MODE_INPUT`, `XM_EXT_DIO_MODE_INPUT_PULLUP`, `XM_EXT_DIO_MODE_INPUT_PULLDOWN`, `XM_EXT_DIO_MODE_OUTPUT`)
-  * **주의**: 비실시간 함수입니다. 내부에서 `HAL_GPIO_Init` 을 호출하므로 2 ms 실시간 제어 루프 안에서 호출하지 말고 `Control_Setup()` 에서 한 번 설정하세요.
+  * **주의**: 비실시간 함수입니다. 내부에서 `HAL_GPIO_Init` 을 호출하므로 1 ms 실시간 제어 루프 (1 kHz) 안에서 호출하지 말고 `Control_Setup()` 에서 한 번 설정하세요.
   * **Example**
     ```c
     // 3번 핀을 풀업 입력으로 설정 (스위치 연결용)
@@ -241,10 +241,10 @@ DIO 핀을 런타임에 ADC 모드로 전환하여, 8개 DIO + 4개 ADC = 최대
 
   * **Syntax**
     ```c
-    bool XM_SwitchDioToAdc(XmDioPin_t dio_pin);
+    bool XM_SwitchDioToAdc(XmDioPin_t pin);
     ```
   * **Parameters**
-      * `dio_pin`: ADC로 전환할 DIO 핀
+      * `pin`: ADC로 전환할 DIO 핀
   * **Returns**: `true` (전환 성공), `false` (지원되지 않는 핀)
   * **Example**
     ```c

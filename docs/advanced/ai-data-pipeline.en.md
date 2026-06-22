@@ -121,7 +121,7 @@ void Control_Setup(void) {
 
 void Control_Loop(void) {
     float my_value = read_my_sensor();
-    XM_SendUsbDataWithId(&my_value, sizeof(my_value), 0xF0);
+    XM_SendUsbDataWithId(&my_value, sizeof(my_value), 0xF0);  // arg order: (data, len, module_id)
 }
 ```
 

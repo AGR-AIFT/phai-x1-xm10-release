@@ -115,7 +115,7 @@ Sets the operating mode (input / output / analog) of a pin. Must be called befor
   * **Parameters**
       * `pin`: Pin to configure (`XM_EXT_DIO_1` \~ `8`)
       * `mode`: Operating mode (`XM_EXT_DIO_MODE_INPUT`, `XM_EXT_DIO_MODE_INPUT_PULLUP`, `XM_EXT_DIO_MODE_INPUT_PULLDOWN`, `XM_EXT_DIO_MODE_OUTPUT`)
-  * **Note**: This is a non-real-time function. It calls `HAL_GPIO_Init` internally, so do **not** call it inside the 2 ms real-time control loop. Configure pins once in `Control_Setup()`.
+  * **Note**: This is a non-real-time function. It calls `HAL_GPIO_Init` internally, so do **not** call it inside the 1 ms real-time control loop (1 kHz). Configure pins once in `Control_Setup()`.
   * **Example**
     ```c
     // Configure pin 3 as pull-up input (for a switch)
@@ -241,10 +241,10 @@ Switches a specific DIO pin to ADC mode.
 
   * **Syntax**
     ```c
-    bool XM_SwitchDioToAdc(XmDioPin_t dio_pin);
+    bool XM_SwitchDioToAdc(XmDioPin_t pin);
     ```
   * **Parameters**
-      * `dio_pin`: DIO pin to switch to ADC
+      * `pin`: DIO pin to switch to ADC
   * **Returns**: `true` (switch successful), `false` (pin not supported)
   * **Example**
     ```c
