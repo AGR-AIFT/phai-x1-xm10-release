@@ -33,15 +33,17 @@ KIT H10 착용  →  USB 메모리 기록     →  Python 디코더    →  PyTo
 핵심 호출 3 가지:
 
 ```c
-// 1. 로깅 소스 설정 (Total Data 자동 / 커스텀 구조체 수동)
-XM_SetUsbLogSource(USB_LOG_SOURCE_TOTAL_DATA);
+// 1. 로깅 소스 등록 (Control_Setup 에서 1회) — 등록한 구조체가 자동 기록됨
+XM_SetUsbLogSource(&my_data, sizeof(my_data));
 
-// 2. 매 루프에서 데이터 기록
-XM_WriteUsbLogData(&my_data, sizeof(my_data));
+// 2. 세션 시작 (상태 전이 함수에서 1회 — 1ms 제어 루프 안에서는 호출 금지)
+//    sessionName 에 NULL 을 주면 S_001, S_002 ... 자동 넘버링
+XM_StartUsbDataLog(NULL, "hip_L(float), hip_R(float)");
 
-// 3. 파일 롤링 (장시간 세션용, 10 분마다 새 파일)
-XM_GetUsbLogStatus(&status);
-if (status.elapsed_sec > 600) XM_NewUsbLogFile();
+// 3. 기록은 매 루프 백그라운드 자동 — 별도의 per-loop write 호출이 없음
+//    파일 분할 크기:  XM_SetUsbLogRollingSize(MB)  (기본 10MB)
+//    상태 확인:       XmLogStatus_e st = XM_GetUsbLogStatus();
+//    세션 종료:       XM_StopUsbDataLog();   // 역시 1ms 루프 밖에서
 ```
 
 자세한 API: [docs/api-reference/06-usb-data-logging.md](../api-reference/06-usb-data-logging.md).
@@ -52,11 +54,11 @@ USB 메모리를 PC 에 꽂으면 `.bin` 또는 `.csv` 파일이 보입니다. �
 
 ### 3. PythonDecoder 로 변환
 
-`PythonDecoder/` 폴더의 USB MSC 디코더가 `.bin` → `.csv` 또는 `.npy` 로 변환합니다.
+`PythonDecoder/MSC/` 의 디코더가 세션 폴더의 `.bin` → `decoded_output.csv` 로 변환합니다.
 
 ```bash
-cd PythonDecoder
-python usb_msc_decoder.py --input my_log.bin --output my_log.csv
+cd PythonDecoder/MSC
+python data_decoder_xm10.py /LOGS/S_001        # 세션 폴더를 인자로 전달
 ```
 
 산출물:
@@ -113,12 +115,13 @@ clf.fit(X, y)
 
 ```c
 void Control_Setup(void) {
-    XM_SetUsbCustomMeta(0xF0, "my_signal", "v");  // 채널 0xF0, 단위 V
+    // 채널 메타데이터(JSON): 인자는 module_id, json_str 2개
+    XM_SetUsbCustomMeta(0xF0, "[{\"name\":\"my_signal\",\"unit\":\"V\"}]");
 }
 
 void Control_Loop(void) {
     float my_value = read_my_sensor();
-    XM_SendUsbDataWithId(0xF0, &my_value, sizeof(my_value));
+    XM_SendUsbDataWithId(&my_value, sizeof(my_value), 0xF0);  // (data, len, id) 순서
 }
 ```
 
@@ -172,7 +175,7 @@ void Control_Loop(void) {
 
 ## 자주 막히는 부분
 
-- **로그 파일이 너무 큼** — 1 ms × 1 시간 = 360 만 샘플. 다 필요 없으면 `XM_WriteUsbLogData` 호출 빈도를 낮추거나 (예: 10 ms 마다 = 100 Hz), 관심 필드만 골라 작은 구조체로 저장.
+- **로그 파일이 너무 큼** — 1 ms × 1 시간 = 360 만 샘플. 등록한 구조체가 매 루프 자동 기록되므로, 다 필요 없으면 **관심 필드만 골라 작은 구조체로** 저장하거나 파일 분할(`XM_SetUsbLogRollingSize`)로 나누세요.
 - **CSV 가 너무 느림** — 큰 데이터셋은 `.npy` 또는 `.parquet` 로. CSV 는 사람 확인용으로만.
 - **타임스탬프가 안 맞음** — `Ex.10b` 패턴의 수동 타임스탬프 사용. 자동 모드는 파일 단위만 기록.
 - **NaN / Inf 값** — 보드 측에서 `assert(isfinite(value))` 추가. 학습 직전에 `np.isfinite()` 로 필터링.
