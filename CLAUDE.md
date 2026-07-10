@@ -99,7 +99,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | 도구 | 역할 | XM10 과의 관계 |
 |------|------|---------------|
 | **PhAI Studio** | 실시간 데이터 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
-| **angel Sensor Studio** | 사내 진단/검증 GUI (Python/PySide6) | FES/EMG/IMU Hub 등 — XM10 과 CAN-FD 로 연계 가능 |
+| **angel Sensor Studio** | 사내 진단/검증 GUI (Python/PySide6) | EMG/IMU Hub — XM10 과 CAN-FD 로 연계 가능 |
 | **PythonDecoder** (`PythonDecoder/`) | USB MSC 로그 CSV 후처리 | 본 레포 내장 |
 
 ---
