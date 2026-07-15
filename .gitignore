@@ -137,3 +137,6 @@ build_check/
 
 # 릴리즈 패키징 임시 자산 (gh release upload 전 staging)
 /.release_assets_v*/
+
+# 튜토리얼 영상 촬영 가이드 — 내부 제작 자료 (공개 레포 비공개, 로컬 보관)
+video/
