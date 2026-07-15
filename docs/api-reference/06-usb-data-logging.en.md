@@ -368,16 +368,14 @@ Requires Python 3.6 or later. No external package dependencies (uses the standar
 
 ### Running the decoder
 
+`PythonDecoder/MSC/data_decoder_xm10.py` takes a single positional argument — the session folder path (no other flags):
+
 ```bash
-# Basic usage
+cd PythonDecoder/MSC
 python data_decoder_xm10.py /LOGS/BasicTest
-
-# Specify struct format manually (when the metadata does not include type information)
-python data_decoder_xm10.py /LOGS/BasicTest --fmt "<2fB3x"
-
-# Disable stale-record trimming at the end
-python data_decoder_xm10.py /LOGS/BasicTest --no-trim
 ```
+
+The struct format is built automatically from `metadata.txt`, so no manual format is needed.
 
 ### Output
 
@@ -389,10 +387,9 @@ python data_decoder_xm10.py /LOGS/BasicTest --no-trim
 | Feature | Description |
 |------|------|
 | Automatic file header detection | Supports both legacy (no header) and new (with header) formats |
-| Block CRC verification | Detects corrupted blocks and recovers intact blocks |
+| Block CRC skip handling | Automatically skips the CRC32 at each 4KB block boundary and extracts the raw data |
 | Event marker separation | Automatically separates data records from marker records |
 | Footer verification | Confirms whether the file ended normally |
-| Trailing stale trim | Automatically removes frozen records appended at session end |
 
 ---
 

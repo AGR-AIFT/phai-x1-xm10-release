@@ -1,7 +1,7 @@
 # Ex.09 — CDC Stream (PhAI Studio 실시간 바이너리 스트리밍)
 
 > 🎯 **학습 목표**:
-> - System 자동 스트리밍 (Total Data Packet 0x20, 425 B / 1 kHz) 의 존재를 이해합니다.
+> - System 자동 스트리밍 (Total Data Packet 0x20, 365 B / 1 kHz) 의 존재를 이해합니다.
 > - **User Custom 채널** (Module ID `0xF0~0xFE`) 로 알고리즘 디버그 변수를 추가 전송하는 방법.
 > - JSON 메타데이터 등록 + `XM_SendUsbDataWithId()` 패턴.
 >
@@ -22,7 +22,7 @@ PhAI Studio 를 켜고 XM10 USB 를 연결하면:
 
 | Module ID | 출처 | 주기 | 내용 |
 |:---:|------|:---:|------|
-| **0x20** | System 자동 | 1 kHz | Total Data Packet 425 B (H10 PDO + GRF + IMU Hub + External IO 전체) |
+| **0x20** | System 자동 | 1 kHz | Total Data Packet 365 B (H10 PDO + GRF + IMU Hub + External IO 전체) |
 | **0xEF** | System 자동 | 연결 시 1회 | User Meta JSON |
 | **0xF0** | 본 예제 (Control_Loop) | 가변 | 16 B (H10 연결 / 좌·우 고관절 각도 / 전방 보행 속도) |
 
@@ -34,11 +34,11 @@ PhAI Studio 를 켜고 XM10 USB 를 연결하면:
 
 ## 2️⃣ 사전 지식 — 시작 전 알아둘 것
 
-- **Total Data Packet (0x20)** — System 이 425 B 의 H10/IMU/External IO 전체 상태를 1 kHz 로 자동 스트리밍. 사용자 코드 0줄.
+- **Total Data Packet (0x20)** — System 이 365 B 의 H10/IMU/External IO 전체 상태를 1 kHz 로 자동 스트리밍. 사용자 코드 0줄.
 - **User Custom Channel (0xF0~0xFE)** — 알고리즘 내부 변수 (제어 출력, 추정치 등) 를 PhAI 에 노출. 채널당 별도 메타데이터 JSON 등록 필요.
 - **`XM_SetUsbCustomMeta(id, json)`** — Setup 단계 1회. JSON 배열로 채널별 `name` + `unit` 등록 → PhAI 에 자동 표시.
 - **`XM_SendUsbDataWithId(ptr, size, id)`** — non-blocking 전송. 버퍼 가득 차면 `false` 반환 + 해당 tick 드롭.
-- **PhAI V2.1 프로토콜** — SOF 0xAA + CRC8 + STATUS. PythonDecoder/CDC/ 에 디코더 제공.
+- **PhAI V2.2 프로토콜** — SOF 0xAA + CRC16-CCITT + STATUS. PythonDecoder/CDC/ 에 디코더 제공.
 
 ---
 

@@ -95,7 +95,7 @@ CRC16_TABLE = [
 ]
 
 # MODULE_ID → (name, [channel_names] or None)
-# Combined V2.1: 10ch (Accel3 + Gyro3 + MotorAngle2 + MotorTorque2)
+# Combined V2.2: 10ch (Accel3 + Gyro3 + MotorAngle2 + MotorTorque2)
 MODULE_DEFS = {
     0x01: ("IMU_Accel",    ["AccX", "AccY", "AccZ"]),
     0x02: ("IMU_Gyro",     ["GyrX", "GyrY", "GyrZ"]),
@@ -386,7 +386,7 @@ def apply_theme(app, theme: dict):
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("PhAI V2.1 — USB-CDC Real-time Receiver")
+        self.setWindowTitle("PhAI V2.2 — USB-CDC Real-time Receiver")
         self.resize(1500, 950)
 
         self._theme = _MODERN_LIGHT
@@ -594,7 +594,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._plot_widgets[i].setXLink(self._plot_widgets[0])
 
         self._status_bar = self.statusBar()
-        self._status_bar.showMessage("Ready — PhAI V2.1 Protocol")
+        self._status_bar.showMessage("Ready — PhAI V2.2 Protocol")
 
         self._apply_plot_theme()
 
@@ -1189,7 +1189,7 @@ def run_cli(port, baud, output):
 # ============================================================================
 
 def main():
-    ap = argparse.ArgumentParser(description="PhAI V2.1 CDC Receiver")
+    ap = argparse.ArgumentParser(description="PhAI V2.2 CDC Receiver")
     ap.add_argument("--cli", action="store_true")
     ap.add_argument("--port", type=str)
     ap.add_argument("--baud", type=int, default=DEFAULT_BAUD)

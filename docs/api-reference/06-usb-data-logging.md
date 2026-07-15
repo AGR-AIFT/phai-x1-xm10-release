@@ -370,16 +370,14 @@ Python 3.6 이상 필요. 외부 패키지 의존성 없음 (표준 라이브러
 
 ### 실행
 
+`PythonDecoder/MSC/data_decoder_xm10.py`는 세션 폴더 경로 하나만 인자로 받습니다 (별도 옵션 플래그 없음):
+
 ```bash
-# 기본 사용
+cd PythonDecoder/MSC
 python data_decoder_xm10.py /LOGS/BasicTest
-
-# struct format 수동 지정 (metadata에 타입 미포함 시)
-python data_decoder_xm10.py /LOGS/BasicTest --fmt "<2fB3x"
-
-# stale 레코드 trim 비활성화
-python data_decoder_xm10.py /LOGS/BasicTest --no-trim
 ```
+
+metadata.txt로부터 struct format을 자동으로 구성하므로 수동 지정은 필요하지 않습니다.
 
 ### 출력
 
@@ -391,10 +389,9 @@ python data_decoder_xm10.py /LOGS/BasicTest --no-trim
 | 기능 | 설명 |
 |------|------|
 | 파일 헤더 자동 감지 | 레거시(헤더 없음) + 신규(헤더 있음) 모두 지원 |
-| 블록 CRC 검증 | 손상 블록 감지 + 정상 블록 복구 |
+| 블록 CRC 스킵 처리 | 4KB 블록 경계의 CRC32를 자동으로 건너뛰고 순수 데이터만 추출 |
 | 이벤트 마커 분리 | 데이터 레코드와 마커 레코드 자동 분리 |
 | 풋터 검증 | 파일 정상 종료 여부 확인 |
-| 끝부분 stale trim | 세션 종료 시 frozen 레코드 자동 제거 |
 
 ---
 

@@ -1,10 +1,10 @@
 """
-PhAI V2.1 — CDC CSV Post-Processing Reviewer
+PhAI V2.2 — CDC CSV Post-Processing Reviewer
 ==============================================
 cdc_phai_receiver.py 가 저장한 CSV 파일을 로드하여
 전체 세션 데이터를 정밀 분석하는 후처리 뷰어입니다.
 
-CSV 포맷 (PhAI V2.1):
+CSV 포맷 (PhAI V2.2):
     time_s, seq_id, module_id, tx_drops, ch0, ch1, ...
 
 주요 기능:
@@ -111,7 +111,7 @@ def apply_style(app):
 class CsvReviewWindow(QtWidgets.QMainWindow):
     def __init__(self, csv_path=None):
         super().__init__()
-        self.setWindowTitle("PhAI V2.1 — CSV Post-Processing Reviewer")
+        self.setWindowTitle("PhAI V2.2 — CSV Post-Processing Reviewer")
         self.resize(1600, 950)
         self.setAcceptDrops(True)
 
@@ -228,7 +228,7 @@ class CsvReviewWindow(QtWidgets.QMainWindow):
         self.grid.setSpacing(4)
         body.addLayout(self.grid, stretch=1)
 
-        self.statusBar().showMessage("Ready — Drop or Open a PhAI V2.1 CSV file")
+        self.statusBar().showMessage("Ready — Drop or Open a PhAI V2.2 CSV file")
 
     # ------------------------------------------------------------------ Drag & Drop
     def dragEnterEvent(self, event):
@@ -516,7 +516,7 @@ class CsvReviewWindow(QtWidgets.QMainWindow):
 # ============================================================================
 
 def main():
-    ap = argparse.ArgumentParser(description="PhAI V2.1 CSV Post-Processing Reviewer")
+    ap = argparse.ArgumentParser(description="PhAI V2.2 CSV Post-Processing Reviewer")
     ap.add_argument("csv", nargs="?", default=None, help="Path to CSV file")
     args = ap.parse_args()
 

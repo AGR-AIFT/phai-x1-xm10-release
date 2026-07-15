@@ -20,7 +20,7 @@
  *   [Header:4][tick_ms:4][leftHipAngle:4] = 12 bytes/record
  *
  * [디코딩]
- *   PythonDecoder/data_decoder_xm10.py를 사용하여 CSV 변환
+ *   PythonDecoder/MSC/data_decoder_xm10.py를 사용하여 CSV 변환
  *
  * @note  XM_StartUsbDataLog/StopUsbDataLog 는 파일/metadata 생성으로 최대 ~100ms 블로킹합니다.
  *        본 예제는 버튼 클릭 시 각 1회만 호출하며(별도 실시간 제어 없음) 시작/정지 순간의

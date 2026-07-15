@@ -10,7 +10,7 @@
  *
  * [데이터 파이프라인]
  *   H10 CM ──PDO──> XM10 ──USB-MSC──> .bin
- *     > Python data_decoder_xm10_v2.py ──> decoded_output.csv
+ *     > Python PythonDecoder/MSC/data_decoder_xm10.py ──> decoded_output.csv
  *       > MATLAB load_decoded_data() ──> GaitAnalysis_RT ──> GaitAnalysis_PP
  *
  * [저장 데이터 — 36채널]
@@ -48,7 +48,7 @@
  * @version 1.0
  * @date    Mar 18, 2026
  * @see     GaitAnalysis_Rulebase/MATLAB/GaitAnalysis_RT.m
- * @see     GaitAnalysis_Rulebase/Python_Decoder/data_decoder_xm10_v2.py
+ * @see     PythonDecoder/MSC/data_decoder_xm10.py
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
