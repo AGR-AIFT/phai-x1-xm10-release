@@ -6,6 +6,21 @@ This is a function reference to keep open while writing your algorithm. You don'
 
 ---
 
+## How to Read This — Two Layers
+
+The API documentation is split into **two layers with different jobs**. Open the one that matches what you're looking for.
+
+| Layer | Location | Covers | Open this when |
+|-------|----------|--------|-----------------|
+| **① Concept Guides** | This document (01–09, the [Function Groups](#function-groups) table below) | **Why** the API exists and **how** to weave it into your algorithm — background, common pitfalls, example code flow | You don't yet know how to combine an API you're using for the first time |
+| **② Function Reference** | [`ref/`](ref/README.en.md) — one page per header | **Exact** function signatures, parameter types/ranges, return values, struct fields | You need to double-check a function name, argument order, or exact return meaning |
+
+The two layers don't replace each other. Each concept-guide entry links to its matching `ref/` page, and every `ref/` page links back to its matching concept guide — if you get stuck, jump to the other side.
+
+→ **Full function reference index**: [`ref/README.en.md`](ref/README.en.md)
+
+---
+
 ## Function Groups
 
 | # | Document | Contents | Commonly Used Functions |

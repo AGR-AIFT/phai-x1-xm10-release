@@ -97,6 +97,17 @@ plugins:
             메모리 영역: Memory Regions
             실시간 시계 (RTC): Real-Time Clock (RTC)
             보조 태스크: Auxiliary Tasks
+            함수 레퍼런스: Function Reference
+            xm_api.h (진입점): xm_api.h (Entry Point)
+            xm_api_data.h (제어·데이터): xm_api_data.h (Control & Data)
+            xm_api_tsm.h (상태 머신): xm_api_tsm.h (State Machine)
+            xm_api_led_btn.h (LED·버튼): xm_api_led_btn.h (LED & Button)
+            xm_api_external_io.h (외부 IO): xm_api_external_io.h (External IO)
+            xm_api_usb.h (USB): xm_api_usb.h (USB)
+            xm_api_memory.h (메모리): xm_api_memory.h (Memory)
+            xm_api_rtc.h (RTC): xm_api_rtc.h (RTC)
+            xm_api_freertos.h (RTOS): xm_api_freertos.h (RTOS)
+            xm_api_user_custom.h (사용자 데이터): xm_api_user_custom.h (User Data)
             아키텍처: Architecture
             KIT H10 펌웨어: KIT H10 Firmware
             부트로더: Bootloader
@@ -163,6 +174,18 @@ nav:
       - 메모리 영역: api-reference/07-memory-management.md
       - 실시간 시계 (RTC): api-reference/08-rtc-clock.md
       - 보조 태스크: api-reference/09-task-creation.md
+      - 함수 레퍼런스:
+          - 개요: api-reference/ref/README.md
+          - xm_api.h (진입점): api-reference/ref/xm-api.md
+          - xm_api_data.h (제어·데이터): api-reference/ref/xm-api-data.md
+          - xm_api_tsm.h (상태 머신): api-reference/ref/xm-api-tsm.md
+          - xm_api_led_btn.h (LED·버튼): api-reference/ref/xm-api-led-btn.md
+          - xm_api_external_io.h (외부 IO): api-reference/ref/xm-api-external-io.md
+          - xm_api_usb.h (USB): api-reference/ref/xm-api-usb.md
+          - xm_api_memory.h (메모리): api-reference/ref/xm-api-memory.md
+          - xm_api_rtc.h (RTC): api-reference/ref/xm-api-rtc.md
+          - xm_api_freertos.h (RTOS): api-reference/ref/xm-api-freertos.md
+          - xm_api_user_custom.h (사용자 데이터): api-reference/ref/xm-api-user-custom.md
   - 아키텍처: architecture/README.md
   - KIT H10 펌웨어: kit-h10-firmware/README.md
   - 부트로더:
