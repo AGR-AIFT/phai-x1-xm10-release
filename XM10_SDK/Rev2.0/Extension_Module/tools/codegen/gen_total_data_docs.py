@@ -488,8 +488,8 @@ def build_total_data_packet_doc(doc):
         "export const MODULE_ID_TOTAL = 0x20;\n"
         "export const MODULE_ID_USER_META = 0xEF;"
     )
-    add_ref(doc, "[Ref] tools/data_map/xm_total_data.yaml — SSOT")
-    add_ref(doc, "[Ref] tools/data_map/generate_data_map.py — Code-Gen 스크립트")
+    add_ref(doc, "[Ref] tools/codegen/data_map/xm_total_data.yaml — SSOT")
+    add_ref(doc, "[Ref] tools/codegen/data_map/generate_data_map.py — Code-Gen 스크립트")
 
     # ========== Section 8 ==========
     doc.add_heading("8. User Custom Data API", level=1)
@@ -1240,8 +1240,8 @@ def build_total_data_packet_doc_en(doc):
         "export const MODULE_ID_TOTAL = 0x20;\n"
         "export const MODULE_ID_USER_META = 0xEF;"
     )
-    add_ref(doc, "[Ref] tools/data_map/xm_total_data.yaml — SSOT")
-    add_ref(doc, "[Ref] tools/data_map/generate_data_map.py — Code-Gen script")
+    add_ref(doc, "[Ref] tools/codegen/data_map/xm_total_data.yaml — SSOT")
+    add_ref(doc, "[Ref] tools/codegen/data_map/generate_data_map.py — Code-Gen script")
 
     # ========== Section 8 ==========
     doc.add_heading("8. User Custom Data API", level=1)
