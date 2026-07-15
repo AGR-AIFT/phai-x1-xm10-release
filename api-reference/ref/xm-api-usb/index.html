@@ -1,0 +1,4073 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서">
+      
+      
+      
+        <link rel="canonical" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-usb/">
+      
+      
+        <link rel="prev" href="../xm-api-external-io/">
+      
+      
+        <link rel="next" href="../xm-api-memory/">
+      
+      
+        
+          <link rel="alternate" href="./" hreflang="ko">
+        
+          <link rel="alternate" href="../../../en/api-reference/ref/xm-api-usb/" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>xm_api_usb.h (USB) - XM10 Extension Module</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#xm_api_usbh--usb-데이터-로깅--실시간-스트리밍" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../../.." title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XM10 Extension Module
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              xm_api_usb.h (USB)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="언어설정">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../../../en/api-reference/ref/xm-api-usb/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AGR-EXO/Extension_Module" title="저장소로 이동" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    XM10 Extension Module
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AGR-EXO/Extension_Module" title="저장소로 이동" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    홈
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../find-it/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠른 찾기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    시작하기
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    시작하기
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/01-hardware-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    하드웨어 연결
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/02-software-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    개발 환경 구축
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/03-first-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    첫 빌드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code 와 함께 시작
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../hardware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    하드웨어
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    하드웨어
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 GPIO (Rev 1.1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 GPIO (Rev 2.0)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    튜토리얼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API 레퍼런스
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-task-state-machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    상태 머신 (TSM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-h10-control-n-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 제어·데이터
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-led-btn-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED·버튼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-usb-connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 시리얼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리 로깅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-memory-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리 영역
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-rtc-clock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실시간 시계 (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-task-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    보조 태스크
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    함수 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    함수 레퍼런스
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api.h (진입점)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_data.h (제어·데이터)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-tsm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_tsm.h (상태 머신)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-led-btn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_led_btn.h (LED·버튼)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_external_io.h (외부 IO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#언제-사용하나" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        언제 사용하나
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수-목록" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 목록
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수-상세" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 상세
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="함수 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusblogsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbLogSource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbstreamsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbStreamSource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_isusblogready" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsUsbLogReady
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_startusbdatalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_StartUsbDataLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_stopusbdatalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_StopUsbDataLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getactiveusbsessionname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetActiveUsbSessionName
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusblogstatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbLogStatus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusblogautotimestamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbLogAutoTimestamp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusblogrollingsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbLogRollingSize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusblogstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbLogStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusbdiskfreemb--xm_getusbdisktotalmb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbDiskFreeMB / XM_GetUsbDiskTotalMB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_insertusblogmarker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_InsertUsbLogMarker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_isusbstreamconnected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsUsbStreamConnected
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_isusbstreamingactive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsUsbStreamingActive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbautostream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbAutoStream
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_getmode--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_GetMode 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_setmode--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_SetMode 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_registermodechangecallback--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_RegisterModeChangeCallback 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendusbdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUsbData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbstreammoduleid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbStreamModuleId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbcustommeta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbCustomMeta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendusbdatawithid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUsbDataWithId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendusbdebugmessage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUsbDebugMessage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusbdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbData
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#타입매크로" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        타입/매크로
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="타입/매크로">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmlogstatus_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLogStatus_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmlogstats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLogStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmlogmarkertype_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLogMarkerType_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_mode_e--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_Mode_e 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_modechangecb_t--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_ModeChangeCb_t 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#내부-전용-호출-금지" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        내부 전용 (호출 금지)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev11--rev20-차이-요약" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 차이 요약
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-문서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 문서
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_memory.h (메모리)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-rtc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_rtc.h (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-freertos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_freertos.h (RTOS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-user-custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_user_custom.h (사용자 데이터)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    아키텍처
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kit-h10-firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 펌웨어
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../bootloader/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    부트로더
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    부트로더
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    업로드 방법
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    심화
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    심화
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 데이터 파이프라인
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    안전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    문제 해결
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../release-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    릴리스 노트
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    릴리스 노트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#언제-사용하나" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        언제 사용하나
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수-목록" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 목록
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수-상세" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 상세
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="함수 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusblogsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbLogSource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbstreamsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbStreamSource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_isusblogready" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsUsbLogReady
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_startusbdatalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_StartUsbDataLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_stopusbdatalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_StopUsbDataLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getactiveusbsessionname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetActiveUsbSessionName
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusblogstatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbLogStatus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusblogautotimestamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbLogAutoTimestamp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusblogrollingsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbLogRollingSize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusblogstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbLogStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusbdiskfreemb--xm_getusbdisktotalmb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbDiskFreeMB / XM_GetUsbDiskTotalMB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_insertusblogmarker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_InsertUsbLogMarker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_isusbstreamconnected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsUsbStreamConnected
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_isusbstreamingactive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsUsbStreamingActive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbautostream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbAutoStream
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_getmode--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_GetMode 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_setmode--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_SetMode 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_registermodechangecallback--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_RegisterModeChangeCallback 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendusbdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUsbData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbstreammoduleid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbStreamModuleId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbcustommeta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbCustomMeta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendusbdatawithid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUsbDataWithId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendusbdebugmessage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUsbDebugMessage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusbdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbData
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#타입매크로" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        타입/매크로
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="타입/매크로">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmlogstatus_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLogStatus_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmlogstats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLogStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmlogmarkertype_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLogMarkerType_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_mode_e--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_Mode_e 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_modechangecb_t--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_ModeChangeCb_t 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#내부-전용-호출-금지" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        내부 전용 (호출 금지)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev11--rev20-차이-요약" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 차이 요약
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-문서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 문서
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="xm_api_usbh--usb-데이터-로깅--실시간-스트리밍"><code>xm_api_usb.h</code> — USB 데이터 로깅 · 실시간 스트리밍<a class="headerlink" href="#xm_api_usbh--usb-데이터-로깅--실시간-스트리밍" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>대상 헤더</strong>: <code>XM_FW/XM_API/xm_api_usb.h</code>
+<strong>관련 개념 문서</strong>: <a href="../../05-usb-connectivity/">05. USB 시리얼</a> · <a href="../../06-usb-data-logging/">06. USB 메모리 로깅</a>
+<strong>관련 예제</strong>: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/">00_Quick_Start</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/">07_CDC_Basic_Print</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/">08_CDC_Sensor_Print</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/">09_CDC_Stream</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10a_MSC_Basic_Log/">10a_MSC_Basic_Log</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10b_MSC_Custom_Struct/">10b_MSC_Custom_Struct</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/">10c_MSC_Advanced_Log</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/">18_Debug_Monitor</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/">34_MSC_GaitAnalysis_Log</a></p>
+</blockquote>
+<p>이 헤더 하나에 <strong>USB 메모리 로깅(MSC)</strong> 과 <strong>PC 실시간 통신(CDC)</strong> 두 도메인이 함께 정의되어 있습니다. MSC 쪽은 사용자 구조체를 등록해두면 백그라운드 태스크가 알아서 USB 메모리에 저장하고, CDC 쪽은 PhAI Studio·PuTTY 같은 PC 클라이언트와 텍스트/바이너리를 주고받습니다. Rev2.0 부터는 여기에 더해 <strong>하나의 USB-CDC 케이블에서 PhAI / 생산검사(PRODUCTION) / 사용자 터미널(TERMINAL) 세 가지 역할을 자동/수동으로 구분</strong>하는 모드 관리 API가 추가되었습니다.</p>
+<hr />
+<h2 id="언제-사용하나">언제 사용하나<a class="headerlink" href="#언제-사용하나" title="Permanent link">&para;</a></h2>
+<p>센서 데이터를 USB 메모리에 장시간 기록하고 싶거나, PC와 시리얼로 실시간 데이터를 주고받고 싶을 때 사용합니다. 등록 기반 자동화(Setup에서 소스 등록 → System이 주기적으로 자동 처리) 원리와 파일 포맷·Python 디코더 사용법 같은 전체 그림은 <a href="../../05-usb-connectivity/">05. USB 시리얼</a>, <a href="../../06-usb-data-logging/">06. USB 메모리 로깅</a> 두 문서를 먼저 읽어보는 것을 권장합니다 — 이 페이지는 헤더에 선언된 <strong>모든 함수·타입의 시그니처/파라미터 상세</strong>만 다루며, 두 개념 문서가 아직 다루지 않는 Rev2.0 신규 <strong>USB-CDC 통신 모드 관리 API</strong> 도 포함합니다.</p>
+<hr />
+<h2 id="함수-목록">함수 목록<a class="headerlink" href="#함수-목록" title="Permanent link">&para;</a></h2>
+<p><strong>데이터 소스 등록</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_setusblogsource"><code>XM_SetUsbLogSource</code></a></td>
+<td>[MSC] USB 메모리에 저장할 데이터 소스 등록</td>
+</tr>
+<tr>
+<td><a href="#xm_setusbstreamsource"><code>XM_SetUsbStreamSource</code></a> ⚠️ Deprecated</td>
+<td>[CDC] PC로 스트리밍할 데이터 소스 등록 (레거시)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>MSC 로깅 — 세션 제어</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_isusblogready"><code>XM_IsUsbLogReady</code></a></td>
+<td>USB 저장장치 연결 + 로깅 준비 여부 확인</td>
+</tr>
+<tr>
+<td><a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a></td>
+<td>로깅 세션 시작</td>
+</tr>
+<tr>
+<td><a href="#xm_stopusbdatalog"><code>XM_StopUsbDataLog</code></a></td>
+<td>로깅 세션 중지</td>
+</tr>
+<tr>
+<td><a href="#xm_getactiveusbsessionname"><code>XM_GetActiveUsbSessionName</code></a></td>
+<td>현재/마지막 활성 세션 이름 조회 (Option A 재진입용)</td>
+</tr>
+<tr>
+<td><a href="#xm_getusblogstatus"><code>XM_GetUsbLogStatus</code></a></td>
+<td>로거 상태 조회</td>
+</tr>
+</tbody>
+</table>
+<p><strong>MSC 로깅 — 설정</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_setusblogautotimestamp"><code>XM_SetUsbLogAutoTimestamp</code></a></td>
+<td>자동 타임스탬프 삽입 on/off</td>
+</tr>
+<tr>
+<td><a href="#xm_setusblogrollingsize"><code>XM_SetUsbLogRollingSize</code></a></td>
+<td>파일 롤링(분할) 크기 설정</td>
+</tr>
+</tbody>
+</table>
+<p><strong>MSC 로깅 — 통계 · 디스크 용량</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_getusblogstats"><code>XM_GetUsbLogStats</code></a></td>
+<td>세션 실시간 통계 조회</td>
+</tr>
+<tr>
+<td><a href="#xm_getusbdiskfreemb--xm_getusbdisktotalmb"><code>XM_GetUsbDiskFreeMB</code> / <code>XM_GetUsbDiskTotalMB</code></a></td>
+<td>USB 잔여/전체 용량 조회 (10초 캐시)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>MSC 로깅 — 이벤트 마커</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_insertusblogmarker"><code>XM_InsertUsbLogMarker</code></a></td>
+<td>로깅 스트림에 이벤트 마커 삽입</td>
+</tr>
+</tbody>
+</table>
+<p><strong>CDC — 연결 · 스트리밍 상태</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_isusbstreamconnected"><code>XM_IsUsbStreamConnected</code></a></td>
+<td>PC와 CDC 가상 시리얼 포트 연결 여부</td>
+</tr>
+<tr>
+<td><a href="#xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code></a></td>
+<td>스트리밍 활성 여부</td>
+</tr>
+<tr>
+<td><a href="#xm_setusbautostream"><code>XM_SetUsbAutoStream</code></a></td>
+<td>Auto-Stream 모드 on/off</td>
+</tr>
+</tbody>
+</table>
+<p><strong>CDC — 통신 모드 관리</strong> 🟢 Rev 2.0 전용</p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_usb_getmode"><code>XM_USB_GetMode</code></a> 🟢</td>
+<td>현재 USB-CDC 통신 모드 조회</td>
+</tr>
+<tr>
+<td><a href="#xm_usb_setmode"><code>XM_USB_SetMode</code></a> 🟢</td>
+<td>USB-CDC 통신 모드 명시적 전환</td>
+</tr>
+<tr>
+<td><a href="#xm_usb_registermodechangecallback"><code>XM_USB_RegisterModeChangeCallback</code></a> 🟢</td>
+<td>모드 전환 콜백 등록</td>
+</tr>
+</tbody>
+</table>
+<p><strong>CDC — 데이터 전송 (레거시 + Custom Data)</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_sendusbdata"><code>XM_SendUsbData</code></a> ⚠️ Deprecated</td>
+<td>PhAI 패킷으로 래핑해 전송 (Module ID 고정)</td>
+</tr>
+<tr>
+<td><a href="#xm_setusbstreammoduleid"><code>XM_SetUsbStreamModuleId</code></a> ⚠️ Deprecated</td>
+<td>스트리밍 데이터의 Module ID 설정</td>
+</tr>
+<tr>
+<td><a href="#xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code></a></td>
+<td>User Custom 채널 메타데이터(JSON) 등록</td>
+</tr>
+<tr>
+<td><a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a></td>
+<td>지정 Module ID로 float[] 데이터 전송</td>
+</tr>
+</tbody>
+</table>
+<p><strong>CDC — 디버그 메시지 · 수신</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_sendusbdebugmessage"><code>XM_SendUsbDebugMessage</code></a></td>
+<td>PC로 raw 텍스트 디버그 메시지 전송</td>
+</tr>
+<tr>
+<td><a href="#xm_getusbdata"><code>XM_GetUsbData</code></a></td>
+<td>PC로부터 데이터 수신</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="함수-상세">함수 상세<a class="headerlink" href="#함수-상세" title="Permanent link">&para;</a></h2>
+<h3 id="xm_setusblogsource"><code>XM_SetUsbLogSource</code><a class="headerlink" href="#xm_setusblogsource" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbLogSource</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data_ptr</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>[MSC]</strong> USB 메모리에 저장할 데이터 소스를 등록합니다. 등록된 주소의 데이터를 System이 주기적으로 읽어 파일에 기록합니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data_ptr</code></td>
+<td><code>void*</code></td>
+<td>저장할 구조체의 주소 (<code>&amp;myData</code>)</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>uint32_t</code></td>
+<td>구조체의 크기 (<code>sizeof(myData)</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> 컨텍스트 기준. 로깅 시작(<code>XM_StartUsbDataLog</code>) 전에 1회 등록하면 됩니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">hip_angle_L</span><span class="p">;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">hip_angle_R</span><span class="p">;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">}</span><span class="w"> </span><span class="n">MyLogData_t</span><span class="p">;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">MyLogData_t</span><span class="w"> </span><span class="n">myData</span><span class="p">;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">XM_SetUsbLogSource</span><span class="p">(</span><span class="o">&amp;</span><span class="n">myData</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">myData</span><span class="p">));</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a>, <a href="../../06-usb-data-logging/">06. USB 메모리 로깅</a></p>
+<hr />
+<h3 id="xm_setusbstreamsource"><code>XM_SetUsbStreamSource</code><a class="headerlink" href="#xm_setusbstreamsource" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbStreamSource</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data_ptr</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>⚠️ <strong>Deprecated</strong> — Total Data(0x20) 자동 전송으로 대체되었습니다. 추가 채널이 필요하면 <a href="#xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code></a> + <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a> 조합을 사용하세요.</p>
+</blockquote>
+<p><strong>[CDC]</strong> PC로 실시간 스트리밍할 데이터 소스를 등록합니다 (레거시 방식).</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data_ptr</code></td>
+<td><code>void*</code></td>
+<td>전송할 구조체의 주소</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>uint32_t</code></td>
+<td>구조체의 크기</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> 컨텍스트 기준.</p>
+<p><strong>참고</strong>: <a href="#xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code></a>, <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a></p>
+<hr />
+<h3 id="xm_isusblogready"><code>XM_IsUsbLogReady</code><a class="headerlink" href="#xm_isusblogready" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbLogReady</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>USB 저장 장치(MSC)가 연결되고 로깅이 준비되었는지 확인합니다. System Layer의 <code>usb_mode_handler</code>가 관리하는 상태 플래그를 읽기만 하므로 가볍습니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong>: <code>bool</code> — 준비되었으면 <code>true</code>, 아니면 <code>false</code></p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Loop()</code>의 2ms 실시간 루프에서 안전하게 호출할 수 있습니다 (Non-blocking).</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_IsUsbLogReady</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">logging_started</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="n">XM_StartUsbDataLog</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hip_L(float), hip_R(float)&quot;</span><span class="p">);</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="n">logging_started</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a></p>
+<hr />
+<h3 id="xm_startusbdatalog"><code>XM_StartUsbDataLog</code><a class="headerlink" href="#xm_startusbdatalog" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_StartUsbDataLog</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">sessionName</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">metadata</span><span class="p">);</span>
+</code></pre></div>
+<p>USB 데이터 로깅 세션을 시작합니다. 저순위 로깅 태스크가 <code>/LOGS/[sessionName]</code> 폴더와 <code>metadata.txt</code>를 생성하고 <code>data_000...bin</code> 파일 쓰기를 준비합니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sessionName</code></td>
+<td><code>const char*</code></td>
+<td>세션(폴더) 이름 (예: <code>"S_001_TestRun"</code>). <code>NULL</code> 또는 빈 문자열 전달 시 <code>S_001</code>, <code>S_002</code>, ... 자동 생성</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td><code>const char*</code></td>
+<td>저장될 바이너리 데이터를 설명하는 문자열. <code>metadata.txt</code>에 그대로 기록됨</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — 명령 큐 전송 성공 시 <code>true</code>, 큐가 꽉 찼거나 USB 미준비 시 <code>false</code></p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 이 함수는 저순위 로깅 태스크에 명령을 보내며, 큐가 꽉 찬 경우 <strong>최대 100ms까지 블로킹될 수 있습니다.</strong> <strong>2ms 실시간 루프(<code>Control_Loop()</code>) 안에서 절대 호출하지 마십시오</strong> — 상태 전이 진입 함수(<code>EnterActive</code> 등)에서 1회만 호출하는 방식을 권장합니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">// 수동 세션명</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">XM_StartUsbDataLog</span><span class="p">(</span><span class="s">&quot;Gait_001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hip_L(float), hip_R(float)&quot;</span><span class="p">);</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1">// 자동 세션 넘버링</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">XM_StartUsbDataLog</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hip_L(float), hip_R(float)&quot;</span><span class="p">);</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1">// → /LOGS/S_001/, /LOGS/S_002/, ... 순차 생성</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_stopusbdatalog"><code>XM_StopUsbDataLog</code></a>, <a href="#xm_getactiveusbsessionname"><code>XM_GetActiveUsbSessionName</code></a>, <a href="../../06-usb-data-logging/#세션-출력-파일-구조-session-output">06. USB 메모리 로깅 §세션 출력 파일 구조</a></p>
+<hr />
+<h3 id="xm_stopusbdatalog"><code>XM_StopUsbDataLog</code><a class="headerlink" href="#xm_stopusbdatalog" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_StopUsbDataLog</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>USB 데이터 로깅 세션을 중지합니다. 저순위 로깅 태스크에게 현재 열린 파일을 닫고 로깅을 종료하라는 명령을 비동기적으로 전송합니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <strong>2ms 실시간 루프(<code>Control_Loop()</code>) 안에서 호출하지 마십시오.</strong> USB를 뽑기 전 반드시 호출해야 파일이 정상 종료됩니다.</p>
+<p><strong>참고</strong>: <a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a></p>
+<hr />
+<h3 id="xm_getactiveusbsessionname"><code>XM_GetActiveUsbSessionName</code><a class="headerlink" href="#xm_getactiveusbsessionname" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_GetActiveUsbSessionName</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">out_buf</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">buf_size</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>[Option A]</strong> 현재/마지막 활성 USB 세션 이름을 조회합니다. Emergency Stop 후 재진입 시 <strong>같은 폴더에 이어쓰기</strong> 위한 용도로 설계되었습니다. 의도된 사용 흐름은: 최초 <code>XM_StartUsbDataLog("", ...)</code>로 시작 → boot_count 기반 자동 이름 생성 → 이 API로 이름 조회 → 예제가 보관 → 재진입 시 <code>XM_StartUsbDataLog(보관_이름)</code> 호출 → FW가 같은 폴더에 <code>data_001_*</code>, <code>data_002_*</code> 등을 증분 생성합니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out_buf</code></td>
+<td><code>char*</code></td>
+<td>세션 이름이 복사될 버퍼</td>
+</tr>
+<tr>
+<td><code>buf_size</code></td>
+<td><code>uint32_t</code></td>
+<td>버퍼 크기 (32바이트 이상 권장)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준. 헤더는 ISR-안전성을 별도로 명시하지 않습니다.</p>
+<blockquote>
+<p>⚠️ <strong>알려진 레이스 컨디션 — 직접 호출 시 주의</strong>: 세션 이름은 저순위 <code>DataLoggerTask</code>가 비동기로 갱신합니다. <code>XM_StartUsbDataLog()</code> 호출 <strong>직후 바로 이어서</strong> 이 함수를 호출하면, 아직 갱신 전이라 빈 문자열이나 이전 세션 이름을 받을 수 있습니다. 실제로 <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/">Ex.34 (<code>msc_gait_analysis_log.c</code>)</a> 는 이 문제를 겪은 뒤, 이 API에 의존하는 대신 <strong>예제 코드가 직접 RTC/tick 기반으로 세션 이름을 생성</strong>해 <code>XM_StartUsbDataLog()</code>에 동기적으로 전달하고, 그 이름을 자체 변수에 보관해 재진입 시 재사용하는 방식(레이스 없음)으로 전환했습니다. 재진입 로직을 구현할 때는 이 함수의 반환 타이밍에 의존하기보다 Ex.34 패턴을 참고하는 것을 권장합니다.</p>
+</blockquote>
+<p><strong>참고</strong>: <a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a>, <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/">Ex.34 MSC_GaitAnalysis_Log</a></p>
+<hr />
+<h3 id="xm_getusblogstatus"><code>XM_GetUsbLogStatus</code><a class="headerlink" href="#xm_getusblogstatus" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">XmLogStatus_e</span><span class="w"> </span><span class="nf">XM_GetUsbLogStatus</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>현재 로거의 상태를 확인합니다. 로깅이 강제 중단되었는지(<code>ERROR_STOPPED</code>), 버퍼가 꽉 차고 있는지(<code>WARNING_QUEUE_FULL</code>) 등을 이 함수로 확인할 수 있습니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong>: <a href="#xmlogstatus_e"><code>XmLogStatus_e</code></a> 열거형 값</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Loop()</code>의 2ms 실시간 루프에서 안전하게 호출 가능합니다.</p>
+<p><strong>참고</strong>: <a href="#xmlogstatus_e"><code>XmLogStatus_e</code></a> 전체 값 목록</p>
+<hr />
+<h3 id="xm_setusblogautotimestamp"><code>XM_SetUsbLogAutoTimestamp</code><a class="headerlink" href="#xm_setusblogautotimestamp" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbLogAutoTimestamp</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">enabled</span><span class="p">);</span>
+</code></pre></div>
+<p>자동 타임스탬프(4-byte tick_ms)를 매 레코드 앞에 삽입할지 설정합니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td><code>bool</code></td>
+<td><code>true</code>: 매 패킷 앞에 tick 자동 삽입 (기본값). <code>false</code>: 사용자 구조체에 이미 tick이 포함된 경우 비활성화</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code>에서 <a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a> 호출 <strong>전에</strong> 설정하세요.</p>
+<p><strong>참고</strong>: <a href="#xm_setusblogrollingsize"><code>XM_SetUsbLogRollingSize</code></a></p>
+<hr />
+<h3 id="xm_setusblogrollingsize"><code>XM_SetUsbLogRollingSize</code><a class="headerlink" href="#xm_setusblogrollingsize" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbLogRollingSize</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size_mb</span><span class="p">);</span>
+</code></pre></div>
+<p>파일 롤링(자동 분할) 크기를 설정합니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>size_mb</code></td>
+<td><code>uint32_t</code></td>
+<td>파일 분할 크기 (MB). 범위 1~100, 기본값 10</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code>에서 <a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a> 호출 <strong>전에</strong> 설정하세요.</p>
+<p><strong>참고</strong>: <a href="#xm_setusblogautotimestamp"><code>XM_SetUsbLogAutoTimestamp</code></a></p>
+<hr />
+<h3 id="xm_getusblogstats"><code>XM_GetUsbLogStats</code><a class="headerlink" href="#xm_getusblogstats" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_GetUsbLogStats</span><span class="p">(</span><span class="n">XmLogStats_t</span><span class="o">*</span><span class="w"> </span><span class="n">out_stats</span><span class="p">);</span>
+</code></pre></div>
+<p>로깅 중 또는 로깅 종료 후 세션의 상세 통계를 조회합니다. Hot/Cold 버퍼 피크 사용률, 디스크 잔여 용량 등 진단 정보를 포함합니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out_stats</code></td>
+<td><code>XmLogStats_t*</code></td>
+<td>통계가 복사될 구조체 포인터</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — 성공 시 <code>true</code>, 파라미터 오류 또는 USB 미연결 시 <code>false</code></p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Loop()</code>의 2ms 실시간 루프에서 안전하게 호출 가능합니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">XmLogStats_t</span><span class="w"> </span><span class="n">stats</span><span class="p">;</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_GetUsbLogStats</span><span class="p">(</span><span class="o">&amp;</span><span class="n">stats</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Records: %lu, Dropped: %lu, Disk: %lu MB</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">           </span><span class="n">stats</span><span class="p">.</span><span class="n">total_records</span><span class="p">,</span><span class="w"> </span><span class="n">stats</span><span class="p">.</span><span class="n">dropped_records</span><span class="p">,</span><span class="w"> </span><span class="n">stats</span><span class="p">.</span><span class="n">disk_free_mb</span><span class="p">);</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xmlogstats_t"><code>XmLogStats_t</code></a></p>
+<hr />
+<h3 id="xm_getusbdiskfreemb--xm_getusbdisktotalmb"><code>XM_GetUsbDiskFreeMB</code> / <code>XM_GetUsbDiskTotalMB</code><a class="headerlink" href="#xm_getusbdiskfreemb--xm_getusbdisktotalmb" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUsbDiskFreeMB</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUsbDiskTotalMB</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>USB 디스크의 잔여/전체 용량(MB)을 반환합니다. 10초 주기로 캐시된 값을 즉시 반환하므로 매 tick 호출해도 부담이 없습니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong>: <code>uint32_t</code> — 용량 (MB). USB 미연결 시 0</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Loop()</code>의 2ms 실시간 루프에서 안전하게 호출 가능합니다 (Non-blocking, 캐시값 반환).</p>
+<p><strong>참고</strong>: <a href="#xm_getusblogstats"><code>XM_GetUsbLogStats</code></a> — <code>disk_free_mb</code>/<code>disk_total_mb</code> 필드로도 동일 값 확인 가능</p>
+<hr />
+<h3 id="xm_insertusblogmarker"><code>XM_InsertUsbLogMarker</code><a class="headerlink" href="#xm_insertusblogmarker" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_InsertUsbLogMarker</span><span class="p">(</span><span class="n">XmLogMarkerType_e</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">data</span><span class="p">);</span>
+</code></pre></div>
+<p>로깅 중 특정 시점(모드 전환, 이상 감지, 수동 마킹)을 마커로 표시합니다. 마커는 일반 데이터와 동일한 파이프라인에 저장되며, Python 디코더가 자동으로 분리해 이벤트 로그(<code>events.csv</code>)를 생성합니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td><code>XmLogMarkerType_e</code></td>
+<td>마커 타입</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>uint16_t</code></td>
+<td>컨텍스트 데이터 (에러 코드, 모드 ID 등. 불필요 시 0)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — 성공 시 <code>true</code>, 로깅 비활성 또는 버퍼 부족 시 <code>false</code></p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Loop()</code>의 2ms 실시간 루프에서 안전하게 호출 가능합니다 (Non-blocking).</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1">// 모드 전환 시</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">XM_InsertUsbLogMarker</span><span class="p">(</span><span class="n">XM_LOG_MARKER_MODE</span><span class="p">,</span><span class="w"> </span><span class="n">newModeId</span><span class="p">);</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1">// 에러 감지 시</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">XM_InsertUsbLogMarker</span><span class="p">(</span><span class="n">XM_LOG_MARKER_ERROR</span><span class="p">,</span><span class="w"> </span><span class="n">errorCode</span><span class="p">);</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1">// 수동 마킹</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">XM_InsertUsbLogMarker</span><span class="p">(</span><span class="n">XM_LOG_MARKER_USER</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xmlogmarkertype_e"><code>XmLogMarkerType_e</code></a></p>
+<hr />
+<h3 id="xm_isusbstreamconnected"><code>XM_IsUsbStreamConnected</code><a class="headerlink" href="#xm_isusbstreamconnected" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbStreamConnected</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>PC가 USB 가상 시리얼 포트(CDC)에 연결되었는지 확인합니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong>: <code>bool</code> — 연결되었으면 <code>true</code></p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준.</p>
+<p><strong>참고</strong>: <a href="#xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code></a></p>
+<hr />
+<h3 id="xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code><a class="headerlink" href="#xm_isusbstreamingactive" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbStreamingActive</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>스트리밍이 활성화되었는지 확인합니다. Auto-Stream 모드에서는 USB 연결 시 자동으로 <code>true</code>가 되고, Legacy 모드에서는 <code>"AGRB MON START"</code> 수신 시 <code>true</code>가 됩니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 스트리밍 활성(데이터 전송 중), <code>false</code>: 대기</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준.</p>
+<p><strong>참고</strong>: <a href="#xm_setusbautostream"><code>XM_SetUsbAutoStream</code></a></p>
+<hr />
+<h3 id="xm_setusbautostream"><code>XM_SetUsbAutoStream</code><a class="headerlink" href="#xm_setusbautostream" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbAutoStream</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">enabled</span><span class="p">);</span>
+</code></pre></div>
+<p>Auto-Stream 모드를 설정합니다. 기본값은 ON — USB 연결 시 자동으로 스트리밍을 시작합니다 (PhAI Studio 기본 동작).</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td><code>bool</code></td>
+<td><code>true</code>: USB 연결 시 자동 스트리밍 (기본값). <code>false</code>: <code>"AGRB MON START"</code> 명령 대기 (Legacy Python 호환)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> 컨텍스트 기준.</p>
+<p><strong>참고</strong>: <a href="#xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code></a></p>
+<hr />
+<h3 id="xm_usb_getmode--rev-20-전용"><code>XM_USB_GetMode</code> 🟢 Rev 2.0 전용<a class="headerlink" href="#xm_usb_getmode--rev-20-전용" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">XM_USB_Mode_e</span><span class="w"> </span><span class="nf">XM_USB_GetMode</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 전용</strong> — Rev1.1 헤더에는 이 함수와 <a href="#xm_usb_mode_e"><code>XM_USB_Mode_e</code></a> 타입 자체가 존재하지 않습니다.</p>
+</blockquote>
+<p>현재 USB-CDC 통신 모드(PHAI / PRODUCTION / TERMINAL)를 조회합니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong>: <a href="#xm_usb_mode_e"><code>XM_USB_Mode_e</code></a></p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준.</p>
+<p><strong>참고</strong>: <a href="#xm_usb_mode_e"><code>XM_USB_Mode_e</code></a>, <a href="#xm_usb_setmode"><code>XM_USB_SetMode</code></a></p>
+<hr />
+<h3 id="xm_usb_setmode--rev-20-전용"><code>XM_USB_SetMode</code> 🟢 Rev 2.0 전용<a class="headerlink" href="#xm_usb_setmode--rev-20-전용" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_USB_SetMode</span><span class="p">(</span><span class="n">XM_USB_Mode_e</span><span class="w"> </span><span class="n">mode</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 전용</strong> — Rev1.1 헤더에는 존재하지 않습니다.</p>
+</blockquote>
+<p>USB-CDC 통신 모드를 명시적으로 전환합니다. 예제/터미널 사용자는 <code>Control_Setup()</code>에서 <code>XM_USB_SetMode(XM_USB_MODE_TERMINAL)</code>을 1회 호출하여 PhAI Studio 의 auto-pump 전송을 차단하고, 깨끗한 텍스트 입출력만 사용할 수 있습니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mode</code></td>
+<td><code>XM_USB_Mode_e</code></td>
+<td>전환할 모드</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> 컨텍스트 기준.</p>
+<p><strong>⚠️ 참고할 부작용</strong>: <code>XM_USB_MODE_TERMINAL</code>을 명시적으로 설정하면 이후 PRODUCTION 모드로의 <strong>자동 전환이 비활성화됩니다</strong>. PRODUCTION 자동 전환(첫 유효 DOP 프레임 수신 시)은 <code>Extension_Module_GUI_ForProduction</code> 연동 전용이므로, 이 함수를 일반 예제/사용자 코드에서 호출할 필요는 대부분 없습니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="c1">// 예제/터미널 용도로 PhAI auto-pump 를 끄고 싶을 때만 호출</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="n">XM_USB_SetMode</span><span class="p">(</span><span class="n">XM_USB_MODE_TERMINAL</span><span class="p">);</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_usb_mode_e"><code>XM_USB_Mode_e</code></a> 모드 전환 규칙, <a href="#xm_usb_getmode"><code>XM_USB_GetMode</code></a></p>
+<hr />
+<h3 id="xm_usb_registermodechangecallback--rev-20-전용"><code>XM_USB_RegisterModeChangeCallback</code> 🟢 Rev 2.0 전용<a class="headerlink" href="#xm_usb_registermodechangecallback--rev-20-전용" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_USB_RegisterModeChangeCallback</span><span class="p">(</span><span class="n">XM_USB_ModeChangeCb_t</span><span class="w"> </span><span class="n">cb</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 전용</strong> — Rev1.1 헤더에는 존재하지 않습니다.</p>
+</blockquote>
+<p>모드가 실제로 전환된 직후 호출될 콜백을 등록합니다. 향후 OD 모드 플래그(0x6000/0x7000) 양방향 동기화, LED 패턴 전환, <code>Extension_Module_GUI_ForProduction</code> Test Mode 진입/이탈 알림 등에 사용할 수 있습니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cb</code></td>
+<td><a href="#xm_usb_modechangecb_t"><code>XM_USB_ModeChangeCb_t</code></a></td>
+<td>콜백 함수 포인터. <code>NULL</code> 전달 시 등록 해제</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 등록 자체는 <code>Control_Setup()</code> 컨텍스트 기준입니다. 다만 헤더 주석은 콜백 <strong>본문</strong>이 "ISR 컨텍스트 호출 가능하므로 짧고 비차단"이어야 한다고 명시합니다 — 콜백 안에서는 blocking 호출(로깅 Start/Stop 등)을 피하세요.</p>
+<p><strong>⚠️ 등록은 1개만 유지</strong>: 마지막에 등록한 콜백이 이전 콜백을 덮어씁니다 (단일 슬롯).</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">OnUsbModeChanged</span><span class="p">(</span><span class="n">XM_USB_Mode_e</span><span class="w"> </span><span class="n">prev</span><span class="p">,</span><span class="w"> </span><span class="n">XM_USB_Mode_e</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">next</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_USB_MODE_PRODUCTION</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">        </span><span class="n">XM_SetLedEffect</span><span class="p">(</span><span class="n">XM_LED_3</span><span class="p">,</span><span class="w"> </span><span class="n">XM_LED_BLINK</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">);</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="p">}</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">    </span><span class="n">XM_USB_RegisterModeChangeCallback</span><span class="p">(</span><span class="n">OnUsbModeChanged</span><span class="p">);</span>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_usb_modechangecb_t"><code>XM_USB_ModeChangeCb_t</code></a>, <a href="#xm_usb_mode_e"><code>XM_USB_Mode_e</code></a></p>
+<hr />
+<h3 id="xm_sendusbdata"><code>XM_SendUsbData</code><a class="headerlink" href="#xm_sendusbdata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbData</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>⚠️ <strong>Deprecated</strong> — <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a>로 대체되었습니다. Module ID를 명시적으로 지정하세요.</p>
+</blockquote>
+<p>USB CDC로 데이터를 PhAI 패킷(SOF + LEN + SEQ_ID + MODULE_ID + CRC16)으로 자동 래핑하여 전송합니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data</code></td>
+<td><code>const void*</code></td>
+<td>전송할 사용자 구조체 포인터 (float 배열 또는 4-byte 정렬 struct)</td>
+</tr>
+<tr>
+<td><code>len</code></td>
+<td><code>uint32_t</code></td>
+<td>데이터 바이트 수</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — 전송 성공 시 <code>true</code>, 버퍼 풀 또는 연결 안 됨 시 <code>false</code></p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Loop()</code>의 2ms 주기 내에서 안전하게 호출 가능합니다 (Non-blocking).</p>
+<p><strong>참고</strong>: <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a></p>
+<hr />
+<h3 id="xm_setusbstreammoduleid"><code>XM_SetUsbStreamModuleId</code><a class="headerlink" href="#xm_setusbstreammoduleid" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbStreamModuleId</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>⚠️ <strong>Deprecated</strong> — <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a>로 대체되었습니다. Module ID는 전송 시점에 직접 지정하세요.</p>
+</blockquote>
+<p>스트리밍 데이터의 Module ID를 설정합니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>module_id</code></td>
+<td><code>uint8_t</code></td>
+<td>Module ID (기본값 <code>0x10</code> = COMBINED). <code>phai_packet_builder.h</code>의 <code>PHAI_MODULE_*</code> 매크로 참조</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
+<p><strong>참고</strong>: <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a></p>
+<hr />
+<h3 id="xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code><a class="headerlink" href="#xm_setusbcustommeta" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">json_str</span><span class="p">);</span>
+</code></pre></div>
+<p>User Custom 채널의 메타데이터(채널 이름/단위 등)를 등록합니다. USB 연결 시 Module ID <code>0xEF</code>로 자동 전송되어 PhAI Studio에 채널 이름이 표시됩니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>module_id</code></td>
+<td><code>uint8_t</code></td>
+<td>대상 Module ID (<code>0xF0</code>~<code>0xFE</code>)</td>
+</tr>
+<tr>
+<td><code>json_str</code></td>
+<td><code>const char*</code></td>
+<td>채널 정의 JSON 문자열 (NULL-terminated, 문자열 리터럴 권장)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code>에서 1회 호출.</p>
+<p><strong>⚠️ 포인터 수명 주의</strong>: <code>json_str</code> 포인터는 프로그램 수명 동안 유효해야 합니다 (내부에서 복사하지 않음) — 스택 지역 변수가 아닌 문자열 리터럴을 사용하세요.</p>
+<p><strong>⚠️ 단일 슬롯</strong>: USB 연결당 하나의 Module ID 메타만 유지됩니다 (마지막 호출이 이전 것을 덮어씀). 여러 채널 그룹을 라벨링하려면 채널들을 하나의 Module ID로 모아 등록하세요.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">    </span><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">        </span><span class="s">&quot;[{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">Target</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">unit</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">deg</span><span class="se">\&quot;</span><span class="s">},&quot;</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">        </span><span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">Current</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">unit</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">deg</span><span class="se">\&quot;</span><span class="s">}]&quot;</span><span class="p">);</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a></p>
+<hr />
+<h3 id="xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code><a class="headerlink" href="#xm_sendusbdatawithid" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbDataWithId</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">);</span>
+</code></pre></div>
+<p>User Custom <code>float[]</code> 데이터를 지정된 Module ID로 전송합니다. Total Data(0x20)는 System이 이미 자동 전송하므로, 이 함수는 사용자 알고리즘의 추가 디버그 채널을 전송할 때 사용합니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data</code></td>
+<td><code>const void*</code></td>
+<td>float 배열 포인터 (4-byte aligned)</td>
+</tr>
+<tr>
+<td><code>len</code></td>
+<td><code>uint32_t</code></td>
+<td>바이트 수 (<code>sizeof(float) × 채널수</code>)</td>
+</tr>
+<tr>
+<td><code>module_id</code></td>
+<td><code>uint8_t</code></td>
+<td>Module ID (<code>0xF0</code>~<code>0xFE</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — 전송 성공 시 <code>true</code>, 버퍼 풀 또는 연결 없음 시 <code>false</code></p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Loop()</code> 내에서 호출 (Non-blocking). 매 tick 호출이 필수는 아니며, 필요 시에만 호출해도 됩니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">current</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">torque</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="n">XM_SendUsbDataWithId</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">),</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code></a></p>
+<hr />
+<h3 id="xm_sendusbdebugmessage"><code>XM_SendUsbDebugMessage</code><a class="headerlink" href="#xm_sendusbdebugmessage" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+</code></pre></div>
+<p>PC로 디버그 메시지를 raw 텍스트로 전송합니다 (PhAI 패킷 래핑 없음).</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>message</code></td>
+<td><code>const char*</code></td>
+<td>전송할 문자열 (Null-terminated)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — 전송 성공 시 <code>true</code></p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준. 비차단(Non-blocking)입니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Current State: %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">current_state</span><span class="p">);</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="n">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="../../05-usb-connectivity/">05. USB 시리얼</a></p>
+<hr />
+<h3 id="xm_getusbdata"><code>XM_GetUsbData</code><a class="headerlink" href="#xm_getusbdata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUsbData</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">max_len</span><span class="p">);</span>
+</code></pre></div>
+<p>PC로부터 데이터를 수신합니다 (Non-Blocking).</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>buffer</code></td>
+<td><code>void*</code></td>
+<td>수신 데이터를 저장할 버퍼</td>
+</tr>
+<tr>
+<td><code>max_len</code></td>
+<td><code>uint32_t</code></td>
+<td>버퍼 최대 크기</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>uint32_t</code> — 실제로 읽어온 바이트 수 (0이면 수신 데이터 없음)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준. 헤더에 상세 설명(<code>@details</code>)이 없어 반환값 0 이외의 오류 상태 구분은 문서화되어 있지 않습니다 — 사용 전 실측 확인을 권장합니다.</p>
+<hr />
+<h2 id="타입매크로">타입/매크로<a class="headerlink" href="#타입매크로" title="Permanent link">&para;</a></h2>
+<h3 id="xmlogstatus_e"><code>XmLogStatus_e</code><a class="headerlink" href="#xmlogstatus_e" title="Permanent link">&para;</a></h3>
+<p>로거의 현재 상태를 나타내는 열거형입니다.</p>
+<table>
+<thead>
+<tr>
+<th>값</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_LOG_STATUS_IDLE</code></td>
+<td>중지됨 (초기 상태)</td>
+</tr>
+<tr>
+<td><code>XM_LOG_STATUS_LOGGING</code></td>
+<td>정상 로깅 중</td>
+</tr>
+<tr>
+<td><code>XM_LOG_STATUS_WARNING_QUEUE_FULL</code></td>
+<td>버퍼 사용률 높음 (<code>f_write</code> 지연 발생 중)</td>
+</tr>
+<tr>
+<td><code>XM_LOG_STATUS_WARNING_DISK_LOW</code></td>
+<td>USB 디스크 잔여 용량 50MB 미만</td>
+</tr>
+<tr>
+<td><code>XM_LOG_STATUS_ERROR_STOPPED</code></td>
+<td>에러로 로깅이 강제 중지됨</td>
+</tr>
+</tbody>
+</table>
+<h3 id="xmlogstats_t"><code>XmLogStats_t</code><a class="headerlink" href="#xmlogstats_t" title="Permanent link">&para;</a></h3>
+<p>로깅 세션의 실시간 통계 구조체입니다. <a href="#xm_getusblogstats"><code>XM_GetUsbLogStats()</code></a>로 조회합니다.</p>
+<table>
+<thead>
+<tr>
+<th>필드</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>total_bytes</code></td>
+<td><code>uint32_t</code></td>
+<td>총 기록 바이트 수</td>
+</tr>
+<tr>
+<td><code>total_records</code></td>
+<td><code>uint32_t</code></td>
+<td>총 레코드 수</td>
+</tr>
+<tr>
+<td><code>dropped_records</code></td>
+<td><code>uint32_t</code></td>
+<td>누락된 레코드 수 (버퍼 오버플로)</td>
+</tr>
+<tr>
+<td><code>write_errors</code></td>
+<td><code>uint32_t</code></td>
+<td>쓰기 실패 횟수</td>
+</tr>
+<tr>
+<td><code>duration_ms</code></td>
+<td><code>uint32_t</code></td>
+<td>세션 경과 시간 (ms)</td>
+</tr>
+<tr>
+<td><code>hot_buffer_percent</code></td>
+<td><code>uint8_t</code></td>
+<td>Hot Buffer 피크 사용률 (0~100)</td>
+</tr>
+<tr>
+<td><code>cold_buffer_percent</code> 🟢</td>
+<td><code>uint8_t</code></td>
+<td>Cold Buffer 피크 사용률 (0~100) — 레거시 필드, <a href="../../06-usb-data-logging/">현재 Hot-buffer 전용 구조에서는 항상 0</a></td>
+</tr>
+<tr>
+<td><code>disk_free_mb</code></td>
+<td><code>uint32_t</code></td>
+<td>USB 잔여 용량 (MB)</td>
+</tr>
+<tr>
+<td><code>disk_total_mb</code></td>
+<td><code>uint32_t</code></td>
+<td>USB 전체 용량 (MB)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 전용 필드</strong>: <code>cold_buffer_percent</code>는 Rev1.1 헤더의 <code>XmLogStats_t</code>에는 존재하지 않습니다 (Rev1.1은 8개 필드, Rev2.0은 9개 필드). Rev1.1/Rev2.0 양쪽을 함께 다루는 코드에서 이 구조체를 그대로 캐스팅하거나 raw-copy 하지 마세요.</p>
+</blockquote>
+<h3 id="xmlogmarkertype_e"><code>XmLogMarkerType_e</code><a class="headerlink" href="#xmlogmarkertype_e" title="Permanent link">&para;</a></h3>
+<p>로깅 중 이벤트 마커의 종류를 나타내는 열거형입니다.</p>
+<table>
+<thead>
+<tr>
+<th>값</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_LOG_MARKER_USER</code> = 0x01</td>
+<td>수동 마킹 (버튼/명령)</td>
+</tr>
+<tr>
+<td><code>XM_LOG_MARKER_MODE</code> = 0x02</td>
+<td>모드 전환</td>
+</tr>
+<tr>
+<td><code>XM_LOG_MARKER_ERROR</code> = 0x03</td>
+<td>에러 발생</td>
+</tr>
+<tr>
+<td><code>XM_LOG_MARKER_SYNC</code> = 0x04</td>
+<td>시간 동기점</td>
+</tr>
+</tbody>
+</table>
+<h3 id="xm_usb_mode_e--rev-20-전용"><code>XM_USB_Mode_e</code> 🟢 Rev 2.0 전용<a class="headerlink" href="#xm_usb_mode_e--rev-20-전용" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Rev1.1 헤더에는 정의되어 있지 않습니다.</p>
+</blockquote>
+<p>한 보드/한 케이블에서 3가지 호스트 클래스를 분리 지원하기 위한 USB-CDC 통신 모드입니다.</p>
+<table>
+<thead>
+<tr>
+<th>값</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_USB_MODE_PHAI</code> = 0</td>
+<td>PhAI Studio 실시간 telemetry (Total Data auto-pump). 기본 모드</td>
+</tr>
+<tr>
+<td><code>XM_USB_MODE_PRODUCTION</code> = 1</td>
+<td><code>Extension_Module_GUI_ForProduction</code> HW 검증 / SI 측정 / 양산 (COBS+CRC DOP)</td>
+</tr>
+<tr>
+<td><code>XM_USB_MODE_TERMINAL</code> = 2</td>
+<td>예제/Raw 터미널 — auto-pump OFF, 사용자 명시 TX만</td>
+</tr>
+</tbody>
+</table>
+<p><strong>모드 전환 규칙</strong> (헤더 주석 기준):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>(부팅 / DTR=1) ──▶ PHAI ──(첫 유효 DOP frame 수신)──▶ PRODUCTION
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>     ▲                                                    │
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a>     └────────────────(DTR=0 / USB 분리)──────────────────┘
+<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a>
+<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a>사용자가 Control_Setup() 에서 XM_USB_SetMode(TERMINAL) 호출 시:
+<a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a>→ TERMINAL 로 명시 전환, 이후 PRODUCTION 자동 전환 비활성화
+<a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a>  (TERMINAL 은 wire 신호만으로는 식별 불가하므로 반드시 명시 호출 필요)
+</code></pre></div>
+<h3 id="xm_usb_modechangecb_t--rev-20-전용"><code>XM_USB_ModeChangeCb_t</code> 🟢 Rev 2.0 전용<a class="headerlink" href="#xm_usb_modechangecb_t--rev-20-전용" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Rev1.1 헤더에는 정의되어 있지 않습니다.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">XM_USB_ModeChangeCb_t</span><span class="p">)(</span><span class="n">XM_USB_Mode_e</span><span class="w"> </span><span class="n">prev</span><span class="p">,</span><span class="w"> </span><span class="n">XM_USB_Mode_e</span><span class="w"> </span><span class="n">next</span><span class="p">);</span>
+</code></pre></div>
+<p>USB-CDC 모드 변경 콜백 함수 포인터 타입입니다. <a href="#xm_usb_registermodechangecallback"><code>XM_USB_RegisterModeChangeCallback()</code></a>로 등록합니다.</p>
+<table>
+<thead>
+<tr>
+<th>파라미터</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prev</code></td>
+<td><code>XM_USB_Mode_e</code></td>
+<td>이전 모드</td>
+</tr>
+<tr>
+<td><code>next</code></td>
+<td><code>XM_USB_Mode_e</code></td>
+<td>새 모드</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ 헤더 주석은 이 콜백이 "ISR 컨텍스트 호출 가능하므로 짧고 비차단"이어야 한다고 명시합니다. 등록 자체는 <code>Control_Setup()</code>에서 하지만, 콜백 <strong>본문</strong>은 ISR-safe 하게 작성하세요 (blocking 호출 금지).</p>
+</blockquote>
+<hr />
+<h2 id="내부-전용-호출-금지">내부 전용 (호출 금지)<a class="headerlink" href="#내부-전용-호출-금지" title="Permanent link">&para;</a></h2>
+<p>아래 3개 함수는 시스템 내부(라우터 / DTR 핸들러 / core_process)가 호출하는 전용 함수입니다. 사용자 코드에서 직접 호출할 필요가 없으며, 호출해도 의도한 동작을 보장하지 않습니다.</p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>실제 호출 주체</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bool XM_USB_RequestProductionLatch(void)</code> 🟢 Rev 2.0 전용</td>
+<td><code>cdc_dop_router</code></td>
+<td>첫 유효 DOP frame 수신 시 호출. TERMINAL(사용자 lock) 상태가 아니면 PRODUCTION으로 latch. idempotent — 이미 PRODUCTION이면 무동작. 반환값은 "이 호출이 실제 전환을 일으켰는지" 여부</td>
+</tr>
+<tr>
+<td><code>void XM_USB_OnDtrLost(void)</code> 🟢 Rev 2.0 전용</td>
+<td><code>cdc_handler</code></td>
+<td>DTR=0 (USB 분리/재열거) 시 호출. PHAI 모드로 자동 복귀 + 사용자 lock 해제</td>
+</tr>
+<tr>
+<td><code>void XM_USB_ProcessPeriodic(void)</code></td>
+<td><code>core_process</code></td>
+<td>USB 로깅·스트리밍 로직의 주기 처리 엔진. <code>core_process</code>가 자동 호출하므로 사용자가 직접 호출할 필요 없음</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="rev11--rev20-차이-요약">Rev1.1 / Rev2.0 차이 요약<a class="headerlink" href="#rev11--rev20-차이-요약" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Rev1.1</th>
+<th>Rev2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MSC 로깅 기본 API (Start/Stop/Status/Stats/Marker/디스크 조회)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>CDC 스트리밍 기본 API (<code>SendUsbDataWithId</code>/<code>SetUsbCustomMeta</code>/<code>SendUsbDebugMessage</code>)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>XmLogStats_t.cold_buffer_percent</code> 필드</td>
+<td>❌ 없음 (8개 필드)</td>
+<td>🟢 있음 (9개 필드 — 레거시, 현재 항상 0)</td>
+</tr>
+<tr>
+<td><code>XM_USB_Mode_e</code> / <code>XM_USB_GetMode</code> / <code>XM_USB_SetMode</code> / <code>XM_USB_RegisterModeChangeCallback</code> (PHAI/PRODUCTION/TERMINAL 모드 관리)</td>
+<td>❌ 없음</td>
+<td>🟢 전용</td>
+</tr>
+<tr>
+<td><code>XM_USB_RequestProductionLatch</code> / <code>XM_USB_OnDtrLost</code> (Internal, PRODUCTION 자동 latch)</td>
+<td>❌ 없음</td>
+<td>🟢 전용 (Internal)</td>
+</tr>
+<tr>
+<td>MSC 로깅 내부 파이프라인 단계</td>
+<td>2단계 — UserTask가 Lock-Free SPSC 링 버퍼에 직접 기록 → <code>DataLoggerTask</code>가 <code>f_write()</code></td>
+<td>3단계 — UserTask가 1차 큐 적재 → <code>DataLoggerTask</code>가 Binary 변환 후 2차 큐 적재 → 저순위 태스크가 <code>f_write()</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="관련-문서">관련 문서<a class="headerlink" href="#관련-문서" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../05-usb-connectivity/">05. USB 시리얼 (개념)</a> — CDC 동작 원리, 흔한 실수, 예제 매핑</li>
+<li><a href="../../06-usb-data-logging/">06. USB 메모리 로깅 (개념)</a> — MSC 파일 포맷, Python 디코더, 세션 출력 구조</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  맨위로
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../xm-api-external-io/" class="md-footer__link md-footer__link--prev" aria-label="이전: xm_api_external_io.h (외부 IO)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                xm_api_external_io.h (외부 IO)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../xm-api-memory/" class="md-footer__link md-footer__link--next" aria-label="다음: xm_api_memory.h (메모리)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                다음
+              </span>
+              <div class="md-ellipsis">
+                xm_api_memory.h (메모리)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

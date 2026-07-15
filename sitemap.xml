@@ -113,6 +113,83 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/09-task-creation/"/>
     </url>
     <url>
+        <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-data/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-data/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-data/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-external-io/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-external-io/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-external-io/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-freertos/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-freertos/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-freertos/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-led-btn/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-led-btn/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-led-btn/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-memory/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-memory/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-memory/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-rtc/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-rtc/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-rtc/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-tsm/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-tsm/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-tsm/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-usb/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-usb/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-usb/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-user-custom/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-user-custom/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-user-custom/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api/"/>
+    </url>
+    <url>
         <loc>https://agr-exo.github.io/Extension_Module/architecture/</loc>
         <lastmod>2026-07-15</lastmod>
         <changefreq>daily</changefreq>
@@ -356,6 +433,83 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/09-task-creation/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/09-task-creation/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-data/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-data/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-data/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-external-io/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-external-io/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-external-io/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-freertos/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-freertos/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-freertos/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-led-btn/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-led-btn/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-led-btn/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-memory/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-memory/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-memory/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-rtc/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-rtc/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-rtc/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-tsm/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-tsm/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-tsm/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-usb/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-usb/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-usb/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-user-custom/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-user-custom/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-user-custom/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api/</loc>
+        <lastmod>2026-07-15</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/architecture/</loc>

@@ -1,0 +1,4073 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서">
+      
+      
+      
+        <link rel="canonical" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-usb/">
+      
+      
+        <link rel="prev" href="../xm-api-external-io/">
+      
+      
+        <link rel="next" href="../xm-api-memory/">
+      
+      
+        
+          <link rel="alternate" href="../../../../api-reference/ref/xm-api-usb/" hreflang="ko">
+        
+          <link rel="alternate" href="./" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>xm_api_usb.h (USB) - XM10 Extension Module</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#xm_api_usbh--usb-data-logging--real-time-streaming" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../" title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XM10 Extension Module
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              xm_api_usb.h (USB)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../../api-reference/ref/xm-api-usb/" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AGR-EXO/Extension_Module" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../" title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    XM10 Extension Module
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AGR-EXO/Extension_Module" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../find-it/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Find
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/01-hardware-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/02-software-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/03-first-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    First Build
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start with Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../hardware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hardware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External GPIO (Rev 1.1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External GPIO (Rev 2.0)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-task-state-machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State Machine (TSM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-h10-control-n-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 Control & Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-led-btn-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED & Button
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-usb-connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Serial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Storage Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-memory-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory Regions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-rtc-clock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Real-Time Clock (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-task-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Auxiliary Tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Function Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api.h (Entry Point)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_data.h (Control & Data)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-tsm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_tsm.h (State Machine)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-led-btn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_led_btn.h (LED & Button)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_external_io.h (External IO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusblogsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbLogSource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbstreamsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbStreamSource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_isusblogready" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsUsbLogReady
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_startusbdatalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_StartUsbDataLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_stopusbdatalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_StopUsbDataLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getactiveusbsessionname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetActiveUsbSessionName
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusblogstatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbLogStatus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusblogautotimestamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbLogAutoTimestamp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusblogrollingsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbLogRollingSize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusblogstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbLogStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusbdiskfreemb--xm_getusbdisktotalmb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbDiskFreeMB / XM_GetUsbDiskTotalMB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_insertusblogmarker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_InsertUsbLogMarker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_isusbstreamconnected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsUsbStreamConnected
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_isusbstreamingactive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsUsbStreamingActive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbautostream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbAutoStream
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_getmode--rev-20-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_GetMode 🟢 Rev 2.0 only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_setmode--rev-20-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_SetMode 🟢 Rev 2.0 only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_registermodechangecallback--rev-20-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_RegisterModeChangeCallback 🟢 Rev 2.0 only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendusbdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUsbData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbstreammoduleid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbStreamModuleId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbcustommeta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbCustomMeta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendusbdatawithid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUsbDataWithId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendusbdebugmessage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUsbDebugMessage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusbdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbData
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types--macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Types / macros
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Types / macros">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmlogstatus_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLogStatus_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmlogstats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLogStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmlogmarkertype_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLogMarkerType_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_mode_e--rev-20-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_Mode_e 🟢 Rev 2.0 only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_modechangecb_t--rev-20-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_ModeChangeCb_t 🟢 Rev 2.0 only
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#internal-only-do-not-call" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internal-only (do not call)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev11--rev20-difference-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 Difference Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_memory.h (Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-rtc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_rtc.h (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-freertos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_freertos.h (RTOS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-user-custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_user_custom.h (User Data)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kit-h10-firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 Firmware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../bootloader/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bootloader
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bootloader
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upload Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../release-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Release Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusblogsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbLogSource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbstreamsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbStreamSource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_isusblogready" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsUsbLogReady
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_startusbdatalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_StartUsbDataLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_stopusbdatalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_StopUsbDataLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getactiveusbsessionname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetActiveUsbSessionName
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusblogstatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbLogStatus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusblogautotimestamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbLogAutoTimestamp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusblogrollingsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbLogRollingSize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusblogstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbLogStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusbdiskfreemb--xm_getusbdisktotalmb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbDiskFreeMB / XM_GetUsbDiskTotalMB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_insertusblogmarker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_InsertUsbLogMarker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_isusbstreamconnected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsUsbStreamConnected
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_isusbstreamingactive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsUsbStreamingActive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbautostream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbAutoStream
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_getmode--rev-20-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_GetMode 🟢 Rev 2.0 only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_setmode--rev-20-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_SetMode 🟢 Rev 2.0 only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_registermodechangecallback--rev-20-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_RegisterModeChangeCallback 🟢 Rev 2.0 only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendusbdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUsbData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbstreammoduleid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbStreamModuleId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setusbcustommeta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetUsbCustomMeta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendusbdatawithid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUsbDataWithId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendusbdebugmessage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUsbDebugMessage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getusbdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUsbData
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types--macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Types / macros
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Types / macros">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmlogstatus_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLogStatus_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmlogstats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLogStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmlogmarkertype_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmLogMarkerType_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_mode_e--rev-20-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_Mode_e 🟢 Rev 2.0 only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usb_modechangecb_t--rev-20-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_USB_ModeChangeCb_t 🟢 Rev 2.0 only
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#internal-only-do-not-call" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internal-only (do not call)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev11--rev20-difference-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 Difference Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="xm_api_usbh--usb-data-logging--real-time-streaming"><code>xm_api_usb.h</code> — USB Data Logging · Real-Time Streaming<a class="headerlink" href="#xm_api_usbh--usb-data-logging--real-time-streaming" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Target header</strong>: <code>XM_FW/XM_API/xm_api_usb.h</code>
+<strong>Related concept docs</strong>: <a href="../../05-usb-connectivity/">05. USB Serial</a> · <a href="../../06-usb-data-logging/">06. USB Mass-Storage Logging</a>
+<strong>Related examples</strong>: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/">00_Quick_Start</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/">07_CDC_Basic_Print</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/">08_CDC_Sensor_Print</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/">09_CDC_Stream</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10a_MSC_Basic_Log/">10a_MSC_Basic_Log</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10b_MSC_Custom_Struct/">10b_MSC_Custom_Struct</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/">10c_MSC_Advanced_Log</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/">18_Debug_Monitor</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/">34_MSC_GaitAnalysis_Log</a></p>
+</blockquote>
+<p>This single header defines two domains together: <strong>USB mass-storage logging (MSC)</strong> and <strong>real-time PC communication (CDC)</strong>. On the MSC side, once you register a user struct, a background task automatically stores it to USB storage; on the CDC side, you exchange text/binary data with a PC client such as PhAI Studio or PuTTY. Starting with Rev2.0, a mode-management API has also been added that <strong>automatically/manually distinguishes three roles — PhAI, production inspection (PRODUCTION), and user terminal (TERMINAL) — over a single USB-CDC cable</strong>.</p>
+<hr />
+<h2 id="when-to-use-it">When to use it<a class="headerlink" href="#when-to-use-it" title="Permanent link">&para;</a></h2>
+<p>Use this API when you want to log sensor data to USB storage over a long period, or exchange real-time data with a PC over a serial connection. For the registration-based automation principle (register a source in Setup → the System processes it automatically on a periodic basis) and the big picture — file format, Python decoder usage, and so on — we recommend reading <a href="../../05-usb-connectivity/">05. USB Serial</a> and <a href="../../06-usb-data-logging/">06. USB Mass-Storage Logging</a> first. This page only covers the detailed <strong>signatures/parameters of every function and type</strong> declared in the header, and it also includes the new Rev2.0 <strong>USB-CDC communication mode management API</strong>, which the two concept docs do not yet cover.</p>
+<hr />
+<h2 id="function-list">Function list<a class="headerlink" href="#function-list" title="Permanent link">&para;</a></h2>
+<p><strong>Data Source Registration</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_setusblogsource"><code>XM_SetUsbLogSource</code></a></td>
+<td>[MSC] Registers a data source to store to USB storage</td>
+</tr>
+<tr>
+<td><a href="#xm_setusbstreamsource"><code>XM_SetUsbStreamSource</code></a> ⚠️ Deprecated</td>
+<td>[CDC] Registers a data source to stream to the PC (legacy)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>MSC Logging — Session Control</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_isusblogready"><code>XM_IsUsbLogReady</code></a></td>
+<td>Checks whether a USB storage device is connected and logging is ready</td>
+</tr>
+<tr>
+<td><a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a></td>
+<td>Starts a logging session</td>
+</tr>
+<tr>
+<td><a href="#xm_stopusbdatalog"><code>XM_StopUsbDataLog</code></a></td>
+<td>Stops a logging session</td>
+</tr>
+<tr>
+<td><a href="#xm_getactiveusbsessionname"><code>XM_GetActiveUsbSessionName</code></a></td>
+<td>Retrieves the current/last active session name (for Option A re-entry)</td>
+</tr>
+<tr>
+<td><a href="#xm_getusblogstatus"><code>XM_GetUsbLogStatus</code></a></td>
+<td>Queries the logger state</td>
+</tr>
+</tbody>
+</table>
+<p><strong>MSC Logging — Configuration</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_setusblogautotimestamp"><code>XM_SetUsbLogAutoTimestamp</code></a></td>
+<td>Turns automatic timestamp insertion on/off</td>
+</tr>
+<tr>
+<td><a href="#xm_setusblogrollingsize"><code>XM_SetUsbLogRollingSize</code></a></td>
+<td>Sets the file rolling (splitting) size</td>
+</tr>
+</tbody>
+</table>
+<p><strong>MSC Logging — Statistics · Disk Capacity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_getusblogstats"><code>XM_GetUsbLogStats</code></a></td>
+<td>Queries real-time session statistics</td>
+</tr>
+<tr>
+<td><a href="#xm_getusbdiskfreemb--xm_getusbdisktotalmb"><code>XM_GetUsbDiskFreeMB</code> / <code>XM_GetUsbDiskTotalMB</code></a></td>
+<td>Queries USB free/total capacity (10-second cache)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>MSC Logging — Event Markers</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_insertusblogmarker"><code>XM_InsertUsbLogMarker</code></a></td>
+<td>Inserts an event marker into the logging stream</td>
+</tr>
+</tbody>
+</table>
+<p><strong>CDC — Connection · Streaming Status</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_isusbstreamconnected"><code>XM_IsUsbStreamConnected</code></a></td>
+<td>Whether a CDC virtual serial port connection to the PC exists</td>
+</tr>
+<tr>
+<td><a href="#xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code></a></td>
+<td>Whether streaming is active</td>
+</tr>
+<tr>
+<td><a href="#xm_setusbautostream"><code>XM_SetUsbAutoStream</code></a></td>
+<td>Turns Auto-Stream mode on/off</td>
+</tr>
+</tbody>
+</table>
+<p><strong>CDC — Communication Mode Management</strong> 🟢 Rev 2.0 only</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_usb_getmode"><code>XM_USB_GetMode</code></a> 🟢</td>
+<td>Queries the current USB-CDC communication mode</td>
+</tr>
+<tr>
+<td><a href="#xm_usb_setmode"><code>XM_USB_SetMode</code></a> 🟢</td>
+<td>Explicitly switches the USB-CDC communication mode</td>
+</tr>
+<tr>
+<td><a href="#xm_usb_registermodechangecallback"><code>XM_USB_RegisterModeChangeCallback</code></a> 🟢</td>
+<td>Registers a mode-change callback</td>
+</tr>
+</tbody>
+</table>
+<p><strong>CDC — Data Transmission (Legacy + Custom Data)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_sendusbdata"><code>XM_SendUsbData</code></a> ⚠️ Deprecated</td>
+<td>Sends data wrapped in a PhAI packet (fixed Module ID)</td>
+</tr>
+<tr>
+<td><a href="#xm_setusbstreammoduleid"><code>XM_SetUsbStreamModuleId</code></a> ⚠️ Deprecated</td>
+<td>Sets the Module ID of the streamed data</td>
+</tr>
+<tr>
+<td><a href="#xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code></a></td>
+<td>Registers User Custom channel metadata (JSON)</td>
+</tr>
+<tr>
+<td><a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a></td>
+<td>Sends <code>float[]</code> data with a specified Module ID</td>
+</tr>
+</tbody>
+</table>
+<p><strong>CDC — Debug Messages · Receiving</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_sendusbdebugmessage"><code>XM_SendUsbDebugMessage</code></a></td>
+<td>Sends a raw text debug message to the PC</td>
+</tr>
+<tr>
+<td><a href="#xm_getusbdata"><code>XM_GetUsbData</code></a></td>
+<td>Receives data from the PC</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="function-details">Function details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
+<h3 id="xm_setusblogsource"><code>XM_SetUsbLogSource</code><a class="headerlink" href="#xm_setusblogsource" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbLogSource</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data_ptr</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>[MSC]</strong> Registers the data source to store to USB storage. The System periodically reads the data at the registered address and writes it to a file.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data_ptr</code></td>
+<td><code>void*</code></td>
+<td>Address of the struct to store (<code>&amp;myData</code>)</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>uint32_t</code></td>
+<td>Size of the struct (<code>sizeof(myData)</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>)</p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> context. Register once before starting logging (<code>XM_StartUsbDataLog</code>).</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">hip_angle_L</span><span class="p">;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">hip_angle_R</span><span class="p">;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">}</span><span class="w"> </span><span class="n">MyLogData_t</span><span class="p">;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">MyLogData_t</span><span class="w"> </span><span class="n">myData</span><span class="p">;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">XM_SetUsbLogSource</span><span class="p">(</span><span class="o">&amp;</span><span class="n">myData</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">myData</span><span class="p">));</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a>, <a href="../../06-usb-data-logging/">06. USB Mass-Storage Logging</a></p>
+<hr />
+<h3 id="xm_setusbstreamsource"><code>XM_SetUsbStreamSource</code><a class="headerlink" href="#xm_setusbstreamsource" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbStreamSource</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data_ptr</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>⚠️ <strong>Deprecated</strong> — Replaced by Total Data (0x20) automatic transmission. If you need additional channels, use the combination of <a href="#xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code></a> + <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a>.</p>
+</blockquote>
+<p><strong>[CDC]</strong> Registers a data source to stream to the PC in real time (legacy method).</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data_ptr</code></td>
+<td><code>void*</code></td>
+<td>Address of the struct to send</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>uint32_t</code></td>
+<td>Size of the struct</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>)</p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> context.</p>
+<p><strong>See also</strong>: <a href="#xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code></a>, <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a></p>
+<hr />
+<h3 id="xm_isusblogready"><code>XM_IsUsbLogReady</code><a class="headerlink" href="#xm_isusblogready" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbLogReady</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Checks whether a USB storage device (MSC) is connected and logging is ready. This is lightweight, since it only reads a status flag managed by the System Layer's <code>usb_mode_handler</code>.</p>
+<p><strong>Parameters</strong>: none</p>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> if ready, <code>false</code> otherwise</p>
+<p><strong>⚠️ Call context</strong>: Safe to call from the 2 ms real-time loop in <code>Control_Loop()</code> (non-blocking).</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_IsUsbLogReady</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">logging_started</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="n">XM_StartUsbDataLog</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hip_L(float), hip_R(float)&quot;</span><span class="p">);</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="n">logging_started</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a></p>
+<hr />
+<h3 id="xm_startusbdatalog"><code>XM_StartUsbDataLog</code><a class="headerlink" href="#xm_startusbdatalog" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_StartUsbDataLog</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">sessionName</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">metadata</span><span class="p">);</span>
+</code></pre></div>
+<p>Starts a USB data logging session. The low-priority logging task creates the <code>/LOGS/[sessionName]</code> folder and <code>metadata.txt</code>, and prepares to write <code>data_000...bin</code>.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sessionName</code></td>
+<td><code>const char*</code></td>
+<td>Session (folder) name (e.g., <code>"S_001_TestRun"</code>). Passing <code>NULL</code> or an empty string auto-generates <code>S_001</code>, <code>S_002</code>, ...</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td><code>const char*</code></td>
+<td>A string describing the binary data to be stored. Written as-is into <code>metadata.txt</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> if the command was successfully queued, <code>false</code> if the queue is full or USB is not ready</p>
+<p><strong>⚠️ Call context</strong>: This function sends a command to the low-priority logging task, and <strong>can block for up to 100 ms</strong> if the queue is full. <strong>Never call it from inside the 2 ms real-time loop (<code>Control_Loop()</code>)</strong> — it is recommended to call it only once, from a state-transition entry function (such as <code>EnterActive</code>).</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">// Manual session name</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">XM_StartUsbDataLog</span><span class="p">(</span><span class="s">&quot;Gait_001&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hip_L(float), hip_R(float)&quot;</span><span class="p">);</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1">// Automatic session numbering</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">XM_StartUsbDataLog</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hip_L(float), hip_R(float)&quot;</span><span class="p">);</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1">// → creates /LOGS/S_001/, /LOGS/S_002/, ... in sequence</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_stopusbdatalog"><code>XM_StopUsbDataLog</code></a>, <a href="#xm_getactiveusbsessionname"><code>XM_GetActiveUsbSessionName</code></a>, <a href="../../06-usb-data-logging/#session-output-file-structure">06. USB Mass-Storage Logging §Session Output File Structure</a></p>
+<hr />
+<h3 id="xm_stopusbdatalog"><code>XM_StopUsbDataLog</code><a class="headerlink" href="#xm_stopusbdatalog" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_StopUsbDataLog</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Stops the USB data logging session. Asynchronously sends the low-priority logging task a command to close the currently open file and end logging.</p>
+<p><strong>Parameters</strong>: none</p>
+<p><strong>Return value</strong>: none (<code>void</code>)</p>
+<p><strong>⚠️ Call context</strong>: <strong>Do not call from inside the 2 ms real-time loop (<code>Control_Loop()</code>).</strong> You must call this before unplugging USB, so that the file is closed properly.</p>
+<p><strong>See also</strong>: <a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a></p>
+<hr />
+<h3 id="xm_getactiveusbsessionname"><code>XM_GetActiveUsbSessionName</code><a class="headerlink" href="#xm_getactiveusbsessionname" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_GetActiveUsbSessionName</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">out_buf</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">buf_size</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>[Option A]</strong> Queries the current/last active USB session name. Designed so that, after re-entering following an Emergency Stop, you can <strong>keep appending to the same folder</strong>. The intended usage flow is: call <code>XM_StartUsbDataLog("", ...)</code> the first time → an automatic name is generated based on the boot count → query the name with this API → the example code stores it → on re-entry, call <code>XM_StartUsbDataLog(&lt;stored name&gt;)</code> → the firmware incrementally creates <code>data_001_*</code>, <code>data_002_*</code>, and so on in the same folder.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out_buf</code></td>
+<td><code>char*</code></td>
+<td>Buffer into which the session name is copied</td>
+</tr>
+<tr>
+<td><code>buf_size</code></td>
+<td><code>uint32_t</code></td>
+<td>Buffer size (32 bytes or more recommended)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>)</p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. The header does not separately document ISR-safety.</p>
+<blockquote>
+<p>⚠️ <strong>Known race condition — caution when calling directly</strong>: The session name is updated asynchronously by the low-priority <code>DataLoggerTask</code>. If you call this function <strong>immediately after</strong> <code>XM_StartUsbDataLog()</code>, you may get an empty string or the previous session's name, since the update has not happened yet. In practice, <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/">Ex.34 (<code>msc_gait_analysis_log.c</code>)</a> ran into exactly this problem, and switched away from relying on this API: instead, <strong>the example code itself generates the session name based on RTC/tick</strong>, passes it synchronously to <code>XM_StartUsbDataLog()</code>, and stores that name in its own variable for reuse on re-entry (no race). When implementing re-entry logic, we recommend following the Ex.34 pattern rather than depending on the return timing of this function.</p>
+</blockquote>
+<p><strong>See also</strong>: <a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a>, <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/">Ex.34 MSC_GaitAnalysis_Log</a></p>
+<hr />
+<h3 id="xm_getusblogstatus"><code>XM_GetUsbLogStatus</code><a class="headerlink" href="#xm_getusblogstatus" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">XmLogStatus_e</span><span class="w"> </span><span class="nf">XM_GetUsbLogStatus</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Checks the current logger state. Use this to check whether logging has been forcibly stopped (<code>ERROR_STOPPED</code>), whether the buffer is filling up (<code>WARNING_QUEUE_FULL</code>), and so on.</p>
+<p><strong>Parameters</strong>: none</p>
+<p><strong>Return value</strong>: an <a href="#xmlogstatus_e"><code>XmLogStatus_e</code></a> enum value</p>
+<p><strong>⚠️ Call context</strong>: Safe to call from the 2 ms real-time loop in <code>Control_Loop()</code>.</p>
+<p><strong>See also</strong>: full list of <a href="#xmlogstatus_e"><code>XmLogStatus_e</code></a> values</p>
+<hr />
+<h3 id="xm_setusblogautotimestamp"><code>XM_SetUsbLogAutoTimestamp</code><a class="headerlink" href="#xm_setusblogautotimestamp" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbLogAutoTimestamp</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">enabled</span><span class="p">);</span>
+</code></pre></div>
+<p>Sets whether an automatic timestamp (4-byte <code>tick_ms</code>) is prepended to each record.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td><code>bool</code></td>
+<td><code>true</code>: automatically insert the tick before each packet (default). <code>false</code>: disable this when the user struct already contains its own tick</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>)</p>
+<p><strong>⚠️ Call context</strong>: Set this in <code>Control_Setup()</code> <strong>before</strong> calling <a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a>.</p>
+<p><strong>See also</strong>: <a href="#xm_setusblogrollingsize"><code>XM_SetUsbLogRollingSize</code></a></p>
+<hr />
+<h3 id="xm_setusblogrollingsize"><code>XM_SetUsbLogRollingSize</code><a class="headerlink" href="#xm_setusblogrollingsize" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbLogRollingSize</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size_mb</span><span class="p">);</span>
+</code></pre></div>
+<p>Sets the file rolling (automatic splitting) size.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>size_mb</code></td>
+<td><code>uint32_t</code></td>
+<td>File split size (MB). Range 1–100, default 10</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>)</p>
+<p><strong>⚠️ Call context</strong>: Set this in <code>Control_Setup()</code> <strong>before</strong> calling <a href="#xm_startusbdatalog"><code>XM_StartUsbDataLog</code></a>.</p>
+<p><strong>See also</strong>: <a href="#xm_setusblogautotimestamp"><code>XM_SetUsbLogAutoTimestamp</code></a></p>
+<hr />
+<h3 id="xm_getusblogstats"><code>XM_GetUsbLogStats</code><a class="headerlink" href="#xm_getusblogstats" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_GetUsbLogStats</span><span class="p">(</span><span class="n">XmLogStats_t</span><span class="o">*</span><span class="w"> </span><span class="n">out_stats</span><span class="p">);</span>
+</code></pre></div>
+<p>Queries detailed session statistics, either during logging or after a session has ended. Includes diagnostic information such as Hot/Cold buffer peak utilization and remaining disk space.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out_stats</code></td>
+<td><code>XmLogStats_t*</code></td>
+<td>Pointer to the struct that receives the statistics</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> on success, <code>false</code> on a parameter error or when USB is not connected</p>
+<p><strong>⚠️ Call context</strong>: Safe to call from the 2 ms real-time loop in <code>Control_Loop()</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">XmLogStats_t</span><span class="w"> </span><span class="n">stats</span><span class="p">;</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_GetUsbLogStats</span><span class="p">(</span><span class="o">&amp;</span><span class="n">stats</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Records: %lu, Dropped: %lu, Disk: %lu MB</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">           </span><span class="n">stats</span><span class="p">.</span><span class="n">total_records</span><span class="p">,</span><span class="w"> </span><span class="n">stats</span><span class="p">.</span><span class="n">dropped_records</span><span class="p">,</span><span class="w"> </span><span class="n">stats</span><span class="p">.</span><span class="n">disk_free_mb</span><span class="p">);</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xmlogstats_t"><code>XmLogStats_t</code></a></p>
+<hr />
+<h3 id="xm_getusbdiskfreemb--xm_getusbdisktotalmb"><code>XM_GetUsbDiskFreeMB</code> / <code>XM_GetUsbDiskTotalMB</code><a class="headerlink" href="#xm_getusbdiskfreemb--xm_getusbdisktotalmb" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUsbDiskFreeMB</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUsbDiskTotalMB</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Returns the USB disk's free/total capacity (MB). Since the value is cached and updated on a 10-second cycle and returned immediately, there is no cost to calling it on every tick.</p>
+<p><strong>Parameters</strong>: none</p>
+<p><strong>Return value</strong>: <code>uint32_t</code> — capacity (MB). 0 if USB is not connected</p>
+<p><strong>⚠️ Call context</strong>: Safe to call from the 2 ms real-time loop in <code>Control_Loop()</code> (non-blocking, returns a cached value).</p>
+<p><strong>See also</strong>: <a href="#xm_getusblogstats"><code>XM_GetUsbLogStats</code></a> — the same value can also be checked via the <code>disk_free_mb</code>/<code>disk_total_mb</code> fields</p>
+<hr />
+<h3 id="xm_insertusblogmarker"><code>XM_InsertUsbLogMarker</code><a class="headerlink" href="#xm_insertusblogmarker" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_InsertUsbLogMarker</span><span class="p">(</span><span class="n">XmLogMarkerType_e</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">data</span><span class="p">);</span>
+</code></pre></div>
+<p>Marks a specific point in time during logging (mode transition, anomaly detection, manual mark) as a marker. Markers are stored in the same pipeline as normal data, and the Python decoder automatically separates them out to generate an event log (<code>events.csv</code>).</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td><code>XmLogMarkerType_e</code></td>
+<td>Marker type</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>uint16_t</code></td>
+<td>Context data (error code, mode ID, etc.; 0 if not needed)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> on success, <code>false</code> if logging is inactive or the buffer is insufficient</p>
+<p><strong>⚠️ Call context</strong>: Safe to call from the 2 ms real-time loop in <code>Control_Loop()</code> (non-blocking).</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1">// On a mode transition</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">XM_InsertUsbLogMarker</span><span class="p">(</span><span class="n">XM_LOG_MARKER_MODE</span><span class="p">,</span><span class="w"> </span><span class="n">newModeId</span><span class="p">);</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1">// On error detection</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">XM_InsertUsbLogMarker</span><span class="p">(</span><span class="n">XM_LOG_MARKER_ERROR</span><span class="p">,</span><span class="w"> </span><span class="n">errorCode</span><span class="p">);</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1">// Manual marking</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">XM_InsertUsbLogMarker</span><span class="p">(</span><span class="n">XM_LOG_MARKER_USER</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xmlogmarkertype_e"><code>XmLogMarkerType_e</code></a></p>
+<hr />
+<h3 id="xm_isusbstreamconnected"><code>XM_IsUsbStreamConnected</code><a class="headerlink" href="#xm_isusbstreamconnected" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbStreamConnected</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Checks whether a PC is connected to the USB virtual serial port (CDC).</p>
+<p><strong>Parameters</strong>: none</p>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> if connected</p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context.</p>
+<p><strong>See also</strong>: <a href="#xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code></a></p>
+<hr />
+<h3 id="xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code><a class="headerlink" href="#xm_isusbstreamingactive" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbStreamingActive</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Checks whether streaming is active. In Auto-Stream mode this automatically becomes <code>true</code> when USB connects; in Legacy mode it becomes <code>true</code> when <code>"AGRB MON START"</code> is received.</p>
+<p><strong>Parameters</strong>: none</p>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: streaming active (data being sent), <code>false</code>: idle</p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context.</p>
+<p><strong>See also</strong>: <a href="#xm_setusbautostream"><code>XM_SetUsbAutoStream</code></a></p>
+<hr />
+<h3 id="xm_setusbautostream"><code>XM_SetUsbAutoStream</code><a class="headerlink" href="#xm_setusbautostream" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbAutoStream</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">enabled</span><span class="p">);</span>
+</code></pre></div>
+<p>Sets Auto-Stream mode. Default is ON — streaming starts automatically when USB connects (PhAI Studio's default behavior).</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td><code>bool</code></td>
+<td><code>true</code>: automatic streaming on USB connect (default). <code>false</code>: wait for the <code>"AGRB MON START"</code> command (Legacy Python compatibility)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>)</p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> context.</p>
+<p><strong>See also</strong>: <a href="#xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code></a></p>
+<hr />
+<h3 id="xm_usb_getmode--rev-20-only"><code>XM_USB_GetMode</code> 🟢 Rev 2.0 only<a class="headerlink" href="#xm_usb_getmode--rev-20-only" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">XM_USB_Mode_e</span><span class="w"> </span><span class="nf">XM_USB_GetMode</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 only</strong> — This function and the <a href="#xm_usb_mode_e"><code>XM_USB_Mode_e</code></a> type itself do not exist at all in the Rev1.1 header.</p>
+</blockquote>
+<p>Queries the current USB-CDC communication mode (PHAI / PRODUCTION / TERMINAL).</p>
+<p><strong>Parameters</strong>: none</p>
+<p><strong>Return value</strong>: <a href="#xm_usb_mode_e"><code>XM_USB_Mode_e</code></a></p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context.</p>
+<p><strong>See also</strong>: <a href="#xm_usb_mode_e"><code>XM_USB_Mode_e</code></a>, <a href="#xm_usb_setmode"><code>XM_USB_SetMode</code></a></p>
+<hr />
+<h3 id="xm_usb_setmode--rev-20-only"><code>XM_USB_SetMode</code> 🟢 Rev 2.0 only<a class="headerlink" href="#xm_usb_setmode--rev-20-only" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_USB_SetMode</span><span class="p">(</span><span class="n">XM_USB_Mode_e</span><span class="w"> </span><span class="n">mode</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 only</strong> — Does not exist in the Rev1.1 header.</p>
+</blockquote>
+<p>Explicitly switches the USB-CDC communication mode. Example/terminal users can call <code>XM_USB_SetMode(XM_USB_MODE_TERMINAL)</code> once in <code>Control_Setup()</code> to block PhAI Studio's auto-pump transmission and use nothing but clean text input/output.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mode</code></td>
+<td><code>XM_USB_Mode_e</code></td>
+<td>Mode to switch to</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>)</p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> context.</p>
+<p><strong>⚠️ Side effect to note</strong>: Explicitly setting <code>XM_USB_MODE_TERMINAL</code> <strong>disables the automatic transition</strong> to PRODUCTION mode afterward. Automatic PRODUCTION transition (on receiving the first valid DOP frame) exists solely for integration with <code>Extension_Module_GUI_ForProduction</code>, so ordinary example/user code will rarely need to call this function at all.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="c1">// Call only when you want to turn off the PhAI auto-pump for example/terminal purposes</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="n">XM_USB_SetMode</span><span class="p">(</span><span class="n">XM_USB_MODE_TERMINAL</span><span class="p">);</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_usb_mode_e"><code>XM_USB_Mode_e</code></a> mode-transition rules, <a href="#xm_usb_getmode"><code>XM_USB_GetMode</code></a></p>
+<hr />
+<h3 id="xm_usb_registermodechangecallback--rev-20-only"><code>XM_USB_RegisterModeChangeCallback</code> 🟢 Rev 2.0 only<a class="headerlink" href="#xm_usb_registermodechangecallback--rev-20-only" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_USB_RegisterModeChangeCallback</span><span class="p">(</span><span class="n">XM_USB_ModeChangeCb_t</span><span class="w"> </span><span class="n">cb</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 only</strong> — Does not exist in the Rev1.1 header.</p>
+</blockquote>
+<p>Registers a callback to be invoked right after the mode actually switches. This can be used for future two-way synchronization of OD mode flags (0x6000/0x7000), LED pattern transitions, notifying entry/exit of <code>Extension_Module_GUI_ForProduction</code> Test Mode, and so on.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cb</code></td>
+<td><a href="#xm_usb_modechangecb_t"><code>XM_USB_ModeChangeCb_t</code></a></td>
+<td>Callback function pointer. Pass <code>NULL</code> to unregister</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>)</p>
+<p><strong>⚠️ Call context</strong>: The registration call itself assumes <code>Control_Setup()</code> context. However, the header comment states that the callback <strong>body</strong> must be "short and non-blocking, since it may be called from ISR context" — avoid blocking calls (such as logging Start/Stop) inside the callback.</p>
+<p><strong>⚠️ Only one registration is kept</strong>: The most recently registered callback overwrites the previous one (single slot).</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">OnUsbModeChanged</span><span class="p">(</span><span class="n">XM_USB_Mode_e</span><span class="w"> </span><span class="n">prev</span><span class="p">,</span><span class="w"> </span><span class="n">XM_USB_Mode_e</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">next</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_USB_MODE_PRODUCTION</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">        </span><span class="n">XM_SetLedEffect</span><span class="p">(</span><span class="n">XM_LED_3</span><span class="p">,</span><span class="w"> </span><span class="n">XM_LED_BLINK</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">);</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="p">}</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">    </span><span class="n">XM_USB_RegisterModeChangeCallback</span><span class="p">(</span><span class="n">OnUsbModeChanged</span><span class="p">);</span>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_usb_modechangecb_t"><code>XM_USB_ModeChangeCb_t</code></a>, <a href="#xm_usb_mode_e"><code>XM_USB_Mode_e</code></a></p>
+<hr />
+<h3 id="xm_sendusbdata"><code>XM_SendUsbData</code><a class="headerlink" href="#xm_sendusbdata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbData</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>⚠️ <strong>Deprecated</strong> — Replaced by <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a>. Specify the Module ID explicitly.</p>
+</blockquote>
+<p>Sends data over USB CDC, automatically wrapped in a PhAI packet (SOF + LEN + SEQ_ID + MODULE_ID + CRC16).</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data</code></td>
+<td><code>const void*</code></td>
+<td>Pointer to the user struct to send (a float array or a 4-byte-aligned struct)</td>
+</tr>
+<tr>
+<td><code>len</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of data bytes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> on successful send, <code>false</code> if the buffer is full or not connected</p>
+<p><strong>⚠️ Call context</strong>: Safe to call within the 2 ms cycle of <code>Control_Loop()</code> (non-blocking).</p>
+<p><strong>See also</strong>: <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a></p>
+<hr />
+<h3 id="xm_setusbstreammoduleid"><code>XM_SetUsbStreamModuleId</code><a class="headerlink" href="#xm_setusbstreammoduleid" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbStreamModuleId</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>⚠️ <strong>Deprecated</strong> — Replaced by <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a>. Specify the Module ID directly at send time.</p>
+</blockquote>
+<p>Sets the Module ID of the streamed data.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>module_id</code></td>
+<td><code>uint8_t</code></td>
+<td>Module ID (default <code>0x10</code> = COMBINED). See the <code>PHAI_MODULE_*</code> macros in <code>phai_packet_builder.h</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>)</p>
+<p><strong>See also</strong>: <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a></p>
+<hr />
+<h3 id="xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code><a class="headerlink" href="#xm_setusbcustommeta" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">json_str</span><span class="p">);</span>
+</code></pre></div>
+<p>Registers metadata (channel names/units, etc.) for the User Custom channel. Automatically sent with Module ID <code>0xEF</code> when USB connects, so channel names are displayed in PhAI Studio.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>module_id</code></td>
+<td><code>uint8_t</code></td>
+<td>Target Module ID (<code>0xF0</code>~<code>0xFE</code>)</td>
+</tr>
+<tr>
+<td><code>json_str</code></td>
+<td><code>const char*</code></td>
+<td>JSON string of channel definitions (NULL-terminated; a string literal is recommended)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>)</p>
+<p><strong>⚠️ Call context</strong>: Call once from <code>Control_Setup()</code>.</p>
+<p><strong>⚠️ Pointer lifetime caution</strong>: The <code>json_str</code> pointer must remain valid for the lifetime of the program (it is not copied internally) — use a string literal, not a stack-local variable.</p>
+<p><strong>⚠️ Single slot</strong>: Only one Module ID's metadata is kept per USB connection (the last call overwrites the previous one). To label multiple channel groups, gather the channels under a single Module ID for registration.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">    </span><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">        </span><span class="s">&quot;[{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">Target</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">unit</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">deg</span><span class="se">\&quot;</span><span class="s">},&quot;</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">        </span><span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">Current</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">unit</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">deg</span><span class="se">\&quot;</span><span class="s">}]&quot;</span><span class="p">);</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a></p>
+<hr />
+<h3 id="xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code><a class="headerlink" href="#xm_sendusbdatawithid" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbDataWithId</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">);</span>
+</code></pre></div>
+<p>Sends User Custom <code>float[]</code> data with the specified Module ID. Since Total Data (0x20) is already sent automatically by the System, use this function to send additional debug channels for your own algorithm.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data</code></td>
+<td><code>const void*</code></td>
+<td>Pointer to a float array (4-byte aligned)</td>
+</tr>
+<tr>
+<td><code>len</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of bytes (<code>sizeof(float) × channel count</code>)</td>
+</tr>
+<tr>
+<td><code>module_id</code></td>
+<td><code>uint8_t</code></td>
+<td>Module ID (<code>0xF0</code>~<code>0xFE</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> on successful send, <code>false</code> if the buffer is full or not connected</p>
+<p><strong>⚠️ Call context</strong>: Call from within <code>Control_Loop()</code> (non-blocking). Calling it on every tick is not mandatory — call it only when needed.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">current</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">torque</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="n">XM_SendUsbDataWithId</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">),</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code></a></p>
+<hr />
+<h3 id="xm_sendusbdebugmessage"><code>XM_SendUsbDebugMessage</code><a class="headerlink" href="#xm_sendusbdebugmessage" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+</code></pre></div>
+<p>Sends a debug message to the PC as raw text (no PhAI packet wrapping).</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>message</code></td>
+<td><code>const char*</code></td>
+<td>String to send (null-terminated)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> on successful send</p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. Non-blocking.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Current State: %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">current_state</span><span class="p">);</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="n">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="../../05-usb-connectivity/">05. USB Serial</a></p>
+<hr />
+<h3 id="xm_getusbdata"><code>XM_GetUsbData</code><a class="headerlink" href="#xm_getusbdata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUsbData</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">max_len</span><span class="p">);</span>
+</code></pre></div>
+<p>Receives data from the PC (non-blocking).</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>buffer</code></td>
+<td><code>void*</code></td>
+<td>Buffer to store the received data</td>
+</tr>
+<tr>
+<td><code>max_len</code></td>
+<td><code>uint32_t</code></td>
+<td>Maximum buffer size</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>uint32_t</code> — number of bytes actually read (0 means no data received)</p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. The header has no <code>@details</code> description, so error states other than a 0 return value are not documented — we recommend verifying empirically before use.</p>
+<hr />
+<h2 id="types--macros">Types / macros<a class="headerlink" href="#types--macros" title="Permanent link">&para;</a></h2>
+<h3 id="xmlogstatus_e"><code>XmLogStatus_e</code><a class="headerlink" href="#xmlogstatus_e" title="Permanent link">&para;</a></h3>
+<p>An enum representing the logger's current state.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_LOG_STATUS_IDLE</code></td>
+<td>Stopped (initial state)</td>
+</tr>
+<tr>
+<td><code>XM_LOG_STATUS_LOGGING</code></td>
+<td>Logging normally</td>
+</tr>
+<tr>
+<td><code>XM_LOG_STATUS_WARNING_QUEUE_FULL</code></td>
+<td>Buffer utilization is high (<code>f_write</code> is being delayed)</td>
+</tr>
+<tr>
+<td><code>XM_LOG_STATUS_WARNING_DISK_LOW</code></td>
+<td>Less than 50 MB of USB disk space remains</td>
+</tr>
+<tr>
+<td><code>XM_LOG_STATUS_ERROR_STOPPED</code></td>
+<td>Logging was forcibly stopped due to an error</td>
+</tr>
+</tbody>
+</table>
+<h3 id="xmlogstats_t"><code>XmLogStats_t</code><a class="headerlink" href="#xmlogstats_t" title="Permanent link">&para;</a></h3>
+<p>A struct of real-time statistics for a logging session. Queried with <a href="#xm_getusblogstats"><code>XM_GetUsbLogStats()</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>total_bytes</code></td>
+<td><code>uint32_t</code></td>
+<td>Total bytes written</td>
+</tr>
+<tr>
+<td><code>total_records</code></td>
+<td><code>uint32_t</code></td>
+<td>Total record count</td>
+</tr>
+<tr>
+<td><code>dropped_records</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of dropped records (buffer overflow)</td>
+</tr>
+<tr>
+<td><code>write_errors</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of write failures</td>
+</tr>
+<tr>
+<td><code>duration_ms</code></td>
+<td><code>uint32_t</code></td>
+<td>Session elapsed time (ms)</td>
+</tr>
+<tr>
+<td><code>hot_buffer_percent</code></td>
+<td><code>uint8_t</code></td>
+<td>Hot buffer peak utilization (0–100)</td>
+</tr>
+<tr>
+<td><code>cold_buffer_percent</code> 🟢</td>
+<td><code>uint8_t</code></td>
+<td>Cold buffer peak utilization (0–100) — legacy field, <a href="../../06-usb-data-logging/">always 0 in the current Hot-buffer-only architecture</a></td>
+</tr>
+<tr>
+<td><code>disk_free_mb</code></td>
+<td><code>uint32_t</code></td>
+<td>USB free capacity (MB)</td>
+</tr>
+<tr>
+<td><code>disk_total_mb</code></td>
+<td><code>uint32_t</code></td>
+<td>USB total capacity (MB)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🟢 <strong>Rev 2.0-only field</strong>: <code>cold_buffer_percent</code> does not exist in the Rev1.1 header's <code>XmLogStats_t</code> (Rev1.1 has 8 fields, Rev2.0 has 9). In code that handles both Rev1.1 and Rev2.0, do not cast or raw-copy this struct directly.</p>
+</blockquote>
+<h3 id="xmlogmarkertype_e"><code>XmLogMarkerType_e</code><a class="headerlink" href="#xmlogmarkertype_e" title="Permanent link">&para;</a></h3>
+<p>An enum representing the type of an event marker during logging.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_LOG_MARKER_USER</code> = 0x01</td>
+<td>Manual mark (button/command)</td>
+</tr>
+<tr>
+<td><code>XM_LOG_MARKER_MODE</code> = 0x02</td>
+<td>Mode transition</td>
+</tr>
+<tr>
+<td><code>XM_LOG_MARKER_ERROR</code> = 0x03</td>
+<td>Error occurred</td>
+</tr>
+<tr>
+<td><code>XM_LOG_MARKER_SYNC</code> = 0x04</td>
+<td>Time synchronization point</td>
+</tr>
+</tbody>
+</table>
+<h3 id="xm_usb_mode_e--rev-20-only"><code>XM_USB_Mode_e</code> 🟢 Rev 2.0 only<a class="headerlink" href="#xm_usb_mode_e--rev-20-only" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Not defined in the Rev1.1 header.</p>
+</blockquote>
+<p>The USB-CDC communication mode used to separately support three host classes on one board/one cable.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_USB_MODE_PHAI</code> = 0</td>
+<td>PhAI Studio real-time telemetry (Total Data auto-pump). Default mode</td>
+</tr>
+<tr>
+<td><code>XM_USB_MODE_PRODUCTION</code> = 1</td>
+<td><code>Extension_Module_GUI_ForProduction</code> HW verification / SI measurement / production (COBS+CRC DOP)</td>
+</tr>
+<tr>
+<td><code>XM_USB_MODE_TERMINAL</code> = 2</td>
+<td>Example/raw terminal — auto-pump OFF, user-initiated TX only</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Mode-transition rules</strong> (per the header comment):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>(boot / DTR=1) ──▶ PHAI ──(first valid DOP frame received)──▶ PRODUCTION
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>     ▲                                                    │
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a>     └────────────────(DTR=0 / USB unplugged)─────────────┘
+<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a>
+<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a>When the user calls XM_USB_SetMode(TERMINAL) from Control_Setup():
+<a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a>→ explicitly switches to TERMINAL, and the automatic PRODUCTION transition is disabled afterward
+<a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a>  (TERMINAL cannot be identified from wire signals alone, so it must always be set explicitly)
+</code></pre></div>
+<h3 id="xm_usb_modechangecb_t--rev-20-only"><code>XM_USB_ModeChangeCb_t</code> 🟢 Rev 2.0 only<a class="headerlink" href="#xm_usb_modechangecb_t--rev-20-only" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Not defined in the Rev1.1 header.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">XM_USB_ModeChangeCb_t</span><span class="p">)(</span><span class="n">XM_USB_Mode_e</span><span class="w"> </span><span class="n">prev</span><span class="p">,</span><span class="w"> </span><span class="n">XM_USB_Mode_e</span><span class="w"> </span><span class="n">next</span><span class="p">);</span>
+</code></pre></div>
+<p>The function pointer type for the USB-CDC mode-change callback. Registered with <a href="#xm_usb_registermodechangecallback"><code>XM_USB_RegisterModeChangeCallback()</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prev</code></td>
+<td><code>XM_USB_Mode_e</code></td>
+<td>Previous mode</td>
+</tr>
+<tr>
+<td><code>next</code></td>
+<td><code>XM_USB_Mode_e</code></td>
+<td>New mode</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ The header comment states this callback must be "short and non-blocking, since it may be called from ISR context." The registration call itself happens in <code>Control_Setup()</code>, but write the callback <strong>body</strong> to be ISR-safe (no blocking calls).</p>
+</blockquote>
+<hr />
+<h2 id="internal-only-do-not-call">Internal-only (do not call)<a class="headerlink" href="#internal-only-do-not-call" title="Permanent link">&para;</a></h2>
+<p>The 3 functions below are for exclusive use by internal system components (the router / DTR handler / core_process). User code does not need to call them directly, and calling them does not guarantee the intended behavior.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Actual caller</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bool XM_USB_RequestProductionLatch(void)</code> 🟢 Rev 2.0 only</td>
+<td><code>cdc_dop_router</code></td>
+<td>Called when the first valid DOP frame is received. Latches to PRODUCTION unless in the TERMINAL (user-locked) state. Idempotent — a no-op if already in PRODUCTION. The return value indicates whether this call actually caused a transition</td>
+</tr>
+<tr>
+<td><code>void XM_USB_OnDtrLost(void)</code> 🟢 Rev 2.0 only</td>
+<td><code>cdc_handler</code></td>
+<td>Called when DTR=0 (USB unplugged/re-enumerated). Automatically returns to PHAI mode and releases the user lock</td>
+</tr>
+<tr>
+<td><code>void XM_USB_ProcessPeriodic(void)</code></td>
+<td><code>core_process</code></td>
+<td>The periodic-processing engine for USB logging/streaming logic. <code>core_process</code> calls this automatically, so user code does not need to call it directly</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="rev11--rev20-difference-summary">Rev1.1 / Rev2.0 Difference Summary<a class="headerlink" href="#rev11--rev20-difference-summary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Rev1.1</th>
+<th>Rev2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MSC logging basic API (Start/Stop/Status/Stats/Marker/disk query)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>CDC streaming basic API (<code>SendUsbDataWithId</code>/<code>SetUsbCustomMeta</code>/<code>SendUsbDebugMessage</code>)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>XmLogStats_t.cold_buffer_percent</code> field</td>
+<td>❌ Absent (8 fields)</td>
+<td>🟢 Present (9 fields — legacy, currently always 0)</td>
+</tr>
+<tr>
+<td><code>XM_USB_Mode_e</code> / <code>XM_USB_GetMode</code> / <code>XM_USB_SetMode</code> / <code>XM_USB_RegisterModeChangeCallback</code> (PHAI/PRODUCTION/TERMINAL mode management)</td>
+<td>❌ Absent</td>
+<td>🟢 Exclusive</td>
+</tr>
+<tr>
+<td><code>XM_USB_RequestProductionLatch</code> / <code>XM_USB_OnDtrLost</code> (Internal, automatic PRODUCTION latch)</td>
+<td>❌ Absent</td>
+<td>🟢 Exclusive (Internal)</td>
+</tr>
+<tr>
+<td>MSC logging internal pipeline stages</td>
+<td>2-stage — UserTask writes directly into a lock-free SPSC ring buffer → <code>DataLoggerTask</code> calls <code>f_write()</code></td>
+<td>3-stage — UserTask enqueues into a primary queue → <code>DataLoggerTask</code> converts to binary and enqueues into a secondary queue → the low-priority task calls <code>f_write()</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-documents">Related Documents<a class="headerlink" href="#related-documents" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../05-usb-connectivity/">05. USB Serial (concept)</a> — CDC operating principles, common mistakes, example mapping</li>
+<li><a href="../../06-usb-data-logging/">06. USB Mass-Storage Logging (concept)</a> — MSC file format, Python decoder, session output structure</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../xm-api-external-io/" class="md-footer__link md-footer__link--prev" aria-label="Previous: xm_api_external_io.h (External IO)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                xm_api_external_io.h (External IO)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../xm-api-memory/" class="md-footer__link md-footer__link--next" aria-label="Next: xm_api_memory.h (Memory)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                xm_api_memory.h (Memory)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

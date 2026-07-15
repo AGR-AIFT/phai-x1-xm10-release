@@ -1,0 +1,3732 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서">
+      
+      
+      
+        <link rel="canonical" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-freertos/">
+      
+      
+        <link rel="prev" href="../xm-api-rtc/">
+      
+      
+        <link rel="next" href="../xm-api-user-custom/">
+      
+      
+        
+          <link rel="alternate" href="../../../../api-reference/ref/xm-api-freertos/" hreflang="ko">
+        
+          <link rel="alternate" href="./" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>xm_api_freertos.h (RTOS) - XM10 Extension Module</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#xm_api_freertosh--rtos-helper-task-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../" title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XM10 Extension Module
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              xm_api_freertos.h (RTOS)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../../api-reference/ref/xm-api-freertos/" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AGR-EXO/Extension_Module" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../" title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    XM10 Extension Module
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AGR-EXO/Extension_Module" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../find-it/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Find
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/01-hardware-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/02-software-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/03-first-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    First Build
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start with Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../hardware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hardware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External GPIO (Rev 1.1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External GPIO (Rev 2.0)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-task-state-machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State Machine (TSM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-h10-control-n-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 Control & Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-led-btn-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED & Button
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-usb-connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Serial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Storage Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-memory-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory Regions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-rtc-clock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Real-Time Clock (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-task-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Auxiliary Tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Function Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api.h (Entry Point)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_data.h (Control & Data)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-tsm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_tsm.h (State Machine)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-led-btn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_led_btn.h (LED & Button)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_external_io.h (External IO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-usb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_memory.h (Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-rtc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_rtc.h (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_freertos.h (RTOS)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_freertos.h (RTOS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use this
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function List
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function Details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#oneshot-task-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OneShot Task API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OneShot Task API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_createoneshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_CreateOneShot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_iscomplete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_IsComplete
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#periodic-task-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Periodic Task API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Periodic Task API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_createperiodic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_CreatePeriodic
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-lifecycle-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task Lifecycle API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Task Lifecycle API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_suspend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_Suspend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_resume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_Resume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_Delete
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mutex-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mutex API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mutex API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_mutex_create" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Mutex_Create
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_mutex_lock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Mutex_Lock
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_mutex_unlock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Mutex_Unlock
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_mutex_delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Mutex_Delete
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hw-constraint-diagnostic-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HW-constraint Diagnostic API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HW-constraint Diagnostic API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_getheapfreebytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_GetHeapFreeBytes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_getheapmineverbytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_GetHeapMinEverBytes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_getinstancecount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_GetInstanceCount
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_getbudgetremainingbytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_GetBudgetRemainingBytes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostic-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnostic API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Diagnostic API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_rtos_printtasklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_RTOS_PrintTaskList
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deprecated-api-avoid-in-new-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deprecated API (avoid in new code)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Definitions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Type Definitions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmtaskprio_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmTaskPrio_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handle-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handle Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-pointer-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function Pointer Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Macros
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Macros">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#system-guard-constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Guard Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-stack-per-prio_hint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default Stack per prio_hint
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Mistakes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-user-custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_user_custom.h (User Data)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kit-h10-firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 Firmware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../bootloader/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bootloader
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bootloader
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upload Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../release-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Release Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use this
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function List
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function Details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#oneshot-task-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OneShot Task API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OneShot Task API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_createoneshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_CreateOneShot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_iscomplete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_IsComplete
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#periodic-task-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Periodic Task API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Periodic Task API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_createperiodic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_CreatePeriodic
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-lifecycle-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task Lifecycle API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Task Lifecycle API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_suspend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_Suspend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_resume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_Resume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_Delete
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mutex-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mutex API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mutex API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_mutex_create" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Mutex_Create
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_mutex_lock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Mutex_Lock
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_mutex_unlock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Mutex_Unlock
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_mutex_delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Mutex_Delete
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hw-constraint-diagnostic-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HW-constraint Diagnostic API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HW-constraint Diagnostic API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_getheapfreebytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_GetHeapFreeBytes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_getheapmineverbytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_GetHeapMinEverBytes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_getinstancecount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_GetInstanceCount
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_task_getbudgetremainingbytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Task_GetBudgetRemainingBytes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostic-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnostic API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Diagnostic API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_rtos_printtasklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_RTOS_PrintTaskList
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deprecated-api-avoid-in-new-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deprecated API (avoid in new code)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Definitions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Type Definitions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmtaskprio_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmTaskPrio_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handle-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handle Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-pointer-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function Pointer Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Macros
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Macros">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#system-guard-constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Guard Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-stack-per-prio_hint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default Stack per prio_hint
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Mistakes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="xm_api_freertosh--rtos-helper-task-api"><code>xm_api_freertos.h</code> — RTOS Helper Task API<a class="headerlink" href="#xm_api_freertosh--rtos-helper-task-api" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>📄 Target header: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h"><code>XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h</code></a> (Rev1.1 has <strong>byte-for-byte the same file</strong> at the same relative path — there are no Rev-specific items on this page)
+🧭 Related concept doc: <a href="../../09-task-creation/">09. Helper Tasks &amp; Data Sharing</a> — read this first for the task priority zones, the data-flow picture, and the 4 shared-variable patterns.
+🧰 Related examples: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/38_Periodic_Background_Task/">Ex.38 Periodic_Background_Task</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/39_Task_Lifecycle/">Ex.39 Task_Lifecycle</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/">Ex.36 OnDevice_Kinesthetic_Learning</a> (an example of migrating from the deprecated API to the new one)</p>
+</blockquote>
+<p>This is the API for safely creating helper RTOS tasks that run alongside <code>Control_Loop()</code> (the 1 kHz control loop) without disturbing it, and for exchanging data with those tasks safely.</p>
+<hr />
+<h2 id="when-to-use-this">When to use this<a class="headerlink" href="#when-to-use-this" title="Permanent link">&para;</a></h2>
+<p>If you run something heavy — an FFT, a neural-network training pass, a large matrix operation — directly inside Control_Loop, you break the 1 ms period and destabilize control. In that case, use <code>XM_Task_CreateOneShot()</code> / <code>XM_Task_CreatePeriodic()</code> to split the computation into a separate RTOS task, and use <code>XM_Mutex_*</code> to exchange data safely with Control_Loop.</p>
+<ul>
+<li>For how to pick a task priority and how data flows between Control_Loop and helper tasks, read <a href="../../09-task-creation/">09. Helper Tasks &amp; Data Sharing</a> first.</li>
+<li>This page only covers each function's signature / parameters / return value / calling context.</li>
+</ul>
+<hr />
+<h2 id="function-list">Function List<a class="headerlink" href="#function-list" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_task_createoneshot"><code>XM_Task_CreateOneShot</code></a></td>
+<td>Create a task that runs once and terminates automatically (e.g. NN training, FFT)</td>
+</tr>
+<tr>
+<td><a href="#xm_task_iscomplete"><code>XM_Task_IsComplete</code></a></td>
+<td>Check whether a OneShot task has finished (returned)</td>
+</tr>
+<tr>
+<td><a href="#xm_task_createperiodic"><code>XM_Task_CreatePeriodic</code></a></td>
+<td>Create a task that runs periodically (e.g. 100 Hz logging)</td>
+</tr>
+<tr>
+<td><a href="#xm_task_suspend"><code>XM_Task_Suspend</code></a></td>
+<td>Suspend a task</td>
+</tr>
+<tr>
+<td><a href="#xm_task_resume"><code>XM_Task_Resume</code></a></td>
+<td>Resume a suspended task</td>
+</tr>
+<tr>
+<td><a href="#xm_task_delete"><code>XM_Task_Delete</code></a></td>
+<td>Terminate a task and free its memory</td>
+</tr>
+<tr>
+<td><a href="#xm_mutex_create"><code>XM_Mutex_Create</code></a></td>
+<td>Create a mutex</td>
+</tr>
+<tr>
+<td><a href="#xm_mutex_lock"><code>XM_Mutex_Lock</code></a></td>
+<td>Attempt to lock a mutex</td>
+</tr>
+<tr>
+<td><a href="#xm_mutex_unlock"><code>XM_Mutex_Unlock</code></a></td>
+<td>Unlock a mutex</td>
+</tr>
+<tr>
+<td><a href="#xm_mutex_delete"><code>XM_Mutex_Delete</code></a></td>
+<td>Delete a mutex and free its memory</td>
+</tr>
+<tr>
+<td><a href="#xm_task_getheapfreebytes"><code>XM_Task_GetHeapFreeBytes</code></a></td>
+<td>Query the current system heap's free bytes</td>
+</tr>
+<tr>
+<td><a href="#xm_task_getheapmineverbytes"><code>XM_Task_GetHeapMinEverBytes</code></a></td>
+<td>Query the all-time-lowest heap free level (leak detection)</td>
+</tr>
+<tr>
+<td><a href="#xm_task_getinstancecount"><code>XM_Task_GetInstanceCount</code></a></td>
+<td>Query how many user tasks currently exist</td>
+</tr>
+<tr>
+<td><a href="#xm_task_getbudgetremainingbytes"><code>XM_Task_GetBudgetRemainingBytes</code></a></td>
+<td>Query the remaining user-task heap budget</td>
+</tr>
+<tr>
+<td><a href="#xm_rtos_printtasklist"><code>XM_RTOS_PrintTaskList</code></a></td>
+<td>Print the list of currently running tasks (diagnostics)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <code>XM_BgTask_Create</code> / <code>XM_BgTask_IsDone</code> are <strong>Deprecated</strong> and excluded from the table above. See the <a href="#deprecated-api-avoid-in-new-code">Deprecated API</a> section below.</p>
+</blockquote>
+<hr />
+<h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
+<h3 id="oneshot-task-api">OneShot Task API<a class="headerlink" href="#oneshot-task-api" title="Permanent link">&para;</a></h3>
+<h4 id="xm_task_createoneshot"><code>XM_Task_CreateOneShot</code><a class="headerlink" href="#xm_task_createoneshot" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">XmTaskHandle_t</span><span class="w"> </span><span class="nf">XM_Task_CreateOneShot</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w">         </span><span class="n">name</span><span class="p">,</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">                                      </span><span class="n">XmTaskOneShotFunc_t</span><span class="w"> </span><span class="n">func</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">                                      </span><span class="kt">void</span><span class="o">*</span><span class="w">               </span><span class="n">arg</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">                                      </span><span class="n">XmTaskPrio_t</span><span class="w">        </span><span class="n">prio_hint</span><span class="p">);</span>
+</code></pre></div>
+<p>Creates a task that runs once and terminates automatically when the function <code>return</code>s. Use this to run time-consuming computation such as neural-network training or FFT outside Control_Loop.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>const char*</code></td>
+<td>Task name (10 characters or fewer recommended). <code>NULL</code>, an empty string, or a name already in use is rejected.</td>
+</tr>
+<tr>
+<td><code>func</code></td>
+<td><code>XmTaskOneShotFunc_t</code></td>
+<td>The function to run as the task. Returning from it marks the task complete.</td>
+</tr>
+<tr>
+<td><code>arg</code></td>
+<td><code>void*</code></td>
+<td>The argument passed to <code>func</code>. Pass <strong>only static variables or heap pointers</strong> — the address of a caller's local (stack) variable may already be gone by the time the task actually runs, so this is forbidden.</td>
+</tr>
+<tr>
+<td><code>prio_hint</code></td>
+<td><code>XmTaskPrio_t</code></td>
+<td>Priority hint. Use <code>XM_PRIO_BACKGROUND</code> unless you have a specific reason not to.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: a valid <code>XmTaskHandle_t</code> on success, <code>NULL</code> if rejected (plus a <code>[XM-WARN]</code> message over USB-CDC).</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately — do not call from an ISR). At most <a href="#macros"><code>XM_TASK_MAX_INSTANCES</code></a> (4) tasks can exist at the same time, and a completed task still counts toward this limit until you call <a href="#xm_task_delete"><code>XM_Task_Delete</code></a>.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XmTaskHandle_t</span><span class="w"> </span><span class="n">s_heavy</span><span class="p">;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">trigger</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s_heavy</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">s_heavy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_Task_CreateOneShot</span><span class="p">(</span><span class="s">&quot;HeavyCalc&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">_HeavyCalc</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">XM_PRIO_BACKGROUND</span><span class="p">);</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_task_iscomplete"><code>XM_Task_IsComplete</code></a>, <a href="#xm_task_delete"><code>XM_Task_Delete</code></a>, Ex.39 <code>task_lifecycle.c</code></p>
+<hr />
+<h4 id="xm_task_iscomplete"><code>XM_Task_IsComplete</code><a class="headerlink" href="#xm_task_iscomplete" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_Task_IsComplete</span><span class="p">(</span><span class="n">XmTaskHandle_t</span><span class="w"> </span><span class="n">handle</span><span class="p">);</span>
+</code></pre></div>
+<p>Checks whether a OneShot task's function body has already <code>return</code>ed.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>handle</code></td>
+<td><code>XmTaskHandle_t</code></td>
+<td>The handle returned by <code>XM_Task_CreateOneShot()</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>true</code> — the function returned and the task is complete / <code>false</code> — still running, or the handle is invalid (or already deleted).</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately).</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_heavy</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">XM_Task_IsComplete</span><span class="p">(</span><span class="n">s_heavy</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="n">XM_Task_Delete</span><span class="p">(</span><span class="n">s_heavy</span><span class="p">);</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="n">s_heavy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w">   </span><span class="cm">/* prevents a dangling pointer — always set it to NULL */</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_task_createoneshot"><code>XM_Task_CreateOneShot</code></a>, <a href="#xm_task_delete"><code>XM_Task_Delete</code></a></p>
+<hr />
+<h3 id="periodic-task-api">Periodic Task API<a class="headerlink" href="#periodic-task-api" title="Permanent link">&para;</a></h3>
+<h4 id="xm_task_createperiodic"><code>XM_Task_CreatePeriodic</code><a class="headerlink" href="#xm_task_createperiodic" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">XmTaskHandle_t</span><span class="w"> </span><span class="nf">XM_Task_CreatePeriodic</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w">          </span><span class="n">name</span><span class="p">,</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">                                       </span><span class="n">XmTaskPeriodicFunc_t</span><span class="w"> </span><span class="n">func</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">                                       </span><span class="kt">uint32_t</span><span class="w">             </span><span class="n">period_ms</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">                                       </span><span class="n">XmTaskPrio_t</span><span class="w">         </span><span class="n">prio_hint</span><span class="p">);</span>
+</code></pre></div>
+<p>Creates a task that is called repeatedly at the given period. Use this for work that must keep running on its own cadence separate from Control_Loop, such as 100 Hz logging or a 10 Hz UI refresh.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>const char*</code></td>
+<td>Task name</td>
+</tr>
+<tr>
+<td><code>func</code></td>
+<td><code>XmTaskPeriodicFunc_t</code></td>
+<td>The function called every period. <strong>It takes no argument</strong> — exchange data with Control_Loop through a shared variable (volatile or a mutex).</td>
+</tr>
+<tr>
+<td><code>period_ms</code></td>
+<td><code>uint32_t</code></td>
+<td>Call period in ms. <strong>1 ms is reserved for Control_Loop</strong>, so 2 ms or more is recommended.</td>
+</tr>
+<tr>
+<td><code>prio_hint</code></td>
+<td><code>XmTaskPrio_t</code></td>
+<td>Priority hint</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: a valid handle on success, <code>NULL</code> if rejected.</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately).</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XmMutexHandle_t</span><span class="w"> </span><span class="n">s_buf_mutex</span><span class="p">;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">static</span><span class="w"> </span><span class="n">XmTaskHandle_t</span><span class="w">  </span><span class="n">s_summary_task</span><span class="p">;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="n">s_buf_mutex</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">XM_Mutex_Create</span><span class="p">();</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="n">s_summary_task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_Task_CreatePeriodic</span><span class="p">(</span><span class="s">&quot;AdcSummary&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">_SummaryTask</span><span class="p">,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">                                             </span><span class="mi">10U</span><span class="w"> </span><span class="cm">/* 10 ms = 100 Hz */</span><span class="p">,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">                                             </span><span class="n">XM_PRIO_BACKGROUND</span><span class="p">);</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="../../09-task-creation/">09. Helper Tasks &amp; Data Sharing §3 Shared-Variable Patterns</a>, Ex.38 <code>periodic_bg_task.c</code></p>
+<hr />
+<h3 id="task-lifecycle-api">Task Lifecycle API<a class="headerlink" href="#task-lifecycle-api" title="Permanent link">&para;</a></h3>
+<h4 id="xm_task_suspend"><code>XM_Task_Suspend</code><a class="headerlink" href="#xm_task_suspend" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_Task_Suspend</span><span class="p">(</span><span class="n">XmTaskHandle_t</span><span class="w"> </span><span class="n">handle</span><span class="p">);</span>
+</code></pre></div>
+<p>Suspends a task. It will not run again until you call <a href="#xm_task_resume"><code>XM_Task_Resume</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>handle</code></td>
+<td><code>XmTaskHandle_t</code></td>
+<td>Handle of the task to suspend</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>).</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). Passing an invalid handle is ignored without crashing (the same defensive pattern used by the other APIs).</p>
+</blockquote>
+<p><strong>See also</strong>: <a href="#xm_task_resume"><code>XM_Task_Resume</code></a></p>
+<hr />
+<h4 id="xm_task_resume"><code>XM_Task_Resume</code><a class="headerlink" href="#xm_task_resume" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_Task_Resume</span><span class="p">(</span><span class="n">XmTaskHandle_t</span><span class="w"> </span><span class="n">handle</span><span class="p">);</span>
+</code></pre></div>
+<p>Resumes a task previously stopped with <a href="#xm_task_suspend"><code>XM_Task_Suspend</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>handle</code></td>
+<td><code>XmTaskHandle_t</code></td>
+<td>Handle of the task to resume</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>).</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately).</p>
+</blockquote>
+<p><strong>See also</strong>: <a href="#xm_task_suspend"><code>XM_Task_Suspend</code></a></p>
+<hr />
+<h4 id="xm_task_delete"><code>XM_Task_Delete</code><a class="headerlink" href="#xm_task_delete" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_Task_Delete</span><span class="p">(</span><span class="n">XmTaskHandle_t</span><span class="w"> </span><span class="n">handle</span><span class="p">);</span>
+</code></pre></div>
+<p>Terminates a task and reclaims its memory (heap). Every task you create must eventually be matched with a <code>Delete</code> call, or you will leak heap.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>handle</code></td>
+<td><code>XmTaskHandle_t</code></td>
+<td>Handle of the task to delete</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>).</p>
+<ul>
+<li><strong>OneShot</strong>: it is recommended to confirm completion with <a href="#xm_task_iscomplete"><code>XM_Task_IsComplete</code></a> before calling this.</li>
+<li><strong>Periodic</strong>: there is no "complete" state, so you can call this at any time to force termination.</li>
+<li><strong>No self-deletion</strong>: an attempt by a task to <code>Delete</code> itself (from inside its own currently-running context) is rejected (stated in the header — do not call <code>XM_Task_Delete(own_handle)</code> from inside the task function itself).</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately).</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_heavy</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">XM_Task_IsComplete</span><span class="p">(</span><span class="n">s_heavy</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="n">XM_Task_Delete</span><span class="p">(</span><span class="n">s_heavy</span><span class="p">);</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="n">s_heavy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w">   </span><span class="cm">/* required — prevents a dangling pointer */</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_task_createoneshot"><code>XM_Task_CreateOneShot</code></a>, <a href="#xm_task_createperiodic"><code>XM_Task_CreatePeriodic</code></a>, Ex.39 <code>task_lifecycle.c</code></p>
+<hr />
+<h3 id="mutex-api">Mutex API<a class="headerlink" href="#mutex-api" title="Permanent link">&para;</a></h3>
+<h4 id="xm_mutex_create"><code>XM_Mutex_Create</code><a class="headerlink" href="#xm_mutex_create" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">XmMutexHandle_t</span><span class="w"> </span><span class="nf">XM_Mutex_Create</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Creates a mutex. Use one to protect <strong>multi-word</strong> data — arrays or structs — that Control_Loop and a helper task both read and write.</p>
+<p><strong>Parameters</strong>: none.</p>
+<p><strong>Return value</strong>: a valid <code>XmMutexHandle_t</code> on success, <code>NULL</code> on failure.</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). Typically created once in <code>Control_Setup()</code> and reused from then on.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XmMutexHandle_t</span><span class="w"> </span><span class="n">s_buf_mutex</span><span class="p">;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="n">s_buf_mutex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_Mutex_Create</span><span class="p">();</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_mutex_lock"><code>XM_Mutex_Lock</code></a>, <a href="../../09-task-creation/">09. Helper Tasks &amp; Data Sharing §3 Shared-Variable Patterns</a></p>
+<hr />
+<h4 id="xm_mutex_lock"><code>XM_Mutex_Lock</code><a class="headerlink" href="#xm_mutex_lock" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_Mutex_Lock</span><span class="p">(</span><span class="n">XmMutexHandle_t</span><span class="w"> </span><span class="n">mutex</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">timeout_ms</span><span class="p">);</span>
+</code></pre></div>
+<p>Attempts to lock a mutex.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mutex</code></td>
+<td><code>XmMutexHandle_t</code></td>
+<td>Handle of the mutex to lock</td>
+</tr>
+<tr>
+<td><code>timeout_ms</code></td>
+<td><code>uint32_t</code></td>
+<td>Lock wait time in ms. <strong>Always use 0 inside Control_Loop</strong> (stated in the header — never block; a 1 ms period would be broken). 0 is recommended inside helper tasks too.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>true</code> — lock acquired / <code>false</code> — timed out, or the handle is invalid.</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). Using <code>timeout_ms &gt; 0</code> inside Control_Loop can, in the worst case, delay the 1 kHz period by that much — always use <code>0</code> together with a skip-on-failure pattern.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cm">/* Control_Loop — 1 kHz writer, always timeout=0 */</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_Mutex_Lock</span><span class="p">(</span><span class="n">s_buf_mutex</span><span class="p">,</span><span class="w"> </span><span class="mi">0U</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="n">s_adc_buf</span><span class="p">[</span><span class="n">s_adc_idx</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_AnalogRead</span><span class="p">(</span><span class="n">XM_EXT_ADC_1</span><span class="p">);</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="n">s_adc_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">s_adc_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">ADC_BUF_SIZE</span><span class="p">;</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="n">XM_Mutex_Unlock</span><span class="p">(</span><span class="n">s_buf_mutex</span><span class="p">);</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="p">}</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="cm">/* On failure, this cycle&#39;s sample is simply skipped (preserving jitter) */</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_mutex_unlock"><code>XM_Mutex_Unlock</code></a>, Ex.38 <code>periodic_bg_task.c</code></p>
+<hr />
+<h4 id="xm_mutex_unlock"><code>XM_Mutex_Unlock</code><a class="headerlink" href="#xm_mutex_unlock" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_Mutex_Unlock</span><span class="p">(</span><span class="n">XmMutexHandle_t</span><span class="w"> </span><span class="n">mutex</span><span class="p">);</span>
+</code></pre></div>
+<p>Unlocks a mutex. <strong>Only the task that locked it</strong> may unlock it.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mutex</code></td>
+<td><code>XmMutexHandle_t</code></td>
+<td>Handle of the mutex to unlock</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>).</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). After a successful <code>XM_Mutex_Lock()</code>, be sure to call <code>Unlock</code> before any early return — omitting it leaves that mutex permanently locked.</p>
+</blockquote>
+<p><strong>See also</strong>: <a href="#xm_mutex_lock"><code>XM_Mutex_Lock</code></a></p>
+<hr />
+<h4 id="xm_mutex_delete"><code>XM_Mutex_Delete</code><a class="headerlink" href="#xm_mutex_delete" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_Mutex_Delete</span><span class="p">(</span><span class="n">XmMutexHandle_t</span><span class="w"> </span><span class="n">mutex</span><span class="p">);</span>
+</code></pre></div>
+<p>Deletes a mutex and reclaims its memory.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mutex</code></td>
+<td><code>XmMutexHandle_t</code></td>
+<td>Handle of the mutex to delete</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>).</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). Do not delete a mutex while a task that still uses it is alive — delete the related task(s) with <a href="#xm_task_delete"><code>XM_Task_Delete</code></a> first, then delete the mutex.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">XM_Task_Delete</span><span class="p">(</span><span class="n">s_summary_task</span><span class="p">);</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">XM_Mutex_Delete</span><span class="p">(</span><span class="n">s_buf_mutex</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_mutex_create"><code>XM_Mutex_Create</code></a>, <a href="#xm_task_delete"><code>XM_Task_Delete</code></a></p>
+<hr />
+<h3 id="hw-constraint-diagnostic-api">HW-constraint Diagnostic API<a class="headerlink" href="#hw-constraint-diagnostic-api" title="Permanent link">&para;</a></h3>
+<p>These four functions all take no parameters and immediately return the current state as a single number — simple getters. Use them when you want to check in code the HW constraints described in <a href="../../09-task-creation/">09. Helper Tasks &amp; Data Sharing §4</a> (max 4 tasks, 32 KB heap budget).</p>
+<h4 id="xm_task_getheapfreebytes"><code>XM_Task_GetHeapFreeBytes</code><a class="headerlink" href="#xm_task_getheapfreebytes" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_Task_GetHeapFreeBytes</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Returns the current system heap's free byte count.</p>
+<p><strong>Return value</strong>: free heap (bytes).</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately).</p>
+</blockquote>
+<hr />
+<h4 id="xm_task_getheapmineverbytes"><code>XM_Task_GetHeapMinEverBytes</code><a class="headerlink" href="#xm_task_getheapmineverbytes" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_Task_GetHeapMinEverBytes</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Returns the lowest the system heap has ever dropped to. If this value keeps shrinking across repeated task create/delete cycles, suspect a heap leak (e.g. a missing <code>XM_Task_Delete</code> call).</p>
+<p><strong>Return value</strong>: all-time-lowest heap free level (bytes).</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). Ex.39 verifies there is no leak by pressing a button 3 times to repeat OneShot task create/delete cycles and confirming this value does not keep dropping.</p>
+</blockquote>
+<p><strong>See also</strong>: Ex.39 <code>README.md</code> (heap-leak verification scenario)</p>
+<hr />
+<h4 id="xm_task_getinstancecount"><code>XM_Task_GetInstanceCount</code><a class="headerlink" href="#xm_task_getinstancecount" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_Task_GetInstanceCount</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Returns the number of user tasks created so far that have not yet been <code>Delete</code>d (including OneShot tasks that completed but were not yet deleted).</p>
+<p><strong>Return value</strong>: current user-task count (0 to <a href="#macros"><code>XM_TASK_MAX_INSTANCES</code></a>).</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). Once this reaches 4, every subsequent <code>XM_Task_CreateOneShot</code>/<code>CreatePeriodic</code> call returns <code>NULL</code> — checking this value before creating a new task helps diagnose why.</p>
+</blockquote>
+<hr />
+<h4 id="xm_task_getbudgetremainingbytes"><code>XM_Task_GetBudgetRemainingBytes</code><a class="headerlink" href="#xm_task_getbudgetremainingbytes" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_Task_GetBudgetRemainingBytes</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Returns how much of the user-task-only heap budget (total <a href="#macros"><code>XM_TASK_HEAP_BUDGET_BYTES</code></a>, 32 KB) remains.</p>
+<p><strong>Return value</strong>: remaining budget (bytes).</p>
+<blockquote>
+<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). If this value is too low, creating a task with a large stack (e.g. the 8 KB default for <code>XM_PRIO_BACKGROUND</code>) may be rejected.</p>
+</blockquote>
+<hr />
+<h3 id="diagnostic-api">Diagnostic API<a class="headerlink" href="#diagnostic-api" title="Permanent link">&para;</a></h3>
+<h4 id="xm_rtos_printtasklist"><code>XM_RTOS_PrintTaskList</code><a class="headerlink" href="#xm_rtos_printtasklist" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_RTOS_PrintTaskList</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Prints the list of currently running tasks (on-demand diagnostics).</p>
+<p><strong>Parameters</strong>: none. <strong>Return value</strong>: none (<code>void</code>).</p>
+<blockquote>
+<p>⚠️ <strong>Current status (Phase 1)</strong>: in this SDK version, the diagnostic output channel is not yet wired up, so calling this is a <strong>no-op stub that does nothing</strong> (stated in the header). It is planned to connect to the PhAI Studio diagnostic channel in Phase 2.</p>
+<p>⚠️ <strong>Calling context (get ahead of it)</strong>: right now it is a stub, so calling it anywhere is safe, but the internal implementation this function wraps already documents the constraint "<strong>do not call inside the 1 kHz Control_Loop</strong> (accumulated string formatting can take 100 µs or more)." To stay safe once Phase 2 lands, it's worth building the habit now of only calling this from somewhere that does <strong>not</strong> run at 1 kHz, such as <code>Control_Setup()</code> or a button-event handler.</p>
+</blockquote>
+<hr />
+<h2 id="deprecated-api-avoid-in-new-code">Deprecated API (avoid in new code)<a class="headerlink" href="#deprecated-api-avoid-in-new-code" title="Permanent link">&para;</a></h2>
+<p>These APIs remain for v1.0 compatibility. <strong>They are scheduled for removal in the next major release</strong>, so do not use them in new code. Only the table is kept below — full function-detail blocks are omitted.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Replacement API</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XmBgTaskHandle_t XM_BgTask_Create(const char* name, XmBgTaskFunc_t func, void* arg, uint32_t stack_words)</code></td>
+<td><a href="#xm_task_createoneshot"><code>XM_Task_CreateOneShot</code></a><code>(name, func, arg, XM_PRIO_BACKGROUND)</code></td>
+<td>The compiler emits a <code>deprecated</code> warning. Calling <a href="#xm_task_delete"><code>XM_Task_Delete</code></a> after completion is still required, same as the new API.</td>
+</tr>
+<tr>
+<td><code>bool XM_BgTask_IsDone(XmBgTaskHandle_t handle)</code></td>
+<td><a href="#xm_task_iscomplete"><code>XM_Task_IsComplete</code></a></td>
+<td>Also subject to a <code>deprecated</code> compiler warning.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Ex.36 (<code>OnDevice_Kinesthetic_Learning</code>) is a real example of migrating from <code>XM_BgTask_Create</code> to <code>XM_Task_CreateOneShot</code> (its source comment records <code>[2026-05-13] XM_BgTask_Create → XM_Task_CreateOneShot migration</code>).</p>
+</blockquote>
+<hr />
+<h2 id="type-definitions">Type Definitions<a class="headerlink" href="#type-definitions" title="Permanent link">&para;</a></h2>
+<h3 id="xmtaskprio_t"><code>XmTaskPrio_t</code><a class="headerlink" href="#xmtaskprio_t" title="Permanent link">&para;</a></h3>
+<p>The task-priority-hint enum. Instead of exposing CMSIS-OS2's raw numeric priority values, it wraps them into named, meaningful levels. The numeric range already occupied by system tasks (51–55) does not exist in this enum at all — so a user task can never accidentally collide with a system task's priority.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="n">XM_PRIO_IDLE</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">   </span><span class="cm">/* osPriorityLow      — same tier as DefaultTask */</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="n">XM_PRIO_BACKGROUND</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityNormal   — recommended default */</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">    </span><span class="n">XM_PRIO_BELOW_CONTROL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityAboveNormal — below Control_Loop */</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">    </span><span class="n">XM_PRIO_ABOVE_CONTROL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityHigh     — same tier as USBH, still below Control_Loop */</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">    </span><span class="n">XM_PRIO_NEAR_REALTIME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">48</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityRealtime — caution: may contend with PnP traffic */</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="p">}</span><span class="w"> </span><span class="n">XmTaskPrio_t</span><span class="p">;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Number</th>
+<th>Default stack</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_PRIO_IDLE</code></td>
+<td>8</td>
+<td>1 KB</td>
+<td>The lowest priority, same tier as <code>DefaultTask</code></td>
+</tr>
+<tr>
+<td><code>XM_PRIO_BACKGROUND</code></td>
+<td>24</td>
+<td>8 KB</td>
+<td><strong>Recommended default</strong></td>
+</tr>
+<tr>
+<td><code>XM_PRIO_BELOW_CONTROL</code></td>
+<td>32</td>
+<td>4 KB</td>
+<td>Below Control_Loop</td>
+</tr>
+<tr>
+<td><code>XM_PRIO_ABOVE_CONTROL</code></td>
+<td>40</td>
+<td>2 KB</td>
+<td>Same tier as USBH — still below Control_Loop</td>
+</tr>
+<tr>
+<td><code>XM_PRIO_NEAR_REALTIME</code></td>
+<td>48</td>
+<td>2 KB</td>
+<td>⚠️ Does not contend with PnP traffic (<code>PnP_Task</code>, 25) directly, but sits close to the system tasks above it — don't overuse it.</td>
+</tr>
+</tbody>
+</table>
+<p>For the full picture of how priority zones are laid out system-wide (and why 51–55 are excluded), see <a href="../../09-task-creation/">09. Helper Tasks &amp; Data Sharing §1–2</a>.</p>
+<h3 id="handle-types">Handle Types<a class="headerlink" href="#handle-types" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Definition</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XmTaskHandle_t</code></td>
+<td><code>typedef void*</code></td>
+<td>Task handle. <code>NULL</code> means an invalid handle.</td>
+</tr>
+<tr>
+<td><code>XmMutexHandle_t</code></td>
+<td><code>typedef void*</code></td>
+<td>Mutex handle. <code>NULL</code> means an invalid handle.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="function-pointer-types">Function Pointer Types<a class="headerlink" href="#function-pointer-types" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XmTaskOneShotFunc_t</code></td>
+<td><code>void (*)(void* arg)</code></td>
+<td>The type of the <code>func</code> parameter of <a href="#xm_task_createoneshot"><code>XM_Task_CreateOneShot</code></a></td>
+</tr>
+<tr>
+<td><code>XmTaskPeriodicFunc_t</code></td>
+<td><code>void (*)(void)</code></td>
+<td>The type of the <code>func</code> parameter of <a href="#xm_task_createperiodic"><code>XM_Task_CreatePeriodic</code></a> (no argument — pass data through a shared variable)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="macros">Macros<a class="headerlink" href="#macros" title="Permanent link">&para;</a></h2>
+<h3 id="system-guard-constants">System Guard Constants<a class="headerlink" href="#system-guard-constants" title="Permanent link">&para;</a></h3>
+<p>Students cannot change these values, but they are exposed as-is in the header so you can use them in conditional logic (e.g. <code>if (XM_Task_GetInstanceCount() &lt; XM_TASK_MAX_INSTANCES)</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Macro</th>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_TASK_MAX_INSTANCES</code></td>
+<td><code>4U</code></td>
+<td>Max number of user tasks that can exist at the same time</td>
+</tr>
+<tr>
+<td><code>XM_TASK_HEAP_BUDGET_BYTES</code></td>
+<td><code>32768U</code> (32 KB)</td>
+<td>Total heap all user tasks together may use</td>
+</tr>
+<tr>
+<td><code>XM_TASK_STACK_MAX_WORDS</code></td>
+<td><code>2048U</code> (8 KB)</td>
+<td>Max stack for a single task (1 word = 4 bytes)</td>
+</tr>
+<tr>
+<td><code>XM_TASK_STACK_MIN_WORDS</code></td>
+<td><code>128U</code> (512 B)</td>
+<td>Min stack for a single task</td>
+</tr>
+</tbody>
+</table>
+<h3 id="default-stack-per-prio_hint">Default Stack per <code>prio_hint</code><a class="headerlink" href="#default-stack-per-prio_hint" title="Permanent link">&para;</a></h3>
+<p>When you call <code>XM_Task_CreateOneShot</code>/<code>CreatePeriodic</code>, you don't specify a stack size directly — the value below is applied automatically based on <code>prio_hint</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Macro</th>
+<th>Value (words)</th>
+<th>In bytes</th>
+<th>Corresponding <code>prio_hint</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_TASK_STACK_IDLE_WORDS</code></td>
+<td><code>256U</code></td>
+<td>1 KB</td>
+<td><code>XM_PRIO_IDLE</code></td>
+</tr>
+<tr>
+<td><code>XM_TASK_STACK_BACKGROUND_WORDS</code></td>
+<td><code>2048U</code></td>
+<td>8 KB</td>
+<td><code>XM_PRIO_BACKGROUND</code></td>
+</tr>
+<tr>
+<td><code>XM_TASK_STACK_BELOW_WORDS</code></td>
+<td><code>1024U</code></td>
+<td>4 KB</td>
+<td><code>XM_PRIO_BELOW_CONTROL</code></td>
+</tr>
+<tr>
+<td><code>XM_TASK_STACK_ABOVE_WORDS</code></td>
+<td><code>512U</code></td>
+<td>2 KB</td>
+<td><code>XM_PRIO_ABOVE_CONTROL</code></td>
+</tr>
+<tr>
+<td><code>XM_TASK_STACK_NRT_WORDS</code></td>
+<td><code>512U</code></td>
+<td>2 KB</td>
+<td><code>XM_PRIO_NEAR_REALTIME</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>The header comment records <code>XM_TASK_STACK_BACKGROUND_WORDS</code> (8 KB) as "measured from Ex.36 NN_Train" — it's large enough for typical algorithmic computation.</p>
+</blockquote>
+<hr />
+<h2 id="common-mistakes">Common Mistakes<a class="headerlink" href="#common-mistakes" title="Permanent link">&para;</a></h2>
+<p>The full pitfalls table lives in <a href="../../09-task-creation/">09. Helper Tasks &amp; Data Sharing §6</a>. Summarized here are only the ones directly tied to this header:</p>
+<table>
+<thead>
+<tr>
+<th>Mistake</th>
+<th>Result</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_Mutex_Lock(m, &gt; 0)</code> inside Control_Loop</td>
+<td>Breaks the 1 ms period</td>
+<td>Always use <code>timeout_ms = 0</code>, skip on failure</td>
+</tr>
+<tr>
+<td>Forgetting <code>XM_Mutex_Unlock</code> after a successful <code>XM_Mutex_Lock</code></td>
+<td>Mutex stays locked forever</td>
+<td>Always unlock before any early return</td>
+</tr>
+<tr>
+<td>Reusing a handle after <code>XM_Task_Delete</code></td>
+<td>All subsequent calls return <code>false</code>/<code>NULL</code></td>
+<td>Set <code>handle = NULL</code> right after Delete</td>
+</tr>
+<tr>
+<td>Forgetting to call <code>XM_Task_Delete</code> at all</td>
+<td>Hits the 4-task limit → later Creates return <code>NULL</code></td>
+<td>Follow the <code>IsComplete</code> → <code>Delete</code> cycle for OneShot tasks</td>
+</tr>
+<tr>
+<td>A task function calling <code>XM_Task_Delete</code> on itself</td>
+<td>Rejected (no-op)</td>
+<td>Check <code>IsComplete</code> and call Delete from the outside (e.g. Control_Loop)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-documents">Related Documents<a class="headerlink" href="#related-documents" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../09-task-creation/">09. Helper Tasks &amp; Data Sharing</a> — system task inventory, priority zones, data flow, shared-variable patterns</li>
+<li><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/38_Periodic_Background_Task/">Ex.38 Periodic_Background_Task</a></li>
+<li><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/39_Task_Lifecycle/">Ex.39 Task_Lifecycle</a></li>
+<li><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/">Ex.36 OnDevice_Kinesthetic_Learning</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../xm-api-rtc/" class="md-footer__link md-footer__link--prev" aria-label="Previous: xm_api_rtc.h (RTC)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                xm_api_rtc.h (RTC)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../xm-api-user-custom/" class="md-footer__link md-footer__link--next" aria-label="Next: xm_api_user_custom.h (User Data)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                xm_api_user_custom.h (User Data)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

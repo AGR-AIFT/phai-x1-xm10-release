@@ -1,0 +1,3142 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서">
+      
+      
+      
+        <link rel="canonical" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-memory/">
+      
+      
+        <link rel="prev" href="../xm-api-usb/">
+      
+      
+        <link rel="next" href="../xm-api-rtc/">
+      
+      
+        
+          <link rel="alternate" href="./" hreflang="ko">
+        
+          <link rel="alternate" href="../../../en/api-reference/ref/xm-api-memory/" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>xm_api_memory.h (메모리) - XM10 Extension Module</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#xm_api_memoryh--xm10-메모리-접근-api" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../../.." title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XM10 Extension Module
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              xm_api_memory.h (메모리)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="언어설정">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../../../en/api-reference/ref/xm-api-memory/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AGR-EXO/Extension_Module" title="저장소로 이동" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    XM10 Extension Module
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AGR-EXO/Extension_Module" title="저장소로 이동" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    홈
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../find-it/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠른 찾기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    시작하기
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    시작하기
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/01-hardware-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    하드웨어 연결
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/02-software-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    개발 환경 구축
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/03-first-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    첫 빌드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code 와 함께 시작
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../hardware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    하드웨어
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    하드웨어
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 GPIO (Rev 1.1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 GPIO (Rev 2.0)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    튜토리얼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API 레퍼런스
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-task-state-machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    상태 머신 (TSM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-h10-control-n-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 제어·데이터
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-led-btn-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED·버튼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-usb-connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 시리얼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리 로깅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-memory-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리 영역
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-rtc-clock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실시간 시계 (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-task-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    보조 태스크
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    함수 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    함수 레퍼런스
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api.h (진입점)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_data.h (제어·데이터)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-tsm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_tsm.h (상태 머신)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-led-btn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_led_btn.h (LED·버튼)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_external_io.h (외부 IO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-usb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_memory.h (메모리)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_memory.h (메모리)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#언제-사용하나" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        언제 사용하나
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수-목록" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 목록
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수-상세" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 상세
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="함수 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ram_d1-사용자-워크스페이스" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RAM_D1 사용자 워크스페이스
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RAM_D1 사용자 워크스페이스">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_getuserworkspace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUserWorkspace()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getuserworkspacesize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUserWorkspaceSize()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#psram-사용자-영역--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PSRAM 사용자 영역 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PSRAM 사용자 영역 🟢 Rev 2.0 전용">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_getuserpsram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUserPSRAM()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getuserpsramsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUserPSRAMSize()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dtcm-사용자-영역" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DTCM 사용자 영역
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DTCM 사용자 영역">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_getuserdtcm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUserDTCM()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getuserdtcmsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUserDTCMSize()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flash-user-nv-비휘발성-저장소" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flash User NV (비휘발성 저장소)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Flash User NV (비휘발성 저장소)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_usernv_getsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_UserNV_GetSize()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usernv_read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_UserNV_Read()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usernv_write" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_UserNV_Write()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usernv_erase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_UserNV_Erase()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usernv_iserased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_UserNV_IsErased()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#타입매크로" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        타입/매크로
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="타입/매크로">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_ramfunc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_RAMFUNC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_dtcm_var" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_DTCM_VAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#내부-전용-호출-금지" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        내부 전용 (호출 금지)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-문서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 문서
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-rtc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_rtc.h (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-freertos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_freertos.h (RTOS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-user-custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_user_custom.h (사용자 데이터)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    아키텍처
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kit-h10-firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 펌웨어
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../bootloader/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    부트로더
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    부트로더
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    업로드 방법
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    심화
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    심화
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 데이터 파이프라인
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    안전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    문제 해결
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../release-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    릴리스 노트
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    릴리스 노트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#언제-사용하나" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        언제 사용하나
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수-목록" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 목록
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수-상세" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 상세
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="함수 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ram_d1-사용자-워크스페이스" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RAM_D1 사용자 워크스페이스
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RAM_D1 사용자 워크스페이스">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_getuserworkspace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUserWorkspace()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getuserworkspacesize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUserWorkspaceSize()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#psram-사용자-영역--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PSRAM 사용자 영역 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PSRAM 사용자 영역 🟢 Rev 2.0 전용">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_getuserpsram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUserPSRAM()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getuserpsramsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUserPSRAMSize()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dtcm-사용자-영역" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DTCM 사용자 영역
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DTCM 사용자 영역">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_getuserdtcm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUserDTCM()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getuserdtcmsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetUserDTCMSize()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flash-user-nv-비휘발성-저장소" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flash User NV (비휘발성 저장소)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Flash User NV (비휘발성 저장소)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_usernv_getsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_UserNV_GetSize()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usernv_read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_UserNV_Read()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usernv_write" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_UserNV_Write()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usernv_erase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_UserNV_Erase()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_usernv_iserased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_UserNV_IsErased()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#타입매크로" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        타입/매크로
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="타입/매크로">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_ramfunc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_RAMFUNC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_dtcm_var" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_DTCM_VAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#내부-전용-호출-금지" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        내부 전용 (호출 금지)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-문서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 문서
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="xm_api_memoryh--xm10-메모리-접근-api"><code>xm_api_memory.h</code> — XM10 메모리 접근 API<a class="headerlink" href="#xm_api_memoryh--xm10-메모리-접근-api" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 전용</strong> — 본 헤더 전체가 XM10 Rev 2.0 SDK에만 포함되어 있습니다. Rev 1.1 SDK (<code>XM10_SDK/Rev1.1/</code>) 에는 <code>xm_api_memory.h</code> 자체가 존재하지 않으므로, 아래 함수를 Rev 1.1 프로젝트에서 호출하면 <strong>link 단계에서 실패</strong>합니다. 보드 리비전 확인은 <a href="../../../hardware/#보드-리비전-비교">보드 리비전 비교</a> 참고.</p>
+<ul>
+<li><strong>대상 헤더</strong>: <code>XM_FW/XM_API/xm_api_memory.h</code></li>
+<li><strong>관련 개념 문서</strong>: <a href="../../07-memory-management/">07. 메모리 영역</a></li>
+<li><strong>관련 예제</strong>: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/">Ex.36 OnDevice Kinesthetic Learning</a> — <code>XM_UserNV_Read/Write/Erase</code>로 학습된 신경망 가중치를 Flash에 저장/복원</li>
+</ul>
+</blockquote>
+<hr />
+<h2 id="언제-사용하나">언제 사용하나<a class="headerlink" href="#언제-사용하나" title="Permanent link">&para;</a></h2>
+<p>기본 전역 변수(<code>.bss</code>/<code>.data</code>)만으로는 부족한 상황 — 대용량 버퍼가 필요하거나, 제어 루프 안에서 캐시 지연 없이 결정론적으로 접근해야 하거나, 전원이 꺼져도 값을 남겨야 하는 상황 — 에서 이 API로 원하는 메모리 영역을 직접 선택합니다. 각 영역의 특성(속도/휘발성/DMA 가능 여부)과 선택 기준은 <a href="../../07-memory-management/">07. 메모리 영역</a>에 정리되어 있으니, 이 페이지에서는 개별 함수의 시그니처와 파라미터만 다룹니다.</p>
+<hr />
+<h2 id="함수-목록">함수 목록<a class="headerlink" href="#함수-목록" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_getuserworkspace"><code>XM_GetUserWorkspace()</code></a></td>
+<td>RAM_D1 사용자 워크스페이스 시작 주소 반환</td>
+</tr>
+<tr>
+<td><a href="#xm_getuserworkspacesize"><code>XM_GetUserWorkspaceSize()</code></a></td>
+<td>RAM_D1 워크스페이스 크기(바이트) 반환</td>
+</tr>
+<tr>
+<td><a href="#xm_getuserpsram"><code>XM_GetUserPSRAM()</code></a> 🟢</td>
+<td>PSRAM 사용자 영역 시작 주소 반환</td>
+</tr>
+<tr>
+<td><a href="#xm_getuserpsramsize"><code>XM_GetUserPSRAMSize()</code></a> 🟢</td>
+<td>PSRAM 사용자 영역 크기(바이트) 반환</td>
+</tr>
+<tr>
+<td><a href="#xm_getuserdtcm"><code>XM_GetUserDTCM()</code></a></td>
+<td>DTCM 사용자 영역 시작 주소 반환</td>
+</tr>
+<tr>
+<td><a href="#xm_getuserdtcmsize"><code>XM_GetUserDTCMSize()</code></a></td>
+<td>DTCM 사용자 영역 크기(바이트) 반환</td>
+</tr>
+<tr>
+<td><a href="#xm_usernv_getsize"><code>XM_UserNV_GetSize()</code></a></td>
+<td>Flash User NV 영역 크기(바이트) 반환</td>
+</tr>
+<tr>
+<td><a href="#xm_usernv_read"><code>XM_UserNV_Read()</code></a></td>
+<td>Flash User NV에서 데이터 읽기</td>
+</tr>
+<tr>
+<td><a href="#xm_usernv_write"><code>XM_UserNV_Write()</code></a></td>
+<td>Flash User NV에 데이터 쓰기</td>
+</tr>
+<tr>
+<td><a href="#xm_usernv_erase"><code>XM_UserNV_Erase()</code></a></td>
+<td>Flash User NV 전체 영역 지우기</td>
+</tr>
+<tr>
+<td><a href="#xm_usernv_iserased"><code>XM_UserNV_IsErased()</code></a></td>
+<td>Flash User NV가 비어있는지(전체 0xFF) 확인</td>
+</tr>
+</tbody>
+</table>
+<p>매크로 2종(<code>XM_RAMFUNC</code>, <code>XM_DTCM_VAR</code>)은 <a href="#타입매크로">타입/매크로</a>에서 다룹니다.</p>
+<hr />
+<h2 id="함수-상세">함수 상세<a class="headerlink" href="#함수-상세" title="Permanent link">&para;</a></h2>
+<h3 id="ram_d1-사용자-워크스페이스">RAM_D1 사용자 워크스페이스<a class="headerlink" href="#ram_d1-사용자-워크스페이스" title="Permanent link">&para;</a></h3>
+<h4 id="xm_getuserworkspace"><code>XM_GetUserWorkspace()</code><a class="headerlink" href="#xm_getuserworkspace" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">XM_GetUserWorkspace</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>RAM_D1 영역에 마련된 사용자 워크스페이스의 시작 주소를 반환합니다. Cacheable(D-Cache 경유) 영역이라 접근 속도는 빠르지만, 전원이 꺼지면 내용이 사라집니다. 알고리즘 변수, 센서 데이터 배열, 연산 버퍼 등 범용 목적으로 가장 먼저 고려할 영역입니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong></p>
+<table>
+<thead>
+<tr>
+<th>반환값</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>void*</code></td>
+<td>연속 메모리 블록의 시작 주소</td>
+</tr>
+</tbody>
+</table>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 헤더에 별도 제약이 명시되어 있지 않습니다. <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준으로 작성되었으며, 보통 <code>Control_Setup()</code>에서 포인터를 한 번 받아 전역/정적 포인터에 저장해두고 이후 <code>Control_Loop()</code>에서 재사용하는 방식을 권장합니다.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">s_work_buf</span><span class="p">;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">s_work_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">)</span><span class="n">XM_GetUserWorkspace</span><span class="p">();</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="../../07-memory-management/#ram_d1-workspace-api">07. 메모리 영역 — RAM_D1 Workspace API</a></p>
+<h4 id="xm_getuserworkspacesize"><code>XM_GetUserWorkspaceSize()</code><a class="headerlink" href="#xm_getuserworkspacesize" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserWorkspaceSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p><code>XM_GetUserWorkspace()</code>가 반환한 블록의 전체 크기를 바이트 단위로 반환합니다. 워크스페이스 안에서 직접 오프셋을 나누어 쓸 때 경계를 벗어나지 않는지 확인하는 용도로 사용합니다.</p>
+<p><strong>파라미터</strong>: 없음 · <strong>반환값</strong>: 워크스페이스 크기 (바이트)</p>
+<hr />
+<h3 id="psram-사용자-영역--rev-20-전용">PSRAM 사용자 영역 🟢 Rev 2.0 전용<a class="headerlink" href="#psram-사용자-영역--rev-20-전용" title="Permanent link">&para;</a></h3>
+<h4 id="xm_getuserpsram"><code>XM_GetUserPSRAM()</code><a class="headerlink" href="#xm_getuserpsram" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">XM_GetUserPSRAM</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>외장 PSRAM(APS6404L, QSPI Memory-Mapped) 안의 사용자 영역 시작 주소(<code>0x90700000</code>)를 반환합니다. Write-Through Cacheable이며 RAM_D1보다 용량이 훨씬 크지만 접근 속도는 중간 수준(~30MB/s)입니다. AI/ML 모델 가중치, 대용량 Lookup Table처럼 "크지만 그렇게까지 빠르지 않아도 되는" 데이터에 적합합니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong></p>
+<table>
+<thead>
+<tr>
+<th>반환값</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>void*</code></td>
+<td>PSRAM 연속 메모리 블록의 시작 주소 (<code>0x90700000</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> 이후부터 안전합니다. QSPI Memory-Mapped 초기화가 System Startup 단계에서 자동으로 끝나므로, 그 이전(전역 변수 초기화 구문 등)에 이 포인터를 역참조하면 <strong>HardFault</strong>가 발생할 수 있습니다.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">s_nn_weights</span><span class="p">;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">s_nn_weights</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">)</span><span class="n">XM_GetUserPSRAM</span><span class="p">();</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="c1">// 이 시점부터는 안전하게 읽기/쓰기 가능</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: PSRAM은 XM10 Rev 2.0 전용 하드웨어입니다 — Rev 1.1 보드에는 미탑재. <a href="../../07-memory-management/#psram-api">07. 메모리 영역 — PSRAM API</a></p>
+<h4 id="xm_getuserpsramsize"><code>XM_GetUserPSRAMSize()</code><a class="headerlink" href="#xm_getuserpsramsize" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserPSRAMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p><code>XM_GetUserPSRAM()</code>이 반환한 블록의 전체 크기를 바이트 단위로 반환합니다.</p>
+<p><strong>파라미터</strong>: 없음 · <strong>반환값</strong>: PSRAM 사용자 영역 크기 (바이트)</p>
+<hr />
+<h3 id="dtcm-사용자-영역">DTCM 사용자 영역<a class="headerlink" href="#dtcm-사용자-영역" title="Permanent link">&para;</a></h3>
+<h4 id="xm_getuserdtcm"><code>XM_GetUserDTCM()</code><a class="headerlink" href="#xm_getuserdtcm" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">XM_GetUserDTCM</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>DTCMRAM 안의 사용자 변수 영역 시작 주소를 반환합니다. 480MHz에서 Zero-Wait-State로 접근되고 D-Cache를 거치지 않아 접근 지연이 결정론적이지만, <strong>DMA로는 접근할 수 없습니다.</strong> 개별 변수 몇 개만 필요하다면 <code>XM_DTCM_VAR</code> 매크로가 더 간편하며, 이 함수는 LUT처럼 큰 연속 블록이 필요할 때 사용합니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong></p>
+<table>
+<thead>
+<tr>
+<th>반환값</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>void*</code></td>
+<td>DTCM 연속 메모리 블록의 시작 주소</td>
+</tr>
+</tbody>
+</table>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 헤더에 별도 제약이 명시되어 있지 않습니다. <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준으로 작성되었습니다. 이 블록에 DMA 버퍼를 두지 마세요 — DMA 컨트롤러가 DTCM 주소 공간에 접근할 수 없습니다.</p>
+<p><strong>참고</strong>: <a href="../../07-memory-management/#dtcm-api">07. 메모리 영역 — DTCM API</a></p>
+<h4 id="xm_getuserdtcmsize"><code>XM_GetUserDTCMSize()</code><a class="headerlink" href="#xm_getuserdtcmsize" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserDTCMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p><code>XM_GetUserDTCM()</code>이 반환한 블록의 전체 크기를 바이트 단위로 반환합니다.</p>
+<p><strong>파라미터</strong>: 없음 · <strong>반환값</strong>: DTCM 사용자 영역 크기 (바이트)</p>
+<hr />
+<h3 id="flash-user-nv-비휘발성-저장소">Flash User NV (비휘발성 저장소)<a class="headerlink" href="#flash-user-nv-비휘발성-저장소" title="Permanent link">&para;</a></h3>
+<p>Flash Bank 2, Sector 7 (128KB)을 사용하는 비휘발성 저장 영역입니다. 전원이 꺼져도 값이 보존되지만, Flash 특유의 제약(Erase 후에만 Write 가능, 유한한 erase 사이클)이 그대로 적용됩니다.</p>
+<h4 id="xm_usernv_getsize"><code>XM_UserNV_GetSize()</code><a class="headerlink" href="#xm_usernv_getsize" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_UserNV_GetSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>User NV 영역 전체 크기(바이트)를 반환합니다.</p>
+<p><strong>파라미터</strong>: 없음 · <strong>반환값</strong>: User NV 영역 크기 (바이트, 128KB 고정)</p>
+<h4 id="xm_usernv_read"><code>XM_UserNV_Read()</code><a class="headerlink" href="#xm_usernv_read" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Read</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+<p>Flash User NV 영역에서 데이터를 읽어 <code>data</code> 버퍼에 채웁니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>offset</code></td>
+<td><code>uint32_t</code></td>
+<td>User NV 시작부터의 바이트 오프셋 (0 ~ <code>Size</code>-1)</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>void*</code></td>
+<td>읽은 데이터를 저장할 버퍼</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>uint32_t</code></td>
+<td>읽을 바이트 수</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong></p>
+<table>
+<thead>
+<tr>
+<th>반환값</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>성공</td>
+</tr>
+<tr>
+<td><code>-1</code></td>
+<td>파라미터 오류 (<code>offset + size</code> &gt; NV 크기)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 헤더에 별도 제약이 명시되어 있지 않습니다. <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준으로 작성되었으며, 보통 부팅 시 <code>Control_Setup()</code>에서 1회 호출하는 패턴을 권장합니다.</p>
+<p><strong>참고</strong>: <a href="#xm_usernv_iserased"><code>XM_UserNV_IsErased()</code></a>로 유효한 데이터가 있는지 먼저 확인하는 것이 안전합니다 — Erase 직후에는 전체가 <code>0xFF</code>입니다.</p>
+<h4 id="xm_usernv_write"><code>XM_UserNV_Write()</code><a class="headerlink" href="#xm_usernv_write" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Write</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+<p>Flash User NV 영역에 데이터를 기록합니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>offset</code></td>
+<td><code>uint32_t</code></td>
+<td>User NV 시작부터의 바이트 오프셋 (32-byte 정렬 권장)</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>const void*</code></td>
+<td>기록할 데이터 포인터</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>uint32_t</code></td>
+<td>기록할 바이트 수</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong></p>
+<table>
+<thead>
+<tr>
+<th>반환값</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>성공</td>
+</tr>
+<tr>
+<td><code>-1</code></td>
+<td>파라미터 오류</td>
+</tr>
+<tr>
+<td><code>-2</code></td>
+<td>Flash 프로그래밍 실패</td>
+</tr>
+</tbody>
+</table>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 헤더에 별도 제약이 명시되어 있지 않습니다. <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준으로 작성되었습니다. 다만 아래 두 가지는 헤더에 명시된 제약이므로 반드시 지켜야 합니다.</p>
+<ul>
+<li>Flash는 <strong>Erase 후에만 Write 가능</strong>합니다 (1→0만 가능, 0→1 불가). 새 데이터를 쓰기 전 <a href="#xm_usernv_erase"><code>XM_UserNV_Erase()</code></a>를 먼저 호출하세요.</li>
+<li>STM32H7 Flash는 32바이트(256-bit) 단위로 기록되며, <code>offset</code>이 정렬되지 않으면 자동으로 정렬 후 기록합니다.</li>
+<li>빈번한 Write는 Flash 수명(최소 10,000 erase 사이클)에 영향을 줍니다. 부팅 시 1회 읽기, 설정 변경/종료 시 1회 쓰기 패턴을 권장합니다.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// Ex.36 방식 — 오프셋을 상수로 정의해두고 구조체 필드별로 기록</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="cp">#define NV_MAGIC          0xCA5E0A01</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="cp">#define NV_OFFSET_MAGIC   0</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="cp">#define NV_OFFSET_WEIGHTS 4</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="n">XM_UserNV_Erase</span><span class="p">();</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="n">XM_UserNV_Write</span><span class="p">(</span><span class="n">NV_OFFSET_MAGIC</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">magic</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">magic</span><span class="p">));</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="n">XM_UserNV_Write</span><span class="p">(</span><span class="n">NV_OFFSET_WEIGHTS</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s_nn</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">s_nn</span><span class="p">));</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/">Ex.36 OnDevice Kinesthetic Learning</a>에서 학습된 신경망 가중치를 이 방식으로 저장합니다.</p>
+<h4 id="xm_usernv_erase"><code>XM_UserNV_Erase()</code><a class="headerlink" href="#xm_usernv_erase" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Erase</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Flash User NV 전체 영역(128KB)을 지웁니다 (전체 <code>0xFF</code>로 초기화).</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong></p>
+<table>
+<thead>
+<tr>
+<th>반환값</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>성공</td>
+</tr>
+<tr>
+<td><code>-2</code></td>
+<td>Flash Erase 실패</td>
+</tr>
+</tbody>
+</table>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 128KB 전체 섹터를 지우는 데 약 1~2초가 걸립니다 — 헤더가 명시적으로 <strong>"실시간 제어 루프에서 호출하지 마세요"</strong>라고 경고합니다. 즉 1kHz <code>Control_Loop()</code> 안에서는 절대 호출하지 말고, 버튼 이벤트 처리·부팅 시 초기화처럼 1회성으로 실행되는 경로에서만 사용하세요.</p>
+<h4 id="xm_usernv_iserased"><code>XM_UserNV_IsErased()</code><a class="headerlink" href="#xm_usernv_iserased" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_UserNV_IsErased</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Flash User NV 영역 전체가 비어있는 상태(전체 <code>0xFF</code>, Erase 직후)인지 확인합니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong></p>
+<table>
+<thead>
+<tr>
+<th>반환값</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>true</code></td>
+<td>전체 영역이 <code>0xFF</code> (Erase 직후 상태)</td>
+</tr>
+<tr>
+<td><code>false</code></td>
+<td>데이터가 존재하거나 부분적으로 기록됨</td>
+</tr>
+</tbody>
+</table>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 헤더에 별도 제약이 명시되어 있지 않습니다. <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준으로 작성되었습니다. 보통 <code>XM_UserNV_Read()</code>로 값을 불러오기 전에, 유효한 데이터가 저장되어 있는지 미리 확인하는 가드로 사용합니다 (또는 읽은 뒤 magic number 필드로 검증하는 방식도 가능).</p>
+<hr />
+<h2 id="타입매크로">타입/매크로<a class="headerlink" href="#타입매크로" title="Permanent link">&para;</a></h2>
+<h3 id="xm_ramfunc"><code>XM_RAMFUNC</code><a class="headerlink" href="#xm_ramfunc" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="cp">#define XM_RAMFUNC  __attribute__((section(&quot;.itcm_text&quot;)))</span>
+</code></pre></div>
+<p>함수를 ITCMRAM에 배치하여 Zero-Wait-State로 실행되게 하는 함수 어트리뷰트 매크로입니다. Flash에서 직접 실행할 때 발생하는 분기 예측 실패 지연이 없어, ISR이나 제어 루프처럼 실행 시간이 결정론적이어야 하는 함수에 적합합니다. Startup 코드가 Flash → ITCM 복사를 자동으로 처리하므로 사용자가 별도로 복사할 필요는 없습니다.</p>
+<table>
+<thead>
+<tr>
+<th>필드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>적용 대상</td>
+<td>함수 선언 앞에 붙이는 어트리뷰트</td>
+</tr>
+<tr>
+<td>배치 영역</td>
+<td>ITCMRAM (<code>.itcm_text</code> 섹션)</td>
+</tr>
+<tr>
+<td>제약</td>
+<td>ITCM 용량 제한(64KB) — 함수 코드만 배치하고, 큰 배열/버퍼는 RAM_D1 등 다른 영역에 두세요</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">XM_RAMFUNC</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">MyControlLoop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="c1">// 이 함수는 ITCMRAM에서 실행됨 (1-cycle fetch @ 480MHz)</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="xm_dtcm_var"><code>XM_DTCM_VAR</code><a class="headerlink" href="#xm_dtcm_var" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="cp">#define XM_DTCM_VAR  __attribute__((section(&quot;.dtcm_data&quot;)))</span>
+</code></pre></div>
+<p>변수를 DTCMRAM에 배치하여 Zero-Wait-State로 접근되게 하는 변수 어트리뷰트 매크로입니다. D-Cache를 경유하지 않으므로 접근 지연이 결정론적이며, 제어 알고리즘의 상태 변수·Lookup Table처럼 개별 변수 단위로 빠르게 접근해야 할 때 적합합니다.</p>
+<table>
+<thead>
+<tr>
+<th>필드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>적용 대상</td>
+<td>변수 선언 앞에 붙이는 어트리뷰트</td>
+</tr>
+<tr>
+<td>배치 영역</td>
+<td>DTCMRAM (<code>.dtcm_data</code> 섹션)</td>
+</tr>
+<tr>
+<td>제약</td>
+<td>DMA 접근 불가 — DMA로 채워야 하는 버퍼에는 사용하지 마세요</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">XM_DTCM_VAR</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">s_pid_state</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">XM_DTCM_VAR</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">s_lookup_table</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+</code></pre></div>
+<p><strong>참고</strong>: 변수 몇 개가 아니라 큰 연속 블록이 필요하다면 <a href="#xm_getuserdtcm"><code>XM_GetUserDTCM()</code></a>을 사용하세요.</p>
+<hr />
+<h2 id="내부-전용-호출-금지">내부 전용 (호출 금지)<a class="headerlink" href="#내부-전용-호출-금지" title="Permanent link">&para;</a></h2>
+<p><code>xm_api_memory.h</code>에는 [Internal]/System-only로 표시된 함수가 없습니다 — 위에 나열된 11개 함수와 2개 매크로 모두 사용자 코드(<code>XM_Apps</code>)에서 호출하도록 공개된 API입니다.</p>
+<hr />
+<h2 id="관련-문서">관련 문서<a class="headerlink" href="#관련-문서" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../07-memory-management/">07. 메모리 영역</a> — 4개 메모리 영역의 특성 비교, 흔한 실수, 관련 예제</li>
+<li><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/">Ex.36 OnDevice Kinesthetic Learning</a> — Flash User NV API의 실제 사용 예</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  맨위로
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../xm-api-usb/" class="md-footer__link md-footer__link--prev" aria-label="이전: xm_api_usb.h (USB)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                xm_api_usb.h (USB)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../xm-api-rtc/" class="md-footer__link md-footer__link--next" aria-label="다음: xm_api_rtc.h (RTC)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                다음
+              </span>
+              <div class="md-ellipsis">
+                xm_api_rtc.h (RTC)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

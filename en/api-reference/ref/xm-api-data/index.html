@@ -1,0 +1,4836 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서">
+      
+      
+      
+        <link rel="canonical" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-data/">
+      
+      
+        <link rel="prev" href="../xm-api/">
+      
+      
+        <link rel="next" href="../xm-api-tsm/">
+      
+      
+        
+          <link rel="alternate" href="../../../../api-reference/ref/xm-api-data/" hreflang="ko">
+        
+          <link rel="alternate" href="./" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>xm_api_data.h (Control & Data) - XM10 Extension Module</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#xm_api_datah--xm10-unified-data--control-interface" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../" title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XM10 Extension Module
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              xm_api_data.h (Control & Data)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../../api-reference/ref/xm-api-data/" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AGR-EXO/Extension_Module" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../" title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    XM10 Extension Module
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AGR-EXO/Extension_Module" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-EXO/Extension_Module
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../find-it/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Find
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/01-hardware-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/02-software-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/03-first-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    First Build
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start with Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../hardware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hardware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External GPIO (Rev 1.1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External GPIO (Rev 2.0)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-task-state-machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State Machine (TSM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-h10-control-n-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 Control & Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-led-btn-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED & Button
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-usb-connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Serial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Storage Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-memory-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory Regions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-rtc-clock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Real-Time Clock (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-task-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Auxiliary Tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Function Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api.h (Entry Point)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_data.h (Control & Data)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_data.h (Control & Data)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use this
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function List
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function List">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#control-mode--real-time-torque" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Control Mode · Real-time Torque
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system--connection-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System · Connection Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-transmission-body-data--pif-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Transmission (Body Data · PIF-Vector)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#routines--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Routines · Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function Details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setcontrolmode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetControlMode()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setassisttorque" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetAssistTorque()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setassisttorquerh--xm_setassisttorquelh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetAssistTorqueRH() / XM_SetAssistTorqueLH()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_iscmconnected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsCmConnected()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getxmnmtstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetXMNmtState()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_senduserbodydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUserBodyData()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendpvector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendPVector()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendpvectorreset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendPVectorReset()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_clearpvectordoneflag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_ClearPVectorDoneFlag()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendivector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendIVector()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendfvector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendFVector()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendivectorkpkdmax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendIVectorKpKdMax()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setdegreelimitroutine--xm_setdegreelimit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetDegreeLimitRoutine() / XM_SetDegreeLimit()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setvelocitylimitroutine--xm_setvelocitylimit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetVelocityLimitRoutine() / XM_SetVelocityLimit()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setdobroutine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetDOBRoutine()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setnormalcompgain--xm_setresistivecompgain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetNormalCompGain() / XM_SetResistiveCompGain()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_seth10assistexistingmode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetH10AssistExistingMode()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_captureloopcountbase--xm_getrelativeloopcount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CaptureLoopCountBase() / XM_GetRelativeLoopCount()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types--macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Types · Macros
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Types · Macros">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Macros
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcontrolmode_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmControlMode_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmh10mode_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmH10Mode_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pvector_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PVector_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ivector_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IVector_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fvector_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FVector_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmh10data_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmH10Data_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_grf_space_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GRF_SPACE_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmgrfdata_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmGrfData_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmextimudata_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmExtImuData_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmimuhubsensor_t--xmimuhubdata_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmImuHubSensor_t / XmImuHubData_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmemghubdata_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmEmgHubData_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmfeshubdata_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmFesHubData_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xminput_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmInput_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmoutput_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmOutput_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmrobot_t-global-instance-xm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmRobot_t (global instance XM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-tsm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_tsm.h (State Machine)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-led-btn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_led_btn.h (LED & Button)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_external_io.h (External IO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-usb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_memory.h (Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-rtc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_rtc.h (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-freertos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_freertos.h (RTOS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-user-custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_user_custom.h (User Data)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kit-h10-firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 Firmware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../bootloader/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bootloader
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bootloader
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upload Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../release-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Release Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use this
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function List
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function List">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#control-mode--real-time-torque" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Control Mode · Real-time Torque
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system--connection-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System · Connection Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-transmission-body-data--pif-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Transmission (Body Data · PIF-Vector)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#routines--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Routines · Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function Details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_setcontrolmode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetControlMode()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setassisttorque" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetAssistTorque()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setassisttorquerh--xm_setassisttorquelh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetAssistTorqueRH() / XM_SetAssistTorqueLH()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_iscmconnected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_IsCmConnected()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_getxmnmtstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetXMNmtState()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_senduserbodydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendUserBodyData()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendpvector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendPVector()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendpvectorreset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendPVectorReset()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_clearpvectordoneflag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_ClearPVectorDoneFlag()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendivector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendIVector()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendfvector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendFVector()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendivectorkpkdmax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendIVectorKpKdMax()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setdegreelimitroutine--xm_setdegreelimit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetDegreeLimitRoutine() / XM_SetDegreeLimit()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setvelocitylimitroutine--xm_setvelocitylimit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetVelocityLimitRoutine() / XM_SetVelocityLimit()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setdobroutine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetDOBRoutine()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setnormalcompgain--xm_setresistivecompgain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetNormalCompGain() / XM_SetResistiveCompGain()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_seth10assistexistingmode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetH10AssistExistingMode()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_captureloopcountbase--xm_getrelativeloopcount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CaptureLoopCountBase() / XM_GetRelativeLoopCount()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types--macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Types · Macros
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Types · Macros">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Macros
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcontrolmode_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmControlMode_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmh10mode_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmH10Mode_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pvector_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PVector_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ivector_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IVector_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fvector_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FVector_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmh10data_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmH10Data_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_grf_space_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GRF_SPACE_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmgrfdata_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmGrfData_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmextimudata_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmExtImuData_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmimuhubsensor_t--xmimuhubdata_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmImuHubSensor_t / XmImuHubData_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmemghubdata_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmEmgHubData_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmfeshubdata_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmFesHubData_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xminput_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmInput_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmoutput_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmOutput_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmrobot_t-global-instance-xm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmRobot_t (global instance XM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="xm_api_datah--xm10-unified-data--control-interface"><code>xm_api_data.h</code> — XM10 Unified Data &amp; Control Interface<a class="headerlink" href="#xm_api_datah--xm10-unified-data--control-interface" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Header</strong>: <code>XM_FW/XM_API/xm_api_data.h</code> (shared by Rev1.1 / Rev2.0 — the GRF extension fields are 🟢 Rev 2.0 only)
+<strong>Related concept doc</strong>: <a href="../../02-h10-control-n-data/">02. KIT H10 Control &amp; Data</a> (IPO cycle, Body Data, torque sign convention)
+<strong>Related examples</strong>: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/">11 Passive Mode</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/12_Active_Assist_Mode/">12 Active Assist</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/13_Resistive_Mode/">13 Resistive</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/14_PD_Realtime_Control/">14 PD Realtime</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/16_TinyAI_Sensor_Fusion/">16 TinyAI Sensor Fusion</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/32_GRF_Gait_Intent/">32 GRF Gait Intent</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/37_FES_Hub_Module_Ctrl/">37 FES Hub Ctrl</a> 🛑 Rev 2.0 only · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/41_IMU_Hub_Dashboard/">41 IMU Hub Dashboard</a> 🛑 Rev 2.0 only · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/42_EMG_Hub_Biofeedback/">42 EMG Hub Biofeedback</a> 🛑 Rev 2.0 only</p>
+</blockquote>
+<hr />
+<h2 id="when-to-use-this">When to use this<a class="headerlink" href="#when-to-use-this" title="Permanent link">&para;</a></h2>
+<p><code>xm_api_data.h</code> is the facade you will open <strong>most often</strong> while working on XM10 firmware. Every function that reads the latest state of <code>KIT H10</code> and the various sensor hubs (GRF, External IMU, IMU Hub, EMG Hub, FES Hub) inside <code>Control_Loop()</code> (<code>XM.status</code>), and every function that issues control commands (<code>XM_Set*</code> / <code>XM_Send*</code>), is declared here.</p>
+<p>This page does not re-explain how the global <code>XM</code> object gets filled and flushed (the <strong>IPO — Input-Process-Output — cycle</strong>), the torque sign convention, or the Body Data prerequisite. If this is your first time, read <a href="../../02-h10-control-n-data/">02. KIT H10 Control &amp; Data</a> first; use this page to quickly look up function signatures, parameters, and struct fields.</p>
+<blockquote>
+<p>ℹ️ <strong>Note on the common <code>nodeId</code> parameter</strong>: most joint-control functions in this header take a <code>SystemNodeID_t nodeId</code>. In practice only two values are used — <code>SYS_NODE_ID_RH</code> (right hip) and <code>SYS_NODE_ID_LH</code> (left hip) — defined in <code>data_object_dictionaries.h</code> (a different header). Since this page only covers <code>xm_api_data.h</code>, it does not list the full <code>SystemNodeID_t</code> enum.</p>
+</blockquote>
+<hr />
+<h2 id="function-list">Function List<a class="headerlink" href="#function-list" title="Permanent link">&para;</a></h2>
+<h3 id="control-mode--real-time-torque">Control Mode · Real-time Torque<a class="headerlink" href="#control-mode--real-time-torque" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_setcontrolmode"><code>XM_SetControlMode()</code></a></td>
+<td>Switches whether torque commands are actually sent (monitor / torque control)</td>
+</tr>
+<tr>
+<td><a href="#xm_setassisttorque"><code>XM_SetAssistTorque()</code></a></td>
+<td>Sets both hip assist torques at once</td>
+</tr>
+<tr>
+<td><a href="#xm_setassisttorquerh--xm_setassisttorquelh"><code>XM_SetAssistTorqueRH()</code> / <code>XM_SetAssistTorqueLH()</code></a></td>
+<td>Sets a single hip's assist torque</td>
+</tr>
+</tbody>
+</table>
+<h3 id="system--connection-status">System · Connection Status<a class="headerlink" href="#system--connection-status" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_iscmconnected"><code>XM_IsCmConnected()</code></a></td>
+<td>Checks whether communication with the CM is Operational</td>
+</tr>
+<tr>
+<td><a href="#xm_getxmnmtstate"><code>XM_GetXMNmtState()</code></a></td>
+<td>Returns the detailed PnP (NMT) state with the CM</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-transmission-body-data--pif-vector">Data Transmission (Body Data · PIF-Vector)<a class="headerlink" href="#data-transmission-body-data--pif-vector" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_senduserbodydata"><code>XM_SendUserBodyData()</code></a></td>
+<td>Sends user body info (weight/height/segment lengths) to the CM</td>
+</tr>
+<tr>
+<td><a href="#xm_sendpvector"><code>XM_SendPVector()</code></a></td>
+<td>Sends a position-based trajectory (P-Vector)</td>
+</tr>
+<tr>
+<td><a href="#xm_sendpvectorreset"><code>XM_SendPVectorReset()</code></a></td>
+<td>Immediately cancels an in-progress P-Vector trajectory</td>
+</tr>
+<tr>
+<td><a href="#xm_clearpvectordoneflag"><code>XM_ClearPVectorDoneFlag()</code></a></td>
+<td>Manually clears the P-Vector completion flag</td>
+</tr>
+<tr>
+<td><a href="#xm_sendivector"><code>XM_SendIVector()</code></a></td>
+<td>Sends impedance control parameters (I-Vector)</td>
+</tr>
+<tr>
+<td><a href="#xm_sendfvector"><code>XM_SendFVector()</code></a></td>
+<td>Sends a force-based trajectory (F-Vector)</td>
+</tr>
+<tr>
+<td><a href="#xm_sendivectorkpkdmax"><code>XM_SendIVectorKpKdMax()</code></a></td>
+<td>Sets the Kp/Kd ceiling (the 100% reference) used by I-Vector</td>
+</tr>
+</tbody>
+</table>
+<h3 id="routines--parameters">Routines · Parameters<a class="headerlink" href="#routines--parameters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_setdegreelimitroutine--xm_setdegreelimit"><code>XM_SetDegreeLimitRoutine()</code> / <code>XM_SetDegreeLimit()</code></a></td>
+<td>Toggle the angle-limit routine + set upper/lower bounds</td>
+</tr>
+<tr>
+<td><a href="#xm_setvelocitylimitroutine--xm_setvelocitylimit"><code>XM_SetVelocityLimitRoutine()</code> / <code>XM_SetVelocityLimit()</code></a></td>
+<td>Toggle the angular-velocity-limit routine + set upper/lower bounds</td>
+</tr>
+<tr>
+<td><a href="#xm_setdobroutine"><code>XM_SetDOBRoutine()</code></a></td>
+<td>Toggles the disturbance observer (DOB) routine</td>
+</tr>
+<tr>
+<td><a href="#xm_setnormalcompgain--xm_setresistivecompgain"><code>XM_SetNormalCompGain()</code> / <code>XM_SetResistiveCompGain()</code></a></td>
+<td>Sets the gravity-compensation / resistive-compensation gain</td>
+</tr>
+<tr>
+<td><a href="#xm_seth10assistexistingmode"><code>XM_SetH10AssistExistingMode()</code></a></td>
+<td>Enables/disables H10's built-in (legacy) assist algorithm</td>
+</tr>
+</tbody>
+</table>
+<h3 id="utility">Utility<a class="headerlink" href="#utility" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_captureloopcountbase--xm_getrelativeloopcount"><code>XM_CaptureLoopCountBase()</code> / <code>XM_GetRelativeLoopCount()</code></a></td>
+<td>Captures a baseline for the Assist Loop Count and returns the relative count since then</td>
+</tr>
+</tbody>
+</table>
+<p><strong>23 functions</strong> total, plus 3 macros and 13 structs/enums (see <a href="#types--macros">Types · Macros</a> below).</p>
+<hr />
+<h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
+<h3 id="xm_setcontrolmode"><code>XM_SetControlMode()</code><a class="headerlink" href="#xm_setcontrolmode" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetControlMode</span><span class="p">(</span><span class="n">XmControlMode_t</span><span class="w"> </span><span class="n">mode</span><span class="p">);</span>
+</code></pre></div>
+<p>This is the safety switch that decides whether the robot's <strong>output (actuation) is ON or OFF</strong>. In both <code>XM_CTRL_MONITOR</code> and <code>XM_CTRL_TORQUE</code>, your <code>Control_Loop()</code> algorithm itself still runs every tick — the only difference is whether the computed torque command is actually sent to the CM. In other words, it is not a switch that turns the algorithm off, only the output.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mode</code></td>
+<td><code>XmControlMode_t</code></td>
+<td><code>XM_CTRL_MONITOR</code> (default, no output) or <code>XM_CTRL_TORQUE</code> (actual actuation)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p><strong>Safety logic</strong>: the instant the mode changes (especially MONITOR → TORQUE), <strong>all torque commands are internally reset to 0</strong> to prevent a jerk at the start of actuation.</p>
+<p>⚠️ <strong>Call context</strong>: assumed to be called from <code>Control_Setup()</code>/<code>Control_Loop()</code> (the header does not state any ISR-safety guarantee). The common pattern is <code>XM_CTRL_TORQUE</code> on algorithm Entry and <code>XM_CTRL_MONITOR</code> on Exit.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_TORQUE</span><span class="p">);</span><span class="w">   </span><span class="c1">// start real actuation</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">}</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_MONITOR</span><span class="p">);</span><span class="w">  </span><span class="c1">// safely fall back to monitoring</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">}</span>
+</code></pre></div></p>
+<p><strong>See also</strong>: <a href="#xmcontrolmode_t"><code>XmControlMode_t</code></a></p>
+<hr />
+<h3 id="xm_setassisttorque"><code>XM_SetAssistTorque()</code><a class="headerlink" href="#xm_setassisttorque" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorque</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">rh</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lh</span><span class="p">);</span>
+</code></pre></div>
+<p>Sets both hip assist torques in one call. The actual CAN transmission happens automatically in the Output stage of the IPO cycle, not inside this function.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rh</code></td>
+<td><code>float</code></td>
+<td>Right (RH) hip assist torque, unit <strong>Nm</strong> — first argument</td>
+</tr>
+<tr>
+<td><code>lh</code></td>
+<td><code>float</code></td>
+<td>Left (LH) hip assist torque, unit <strong>Nm</strong> — second argument</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<blockquote>
+<p>⚠️ Argument order is <strong>(right rh, left lh)</strong>. If that's confusing, use <a href="#xm_setassisttorquerh--xm_setassisttorquelh"><code>XM_SetAssistTorqueRH()</code> / <code>XM_SetAssistTorqueLH()</code></a> to set one side at a time.
+For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../02-h10-control-n-data/#xm_setassisttorque">Doc 02 §Real-time Control</a> — this header itself does not define the scaling/clamp values (they live in another internal module).</p>
+</blockquote>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Loop()</code>. Requires <code>XM_SetControlMode(XM_CTRL_TORQUE)</code> to actually be transmitted.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">cmd_R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">rightHipAngle</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">;</span><span class="w">   </span><span class="c1">// simple P control</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">cmd_L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">leftHipAngle</span><span class="w">  </span><span class="o">*</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="n">XM_SetAssistTorque</span><span class="p">(</span><span class="n">cmd_R</span><span class="p">,</span><span class="w"> </span><span class="n">cmd_L</span><span class="p">);</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">}</span>
+</code></pre></div></p>
+<hr />
+<h3 id="xm_setassisttorquerh--xm_setassisttorquelh"><code>XM_SetAssistTorqueRH()</code> / <code>XM_SetAssistTorqueLH()</code><a class="headerlink" href="#xm_setassisttorquerh--xm_setassisttorquelh" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorqueRH</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">rh</span><span class="p">);</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorqueLH</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">lh</span><span class="p">);</span>
+</code></pre></div>
+<p>Sets the assist torque for one leg only. The other leg's torque keeps whatever value was previously set.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rh</code> (RH version)</td>
+<td><code>float</code></td>
+<td>Right hip assist torque, unit Nm</td>
+</tr>
+<tr>
+<td><code>lh</code> (LH version)</td>
+<td><code>float</code></td>
+<td>Left hip assist torque, unit Nm</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Loop()</code>. Works the same way as <code>XM_SetAssistTorque()</code> by setting an internal Dirty Flag (<code>XmOutput_t._dirty_flags</code>).</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">XM_SetAssistTorqueRH</span><span class="p">(</span><span class="mf">5.0f</span><span class="p">);</span><span class="w">   </span><span class="c1">// right side only, to 5.0 Nm; left keeps its previous value</span>
+</code></pre></div></p>
+<hr />
+<h3 id="xm_iscmconnected"><code>XM_IsCmConnected()</code><a class="headerlink" href="#xm_iscmconnected" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsCmConnected</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Checks the communication status with the Control Module (CM).</p>
+<p><strong>Return value</strong></p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>true</code></td>
+<td>Connection is Operational</td>
+</tr>
+<tr>
+<td><code>false</code></td>
+<td>Disconnected, or not yet ready</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Setup()</code>/<code>Control_Loop()</code>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_IsCmConnected</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="c1">// use as an algorithm start condition</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="p">}</span>
+</code></pre></div></p>
+<p><strong>See also</strong>: <a href="#xm_getxmnmtstate"><code>XM_GetXMNmtState()</code></a> — for finer-grained state branching</p>
+<hr />
+<h3 id="xm_getxmnmtstate"><code>XM_GetXMNmtState()</code><a class="headerlink" href="#xm_getxmnmtstate" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">CM_NmtState_t</span><span class="w"> </span><span class="nf">XM_GetXMNmtState</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Returns the detailed DOP V3 PnP (NMT) state with the CM. <code>XM_IsCmConnected()</code> is internally equivalent to checking <code>XM_GetXMNmtState() == CM_NMT_OPERATIONAL</code>.</p>
+<p><strong>Return value</strong>: <code>CM_NmtState_t</code> (defined in <code>cm_drv.h</code> — a different header this one includes)</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CM_NMT_INITIALISING</code></td>
+<td>0</td>
+<td>Booting (boot-up message not yet received)</td>
+</tr>
+<tr>
+<td><code>CM_NMT_PRE_OPERATIONAL</code></td>
+<td>1</td>
+<td>SDO communication available, PDO inactive</td>
+</tr>
+<tr>
+<td><code>CM_NMT_OPERATIONAL</code></td>
+<td>2</td>
+<td>All communication active (normal state)</td>
+</tr>
+<tr>
+<td><code>CM_NMT_STOPPED</code></td>
+<td>3</td>
+<td>Communication stopped</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Setup()</code>/<code>Control_Loop()</code>. No SDK example currently calls this function directly (<code>XM_IsCmConnected()</code> covers most cases).</p>
+<hr />
+<h3 id="xm_senduserbodydata"><code>XM_SendUserBodyData()</code><a class="headerlink" href="#xm_senduserbodydata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendUserBodyData</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">bodyData</span><span class="p">[</span><span class="mi">8</span><span class="p">]);</span>
+</code></pre></div>
+<p>Sends the user's body information (weight, height, segment lengths, etc.) to the CM. The CM uses this to improve the accuracy of its real-time gait analysis.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bodyData</code></td>
+<td><code>const uint32_t[8]</code></td>
+<td>An array holding the 8 values below</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Meaning of each <code>bodyData</code> index</strong> (units per header comment):</p>
+<table>
+<thead>
+<tr>
+<th>Index</th>
+<th>Description</th>
+<th>Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Wearer's weight</td>
+<td>g</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Wearer's height</td>
+<td>mm</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Right thigh segment length</td>
+<td>mm</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Left thigh segment length</td>
+<td>mm</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Right shank segment length</td>
+<td>mm</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Left shank segment length</td>
+<td>mm</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Right ankle segment length</td>
+<td>mm</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Left ankle segment length</td>
+<td>mm</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ <strong>Call context</strong>: <code>Control_Setup()</code> recommended (call once). Body info typically does not change during a session, so there is no need to call this every tick — if omitted, estimated data such as <code>forwardVelocity</code>/<code>leftKneeAngle</code> become inaccurate (see <a href="../../">README §Body Data</a>).</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">body_data</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">        </span><span class="mi">70000</span><span class="p">,</span><span class="w"> </span><span class="mi">1750</span><span class="p">,</span><span class="w"> </span><span class="mi">450</span><span class="p">,</span><span class="w"> </span><span class="mi">450</span><span class="p">,</span><span class="w"> </span><span class="mi">420</span><span class="p">,</span><span class="w"> </span><span class="mi">420</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="n">XM_SendUserBodyData</span><span class="p">(</span><span class="n">body_data</span><span class="p">);</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="p">}</span>
+</code></pre></div></p>
+<hr />
+<h3 id="xm_sendpvector"><code>XM_SendPVector()</code><a class="headerlink" href="#xm_sendpvector" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendPVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">PVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">pVector</span><span class="p">);</span>
+</code></pre></div>
+<p>Sends a <strong>position-based trajectory (P-Vector)</strong> to the specified joint. The motor driver generates a 5th-order polynomial trajectory that smoothly moves to the target position (<code>yd</code>) within the specified time (<code>L</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeId</code></td>
+<td><code>SystemNodeID_t</code></td>
+<td>The joint to command (<code>SYS_NODE_ID_RH</code> / <code>SYS_NODE_ID_LH</code>)</td>
+</tr>
+<tr>
+<td><code>pVector</code></td>
+<td><code>const PVector_t*</code></td>
+<td>Pointer to the P-Vector data struct to send</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ Impedance parameters must already be configured via <a href="#xm_sendivector"><code>XM_SendIVector()</code></a> beforehand.</p>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Loop()</code>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">PVector_t</span><span class="w"> </span><span class="n">pv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">yd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">s0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">sd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="p">};</span><span class="w">  </span><span class="c1">// target 25.0deg, moves over 1s</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">XM_SendPVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pv</span><span class="p">);</span>
+</code></pre></div></p>
+<p><strong>See also</strong>: <a href="#pvector_t"><code>PVector_t</code></a></p>
+<hr />
+<h3 id="xm_sendpvectorreset"><code>XM_SendPVectorReset()</code><a class="headerlink" href="#xm_sendpvectorreset" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendPVectorReset</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">);</span>
+</code></pre></div>
+<p>Immediately resets (cancels) the currently running or pending P-Vector command.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeId</code></td>
+<td><code>SystemNodeID_t</code></td>
+<td>The joint whose P-Vector should be reset</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Loop()</code>. Used for mode transitions / emergency stops.</p>
+<hr />
+<h3 id="xm_clearpvectordoneflag"><code>XM_ClearPVectorDoneFlag()</code><a class="headerlink" href="#xm_clearpvectordoneflag" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_ClearPVectorDoneFlag</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">);</span>
+</code></pre></div>
+<p>After confirming that <code>XM.status.h10.isPVectorRHDone</code> / <code>isPVectorLHDone</code> has become <code>true</code> and finishing the associated logic, call this manually to signal that you've "consumed" the event.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeId</code></td>
+<td><code>SystemNodeID_t</code></td>
+<td>The joint whose completion flag should be cleared</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ <strong>Warning</strong>: if you don't call this, the flag stays <code>true</code> and the same completion event may be processed repeatedly.</p>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Loop()</code>.</p>
+<hr />
+<h3 id="xm_sendivector"><code>XM_SendIVector()</code><a class="headerlink" href="#xm_sendivector" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendIVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">IVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">iVector</span><span class="p">);</span>
+</code></pre></div>
+<p>Sends <strong>impedance control parameters (I-Vector)</strong> to the specified joint, making it behave like a virtual spring-damper.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeId</code></td>
+<td><code>SystemNodeID_t</code></td>
+<td>The joint to command</td>
+</tr>
+<tr>
+<td><code>iVector</code></td>
+<td><code>const IVector_t*</code></td>
+<td>Pointer to the impedance parameter struct</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Loop()</code>. <code>kp</code>/<code>kd</code> are interpreted as a percentage of the ceiling set by <a href="#xm_sendivectorkpkdmax"><code>XM_SendIVectorKpKdMax()</code></a>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">IVector_t</span><span class="w"> </span><span class="n">iv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">epsilon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">iv</span><span class="p">);</span>
+</code></pre></div></p>
+<p><strong>See also</strong>: <a href="#ivector_t"><code>IVector_t</code></a>, <a href="#xm_sendivectorkpkdmax"><code>XM_SendIVectorKpKdMax()</code></a></p>
+<hr />
+<h3 id="xm_sendfvector"><code>XM_SendFVector()</code><a class="headerlink" href="#xm_sendfvector" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendFVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">FVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">fVector</span><span class="p">);</span>
+</code></pre></div>
+<p>Sends a <strong>force-based trajectory (F-Vector)</strong> to the specified joint, commanding it to generate a pre-defined torque profile.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeId</code></td>
+<td><code>SystemNodeID_t</code></td>
+<td>The joint to command</td>
+</tr>
+<tr>
+<td><code>fVector</code></td>
+<td><code>const FVector_t*</code></td>
+<td>Pointer to the struct holding target torque / mode info</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Loop()</code>. No current SDK example uses this function — the snippet below is an illustrative initialization built purely from the struct's field definitions.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">FVector_t</span><span class="w"> </span><span class="n">fv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">modeIdx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">tauMax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">delay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">zero</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">};</span><span class="w">  </span><span class="c1">// tauMax=5.00A (scaled by 100)</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">XM_SendFVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">fv</span><span class="p">);</span>
+</code></pre></div></p>
+<p><strong>See also</strong>: <a href="#fvector_t"><code>FVector_t</code></a></p>
+<hr />
+<h3 id="xm_sendivectorkpkdmax"><code>XM_SendIVectorKpKdMax()</code><a class="headerlink" href="#xm_sendivectorkpkdmax" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendIVectorKpKdMax</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">kpMax</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">kdMax</span><span class="p">);</span>
+</code></pre></div>
+<p>Sets the <strong>ceiling values</strong> applied when <code>XM_SendIVector()</code>'s <code>kp</code>/<code>kd</code> (%) for the specified joint reach 100%.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeId</code></td>
+<td><code>SystemNodeID_t</code></td>
+<td>The joint to configure</td>
+</tr>
+<tr>
+<td><code>kpMax</code></td>
+<td><code>const float</code></td>
+<td>Maximum virtual spring stiffness applied when <code>kp</code> = 100%</td>
+</tr>
+<tr>
+<td><code>kdMax</code></td>
+<td><code>const float</code></td>
+<td>Maximum virtual damper stiffness applied when <code>kd</code> = 100%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ <strong>Call context</strong>: recommended at <code>Control_Setup()</code> or on state Entry — it must be configured before <code>XM_SendIVector()</code> for the percentage interpretation to make sense.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">XM_SendIVectorKpKdMax</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="mf">6.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="n">XM_SendIVectorKpKdMax</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="mf">6.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+</code></pre></div></p>
+<hr />
+<h3 id="xm_setdegreelimitroutine--xm_setdegreelimit"><code>XM_SetDegreeLimitRoutine()</code> / <code>XM_SetDegreeLimit()</code><a class="headerlink" href="#xm_setdegreelimitroutine--xm_setdegreelimit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDegreeLimitRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDegreeLimit</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">upperLimit</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lowerLimit</span><span class="p">);</span>
+</code></pre></div>
+<p>Toggles the <strong>angle-limit routine</strong> for the specified joint (<code>Routine</code>) and sets its upper/lower bounds (<code>Limit</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeId</code></td>
+<td><code>SystemNodeID_t</code></td>
+<td>The joint to configure</td>
+</tr>
+<tr>
+<td><code>isSet</code> (Routine)</td>
+<td><code>bool</code></td>
+<td><code>true</code>: enable the routine / <code>false</code>: disable</td>
+</tr>
+<tr>
+<td><code>upperLimit</code> (Limit)</td>
+<td><code>float</code></td>
+<td>Upper bound of range of motion, unit degree</td>
+</tr>
+<tr>
+<td><code>lowerLimit</code> (Limit)</td>
+<td><code>float</code></td>
+<td>Lower bound of range of motion, unit degree</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Setup()</code>/<code>Control_Loop()</code>. No current SDK example uses this directly.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">XM_SetDegreeLimitRoutine</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="n">XM_SetDegreeLimit</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="mf">30.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-30.0f</span><span class="p">);</span>
+</code></pre></div></p>
+<hr />
+<h3 id="xm_setvelocitylimitroutine--xm_setvelocitylimit"><code>XM_SetVelocityLimitRoutine()</code> / <code>XM_SetVelocityLimit()</code><a class="headerlink" href="#xm_setvelocitylimitroutine--xm_setvelocitylimit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetVelocityLimitRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetVelocityLimit</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">upperLimit</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lowerLimit</span><span class="p">);</span>
+</code></pre></div>
+<p>Toggles the <strong>angular-velocity-limit routine</strong> for the specified joint and sets its upper/lower bounds.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeId</code></td>
+<td><code>SystemNodeID_t</code></td>
+<td>The joint to configure</td>
+</tr>
+<tr>
+<td><code>isSet</code> (Routine)</td>
+<td><code>bool</code></td>
+<td><code>true</code>: enable the routine / <code>false</code>: disable</td>
+</tr>
+<tr>
+<td><code>upperLimit</code> (Limit)</td>
+<td><code>float</code></td>
+<td>Upper bound of velocity range, unit deg/s</td>
+</tr>
+<tr>
+<td><code>lowerLimit</code> (Limit)</td>
+<td><code>float</code></td>
+<td>Lower bound of velocity range, unit deg/s</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Setup()</code>/<code>Control_Loop()</code>. No current SDK example uses this directly.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">XM_SetVelocityLimitRoutine</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="n">XM_SetVelocityLimit</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-100.0f</span><span class="p">);</span>
+</code></pre></div></p>
+<hr />
+<h3 id="xm_setdobroutine"><code>XM_SetDOBRoutine()</code><a class="headerlink" href="#xm_setdobroutine" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDOBRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
+</code></pre></div>
+<p>Enables/disables the <strong>disturbance observer (DOB)</strong> routine for the specified joint.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeId</code></td>
+<td><code>SystemNodeID_t</code></td>
+<td>The joint to configure</td>
+</tr>
+<tr>
+<td><code>isSet</code></td>
+<td><code>bool</code></td>
+<td><code>true</code>: enable / <code>false</code>: disable</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Setup()</code>/<code>Control_Loop()</code>. No current SDK example uses this directly. Per the header comment, using DOB requires the motor driver side to have completed System Identification.</p>
+<hr />
+<h3 id="xm_setnormalcompgain--xm_setresistivecompgain"><code>XM_SetNormalCompGain()</code> / <code>XM_SetResistiveCompGain()</code><a class="headerlink" href="#xm_setnormalcompgain--xm_setresistivecompgain" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetNormalCompGain</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">gain</span><span class="p">);</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetResistiveCompGain</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">gain</span><span class="p">);</span>
+</code></pre></div>
+<p>Adjusts the strength of <strong>normal compensation (e.g. gravity compensation)</strong> and <strong>resistive compensation (resistance-training mode)</strong>, respectively.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeId</code></td>
+<td><code>SystemNodeID_t</code></td>
+<td>The joint to configure</td>
+</tr>
+<tr>
+<td><code>gain</code> (<code>Normal</code>)</td>
+<td><code>uint8_t</code></td>
+<td>Normal compensation gain</td>
+</tr>
+<tr>
+<td><code>gain</code> (<code>Resistive</code>)</td>
+<td><code>float</code></td>
+<td>Resistive compensation gain</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ <strong>Note</strong>: the two functions' <code>gain</code> parameters have different types (<code>uint8_t</code> vs <code>float</code>). The header does not separately define a range/scale for either, so pay attention to the integer/float distinction as-is in the signature.</p>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Loop()</code>. <code>XM_SetNormalCompGain()</code> currently has no direct SDK example usage.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">strongResistance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.8f</span><span class="p">;</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="n">XM_SetResistiveCompGain</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="n">strongResistance</span><span class="p">);</span>
+</code></pre></div></p>
+<hr />
+<h3 id="xm_seth10assistexistingmode"><code>XM_SetH10AssistExistingMode()</code><a class="headerlink" href="#xm_seth10assistexistingmode" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetH10AssistExistingMode</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
+</code></pre></div>
+<p>Sets whether H10's <strong>built-in (legacy) assist algorithm</strong> is active. When XM10 and H10 are connected, the default is <strong>disabled</strong> (XM10 controls directly).</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isSet</code></td>
+<td><code>bool</code></td>
+<td><code>true</code>: enable H10's built-in assist algorithm / <code>false</code>: disable</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none</p>
+<p>⚠️ <strong>Call context</strong>: assumed to be <code>Control_Setup()</code>.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Off_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="w">    </span><span class="n">XM_SetH10AssistExistingMode</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span><span class="w">  </span><span class="c1">// switch to H10&#39;s built-in assist</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="p">}</span>
+</code></pre></div></p>
+<hr />
+<h3 id="xm_captureloopcountbase--xm_getrelativeloopcount"><code>XM_CaptureLoopCountBase()</code> / <code>XM_GetRelativeLoopCount()</code><a class="headerlink" href="#xm_captureloopcountbase--xm_getrelativeloopcount" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_CaptureLoopCountBase</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetRelativeLoopCount</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Stores the <code>h10AssistModeLoopCnt</code> value at the moment of the call as a baseline (0) (<code>Capture</code>), and afterwards returns the count relative to that baseline (<code>GetRelative</code>). Calling this at the start of a data-logging session makes the logged count always start from 0.</p>
+<p><strong>Return value</strong> (<code>XM_GetRelativeLoopCount</code>): <code>h10AssistModeLoopCnt - baseline</code>. If <code>XM_CaptureLoopCountBase()</code> was never called, the absolute value is returned as-is.</p>
+<p>⚠️ <strong>Call context</strong>: <code>Capture</code> at <code>Control_Setup()</code>/state Entry, <code>GetRelative</code> queried inside <code>Control_Loop()</code>. No current SDK example uses this directly.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">    </span><span class="n">XM_CaptureLoopCountBase</span><span class="p">();</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="p">}</span>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">elapsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_GetRelativeLoopCount</span><span class="p">();</span><span class="w">  </span><span class="c1">// relative count starting from 0</span>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="w">    </span><span class="n">myLogData</span><span class="p">.</span><span class="n">loopCnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">elapsed</span><span class="p">;</span>
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="p">}</span>
+</code></pre></div></p>
+<hr />
+<h2 id="types--macros">Types · Macros<a class="headerlink" href="#types--macros" title="Permanent link">&para;</a></h2>
+<h3 id="macros">Macros<a class="headerlink" href="#macros" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Macro</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_GRF_CHANNEL_SIZE</code></td>
+<td><code>14</code></td>
+<td>Channel count of the legacy GRF (FSR) shoe sensor</td>
+</tr>
+<tr>
+<td><code>XM_IMU_HUB_SENSOR_COUNT</code></td>
+<td><code>6</code></td>
+<td>Number of sensors (ports) on the IMU Hub Module</td>
+</tr>
+<tr>
+<td><code>XM_FES_HUB_CH_COUNT</code></td>
+<td><code>2</code></td>
+<td>Channel count of the FES Hub Module</td>
+</tr>
+<tr>
+<td><code>XM_GRF_FSR_CH_TOTAL</code> 🟢 Rev 2.0 only</td>
+<td><code>24</code></td>
+<td>FSR channel count of the SM-GRF fixed-frame module (ADC1 15ch + ADC3 9ch). Defined in <code>module.h</code>, which <code>xm_api_data.h</code> includes — Rev1.1 does not have that include at all</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xmcontrolmode_t"><code>XmControlMode_t</code><a class="headerlink" href="#xmcontrolmode_t" title="Permanent link">&para;</a></h3>
+<p>XM10's control-authority (output ON/OFF) mode.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="n">XM_CTRL_MONITOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// monitoring mode (default) — algorithm runs, torque command not sent</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="n">XM_CTRL_TORQUE</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="c1">// torque control mode — computed torque command is sent periodically (real actuation)</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="p">}</span><span class="w"> </span><span class="n">XmControlMode_t</span><span class="p">;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>XM_CTRL_MONITOR</code></td>
+<td>Default. The algorithm still runs every tick, but output (actuation) is blocked</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>XM_CTRL_TORQUE</code></td>
+<td>The computed torque command is actually sent to the CM</td>
+</tr>
+</tbody>
+</table>
+<p><strong>See also</strong>: <a href="#xm_setcontrolmode"><code>XM_SetControlMode()</code></a></p>
+<hr />
+<h3 id="xmh10mode_t"><code>XmH10Mode_t</code><a class="headerlink" href="#xmh10mode_t" title="Permanent link">&para;</a></h3>
+<p>H10 robot's current operating mode (read-only via <code>XM.status.h10.h10Mode</code>).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">    </span><span class="n">XM_H10_MODE_STANDBY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// standby mode (no output)</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">    </span><span class="n">XM_H10_MODE_ASSIST</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="c1">// assist mode (torque output)</span>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">    </span><span class="n">XM_H10_MODE_UNKNOWN</span>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="p">}</span><span class="w"> </span><span class="n">XmH10Mode_t</span><span class="p">;</span>
+</code></pre></div>
+<hr />
+<h3 id="pvector_t"><code>PVector_t</code><a class="headerlink" href="#pvector_t" title="Permanent link">&para;</a></h3>
+<p>A position-based trajectory command vector. Parameter of <a href="#xm_sendpvector"><code>XM_SendPVector()</code></a>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">    </span><span class="kt">int16_t</span><span class="w">  </span><span class="n">yd</span><span class="p">;</span><span class="w"> </span><span class="c1">// target position, deg×10 scale</span>
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">L</span><span class="p">;</span><span class="w">  </span><span class="c1">// move duration (ms)</span>
+<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">s0</span><span class="p">;</span><span class="w"> </span><span class="c1">// starting acceleration profile (deg/s^2)</span>
+<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">sd</span><span class="p">;</span><span class="w"> </span><span class="c1">// ending deceleration profile (deg/s^2)</span>
+<a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="p">}</span><span class="w"> </span><span class="n">PVector_t</span><span class="p">;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>yd</code></td>
+<td><code>int16_t</code></td>
+<td>deg × 10</td>
+<td>Target position. The header comment states a field-verified example: <strong>25.0deg → 250</strong></td>
+</tr>
+<tr>
+<td><code>L</code></td>
+<td><code>uint16_t</code></td>
+<td>ms</td>
+<td>Trajectory move duration</td>
+</tr>
+<tr>
+<td><code>s0</code></td>
+<td><code>uint8_t</code></td>
+<td>deg/s²</td>
+<td>Starting acceleration profile</td>
+</tr>
+<tr>
+<td><code>sd</code></td>
+<td><code>uint8_t</code></td>
+<td>deg/s²</td>
+<td>Ending deceleration profile</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>Scaling discrepancy to be aware of</strong>: some example text in <a href="../../02-h10-control-n-data/">02. KIT H10 Control &amp; Data</a> still shows <code>yd</code> as "scaled by 100." The header (<code>xm_api_data.h</code>, the ground truth for this page) explicitly comments <strong>"scaled by 10 — field-verified value"</strong>. Follow this page (the header) when writing code.</p>
+</blockquote>
+<hr />
+<h3 id="ivector_t"><code>IVector_t</code><a class="headerlink" href="#ivector_t" title="Permanent link">&para;</a></h3>
+<p>An impedance-control parameter vector. Parameter of <a href="#xm_sendivector"><code>XM_SendIVector()</code></a>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">epsilon</span><span class="p">;</span><span class="w"> </span><span class="c1">// half width of the corridor (deg×10)</span>
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">kp</span><span class="p">;</span><span class="w">      </span><span class="c1">// virtual spring magnitude (%)</span>
+<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">kd</span><span class="p">;</span><span class="w">      </span><span class="c1">// virtual damper magnitude (%)</span>
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">lambda</span><span class="p">;</span><span class="w">  </span><span class="c1">// impedance ratio (×100 scale)</span>
+<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">duration</span><span class="p">;</span><span class="c1">// transition duration (ms)</span>
+<a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a><span class="p">}</span><span class="w"> </span><span class="n">IVector_t</span><span class="p">;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>epsilon</code></td>
+<td><code>uint8_t</code></td>
+<td>deg × 10</td>
+<td>Half width of the corridor</td>
+</tr>
+<tr>
+<td><code>kp</code></td>
+<td><code>uint8_t</code></td>
+<td>%</td>
+<td>Virtual spring magnitude — percentage of <code>kpMax</code> set via <code>XM_SendIVectorKpKdMax()</code></td>
+</tr>
+<tr>
+<td><code>kd</code></td>
+<td><code>uint8_t</code></td>
+<td>%</td>
+<td>Virtual damper magnitude — percentage of <code>kdMax</code></td>
+</tr>
+<tr>
+<td><code>lambda</code></td>
+<td><code>uint8_t</code></td>
+<td>ratio × 100</td>
+<td>Impedance ratio</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td><code>uint16_t</code></td>
+<td>ms</td>
+<td>Parameter transition time</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="fvector_t"><code>FVector_t</code><a class="headerlink" href="#fvector_t" title="Permanent link">&para;</a></h3>
+<p>A force-based trajectory command vector. Parameter of <a href="#xm_sendfvector"><code>XM_SendFVector()</code></a>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">modeIdx</span><span class="p">;</span><span class="w"> </span><span class="c1">// torque profile index, 0.1~10</span>
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="w">    </span><span class="kt">int16_t</span><span class="w">  </span><span class="n">tauMax</span><span class="p">;</span><span class="w">  </span><span class="c1">// max torque (A × 100 scale)</span>
+<a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">delay</span><span class="p">;</span><span class="w">   </span><span class="c1">// initial delay (ms)</span>
+<a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">zero</span><span class="p">;</span><span class="w">    </span><span class="c1">// dummy data for reset</span>
+<a id="__codelineno-36-6" name="__codelineno-36-6" href="#__codelineno-36-6"></a><span class="p">}</span><span class="w"> </span><span class="n">FVector_t</span><span class="p">;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>modeIdx</code></td>
+<td><code>uint16_t</code></td>
+<td>Index (0.1 ~ 10)</td>
+<td>Torque profile index (Tp)</td>
+</tr>
+<tr>
+<td><code>tauMax</code></td>
+<td><code>int16_t</code></td>
+<td>A × 100</td>
+<td>Max torque</td>
+</tr>
+<tr>
+<td><code>delay</code></td>
+<td><code>uint16_t</code></td>
+<td>ms</td>
+<td>Initial delay</td>
+</tr>
+<tr>
+<td><code>zero</code></td>
+<td><code>uint16_t</code></td>
+<td>-</td>
+<td>Dummy data for reset (header comment: "Dummy data for reset")</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xmh10data_t"><code>XmH10Data_t</code><a class="headerlink" href="#xmh10data_t" title="Permanent link">&para;</a></h3>
+<p><strong>KIT H10 body data</strong> (DOP V1), accessed via <code>XM.status.h10</code>. Includes encoders, joint angles, gait state, and more.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>is_connected</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Communication connection status with H10</td>
+</tr>
+<tr>
+<td><code>h10AssistModeLoopCnt</code></td>
+<td><code>uint32_t</code></td>
+<td>-</td>
+<td>H10 assist-mode loop count (counts from the start of Assist Mode)</td>
+</tr>
+<tr>
+<td><code>h10PostProcessingCnt</code></td>
+<td><code>uint32_t</code></td>
+<td>-</td>
+<td>GaitAnalysis post-processing sample count (0~30000, for 5m analysis)</td>
+</tr>
+<tr>
+<td><code>h10Mode</code></td>
+<td><code>XmH10Mode_t</code></td>
+<td>-</td>
+<td>H10 operating mode (Assist ↔ Standby)</td>
+</tr>
+<tr>
+<td><code>h10AssistLevel</code></td>
+<td><code>uint8_t</code></td>
+<td>0~10</td>
+<td>H10 assist level</td>
+</tr>
+<tr>
+<td><code>h10FSMcurrentState</code></td>
+<td><code>uint8_t</code></td>
+<td>-</td>
+<td>H10's current FSM state</td>
+</tr>
+<tr>
+<td><code>isPVectorRHDone</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>RH P-Vector completion flag</td>
+</tr>
+<tr>
+<td><code>isPVectorLHDone</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>LH P-Vector completion flag</td>
+</tr>
+<tr>
+<td><code>h10IsNeutralPosSet</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>H10 neutral-angle setup completion status</td>
+</tr>
+<tr>
+<td><code>leftHipAngle</code> / <code>rightHipAngle</code></td>
+<td><code>float</code></td>
+<td>deg</td>
+<td>Left/right hip angle</td>
+</tr>
+<tr>
+<td><code>leftThighAngle</code> / <code>rightThighAngle</code></td>
+<td><code>float</code></td>
+<td>deg</td>
+<td>Left/right absolute thigh angle</td>
+</tr>
+<tr>
+<td><code>leftKneeAngle</code> / <code>rightKneeAngle</code></td>
+<td><code>float</code></td>
+<td>deg</td>
+<td>Left/right knee angle (estimated)</td>
+</tr>
+<tr>
+<td><code>pelvicAngle</code></td>
+<td><code>float</code></td>
+<td>deg</td>
+<td>Pelvic tilt angle</td>
+</tr>
+<tr>
+<td><code>isLeftFootContact</code> / <code>isRightFootContact</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Left/right foot ground contact</td>
+</tr>
+<tr>
+<td><code>forwardVelocity</code></td>
+<td><code>float</code></td>
+<td>m/s</td>
+<td>Forward gait velocity</td>
+</tr>
+<tr>
+<td><code>leftHipTorque</code> / <code>rightHipTorque</code></td>
+<td><code>float</code></td>
+<td><strong>A</strong></td>
+<td>⚠️ Despite the field name, this is <strong>motor current</strong>. Joint torque conversion: <code>τ_joint[Nm] = 0.085 × 18.75 × current[A] ≈ 1.594 × current</code> (no real torque sensor — current-based estimate)</td>
+</tr>
+<tr>
+<td><code>leftHipMotorAngle</code> / <code>rightHipMotorAngle</code></td>
+<td><code>float</code></td>
+<td>deg</td>
+<td>Left/right motor encoder angle (may differ from joint angle due to gear ratio)</td>
+</tr>
+<tr>
+<td><code>left/rightHipImuFrontalRoll</code></td>
+<td><code>float</code></td>
+<td>deg</td>
+<td>Hip IMU Frontal Roll</td>
+</tr>
+<tr>
+<td><code>left/rightHipImuSagittalPitch</code></td>
+<td><code>float</code></td>
+<td>deg</td>
+<td>Hip IMU Sagittal Pitch</td>
+</tr>
+<tr>
+<td><code>left/rightHipImuTransverseYaw</code></td>
+<td><code>float</code></td>
+<td>deg</td>
+<td>Hip IMU Transverse Yaw</td>
+</tr>
+<tr>
+<td><code>left/rightHipImuGlobalAccX/Y/Z</code></td>
+<td><code>float</code></td>
+<td>m/s²</td>
+<td>Hip IMU global acceleration</td>
+</tr>
+<tr>
+<td><code>left/rightHipImuGlobalGyrX/Y/Z</code></td>
+<td><code>float</code></td>
+<td>deg/s</td>
+<td>Hip IMU global gyroscope</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xm_grf_space_e"><code>XM_GRF_SPACE_e</code><a class="headerlink" href="#xm_grf_space_e" title="Permanent link">&para;</a></h3>
+<p>Left/right identifier for the legacy GRF (FSR) module.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="w">    </span><span class="n">XM_SPACE_LEFT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">    </span><span class="n">XM_SPACE_RIGHT</span><span class="p">,</span>
+<a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a><span class="w">    </span><span class="n">XM_SPACE_UNKNOWN</span><span class="p">,</span>
+<a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a><span class="p">}</span><span class="w"> </span><span class="n">XM_GRF_SPACE_e</span><span class="p">;</span>
+</code></pre></div>
+<hr />
+<h3 id="xmgrfdata_t"><code>XmGrfData_t</code><a class="headerlink" href="#xmgrfdata_t" title="Permanent link">&para;</a></h3>
+<p><strong>Ground-reaction-force (foot pressure) sensor data</strong>, accessed via <code>XM.status.grf</code>. The legacy 14-channel MarvelDex FSR shoe fields are always present; the 🟢 <strong>Rev 2.0 only</strong> 24-channel fixed-frame (SM-GRF) fields are only included in the struct when the <code>XM_GRF_FIXED_FRAME_MODULE</code> macro is on (Rev 2.0).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>is_left_grf_connected</code> / <code>is_right_grf_connected</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Left/right GRF module connection status</td>
+</tr>
+<tr>
+<td><code>leftLastUpdateTick</code> / <code>rightLastUpdateTick</code></td>
+<td><code>uint32_t</code></td>
+<td>ms</td>
+<td>Left/right data receive timestamp</td>
+</tr>
+<tr>
+<td><code>leftSensorSpace</code> / <code>rightSensorSpace</code></td>
+<td><code>XM_GRF_SPACE_e</code></td>
+<td>-</td>
+<td>1=left foot, 2=right foot</td>
+</tr>
+<tr>
+<td><code>leftRollingIndex</code> / <code>rightRollingIndex</code></td>
+<td><code>uint8_t</code></td>
+<td>-</td>
+<td>Packet sequence (0~199)</td>
+</tr>
+<tr>
+<td><code>leftSensorData[14]</code> / <code>rightSensorData[14]</code></td>
+<td><code>uint8_t[XM_GRF_CHANNEL_SIZE]</code></td>
+<td>0~255 raw</td>
+<td>14-channel FSR values</td>
+</tr>
+<tr>
+<td><code>leftBatteryLevel</code> / <code>rightBatteryLevel</code></td>
+<td><code>uint8_t</code></td>
+<td>0~100</td>
+<td>Battery level</td>
+</tr>
+<tr>
+<td><code>leftStatusFlags</code> / <code>rightStatusFlags</code></td>
+<td><code>uint8_t</code></td>
+<td>-</td>
+<td>Status flags</td>
+</tr>
+<tr>
+<td><code>leftFsr[24]</code> / <code>rightFsr[24]</code> 🟢 Rev 2.0 only</td>
+<td><code>uint16_t[XM_GRF_FSR_CH_TOTAL]</code></td>
+<td>ADC LSB</td>
+<td>SM-GRF 24ch FSR raw values (ADC1 15ch + ADC3 9ch)</td>
+</tr>
+<tr>
+<td><code>leftImu[7]</code> / <code>rightImu[7]</code> 🟢 Rev 2.0 only</td>
+<td><code>int16_t[7]</code></td>
+<td>raw</td>
+<td>6-axis IMU raw values in <code>acc[3], gyr[3], temp</code> order</td>
+</tr>
+<tr>
+<td><code>leftGrfTick</code> / <code>rightGrfTick</code> 🟢 Rev 2.0 only</td>
+<td><code>uint32_t</code></td>
+<td>ms</td>
+<td>SM-GRF module control tick — used to judge gap/freshness across consecutive receives</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>ℹ️ <strong>L/R is based on the physical port</strong>, not on packet content (header comment: right-foot GRF → XM's right-side port = UART8). This is separate from the legacy fields' "1=left,2=right" discrimination — the Rev 2.0 extension fields are hard-wired to a fixed left/right port.</p>
+</blockquote>
+<hr />
+<h3 id="xmextimudata_t"><code>XmExtImuData_t</code><a class="headerlink" href="#xmextimudata_t" title="Permanent link">&para;</a></h3>
+<p><strong>External UART precision IMU</strong> data (currently Xsens MTi-630), accessed via <code>XM.status.ext_imu</code>. The "ext_imu" prefix distinguishes it from the CAN-FD-based IMU Hub, and the name is kept even if the device is swapped for a different UART IMU.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>is_connected</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>External IMU connection status</td>
+</tr>
+<tr>
+<td><code>lastUpdateTick</code></td>
+<td><code>uint32_t</code></td>
+<td>ms</td>
+<td>Data receive timestamp</td>
+</tr>
+<tr>
+<td><code>q_w, q_x, q_y, q_z</code></td>
+<td><code>float</code></td>
+<td>-</td>
+<td>Orientation (quaternion)</td>
+</tr>
+<tr>
+<td><code>acc_x, acc_y, acc_z</code></td>
+<td><code>float</code></td>
+<td>m/s²</td>
+<td>Calibrated acceleration</td>
+</tr>
+<tr>
+<td><code>gyr_x, gyr_y, gyr_z</code></td>
+<td><code>float</code></td>
+<td>deg/s or rad/s</td>
+<td>Calibrated gyroscope (header comment lists both units — check per device)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xmimuhubsensor_t--xmimuhubdata_t"><code>XmImuHubSensor_t</code> / <code>XmImuHubData_t</code><a class="headerlink" href="#xmimuhubsensor_t--xmimuhubdata_t" title="Permanent link">&para;</a></h3>
+<p><strong>IMU Hub Module</strong> data (EBIMU-9DOFV6 × 6, DOP V3), accessed via <code>XM.status.imu_hub</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">q_w</span><span class="p">,</span><span class="w"> </span><span class="n">q_x</span><span class="p">,</span><span class="w"> </span><span class="n">q_y</span><span class="p">,</span><span class="w"> </span><span class="n">q_z</span><span class="p">;</span><span class="w">           </span><span class="c1">// orientation (quaternion)</span>
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">roll</span><span class="p">,</span><span class="w"> </span><span class="n">pitch</span><span class="p">,</span><span class="w"> </span><span class="n">yaw</span><span class="p">;</span><span class="w">             </span><span class="c1">// orientation (Euler, deg)</span>
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">acc_x</span><span class="p">,</span><span class="w"> </span><span class="n">acc_y</span><span class="p">,</span><span class="w"> </span><span class="n">acc_z</span><span class="p">;</span><span class="w">          </span><span class="c1">// calibrated acceleration (g)</span>
+<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">gyr_x</span><span class="p">,</span><span class="w"> </span><span class="n">gyr_y</span><span class="p">,</span><span class="w"> </span><span class="n">gyr_z</span><span class="p">;</span><span class="w">          </span><span class="c1">// calibrated gyroscope (deg/s)</span>
+<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">mag_x</span><span class="p">,</span><span class="w"> </span><span class="n">mag_y</span><span class="p">,</span><span class="w"> </span><span class="n">mag_z</span><span class="p">;</span><span class="w">          </span><span class="c1">// calibrated magnetometer (uT)</span>
+<a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a><span class="p">}</span><span class="w"> </span><span class="n">XmImuHubSensor_t</span><span class="p">;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>q_w, q_x, q_y, q_z</code></td>
+<td><code>float</code></td>
+<td>-</td>
+<td>Orientation (quaternion)</td>
+</tr>
+<tr>
+<td><code>roll, pitch, yaw</code></td>
+<td><code>float</code></td>
+<td>deg</td>
+<td>Orientation (Euler angles)</td>
+</tr>
+<tr>
+<td><code>acc_x, acc_y, acc_z</code></td>
+<td><code>float</code></td>
+<td>g</td>
+<td>Calibrated acceleration</td>
+</tr>
+<tr>
+<td><code>gyr_x, gyr_y, gyr_z</code></td>
+<td><code>float</code></td>
+<td>deg/s</td>
+<td>Calibrated gyroscope</td>
+</tr>
+<tr>
+<td><code>mag_x, mag_y, mag_z</code></td>
+<td><code>float</code></td>
+<td>uT</td>
+<td>Calibrated magnetometer</td>
+</tr>
+</tbody>
+</table>
+<p><code>XmImuHubData_t</code> (the top-level struct wrapping all 6 sensors in an array):</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>is_connected</code></td>
+<td><code>bool</code></td>
+<td>IMU Hub Module connection status</td>
+</tr>
+<tr>
+<td><code>lastUpdateTick</code></td>
+<td><code>uint32_t</code></td>
+<td>Data receive timestamp (ms)</td>
+</tr>
+<tr>
+<td><code>sensor[6]</code></td>
+<td><code>XmImuHubSensor_t[XM_IMU_HUB_SENSOR_COUNT]</code></td>
+<td>IMU sensor data for ports 0~5</td>
+</tr>
+<tr>
+<td><code>connected_mask</code></td>
+<td><code>uint8_t</code></td>
+<td>Per-sensor connection bitmask (bit0~5)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong> (pattern from Ex.41 IMU Hub Dashboard)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="k">const</span><span class="w"> </span><span class="n">XmImuHubData_t</span><span class="o">*</span><span class="w"> </span><span class="n">hub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">imu_hub</span><span class="p">;</span>
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">hub</span><span class="o">-&gt;</span><span class="n">is_connected</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">roll0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hub</span><span class="o">-&gt;</span><span class="n">sensor</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">roll</span><span class="p">;</span><span class="w">   </span><span class="c1">// port 0 IMU&#39;s Roll (deg)</span>
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">port2_ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">hub</span><span class="o">-&gt;</span><span class="n">connected_mask</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">1u</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a><span class="p">}</span>
+</code></pre></div></p>
+<hr />
+<h3 id="xmemghubdata_t"><code>XmEmgHubData_t</code><a class="headerlink" href="#xmemghubdata_t" title="Permanent link">&para;</a></h3>
+<p><strong>EMG Hub Module</strong> data (sEMG sensor hub, DOP V3), accessed via <code>XM.status.emg_hub</code>. Sourced from the EMG Hub's TPDO1 (CAN ID <code>0x18F</code>), 1kHz sampling, including the results of the HPF 20Hz → rectification → RMS 200ms → envelope 8Hz → MVC → activation pipeline.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>is_connected</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>EMG Hub Module connection status</td>
+</tr>
+<tr>
+<td><code>lastUpdateTick</code></td>
+<td><code>uint32_t</code></td>
+<td>ms</td>
+<td>Slave control tick (OD <code>0x6050 ctrl_tick_ms</code>, 32-bit, wraps at ~49.7 days). If the delta between consecutive receives isn't 1, it's a gap. Falls back to the 24-bit Metadata timestamp on the older 14B TPDO format</td>
+</tr>
+<tr>
+<td><code>raw_adc</code></td>
+<td><code>uint16_t</code></td>
+<td>12-bit (HW OVS 16×)</td>
+<td>Raw ADC value</td>
+</tr>
+<tr>
+<td><code>voltage_uv</code></td>
+<td><code>float</code></td>
+<td>µV</td>
+<td>EMG voltage (AFE-converted)</td>
+</tr>
+<tr>
+<td><code>rms_uv</code></td>
+<td><code>float</code></td>
+<td>µV</td>
+<td>RMS value (200ms sliding window)</td>
+</tr>
+<tr>
+<td><code>envelope_uv</code></td>
+<td><code>float</code></td>
+<td>µV</td>
+<td>Envelope value (EMA fc≈8Hz)</td>
+</tr>
+<tr>
+<td><code>mvc_percent</code></td>
+<td><code>uint8_t</code></td>
+<td>0~100%</td>
+<td>MVC normalization</td>
+</tr>
+<tr>
+<td><code>is_active</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Muscle contraction detection (Schmitt trigger)</td>
+</tr>
+<tr>
+<td><code>status_flags</code></td>
+<td><code>uint8_t</code></td>
+<td>bitfield</td>
+<td>See the table below</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>status_flags</code> bit meanings:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Bit</th>
+<th>Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bit0</td>
+<td><code>ADC_OK</code></td>
+<td>ADC normal</td>
+</tr>
+<tr>
+<td>bit1</td>
+<td><code>IS_ACTIVE</code></td>
+<td>Muscle-contraction detection state</td>
+</tr>
+<tr>
+<td>bit2</td>
+<td><code>SATURATED</code></td>
+<td>Signal saturated</td>
+</tr>
+<tr>
+<td>bit3</td>
+<td><code>CALIB_VALID</code></td>
+<td>MVC calibration valid</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong> (pattern from Ex.42 EMG Hub Biofeedback)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="k">const</span><span class="w"> </span><span class="n">XmEmgHubData_t</span><span class="o">*</span><span class="w"> </span><span class="n">emg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">emg_hub</span><span class="p">;</span>
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">emg</span><span class="o">-&gt;</span><span class="n">is_connected</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">calib_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">emg</span><span class="o">-&gt;</span><span class="n">status_flags</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">1u</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0U</span><span class="p">;</span>
+<a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">mvc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emg</span><span class="o">-&gt;</span><span class="n">mvc_percent</span><span class="p">;</span>
+<a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a><span class="p">}</span>
+</code></pre></div></p>
+<hr />
+<h3 id="xmfeshubdata_t"><code>XmFesHubData_t</code><a class="headerlink" href="#xmfeshubdata_t" title="Permanent link">&para;</a></h3>
+<p><strong>FES Hub Module</strong> feedback data (functional electrical stimulation, DOP V3 ES-vector, Node <code>0x0C</code>), accessed via <code>XM.status.fes_hub</code>. Sourced from the FES Hub's TPDO1 (CAN ID <code>0x18C</code>, 37B, 10ms period) — composed of a legacy 16B block (channel state/current/HV, etc.) plus a 21B KHJ extension (FSM/ISI/target amplitude, etc.). Commands are sent via SDO (<code>0x6300</code> ES-vector, <code>0x6310</code> Master Command), not through this struct.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>is_connected</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>FES Hub Module connection status</td>
+</tr>
+<tr>
+<td><code>lastUpdateTick</code></td>
+<td><code>uint32_t</code></td>
+<td>ms</td>
+<td>Data receive timestamp (FES slave 24-bit timestamp, LE)</td>
+</tr>
+<tr>
+<td><code>ch_state[2]</code></td>
+<td><code>uint8_t[XM_FES_HUB_CH_COUNT]</code></td>
+<td>0~3</td>
+<td>Channel state: 0=IDLE, 1=READY, 2=STIMULATING, 3=FAULT</td>
+</tr>
+<tr>
+<td><code>ch_current_mA[2]</code></td>
+<td><code>float[2]</code></td>
+<td>mA</td>
+<td>Current feedback (PID output)</td>
+</tr>
+<tr>
+<td><code>ch_fault_code[2]</code></td>
+<td><code>uint8_t[2]</code></td>
+<td>-</td>
+<td>Per-channel fault code</td>
+</tr>
+<tr>
+<td><code>hv_voltage_V</code></td>
+<td><code>float</code></td>
+<td>V</td>
+<td>HV boost converter output voltage</td>
+</tr>
+<tr>
+<td><code>digipot_pos</code></td>
+<td><code>uint8_t</code></td>
+<td>0~127</td>
+<td>Digipot position (amplitude control)</td>
+</tr>
+<tr>
+<td><code>es_state_packed</code></td>
+<td><code>uint8_t</code></td>
+<td>bitfield</td>
+<td><code>[3:0]</code>=CH0 ESState, <code>[7:4]</code>=CH1 ESState</td>
+</tr>
+<tr>
+<td><code>error_register</code></td>
+<td><code>uint8_t</code></td>
+<td>-</td>
+<td>Error register</td>
+</tr>
+<tr>
+<td><code>fsm_state</code> / <code>fsm_state_prev</code></td>
+<td><code>uint8_t</code></td>
+<td>-</td>
+<td>Current/previous FSM state (KHJ Control Task)</td>
+</tr>
+<tr>
+<td><code>isi_packed</code></td>
+<td><code>uint8_t</code></td>
+<td>bitmap</td>
+<td><code>bit[N]</code>=ISI[N]. EXT7(bit7)/EXT8(bit8)=trace of a Master Command action</td>
+</tr>
+<tr>
+<td><code>ch_es_error_lo[2]</code></td>
+<td><code>uint8_t[2]</code></td>
+<td>-</td>
+<td>ES-vector error code low byte (per channel, separate from the CiA 301 Abort code)</td>
+</tr>
+<tr>
+<td><code>ch_target_amplitude_mA[2]</code></td>
+<td><code>float[2]</code></td>
+<td>mA</td>
+<td>Target amplitude (setpoint) commanded by the Master</td>
+</tr>
+<tr>
+<td><code>ch_impedance[2]</code></td>
+<td><code>float[2]</code></td>
+<td>ohm</td>
+<td>Filtered impedance — an indicator for judging electrode contact</td>
+</tr>
+<tr>
+<td><code>ch_pulse_cnt[2]</code></td>
+<td><code>uint16_t[2]</code></td>
+<td>-</td>
+<td>Cumulative stimulation pulse counter</td>
+</tr>
+<tr>
+<td><code>ch_voltage_diff_V[2]</code></td>
+<td><code>float[2]</code></td>
+<td>V</td>
+<td>Actual stimulation differential voltage</td>
+</tr>
+</tbody>
+</table>
+<p><strong>See also</strong>: the channel index (0/1) and array sizes are defined by <a href="#macros"><code>XM_FES_HUB_CH_COUNT</code></a>.</p>
+<hr />
+<h3 id="xminput_t"><code>XmInput_t</code><a class="headerlink" href="#xminput_t" title="Permanent link">&para;</a></h3>
+<p>The <strong>integrated robot state struct</strong>, accessed via <code>XM.status</code>. All read-only sensor data is collected here.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="w">    </span><span class="n">XmH10Data_t</span><span class="w">     </span><span class="n">h10</span><span class="p">;</span><span class="w">      </span><span class="c1">// KIT H10 body data</span>
+<a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="w">    </span><span class="n">XmGrfData_t</span><span class="w">     </span><span class="n">grf</span><span class="p">;</span><span class="w">      </span><span class="c1">// GRF foot-pressure sensor data</span>
+<a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a><span class="w">    </span><span class="n">XmExtImuData_t</span><span class="w">  </span><span class="n">ext_imu</span><span class="p">;</span><span class="w">  </span><span class="c1">// External UART IMU (Xsens MTi-630)</span>
+<a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a><span class="w">    </span><span class="n">XmImuHubData_t</span><span class="w">  </span><span class="n">imu_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// IMU Hub sensor data (DOP V3)</span>
+<a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a><span class="w">    </span><span class="n">XmEmgHubData_t</span><span class="w">  </span><span class="n">emg_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// EMG Hub sensor data (DOP V3)</span>
+<a id="__codelineno-41-7" name="__codelineno-41-7" href="#__codelineno-41-7"></a><span class="w">    </span><span class="n">XmFesHubData_t</span><span class="w">  </span><span class="n">fes_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// FES Hub stimulation feedback (DOP V3)</span>
+<a id="__codelineno-41-8" name="__codelineno-41-8" href="#__codelineno-41-8"></a><span class="p">}</span><span class="w"> </span><span class="n">XmInput_t</span><span class="p">;</span>
+</code></pre></div>
+<hr />
+<h3 id="xmoutput_t"><code>XmOutput_t</code><a class="headerlink" href="#xmoutput_t" title="Permanent link">&para;</a></h3>
+<p>The <strong>robot control command struct</strong>, accessed via <code>XM.command</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="w">    </span><span class="n">XmControlMode_t</span><span class="w"> </span><span class="n">control_mode</span><span class="p">;</span>
+<a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">assist_torque_rh</span><span class="p">;</span>
+<a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">assist_torque_lh</span><span class="p">;</span>
+<a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a><span class="w">        </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">torque_rh_updated</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-42-7" name="__codelineno-42-7" href="#__codelineno-42-7"></a><span class="w">        </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">torque_lh_updated</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-42-8" name="__codelineno-42-8" href="#__codelineno-42-8"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="n">_dirty_flags</span><span class="p">;</span>
+<a id="__codelineno-42-9" name="__codelineno-42-9" href="#__codelineno-42-9"></a><span class="p">}</span><span class="w"> </span><span class="n">XmOutput_t</span><span class="p">;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>control_mode</code></td>
+<td><code>XmControlMode_t</code></td>
+<td>Current control mode</td>
+</tr>
+<tr>
+<td><code>assist_torque_rh</code> / <code>assist_torque_lh</code></td>
+<td><code>float</code></td>
+<td>Right/left assist torque (Nm)</td>
+</tr>
+<tr>
+<td><code>_dirty_flags</code></td>
+<td>anonymous bitfield struct</td>
+<td>⚠️ <strong>Internal only</strong> — header comment: "the user doesn't need to know this, the helper functions manage it." Don't write to it directly; always use <code>XM_SetAssistTorque()</code>-family functions</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>Do not write directly</strong>: <code>XM.command</code> is a staging area. Assigning to these fields directly does not set the Dirty Flag, so nothing actually gets transmitted. Always use setter functions such as <a href="#xm_setassisttorque"><code>XM_SetAssistTorque()</code></a>.</p>
+</blockquote>
+<hr />
+<h3 id="xmrobot_t-global-instance-xm"><code>XmRobot_t</code> (global instance <code>XM</code>)<a class="headerlink" href="#xmrobot_t-global-instance-xm" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="w">    </span><span class="n">XmInput_t</span><span class="w">  </span><span class="n">status</span><span class="p">;</span><span class="w">  </span><span class="c1">// [Read] sensor values (Input)</span>
+<a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="w">    </span><span class="n">XmOutput_t</span><span class="w"> </span><span class="n">command</span><span class="p">;</span><span class="w"> </span><span class="c1">// [Write] command values (Output)</span>
+<a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="p">}</span><span class="w"> </span><span class="n">XmRobot_t</span><span class="p">;</span>
+<a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a>
+<a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a><span class="k">extern</span><span class="w"> </span><span class="n">XmRobot_t</span><span class="w"> </span><span class="n">XM</span><span class="p">;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>XmInput_t</code></td>
+<td>Read-only sensor data (H10/GRF/ExtIMU/IMU Hub/EMG Hub/FES Hub)</td>
+</tr>
+<tr>
+<td><code>command</code></td>
+<td><code>XmOutput_t</code></td>
+<td>Write-only control-command staging area — don't write directly, use <code>XM_Set*</code> functions</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">leftHipAngle</span><span class="p">;</span><span class="w">  </span><span class="c1">// read the left hip angle</span>
+</code></pre></div></p>
+<hr />
+<h2 id="related-documents">Related Documents<a class="headerlink" href="#related-documents" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../02-h10-control-n-data/">02. KIT H10 Control &amp; Data</a> — IPO cycle, torque sign convention, Body Data details, common mistakes</li>
+<li><a href="../../">README — API Reference Index</a> — full function-group table of contents, per-example Body Data requirements</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../xm-api/" class="md-footer__link md-footer__link--prev" aria-label="Previous: xm_api.h (Entry Point)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                xm_api.h (Entry Point)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../xm-api-tsm/" class="md-footer__link md-footer__link--next" aria-label="Next: xm_api_tsm.h (State Machine)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                xm_api_tsm.h (State Machine)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
