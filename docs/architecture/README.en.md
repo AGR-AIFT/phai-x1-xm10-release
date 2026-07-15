@@ -66,7 +66,7 @@ The heart of XM10 is a **control loop that repeats every 1 ms (1 kHz)**. Each mi
   │  XM.status.h10.    XM_TSM_Run         XM_SetAssistTorque  │
   │   leftHipAngle      → on_loop()        XM_SendUsbData     │
   │   rightHipAngle                                            │
-  │   isFootContact                                            │
+  │   isLeftFootContact                                        │
   └────────────────────────────────────────────────────────────┘
                               ↓ repeats 1 ms later
 ```
@@ -140,7 +140,7 @@ There are three channels — that is all you need to know.
 |---------|-------------------|------------------|
 | **CAN-FD** | XM10 ↔ KIT H10 exoskeleton | Read `XM.status.h10.*`, write `XM_SetAssistTorque*()` |
 | **USB Serial (CDC)** | XM10 → PC terminal / PhAI Studio | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
-| **USB Mass Storage (MSC)** | XM10 → USB drive (data logging) | `XM_StartUsbLogging`, `XM_LogBinaryData` |
+| **USB Mass Storage (MSC)** | XM10 → USB drive (data logging) | `XM_SetUsbLogSource`, `XM_StartUsbDataLog` |
 
 The underlying protocol details are handled by the library. You only need to call the functions.
 

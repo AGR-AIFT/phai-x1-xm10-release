@@ -70,11 +70,11 @@ Or via Group Policy:
 
 ### IOIF Macro Redefinition Warnings
 
-**Symptom:** Warnings such as `warning: "AGRB_IOIF_FDCAN_ENABLE" redefined`
+**Symptom:** Warnings such as `warning: "AGRB_IOIF_FDCAN_ENABLE" redefined` (occurs when building the Rev 1.1 SDK with CMake — it does not appear with STM32CubeIDE builds or with the Rev 2.0 SDK)
 
-**Cause:** `AGRB_IOIF_*_ENABLE` macros are defined in both the `-D` flags in `CMakeLists.txt` and in `ioif_conf.h`.
+**Cause:** `AGRB_IOIF_*_ENABLE` macros are defined in both the macro-definitions block (`target_compile_definitions`) in `CMakeLists.txt` and in `ioif_conf.h`.
 
-**Resolution:** Remove the `AGRB_IOIF_*` definitions from `PROJECT_DEFINES` in `CMakeLists.txt` and manage them exclusively in `ioif_conf.h`. These warnings do not affect behavior, but eliminating them keeps the build output clean.
+**Resolution:** Remove the `AGRB_IOIF_*` definitions from the `target_compile_definitions` block in `CMakeLists.txt` and manage them exclusively in `ioif_conf.h`. These warnings do not affect behavior, but eliminating them keeps the build output clean.
 
 ---
 

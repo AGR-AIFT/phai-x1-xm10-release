@@ -3,9 +3,9 @@
 > 📌 **After reading this page**: You will be able to update the KIT H10 (CM / ESP32 / SAM10) firmware and ContentsFiles — matched to your XM firmware version — using either a USB stick or an SD card.
 > ⏱️ Estimated reading time: 20 min (hands-on: 30–60 min)
 > 🧰 Prerequisites: KIT H10 hardware architecture ([docs/architecture/README.md](../architecture/README.md))
-> 🎯 Key point: Compatibility matrix — **XM v2.2.2 ↔ H10 v2.3.0 ↔ ContentsFiles 2026.04** (mixing versions is not allowed)
+> 🎯 Key point: Compatibility matrix — **XM v2.3.0 ↔ H10 v2.3.0+ (latest files attached to the Release) ↔ ContentsFiles v2.3.0+ (latest files attached to the Release)** (mixing versions is not allowed)
 
-> ⚠️ **Do not mix versions** — combining XM v2.2.2 with H10 v1.0.x (or vice versa) causes CAN-FD protocol mismatch and communication errors. Apply the matrix exactly as shown.
+> ⚠️ **Do not mix versions** — combining XM v2.3.0 with H10 v1.0.x (or vice versa) causes CAN-FD protocol mismatch and communication errors. Apply the matrix exactly as shown.
 
 XM10 communicates with KIT H10 over CAN-FD, so you must use **the KIT H10 firmware and ContentsFiles that match your XM firmware version**. A version mismatch will cause communication errors or unexpected behavior.
 
@@ -18,7 +18,7 @@ XM10 communicates with KIT H10 over CAN-FD, so you must use **the KIT H10 firmwa
 | Situation | What you need | Where to go |
 |-----------|--------------|-------------|
 | **New XM10 received, H10 is also new** | Check the compatibility matrix — if they match, proceed as-is | ↓ Matrix |
-| **XM10 is v2.2.2 but H10 is an older version** | Update CM / SAM10 / ESP32 + ContentsFiles | ↓ Firmware Update (USB stick) |
+| **XM10 is v2.3.0 but H10 is an older version** | Update CM / SAM10 / ESP32 + ContentsFiles | ↓ Firmware Update (USB stick) |
 | **Firmware is OK, only motion map / audio needs updating** | Replace ContentsFiles only (SD card swap) | ↓ Contents File Update (SD card) |
 | **Red LED during update** | An error occurred | ↓ Error reference table |
 | **Manual update is not feasible** | Contact support | [Discussions Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a) |
@@ -29,11 +29,12 @@ XM10 communicates with KIT H10 over CAN-FD, so you must use **the KIT H10 firmwa
 
 | XM FW Version | KIT H10 FW Version | ContentsFiles | Notes |
 | :---: | :---: | :---: | :--- |
-| **v2.2.2** | **CM v2.3.0 / ESP32 v2.3.0 / SAM10 v2.3.0** | **2026.04** | **Latest — recommended** |
+| **v2.3.0** | **v2.3.0+ (latest files attached to the Release)** | **v2.3.0+ (latest files attached to the Release)** | **Latest — recommended** |
+| v2.2.2 | CM v2.3.0 / ESP32 v2.3.0 / SAM10 v2.3.0 | 2026.04 | Previous |
 | v2.0.x | CM v2.3.0 / ESP32 v2.3.0 / SAM10 v2.3.0 | 2025.02 | Previous |
 | v1.0.x | Factory-shipped version | Factory-shipped version | Legacy |
 
-> **v1.0.x users:** If you continue using XM FW v1.0.x without upgrading to v2.2.2, you must keep the KIT H10 firmware at its factory-shipped version as well. Mixing XM v2.2.2 with an older H10 firmware causes a protocol mismatch and will prevent normal operation.
+> **v1.0.x users:** If you continue using XM FW v1.0.x without upgrading to v2.3.0, you must keep the KIT H10 firmware at its factory-shipped version as well. Mixing XM v2.3.0 with an older H10 firmware causes a protocol mismatch and will prevent normal operation.
 > Note that the KIT H10 firmware paired with v1.0.x has known issues (such as motor communication errors) that have not been resolved, so upgrading both XM and KIT H10 to the latest firmware is strongly recommended.
 
 ---
@@ -44,14 +45,16 @@ All files are available on the GitHub Releases page.
 
 **[Go to Releases](https://github.com/AGR-EXO/Extension_Module/releases)**
 
-### Files for XM v2.2.2
+### Files for XM v2.3.0
+
+> The KIT H10 firmware and contents files were updated in this release (v2.3.0+). Check the exact filenames and version numbers in the latest files attached to the Release page.
 
 | Filename | Purpose | Size |
 | :--- | :--- | :---: |
-| `SUIT_CM_APP_2_3_0.bin` | Control Module (CM) firmware | 299 KB |
-| `SUIT_ESP32_FW_2_3_0.bin` | ESP32 module firmware | 1,030 KB |
-| `SUIT_SAM10_APP_2_3_0.bin` | Motor Driver (SAM10 / MD) firmware | 284 KB |
-| `ContentsFiles.zip` | SD card contents files (audio, FSM, motion map, etc.) | 6,974 KB |
+| `SUIT_CM_APP_X_X_X.bin` | Control Module (CM) firmware | See Release assets |
+| `SUIT_ESP32_FW_X_X_X.bin` | ESP32 module firmware | See Release assets |
+| `SUIT_SAM10_APP_X_X_X.bin` | Motor Driver (SAM10 / MD) firmware | See Release assets |
+| `ContentsFiles.zip` | SD card contents files (audio, FSM, motion map, etc.) | See Release assets |
 | `KIT_H10_FW_Update.pdf` | Firmware update manual (detailed, with photos) | 1,451 KB |
 | `KIT_H10_ContentsFiles_Update.pdf` | Contents file update manual (detailed, with photos) | 1,443 KB |
 
@@ -177,14 +180,14 @@ The CM module contains an internal SD card (SanDisk Micro SD Max Endurance) with
 
 ## Frequently Asked Questions
 
-**Q: I installed XM v2.2.2 but haven't updated the KIT H10 firmware. What happens?**
+**Q: I installed XM v2.3.0 but haven't updated the KIT H10 firmware. What happens?**
 > The CAN-FD protocol has changed, so communication errors will occur. Update to the corresponding H10 firmware immediately.
 
 **Q: How do I update the ESP32 firmware?**
-> The ESP32 firmware (`SUIT_ESP32_FW_2_3_0.bin`) is transmitted from the CM to the ESP32 automatically during CM boot. Simply include it on the USB stick alongside the CM firmware — it will be handled automatically during the CM update process.
+> The ESP32 firmware (`SUIT_ESP32_FW_X_X_X.bin`) is transmitted from the CM to the ESP32 automatically during CM boot. Simply include it on the USB stick alongside the CM firmware — it will be handled automatically during the CM update process.
 
 **Q: Can I keep using XM FW v1.0.x?**
-> Yes, but you must also keep the KIT H10 firmware at its factory-shipped version. Do not mix XM FW v1.0.x with H10 FW v2.3.0.
+> Yes, but you must also keep the KIT H10 firmware at its factory-shipped version. Do not mix XM FW v1.0.x with the latest H10 FW (v2.3.0+).
 
 **Q: What should I do if an error occurs (red LED) during the update?**
 > Power off the device, verify the filenames and format (FAT32) on the USB stick, then try again. If the error persists, contact support using the channels listed above.

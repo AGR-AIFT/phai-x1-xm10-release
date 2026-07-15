@@ -65,7 +65,7 @@ Used for data exchange with a PC. The single port supports both serial communica
 | Mode | Purpose | Functions used |
 |------|---------|----------------|
 | Serial (CDC) | Debug and data transfer via PC terminal / PhAI Studio | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
-| Memory (MSC) | Data logging to USB flash drive (FAT32, 32 KB cluster) | `XM_StartUsbDataLog`, `XM_LogBinaryData` |
+| Memory (MSC) | Data logging to USB flash drive (FAT32, 32 KB cluster) | `XM_SetUsbLogSource`, `XM_StartUsbDataLog` |
 
 > Only one mode is active at a time. Inserting a USB flash drive while serial mode is active triggers a mode switch.
 

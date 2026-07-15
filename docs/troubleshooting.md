@@ -70,11 +70,11 @@ New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name
 
 ### IOIF 매크로 재정의 경고
 
-**증상:** `warning: "AGRB_IOIF_FDCAN_ENABLE" redefined` 등의 경고
+**증상:** `warning: "AGRB_IOIF_FDCAN_ENABLE" redefined` 등의 경고 (Rev 1.1 SDK 를 CMake 로 빌드할 때 발생 — STM32CubeIDE 빌드나 Rev 2.0 SDK 에서는 나타나지 않습니다)
 
-**원인:** `AGRB_IOIF_*_ENABLE` 매크로가 CMakeLists.txt의 `-D` 플래그와 `ioif_conf.h`에서 중복 정의
+**원인:** `AGRB_IOIF_*_ENABLE` 매크로가 `CMakeLists.txt` 의 매크로 정의 블록(`target_compile_definitions`)과 `ioif_conf.h` 양쪽에서 중복 정의
 
-**해결:** CMakeLists.txt의 `PROJECT_DEFINES`에서 `AGRB_IOIF_*` 관련 정의를 제거하고, `ioif_conf.h`에서만 관리하세요. 경고 자체는 동작에 영향을 주지 않지만, 제거하는 것이 깔끔합니다.
+**해결:** `CMakeLists.txt` 의 `target_compile_definitions` 블록에서 `AGRB_IOIF_*` 관련 정의를 제거하고, `ioif_conf.h`에서만 관리하세요. 경고 자체는 동작에 영향을 주지 않지만, 제거하는 것이 깔끔합니다.
 
 ---
 

@@ -39,14 +39,14 @@ Rev 1.1 보드의 외부 GPIO 헤더 (DIO 8 + ADC 4) 가 보드의 어느 위치
 
 | API 이름 | PCB 라벨 | 비고 |
 |----------|---------|------|
-| `XM_EXT_ADC_1` | EXT_ADC_1 | 12-bit 아날로그 입력 전용 |
-| `XM_EXT_ADC_2` | EXT_ADC_2 | 12-bit 아날로그 입력 전용 |
-| `XM_EXT_ADC_3` | EXT_ADC_3 | 12-bit 아날로그 입력 전용 |
-| `XM_EXT_ADC_4` | EXT_ADC_4 | 12-bit 아날로그 입력 전용 |
+| `XM_EXT_ADC_1` | EXT_ADC_1 | 12-bit 네이티브 (ADC1), 아날로그 입력 전용 |
+| `XM_EXT_ADC_2` | EXT_ADC_2 | 16-bit 네이티브 (ADC2), 아날로그 입력 전용 |
+| `XM_EXT_ADC_3` | EXT_ADC_3 | 12-bit 네이티브 (ADC1), 아날로그 입력 전용 |
+| `XM_EXT_ADC_4` | EXT_ADC_4 | 16-bit 네이티브 (ADC2), 아날로그 입력 전용 |
 
 **전기 사양**:
 - 입력 범위: 0 ~ 3.3 V
-- 해상도: 12-bit (네이티브), 함수 출력은 8/10/12/16-bit 선택 가능
+- 해상도: `XM_EXT_ADC_1`/`_3` = 12-bit 네이티브 (ADC1), `XM_EXT_ADC_2`/`_4` = 16-bit 네이티브 (ADC2) — 함수 출력은 8/10/12/16-bit 중 선택 가능
 - 샘플링: 10 kHz
 
 ---

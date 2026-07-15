@@ -175,6 +175,7 @@ nav:
   - 문제 해결: troubleshooting.md
   - 릴리스 노트:
       - 개요: release-notes/README.md
+      - v2.3.0: release-notes/v2.3.0.md
       - v2.2.2: release-notes/v2.2.2.md
       - v2.2.1: release-notes/v2.2.1.md
       - v2.2.0: release-notes/v2.2.0.md

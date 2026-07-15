@@ -39,14 +39,14 @@ Use the photo above to locate the external GPIO header (DIO 8 + ADC 4) on the Re
 
 | API Name | PCB Label | Notes |
 |----------|-----------|-------|
-| `XM_EXT_ADC_1` | EXT_ADC_1 | 12-bit analog input only |
-| `XM_EXT_ADC_2` | EXT_ADC_2 | 12-bit analog input only |
-| `XM_EXT_ADC_3` | EXT_ADC_3 | 12-bit analog input only |
-| `XM_EXT_ADC_4` | EXT_ADC_4 | 12-bit analog input only |
+| `XM_EXT_ADC_1` | EXT_ADC_1 | 12-bit native (ADC1), analog input only |
+| `XM_EXT_ADC_2` | EXT_ADC_2 | 16-bit native (ADC2), analog input only |
+| `XM_EXT_ADC_3` | EXT_ADC_3 | 12-bit native (ADC1), analog input only |
+| `XM_EXT_ADC_4` | EXT_ADC_4 | 16-bit native (ADC2), analog input only |
 
 **Electrical specifications**:
 - Input range: 0 – 3.3 V
-- Resolution: 12-bit (native); function output supports 8/10/12/16-bit selection
+- Resolution: `XM_EXT_ADC_1`/`_3` = 12-bit native (ADC1), `XM_EXT_ADC_2`/`_4` = 16-bit native (ADC2) — function output supports 8/10/12/16-bit selection
 - Sampling rate: 10 kHz
 
 ---

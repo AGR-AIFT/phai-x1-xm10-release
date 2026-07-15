@@ -3,9 +3,9 @@
 > 📌 **이 페이지를 읽고 나면**: XM FW 버전에 맞는 KIT H10 (CM / ESP32 / SAM10) 펌웨어 + ContentsFiles 를 USB Stick 또는 SD카드 방식으로 업데이트할 수 있습니다.
 > ⏱️ 예상 학습 시간: 20분 (실습 30~60분)
 > 🧰 사전 지식: KIT H10 HW 구조 ([docs/architecture/README.md](../architecture/README.md))
-> 🎯 핵심: 호환성 매트릭스 — **XM v2.2.2 ↔ H10 v2.3.0 ↔ ContentsFiles 2026.04** (혼용 금지)
+> 🎯 핵심: 호환성 매트릭스 — **XM v2.3.0 ↔ H10 v2.3.0+ (Release 첨부 최신 파일) ↔ ContentsFiles v2.3.0+ (Release 첨부 최신 파일)** (혼용 금지)
 
-> ⚠️ **버전 혼용 금지** — XM v2.2.2 + H10 v1.0.x 또는 그 반대 조합 시 CAN-FD 프로토콜 불일치로 통신 오류. 매트릭스 그대로 적용 필수.
+> ⚠️ **버전 혼용 금지** — XM v2.3.0 + H10 v1.0.x 또는 그 반대 조합 시 CAN-FD 프로토콜 불일치로 통신 오류. 매트릭스 그대로 적용 필수.
 
 XM10은 KIT H10과 CAN-FD로 연동되므로 **XM FW 버전에 맞는 KIT H10 펌웨어 및 컨텐츠 파일**을 사용해야 합니다. 버전이 불일치하면 통신 오류 또는 예기치 않은 동작이 발생할 수 있습니다.
 
@@ -18,7 +18,7 @@ XM10은 KIT H10과 CAN-FD로 연동되므로 **XM FW 버전에 맞는 KIT H10 �
 | 상황 | 무엇이 필요한가 | 어디로 |
 |------|---------------|-------|
 | **새 XM10 받음, H10 새것** | 호환성 매트릭스 확인 → 일치하면 그대로 사용 | ↓ 매트릭스 |
-| **XM10 v2.2.2 인데 H10 가 구버전** | CM/SAM10/ESP32 + ContentsFiles 업데이트 | ↓ 펌웨어 업데이트 (USB Stick) |
+| **XM10 v2.3.0 인데 H10 가 구버전** | CM/SAM10/ESP32 + ContentsFiles 업데이트 | ↓ 펌웨어 업데이트 (USB Stick) |
 | **펌웨어는 OK, 모션맵/음성 갱신** | ContentsFiles 만 SD카드 교체 | ↓ 컨텐츠 파일 업데이트 (SD카드) |
 | **업데이트 도중 빨간 LED** | 오류 발생 | ↓ 오류 대응 표 |
 | **수동 작업 불가** | 지원 요청 | [Discussions Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a) |
@@ -29,11 +29,12 @@ XM10은 KIT H10과 CAN-FD로 연동되므로 **XM FW 버전에 맞는 KIT H10 �
 
 | XM FW 버전 | KIT H10 FW 버전 | ContentsFiles | 비고 |
 | :---: | :---: | :---: | :--- |
-| **v2.2.2** | **CM v2.3.0 / ESP32 v2.3.0 / SAM10 v2.3.0** | **2026.04** | **최신 — 권장** |
+| **v2.3.0** | **v2.3.0+ (Release 첨부 최신 파일)** | **v2.3.0+ (Release 첨부 최신 파일)** | **최신 — 권장** |
+| v2.2.2 | CM v2.3.0 / ESP32 v2.3.0 / SAM10 v2.3.0 | 2026.04 | Previous |
 | v2.0.x | CM v2.3.0 / ESP32 v2.3.0 / SAM10 v2.3.0 | 2025.02 | Previous |
 | v1.0.x | 기존 출하 버전 | 기존 출하 버전 | Legacy |
 
-> **v1.0.x 사용자:** XM FW를 v2.2.2으로 업그레이드하지 않고 v1.0.x를 그대로 사용하는 경우, KIT H10 FW도 기존 출하 버전을 유지해야 합니다. XM v2.2.2와 구 버전 H10 FW를 혼용하면 프로토콜 불일치로 정상 동작하지 않습니다.
+> **v1.0.x 사용자:** XM FW를 v2.3.0으로 업그레이드하지 않고 v1.0.x를 그대로 사용하는 경우, KIT H10 FW도 기존 출하 버전을 유지해야 합니다. XM v2.3.0과 구 버전 H10 FW를 혼용하면 프로토콜 불일치로 정상 동작하지 않습니다.
 > 또한, v1.0.x와 연동되는 KIT H10 FW는 모터 통신 오류 등 자주 발생되는 문제가 해결되지 않은 버전이므로 XM과 KIT H10의 FW는 최신 버전으로 업그레이드하길 권장합니다.
 
 ---
@@ -44,14 +45,16 @@ GitHub Releases에서 다운로드할 수 있습니다.
 
 **[Releases 페이지 바로가기](https://github.com/AGR-EXO/Extension_Module/releases)**
 
-### XM v2.2.2 대응 파일
+### XM v2.3.0 대응 파일
+
+> KIT H10 펌웨어와 컨텐츠 파일은 이번 릴리즈에서 갱신되었습니다 (v2.3.0+). 정확한 파일명·버전 번호는 Release 페이지에 첨부된 최신 파일을 확인하세요.
 
 | 파일명 | 용도 | 크기 |
 | :--- | :--- | :---: |
-| `SUIT_CM_APP_2_3_0.bin` | Control Module (CM) 펌웨어 | 299 KB |
-| `SUIT_ESP32_FW_2_3_0.bin` | ESP32 모듈 펌웨어 | 1,030 KB |
-| `SUIT_SAM10_APP_2_3_0.bin` | Motor Driver (SAM10/MD) 펌웨어 | 284 KB |
-| `ContentsFiles.zip` | SD카드 컨텐츠 파일 (음성, FSM, 모션맵 등) | 6,974 KB |
+| `SUIT_CM_APP_X_X_X.bin` | Control Module (CM) 펌웨어 | Release 첨부 파일 확인 |
+| `SUIT_ESP32_FW_X_X_X.bin` | ESP32 모듈 펌웨어 | Release 첨부 파일 확인 |
+| `SUIT_SAM10_APP_X_X_X.bin` | Motor Driver (SAM10/MD) 펌웨어 | Release 첨부 파일 확인 |
+| `ContentsFiles.zip` | SD카드 컨텐츠 파일 (음성, FSM, 모션맵 등) | Release 첨부 파일 확인 |
 | `KIT_H10_FW_Update.pdf` | 펌웨어 업데이트 매뉴얼 (상세) | 1,451 KB |
 | `KIT_H10_ContentsFiles_Update.pdf` | 컨텐츠 파일 업데이트 매뉴얼 (상세) | 1,443 KB |
 
@@ -177,14 +180,14 @@ CM 내부의 SD카드(SanDisk Micro SD Max Endurance)에는 다음 폴더가 존
 
 ## 자주 묻는 질문
 
-**Q: XM v2.2.2을 설치했는데 KIT H10 FW를 업데이트하지 않으면?**
+**Q: XM v2.3.0을 설치했는데 KIT H10 FW를 업데이트하지 않으면?**
 > CAN-FD 프로토콜이 변경되었으므로 통신 오류가 발생합니다. 반드시 대응하는 H10 FW로 업데이트하세요.
 
 **Q: ESP32 펌웨어는 어떻게 업데이트하나요?**
-> ESP32 FW(`SUIT_ESP32_FW_2_3_0.bin`)는 CM이 부팅 시 자동으로 ESP32에 전송하여 업데이트합니다. USB Stick에 함께 넣어두면 CM 업데이트 과정에서 자동 처리됩니다.
+> ESP32 FW(`SUIT_ESP32_FW_X_X_X.bin`)는 CM이 부팅 시 자동으로 ESP32에 전송하여 업데이트합니다. USB Stick에 함께 넣어두면 CM 업데이트 과정에서 자동 처리됩니다.
 
 **Q: v1.0.x XM FW를 계속 사용해도 되나요?**
-> 가능합니다. 단, KIT H10 FW도 기존 출하 버전을 그대로 유지해야 합니다. v1.0.x XM FW와 v2.3.0 H10 FW를 혼용하면 안 됩니다.
+> 가능합니다. 단, KIT H10 FW도 기존 출하 버전을 그대로 유지해야 합니다. v1.0.x XM FW와 최신 H10 FW(v2.3.0+)를 혼용하면 안 됩니다.
 
 **Q: 업데이트 중 오류(붉은색 LED)가 발생하면?**
 > 전원을 끄고 USB Stick의 파일명과 포맷(FAT32)을 확인한 후 다시 시도하세요. 반복되면 위 담당자에게 문의하세요.

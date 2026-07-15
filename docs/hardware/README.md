@@ -65,7 +65,7 @@ PC 와 데이터를 주고받는 데 사용합니다. 시리얼 통신 (CDC) + U
 | 모드 | 용도 | 사용하는 함수 |
 |------|------|--------------|
 | 시리얼 (CDC) | PC 터미널 / PhAI Studio 로 디버그·데이터 전송 | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
-| 메모리 (MSC) | USB 메모리에 데이터 로깅 (FAT32, 32 KB cluster) | `XM_StartUsbDataLog`, `XM_LogBinaryData` |
+| 메모리 (MSC) | USB 메모리에 데이터 로깅 (FAT32, 32 KB cluster) | `XM_SetUsbLogSource`, `XM_StartUsbDataLog` |
 
 > 한 번에 하나의 모드만 활성됩니다. 시리얼 사용 중 USB 메모리 꽂으면 모드 전환 동작.
 

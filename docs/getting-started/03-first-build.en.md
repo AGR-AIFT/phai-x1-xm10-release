@@ -40,7 +40,7 @@ When `Extension_Module` appears in the `Projects:` list, click `Finish`.
 
 The default project builds and boots as-is — LED 1 will blink in a heartbeat pattern. To try a specific example:
 
-- **Option A (recommended)** — Copy the entire contents of an example file such as `examples/00_Quick_Start/quick_start.c` and paste it into `XM_Apps/Control_Task/control_task.c`.
+- **Option A (recommended)** — Copy the entire contents of an example file such as `Examples/00_Quick_Start/quick_start.c` and paste it into `XM_Apps/Control_Task/control_task.c`.
 - **Option B** — Move the example `.c` file into the `Control_Task` folder and delete the existing `control_task.c`.
 
 ### 3. Build

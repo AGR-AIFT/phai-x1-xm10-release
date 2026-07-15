@@ -59,7 +59,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 # 2. 압축 해제 — 한글·공백 없는 짧은 경로에
 #    예: C:\dev\Extension_Module\
-#    압축 풀면 ZIP root 에 .project, CLAUDE.md, docs/, examples/, .claude/ 가 함께 있음
+#    압축 풀면 ZIP root 에 .project, CLAUDE.md, docs/, Examples/, .claude/ 가 함께 있음
 
 # 3. STM32CubeIDE 에서 Import
 #    File → Import → Existing Projects into Workspace
@@ -114,7 +114,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 ## 폴더 구조 한눈에
 
-> 본 트리는 **GitHub 레포 전체(개발) 구조**입니다. 사용자가 받는 **ZIP 다운로더 (Rev1.1.zip / Rev2.0.zip)** 는 본인 Rev SDK 한 벌이 ZIP root 에 평탄화되어 있고, `docs/`, `examples/`, `.claude/`, `CLAUDE.md` (Rev 특화) 가 함께 들어있습니다. 사용자는 압축 푼 폴더 안에서만 작업합니다.
+> 본 트리는 **GitHub 레포 전체(개발) 구조**입니다. 사용자가 받는 **ZIP 다운로더 (Rev1.1.zip / Rev2.0.zip)** 는 본인 Rev SDK 한 벌이 ZIP root 에 평탄화되어 있고, `docs/`, `Examples/` (대문자 — 아래 트리의 `examples/` 와 이름만 다를 뿐 같은 예제 모음), `.claude/`, `CLAUDE.md` (Rev 특화) 가 함께 들어있습니다. 사용자는 압축 푼 폴더 안에서만 작업합니다.
 
 ```
 Extension_Module/
@@ -131,7 +131,7 @@ Extension_Module/
 │   ├── kit-h10-firmware/  ← H10 외골격 펌웨어 호환성
 │   ├── release-notes/     ← 버전별 첨부 파일 + 호환성 매트릭스
 │   └── troubleshooting.md ← 자주 마주치는 문제 모음
-├── examples/              ← 50 개 실습 예제 (각 폴더에 README)
+├── examples/              ← 50 개 실습 예제 (각 폴더에 README, SDK ZIP 배포판에서는 `Examples/` 대문자로 포함)
 ├── XM10_SDK/              ← STM32CubeIDE 프로젝트
 │   ├── Rev1.1/Extension_Module/  ← PCB Rev 1.1 용
 │   └── Rev2.0/Extension_Module/  ← PCB Rev 2.0 용 (대부분 여기)

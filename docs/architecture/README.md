@@ -66,7 +66,7 @@ XM10 의 핵심은 **1 ms (1 kHz) 주기로 반복되는 제어 루프**입니�
   │  XM.status.h10.    XM_TSM_Run         XM_SetAssistTorque  │
   │   leftHipAngle      → on_loop()        XM_SendUsbData     │
   │   rightHipAngle                                            │
-  │   isFootContact                                            │
+  │   isLeftFootContact                                        │
   └────────────────────────────────────────────────────────────┘
                               ↓ 1 ms 후 반복
 ```
@@ -140,7 +140,7 @@ Extension_Module/
 |------|----------|--------------|
 | **CAN-FD** | XM10 ↔ KIT H10 외골격 | `XM.status.h10.*` 읽기, `XM_SetAssistTorque*()` 쓰기 |
 | **USB 시리얼 (CDC)** | XM10 → PC 터미널/PhAI Studio | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
-| **USB 메모리 (MSC)** | XM10 → USB 메모리 (로깅) | `XM_StartUsbLogging`, `XM_LogBinaryData` |
+| **USB 메모리 (MSC)** | XM10 → USB 메모리 (로깅) | `XM_SetUsbLogSource`, `XM_StartUsbDataLog` |
 
 세부 프로토콜은 라이브러리가 알아서 처리합니다. 사용자는 함수 호출만 하면 됩니다.
 

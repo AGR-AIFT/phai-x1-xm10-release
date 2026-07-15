@@ -43,11 +43,13 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **RTC** | ✅ 내장 RTC + 배터리 백업 | ❌ |
 | **USB Type-C** | ✅ C-to-C DRP 지원 (CDC/MSC 모두) | A-to-C + MSC 만 |
 | **RAM_D2 여유** | 충분 | 99.21% 사용 (Rev 1.1 위험 주의) |
+| **FDCAN2 센서허브 (IMU/EMG Hub)** | ✅ Ex.41/42 지원 | ❌ 미지원 |
 
 **Rev 2.0 만 활성화된 페리페럴**:
 - ETH (LWIP) — `LWIP/` 미들웨어
 - PSRAM — `XM_FW/Drivers/PSRAM/`
 - RTC — `XM_FW/System/RTC/`
+- FDCAN2 센서허브 — IMU/EMG Hub Module 연동 (Ex.41/42)
 
 코드에서 `STM32H743xx` 매크로는 두 Rev 공통이지만, **Ethernet/PSRAM/RTC 페리페럴 코드는 Rev 2.0 SDK 에만 존재**합니다. Rev 1.1 사용자가 본 SDK 를 잘못 쓰면 빌드 실패 또는 페리페럴 초기화 hang.
 
@@ -59,7 +61,8 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 2. **[Ex.00 Quick Start](examples/00_Quick_Start/)** — 보드 smoke test (⭐)
 3. **[Ex.01~03 Button & LED](examples/01_Button_LED_Basic/)** — 디지털 IO 기본 (⭐~⭐⭐)
 4. **[전체 학습 로드맵](docs/tutorials/README.md)** — 50 예제 트랙
-5. **[Rev 2.0 전용 예제]** — Ethernet (`05_USB_Connectivity` 외), PSRAM (`19_Memory_*`), RTC 활용
+5. **[Rev 2.0 전용 예제]** — PSRAM (`19_Memory_*`), RTC 활용. Ethernet 전용 예제는 아직 없으며, 활용 시 `XM_FW/System/Comm/ETH/` 드라이버 코드를 참고하세요.
+6. **[Ex.41 IMU Hub Dashboard](examples/41_IMU_Hub_Dashboard/) / [Ex.42 EMG Hub Biofeedback](examples/42_EMG_Hub_Biofeedback/)** — FDCAN2 센서허브(IMU/EMG Hub Module) 연동 (⭐⭐⭐, Rev 2.0 전용)
 
 ---
 
@@ -71,6 +74,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 - **빌드**: `Ctrl+B` (Post-Build 스크립트가 자동으로 `XM10_2_X_X_X.bin` 패키징 생성)
 - **디버그/플래시**: `F11` (ST-Link 필요, Start address `0x08040000`)
 - **PhAI Studio FW 업로드**: 패키징된 `XM10_2_X_X_X.bin` 을 PhAI Studio FTP 로 업로드
+- **CMake CLI (선택)**: `cmake --preset Debug && cmake --build --preset Debug` 로도 빌드 가능 (`CMakePresets.json` 포함, ARM GCC 툴체인 필요)
 
 ---
 
@@ -102,7 +106,8 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 3. **사용자 코드 영역**
    - 사용자가 수정하는 곳: `XM_Apps/Control_Task/` 또는 `examples/<번호>_<이름>/*.c`
-   - 라이브러리 (`XM_FW`, `XM_Lib`, `Drivers/`, `Middlewares/`, `LWIP/`, `Compatible/`) 는 **봉인** — 수정 시 SDK 일관성 깨짐.
+   - 라이브러리 (`XM_FW`, `XM_FW/libXM_Lib.a`, `Drivers/`, `Middlewares/`, `LWIP/`, `Compatible/`) 는 **봉인** — 수정 시 SDK 일관성 깨짐.
+   - 알고리즘 출력을 PhAI Studio 에서 실시간으로 보고 싶다면 `xm_api_user_custom.h` 의 `XM_UserCustom_SetFloat/SetI16/SetFlag` 로 1kHz 스트리밍 + 녹화용 커스텀 슬롯에 값을 쓸 수 있습니다.
 
 4. **HW Rev 호환**
    - 본 SDK 는 **Rev 2.0 전용** 입니다. Rev 1.1 보드에 본 SDK 빌드 결과물을 플래시하지 마세요.
@@ -124,7 +129,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 |------|------|---------------|
 | **PhAI Studio** | 실시간 데이터 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
 | **angel Sensor Studio** | 진단/검증 GUI (Python/PySide6, 별도 배포) | FES/EMG/IMU Hub 등 — XM10 과 CAN-FD 로 연계 가능 |
-| **PythonDecoder** | USB MSC 로그 CSV 후처리 | 본 ZIP 에 포함 (있다면) |
+| **PythonDecoder** | USB MSC 로그 CSV 후처리 | 본 ZIP 에는 포함되지 않음 — [GitHub 레포](https://github.com/AGR-EXO/Extension_Module) 의 `PythonDecoder/` 에서 별도로 받으세요 |
 
 ---
 

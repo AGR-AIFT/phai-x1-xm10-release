@@ -40,7 +40,7 @@ CubeIDE 가 자동으로 만들어 줍니다.
 
 기본 상태 그대로 빌드해도 보드는 부팅합니다 (LED 1 이 두근두근 깜빡임). 직접 예제 코드를 시험하려면:
 
-- **옵션 A (권장)** — `examples/00_Quick_Start/quick_start.c` 같은 예제의 내용을 통째로 복사해서 `XM_Apps/Control_Task/control_task.c` 에 붙여넣기
+- **옵션 A (권장)** — `Examples/00_Quick_Start/quick_start.c` 같은 예제의 내용을 통째로 복사해서 `XM_Apps/Control_Task/control_task.c` 에 붙여넣기
 - **옵션 B** — 예제 `.c` 파일을 `Control_Task` 폴더로 옮기고 기존 `control_task.c` 는 삭제
 
 ### 3. 빌드
