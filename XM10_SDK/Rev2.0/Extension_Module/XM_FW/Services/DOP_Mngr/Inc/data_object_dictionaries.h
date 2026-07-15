@@ -37,7 +37,7 @@
  * 
  * - DOP V2 (CANopen): AGR_DOP_Node_ID와 일치 (Node ID v3.0, xm_node_id.h 기준)
  *   - XM Node ID = 0x02 (AGR_NODE_ID_XM)
- *   - FES Hub = 0x0C, IMU Hub_A = 0x0D, IMU Hub_B = 0x0E (legacy), EMG Hub = 0x0F
+ *   - FES Hub = 0x0C, IMU Hub = 0x0D (단일 노드), EMG Hub = 0x0F
  */
 typedef enum {
     SYS_NODE_ID_ALL   = 0x0,

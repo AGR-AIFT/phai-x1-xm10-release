@@ -38,10 +38,10 @@ typedef uint8_t AGR_NodeID_t;
 
 /* Sensor Hub Modules */
 #define AGR_NODE_ID_FES_HUB          0x0C  /**< FES Hub (2-ch Biphasic Stimulator) */
-#define AGR_NODE_ID_IMU_HUB_A        0x0D  /**< IMU Hub — Group A (TPDO1, SDO/NMT) */
-#define AGR_NODE_ID_IMU_HUB_B        0x0E  /**< IMU Hub — Group B (TPDO2) */
-#define AGR_NODE_ID_IMU_HUB          AGR_NODE_ID_IMU_HUB_A  /**< SDO/NMT용 alias */
+#define AGR_NODE_ID_IMU_HUB_A        0x0D  /**< IMU Hub (단일 노드 — TPDO1 0x18D + TPDO2 0x28D + SDO/NMT) */
+#define AGR_NODE_ID_IMU_HUB          AGR_NODE_ID_IMU_HUB_A  /**< 기본 alias */
 #define AGR_NODE_ID_EMG_HUB          0x0F  /**< EMG Hub */
+#define AGR_NODE_ID_GRF_MODULE       0x11  /**< SM-GRF reserved node ID. XM UART path uses fixed-frame, port=identity. */
 
 /* Utility */
 #define AGR_NODE_ID_IS_VALID(id)     ((id) >= 0x01 && (id) <= 0x7F)

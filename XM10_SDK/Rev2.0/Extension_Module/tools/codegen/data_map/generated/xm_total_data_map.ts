@@ -1,5 +1,5 @@
-/* AUTO-GENERATED from xm_total_data.yaml v2.4 — DO NOT EDIT MANUALLY */
-/* Generated: 2026-04-01 12:22:04 */
+/* AUTO-GENERATED from xm_total_data.yaml v2.6 — DO NOT EDIT MANUALLY */
+/* Generated: 2026-05-12 22:54:08 */
 
 export interface ChannelDef {
   offset: number;
@@ -23,7 +23,7 @@ export const TYPE_SIZE: Record<string, number> = {
 };
 
 export const TOTAL_DATA_MAP: ChannelDef[] = [
-  { offset:   0, type: 'uint32'  , scale:        1, scaleFormula: 'none', unit: 'ms', name: 'timestamp_ms', group: 'Header' },
+  { offset:   0, type: 'uint32'  , scale:        1, scaleFormula: 'none', unit: 'count', name: 'xm_loop_count', group: 'Header' },
   { offset:   4, type: 'uint16'  , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'device_online_mask', group: 'Header' },
   { offset:   6, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'phai_x1_status', group: 'Header' },
   { offset:   7, type: 'int16'   , scale:      720, scaleFormula: 'multiply_divide', unit: 'deg', name: 'leftHipAngle', group: 'H10_Joint' },
@@ -127,10 +127,14 @@ export const TOTAL_DATA_MAP: ChannelDef[] = [
   { offset: 334, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'fdcan2_bus_status', group: 'FDCAN2_Diag' },
   { offset: 335, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan2_rx_fifo0_fill', group: 'FDCAN2_Diag' },
   { offset: 336, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan2_tx_fifo_free', group: 'FDCAN2_Diag' },
+  { offset: 337, type: 'float32' , scale:        1, scaleFormula: 'none', unit: 'user', name: 'user_f', group: 'User_Custom', count: 4 },
+  { offset: 353, type: 'int16'   , scale:        1, scaleFormula: 'none', unit: 'user', name: 'user_i16', group: 'User_Custom', count: 4 },
+  { offset: 361, type: 'uint16'  , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'user_flags', group: 'User_Custom' },
+  { offset: 363, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'user', name: 'user_u8', group: 'User_Custom', count: 2 },
 ];
 
 export const TOTAL_PACKET_SIZE = 365;
-export const DATA_MAP_VERSION = '2.4';
+export const DATA_MAP_VERSION = '2.6';
 export const MODULE_ID_TOTAL = 0x20;
 export const MODULE_ID_USER_META = 0xEF;
 export const MODULE_ID_USER_CUSTOM_START = 0xF0;

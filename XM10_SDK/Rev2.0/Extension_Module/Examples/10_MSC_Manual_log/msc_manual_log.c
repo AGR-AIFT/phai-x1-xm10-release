@@ -53,6 +53,7 @@ typedef struct {
 
 static MiniLog_t myLog;
 static XmTsmHandle_t s_tsm;
+static bool s_log_start_failed = false;  /* 로그 시작 실패 → Active_Loop 에서 STANDBY 복귀 */
 
 /**
  *------------------------------------------------------------
@@ -114,24 +115,13 @@ void Control_Loop(void)
 
 static void Standby_loop(void)
 {
-    bool log_start = false;
     if (XM_GetButtonEvent(XM_BTN_1) == XM_BTN_CLICK) { /* 버튼 1: 녹화 시작 */
         if (XM_IsUsbLogReady()) {
-            /*
-             * "/LOGS/TestRun_001" 폴더를 만들고 "metadata.txt"를 생성함
-             * C언어 문자열 연결 기능을 사용하여 깔끔하게 작성
-             * 각 줄 끝에 공백이나 쉼표가 빠지지 않도록 주의하세요.
-             * metadata를 저장하면서 log status를 LOG_STATUS_LOGGING으로 변경하여 데이터 저장을 수행할 수 있음.
-             */
-            log_start = XM_StartUsbDataLog("TestRun_001", "command_torque(float), result_angle(float)");
-            if (log_start) {
-                XM_TSM_TransitionTo(s_tsm, XM_STATE_ACTIVE);
-            } else {
-                /* 실패 (USB 없음 등) -> 빨간불 */
-                XM_SetLedEffect(XM_LED_2, XM_LED_HEARTBEAT, 200);
-            }
+            /* 실제 로그 시작(폴더/metadata 생성, 최대 ~100ms 블로킹)은 ACTIVE 진입 시
+             * Active_Entry(on_entry)에서 수행 — 블로킹 호출을 실시간 on_loop 밖으로 분리. */
+            XM_TSM_TransitionTo(s_tsm, XM_STATE_ACTIVE);
         } else {
-            /* 실패 (USB 없음 등) -> 빨간불 */
+            /* USB 미준비 -> 빨간불 */
             XM_SetLedEffect(XM_LED_3, XM_LED_HEARTBEAT, 200);
         }
     }
@@ -140,11 +130,26 @@ static void Standby_loop(void)
 /* --- ACTIVE 상태 (실험 구간) --- */
 static void Active_Entry(void)
 {
-    XM_SetLedEffect(XM_LED_1, XM_LED_BLINK, 500); /* 녹화 중 표시 */
+    /* 로그 시작은 상태 진입 시 1회 (on_entry) — 블로킹 호출을 1kHz on_loop 밖으로 분리 */
+    bool ok = XM_StartUsbDataLog("TestRun_001", "command_torque(float), result_angle(float)");
+    if (ok) {
+        XM_SetLedEffect(XM_LED_1, XM_LED_BLINK, 500); /* 녹화 중 표시 */
+    } else {
+        /* 시작 실패 — on_entry 전이는 TSM 엔진이 무시하므로 플래그로 다음 tick 복귀 */
+        s_log_start_failed = true;
+        XM_SetLedEffect(XM_LED_2, XM_LED_HEARTBEAT, 200);
+    }
 }
 
 static void Active_Loop(void)
 {
+    /* 로그 시작 실패 폴백 (on_entry 에서 이월) */
+    if (s_log_start_failed) {
+        s_log_start_failed = false;
+        XM_TSM_TransitionTo(s_tsm, XM_STATE_STANDBY);
+        return;
+    }
+
     /* User payload만 채우면 됨 (tick_ms는 System이 자동 삽입) */
     myLog.cmd_torque = XM.command.assist_torque_rh;
     myLog.res_angle  = XM.status.h10.rightHipAngle;

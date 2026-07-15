@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    passive_mode.c
  * @author  HyundoKim
- * @brief
+ * @brief   [고급] Passive Mode — 사전 정의 P-Vector 명령으로 관절 자동 왕복 (수동 운동)
  * @version 1.1
  * @date    Mar 09, 2026
  *
@@ -14,6 +14,7 @@
  */
 
 #include "xm_api.h"           // XM API
+#include <stdlib.h>           // abs()
 
 /**
  *-----------------------------------------------------------
@@ -28,6 +29,7 @@
 // --- Homing 설정 값 ---
 #define HOMING_TRANSITION_DELAY_MS  50    // 각 단계 사이의 지연 시간 (50ms)
 #define HOMING_MIN_DURATION_MS      50    // P-Vector 최소 duration (L=0 방어 + HB 위상 offset)
+#define HOMING_WAIT_TIMEOUT_MS      3000  // Done 미수신 시 무한대기 방지 타임아웃 (MD 미응답/통신 손실 대비)
 #define HOMING_SPEED_RH             250   // 초당 이동 속도 (deg/s)
 #define HOMING_ACCEL_S0_RH          1     // 초기 가속도(deg/s^2)
 #define HOMING_ACCEL_SD_RH          1     // 말기 가속도(deg/s^2)
@@ -67,6 +69,15 @@ typedef enum {
     HOMING_FINALIZE_DELAY,        // 5. 안정화 지연
     HOMING_FINALIZE_CLEANUP       // 6. 설정 정리 및 종료
 } HomingState_t;
+
+/**
+ * @brief Homing 결과 표시값 — abort/에러는 동작 중단 없이 '표시'만 (result 변수 + LED)
+ */
+typedef enum {
+    HOMING_RESULT_NONE = 0,       // 아직 미완료
+    HOMING_RESULT_OK,             // Done 정상 수신 후 완료
+    HOMING_RESULT_TIMEOUT         // Done 미수신 타임아웃 (MD/통신 이상 추정) — Finalize 는 계속 진행
+} HomingResult_t;
 
 /**
  * @brief 보조 모드 간 전환 과정을 관리하는 상태
@@ -156,6 +167,7 @@ static char s_session_name[32];
 
 // --- Init Homing State Management ---
 static HomingState_t s_homingState = HOMING_ENTRY;
+static volatile HomingResult_t s_homingResult = HOMING_RESULT_NONE;  // 호밍 결과 표시 (정상/타임아웃) — 외부 관찰용
 
 // --- Mode Transition Management ---
 static uint32_t s_modeTransitionTimer = 0;
@@ -408,6 +420,7 @@ static void InitHoming(void)
     // --- Homing 상태 머신 ---
     switch (s_homingState) {
         case HOMING_ENTRY:
+            s_homingResult = HOMING_RESULT_NONE;  // 새 호밍 사이클 — 결과 초기화
             XM_SendPVectorReset(SYS_NODE_ID_RH);
             XM_SendPVectorReset(SYS_NODE_ID_LH);
             XM_SendIVectorKpKdMax(SYS_NODE_ID_RH, 6, 6);
@@ -444,6 +457,7 @@ static void InitHoming(void)
             XM_SendPVector(SYS_NODE_ID_RH, &homingVecRH);
             XM_SendPVector(SYS_NODE_ID_LH, &homingVecLH);
 
+            homingTimer = XM_GetTick();  // Done 대기 타임아웃 기준 시각
             s_homingState = HOMING_WAIT_FOR_DONE;
             break;
         }
@@ -453,7 +467,18 @@ static void InitHoming(void)
                 XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
                 XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
                 
+                s_homingResult = HOMING_RESULT_OK;
                 homingTimer = XM_GetTick(); // 짧은 지연을 위한 타이머 시작
+                s_homingState = HOMING_FINALIZE_DELAY;
+            }
+            // [Fail-safe] Done 미수신 타임아웃 — MD 미응답/통신 손실 등으로 간주.
+            // 정책: abort+에러는 result 변수 + LED 로 '표시만' 하고, 동작은 Finalize 로 그대로 진행.
+            else if (XM_GetTick() - homingTimer >= HOMING_WAIT_TIMEOUT_MS) {
+                s_homingResult = HOMING_RESULT_TIMEOUT;
+                XM_SetLedEffect(XM_LED_1, XM_LED_BLINK, 100);  // 에러 표시 (빠른 깜빡임)
+                XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
+                XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
+                homingTimer = XM_GetTick();
                 s_homingState = HOMING_FINALIZE_DELAY;
             }
             break;

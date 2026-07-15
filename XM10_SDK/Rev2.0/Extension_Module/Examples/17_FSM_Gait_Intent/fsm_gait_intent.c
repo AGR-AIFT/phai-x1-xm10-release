@@ -234,12 +234,12 @@ void Control_Setup(void)
 {
     /*
      * [필수] 사용자 신체 정보 전송 — 동작 분석 추정치의 정확도에 직접 영향
-     * bodyData[0] = 체중 (kg × 10, 예: 700 = 70.0kg)
-     * bodyData[1] = 신장 (cm × 10, 예: 1750 = 175.0cm)
-     * bodyData[2~7] = 분절 길이 등 (H10 프로토콜 참조)
+     * bodyData[0] = 체중 (g, 예: 70000 = 70kg)
+     * bodyData[1] = 신장 (mm, 예: 1750 = 175cm)
+     * bodyData[2~7] = 분절 길이 (mm) 등 (H10 프로토콜 참조 — Ex.22 _SetupBodyData 단위 기준)
      * → 미설정 시 무릎 각도, 허벅지 각도, 발 접지 감지 등이 부정확합니다.
      */
-    uint32_t bodyData[8] = { 700, 1750, 0, 0, 0, 0, 0, 0 };  // 70kg, 175cm 예시
+    uint32_t bodyData[8] = { 70000, 1750, 0, 0, 0, 0, 0, 0 };  // 70kg(g), 175cm(mm) 예시
     XM_SendUserBodyData(bodyData);
 
     /* TSM 생성 (초기 상태: OFF) */
@@ -431,7 +431,7 @@ static void Active_Loop(void)
     _ApplyPhaseAssist(&s_gait_lh);
 
     /* 토크 출력 (어시스트 레벨 반영) */
-    float level_scale = (float)XM.status.h10.h10AssistLevel / 9.0f;
+    float level_scale = (float)XM.status.h10.h10AssistLevel / 10.0f;  // AssistLevel 0~10 정규화 (Ex.12 와 동일)
     XM_SetAssistTorqueRH(s_gait_rh.current_torque_nm * level_scale);
     XM_SetAssistTorqueLH(s_gait_lh.current_torque_nm * level_scale);
 

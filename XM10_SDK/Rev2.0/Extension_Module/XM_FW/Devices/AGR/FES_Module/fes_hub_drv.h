@@ -92,10 +92,16 @@ typedef struct __attribute__((packed)) {
  * @details SDO Download to 0x6310:00 (UINT8, 1-shot)
  */
 typedef enum {
-    FESHUB_MCMD_NOOP         = 0,  /**< No operation */
-    FESHUB_MCMD_TOGGLE_CH1   = 1,  /**< CH1 토글 (가상 ISI EXT7) */
-    FESHUB_MCMD_TOGGLE_CH2   = 2,  /**< CH2 토글 (가상 ISI EXT8) */
-    FESHUB_MCMD_TOGGLE_BOTH  = 3,  /**< 양채널 (EXT7 + EXT8) */
+    FESHUB_MCMD_NOOP                 = 0,  /**< No operation */
+    FESHUB_MCMD_TOGGLE_CH1           = 1,  /**< CH1 토글 (가상 ISI EXT7) */
+    FESHUB_MCMD_TOGGLE_CH2           = 2,  /**< CH2 토글 (가상 ISI EXT8) */
+    FESHUB_MCMD_TOGGLE_BOTH          = 3,  /**< 양채널 (EXT7 + EXT8) */
+    FESHUB_MCMD_FLASH_COMMIT_TUNABLE = 4,  /**< Tunable RAM→Flash 즉시 commit */
+    FESHUB_MCMD_FLASH_COMMIT_FACTORY = 5,  /**< Factory RAM→Flash commit (제조 도구용) */
+    FESHUB_MCMD_ERROR_CLEAR_ALL      = 6,  /**< Error stack active flag 전체 clear (Fault 복구) */
+    /* 정수값은 FES Slave의 FesMasterCmd_t (FES_HUB_MODULE
+     * Devices/AGR/eXtension_Module/xm_drv.h)와 1:1 일치해야 한다 —
+     * cross-repo 계약, Slave OD 매뉴얼(fes_od_table.h) 변경 시 동기화. */
 } FesHub_MasterCmd_t;
 
 /**
@@ -198,8 +204,52 @@ int FesHub_Drv_SendESVector(const FesHub_ESVector_t* esv);
 int FesHub_Drv_SendMasterCommand(FesHub_MasterCmd_t cmd);
 
 /**
+ *------------------------------------------------------------
+ * Command Vector — 신규 와이어 메시지 유형 (SDO와 별도 fnc)
+ *------------------------------------------------------------
+ * FES xm_drv.h 와 1:1 계약 (값 변경 시 양측 동시 + revision bump MUST).
+ * Request: 0x100+N — [vector_type][seq][len][payload] / ACK: 0x680+N — [echo_seq][status]
+ * ACK 의미 = "수신+스테이징" (실행 결과는 TPDO es_state 관측).
+ * Master 책임: ACK 소비 + 타임아웃 재전송(동일 seq — Slave 멱등) + 한도 초과 시 포기.
+ */
+#define FESHUB_VEC_REQ_FNC_BASE   0x100u
+#define FESHUB_VEC_ACK_FNC_BASE   0x680u
+#define FESHUB_VEC_TYPE_ES        0x01u
+
+typedef enum {
+    FESHUB_VEC_ACK_OK          = 0,
+    FESHUB_VEC_ACK_BUSY        = 1,  /**< Slave 펄스 생성 중 — 종료 후 재전송 필요 (Master 자동 재시도 없음) */
+    FESHUB_VEC_ACK_RANGE       = 2,  /**< payload 값 범위 밖 — 보정 후 동일 seq 재시도 가능 */
+    FESHUB_VEC_ACK_WRONG_STATE = 3,  /**< Slave NMT OPERATIONAL 아님 */
+    FESHUB_VEC_ACK_UNSUPPORTED = 4,
+    FESHUB_VEC_ACK_BAD_LEN     = 5,
+} FesHubVecAckStatus_e;
+
+/**
+ * @brief ES-vector 를 Command Vector 채널로 전송 (SDO 아님 — 0x10C)
+ * @return 0=전송(ACK 대기 시작), -1=이전 vector ACK 대기 중(단일 outstanding), -2=Tx 실패
+ * @note ACK 수신/타임아웃 재시도(동일 seq, 20ms×3)는 RunPeriodic 이 처리.
+ *   결과는 Live Expression: s_diag_vec_ack_ok / s_diag_vec_fail / s_diag_vec_last_status
+ */
+int FesHub_Drv_SendESVectorCmd(const FesHub_ESVector_t* esv);
+
+/**
+ * @brief Command Vector ACK 수신 주입 — canfd_rx_handler(Rx task) 전용
+ * @details volatile 필드 기록만 — 매칭/재시도 판단은 RunPeriodic(pnp_task)
+ */
+void FesHub_Drv_OnVectorAck(const uint8_t* data, uint8_t len);
+
+/**
  * @brief 주기 실행 (Pre-Op SM + Timeout/Retry)
  */
 void FesHub_Drv_RunPeriodic(void);
+
+/**
+ * @brief IDENTIFY 불일치 상태 여부 (NMT START 영구 보류 중)
+ * @details PnP IDENTIFY (0x1000/0x1018 비교) 실패 시 true.
+ *   LED 가시성(pnp_task) 및 운용 진단용. 상세는 디버거 Live Expression
+ *   s_diag_identify_* 참조.
+ */
+bool FesHub_Drv_IsIdentityMismatch(void);
 
 #endif /* DEVICES_AGR_FES_MODULE_FES_HUB_DRV_H_ */

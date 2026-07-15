@@ -76,8 +76,8 @@
  *  ────  ───────────────────  ──────────────  ──────  ──────────────────────
  *  55    StartupTask          main.c (IOC)    once    시스템 초기화 후 자기 삭제
  *  55    FDCAN RxTask         ioif_conf.h     event   PDO 수신, 즉시 선점 처리
- *  55    UART RxTask          ioif_conf.h     event   센서 패킷 파싱 (DMA→파서)
- *  54    UserTask             main.c (IOC)    1ms     IPO Control Loop
+ *  54    UART RxTask          ioif_conf.h     event   센서 패킷 파싱 (DMA→파서) [2026-07-14: 55→54]
+ *  53    UserTask             main.c (IOC)    1ms     IPO Control Loop [2026-07-14: 54→53]
  *  51    SDO Processor        module.h        event   PnP/설정 (비실시간)
  *  32    PSRAM Offload        module.h        20ms    [DEPRECATED 2026-04-18 C안 — 미사용]
  *  25    PnP Manager          module.h        100ms   연결 관리
@@ -87,13 +87,16 @@
  *   8    DefaultTask          main.c (IOC)    —       FreeRTOS idle (suspended)
  *
  *  [설계 원칙]
- *  RxTask(55) > UserTask(54): 데이터 도착 즉시 선점 → stale data 방지
+ *  55(FDCAN) > 54(UART) > 53(UserTask) [2026-07-14 재배치]:
+ *   - 두 RxTask > UserTask: 데이터 도착 즉시 선점 → stale data 방지 (불변식 유지)
+ *   - FDCAN > UART: 동급(55=55) 라운드로빈 비결정성 제거, FDCAN(로봇/IMU/EMG) 우선.
+ *     두 RxTask 모두 짧아(SDO/NMT 는 51 로 위임) FDCAN 선점 유계 → GRF 1ms 데드라인 안전.
  *  RxTask 실행 ~10-50us/선점 → UserTask 지터 무시 가능 (<100us/1ms)
  *  FDCAN/UART RxTask는 IOIF 내부 생성 → ioif_conf.h에서 오버라이드
  */
 
-/* ----- FDCAN/UART RxTask (55) — ioif_conf.h 참조 ----- */
-/* ----- UserTask (54) — main.c IOC 참조 ----- */
+/* ----- FDCAN RxTask (55) / UART RxTask (54) — ioif_conf.h 참조 ----- */
+/* ----- UserTask (53) — main.c IOC 참조 ----- */
 
 /* ----- SDO Processor (51) ----- */
 #define TASK_PRIO_SDO_PROCESSOR     osPriorityRealtime3  /**< (51) SDO/PnP 설정 처리 */
@@ -158,6 +161,16 @@
 #define XSENS_MAX_INSTANCES         1           /**< XM은 XSENS IMU 1개 사용 */
 #define MARVELDEX_MAX_INSTANCES     2           /**< XM은 GRF 2개 사용 (L/R) */
 
+/* --- GRF source selection (UART7/8 are shared by one GRF source) ---
+ * 0 = MarvelDex FSR receiver. Default until SM-GRF hardware/FW is stable.
+ * 1 = SM-GRF fixed binary frame receiver. UART7=L, UART8=R.
+ * Only one source may bind to UART7/8 at build time.
+ */
+#ifndef XM_GRF_FIXED_FRAME_MODULE
+#define XM_GRF_FIXED_FRAME_MODULE   1
+#endif
+#define XM_GRF_FSR_CH_TOTAL         24          /**< SM-GRF: ADC1 15ch + ADC3 9ch */
+
 /**
  *===========================================================================
  * TIMING CONFIGURATION (실제 사용)
@@ -187,11 +200,10 @@
  * 참조: docs/dev/REV2_USB_TightSpin_InvestigationPlan.md
  */
 
-/* [Step 0] UserTask jitter histogram + p99 수집 활성화.
- *  측정 종료 후 이 줄을 주석 처리하여 FW stub 상태로 복귀. */
-#ifndef DIAG_PROFILE_ENABLED
-#define DIAG_PROFILE_ENABLED
-#endif
+/* [Step 0] UserTask jitter histogram + p99 수집.
+ *  측정 완료 (2026-04-18) — production 기본 OFF (diag_perf.h zero-cost stub 복귀).
+ *  재측정 시: 아래 줄 uncomment 또는 CMake `-DDIAG_PROFILE_ENABLED` opt-in. */
+/* #define DIAG_PROFILE_ENABLED */
 
 /* [Step 0 K2a / Step A-1 K2a] _WriteDataWithBlockCRC early-return 으로
  *  drain write 전면 skip. K2a 측정 시 uncomment, 측정 완료 후 comment 복귀.

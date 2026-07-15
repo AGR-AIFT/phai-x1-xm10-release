@@ -138,6 +138,12 @@ typedef struct {
     uint32_t                 last_bootup_sent_ms;  /**< 마지막 Boot-up 전송 시간 */
     uint32_t                 last_heartbeat_sent_ms; /**< 마지막 Heartbeat 전송 시간 */
 
+    /** @brief Producer Heartbeat 주기 소스 (Optional, CiA 301 0x1017 배선용).
+     *  NULL(=Init memset 기본) → AGR_PNP_SLAVE_HEARTBEAT_INTERVAL_MS 하드코딩(기존 동작 유지).
+     *  非NULL → 매 주기 *heartbeat_period_src(ms) 를 읽어 HB 송신 간격에 반영. 모듈 OD 0x1017
+     *  backing 을 연결하면 SDO write 로 슬레이브 HB 주기 재설정 실효(0 값은 default 로 방어). */
+    const uint16_t*          heartbeat_period_src;
+
     /* 상태 */
     bool                     is_initialized;       /**< 초기화 완료 여부 */
     bool                     initial_bootup_sent;  /**< 첫 Boot-up 송신 완료 플래그
@@ -198,7 +204,7 @@ int32_t AGR_PnP_Slave_SetCallbacks(AGR_PnP_Slave_t* slave,
                                 const AGR_PnP_Slave_Callbacks_t* callbacks);
 
 /**
- * @brief 주기 실행 (100ms마다 호출)
+ * @brief 주기 실행 (시스템 PnP Task 주기마다 호출)
  *
  * @param slave  Slave 인스턴스
  *
@@ -292,5 +298,18 @@ int32_t AGR_PnP_Slave_SendBootupNow(AGR_PnP_Slave_t* slave);
  * @warning 일반적으로 RunPeriodic()이 자동 전송합니다. 수동 호출 불필요.
  */
 int32_t AGR_PnP_Slave_SendHeartbeatNow(AGR_PnP_Slave_t* slave);
+
+/**
+ * @brief Producer Heartbeat 주기 소스 연결 (CiA 301 0x1017 배선, Optional opt-in)
+ * @details src 를 연결하면 RunPeriodic 이 매 주기 *src(ms) 를 읽어 HB 송신 간격에 사용한다.
+ *          모듈 OD 0x1017 의 backing(uint16_t) 을 넘기면 SDO write 로 슬레이브 HB 주기 재설정이
+ *          실효한다. 미호출(NULL) 이면 하드코딩 AGR_PNP_SLAVE_HEARTBEAT_INTERVAL_MS 유지(하위호환).
+ * @param slave  Slave 인스턴스
+ * @param src    HB 주기(ms) 를 담는 변수 주소 (수명 = slave). NULL = default 로 복귀.
+ * @return 0: 성공, <0: 에러(-1 = slave NULL)
+ * @note  값 0 은 RunPeriodic 이 default 로 방어 → HB 폭주(매 tick) 회피.
+ */
+int32_t AGR_PnP_Slave_SetHeartbeatPeriodSource(AGR_PnP_Slave_t* slave,
+                                               const uint16_t* src);
 
 #endif /* AGR_PNP_SLAVE_H */

@@ -69,7 +69,7 @@ extern uint32_t SystemCoreClock;
 #define configUSE_SB_COMPLETED_CALLBACK          ( 0 )
 #define configUSE_MINI_LIST_ITEM                ( 1 )
 #define configMINIMAL_STACK_SIZE                 ((uint16_t)128)
-#define configTOTAL_HEAP_SIZE                    ((size_t)102400)
+#define configTOTAL_HEAP_SIZE                    ((size_t)61440)
 #define configMAX_TASK_NAME_LEN                  ( 16 )
 #define configHEAP_CLEAR_MEMORY_ON_FREE          0
 #define configUSE_TRACE_FACILITY                 1
@@ -78,6 +78,7 @@ extern uint32_t SystemCoreClock;
 #define configQUEUE_REGISTRY_SIZE                8
 #define configCHECK_FOR_STACK_OVERFLOW           2
 #define configUSE_RECURSIVE_MUTEXES              1
+#define configUSE_MALLOC_FAILED_HOOK             1
 #define configUSE_COUNTING_SEMAPHORES            1
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION  0
 /* USER CODE BEGIN MESSAGE_BUFFER_LENGTH_TYPE */
@@ -122,7 +123,6 @@ to exclude the API function. */
 #define INCLUDE_xQueueGetMutexHolder         1
 #define INCLUDE_uxTaskGetStackHighWaterMark  1
 #define INCLUDE_xTaskGetCurrentTaskHandle    1
-#define INCLUDE_xTaskGetHandle               1
 #define INCLUDE_eTaskGetState                1
 
 /*
@@ -173,10 +173,16 @@ standard names. */
 
 /* USER CODE BEGIN Defines */
 /* FreeRTOS Heap → DTCMRAM 배치 (Zero-Wait-State @ 480MHz)
- * configTOTAL_HEAP_SIZE = IOC에서 관리 (현재 100KB)
- * DTCMRAM 128KB 제약: MSP 8KB + 여유 20KB → 최대 ~120KB까지 가능
+ * configTOTAL_HEAP_SIZE = IOC에서 관리 (현재 60KB)
+ * DTCMRAM 128KB 제약: MSP 8KB + UserTask static stack 32KB + DTCM workspace 16KB
+ * + heap 60KB + 진단 변수 여유를 함께 고려.
  * ucHeap[]은 freertos.c에서 .dtcm_data 섹션으로 배치 */
 #define configAPPLICATION_ALLOCATED_HEAP  1
+
+/* [2026-05-14] core_process.c 5s watermark 모니터링 — task name 으로 핸들 조회.
+ * v2.1.1 무한리셋 진단([[project_v211_cdc_reset_hang_diagnosis]]) 1순위 의심
+ * (usbContolTask stack overflow) 실측 검증 목적. */
+#define INCLUDE_xTaskGetHandle               1
 /* USER CODE END Defines */
 
 #endif /* FREERTOS_CONFIG_H */

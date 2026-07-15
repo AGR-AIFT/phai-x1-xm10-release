@@ -7,7 +7,7 @@
  * @date    2026-02-10
  *
  * @details
- * [변경 이유] .cursorrules Phase 5 - Link → Device 병합
+ * [변경 이유] Phase 5 - Link → Device 병합
  * - AS-IS: cm_drv.c (데이터 처리) + cm_xm_link.c (PnP 상태 머신) 분리
  * - TO-BE: cm_drv.c 하나에 PnP 상태 머신 통합
  * 
@@ -15,7 +15,7 @@
  * 1. CM_EventCallbacks_t 제거 → 내부 함수 직접 호출
  * 2. CM_Init() 시그니처 변경 (callbacks 파라미터 제거)
  * 3. CM_Drv_RunPeriodic(), CM_Drv_IsConnected(), CM_Drv_GetNmtState() 추가
- * 4. PnP Heartbeat 타임아웃: 1초 → 3초 (.cursorrules 표준 통일)
+ * 4. PnP Heartbeat 타임아웃: 1초 → 3초 (표준 통일)
  * 5. Pre-Op fall-through 버그 수정
  *
  * @copyright Copyright (c) 2025 Angel Robotics Inc. All rights reserved.
@@ -39,7 +39,7 @@
  */
 
 /* ===== PnP NMT 상태 정의 (cm_xm_link.h에서 이동) =====
- * [변경 이유] Link → Device 병합 (.cursorrules Phase 5)
+ * [변경 이유] Link → Device 병합 (Phase 5)
  * - 값은 CM의 ExtLinkNmtState_t와 동일 (SDO 통신 호환성)
  */
 typedef enum {
@@ -203,7 +203,7 @@ typedef enum {
  */
 
 /* ===== CM_EventCallbacks_t 제거 =====
- * [변경 이유] Link → Device 병합 (.cursorrules Phase 5)
+ * [변경 이유] Link → Device 병합 (Phase 5)
  * - AS-IS: cm_xm_link.c가 콜백을 등록하여 SDO 이벤트 수신
  * - TO-BE: PnP 상태 머신이 cm_drv.c 내부에 통합되어 직접 호출
  * - 외부 콜백이 더 이상 불필요하므로 제거
@@ -222,7 +222,7 @@ typedef enum {
 
 // P-Vector 데이터 구조체
 typedef struct {
-    int16_t  yd; // Desired Position (unit: deg, scaled by 100)
+    int16_t  yd; // Desired Position (unit: deg, scaled by 10 — 실동작 검증값. 구 주석 'by 100'은 오기, xm_production_ctrl_test.c §스케일 경고 참조)
     uint16_t L;  // Trajectory Duration (ms)
     uint8_t  s0; // Acceleration Profile (deg/s^2)
     uint8_t  sd; // Deceleration Profile (deg/s^2)
@@ -371,7 +371,7 @@ typedef struct {
  * @brief CM Device Driver 초기화 (DOP V1 + PnP 상태 머신 통합)
  * 
  * @details
- * [변경 이유] Link → Device 병합 (.cursorrules Phase 5)
+ * [변경 이유] Link → Device 병합 (Phase 5)
  * - AS-IS: CM_Init(txFunc, callbacks, xmNodeId, cmNodeId) + CM_XM_Link_Init()
  * - TO-BE: CM_Init(txFunc, xmNodeId, cmNodeId) 하나로 통합
  * - 외부 콜백(CM_EventCallbacks_t) 제거 → 내부 PnP SM이 직접 처리
@@ -379,14 +379,15 @@ typedef struct {
  * @param[in] txFunc      CAN 메시지를 전송할 함수 포인터 (IOIF 계층의 Transmit 함수).
  * @param[in] xmNodeId    이 모듈(XM)의 Node ID.
  * @param[in] cmNodeId    통신 대상인 CM의 Node ID.
+ * @return 0 성공 / -1 CM 데이터 Mutex 생성 실패 (CM 데이터 보호 불가 — 호출자가 가시화).
  */
-void CM_Init(CM_TxFunc_t txFunc, uint8_t xmNodeId, uint8_t cmNodeId);
+int CM_Init(CM_TxFunc_t txFunc, uint8_t xmNodeId, uint8_t cmNodeId);
 
 /**
  * @brief CM PnP 상태 머신 주기적 실행 (100ms 주기)
  * 
  * @details
- * [변경 이유] cm_xm_link.c → cm_drv.c 병합 (.cursorrules Phase 5)
+ * [변경 이유] cm_xm_link.c → cm_drv.c 병합 (Phase 5)
  * - AS-IS: CM_XM_Link_RunPeriodic() (System/Links/)
  * - TO-BE: CM_Drv_RunPeriodic() (Devices/AGR/Control_Module/)
  * 
@@ -404,7 +405,7 @@ void CM_Drv_RunPeriodic(void);
  * @brief CM과의 PnP 연결 완료 여부 반환
  * 
  * @details
- * [변경 이유] CM_XM_Link_IsConnected() 대체 (.cursorrules Phase 5)
+ * [변경 이유] CM_XM_Link_IsConnected() 대체 (Phase 5)
  * 
  * @return true: OPERATIONAL + PDO 스트림 시작됨, false: 미연결
  */
@@ -412,20 +413,30 @@ bool CM_Drv_IsConnected(void);
 
 /**
  * @brief CM과의 PnP NMT 상태 반환
- * 
+ *
  * @details
- * [변경 이유] CM_XM_Link_GetXMNmtState() 대체 (.cursorrules Phase 5)
- * 
+ * [변경 이유] CM_XM_Link_GetXMNmtState() 대체 (Phase 5)
+ *
  * @return CM_NmtState_t 현재 XM→CM PnP NMT 상태
  */
 CM_NmtState_t CM_Drv_GetNmtState(void);
+
+/**
+ * @brief CM PnP 링크가 STOPPED 로 전이된 누적 횟수를 반환합니다.
+ * @details [생산검사 OD 0x7E50:02, 2026-07-02] _CM_PnP_GoToStopped() 진입마다
+ *          증가하는 카운터의 mirror. writer=PnP_Task(~100ms), reader=임의
+ *          컨텍스트(단일 word volatile, atomic read — 별도 락 불필요).
+ * @return 누적 STOPPED 전이 횟수 (재부팅 전까지 단조 증가, wrap 미처리 — 생산검사
+ *         관찰창(수 초) 내에서는 32bit wrap 발생 불가).
+ */
+uint32_t CM_Drv_GetLinkDropCount(void);
 
 /**
  * @brief CM으로부터 수신된 SDO 메시지를 처리합니다.
  * @details SDO Processor Task (비실시간)에서 호출.
  *          내부에서 Mutex 보호 후 SDO 언패킹 수행.
  * 
- * [변경 이유] .cursorrules 기반 리팩토링
+ * [변경 이유] 기반 리팩토링
  * - AS-IS: CM_ProcessCANMessage() - SDO/PDO 모두 수신 가능하나 PDO는 default 드롭
  * - TO-BE: CM_Drv_ProcessSdo() - SDO 전용, canfd_rx_handler에서 SDO만 라우팅
  * 
@@ -442,7 +453,7 @@ void CM_Drv_ProcessSdo(uint16_t canId, uint8_t* data, uint8_t len);
  * @details FDCAN_Rx_Task (실시간)에서 호출.
  *          내부에서 Mutex 보호 후 PDO 언패킹 및 스케일링 수행.
  * 
- * [변경 이유] .cursorrules 기반 리팩토링
+ * [변경 이유] 기반 리팩토링
  * - AS-IS: CM_UpdatePdoData() - 네이밍이 모호
  * - TO-BE: CM_Drv_ProcessPdo() - PDO 전용 처리 함수로 명확화
  * 

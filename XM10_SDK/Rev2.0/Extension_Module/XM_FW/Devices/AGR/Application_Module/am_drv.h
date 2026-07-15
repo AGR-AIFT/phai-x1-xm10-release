@@ -15,7 +15,7 @@
  *
  * [의존성]
  *   - agr_dop_udp.h: UDP Transport (RX 콜백 등록)
- *   - FreeRTOS: Mutex (xSemaphoreCreateMutex)
+ *   - CMSIS-OS2: Mutex (osMutexNew, Reader/Writer timeout 분리)
  *
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************

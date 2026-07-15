@@ -102,7 +102,7 @@ typedef struct
 LWIP_MEMPOOL_DECLARE(RX_POOL, ETH_RX_BUFFER_CNT, sizeof(RxBuff_t), "Zero-copy RX PBUF pool");
 
 /* Variable Definitions */
-static volatile uint8_t RxAllocStatus;
+static uint8_t RxAllocStatus;
 #if defined ( __ICCARM__ ) /*!< IAR Compiler */
 
 #pragma location=0x30000000
@@ -141,13 +141,30 @@ static IOIF_ETH_MDIOx_t s_mdio_id = IOIF_ETH_MDIO_NOT_ALLOCATED;
 osSemaphoreId_t RxPktSemaphore = NULL;   /* Semaphore to signal incoming packets */
 osSemaphoreId_t TxPktSemaphore = NULL;   /* Semaphore to signal transmit packet complete */
 
+/* [2026-07-08] ETH RTOS 객체 static 저장 — FreeRTOS heap(60KB DTCM) 경쟁 제거.
+ * 095e730 이 힙을 100→60KB 로 줄이고 malloc-fail 훅을 무한정지로 바꾼 뒤, ETH bring-up
+ * 의 동적 할당(세마포어×2 + ethernetif_input 스레드)이 실패하면 low_level_init 이
+ * RTL8201F_Init/HAL_ETH_Start_IT 전에 얼어붙어 "링크 UP·ARP 무응답"이 될 수 있다.
+ * 이 객체들은 전부 CPU-only RTOS 구조체(DMA 미접근)라 링커 .bss(RAM_D1) 배치 안전 —
+ * DMA 디스크립터/RX풀만 RAM_D2 유지(불변). configSUPPORT_STATIC_ALLOCATION=1 전제. */
+static StaticSemaphore_t s_rxPktSemCb;
+static StaticSemaphore_t s_txPktSemCb;
+static StaticTask_t      s_ethIfTaskCb;
+static uint64_t          s_ethIfTaskStack[INTERFACE_THREAD_STACK_SIZE / sizeof(uint64_t)];
+
 /* Global Ethernet handle */
 ETH_HandleTypeDef heth;
 
 /* Private function prototypes -----------------------------------------------*/
 
 /* USER CODE BEGIN 3 */
-
+/* [2026-07-08 이더넷 무응답 진단] ETH ISR-레벨 카운터 — 정의는 아래 PHI IO 섹션
+ * (line~742). ISR 콜백(RxCplt/TxCplt/Error)이 파일 앞쪽이라 forward extern 필요.
+ * ping 1회로 RX 국소화: rx_isr(ISR 도착) → eth_rx_pkt(pbuf 전달) → tx(응답 송신).
+ * single writer=각 ISR, volatile 32-bit(M7 atomic) → lock 불필요. */
+extern volatile uint32_t g_diag_eth_rx_cnt;   /* HAL_ETH_RxCpltCallback ISR */
+extern volatile uint32_t g_diag_eth_tx_cnt;   /* HAL_ETH_TxCpltCallback ISR */
+extern volatile uint32_t g_diag_eth_err_cnt;  /* HAL_ETH_ErrorCallback  ISR */
 /* USER CODE END 3 */
 
 /* Private functions ---------------------------------------------------------*/
@@ -160,10 +177,8 @@ void pbuf_free_custom(struct pbuf *p);
   */
 void HAL_ETH_RxCpltCallback(ETH_HandleTypeDef *handlerEth)
 {
-  { extern volatile uint32_t g_diag_eth_rx_cnt; g_diag_eth_rx_cnt++; }
-  if (RxPktSemaphore != NULL) {
-    osSemaphoreRelease(RxPktSemaphore);
-  }
+  g_diag_eth_rx_cnt++;   /* [진단] ISR-레벨 RX 도착 — 0이면 MAC/DMA RX 미가동 */
+  osSemaphoreRelease(RxPktSemaphore);
 }
 /**
   * @brief  Ethernet Tx Transfer completed callback
@@ -172,10 +187,8 @@ void HAL_ETH_RxCpltCallback(ETH_HandleTypeDef *handlerEth)
   */
 void HAL_ETH_TxCpltCallback(ETH_HandleTypeDef *handlerEth)
 {
-  { extern volatile uint32_t g_diag_eth_tx_cnt; g_diag_eth_tx_cnt++; }
-  if (TxPktSemaphore != NULL) {
-    osSemaphoreRelease(TxPktSemaphore);
-  }
+  g_diag_eth_tx_cnt++;   /* [진단] ISR-레벨 TX 완료 — RX↑인데 0이면 응답(ARP reply) 미송신 */
+  osSemaphoreRelease(TxPktSemaphore);
 }
 /**
   * @brief  Ethernet DMA transfer error callback
@@ -184,12 +197,10 @@ void HAL_ETH_TxCpltCallback(ETH_HandleTypeDef *handlerEth)
   */
 void HAL_ETH_ErrorCallback(ETH_HandleTypeDef *handlerEth)
 {
-  { extern volatile uint32_t g_diag_eth_err_cnt; g_diag_eth_err_cnt++; }
+  g_diag_eth_err_cnt++;  /* [진단] ISR-레벨 DMA 에러(RBU 등) — RX풀 고갈/디스크립터 이상 지표 */
   if((HAL_ETH_GetDMAError(handlerEth) & ETH_DMACSR_RBU) == ETH_DMACSR_RBU)
   {
-    if (RxPktSemaphore != NULL) {
-      osSemaphoreRelease(RxPktSemaphore);
-    }
+     osSemaphoreRelease(RxPktSemaphore);
   }
 }
 
@@ -247,10 +258,6 @@ static void low_level_init(struct netif *netif)
 
   hal_eth_init_status = HAL_ETH_Init(&heth);
 
-  /* [진단] MspInit→Init 직후 PMCR 캡처 */
-  extern volatile uint32_t g_diag_pmcr_after_mspinit;
-  g_diag_pmcr_after_mspinit = SYSCFG->PMCR;
-
   /* End ETH HAL Init */
 
   /* Initialize the RX POOL */
@@ -280,16 +287,21 @@ static void low_level_init(struct netif *netif)
   #endif /* LWIP_ARP */
 
   /* create a binary semaphore used for informing ethernetif of frame reception */
-  RxPktSemaphore = osSemaphoreNew(1, 0, NULL);
+  osSemaphoreAttr_t rxSemAttr = { .cb_mem = &s_rxPktSemCb, .cb_size = sizeof(s_rxPktSemCb) };
+  RxPktSemaphore = osSemaphoreNew(1, 0, &rxSemAttr);
 
   /* create a binary semaphore used for informing ethernetif of frame transmission */
-  TxPktSemaphore = osSemaphoreNew(1, 0, NULL);
+  osSemaphoreAttr_t txSemAttr = { .cb_mem = &s_txPktSemCb, .cb_size = sizeof(s_txPktSemCb) };
+  TxPktSemaphore = osSemaphoreNew(1, 0, &txSemAttr);
 
   /* create the task that handles the ETH_MAC */
 /* USER CODE BEGIN OS_THREAD_NEW_CMSIS_RTOS_V2 */
   memset(&attributes, 0x0, sizeof(osThreadAttr_t));
   attributes.name = "EthIf";
-  attributes.stack_size = INTERFACE_THREAD_STACK_SIZE;
+  attributes.cb_mem = &s_ethIfTaskCb;
+  attributes.cb_size = sizeof(s_ethIfTaskCb);
+  attributes.stack_mem = s_ethIfTaskStack;
+  attributes.stack_size = sizeof(s_ethIfTaskStack);
   attributes.priority = osPriorityRealtime;
   osThreadNew(ethernetif_input, netif, &attributes);
 /* USER CODE END OS_THREAD_NEW_CMSIS_RTOS_V2 */
@@ -491,12 +503,6 @@ static struct pbuf * low_level_input(struct netif *netif)
   if(RxAllocStatus == RX_ALLOC_OK)
   {
     HAL_ETH_ReadData(&heth, (void **)&p);
-    if (p != NULL) {
-      /* [2026-05-14] 정상 RX frame 카운트 — RMII stimulus 의 PC LAN 트래픽
-       * 활동 표시. USER CODE 4 의 g_eth_rx_packet_count 변수 사용. */
-      extern volatile uint32_t g_eth_rx_packet_count;
-      g_eth_rx_packet_count++;
-    }
   }
 
   return p;
@@ -525,9 +531,9 @@ void ethernetif_input(void* argument)
         p = low_level_input( netif );
         if (p != NULL)
         {
-          /* [2026-05-14] SI stimulus RX packet 카운터 (RMII/MDIO row 표시용).
-           * single writer (ethernetif_input task), single reader (sensor-studio
-           * polling) → 4B atomic, race 없음. ARP/ICMP/IP 모든 RX 포함. */
+          /* [진단 복원 2026-07-08] RX pbuf 도착 카운터 — 8e3099a 에서 제거된 계측 복원.
+           * OD(0x7E80:04)/RMII stimulus 가 "LAN 트래픽 수신 활동" 표시(ping 중 증가
+           * → RX DMA 정상). 단일 writer(이 task), volatile 32-bit(atomic) → lock 불필요. */
           g_eth_rx_packet_count++;
           if (netif->input( p, netif) != ERR_OK )
           {

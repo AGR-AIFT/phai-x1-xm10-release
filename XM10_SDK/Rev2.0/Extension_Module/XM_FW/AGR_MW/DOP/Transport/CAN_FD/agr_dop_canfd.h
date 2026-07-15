@@ -30,7 +30,11 @@
 #include "agr_dop_config.h"
 #include "Core/agr_od.h"
 #include "Core/agr_sdo_protocol.h"
+#include "Core/agr_sdo_master.h"
 #include "Core/agr_pdo_engine.h"
+#if AGR_VECTOR_ENABLED
+#include "Core/agr_vector.h"   /* Command Vector — opt-in (agr_dop_config.h AGR_VECTOR_ENABLED) */
+#endif
 
 /**
  *-----------------------------------------------------------
@@ -67,6 +71,16 @@ static inline uint32_t AGR_CANFD_GetRPDOID(uint8_t node_id, uint8_t pdo_num) {
 /** @brief Heartbeat CAN-ID (0x700 + node_id) */
 static inline uint32_t AGR_CANFD_GetHeartbeatID(uint8_t node_id) {
     return AGR_CAN_ID_HEARTBEAT + node_id;
+}
+
+/** @brief Command Vector Request CAN-ID (0x100 + node_id) */
+static inline uint32_t AGR_CANFD_GetVectorRequestID(uint8_t node_id) {
+    return AGR_CAN_ID_VECTOR_REQ + node_id;
+}
+
+/** @brief Command Vector ACK/EVENT CAN-ID (0x680 + node_id) */
+static inline uint32_t AGR_CANFD_GetVectorAckID(uint8_t node_id) {
+    return AGR_CAN_ID_VECTOR_ACK + node_id;
 }
 
 /**
@@ -158,7 +172,7 @@ int32_t AGR_CANFD_SendSDOWrite(AGR_DOP_Ctx_t* ctx,
                            uint16_t index,
                            uint8_t subindex,
                            const void* data,
-                           uint8_t data_len);
+                           uint16_t data_len);
 
 /**
  * @brief 통신 대상 Node ID 설정
@@ -166,6 +180,77 @@ int32_t AGR_CANFD_SendSDOWrite(AGR_DOP_Ctx_t* ctx,
  * @param target_node_id 대상 Node ID
  */
 void AGR_CANFD_SetTargetNodeId(AGR_DOP_Ctx_t* ctx, uint8_t target_node_id);
+
+/**
+ * @brief SDO Master request — 응답/abort/timeout 을 callback 으로 통지 (C6).
+ * @details fire-and-forget(AGR_CANFD_SendSDO/Write) 와 달리 transaction 을 풀에
+ *          등록하고, slave 응답(0x580+slave)을 AGR_CANFD_ProcessRxMessage 의
+ *          SDO_TX case 가 AGR_SDO_Master_ProcessResponse 로 매칭 → on_done 호출.
+ *          Wire format 은 fire-and-forget 과 동일(CiA 301). Timeout 은 호출자가
+ *          AGR_SDO_Master_Tick(&ctx->sdo_master, now) 을 주기 호출해야 동작.
+ *          사전 조건: AGR_SDO_Master_Init(&ctx->sdo_master, get_tick_ms).
+ * @param ctx        Master DOP context (sdo_master 초기화 필요).
+ * @param slave_id   대상 slave node id.
+ * @param index      OD index.
+ * @param subindex   OD sub-index.
+ * @param is_write   true=Download(Write), false=Upload(Read).
+ * @param data       write 데이터 (read 시 NULL).
+ * @param data_len   write 데이터 길이 (read 시 0). ≤ AGR_SDO_MAX_DATA_SIZE.
+ * @param timeout_ms 응답 대기 한도 (Tick 기준).
+ * @param on_done    완료 콜백 (필수, NULL 금지).
+ * @param user_ctx   콜백 전달 context.
+ * @return 0=송신 성공(대기 시작), -1=인자, -2=oversize, -3=busy/풀가득,
+ *         -4=encode 실패, -5=TX 실패.
+ */
+int32_t AGR_CANFD_Master_Request(AGR_DOP_Ctx_t*         ctx,
+                                 uint8_t                slave_id,
+                                 uint16_t               index,
+                                 uint8_t                subindex,
+                                 bool                   is_write,
+                                 const uint8_t*         data,
+                                 uint8_t                data_len,
+                                 uint32_t               timeout_ms,
+                                 AGR_SDO_CompletionCb_t on_done,
+                                 void*                  user_ctx);
+
+/**
+ *-----------------------------------------------------------
+ * COMMAND VECTOR TRANSPORT (TX) — opt-in (AGR_VECTOR_ENABLED)
+ *-----------------------------------------------------------
+ */
+#if AGR_VECTOR_ENABLED
+
+/**
+ * @brief Command Vector Request 전송 (Master → Slave, 0x100+target)
+ * @details 단일 atomic 프레임 = vector 하나. seq 는 per-node 단조 증가를
+ *          호출자(master)가 관리 — 동일 seq 재전송 = 멱등 재시도.
+ *          ACK([echo_seq][status])는 AGR_Vector_SetMasterCallbacks 로 소비.
+ * @param ctx         DOP Context (master)
+ * @param target_node 대상 slave node id
+ * @param type        vector_type 코드 (예: 0x10 P / 0x11 I / 0x12 F)
+ * @param seq         시퀀스 번호
+ * @param payload     payload (len==0 이면 NULL 허용)
+ * @param len         payload 길이 (≤ AGR_VECTOR_MAX_PAYLOAD)
+ * @return 0=성공, -1=인자, -2=인코드 실패, 그 외=tx_func 반환값
+ */
+int32_t AGR_CANFD_SendVectorRequest(AGR_DOP_Ctx_t* ctx,
+                                    uint8_t target_node,
+                                    uint8_t type,
+                                    uint8_t seq,
+                                    const void* payload,
+                                    uint8_t len);
+
+/**
+ * @brief Command Vector EVENT 전송 (Slave → Master, 0x680+own, 1B 정확 DLC)
+ * @details ACK 채널의 1B frame = EVENT (2B=ACK 와 길이로 구분). 예: MD 의
+ *          P-Done = 0x80|0x10 = 0x90 (P decoder 의 duration_completed 시점).
+ * @param ctx        DOP Context (slave)
+ * @param event_code 이벤트 코드 — bit7 필수 (0x80|type 규약)
+ * @return 0=성공, -1=인자, -2=bit7 없는 코드, 그 외=tx_func 반환값
+ */
+int32_t AGR_CANFD_SendVectorEvent(AGR_DOP_Ctx_t* ctx, uint8_t event_code);
+
+#endif /* AGR_VECTOR_ENABLED */
 
 /**
  *-----------------------------------------------------------

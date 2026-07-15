@@ -7,7 +7,7 @@
  * 로봇의 모든 센서 데이터(Input)를 읽고, 제어 명령(Output)을 내리는 핵심 API입니다.
  * 사용자는 전역 객체 'XM'을 통해 모든 데이터에 접근할 수 있습니다.
  * * @note    [데이터 흐름]
- * 1. Input (Read):  XM.status 구조체 (센서값, 2ms마다 자동 갱신됨)
+ * 1. Input (Read):  XM.status 구조체 (센서값, 1ms(1kHz)마다 자동 갱신됨)
  * 2. Output (Write): XM_SetAssistTorque() 함수 사용 (명령 전달)
  * @version 0.1
  * @date    Nov 17, 2025
@@ -23,6 +23,7 @@
 
 #include "cm_drv.h"             /* CM Device Driver (PnP 통합 완료) */
 #include "data_object_dictionaries.h"
+#include "module.h"             /* XM_GRF_FIXED_FRAME_MODULE / XM_GRF_FSR_CH_TOTAL — 구조체 레이아웃 일관성 필수 */
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -43,12 +44,15 @@
  */
 
 /**
- * @brief XM10 제어 권한 모드
+ * @brief XM10 제어 권한 모드 (= 토크 출력 ON/OFF)
+ * @details 두 모드 모두 사용자 알고리즘(Control_Loop)은 매 tick 그대로 실행됩니다.
+ *          차이는 "계산된 토크 명령을 CM으로 전송하느냐"뿐입니다. 즉 알고리즘을
+ *          끄는 스위치가 아니라, 출력(구동)을 켜고 끄는 안전 스위치입니다.
  * @warning 알고리즘 시작 시 반드시 모드를 설정해야 합니다.
  */
 typedef enum {
-    XM_CTRL_MONITOR = 0,  /**< [기본] 모니터링 모드. 센서 데이터만 수신하고 제어 명령은 전송하지 않습니다. */
-    XM_CTRL_TORQUE  = 1   /**< [주의] 토크 제어 모드. 설정된 토크 명령을 주기적으로 전송합니다. */
+    XM_CTRL_MONITOR = 0,  /**< [기본] 모니터링 모드. 알고리즘은 실행되지만 토크 명령은 전송하지 않습니다 (출력 차단 — 안전하게 개발/관찰). */
+    XM_CTRL_TORQUE  = 1   /**< [주의] 토크 제어 모드. 계산된 토크 명령을 주기적으로 전송합니다 (실제 구동). */
 } XmControlMode_t;
 
 /**
@@ -62,7 +66,7 @@ typedef enum {
 
 // P-Vector 데이터 구조체
 typedef struct {
-    int16_t  yd; // Desired Position (unit: deg, scaled by 100)
+    int16_t  yd; // Desired Position (unit: deg, scaled by 10 — 실동작 검증값. 예: 25.0deg → 250)
     uint16_t L;  // Trajectory Duration (ms)
     uint8_t  s0; // Acceleration Profile (deg/s^2)
     uint8_t  sd; // Deceleration Profile (deg/s^2)
@@ -184,6 +188,18 @@ typedef struct {
     uint8_t  rightSensorData[XM_GRF_CHANNEL_SIZE]; // (0~255 Raw Value)
     uint8_t  rightBatteryLevel;
     uint8_t  rightStatusFlags;
+
+#if XM_GRF_FIXED_FRAME_MODULE
+    /* === SM-GRF fixed UART 모듈 (24ch FSR + 6축 IMU raw, 포트=L/R) ===
+     * XM_GRF_FIXED_FRAME_MODULE=1 일 때 core_process 가 GrfModule_GetLatest 로 채움.
+     * L/R 은 물리 포트로 구분(오른발 GRF→XM 오른쪽 포트=UART8). */
+    uint16_t leftFsr[XM_GRF_FSR_CH_TOTAL];   /**< 24ch FSR raw (ADC LSB) */
+    int16_t  leftImu[7];                     /**< acc[3],gyr[3],temp raw */
+    uint32_t leftGrfTick;                    /**< GRF 제어틱(ms) — gap/freshness */
+    uint16_t rightFsr[XM_GRF_FSR_CH_TOTAL];
+    int16_t  rightImu[7];
+    uint32_t rightGrfTick;
+#endif
 } XmGrfData_t;
 
 /**
@@ -208,7 +224,7 @@ typedef struct {
 
 /**
  * @brief [IMU Hub Module] 6축 IMU 센서 허브 (EBIMU-9DOFV6 × 6)
- * @details DOP V2 프로토콜로 연결된 IMU Hub Module 데이터
+ * @details DOP V3 프로토콜로 연결된 IMU Hub Module 데이터
  */
 #define XM_IMU_HUB_SENSOR_COUNT  6  /**< IMU Hub의 센서 개수 */
 
@@ -241,8 +257,8 @@ typedef struct {
 } XmImuHubData_t;
 
 /**
- * @brief [EMG Hub Module] sEMG 센서 허브 (DOP V2)
- * @details DOP V2 프로토콜로 연결된 EMG Hub Module 데이터
+ * @brief [EMG Hub Module] sEMG 센서 허브 (DOP V3)
+ * @details DOP V3 프로토콜로 연결된 EMG Hub Module 데이터
  *
  * [데이터 원본] EMG Hub TPDO1 (CAN ID 0x18F)
  * - 1kHz 샘플링, 신호처리 파이프라인 결과 포함
@@ -263,7 +279,7 @@ typedef struct {
     bool     is_active;           /**< 근수축 감지 (Schmitt trigger) */
 
     /* Status Flags (비트 필드) */
-    uint8_t  status_flags;        /**< bit0: ADC_OK, bit1: IS_ACTIVE, bit2: SATURATED */
+    uint8_t  status_flags;        /**< bit0: ADC_OK, bit1: IS_ACTIVE, bit2: SATURATED, bit3: CALIB_VALID(MVC 유효) */
 } XmEmgHubData_t;
 
 /**
@@ -344,9 +360,9 @@ typedef struct {
     XmH10Data_t     h10;      /**< H10 로봇 본체 데이터 (DOP V1) */
     XmGrfData_t     grf;      /**< GRF 족압 센서 데이터 */
     XmExtImuData_t  ext_imu;  /**< External UART IMU 데이터 (Xsens MTi-630) */
-    XmImuHubData_t  imu_hub;  /**< [신규] IMU Hub 센서 데이터 (DOP V2) ✅ */
-    XmEmgHubData_t  emg_hub;  /**< [신규] EMG Hub 센서 데이터 (DOP V2) */
-    XmFesHubData_t  fes_hub;  /**< [신규] FES Hub 자극 피드백 (DOP V2) */
+    XmImuHubData_t  imu_hub;  /**< [신규] IMU Hub 센서 데이터 (DOP V3) ✅ */
+    XmEmgHubData_t  emg_hub;  /**< [신규] EMG Hub 센서 데이터 (DOP V3) */
+    XmFesHubData_t  fes_hub;  /**< [신규] FES Hub 자극 피드백 (DOP V3) */
 } XmInput_t;
 
 /**
@@ -440,7 +456,7 @@ bool XM_IsCmConnected(void);
 /**
  * @brief 현재 CM과의 PnP(NMT) 상태를 가져옵니다.
  * @return CM_NmtState_t 열거형 값.
- * @details [변경] LinkNmtState_t → CM_NmtState_t (.cursorrules Phase 5)
+ * @details [변경] LinkNmtState_t → CM_NmtState_t (Phase 5)
  */
 CM_NmtState_t XM_GetXMNmtState(void);
 

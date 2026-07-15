@@ -15,6 +15,8 @@
 #ifndef SYSTEM_CORE_INC_SYSTEM_STARTUP_H_
 #define SYSTEM_CORE_INC_SYSTEM_STARTUP_H_
 
+#include <stdint.h>
+
 #include "ioif_agrb_fdcan.h"
 #include "ioif_agrb_gpio.h"
 #include "ioif_agrb_spi.h"
@@ -106,6 +108,13 @@ void System_SendSync_Ch1(void);
 void System_SendSync_Ch2(void);
 
 /**
+ * @brief Notify FDCAN2 bus manager that a sensor-module bootup/heartbeat was seen.
+ * @details Called from the FDCAN Rx routing task. This is non-blocking and only
+ *          marks Tx cleanup for the next task-context FDCAN2 transmit.
+ */
+void System_Fdcan2_NotifySensorHeartbeat(uint8_t node_id, uint8_t nmt_state);
+
+/**
  * @brief EXT_PWR_SEL_5V(PE3)의 IOIF GPIO 핸들을 반환합니다.
  * @return IOIF_GPIOx_t 핸들.
  */
@@ -133,6 +142,34 @@ IOIF_SPIx_t System_GetSpi2RtcId(void);
  * @return IOIF_SPIx_t 핸들 (미초기화 시 IOIF_SPI_ID_NOT_ALLOCATED).
  */
 IOIF_SPIx_t System_GetSpi5LedDrvId(void);
+
+/**
+ * @brief Power On LED(PC6)의 IOIF GPIO 핸들을 반환합니다.
+ * @details 부팅 완료 직후 상시 Solid ON(led_manager 관리 대상 아님). 생산검사
+ *          LED 일괄 점등(OD 0x7EA0) 이 5종 GPIO 를 함께 재확인할 때 사용.
+ * @return IOIF_GPIOx_t 핸들 (미초기화 시 IOIF_GPIO_NOT_INITIALIZED).
+ */
+IOIF_GPIOx_t System_GetPowerLedGpioId(void);
+
+/**
+ * @brief HWREV[2:0] strap 값을 읽어 반환합니다.
+ * @return bit2=HWREV_2, bit1=HWREV_1, bit0=HWREV_0. 미초기화 시 0.
+ */
+uint8_t System_GetHwRevisionStrap(void);
+
+/**
+ * @brief GRF 포트 전원 폴트 자동 복구 주기 실행 (grf-pwr-watchdog).
+ * @details 로드스위치 #FAULT(low-active)가 디바운스(연속 3샘플) 확정될 때만 해당
+ *          포트 EN 을 off(500ms)→on 토글하고, 재인가 후 1s blanking 동안은 소프트스타트
+ *          인러시를 폴트로 오판하지 않는다. 재시도는 지수 백오프(2s→30s), 연속 8회 미해소
+ *          시 hands-off(EN 유지 = 워치독 도입 전 거동, 스위치 자체 보호에 위임). 핫플러그/
+ *          부팅 인러시 트립으로 GRF 레일이 영구 사망하던 문제의 자동 복구선.
+ *          ⚠️ 초판(off 100ms/2s 고정/무제한)은 트립 즉시재발 시 2s 주기 무한 콜드리셋으로
+ *          dead-window 를 영속화해 폐기됨(2026-07-13). 관측: g_dbg_grf_power_retry_count[L/R],
+ *          g_dbg_grf_power_fault_mask.
+ * @note Call context: PnP Task 주기 루프 (~100ms, Task 전용 — 단일 태스크 소유, 락 불필요).
+ */
+void System_GrfPowerRunPeriodic(void);
 
 /**
  * @brief [RTOS 태스크] "강한(strong)" 정의의 StartupTask 구현부.

@@ -33,8 +33,8 @@ extern "C" {
  */
 
 /* MCP79510 SPI Command */
-#define MCP79510_CMD_READ       (0x13U)  /* EEREAD — Timekeeping Read */
-#define MCP79510_CMD_WRITE      (0x12U)  /* EEWRITE — Timekeeping Write */
+#define MCP79510_CMD_READ       (0x13U)  /* READ  — RTCC/SRAM Read  (주의: EEREAD=0x03 아님) */
+#define MCP79510_CMD_WRITE      (0x12U)  /* WRITE — RTCC/SRAM Write (주의: EEWRITE=0x02 아님) */
 #define MCP79510_CMD_CLRWDT     (0x44U)  /* Clear Watchdog Timer */
 #define MCP79510_CMD_IDWRITE    (0x32U)  /* ID Write */
 #define MCP79510_CMD_IDREAD     (0x33U)  /* ID Read */
@@ -58,6 +58,10 @@ extern "C" {
 #define MCP79510_VBATEN_BIT     (0x08U)  /* RTCWKDAY[3]: Battery Backup Enable */
 #define MCP79510_OSCRUN_BIT     (0x20U)  /* RTCWKDAY[5]: Oscillator Running */
 #define MCP79510_LPYR_BIT       (0x20U)  /* RTCMTH[5]: Leap Year */
+
+/* 진단/통신 sanity 마스크 */
+#define MCP79510_WKDAY_RSVD_MASK (0xC0U) /* RTCWKDAY[7:6] unimplemented → 정상 칩은 항상 0 (통신 sanity) */
+#define MCP79510_DIAG_SENTINEL   (0xAAU) /* DiagReadRaw rx 프리필 — duplex 미완료 시 잔존(무응답 판별) */
 
 /**
  *-----------------------------------------------------------

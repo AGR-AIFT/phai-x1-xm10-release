@@ -143,7 +143,7 @@ int32_t AGR_PDO_ApplyMapFromSDO(AGR_PDO_MapTable_t* map,
 int32_t AGR_PDO_Encode(const AGR_PDO_MapTable_t* map,
                    const AGR_OD_Table_t* od,
                    uint8_t* out_buf,
-                   uint8_t buf_size);
+                   uint16_t buf_size);
 
 /**
  * @brief PDO 페이로드 디코딩 (바이트 버퍼 → OD Entry)

@@ -83,7 +83,7 @@ typedef enum {
  * @details 한 보드/한 케이블에서 3가지 호스트 클래스를 분리 지원하기 위한
  *          모드 분류. wire-level transport 와 역할(목적)을 함께 표현.
  *          - PHAI       : PhAI Studio 실시간 telemetry (Total Data auto-pump)
- *          - PRODUCTION : sensor-studio HW 검증 / SI 측정 / 양산 (COBS+CRC DOP)
+ *          - PRODUCTION : Extension_Module_GUI_ForProduction HW 검증 / SI 측정 / 양산 (COBS+CRC DOP)
  *          - TERMINAL   : 예제 / Raw 터미널 — auto-pump OFF, 사용자 명시 TX 만
  *
  *          모드 전환 규칙:
@@ -102,7 +102,7 @@ typedef enum {
 /**
  * @brief USB-CDC 모드 변경 콜백.
  * @details 모드가 실제 전환된 직후 호출. 향후 OD 모드 플래그(0x6000/0x7000)
- *          양방향 동기화, LED 패턴 전환, sensor-studio Test Mode 진입/이탈
+ *          양방향 동기화, LED 패턴 전환, Extension_Module_GUI_ForProduction Test Mode 진입/이탈
  *          외부 알림 등에 사용. ISR 컨텍스트 호출 가능하므로 짧고 비차단.
  * @param[in] prev 이전 모드
  * @param[in] next 새 모드
@@ -349,7 +349,7 @@ XM_USB_Mode_e XM_USB_GetMode(void);
  * @brief USB-CDC 통신 모드를 명시적으로 전환합니다.
  * @details 예제·터미널 사용자는 setup 에서 XM_USB_SetMode(XM_USB_MODE_TERMINAL)
  *          를 1회 호출하여 PhAI auto-pump 를 차단하고 깨끗한 텍스트 IO 만 사용.
- *          PRODUCTION 으로의 자동 전환은 sensor-studio 의 첫 유효 DOP frame
+ *          PRODUCTION 으로의 자동 전환은 Extension_Module_GUI_ForProduction 의 첫 유효 DOP frame
  *          수신 시 cdc_dop_router 가 수행하므로 명시 호출 불필요.
  * @param[in] mode  전환할 모드.
  * @note  TERMINAL 명시 후에는 PRODUCTION 자동 전환이 비활성화됨.
@@ -423,6 +423,8 @@ void XM_SetUsbStreamModuleId(uint8_t module_id);
  * @param[in] module_id  대상 Module ID (0xF0~0xFE)
  * @param[in] json_str   채널 정의 JSON string (NULL-terminated, 문자열 리터럴 권장)
  * @note json_str 포인터는 프로그램 수명 동안 유효해야 합니다 (복사하지 않음).
+ * @note **USB 연결당 하나의 Module ID 메타만 유지됩니다** (단일 슬롯 — 마지막 호출이 이전 것을
+ *       덮어씀). 여러 채널 그룹을 라벨링하려면 채널을 하나의 Module ID 로 모아 등록하세요.
  */
 void XM_SetUsbCustomMeta(uint8_t module_id, const char* json_str);
 

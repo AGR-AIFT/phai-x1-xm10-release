@@ -364,9 +364,9 @@ void HAL_FDCAN_MspInit(FDCAN_HandleTypeDef* hfdcan)
     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
     /* FDCAN1 interrupt Init */
-    HAL_NVIC_SetPriority(FDCAN1_IT0_IRQn, 4, 0);
+    HAL_NVIC_SetPriority(FDCAN1_IT0_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(FDCAN1_IT0_IRQn);
-    HAL_NVIC_SetPriority(FDCAN1_IT1_IRQn, 4, 0);
+    HAL_NVIC_SetPriority(FDCAN1_IT1_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(FDCAN1_IT1_IRQn);
     /* USER CODE BEGIN FDCAN1_MspInit 1 */
 
@@ -406,9 +406,9 @@ void HAL_FDCAN_MspInit(FDCAN_HandleTypeDef* hfdcan)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* FDCAN2 interrupt Init */
-    HAL_NVIC_SetPriority(FDCAN2_IT0_IRQn, 4, 0);
+    HAL_NVIC_SetPriority(FDCAN2_IT0_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(FDCAN2_IT0_IRQn);
-    HAL_NVIC_SetPriority(FDCAN2_IT1_IRQn, 4, 0);
+    HAL_NVIC_SetPriority(FDCAN2_IT1_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(FDCAN2_IT1_IRQn);
     /* USER CODE BEGIN FDCAN2_MspInit 1 */
 
@@ -1071,10 +1071,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     hdma_uart7_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
     hdma_uart7_rx.Init.Mode = DMA_CIRCULAR;
     hdma_uart7_rx.Init.Priority = DMA_PRIORITY_VERY_HIGH;
-    hdma_uart7_rx.Init.FIFOMode = DMA_FIFOMODE_ENABLE;
-    hdma_uart7_rx.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_1QUARTERFULL;
-    hdma_uart7_rx.Init.MemBurst = DMA_MBURST_SINGLE;
-    hdma_uart7_rx.Init.PeriphBurst = DMA_PBURST_SINGLE;
+    hdma_uart7_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_uart7_rx) != HAL_OK)
     {
       Error_Handler();
@@ -1148,10 +1145,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     hdma_uart8_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
     hdma_uart8_rx.Init.Mode = DMA_CIRCULAR;
     hdma_uart8_rx.Init.Priority = DMA_PRIORITY_VERY_HIGH;
-    hdma_uart8_rx.Init.FIFOMode = DMA_FIFOMODE_ENABLE;
-    hdma_uart8_rx.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_1QUARTERFULL;
-    hdma_uart8_rx.Init.MemBurst = DMA_MBURST_SINGLE;
-    hdma_uart8_rx.Init.PeriphBurst = DMA_PBURST_SINGLE;
+    hdma_uart8_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_uart8_rx) != HAL_OK)
     {
       Error_Handler();
@@ -1407,8 +1401,14 @@ void HAL_PCD_MspInit(PCD_HandleTypeDef* hpcd)
     /* Peripheral clock enable */
     __HAL_RCC_USB_OTG_FS_CLK_ENABLE();
     /* USER CODE BEGIN USB_OTG_FS_PCD_MspInit 1 */
-    /* [Compatible] DRD NVIC는 IOIF(ioif_agrb_usb.c)에서 init 후 수동 활성화.
-     * IOC에서 NVIC 비활성화 → MspInit에서도 건드리지 않음. */
+    /* [Compatible] DRD OTG NVIC priority 는 여기서 설정, enable 은 IOIF
+     * (ioif_usb_device_init) 가 USBD_Start 이후 수행 (IOC 는 NVIC 비활성).
+     * Device=5 : configMAX_SYSCALL_INTERRUPT_PRIORITY(=5) 경계 → CDC FromISR 안전.
+     * IOIF 4a290b3(2026-07-15)에서 priority 소유가 프로젝트로 이관됨 — 여기 미설정 시
+     * OTG IRQ 가 reset 기본값 0 → FreeRTOS assert (구 IOIF 하드코딩 5 를 대체). */
+    HAL_NVIC_SetPriority(OTG_FS_EP1_OUT_IRQn, 5, 0);
+    HAL_NVIC_SetPriority(OTG_FS_EP1_IN_IRQn,  5, 0);
+    HAL_NVIC_SetPriority(OTG_FS_IRQn,         5, 0);
     /* USER CODE END USB_OTG_FS_PCD_MspInit 1 */
 
   }
@@ -1471,8 +1471,14 @@ void HAL_HCD_MspInit(HCD_HandleTypeDef* hhcd)
     /* Peripheral clock enable */
     __HAL_RCC_USB_OTG_FS_CLK_ENABLE();
     /* USER CODE BEGIN USB_OTG_FS_HCD_MspInit 1 */
-    /* [Compatible] DRD NVIC는 IOIF(ioif_agrb_usb.c)에서 init 후 수동 활성화.
-     * IOC에서 NVIC 비활성화 → MspInit에서도 건드리지 않음. */
+    /* [Compatible] DRD OTG NVIC priority 는 여기서 설정, enable 은 IOIF
+     * (ioif_usb_host_init) 가 USBH_Start 이후 수행 (IOC 는 NVIC 비활성).
+     * Host=6 : configMAX_SYSCALL(5) 이상 → USBH_OS_PutMessage(FromISR) 안전.
+     * FDCAN(4)/Device(5) 아래로 두어 CAN·CDC 타이밍 간섭 최소화.
+     * IOIF 4a290b3(2026-07-15)에서 priority 소유가 프로젝트로 이관됨. */
+    HAL_NVIC_SetPriority(OTG_FS_EP1_OUT_IRQn, 6, 0);
+    HAL_NVIC_SetPriority(OTG_FS_EP1_IN_IRQn,  6, 0);
+    HAL_NVIC_SetPriority(OTG_FS_IRQn,         6, 0);
     /* USER CODE END USB_OTG_FS_HCD_MspInit 1 */
 
   }

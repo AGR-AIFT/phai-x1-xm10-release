@@ -36,6 +36,31 @@ typedef enum {
 typedef struct TsmObject_s TsmObject_t;
 
 /**
+ * @brief Tick provider for TsmDelay (RTOS / BareMetal neutral injection).
+ *
+ * Bind once at startup via TsmDelay_SetTickProvider(). Typical bindings:
+ *   - FreeRTOS  : osKernelGetTickCount  [cmsis_os2.h]
+ *   - BareMetal : HAL_GetTick           [STM32 HAL]
+ *   - In-house  : IOIF_TIM_GetTick      [project-specific]
+ *
+ * Unit: milliseconds (caller is responsible for matching tick rate).
+ */
+typedef uint32_t (*TsmDelay_GetTickFunc_t)(void);
+
+/**
+ * @brief One-shot delay timer state — used by FSM Ent/Run pattern.
+ *
+ * POD struct held by the caller (typically as a static at file scope).
+ * All fields are managed by TsmDelay_* — do not mutate directly.
+ */
+typedef struct TsmDelay_t {
+    uint32_t start_ms;     /**< Tick recorded at TsmDelay_Start(). */
+    uint32_t duration_ms;  /**< Configured duration. */
+    bool     active;       /**< True between Start() and the firing edge. */
+    bool     fired;        /**< True after the one-shot has reported expiry. */
+} TsmDelay_t;
+
+/**
  *------------------------------------------------------------
  *                     FUNCTION PROTOTYPES
  *------------------------------------------------------------
@@ -75,5 +100,71 @@ uint8_t TaskMngr_GetPrevStateId(const TsmObject_t* obj);
 
 /** @brief Previous lifecycle phase, or TSM_LIFECYCLE_ENTRY if obj is NULL. */
 TsmLifecycle_e TaskMngr_GetPrevLifecycle(const TsmObject_t* obj);
+
+/**
+ *------------------------------------------------------------
+ *                     TsmDelay — One-shot Timer
+ *------------------------------------------------------------
+ * @details
+ *   Convenience timer for the FSM Ent/Run pattern: arm in the state's
+ *   Entry callback, poll in Loop, transition on expiry. Avoids osDelay()
+ *   blocking the host task and removes wrap-around boilerplate from
+ *   every caller.
+ *
+ *   RTOS-neutral: caller injects the tick source via
+ *   TsmDelay_SetTickProvider() at startup. No direct dependency on
+ *   cmsis_os2.h or HAL — preserves AGR_MW's RTOS/BareMetal portability.
+ */
+
+/**
+ * @brief Bind the global tick source. Call once at startup.
+ *
+ * Must be called before any TsmDelay_Start(). Until set, TsmDelay_Expired()
+ * returns false (timer never fires) and TsmDelay_Start() leaves the timer
+ * inactive.
+ *
+ * @param fn Tick getter. Pass NULL to clear the binding (e.g. for tests).
+ */
+void TsmDelay_SetTickProvider(TsmDelay_GetTickFunc_t fn);
+
+/**
+ * @brief Arm a one-shot delay. Call from the state's Entry callback.
+ *
+ * Records the current tick and resets the fired flag. Re-calling Start()
+ * re-arms the timer regardless of prior state.
+ *
+ * @param d           Delay handle (caller-owned). NULL is a no-op.
+ * @param duration_ms Duration in milliseconds. Must be <= INT32_MAX
+ *                    for wrap-safe comparison (~24.8 days at 1 kHz).
+ *
+ * @note If no tick provider is bound, the timer is left inactive
+ *       (TsmDelay_Expired() will return false until provider is set
+ *       AND Start() is called again).
+ */
+void TsmDelay_Start(TsmDelay_t* d, uint32_t duration_ms);
+
+/**
+ * @brief Has the armed delay elapsed? Call from the state's Loop callback.
+ *
+ * One-shot semantics — returns true exactly once per Start() call. Subsequent
+ * polls return false until the next Start(). Use TsmDelay_Reset() if you need
+ * to abort an armed delay without firing.
+ *
+ * @param d Delay handle. NULL is treated as not-expired.
+ * @return true exactly once on the firing edge; false otherwise.
+ *
+ * @note Single-shot. Re-arm via TsmDelay_Start().
+ */
+bool TsmDelay_Expired(TsmDelay_t* d);
+
+/**
+ * @brief Disarm a delay without firing. Idempotent.
+ *
+ * Normally unnecessary — TsmDelay_Start() already re-arms. Use when a state
+ * Exit must cancel a delay armed in Entry but not yet expired.
+ *
+ * @param d Delay handle. NULL is a no-op.
+ */
+void TsmDelay_Reset(TsmDelay_t* d);
 
 #endif /* AGR_MW_TSM_INC_TASK_MNGR_H_ */

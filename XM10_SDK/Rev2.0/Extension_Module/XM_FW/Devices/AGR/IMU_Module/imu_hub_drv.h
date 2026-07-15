@@ -7,7 +7,7 @@
  * @date    2026-02-10
  *
  * @details
- * [V4.0 변경사항 - PnP V2 리팩토링] (.cursorrules Phase 2)
+ * [V4.0 변경사항 - PnP V2 리팩토링] (Phase 2)
  * - AS-IS: AGR_PnP_Inst_t (구 API), 0x700 자체 처리
  * - TO-BE: AGR_PnP_Master_t (신 API), 0x700 → PnP Master가 처리
  *
@@ -29,7 +29,7 @@
  * - IMU Hub Node ID: 0x0D (AGR_NODE_ID_IMU_HUB)
  * - TPDO1 (0x18D): Group A (Metadata + IMU 0,1,2)
  * - TPDO2 (0x28D): Group B (Metadata + IMU 3,4,5)
- * - SDO Request (0x608): TPDO Mapping (0x1A00/0x1A01)
+ * - SDO Request (0x60D): TPDO Mapping (0x1A00/0x1A01) + IDENTIFY (0x1000/0x1018 Read)
  * - SDO Response (0x58D): IMU Connected Mask (0x2000)
  * - Heartbeat (0x70D): PnP Master가 처리
  *
@@ -156,7 +156,7 @@ int ImuHub_Drv_Init(AGR_TxFunc_t tx_func, AGR_PnP_Master_t* master_pnp);
 void ImuHub_Drv_ProcessCANMessage(uint16_t can_id, uint8_t* data, uint8_t len);
 
 /**
- * @brief 최신 IMU 데이터 읽기 (Lock-Free Double Buffer)
+ * @brief 최신 IMU 데이터 읽기 (Mutex + Snapshot, timeout=0)
  * @param rx_data 수신 데이터를 저장할 포인터
  * @return true: 유효한 데이터 있음, false: 데이터 없음
  */
@@ -164,7 +164,7 @@ bool ImuHub_Drv_GetRxData(ImuHub_RxData_t* rx_data);
 
 /**
  * @brief 데이터 준비 여부 확인
- * @return true: 최소 1회 이상 TPDO 수신 완료
+ * @return true: TPDO1·TPDO2 둘 다 1회 이상 수신 완료 (수신 게이트 — 전 채널 첫 프레임 보장)
  */
 bool ImuHub_Drv_IsDataReady(void);
 
@@ -179,6 +179,13 @@ bool ImuHub_Drv_IsConnected(void);
  * @return NMT 상태
  */
 AGR_NMT_State_t ImuHub_Drv_GetNmtState(void);
+
+/**
+ * @brief IDENTIFY 불일치 상태 여부 (NMT START 영구 보류 중 — fail loud)
+ * @return true: IDENTITY_MISMATCH (잘못된 디바이스/계약버전 연결)
+ * @details pnp_task.c 가 CH_LED_IMU 를 CH_DEV_WRONG_DEVICE 로 표시하는 데 사용 (EMG/FES 정합).
+ */
+bool ImuHub_Drv_IsIdentityMismatch(void);
 
 /**
  * @brief 주기 실행 (Pre-Op SM Timeout/Retry 체크)

@@ -6,7 +6,7 @@
  * @details 
  * 이 모듈은 User Task의 실행 환경을 구축하고 구동하는 '숨겨진 엔진'입니다.
  * * [역할]
- * 1. 실시간성 보장: 2ms 주기의 정밀한 타이밍 제어
+ * 1. 실시간성 보장: 1ms(1kHz) 주기의 정밀한 타이밍 제어
  * 2. 데이터 동기화: 하위 드라이버(Link)와 상위 API(Facade) 간의 데이터 매핑
  * 3. IPO 모델 강제: Input Gathering -> User Process -> Output Flushing 순서 보장
  * * @note    이 파일은 System Layer의 Core에 위치하지만, 
@@ -58,7 +58,7 @@ extern "C" {
  * @brief  User Task의 진입점 (RTOS Task Function)
  * @details 
  * 1. Control_Setup()을 1회 호출하여 사용자 초기화를 수행합니다.
- * 2. 무한 루프에 진입하여 다음 과정을 2ms마다 반복합니다.
+ * 2. 무한 루프에 진입하여 다음 과정을 1ms(1kHz)마다 반복합니다.
  * - [Input]  모든 센서/모듈 데이터 최신화 (_FetchAllInputs)
  * - [Logic]  Control_Loop() 호출 (사용자 알고리즘)
  * - [Output] 제어 명령 물리적 전송 (_FlushAllOutputs)

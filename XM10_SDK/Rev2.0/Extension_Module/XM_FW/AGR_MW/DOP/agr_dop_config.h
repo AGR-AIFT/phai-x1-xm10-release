@@ -50,9 +50,12 @@
  *-----------------------------------------------------------
  */
 
-/** @brief OD Entry 최대 개수 (드라이버별, IMU Hub ~111개 수용) */
+/** @brief OD Entry 개수 참고 상한 (사이징 가이드 — 강제 아님)
+ *  @note  현재 코드 어디에서도 버퍼 크기로 사용하지 않는다. 실제 entry_count/sort_buf
+ *         는 각 모듈이 sizeof 기반으로 정의 (실측: EMG ~34, IMU 134, SAM3x 424+).
+ *         고정 버퍼를 이 값으로 잡는 코드를 추가할 경우 RAM 영향 재검토 필수. */
 #ifndef AGR_OD_MAX_ENTRIES
-#define AGR_OD_MAX_ENTRIES          128
+#define AGR_OD_MAX_ENTRIES          512
 #endif
 
 /**
@@ -84,6 +87,7 @@
  * [Function Code 정의]
  * - 0x000: NMT
  * - 0x080: SYNC / EMCY
+ * - 0x100: Command Vector Request (Master → Node, 결정적 제어입력)
  * - 0x180: TPDO1 (Node → Master)
  * - 0x200: RPDO1 (Master → Node)
  * - 0x280: TPDO2
@@ -94,6 +98,7 @@
  * - 0x500: RPDO4
  * - 0x580: SDO Response (Node → Master)
  * - 0x600: SDO Request (Master → Node)
+ * - 0x680: Command Vector ACK/EVENT (Node → Master)
  * - 0x700: Heartbeat
  * 
  * CAN-ID = Function_Code + Node_ID
@@ -107,6 +112,7 @@
 typedef enum {
     AGR_CAN_FUNC_NMT         = 0x00,   /**< Network Management (0x000) */
     AGR_CAN_FUNC_SYNC_EMCY   = 0x01,   /**< SYNC (0x080) or EMCY (0x080+Node) */
+    AGR_CAN_FUNC_VECTOR_REQ  = 0x02,   /**< Command Vector Request (0x100+Node) */
     AGR_CAN_FUNC_TPDO1       = 0x03,   /**< Transmit PDO 1 (0x180+Node) */
     AGR_CAN_FUNC_RPDO1       = 0x04,   /**< Receive PDO 1 (0x200+Node) */
     AGR_CAN_FUNC_TPDO2       = 0x05,   /**< Transmit PDO 2 (0x280+Node) */
@@ -117,6 +123,7 @@ typedef enum {
     AGR_CAN_FUNC_RPDO4       = 0x0A,   /**< Receive PDO 4 (0x500+Node) */
     AGR_CAN_FUNC_SDO_TX      = 0x0B,   /**< SDO Transmit (0x580+Node) */
     AGR_CAN_FUNC_SDO_RX      = 0x0C,   /**< SDO Receive (0x600+Node) */
+    AGR_CAN_FUNC_VECTOR_ACK  = 0x0D,   /**< Command Vector ACK/EVENT (0x680+Node) */
     AGR_CAN_FUNC_HEARTBEAT   = 0x0E,   /**< Heartbeat (0x700+Node) */
 } AGR_CAN_FuncCode_t;
 
@@ -159,8 +166,44 @@ typedef enum {
 /** @brief SDO Request 기본 CAN-ID (+ Node ID) */
 #define AGR_CAN_ID_SDO_RX           0x600
 
+/** @brief Command Vector Request 기본 CAN-ID (+ Node ID) */
+#define AGR_CAN_ID_VECTOR_REQ       0x100
+
+/** @brief Command Vector ACK/EVENT 기본 CAN-ID (+ Node ID) */
+#define AGR_CAN_ID_VECTOR_ACK       0x680
+
 /** @brief Heartbeat 기본 CAN-ID (+ Node ID) */
 #define AGR_CAN_ID_HEARTBEAT        0x700
+
+/**
+ *-----------------------------------------------------------
+ * COMMAND VECTOR CONFIGURATION
+ *-----------------------------------------------------------
+ * "제어 입력" 클래스 메시지 (P/F/I trajectory, ES vector 등) 전용 채널.
+ * SDO(main-loop deferred)와 달리 단일 atomic 프레임을 소비 모듈이 정한
+ * 제어 tick 에서 결정적으로 처리한다. 설계 SSOT:
+ * SAM3x_FW `MD_FW/Devices/AGR/Control_Module/Doc/md_command_vector_design.md`.
+ */
+
+/** @brief Command Vector 채널 컴파일 스위치 (기본 OFF — 모터/제어 모듈만 opt-in).
+ *  @details 0 = CAN-FD RX 핸들러(VECTOR_REQ/ACK) pass-through + TX 함수(SendVector*)
+ *           미컴파일 + agr_vector.c inert → 미사용 모듈은 소스를 빌드에서 제거 가능.
+ *           1 = 소비 모듈(SAM3x slave / CM master 등)이 agr_mw_conf.h 에서 override +
+ *           agr_vector.c 를 빌드에 편입. **주의**: `AGR_Vector_Ctrl_t` 는 스위치와
+ *           무관하게 AGR_DOP_Ctx_t 에 by-value 임베드 유지(모듈 간 ctx 레이아웃 동일).
+ *           스위치가 없거나 0인데 소비 코드가 링크되면 agr_vector.c self-guard 로
+ *           심볼 미정의 → 링크 에러(loud). 전 모듈 compat 검토 2026-07-02. */
+#ifndef AGR_VECTOR_ENABLED
+#define AGR_VECTOR_ENABLED          0
+#endif
+
+/** @brief Context 당 등록 가능한 vector type 수 (MD: P/I/F/F-zero = 4) */
+#ifndef AGR_VECTOR_MAX_TYPES
+#define AGR_VECTOR_MAX_TYPES        4
+#endif
+
+/** @brief Vector payload 최대 길이 (frame = [type][seq][len] 3B + payload) */
+#define AGR_VECTOR_MAX_PAYLOAD      (AGR_CANFD_MAX_PAYLOAD - 3)
 
 /**
  *-----------------------------------------------------------
@@ -215,37 +258,24 @@ typedef enum {
  * [agr_mw_conf.h에 정의할 매크로]
  * AGR_DOP_TRANSPORT_CANFD   — CAN-FD (agr_dop_canfd.c)
  * AGR_DOP_TRANSPORT_UDP     — UDP/Ethernet (agr_dop_udp.c, Rev2.0 전용)
- * AGR_DOP_TRANSPORT_COE     — CAN over EtherCAT (agr_dop_coe_*.c)
  * AGR_DOP_TRANSPORT_SERIAL  — Serial/COBS (agr_dop_serial.c, BLE UART 등)
+ * AGR_DOP_TRANSPORT_COE     — [REMOVED 2026-07] DOP-over-EtherCAT 폐기.
+ *     EtherCAT wire는 SOES(slave)/SOEM(master)가 전담하며 DOP는 사용되지 않음.
+ *     agr_dop_coe_*.c 삭제됨. 근거: WalkON_H_CM_Temp/docs/ethercat-learning/08.
+ *     모든 모듈 COE=0.
  *
- * [모듈별 권장 설정]
+ * [모듈별 권장 설정]  (COE는 전부 0 — EtherCAT은 SOES/SOEM 전담)
  * XM Rev1.1:              CANFD=1, UDP=0, COE=0, SERIAL=0  (CAN-FD Master)
  * XM Rev2.0:              CANFD=1, UDP=1, COE=0, SERIAL=0  (CAN-FD + Ethernet)
  * IMU Hub:                CANFD=1, UDP=0, COE=0, SERIAL=0  (CAN-FD Slave)
- * CM (Central Module):    CANFD=1, UDP=0, COE=1, SERIAL=0  (EtherCAT Slave + CAN-FD Bridge)
- * CM-WH:                  CANFD=1, UDP=0, COE=1, SERIAL=1  (Triple Transport)
- * MD (Motor Driver):      CANFD=1, UDP=0, COE=1, SERIAL=0  (EtherCAT Slave + CAN-FD)
- * Jetson AM:              CANFD=0, UDP=0, COE=1, SERIAL=0  (EtherCAT Master)
+ * CM (Central Module):    CANFD=1, UDP=0, COE=0, SERIAL=0  (EtherCAT=SOES; CAN-FD Bridge)
+ * CM-WH:                  CANFD=1, UDP=0, COE=0, SERIAL=1  (EtherCAT=SOES; CAN-FD + Serial)
+ * MD (Motor Driver):      CANFD=1, UDP=0, COE=0, SERIAL=0  (EtherCAT=SOES; CAN-FD)
+ * Jetson AM:              CANFD=0, UDP=0, COE=0, SERIAL=0  (EtherCAT Master=SOEM)
  */
 
-/**
- *-----------------------------------------------------------
- * CoE CONFIGURATION
- *-----------------------------------------------------------
- */
-#if AGR_DOP_TRANSPORT_COE
-
-/** @brief Process Image 최대 크기 (SM2/SM3 각각, bytes) */
-#ifndef AGR_COE_MAX_PI_SIZE
-#define AGR_COE_MAX_PI_SIZE         128
-#endif
-
-/** @brief CoE SDO 최대 데이터 크기 (bytes) */
-#ifndef AGR_COE_SDO_MAX_DATA_SIZE
-#define AGR_COE_SDO_MAX_DATA_SIZE   AGR_SDO_MAX_DATA_SIZE
-#endif
-
-#endif /* AGR_DOP_TRANSPORT_COE */
+/* [REMOVED 2026-07] CoE CONFIGURATION 블록 삭제 — DOP-over-EtherCAT 폐기,
+ * agr_dop_coe_*.c 및 AGR_COE_* 상수 제거. EtherCAT은 SOES/SOEM 전담. */
 
 /**
  *-----------------------------------------------------------

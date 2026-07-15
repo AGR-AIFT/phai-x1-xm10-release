@@ -59,10 +59,8 @@
  * [복원 공식]
  * - Voltage/RMS/Envelope: int16 / 10.0f → float (µV)
  * - MVC Percent: uint8 직접 (0~100%)
- * - Frequency: uint16 / 10.0f → float (Hz)
  */
 #define EMGHUB_SCALE_UV_X10            10.0f   /**< µV × 10 → µV */
-#define EMGHUB_SCALE_FREQ_X10          10.0f   /**< Hz × 10 → Hz */
 
 /**
  *-----------------------------------------------------------
@@ -71,34 +69,37 @@
  */
 
 /**
- * @brief EMG Hub PDO 수신 데이터 (최종 처리 완료, int16 기반)
- * @details TPDO1 Metadata + EMG Data SubIndex 0x60 + ctrl_tick_ms 해석 결과
- * @note Metadata timestamp 는 24-bit 값이지만 uint32_t 에 저장 (상위 8bit = 0).
- *       ctrl_tick_ms 는 Slave 제어 루프 32-bit ms tick (wrap 49.7 일) — ground truth.
- *       TPDO payload 18B = Metadata(4B) + EMG Data(10B) + ctrl_tick_ms(4B).
+ * @brief EMG Hub PDO 수신 데이터 (TPDO v2.1, 최종 처리 완료, int16 기반)
+ * @details TPDO v2.1 wire = ctrl_tick_ms(4B) + status(1B) + EMG Processed Set 0x6010:0x60(10B) = 15B.
+ * @note ctrl_tick_ms 는 Slave 제어 루프 32-bit ms tick (wrap 49.7 일) — 송신 1kHz 시점 ground
+ *       truth, 연속 수신 delta!=1 → gap. (구 v1 의 24-bit timestamp 는 제거됨.)
+ *       MDF/MNF(mean/median_freq) 는 EMG/XM 에서 산출 안 함 — raw_adc 로깅 후 PC/MATLAB 오프라인 FFT.
  */
 typedef struct __attribute__((packed)) {
-    /* PDO Metadata (4B) */
-    uint32_t timestamp;           /**< Frame Timestamp (24-bit, ms) — Slave 에서 조립한 Metadata */
-    uint8_t  status_flags;        /**< Status Flags (bit0: ADC_OK, bit1: IS_ACTIVE, bit2: SATURATED) */
+    /* Slave 제어 틱 — OD 0x6050 (4B, LE) — TPDO v2.1 선두 */
+    uint32_t ctrl_tick_ms;        /**< Slave Control Task ms tick (송신 1kHz 시점). delta!=1 → gap */
 
-    /* EMG Sensor Data — SubIndex 0x60 (10B) */
+    /* Status — OD 0x3000 (1B) */
+    uint8_t  status_flags;        /**< bit0 ADC_OK / bit1 IS_ACTIVE / bit2 SATURATED / bit3 CALIB_VALID */
+
+    /* EMG Processed Set — OD 0x6010:0x60 (10B, Little-Endian) */
     uint16_t raw_adc;             /**< ADC 원시값 (12-bit, HW OVS 16×) */
     int16_t  voltage_uv_x10;     /**< EMG 전압 (µV × 10) */
     int16_t  rms_uv_x10;         /**< RMS 값 (µV × 10) */
-    int16_t  envelope_uv_x10;    /**< Envelope 값 (µV × 10) */
-    uint8_t  mvc_percent;         /**< MVC 정규화 (0~100%) */
+    int16_t  envelope_uv_x10;    /**< Envelope 값 (µV × 10) — 제어 1차 입력 */
+    uint8_t  mvc_percent;         /**< MVC 정규화 (0~100+%, calib_valid=1 시 유효) */
     uint8_t  is_active;           /**< 근수축 감지 (0/1) */
-
-    /* Slave 제어 틱 — OD 0x6050 (4B, 32-bit, LE) */
-    uint32_t ctrl_tick_ms;        /**< Slave Control Task 의 ms tick. 연속 수신 간 delta!=1 → gap.
-                                    *   Frame 이 14B (구 포맷) 면 timestamp 값으로 fallback. */
 } EmgHub_RxData_t;
 
 /** @brief EMG Hub Status Flag Bits (EMG Hub xm_drv.h와 동일) */
 #define EMGHUB_STATUS_ADC_OK       (1 << 0)
 #define EMGHUB_STATUS_IS_ACTIVE    (1 << 1)
 #define EMGHUB_STATUS_SATURATED    (1 << 2)
+#define EMGHUB_STATUS_CALIB_VALID  (1 << 3)   /**< MVC 보정 완료 — mvc_percent 신뢰 가능. 0=envelope_uv fallback */
+
+/** @brief EMG 캘리브 명령값 (OD 0x2103, EMG_CMD_* 미러) */
+#define EMGHUB_CAL_CMD_OFFSET      2   /**< offset 캘리브 시작 (EMG 가 4000샘플 누적 후 자동 완료) */
+#define EMGHUB_CAL_CMD_MVC         3   /**< 현재 RMS 를 MVC 기준으로 즉시 캡처 */
 
 /**
  *-----------------------------------------------------------
@@ -136,6 +137,22 @@ void EmgHub_Drv_ProcessCANMessage(uint16_t can_id, uint8_t* data, uint8_t len);
 bool EmgHub_Drv_GetRxData(EmgHub_RxData_t* rx_data);
 
 /**
+ * @brief EMG 캘리브레이션 명령 전송 (XM master → EMG SDO Write 0x2103)
+ * @param cmd EMGHUB_CAL_CMD_OFFSET(2) / EMGHUB_CAL_CMD_MVC(3)
+ * @return 0=성공, <0=SDO Write 실패
+ * @note OPERATIONAL/Pre-Op 무관, EMG 가 SDO 수신 가능한 상태면 동작. offset 은
+ *       EMG 가 ~2초 누적 후 자동 완료, mvc 는 즉시 현재 RMS 캡처.
+ */
+int EmgHub_Drv_SendCalCommand(uint8_t cmd);
+
+/**
+ * @brief EMG MVC 기준값 직접 주입 (XM master → EMG SDO Write 0x2104, float32 µV)
+ * @param mvc_uv host/XM 가 산출한 MVC 기준 RMS (µV, >0)
+ * @return 0=성공, <0=SDO Write 실패
+ */
+int EmgHub_Drv_SetMvcValue(float mvc_uv);
+
+/**
  * @brief 데이터 준비 여부 확인
  * @return true: 최소 1회 이상 TPDO 수신 완료
  */
@@ -152,6 +169,13 @@ bool EmgHub_Drv_IsConnected(void);
  * @return NMT 상태
  */
 AGR_NMT_State_t EmgHub_Drv_GetNmtState(void);
+
+/**
+ * @brief IDENTIFY 불일치 상태 여부 (NMT START 영구 보류 중 — fail loud)
+ * @return true: IDENTITY_MISMATCH (잘못된 디바이스/계약버전 연결)
+ * @details pnp_task.c 가 CH_LED_EMG 를 CH_DEV_WRONG_DEVICE 로 표시하는 데 사용 (FES 정합).
+ */
+bool EmgHub_Drv_IsIdentityMismatch(void);
 
 /**
  * @brief 주기 실행 (Pre-Op SM Timeout/Retry 체크)

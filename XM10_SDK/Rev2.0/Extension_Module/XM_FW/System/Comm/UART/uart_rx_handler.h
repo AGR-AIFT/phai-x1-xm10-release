@@ -27,6 +27,10 @@
  *-----------------------------------------------------------
  */
 
+/** @brief UartRxHandler_GetDiag() type 인자 — FSR(GRF) 진단 그룹. */
+#define UART_RX_DIAG_TYPE_FSR  (0U)
+/** @brief UartRxHandler_GetDiag() type 인자 — IMU 진단 그룹. */
+#define UART_RX_DIAG_TYPE_IMU  (1U)
 
 /**
  *-----------------------------------------------------------

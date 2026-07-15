@@ -81,7 +81,7 @@ uint32_t XM_GetUserWorkspaceSize(void);
 
 /**
  *-----------------------------------------------------------
- * PSRAM USER AREA
+ * PSRAM USER AREA  [Rev2.0 전용]
  *-----------------------------------------------------------
  */
 
@@ -91,8 +91,10 @@ uint32_t XM_GetUserWorkspaceSize(void);
  * @note Write-Through Cacheable, 전원 차단 시 소멸.
  *       QSPI Memory-Mapped 초기화 후 사용 가능.
  *       AI/ML 모델 가중치, 대용량 Lookup Table, 장기 데이터 저장에 적합.
- * @warning PSRAM 초기화 전 접근 시 HardFault 발생.
- *          System Startup에서 자동 초기화되므로 Control_Setup() 이후 안전.
+ * @warning **PSRAM(APS6404L/QSPI)은 XM10 Rev2.0 전용 하드웨어입니다** — Rev1.1 보드에는
+ *          미탑재이므로 Rev1.1 에서 본 함수를 사용하지 마세요.
+ *          또한 PSRAM 초기화 전 접근 시 HardFault (System Startup 자동 초기화 →
+ *          Control_Setup() 이후 안전). 참고: docs/hardware/README.md (보드 리비전 비교)
  */
 void*    XM_GetUserPSRAM(void);
 

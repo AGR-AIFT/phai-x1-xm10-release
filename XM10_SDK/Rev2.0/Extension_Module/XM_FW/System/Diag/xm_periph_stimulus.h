@@ -9,7 +9,7 @@
  *  하는 stimulus generator.
  *
  *  각 stimulus 는 OD 0x7E00:N (UINT8 RW) 1바이트 SDO Write 로 ON/OFF.
- *  sensor-studio SI Toggle 패널 또는 OD Browser 에서 직접 조작.
+ *  Extension_Module_GUI_ForProduction SI Toggle 패널 또는 OD Browser 에서 직접 조작.
  *
  *  자가검증(PASS/FAIL) 과는 분리된 개념 — 자가검증 OD 는 0x2010~ 범위로
  *  추후 Phase 4 에서 별도 정의.
@@ -61,11 +61,11 @@ void XM_Stimulus_Process(void);
 /**
  * @brief USB CDC connect rising edge hook — StimulusTask resume.
  * @details xm_api_usb.c 의 `is_hw_ready && !s_prev_connected` 분기에서 호출.
- *          sensor-studio 가 DTR 토글로 연결 시 stimulus task 가 dorman 에서
+ *          Extension_Module_GUI_ForProduction 가 DTR 토글로 연결 시 stimulus task 가 dorman 에서
  *          깨어나 100ms 주기 step 실행 시작.
  *
  *          disconnect 는 별도 hook 없음 — task 가 자가 polling 으로 감지하고
- *          모든 stimulus OFF + vTaskSuspend(NULL) 로 자가 suspend.
+ *          모든 stimulus OFF + osThreadSuspend 로 자가 suspend.
  */
 void XM_Stimulus_OnUsbConnect(void);
 
@@ -73,7 +73,7 @@ void XM_Stimulus_OnUsbConnect(void);
  * @brief Connected status mirror update — UserTask 1ms 주기에서 호출.
  * @details g_xm_status_connected[] 를 USB CDC / CM / SM Hub 의 IsConnected
  *          최신 값으로 갱신. stimulus task 의 suspend 상태와 무관하게 항상
- *          동작 → sensor-studio 가 USB 연결 즉시 "● connected" 표시 가능.
+ *          동작 → Extension_Module_GUI_ForProduction 가 USB 연결 즉시 "● connected" 표시 가능.
  *
  *          stimulus task 안에서 갱신하던 v2 설계는 task suspend 시 update 가
  *          중단되는 모순이 있었음 (사용자 보고 2026-05-13: "USB stand-by 유지").
@@ -88,6 +88,11 @@ void XM_Stimulus_UpdateConnectedStatus(void);
 bool XM_Stimulus_SetEnabled(XM_Stimulus_e id, bool enabled);
 
 /**
+ * @brief 모든 stimulus 를 OFF 로 강제 복귀. 이미 OFF 여도 부작용 없어야 한다.
+ */
+void XM_Stimulus_DisableAll(void);
+
+/**
  * @brief 현재 enabled 상태 조회.
  */
 bool XM_Stimulus_IsEnabled(XM_Stimulus_e id);
@@ -98,7 +103,7 @@ bool XM_Stimulus_IsEnabled(XM_Stimulus_e id);
 const char* XM_Stimulus_GetName(XM_Stimulus_e id);
 
 /**
- * @brief stimulus 진단 카운터 — sensor-studio 가 OD 0x7E10 로 polling 가능.
+ * @brief stimulus 진단 카운터 — Extension_Module_GUI_ForProduction 가 OD 0x7E10 로 polling 가능.
  *
  *  alloc_failed         : PSRAM lazy alloc 실패 (1 시도, 0 또는 1)
  *  err_count[id]        : 각 stimulus 의 TX 실패 누적 (1ms 마다 누적)
@@ -121,7 +126,7 @@ void XM_Stimulus_GetDiag(XM_Stimulus_Diag_t* out);
  *  - g_stim_err_count[N]       : uint32, N = XM_Stimulus_e
  *
  *  xm_production_od.c 가 이 주소를 OD entry pointer 로 등록한다. 1ms tick
- *  context 에서만 write, sensor-studio polling 단일 reader → race 없음.
+ *  context 에서만 write, Extension_Module_GUI_ForProduction polling 단일 reader → race 없음.
  */
 extern volatile uint8_t  g_stim_psram_alloc_failed;
 extern volatile uint32_t g_stim_err_count[XM_STIM_COUNT_];
@@ -132,13 +137,13 @@ extern volatile uint32_t g_stim_err_count[XM_STIM_COUNT_];
  *   1 = SM 연결 중 (Imu/Emg/FesHub IsConnected)
  *   2 = TEC 누적 (≥ XM_STIM_FDCAN_TEC_AUTODISABLE)
  *   3 = Restricted Mode 진입 실패 (HAL_FDCAN_Stop/Start 실패)
- * OD 0x7E40:02 로 노출 — sensor-studio polling 으로 "starting → OFF" 시 즉시 원인 확인.
+ * OD 0x7E40:02 로 노출 — Extension_Module_GUI_ForProduction polling 으로 "starting → OFF" 시 즉시 원인 확인.
  */
 extern volatile uint8_t  g_stim_fdcan2_reject_reason;
 
 /**
  * @brief stimulus step 실행 카운터 — 1ms 마다 enable 된 slot 의 step 호출 시 ++.
- *  sensor-studio polling 으로 이전 값 대비 증가 여부를 확인하면 "실행 중"
+ *  Extension_Module_GUI_ForProduction polling 으로 이전 값 대비 증가 여부를 확인하면 "실행 중"
  *  검증 가능 (오실로 없이 GUI 만으로 동작 확인). 1Hz polling 기준 약 1000씩
  *  증가하는 것이 정상.
  */
@@ -146,7 +151,7 @@ extern volatile uint32_t g_stim_run_count[XM_STIM_COUNT_];
 
 /**
  * @brief 평시 트래픽 connected 상태 — 1ms tick 마다 외부 IsConnected API 결과를
- *  mirror. OD 0x7E30:N 으로 노출, sensor-studio GUI 가 polling 으로 "연결 OK"
+ *  mirror. OD 0x7E30:N 으로 노출, Extension_Module_GUI_ForProduction GUI 가 polling 으로 "연결 OK"
  *  / "미연결" 가시화 (stimulus 가 의미 없는 FDCAN/UART/USB row 의 status).
  *
  *  0x7E30 subindex (XM_Stimulus_e 와 의도적으로 동일 mapping):
@@ -155,7 +160,8 @@ extern volatile uint32_t g_stim_run_count[XM_STIM_COUNT_];
  *    2 = FDCAN2 (SM)                (bitmap: bit0=IMU, bit1=EMG, bit2=FES Hub)
  *                                    non-zero = connected (boolean 호환 유지)
  *                                    [2026-05-14 v2] 어떤 SM 인지 GUI 표시용
- *    6 = UART GRF (Xsens MTi)       (Xsens attach 상태 — 미구현 시 0)
+ *    6 = UART GRF (MarvelDex FSR)   (bitmap: bit0=Left, bit1=Right —
+ *                                    MarvelDex_IsOnline(ch), [2026-07-02] 구현)
  *  나머지 subindex 는 stimulus row 와 무관, 사용 안 함.
  */
 extern volatile uint8_t g_xm_status_connected[XM_STIM_COUNT_];
@@ -184,7 +190,7 @@ extern volatile uint32_t g_stim_last_data[XM_STIM_COUNT_];
  *  2 = TEC 이미 임계 (>= XM_STIM_FDCAN_TEC_AUTODISABLE) 누적 — 보드 재부팅 필요
  *  3 = Restricted Operation Mode 진입 실패 (HAL_FDCAN_Stop/Start 실패)
  *
- * sensor-studio 가 "FDCAN Ch2 ON 후 즉시 OFF" 시 이 값을 polling 해 원인 표시.
+ * Extension_Module_GUI_ForProduction 가 "FDCAN Ch2 ON 후 즉시 OFF" 시 이 값을 polling 해 원인 표시.
  */
 extern volatile uint8_t g_stim_fdcan2_reject_reason;
 

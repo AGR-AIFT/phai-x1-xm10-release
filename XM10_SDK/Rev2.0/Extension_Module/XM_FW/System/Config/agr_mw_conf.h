@@ -36,7 +36,7 @@
  * agr_dop_config.h가 이 파일을 include하므로 #ifndef 가드보다 먼저 적용.
  * - CAN-FD: IMU Hub, EMG Hub, FES Hub (PnP Master)
  * - UDP:    AM(Jetson) ↔ XM Ethernet 통신 (Rev2.0 전용)
- * - SERIAL: USB-CDC 위 sensor-studio GUI (HW 양산/SI 검증, 0x7000 Test Mode)
+ * - SERIAL: USB-CDC 위 Extension_Module_GUI_ForProduction GUI (HW 양산/SI 검증, 0x7000 Test Mode)
  */
 #define AGR_DOP_TRANSPORT_CANFD     1
 #define AGR_DOP_TRANSPORT_UDP       1

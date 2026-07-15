@@ -4,7 +4,7 @@
  * @author  HyundoKim
  * @brief   USB-CDC ↔ AGR DOP Serial 라우터 (XM Production / SI GUI)
  * @details
- *   PC sensor-studio GUI 가 USB-CDC 위로 COBS-framed DOP V3 프레임을 보내올 때,
+ *   PC Extension_Module_GUI_ForProduction GUI 가 USB-CDC 위로 COBS-framed DOP V3 프레임을 보내올 때,
  *   본 모듈이 CdcStream RX 를 AGR_Serial_ProcessRxData() 로 흘리고,
  *   응답/PDO TX 는 AGR_Serial_*Send*() 가 호출하는 tx_func 을 CdcStream_Send()
  *   로 래핑하여 송신한다.
@@ -17,7 +17,7 @@
  *
  *   FW 변경 흐름:
  *     - System_Startup() :  CdcStream_Init() 후 CdcDopRouter_Init()
- *     - core_process 2ms :  XM_USB_ProcessPeriodic() 내부에서 CdcDopRouter_Process()
+ *     - core_process 1ms :  XM_USB_ProcessPeriodic() 내부에서 CdcDopRouter_Process()
  *     - Host DTR off    :  CdcStream 콜백이 호출되어 사이드이펙트 자동 정리
  *
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
@@ -39,7 +39,7 @@ void CdcDopRouter_Init(void);
 
 /**
  * @brief CDC RX 버퍼를 비우면서 DOP 프레임 파서에 공급한다.
- *        2ms 주기로 XM_USB_ProcessPeriodic() 에서 호출.
+ *        1ms 주기로 XM_USB_ProcessPeriodic() 에서 호출.
  *
  * @return 이번 호출에서 처리한 바이트 수
  */

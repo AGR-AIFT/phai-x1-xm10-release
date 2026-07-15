@@ -18,6 +18,11 @@
  *   - uint32_t/float는 4바이트, uint8_t/bool은 1바이트
  *   - 아래 구조체는 packed 없이 설계하여 자연 정렬 유지
  *
+ * @note  XM_StartUsbDataLog/StopUsbDataLog 는 파일/metadata 생성으로 최대 ~100ms 블로킹합니다.
+ *        본 예제는 버튼 클릭 시 각 1회만 호출하며(별도 실시간 제어 없음) 시작/정지 순간의
+ *        1회 지연은 무해합니다. 실시간 제어와 로깅을 병행하는 앱은 로그 시작을 TSM 상태
+ *        진입(on_entry)으로 옮기세요 — Ex.10 / Ex.10c 참고.
+ *
  * @version 1.1
  * @date    Mar 09, 2026
  * @see     docs/api-reference/05-usb-connectivity.md

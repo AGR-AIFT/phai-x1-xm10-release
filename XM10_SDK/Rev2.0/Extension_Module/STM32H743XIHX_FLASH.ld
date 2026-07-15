@@ -204,6 +204,21 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM_D1
 
+  /* HardFault dump persistent area — warm reset (NVIC_SystemReset / lockup) 후에도 보존.
+   * NOLOAD + startup 이 _sbss~_ebss 만 0-clear 하므로 touch 되지 않음.
+   * 사용: __attribute__((section(".noinit"))) volatile HardFaultDump_t s_fault_dump;
+   * 주의: RAM_D1 은 D-Cache cacheable → handler 에서 쓴 뒤
+   *       SCB_CleanDCache_by_Addr() 호출 필수 (미호출 시 reset 후 SRAM 엔 미반영). */
+  .noinit (NOLOAD) :
+  {
+    . = ALIGN(8);
+    _snoinit = .;
+    KEEP(*(.noinit))
+    KEEP(*(.noinit*))
+    . = ALIGN(8);
+    _enoinit = .;
+  } >RAM_D1
+
   /* [???] D2, D3 ???? ???? ??? (???? .bss ????) */
   .RAM_D2_data (NOLOAD) :
   {
@@ -227,8 +242,8 @@ SECTIONS
   .lwip_sec (NOLOAD) :
   {
     . = ALIGN(4);
-    *(.RxDecripSection)   /* ETH RX DMA Descriptors (ethernetif.c) */
-    *(.TxDecripSection)   /* ETH TX DMA Descriptors (ethernetif.c) */
+    *(.RxDescripSection)  /* ETH RX DMA Descriptors (ethernetif.c) */
+    *(.TxDescripSection)  /* ETH TX DMA Descriptors (ethernetif.c) */
 
     . = ALIGN(4);
     *(.Rx_PoolSection)    /* ETH RX Buffer Pool (ethernetif.c) */

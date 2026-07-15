@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    ondevice_kinesthetic_learning.c
  * @author  HyundoKim
- * @brief   [시연용] On-Device Kinesthetic Learning — MCU 위 실시간 NN 학습
+ * @brief   [고급] On-Device Kinesthetic Learning — MCU 위 실시간 NN 학습
  * @details
  * 사람이 로봇을 잡고 움직인 궤적을 MCU에서 Tiny Neural Network로 학습한 뒤,
  * 학습된 NN 출력 + Multi-Layer 제어로 정밀하게 재현합니다.

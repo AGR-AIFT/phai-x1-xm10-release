@@ -56,6 +56,7 @@
 #include <stdbool.h>
 #include "agr_nmt.h"
 #include "agr_pnp_types.h"
+#include "agr_pnp_identify.h"   /* AGR_Identify_Expected_t (IDENTIFY 단계) */
 
 /**
  *-----------------------------------------------------------
@@ -107,6 +108,13 @@ typedef struct {
     uint8_t     node_id;                     /**< Slave의 CANopen Node ID (1~127) */
     uint32_t    heartbeat_timeout_ms;        /**< Heartbeat Timeout (ms), 권장: 3000 */
     AGR_PnP_Master_SlaveCallbacks_t callbacks; /**< 이벤트 콜백 */
+
+    /* ===== IDENTIFY (선택) =====
+     * NULL이면 IDENTIFY 검사 skip — 기존 모듈(IMU/EMG 등) 무영향.
+     * 검증/구동은 Device Driver의 AGR_Identify_Ctx_t가 담당하며, 본 필드는
+     * Slave별 기대값의 등록 위치 표준화 (Rule 승격 시 확산 경로). */
+    const AGR_Identify_Expected_t* expected_identity;
+    uint8_t                        identity_check_flags; /**< AGR_IDENTIFY_FLAG_* */
 } AGR_PnP_SlaveConfig_t;
 
 /**
@@ -119,6 +127,10 @@ typedef struct {
     uint8_t     node_id;
     uint32_t    heartbeat_timeout_ms;
     AGR_PnP_Master_SlaveCallbacks_t callbacks;
+
+    /* IDENTIFY 기대값 (등록 시 복사, NULL=skip) */
+    const AGR_Identify_Expected_t* expected_identity;
+    uint8_t                        identity_check_flags;
 
     /* NMT 상태 추적 */
     AGR_NMT_Inst_t nmt;                 /**< Slave NMT 인스턴스 */
@@ -149,6 +161,13 @@ typedef struct {
 
     /* Master Heartbeat */
     uint32_t             last_heartbeat_sent_ms; /**< 마지막 Heartbeat 전송 시간 */
+
+    /* ===== Pre-Op 직렬화 슬롯 =====
+     * 한 번에 한 Slave만 IDENTIFY+CONFIG(Pre-Op SDO 시퀀스)에 진입하도록
+     * 직렬화 (G4 등 Tx FIFO 3-slot MCU의 동시 SDO 폭주 방지).
+     * 0 = 빈 슬롯, 1~127 = 점유 중인 Slave Node ID.
+     * Acquire/Release는 PnP Task 단일 컨텍스트에서만 호출할 것. */
+    volatile uint8_t     pre_op_slot_node_id;
 
     /* 상태 */
     bool                 is_initialized; /**< 초기화 완료 여부 */
@@ -292,5 +311,26 @@ AGR_NMT_State_t AGR_PnP_Master_GetSlaveState(const AGR_PnP_Master_t* master,
  */
 AGR_PnP_SlaveInfo_t* AGR_PnP_Master_GetSlaveInfo(AGR_PnP_Master_t* master,
                                                     uint8_t slave_node_id);
+
+/**
+ *-----------------------------------------------------------
+ * PRE-OP 직렬화 슬롯 API
+ *-----------------------------------------------------------
+ * 사용 계약: Device Driver는 Pre-Op(IDENTIFY+CONFIG) 시작 전 TryAcquire,
+ * COMPLETE/리셋/Offline/MISMATCH 시 Release. 호출은 PnP Task 컨텍스트 한정
+ * (Boot-up 콜백 등 Rx 컨텍스트에서 호출 금지 — race).
+ */
+
+/**
+ * @brief Pre-Op 슬롯 획득 시도
+ * @return true=획득 (또는 이미 본인이 점유), false=타 Slave 점유 중
+ */
+bool AGR_PnP_Master_TryAcquirePreOpSlot(AGR_PnP_Master_t* master, uint8_t node_id);
+
+/** @brief Pre-Op 슬롯 반환 (본인 점유일 때만 해제) */
+void AGR_PnP_Master_ReleasePreOpSlot(AGR_PnP_Master_t* master, uint8_t node_id);
+
+/** @brief 현재 슬롯 점유 Node ID (0=빈 슬롯) */
+uint8_t AGR_PnP_Master_GetPreOpSlotOwner(const AGR_PnP_Master_t* master);
 
 #endif /* AGR_PNP_MASTER_H */

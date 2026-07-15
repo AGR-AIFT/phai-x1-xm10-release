@@ -3,6 +3,7 @@
 // #include "ioif_agrb_usb.h" // [신규] 전역 플래그를 가져오기 위해 포함
 
 #include <stdbool.h>
+#include "diag_perf.h"  /* Step A-1: ISR breakdown — plan §9.1 */
 
 extern HCD_HandleTypeDef hhcd_USB_OTG_FS;
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
@@ -89,6 +90,7 @@ void OTG_FS_EP1_IN_IRQHandler(void)
 void OTG_FS_IRQHandler(void)
 {
   /* USER CODE BEGIN OTG_FS_IRQn 0 */
+  DIAG_ISR_ENTER(DIAG_ISR_OTG_FS);
   /* [수정] 현재 활성화된 핸들러만 선택적으로 호출 */
   /* [핵심 수정] 하드웨어 레지스터(GINTSTS)의 CMOD 비트를 확인합니다.
    * CMOD == 1 : Host Mode
@@ -114,7 +116,7 @@ void OTG_FS_IRQHandler(void)
   /* [삭제] HAL_HCD_IRQHandler(&hhcd_USB_OTG_FS); */
   /* [삭제] HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS); */
   /* USER CODE BEGIN OTG_FS_IRQn 1 */
-
+  DIAG_ISR_EXIT();
   /* USER CODE END OTG_FS_IRQn 1 */
 }
  

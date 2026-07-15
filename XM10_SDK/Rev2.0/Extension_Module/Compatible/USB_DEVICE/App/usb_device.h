@@ -63,7 +63,7 @@
  * -- Insert your variables declaration here --
  */
 /* USER CODE BEGIN VARIABLES */
-
+extern USBD_HandleTypeDef hUsbDeviceFS;  /* IOIF ioif_agrb_usb.c 에서 참조 */
 /* USER CODE END VARIABLES */
 /**
   * @}

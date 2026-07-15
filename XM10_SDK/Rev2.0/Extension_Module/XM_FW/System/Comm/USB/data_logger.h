@@ -149,7 +149,7 @@ typedef struct __attribute__((packed)) {
  */
 typedef struct __attribute__((packed)) {
     uint32_t marker_header;   /**< LOG_MARKER_MAGIC | marker_type */
-    uint32_t tick_ms;         /**< 이벤트 발생 시각 (xTaskGetTickCount) */
+    uint32_t tick_ms;         /**< 이벤트 발생 시각 (osKernelGetTickCount) */
     uint16_t marker_data;     /**< context (에러 코드, 모드 ID 등) */
     uint16_t reserved;
 } LogMarkerRecord_t;          /* 12 bytes */
@@ -160,7 +160,7 @@ typedef struct __attribute__((packed)) {
  *-----------------------------------------------------------
  */
 
-extern QueueHandle_t g_logCmdQueue; // 2단계 큐 (LoggerCommand_t)
+extern osMessageQueueId_t g_logCmdQueue; // 2단계 큐 (LoggerCommand_t) — CMSIS-OS2 통일
 
 /**
  *------------------------------------------------------------

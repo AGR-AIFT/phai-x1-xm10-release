@@ -481,19 +481,6 @@ void SystemCoreClockUpdate (void)
 
 
 /**
-  * @brief  Configure the power supply before SystemInit.
-  *         Called from startup assembly before SystemInit().
-  *         CubeMX 6.13+ startup requires this function (bl ExitRun0Mode).
-  * @retval None
-  */
-void ExitRun0Mode(void)
-{
-  /* STM32H743: LDO power supply (USE_PWR_LDO_SUPPLY) */
-  PWR->CR3 = (PWR->CR3 & ~PWR_CR3_BYPASS) | PWR_CR3_LDOEN;
-  while (!(PWR->CSR1 & PWR_CSR1_ACTVOSRDY)) {}
-}
-
-/**
   * @}
   */
 

@@ -106,6 +106,17 @@ AGRBStatusDef IOIF_FDCAN_AssignInstance(IOIF_FDCANx_t* id, FDCAN_HandleTypeDef* 
 AGRBStatusDef IOIF_FDCAN_Start(IOIF_FDCANx_t id);
 
 /**
+ * @brief FDCAN Restricted Operation Mode 전환 (CCCR.ASM 비트 토글)
+ * @param id         IOIF_FDCANx_t 핸들
+ * @param restricted true=Restricted Operation Mode 진입, false=Normal Mode 복원
+ * @return AGRBStatus_OK 성공 / AGRBStatus_ERROR invalid id / AGRBStatus_FAILED Stop·Start 실패
+ * @details ASM=1 이면 외부 라인 정상 + TEC 누적·Bus-Off 차단(peer 미연결 SI 측정 안전).
+ *          Stop→CCCR.ASM→Start 시퀀스를 캡슐화. filter/notification 보존. 진단/stimulus 전용.
+ * @note 단일 컨텍스트 가정 — Stop/Start 윈도우 중 동일 인스턴스 Transmit 금지.
+ */
+AGRBStatusDef IOIF_FDCAN_SetRestrictedMode(IOIF_FDCANx_t id, bool restricted);
+
+/**
  * @brief 지정된 FDCAN 인스턴스를 통해 메시지를 전송합니다. (Thread-Safe)
  * @param id IOIF_FDCANx_t 핸들.
  * @param can_id 전송할 메시지의 CAN ID (11-bit Standard or 29-bit Extended).
@@ -117,6 +128,14 @@ AGRBStatusDef IOIF_FDCAN_Start(IOIF_FDCANx_t id);
  * @note BareMetal: ISR 우선순위 차별화로 보호 (Mutex 없음)
  */
 AGRBStatusDef IOIF_FDCAN_Transmit(IOIF_FDCANx_t id, uint32_t can_id, const uint8_t* txData, uint8_t len);
+
+/**
+ * @brief Classic-CAN(비-FD, BRS off) 프레임 전송 — IOIF_FDCAN_Transmit 과 동일 Tx Mutex.
+ * @param len 전송할 데이터 길이 (바이트, Classic CAN 최대 8).
+ * @return AGRBStatus_OK: 성공, AGRBStatus_TIMEOUT: Mutex 실패, AGRBStatus_PARAM_ERROR: len>8
+ * @note Ch1 SYNC 처럼 Classic-CAN 와이어 포맷을 유지하면서 Tx Mutex 보호가 필요한 경로용.
+ */
+AGRBStatusDef IOIF_FDCAN_TransmitClassic(IOIF_FDCANx_t id, uint32_t can_id, const uint8_t* txData, uint8_t len);
 
 /**
  * @brief Tx FIFO 여유 공간 확인 (HW 레지스터 Read-Only)
@@ -164,6 +183,7 @@ AGRBStatusDef IOIF_FDCAN_GetErrorCounters(IOIF_FDCANx_t id, uint8_t* tec, uint8_
 typedef struct {
     uint32_t bus_off_count;              /**< Bus Off 이벤트 누적 횟수 */
     uint32_t error_passive_count;        /**< Error Passive 이벤트 누적 횟수 */
+    uint32_t rx_fifo0_lost_count;        /**< RxFIFO0 overflow(RF0L) 프레임 유실 누적 (2026-07-13) */
     uint8_t  last_tec_at_error_passive;  /**< 가장 최근 Error Passive 발생 시 TEC 값 */
 } IOIF_FDCAN_ErrorStats_t;
 

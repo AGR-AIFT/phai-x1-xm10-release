@@ -62,7 +62,7 @@
 /*----- Default Value for MEM_SIZE: 1600 ---*/
 #define MEM_SIZE 32768
 /*----- Default Value for H7 devices: 0x30004000 -----*/
-#define LWIP_RAM_HEAP_POINTER 0x30006000
+#define LWIP_RAM_HEAP_POINTER 0x30030000
 /*----- Default Value for MEMP_NUM_PBUF: 16 ---*/
 #define MEMP_NUM_PBUF 32
 /*----- Default Value for MEMP_NUM_TCP_PCB_LISTEN: 8 ---*/

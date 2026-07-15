@@ -54,7 +54,7 @@ void AGR_SDO_CreateWriteReq(AGR_SDO_Msg_t* out_msg,
                             uint16_t index,
                             uint8_t subindex,
                             const void* data,
-                            uint8_t data_len);
+                            uint16_t data_len);
 
 /**
  * @brief SDO Abort 응답 생성 (CANopen 표준)
@@ -98,11 +98,12 @@ int32_t AGR_SDO_ProcessRequest(const AGR_OD_Table_t* od,
 
 /**
  * @brief SDO 메시지 인코딩 (바이트 버퍼로)
- * @param msg     SDO 메시지
- * @param out_buf 출력 버퍼 (최소 4 + data_len 바이트)
- * @return 인코딩된 바이트 수, <0=에러
+ * @param msg         SDO 메시지
+ * @param out_buf     출력 버퍼
+ * @param out_buf_len out_buf 용량 (바이트). 0x21/0x41 은 6 + data_len, 초과 시 -2 (CAN-FD data>58)
+ * @return 인코딩된 바이트 수, <0=에러 (-1=인자, -2=버퍼 초과)
  */
-int32_t AGR_SDO_Encode(const AGR_SDO_Msg_t* msg, uint8_t* out_buf);
+int32_t AGR_SDO_Encode(const AGR_SDO_Msg_t* msg, uint8_t* out_buf, uint16_t out_buf_len);
 
 /**
  * @brief SDO 메시지 디코딩 (바이트 버퍼에서)
@@ -112,7 +113,7 @@ int32_t AGR_SDO_Encode(const AGR_SDO_Msg_t* msg, uint8_t* out_buf);
  * @return 0=성공, <0=에러
  */
 int32_t AGR_SDO_Decode(const uint8_t* in_buf,
-                   uint8_t in_len,
+                   uint16_t in_len,
                    AGR_SDO_Msg_t* out_msg);
 
 #endif /* AGR_SDO_PROTOCOL_H */

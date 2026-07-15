@@ -121,6 +121,27 @@ typedef enum {
  *-----------------------------------------------------------
  */
 
+/**
+ * @brief [진단] ADC3 그룹 핀을 XM_SwitchDioToAdc() 전환 없이 읽은 이력 (핀별 bit).
+ * @details
+ *  bit0 = XM_EXT_ADC_5(DIO_1) … bit7 = XM_EXT_ADC_12(DIO_8). 0 이면 모든 ADC read 정상.
+ *
+ *  ADC3 그룹(XM_EXT_ADC_5~12)은 XM_SwitchDioToAdc() 전환 후에만 유효하다. 전환 없이
+ *  XM_AnalogRead()/XM_AnalogReadMillivolts() 를 호출하면 하위 계층이 0(유효한 0V 와
+ *  구분 불가)을 반환하는데, 그 상황을 채널 독립적으로 이 비트마스크에 기록한다.
+ *  → USB 미사용·SWD-only·임의 GUI 어디서든 STM32CubeIDE Live Expressions 로 관찰하거나
+ *    사용자 코드에서 읽어 분기할 수 있다 (특정 출력 채널에 의존하지 않음).
+ *
+ * @code
+ * // ADC read 값이 계속 0 이라 원인을 확인하고 싶을 때:
+ * if (g_xm_adc_read_before_switch != 0U) {
+ *     // 전환 없이 읽은 ADC3 핀이 있음 → 해당 핀의 XM_SwitchDioToAdc() 호출 누락 확인
+ *     // (bit0 = ADC_5 … bit7 = ADC_12)
+ * }
+ * @endcode
+ */
+extern volatile uint16_t g_xm_adc_read_before_switch;
+
 
 /**
  *------------------------------------------------------------

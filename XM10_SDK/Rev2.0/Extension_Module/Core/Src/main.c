@@ -30,6 +30,7 @@
 #include "am_drv.h"
 #include "agr_boot_core.h"
 #include "ioif_agrb_dwt.h"
+#include "hardfault_dump.h"   /* Step B 재설계 #1: `.noinit` 덤프 부팅 복원 */
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,16 +102,26 @@ const osThreadAttr_t DefaultTask_attributes = {
 };
 /* Definitions for UserTask */
 osThreadId_t UserTaskHandle;
+uint32_t UserTaskBuffer[ 8192 ] __attribute__((section(".dtcm_data"), aligned(8)));
+osStaticThreadDef_t UserTaskControlBlock;
 const osThreadAttr_t UserTask_attributes = {
   .name = "UserTask",
-  .stack_size = 8192 * 4,
+  .cb_mem = &UserTaskControlBlock,
+  .cb_size = sizeof(UserTaskControlBlock),
+  .stack_mem = &UserTaskBuffer[0],
+  .stack_size = sizeof(UserTaskBuffer),
   .priority = (osPriority_t) osPriorityRealtime6,
 };
 /* Definitions for StartupTask */
 osThreadId_t StartupTaskHandle;
+uint32_t StartupTaskBuffer[ 512 ];
+osStaticThreadDef_t StartupTaskControlBlock;
 const osThreadAttr_t StartupTask_attributes = {
   .name = "StartupTask",
-  .stack_size = 512 * 4,
+  .cb_mem = &StartupTaskControlBlock,
+  .cb_size = sizeof(StartupTaskControlBlock),
+  .stack_mem = &StartupTaskBuffer[0],
+  .stack_size = sizeof(StartupTaskBuffer),
   .priority = (osPriority_t) osPriorityRealtime7,
 };
 /* USER CODE BEGIN PV */
@@ -162,6 +173,36 @@ int __io_putchar(int ch)
     return ch;
 }
 
+typedef struct {
+    uint32_t stage;
+    uint32_t line;
+    uint32_t reset_flags;
+    uint32_t error_stage;
+    uint32_t error_count;
+    uint32_t reserved[3];
+} XmBootDiag_t;
+
+__attribute__((section(".noinit"), used))
+volatile XmBootDiag_t g_xm_boot_diag;
+
+static void XM_BootDiagClear(void)
+{
+    g_xm_boot_diag.stage = 0u;
+    g_xm_boot_diag.line = 0u;
+    g_xm_boot_diag.reset_flags = 0u;
+    g_xm_boot_diag.error_stage = 0u;
+    g_xm_boot_diag.error_count = 0u;
+    g_xm_boot_diag.reserved[0] = 0u;
+    g_xm_boot_diag.reserved[1] = 0u;
+    g_xm_boot_diag.reserved[2] = 0u;
+}
+
+#define XM_BOOT_DIAG_MARK(stage_id)        \
+    do {                                   \
+        g_xm_boot_diag.stage = (stage_id); \
+        g_xm_boot_diag.line = __LINE__;    \
+    } while (0)
+
 /* USER CODE END 0 */
 
 /**
@@ -173,6 +214,9 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
 
+  XM_BootDiagClear();
+  XM_BOOT_DIAG_MARK(0x1001u);
+
   /* Why: App runs at 0x08040400 when booted via AGR_BOOT V2 bootloader.
    *      VTOR must be set before HAL_Init() because SysTick ISR uses vector table.
    * What: [AS-IS] VTOR = 0x08000000 (default, standalone)
@@ -180,24 +224,40 @@ int main(void)
    * Impact: All interrupt vectors correctly point to App handlers.
    */
   SCB->VTOR = 0x08040400U;
+  XM_BOOT_DIAG_MARK(0x1002u);
+
+  /* RCC->RSR snapshot + RMVF clear — 직전 boot 의 reset 원인을 정확히 분리.
+   * STM32H7 RSR 은 software clear 안 하면 모든 boot 의 flag 누적. CubeProgrammer
+   * 로 g_last_rcc_rsr (.noinit) read 시 직전 reset 만 set 된 깨끗한 값 확인. */
+  {
+      extern volatile uint32_t g_last_rcc_rsr;
+      g_last_rcc_rsr = RCC->RSR;
+      g_xm_boot_diag.reset_flags = g_last_rcc_rsr;
+      __HAL_RCC_CLEAR_RESET_FLAGS();
+  }
+  XM_BOOT_DIAG_MARK(0x1003u);
 
   /* USER CODE END 1 */
 
   /* MPU Configuration--------------------------------------------------------*/
   MPU_Config();
+  XM_BOOT_DIAG_MARK(0x1101u);
 
   /* Enable the CPU Cache */
 
   /* Enable I-Cache---------------------------------------------------------*/
   SCB_EnableICache();
+  XM_BOOT_DIAG_MARK(0x1201u);
 
   /* Enable D-Cache---------------------------------------------------------*/
   SCB_EnableDCache();
+  XM_BOOT_DIAG_MARK(0x1202u);
 
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
+  XM_BOOT_DIAG_MARK(0x1301u);
 
   /* USER CODE BEGIN Init */
 
@@ -205,11 +265,19 @@ int main(void)
 
   /* Configure the system clock */
   SystemClock_Config();
+  XM_BOOT_DIAG_MARK(0x1401u);
 
   /* Configure the peripherals common clocks */
   PeriphCommonClock_Config();
+  XM_BOOT_DIAG_MARK(0x1402u);
 
   /* USER CODE BEGIN SysInit */
+
+  /* Step B 재설계 #1: `.noinit` HardFault 덤프가 있으면 내부 버퍼로 이관.
+   * `.noinit` magic 은 여기서 clear → reset loop 시 false positive 방지.
+   * 실제 파일 기록은 USB mount 완료 후 DataLogger 초기화 경로에서 처리. */
+  (void)HardFault_LoadBootDump();
+  XM_BOOT_DIAG_MARK(0x1501u);
 
   /* USER CODE END SysInit */
 
@@ -233,6 +301,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_CRC_Init();
   MX_TIM7_Init();
+  XM_BOOT_DIAG_MARK(0x2001u);
   /* USER CODE BEGIN 2 */
 
   /* DWT Cycle Counter 활성화 — PDO 수신 간격 측정용 (cm_drv.c s_dbg_pdo_*) */
@@ -244,11 +313,13 @@ int main(void)
    *         Safe no-op if Boot Config is absent or not in PENDING state.
    */
   AGR_Boot_ConfirmBoot();
+  XM_BOOT_DIAG_MARK(0x2002u);
 
   /* USER CODE END 2 */
 
   /* Init scheduler */
   osKernelInitialize();
+  XM_BOOT_DIAG_MARK(0x3001u);
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
@@ -275,19 +346,22 @@ int main(void)
 
   /* creation of StartupTask */
   StartupTaskHandle = osThreadNew(StartStartupTask, NULL, &StartupTask_attributes);
+  XM_BOOT_DIAG_MARK(0x4001u);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   
   /* [CRITICAL] UserTask Priority Override
-   * - IOC 설정값(Realtime4)을 Realtime6으로 상향
-   * - FDCAN RxTask(Realtime7)보다 낮음: PDO 도착 즉시 선점 처리 → stale data 방지
+   * - IOC 설정값(Realtime4)을 Realtime5(53)로 상향
+   * - [2026-07-14] 55(FDCAN RxTask) > 54(UART RxTask) > 53(UserTask) 재배치.
+   *   두 RxTask 모두 UserTask 위 → PDO/GRF 도착 즉시 선점 처리 → stale data 방지 유지.
    * - RxTask 선점 ~10-50µs/회 → UserTask 지터 무시 가능
    */
-  osThreadSetPriority(UserTaskHandle, osPriorityRealtime6);
+  osThreadSetPriority(UserTaskHandle, osPriorityRealtime5);
   
   osThreadSuspend(DefaultTaskHandle);
   osThreadSuspend(UserTaskHandle);
+  XM_BOOT_DIAG_MARK(0x4002u);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -295,6 +369,7 @@ int main(void)
   /* USER CODE END RTOS_EVENTS */
 
   /* Start scheduler */
+  XM_BOOT_DIAG_MARK(0x4FFFu);
   osKernelStart();
 
   /* We should never get here as control is now taken by the scheduler */

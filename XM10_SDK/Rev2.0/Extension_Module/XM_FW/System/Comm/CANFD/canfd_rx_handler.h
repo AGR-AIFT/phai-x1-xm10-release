@@ -83,17 +83,4 @@ typedef enum {
  */
 FDCANRxHandler_Status_t FDCANRxHandler_Init(void);
 
-#if defined(IOIF_FDCAN_ISR_DIRECT_ENABLE)
-/**
- * @brief [V5.0] TIM7 SW IRQ에서 호출 — NonRealtimeTask 깨우기
- * @details
- * FDCAN ISR(NVIC 4)에서 FreeRTOS API 호출 불가하므로,
- * NVIC_SetPendingIRQ(TIM7_IRQn)으로 NVIC 6 SW IRQ를 트리거한다.
- * TIM7_IRQHandler에서 이 함수를 호출하여 xSemaphoreGiveFromISR 수행.
- *
- * @note stm32h7xx_it.c의 TIM7_IRQHandler(USER CODE)에서 호출
- */
-void FDCANRxHandler_SwIrqNotify(void);
-#endif
-
 #endif /* CANFD_RX_HANDLER_H_ */
