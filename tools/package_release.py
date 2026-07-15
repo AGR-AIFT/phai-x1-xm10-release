@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import zipfile
@@ -18,15 +19,20 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-# robocopy /XD 와 동일 — staging 시 제외할 디렉토리
+# robocopy /XD 와 동일 — staging 시 제외할 디렉토리 (git-추적 스테이징의 2차 안전망)
 EXCLUDE_DIRS = {
     "Debug", "Release", "build", "build_cmake", "build_check",
     "build_rev1.1", "build_rev2.0", ".settings",
 }
 
 # ZIP root 의 Extension_Module/ 에 직접 들어갈 top-level 자산 (레포 루트 기준)
+# 주의: 루트 "examples"(소문자) 는 의도적으로 제외 — SDK 가 이미 Rev 버전정합
+# Examples/(대문자, Rev1.1=47/Rev2.0=50) 를 포함하며, Windows 스테이징에서
+# 대소문자 병합으로 공개판(Rev2.0 성향 superset)이 SDK 판을 덮어쓰는 사고가
+# 있었음 (Ex.37 Rev2.0 Command Vector 판이 Rev1.1 ZIP 에 혼입). 공개 examples
+# 는 GitHub 레포 열람용.
 TOP_LEVEL_ASSETS = [
-    "docs", "examples", ".claude",
+    "docs", ".claude",
     "AGENTS.md", "README.md", "CHANGELOG.md", "LICENSE",
 ]
 
@@ -42,19 +48,34 @@ REQUIRED = [
 ]
 
 
+def git_tracked_files(prefix: Path) -> list[Path]:
+    """prefix 하위의 git-추적 파일 목록 (레포 절대경로).
+
+    디스크 전체가 아니라 git 추적 파일만 스테이징 — .gitignore 화이트리스트
+    (예: .claude/ 는 공개 스킬 2종만 추적)를 그대로 존중하므로 미추적 개인
+    설정/캐시(.cache, settings.local.json, hooks 등)가 ZIP 에 쓸려 들어가는
+    것을 원천 차단한다.
+    """
+    out = subprocess.run(
+        ["git", "ls-files", "-z", "--", str(prefix.relative_to(REPO_ROOT))],
+        cwd=REPO_ROOT, capture_output=True, check=True,
+    ).stdout
+    return [REPO_ROOT / p.decode("utf-8") for p in out.split(b"\0") if p]
+
+
 def copy_tree_filtered(src: Path, dst: Path) -> int:
-    """src → dst 복사, EXCLUDE_DIRS 제외. 복사한 파일 수 반환."""
+    """src 하위 git-추적 파일을 dst 로 복사, EXCLUDE_DIRS 는 2차 안전망. 복사 수 반환."""
     count = 0
-    for root, dirs, files in os.walk(src):
-        # in-place modify dirs 로 os.walk 가 제외 디렉토리 descend 안 함
-        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
-        rel = Path(root).relative_to(src)
-        for f in files:
-            src_f = Path(root) / f
-            dst_f = dst / rel / f
-            dst_f.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(src_f, dst_f)
-            count += 1
+    for src_f in git_tracked_files(src):
+        rel = src_f.relative_to(src)
+        if any(part in EXCLUDE_DIRS for part in rel.parts):
+            continue
+        if not src_f.is_file():  # 추적됐지만 워킹트리에서 삭제된 경우 방어
+            continue
+        dst_f = dst / rel
+        dst_f.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src_f, dst_f)
+        count += 1
     return count
 
 
@@ -101,16 +122,26 @@ def package_one_rev(rev_tag: str, version: str, out_dir: Path) -> None:
         print(f"        copied {n} files")
 
         # 2) 학습 자산 — 레포 루트의 docs, examples, .claude, *.md → ZIP root 의 Extension_Module/
+        #    (git-추적 파일만 — .claude 는 공개 스킬 화이트리스트만 추적되므로 그대로 반영됨)
         print("  (2/3) docs + examples + .claude + AGENTS.md + README.md + CHANGELOG.md + LICENSE")
         for asset in TOP_LEVEL_ASSETS:
             src = REPO_ROOT / asset
-            if src.is_dir():
-                shutil.copytree(src, stage / asset, dirs_exist_ok=True,
-                                ignore=shutil.ignore_patterns(*EXCLUDE_DIRS))
-            elif src.is_file():
-                shutil.copy2(src, stage / asset)
-            else:
+            if not src.exists():
                 print(f"    (skip — not found: {asset})")
+                continue
+            n_asset = 0
+            for src_f in git_tracked_files(src):
+                rel = src_f.relative_to(REPO_ROOT)
+                if any(part in EXCLUDE_DIRS for part in rel.parts):
+                    continue
+                if not src_f.is_file():
+                    continue
+                dst_f = stage / rel
+                dst_f.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(src_f, dst_f)
+                n_asset += 1
+            if n_asset == 0:
+                print(f"    (warn — 0 tracked files: {asset})")
 
         # 3) ZIP 생성
         print(f"  (3/3) Compress → {zip_path}")
