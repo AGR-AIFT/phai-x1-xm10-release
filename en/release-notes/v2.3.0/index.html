@@ -1621,10 +1621,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sdk-alignment--identical-behavior-to-the-development-source" class="md-nav__link">
+  <a href="#sdk-refresh--library-system-code-and-examples-on-one-version" class="md-nav__link">
     <span class="md-ellipsis">
       
-        SDK Alignment — Identical Behavior to the Development Source
+        SDK Refresh — Library, System Code, and Examples on One Version
       
     </span>
   </a>
@@ -1643,10 +1643,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#versionh-aligned-to-230" class="md-nav__link">
+  <a href="#versionh-corrected-to-230" class="md-nav__link">
     <span class="md-ellipsis">
       
-        version.h Aligned to 2.3.0
+        version.h Corrected to 2.3.0
       
     </span>
   </a>
@@ -1701,13 +1701,13 @@
 </blockquote>
 <hr />
 <h2 id="at-a-glance">At a Glance<a class="headerlink" href="#at-a-glance" title="Permanent link">&para;</a></h2>
-<p><strong>This is a minor release that adds two sensor-hub example programs and re-aligns the firmware and examples inside the SDK to match the development source exactly.</strong></p>
+<p><strong>This is a minor release that adds two sensor-hub example programs and brings the firmware, system code, and examples inside the SDK fully up to date with each other.</strong></p>
 <ul>
 <li>Added <strong>Ex.41 IMU Hub Dashboard</strong> and <strong>Ex.42 EMG Hub Biofeedback</strong> (both <strong>Rev 2.0-only</strong>)</li>
-<li>Re-synced the SDK's firmware (<code>libXM_Lib.a</code>) and system code (<code>Core/</code>) with the development source — updating the older state that had lingered only in the SDK. A build from the released SDK now <strong>behaves identically</strong> to the development firmware.</li>
+<li>Updated the SDK's firmware library (<code>libXM_Lib.a</code>) and system code (<code>Core/</code>) to the latest version — fixing places where some system code had fallen behind the library. Every file in an SDK build is now on the same version.</li>
 <li>Fixed runtime behavior in control/logging examples (Ex.12 / 17 / 28 control, Ex.10 / 10c logging, etc.)</li>
-<li>Corrected <code>version.h</code> to the actual release version (<strong>2.3.0</strong>) — closing the gap where it had been reporting 2.2.0 since the v2.2.1 / v2.2.2 patches</li>
-<li>Build sweep verified: Rev 2.0 SDK 50 / 50 · Rev 1.1 SDK 47 / 47 clean build</li>
+<li>Corrected <code>version.h</code> to the actual release version (<strong>2.3.0</strong>) — the version number had not been updated in the v2.2.1 / v2.2.2 patches, so the firmware kept reporting 2.2.0</li>
+<li>Verified every example builds: Rev 2.0 SDK 50 / 50 · Rev 1.1 SDK 47 / 47 with zero errors</li>
 </ul>
 <p><strong>Existing user code continues to work as-is.</strong> No changes to user code (<code>Control_Setup</code> / <code>Control_Loop</code>) or public API signatures.</p>
 <hr />
@@ -1803,13 +1803,13 @@
 <p>Sensor calibration and settings for the IMU / EMG Hub modules can also be adjusted from the dedicated diagnostic GUI (<strong>PhEEL Studio</strong>, coming soon). Both example READMEs include a placeholder for the companion screen.</p>
 </blockquote>
 <hr />
-<h2 id="sdk-alignment--identical-behavior-to-the-development-source">SDK Alignment — Identical Behavior to the Development Source<a class="headerlink" href="#sdk-alignment--identical-behavior-to-the-development-source" title="Permanent link">&para;</a></h2>
-<p>The SDK ships the development firmware wrapped as a static library (<code>libXM_Lib.a</code>). This release re-aligns the SDK's library, system code (<code>Core/</code>), and headers with the latest development source.</p>
+<h2 id="sdk-refresh--library-system-code-and-examples-on-one-version">SDK Refresh — Library, System Code, and Examples on One Version<a class="headerlink" href="#sdk-refresh--library-system-code-and-examples-on-one-version" title="Permanent link">&para;</a></h2>
+<p>The SDK ships the XM10 firmware core as a static library (<code>libXM_Lib.a</code>). This release brings the library, system code (<code>Core/</code>), headers, and examples onto the same v2.3.0 firmware.</p>
 <ul>
-<li><strong>Firmware (<code>libXM_Lib.a</code>) rebuilt</strong> — verified byte-identical to the development source.</li>
-<li><strong>System code (<code>Core/</code>) aligned</strong> — interrupt priorities / fault handling / RTOS configuration that had lingered in an older state only inside the SDK are now matched to the latest firmware.</li>
-<li><strong>Example sources aligned</strong> — example <code>.c</code> files re-synced with the development source (Rev 2.0 SDK 50 · Rev 1.1 SDK 47).</li>
-<li><strong>Final verification</strong> — the Rev 2.0 / Rev 1.1 SDKs each build cleanly with 0 errors, confirming the released SDK builds and behaves identically to the development firmware.</li>
+<li><strong>Firmware library (<code>libXM_Lib.a</code>) updated</strong> — rebuilt from the v2.3.0 firmware.</li>
+<li><strong>System code (<code>Core/</code>) updated</strong> — interrupt priorities / fault handling / RTOS configuration that had fallen behind are now matched to the library.</li>
+<li><strong>Example sources updated</strong> — example <code>.c</code> files refreshed to the latest content (Rev 2.0 SDK 50 · Rev 1.1 SDK 47).</li>
+<li><strong>Final check</strong> — each SDK (Rev 2.0 / Rev 1.1) was rebuilt from scratch with 0 errors, verifying that no header, library, or system-code mismatch remains.</li>
 </ul>
 <hr />
 <h2 id="example-runtime-fixes">Example Runtime Fixes<a class="headerlink" href="#example-runtime-fixes" title="Permanent link">&para;</a></h2>
@@ -1817,12 +1817,12 @@
 <li><strong>Ex.28 (Admittance)</strong> — Fixed ordering where admittance torque was applied before the left/right computation completed (now computed per side, then applied).</li>
 <li><strong>Ex.17 (FSM Gait Intent)</strong> — Corrected the body-mass parameter unit (g) and the level scale factor.</li>
 <li><strong>Ex.12 (Active Assist)</strong> — Corrected the anchor-angle scale (×10).</li>
-<li><strong>Ex.10 / 10c (MSC Log)</strong> — Aligned log start to the on_entry point + safe fallback on start failure.</li>
+<li><strong>Ex.10 / 10c (MSC Log)</strong> — Log start now happens at state entry (on_entry) + safe fallback on start failure.</li>
 <li>Unified entry-point comments (<code>Control_Setup</code> / <code>Control_Loop</code>) and difficulty markers.</li>
 </ul>
 <hr />
-<h2 id="versionh-aligned-to-230"><code>version.h</code> Aligned to 2.3.0<a class="headerlink" href="#versionh-aligned-to-230" title="Permanent link">&para;</a></h2>
-<p><code>version.h</code> was not bumped during the v2.2.1 / v2.2.2 patches, so the firmware had been reporting version <strong>2.2.0</strong>. This release corrects it to <strong>2.3.0.0</strong> (Rev 1.1 / Rev 2.0 alike).</p>
+<h2 id="versionh-corrected-to-230"><code>version.h</code> Corrected to 2.3.0<a class="headerlink" href="#versionh-corrected-to-230" title="Permanent link">&para;</a></h2>
+<p><code>version.h</code> was not updated during the v2.2.1 / v2.2.2 patches, so the firmware had been reporting version <strong>2.2.0</strong>. This release corrects it to <strong>2.3.0.0</strong> (Rev 1.1 / Rev 2.0 alike).</p>
 <hr />
 <h2 id="compatibility">Compatibility<a class="headerlink" href="#compatibility" title="Permanent link">&para;</a></h2>
 <table>

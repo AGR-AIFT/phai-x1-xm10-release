@@ -1621,10 +1621,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sdk-정합--개발-원본과-동작-동일" class="md-nav__link">
+  <a href="#sdk-최신화--라이브러리시스템-코드예제-버전-일치" class="md-nav__link">
     <span class="md-ellipsis">
       
-        SDK 정합 — 개발 원본과 "동작 동일"
+        SDK 최신화 — 라이브러리·시스템 코드·예제 버전 일치
       
     </span>
   </a>
@@ -1632,10 +1632,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#예제-실동작-정리" class="md-nav__link">
+  <a href="#예제-동작-수정" class="md-nav__link">
     <span class="md-ellipsis">
       
-        예제 실동작 정리
+        예제 동작 수정
       
     </span>
   </a>
@@ -1643,10 +1643,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#versionh-230-정합" class="md-nav__link">
+  <a href="#versionh-버전-표기-정정" class="md-nav__link">
     <span class="md-ellipsis">
       
-        version.h 2.3.0 정합
+        version.h 버전 표기 정정
       
     </span>
   </a>
@@ -1701,13 +1701,13 @@
 </blockquote>
 <hr />
 <h2 id="한눈에-보기">한눈에 보기<a class="headerlink" href="#한눈에-보기" title="Permanent link">&para;</a></h2>
-<p><strong>센서 허브 연동 예제 2 종을 새로 추가하고, SDK 안의 펌웨어·예제를 개발 원본과 완전히 같은 상태로 다시 맞춘 마이너 릴리즈</strong> 입니다.</p>
+<p><strong>센서 허브 연동 예제 2 종을 새로 추가하고, SDK 안의 펌웨어·시스템 코드·예제를 모두 최신 버전으로 다시 맞춘 마이너 릴리즈</strong> 입니다.</p>
 <ul>
 <li><strong>Ex.41 IMU Hub Dashboard</strong> · <strong>Ex.42 EMG Hub Biofeedback</strong> 추가 (둘 다 <strong>Rev 2.0 전용</strong>)</li>
-<li>SDK 안의 펌웨어 (<code>libXM_Lib.a</code>) 와 시스템 코드 (<code>Core/</code>) 를 개발 원본과 다시 정합 — 그동안 SDK 에만 남아 있던 예전 상태를 최신 펌웨어로 갱신했습니다. 릴리즈 SDK 로 빌드한 결과가 개발 펌웨어와 <strong>동일하게 동작</strong>하도록 맞췄습니다.</li>
-<li>제어·로깅 예제의 실동작 버그 정리 (Ex.12 / 17 / 28 제어, Ex.10 / 10c 로깅 등)</li>
-<li><code>version.h</code> 를 실제 릴리즈 버전 (<strong>2.3.0</strong>) 으로 정정 — v2.2.1 / v2.2.2 패치 때 누락돼 2.2.0 으로 보고되던 갭 해소</li>
-<li>예제 build sweep: Rev 2.0 SDK 50 / 50 · Rev 1.1 SDK 47 / 47 클린빌드 통과 확인</li>
+<li>SDK 안의 펌웨어 라이브러리 (<code>libXM_Lib.a</code>) 와 시스템 코드 (<code>Core/</code>) 를 최신 상태로 갱신 — 일부 시스템 코드가 이전 버전 그대로 남아 라이브러리와 어긋날 수 있던 부분을 바로잡았습니다. 이제 SDK 로 빌드한 펌웨어는 어느 파일 하나 버전이 어긋나지 않습니다.</li>
+<li>제어·로깅 예제의 동작 버그 수정 (Ex.12 / 17 / 28 제어, Ex.10 / 10c 로깅 등)</li>
+<li><code>version.h</code> 를 실제 릴리즈 버전 (<strong>2.3.0</strong>) 으로 정정 — v2.2.1 / v2.2.2 때 버전 숫자가 갱신되지 않아 펌웨어가 2.2.0 으로 표시되던 문제를 바로잡았습니다</li>
+<li>전체 예제 빌드 확인: Rev 2.0 SDK 50 / 50 · Rev 1.1 SDK 47 / 47 오류 없이 통과</li>
 </ul>
 <p><strong>기존 사용자 코드는 그대로 동작합니다.</strong> 사용자 코드 (<code>Control_Setup</code> / <code>Control_Loop</code>) 와 공개 API 시그니처 변경 없음.</p>
 <hr />
@@ -1794,7 +1794,7 @@
 </table>
 <hr />
 <h2 id="새-예제--센서-허브-연동-2-종-rev-20-전용">새 예제 — 센서 허브 연동 2 종 (Rev 2.0 전용)<a class="headerlink" href="#새-예제--센서-허브-연동-2-종-rev-20-전용" title="Permanent link">&para;</a></h2>
-<p>XM10 Rev 2.0 은 FDCAN2 로 IMU Hub / EMG Hub 모듈과 연결됩니다. 두 예제는 허브를 <strong>꽂고 XM10 에 연결만 하면</strong> 데이터가 자동으로 들어온다는 점 (plug-and-play) 을 보여주고, 그 데이터를 on-device 로 가공·피드백하는 흐름을 담았습니다.</p>
+<p>XM10 Rev 2.0 은 FDCAN2 로 IMU Hub / EMG Hub 모듈과 연결됩니다. 두 예제는 허브를 <strong>꽂고 XM10 에 연결만 하면</strong> 데이터가 자동으로 들어온다는 점 (plug-and-play) 을 보여주고, 그 데이터를 보드 위에서 바로 가공해 피드백까지 주는 흐름을 담았습니다.</p>
 <ul>
 <li><strong>Ex.41 IMU Hub Dashboard</strong> ⭐⭐⭐ — IMU Hub Module 최대 6 채널의 방위 (쿼터니언) 를 받아 오일러 각 (roll / pitch / yaw) 으로 변환합니다. 연결 자동감지 (connected mask) + LED 표시 + PhAI Studio 18 채널 스트리밍. 관찰형 예제라 모터를 쓰지 않아 안전하게 자세 데이터를 다뤄볼 수 있습니다.</li>
 <li><strong>Ex.42 EMG Hub Biofeedback</strong> ⭐⭐⭐ — EMG Hub Module 의 근활성도 (envelope / MVC%) 를 받아 MVC 정규화 캘리브레이션 (BTN) 을 수행하고, 근활성도에 비례해 LED / PhAI Studio 로 바이오피드백을 줍니다. 모터 없음.</li>
@@ -1803,25 +1803,25 @@
 <p>IMU / EMG Hub 모듈의 센서 캘리브레이션·설정은 자체 진단 GUI (<strong>PhEEL Studio</strong>, 공개 예정) 로도 조정할 수 있습니다. 두 예제 README 에 연동 화면 자리를 마련해 두었습니다.</p>
 </blockquote>
 <hr />
-<h2 id="sdk-정합--개발-원본과-동작-동일">SDK 정합 — 개발 원본과 "동작 동일"<a class="headerlink" href="#sdk-정합--개발-원본과-동작-동일" title="Permanent link">&para;</a></h2>
-<p>SDK 는 개발용 펌웨어를 정적 라이브러리 (<code>libXM_Lib.a</code>) 로 감싸 배포합니다. 이번 릴리즈에서 SDK 안의 라이브러리·시스템 코드 (<code>Core/</code>) · 헤더를 개발 원본의 최신 상태로 다시 맞췄습니다.</p>
+<h2 id="sdk-최신화--라이브러리시스템-코드예제-버전-일치">SDK 최신화 — 라이브러리·시스템 코드·예제 버전 일치<a class="headerlink" href="#sdk-최신화--라이브러리시스템-코드예제-버전-일치" title="Permanent link">&para;</a></h2>
+<p>SDK 는 XM10 펌웨어 코어를 정적 라이브러리 (<code>libXM_Lib.a</code>) 로 담아 배포합니다. 이번 릴리즈에서 라이브러리·시스템 코드 (<code>Core/</code>) · 헤더·예제가 모두 같은 v2.3.0 펌웨어를 가리키도록 다시 맞췄습니다.</p>
 <ul>
-<li><strong>펌웨어 (<code>libXM_Lib.a</code>) 재빌드</strong> — 개발 원본과 바이트 단위로 동일함을 확인.</li>
-<li><strong>시스템 코드 (<code>Core/</code>) 정합</strong> — 그동안 SDK 에만 예전 상태로 남아 있던 인터럽트 우선순위 / fault 처리 / RTOS 설정을 최신 펌웨어와 일치시켰습니다.</li>
-<li><strong>예제 소스 정합</strong> — 개발 원본과 예제 <code>.c</code> 를 다시 동기화 (Rev 2.0 SDK 50 종 · Rev 1.1 SDK 47 종).</li>
-<li><strong>최종 검증</strong> — Rev 2.0 / Rev 1.1 SDK 각각 클린빌드 0 error 로, 릴리즈 SDK 가 개발 펌웨어와 동일하게 빌드·동작함을 확인했습니다.</li>
+<li><strong>펌웨어 라이브러리 (<code>libXM_Lib.a</code>) 갱신</strong> — v2.3.0 펌웨어로 새로 빌드했습니다.</li>
+<li><strong>시스템 코드 (<code>Core/</code>) 갱신</strong> — 이전 버전 그대로 남아 있던 인터럽트 우선순위 / fault 처리 / RTOS 설정을 라이브러리와 일치시켰습니다.</li>
+<li><strong>예제 소스 갱신</strong> — 예제 <code>.c</code> 를 최신 내용으로 업데이트했습니다 (Rev 2.0 SDK 50 종 · Rev 1.1 SDK 47 종).</li>
+<li><strong>최종 확인</strong> — Rev 2.0 / Rev 1.1 SDK 를 각각 처음부터 다시 빌드해 오류 0 을 확인했습니다. 헤더·라이브러리·시스템 코드가 서로 어긋나 생기는 빌드 문제가 없는지 전체를 함께 검증했습니다.</li>
 </ul>
 <hr />
-<h2 id="예제-실동작-정리">예제 실동작 정리<a class="headerlink" href="#예제-실동작-정리" title="Permanent link">&para;</a></h2>
+<h2 id="예제-동작-수정">예제 동작 수정<a class="headerlink" href="#예제-동작-수정" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Ex.28 (Admittance)</strong> — 어드미턴스 토크가 좌/우 계산 완료 전에 인가되던 순서 정정 (좌우 각각 계산 후 인가).</li>
 <li><strong>Ex.17 (FSM Gait Intent)</strong> — 체중 파라미터 단위 (g) 및 레벨 스케일 계수 정정.</li>
 <li><strong>Ex.12 (Active Assist)</strong> — 앵커 각도 스케일 (×10) 정정.</li>
-<li><strong>Ex.10 / 10c (MSC Log)</strong> — 로그 시작을 진입 (on_entry) 시점으로 정합 + 시작 실패 시 안전 복귀.</li>
+<li><strong>Ex.10 / 10c (MSC Log)</strong> — 로그 시작 시점을 상태 진입 (on_entry) 으로 통일 + 시작 실패 시 안전 복귀.</li>
 <li>진입점 주석 (<code>Control_Setup</code> / <code>Control_Loop</code>) · 난이도 표기 일관화.</li>
 </ul>
 <hr />
-<h2 id="versionh-230-정합"><code>version.h</code> 2.3.0 정합<a class="headerlink" href="#versionh-230-정합" title="Permanent link">&para;</a></h2>
+<h2 id="versionh-버전-표기-정정"><code>version.h</code> 버전 표기 정정<a class="headerlink" href="#versionh-버전-표기-정정" title="Permanent link">&para;</a></h2>
 <p><code>version.h</code> 가 v2.2.1 / v2.2.2 패치 때 bump 되지 않아 그동안 펌웨어 버전이 <strong>2.2.0</strong> 으로 보고되고 있었습니다. 이번 릴리즈에서 실제 릴리즈 버전에 맞춰 <strong>2.3.0.0</strong> 으로 정정했습니다 (Rev 1.1 / Rev 2.0 공통).</p>
 <hr />
 <h2 id="호환성-안내">호환성 안내<a class="headerlink" href="#호환성-안내" title="Permanent link">&para;</a></h2>
