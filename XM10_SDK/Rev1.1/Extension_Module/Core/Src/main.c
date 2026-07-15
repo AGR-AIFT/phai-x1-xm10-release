@@ -26,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include "agr_boot_core.h"
 #include "ioif_agrb_dwt.h"
+#include "hardfault_dump.h"   /* .noinit HardFault 덤프 부팅 복원 */
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -172,6 +173,11 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
 
+  /* `.noinit` HardFault 덤프가 있으면 내부 버퍼로 이관.
+   * `.noinit` magic 은 여기서 clear → reset loop 시 false positive 방지.
+   * 실제 파일 기록은 USB mount 완료 후 DataLogger 초기화 경로에서 처리. */
+  (void)HardFault_LoadBootDump();
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -236,11 +242,12 @@ int main(void)
   /* add threads, ... */
   
   /* [CRITICAL] UserTask Priority Override
-   * - IOC 설정값(Realtime4)을 Realtime6으로 상향
-   * - FDCAN RxTask(Realtime7)보다 낮음: PDO 도착 즉시 선점 처리 → stale data 방지
+   * - IOC 설정값(Realtime4)을 Realtime5(53)로 상향
+   * - [2026-07-14] 55(FDCAN RxTask) > 54(UART RxTask) > 53(UserTask) 재배치.
+   *   두 RxTask 모두 UserTask 위 → PDO/GRF 도착 즉시 선점 처리 → stale data 방지 유지.
    * - RxTask 선점 ~10-50µs/회 → UserTask 지터 무시 가능
    */
-  osThreadSetPriority(UserTaskHandle, osPriorityRealtime6);
+  osThreadSetPriority(UserTaskHandle, osPriorityRealtime5);
   
   osThreadSuspend(DefaultTaskHandle);
   osThreadSuspend(UserTaskHandle);

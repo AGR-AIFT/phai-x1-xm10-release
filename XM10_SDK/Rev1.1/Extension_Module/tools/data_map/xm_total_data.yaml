@@ -17,6 +17,17 @@
 #   - "divide":          physical = raw / scale            (IMU Hub)
 #   - "none":            physical = raw                    (기본값)
 #
+# Version: 2.6
+# Date:    2026-05-13
+# Changes:
+#   - Reserved_HMMG (28B) → User_Custom (28B): in-packet typed user data slot
+#     (float[4] + int16[4] + uint16 flags + uint8[2]) populated from User_Loop()
+#     via xm_api_user_custom.h setters. Automatically included in 1kHz stream
+#     AND OPFS recording. Replaces 0xF0~0xFE out-of-band path for users whose
+#     post-processed data must reach the recording file.
+#     (Synced from Develop_Rev2.0)
+#   Total packet: 365B (변경 없음)
+#
 # Version: 2.5
 # Date:    2026-04-01
 # Changes:
@@ -90,7 +101,7 @@
 #   - H10 PDO: line-by-line copy (memcpy 제거, 구조체 레이아웃 의존성 제거)
 # =============================================================================
 
-version: "2.5"
+version: "2.6"
 packet_name: XM_TotalDataPacket
 module_id: 0x20
 endian: little
@@ -331,12 +342,30 @@ groups:
       - { name: fdcan2_tx_fifo_free,   type: uint8, unit: count, desc: "Tx FIFO free level (TXFQS.TFFL, max 32)" }
 
   # ===========================================================================
-  # 16. Reserved_HMMG (28B)
+  # 16. User_Custom (28B) — In-packet user algorithm data slot
   # ===========================================================================
-  - name: Reserved_HMMG
-    reserved: true
-    size: 28
-    desc: "Future HMMG module"
+  #
+  # Replaces former Reserved_HMMG (28B). Lives inside the 365B Total Data
+  # Packet (Module ID 0x20) so user-written values are automatically streamed
+  # and recorded by PhAI Studio with zero extra plumbing.
+  #
+  # Layout (natural alignment, total 28B):
+  #   offset 337  user_f[4]      float32  16B  filtered/derived signals
+  #   offset 353  user_i16[4]    int16     8B  raw counters / ADC
+  #   offset 361  user_flags     uint16    2B  16 bit-flags (FSM/debug state)
+  #   offset 363  user_u8[2]     uint8     2B  small enums / state bytes
+  #
+  # Writers: XM_UserCustom_SetFloat / SetI16 / SetFlag / SetU8 (xm_api_user_custom.h)
+  # Default labels (no JSON meta): user_f[N], user_i16[N], user_flags, user_u8[N].
+  # Optional naming via XM_SetUsbCustomMeta(0xE0, json) — see PhAI Studio handoff.
+  #
+  - name: User_Custom
+    desc: "User-defined slots populated from User_Loop() — streamed and recorded automatically"
+    fields:
+      - { name: user_f,     type: float32, count: 4, unit: user,  desc: "Float slots — filtered/derived signals (e.g. EMG envelope)" }
+      - { name: user_i16,   type: int16,   count: 4, unit: user,  desc: "Int16 slots — raw counters / ADC values" }
+      - { name: user_flags, type: uint16,            unit: flags, desc: "16 bit-flags for FSM/debug state" }
+      - { name: user_u8,    type: uint8,   count: 2, unit: user,  desc: "Small enum/state bytes" }
 
 # =============================================================================
 # Complex Types — 복합 타입 정의

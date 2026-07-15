@@ -53,6 +53,7 @@
 #include "agr_cobs.h"
 #include "Core/agr_od.h"
 #include "Core/agr_sdo_protocol.h"
+#include "Core/agr_sdo_master.h"
 #include "Core/agr_pdo_engine.h"
 
 /**
@@ -74,10 +75,12 @@ typedef enum {
     AGR_SERIAL_MSG_HEARTBEAT    = 0x0B,  /**< Heartbeat (CAN 0x700) */
     AGR_SERIAL_MSG_SYNC         = 0x0C,  /**< SYNC (CAN 0x080) */
     AGR_SERIAL_MSG_EMCY         = 0x0D,  /**< Emergency (CAN 0x080+Node) */
+    AGR_SERIAL_MSG_NMT          = 0x0E,  /**< Serial PnP NMT command */
 } AGR_Serial_MsgType_e;
 
 /** @brief Serial 헤더 크기 (MsgType + NodeID + SeqID) */
 #define AGR_SERIAL_HEADER_SIZE      4
+#define AGR_SERIAL_NMT_TARGET_ALL   0U
 
 /** @brief Serial 최대 페이로드 크기 (COBS 디코딩 후, 헤더 제외) */
 #define AGR_SERIAL_MAX_PAYLOAD      (AGR_COBS_MAX_FRAME_SIZE - AGR_SERIAL_HEADER_SIZE)
@@ -96,6 +99,32 @@ typedef enum {
 typedef int32_t (*AGR_Serial_TxFunc_t)(const uint8_t* data, uint32_t len);
 
 /**
+ * @brief   Serial frame TX function with message type metadata.
+ * @details The COBS encoded bytes are identical to AGR_Serial_TxFunc_t. The
+ *          message type lets RTOS transports schedule TPDO/SDO/heartbeat frames
+ *          without decoding the already-encoded COBS frame.
+ */
+typedef int32_t (*AGR_Serial_TypedTxFunc_t)(AGR_Serial_MsgType_e msg_type,
+                                            const uint8_t* data,
+                                            uint32_t len,
+                                            void* user_ctx);
+
+typedef void (*AGR_Serial_HeartbeatCb_t)(uint8_t source_node_id,
+                                         uint8_t state,
+                                         void* user_ctx);
+
+typedef void (*AGR_Serial_NmtCb_t)(uint8_t source_node_id,
+                                   uint8_t command,
+                                   uint8_t target_node_id,
+                                   void* user_ctx);
+
+typedef struct {
+    AGR_Serial_HeartbeatCb_t on_heartbeat;
+    AGR_Serial_NmtCb_t       on_nmt;
+    void*                    user_ctx;
+} AGR_Serial_PnPCallbacks_t;
+
+/**
  *-----------------------------------------------------------
  * SERIAL TRANSPORT CONTEXT
  *-----------------------------------------------------------
@@ -103,9 +132,12 @@ typedef int32_t (*AGR_Serial_TxFunc_t)(const uint8_t* data, uint32_t len);
  *          DOP Context + COBS 디코더 + TX 함수를 묶음.
  */
 typedef struct {
+    AGR_Serial_PnPCallbacks_t pnp_callbacks;
     AGR_DOP_Ctx_t*          dop_ctx;        /**< DOP Context (Core 모듈 공유) */
     AGR_COBS_Decoder_t      cobs_dec;       /**< COBS 디코더 (RX) */
     AGR_Serial_TxFunc_t     tx_func;        /**< 바이트 전송 함수 (DI) */
+    AGR_Serial_TypedTxFunc_t typed_tx_func; /**< Optional typed TX hook */
+    void*                   typed_tx_user_ctx;
     uint16_t                tx_seq;         /**< TX 시퀀스 카운터 (monotonic, 0xFFFF→0 wrap) */
     bool                    initialized;    /**< 초기화 완료 여부 */
 } AGR_Serial_Ctx_t;
@@ -128,10 +160,23 @@ int32_t AGR_Serial_Init(AGR_Serial_Ctx_t* sctx,
                         AGR_Serial_TxFunc_t tx_func);
 
 /**
+ * @brief   Install or clear an optional typed TX hook.
+ * @details When installed, _SendFrame calls this hook instead of tx_func. This
+ *          preserves the legacy byte TX API while allowing transports to make
+ *          queueing decisions from AGR_SERIAL_MSG_xxx.
+ */
+void AGR_Serial_SetTypedTxFunc(AGR_Serial_Ctx_t* sctx,
+                               AGR_Serial_TypedTxFunc_t tx_func,
+                               void* user_ctx);
+
+/**
  * @brief   Serial Transport 리셋 (COBS 디코더 + PDO Mapping 초기화).
  * @param   sctx    Serial Transport Context
  */
 void AGR_Serial_Reset(AGR_Serial_Ctx_t* sctx);
+
+void AGR_Serial_SetPnPCallbacks(AGR_Serial_Ctx_t* sctx,
+                                const AGR_Serial_PnPCallbacks_t* callbacks);
 
 /**
  *-----------------------------------------------------------
@@ -184,7 +229,28 @@ int32_t AGR_Serial_SendSDOWrite(AGR_Serial_Ctx_t* sctx,
                                 uint16_t index,
                                 uint8_t subindex,
                                 const void* data,
-                                uint8_t data_len);
+                                uint16_t data_len);
+
+/**
+ * @brief   Master-side SDO request over Serial DOP.
+ * @details CAN-FD AGR_CANFD_Master_Request()와 같은 completion-callback 모델.
+ *          AGR_Serial_ProcessRxData()가 SDO_RSP를 수신하면 내부
+ *          AGR_SDO_Master_ProcessResponse()로 매칭해 on_done을 호출한다.
+ *
+ * @pre     AGR_SDO_Master_Init(&sctx->dop_ctx->sdo_master, tick_fn) 호출 필요.
+ * @note    AGR_SDO_Master_Tick(&sctx->dop_ctx->sdo_master, now)를 PnP/comm task에서
+ *          주기 호출해야 timeout이 동작한다.
+ */
+int32_t AGR_Serial_Master_Request(AGR_Serial_Ctx_t*      sctx,
+                                  uint8_t                slave_id,
+                                  uint16_t               index,
+                                  uint8_t                subindex,
+                                  bool                   is_write,
+                                  const uint8_t*         data,
+                                  uint8_t                data_len,
+                                  uint32_t               timeout_ms,
+                                  AGR_SDO_CompletionCb_t on_done,
+                                  void*                  user_ctx);
 
 /**
  *-----------------------------------------------------------
@@ -213,6 +279,12 @@ int32_t AGR_Serial_SendTxPDO(AGR_Serial_Ctx_t* sctx, uint8_t pdo_num);
  * @return  0: 성공, <0: 에러
  */
 int32_t AGR_Serial_SendHeartbeat(AGR_Serial_Ctx_t* sctx, uint8_t state);
+
+int32_t AGR_Serial_SendBootup(AGR_Serial_Ctx_t* sctx);
+
+int32_t AGR_Serial_SendNmt(AGR_Serial_Ctx_t* sctx,
+                           uint8_t command,
+                           uint8_t target_node_id);
 
 /**
  * @brief   Emergency 전송.

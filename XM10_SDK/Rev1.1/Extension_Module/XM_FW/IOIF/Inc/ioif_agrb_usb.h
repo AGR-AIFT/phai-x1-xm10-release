@@ -42,7 +42,7 @@
 
 /* COMPOSITE / DRP 는 H7 OTG FS 전용 (G474 미지원) */
 #if defined(AGRB_IOIF_USB_MODE_COMPOSITE) || defined(AGRB_IOIF_USB_MODE_DRP)
-  #if !defined(STM32H743xx) && !defined(STM32H750xx)
+  #if !defined(IOIF_MCU_SERIES_H7)
     #error "AGRB_IOIF_USB_MODE_COMPOSITE / _DRP requires STM32H7 (OTG FS). Use MODE_CDC_ONLY on other chips."
   #endif
 #endif

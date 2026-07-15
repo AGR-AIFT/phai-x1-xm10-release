@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    multilayer_transparent_ctrl.c
  * @author  HyundoKim
- * @brief   [시연용] 다층 제어 아키텍처: Transparent / Wall / Guide 모드 전환
+ * @brief   [고급] 다층 제어 아키텍처: Transparent / Wall / Guide 모드 전환
  * @details
  * 3개의 제어 레이어를 조합하여 하나의 예제에서 극적으로 다른 물리적 느낌을
  * 실시간 전환합니다. 거치대 시연에 최적화.

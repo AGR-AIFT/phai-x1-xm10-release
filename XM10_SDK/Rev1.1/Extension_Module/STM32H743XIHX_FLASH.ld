@@ -173,12 +173,31 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM_D1
 
-  /* [???] D2, D3 ???? ???? ??? (???? .bss ????) */
+  /* HardFault dump persistent area — warm reset (NVIC_SystemReset / lockup) 후에도 보존.
+   * NOLOAD + startup 이 _sbss~_ebss 만 0-clear 하므로 touch 되지 않음.
+   * 사용: __attribute__((section(".noinit"))) volatile HardFaultDump_t s_fault_dump;
+   * 주의: RAM_D1 은 D-Cache cacheable → handler 에서 쓴 뒤
+   *       SCB_CleanDCache_by_Addr() 호출 필수 (미호출 시 reset 후 SRAM 엔 미반영). */
+  .noinit (NOLOAD) :
+  {
+    . = ALIGN(8);
+    _snoinit = .;
+    KEEP(*(.noinit))
+    KEEP(*(.noinit*))
+    . = ALIGN(8);
+    _enoinit = .;
+  } >RAM_D1
+
+  /* D2, D3 수동 배치 섹션 (기본 .bss 외 별도) */
   .RAM_D2_data (NOLOAD) :
   {
     . = ALIGN(4);
     *(.RAM_D2_data)
     *(.RAM_D2_data*)
+    . = ALIGN(32);
+    /* IOIF FATFS s_fs_drive + s_file_pool (aligned 32) — RAM_D2 Non-cacheable DMA 영역 공유 */
+    *(.dma_buffer)
+    *(.dma_buffer*)
     . = ALIGN(4);
   } > RAM_D2
 

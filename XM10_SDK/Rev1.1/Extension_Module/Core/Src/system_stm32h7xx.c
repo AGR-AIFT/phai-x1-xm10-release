@@ -172,6 +172,21 @@
   * @param  None
   * @retval None
   */
+/**
+  * @brief  ExitRun0Mode — Power supply mode transition hook.
+  * @note   startup_stm32h743xx.s calls `bl ExitRun0Mode` before SystemInit.
+  *         CubeMX SMPS 템플릿에서는 VOS0 승급 등의 전원 설정을 수행하지만,
+  *         본 프로젝트는 LDO(USE_PWR_LDO_SUPPLY)이므로 no-op.
+  *         심볼 누락 시 링크 에러(startup.s Reset_Handler) 발생.
+  */
+#if defined(__GNUC__) && !defined(__ARMCC_VERSION)
+__attribute__((optimize("Os")))
+#endif
+void ExitRun0Mode(void)
+{
+  /* LDO supply: no action required. */
+}
+
 void SystemInit (void)
 {
 #if defined (DATA_IN_D2_SRAM)
@@ -436,19 +451,6 @@ void SystemCoreClockUpdate (void)
 #endif /* DUAL_CORE && CORE_CM4 */
 }
 
-
-/**
-  * @brief  Configure the power supply before SystemInit.
-  *         Called from startup assembly before SystemInit().
-  *         CubeMX 6.13+ startup requires this function (bl ExitRun0Mode).
-  * @retval None
-  */
-void ExitRun0Mode(void)
-{
-  /* STM32H743: LDO power supply (USE_PWR_LDO_SUPPLY) */
-  PWR->CR3 = (PWR->CR3 & ~PWR_CR3_BYPASS) | PWR_CR3_LDOEN;
-  while (!(PWR->CSR1 & PWR_CSR1_ACTVOSRDY)) {}
-}
 
 /**
   * @}

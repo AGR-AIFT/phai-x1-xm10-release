@@ -62,6 +62,11 @@ target_include_directories(stm32cubemx INTERFACE
 target_sources(STM32_Drivers PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Compatible/stm32h7xx_compatible.c
 )
+# stm32h7xx_compatible.c includes diag_perf.h (ISR breakdown) → needs XM_FW System paths.
+target_include_directories(STM32_Drivers PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/System/Diag
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/System/Config
+)
 
 # Compatible USB sources (Device CDC + Host MSC + FATFS USB diskio)
 set(COMPATIBLE_USB_SRC
@@ -185,6 +190,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/System/Board/LED
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/System/Board/GPIO
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/System/Config
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/System/Diag
 
     # XM API
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/XM_API

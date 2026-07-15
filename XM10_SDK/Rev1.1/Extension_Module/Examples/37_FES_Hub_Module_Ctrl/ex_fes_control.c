@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    ex_fes_control.c
  * @author  HyundoKim
- * @brief   [Example] FES Hub ES-vector Control via CAN-FD DOP V3
+ * @brief   [고급] FES Hub ES-vector Control via CAN-FD DOP V3
  * @version 1.0
  * @date    2026-04-09
  *

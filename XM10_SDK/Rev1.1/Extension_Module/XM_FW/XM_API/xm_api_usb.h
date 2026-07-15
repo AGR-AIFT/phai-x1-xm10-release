@@ -312,6 +312,8 @@ void XM_SetUsbStreamModuleId(uint8_t module_id);
  * @param[in] module_id  대상 Module ID (0xF0~0xFE)
  * @param[in] json_str   채널 정의 JSON string (NULL-terminated, 문자열 리터럴 권장)
  * @note json_str 포인터는 프로그램 수명 동안 유효해야 합니다 (복사하지 않음).
+ * @note **USB 연결당 하나의 Module ID 메타만 유지됩니다** (단일 슬롯 — 마지막 호출이 이전 것을
+ *       덮어씀). 여러 채널 그룹을 라벨링하려면 채널을 하나의 Module ID 로 모아 등록하세요.
  */
 void XM_SetUsbCustomMeta(uint8_t module_id, const char* json_str);
 

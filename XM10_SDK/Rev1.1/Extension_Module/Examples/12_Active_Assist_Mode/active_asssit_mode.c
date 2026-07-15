@@ -622,8 +622,8 @@ static void UpdateActiveAssistMode(void)
                 // 양쪽 다리의 상태 머신을 보조 대기 상태로 초기화
                 s_aaFsm_RH.state = AA_SUBSTATE_WAIT_AT_PEAK;
                 s_aaFsm_LH.state = AA_SUBSTATE_WAIT_AT_PEAK;
-                s_aaFsm_RH.anchorAngle_deg10 = XM.status.h10.rightThighAngle; // 허벅지 각도의 Homing 완료 위치를 기준점으로
-                s_aaFsm_LH.anchorAngle_deg10 = XM.status.h10.leftThighAngle;
+                s_aaFsm_RH.anchorAngle_deg10 = (int16_t)round(XM.status.h10.rightThighAngle * 10.0f); // 허벅지 각도의 Homing 완료 위치를 기준점으로 (deg10 스케일 — UpdateSingleLegAssistLogic 과 단위 일치)
+                s_aaFsm_LH.anchorAngle_deg10 = (int16_t)round(XM.status.h10.leftThighAngle * 10.0f);
 
                 s_aaGlobalState = AA_STATE_ASSISTING;
             }

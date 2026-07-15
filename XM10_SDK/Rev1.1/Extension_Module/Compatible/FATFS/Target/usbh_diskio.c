@@ -18,7 +18,6 @@
 #include "main.h" // [신규] SCB_InvalidateDCache_by_Addr 등을 사용하기 위해 추가
 #include "usbh_msc.h"  // USBH_MSC_GetState 사용
 #include "ioif_agrb_dwt.h"  // [Diag] IOIF_DWT_GetCycles / CyclesToUs
-#include <stdbool.h>       // [2026-04-18] burst tracking
 /* USER CODE END Header */
 /* USER CODE BEGIN firstSection */
 /* can be used to modify / undefine following code or add new definitions */
@@ -45,32 +44,6 @@ static volatile uint32_t s_diag_polling_iters_max = 0;
 static volatile uint32_t s_diag_write_us_max      = 0;
 static volatile uint64_t s_diag_write_us_sum      = 0;
 static volatile uint32_t s_diag_write_call_count  = 0;
-
-/* [2026-04-18] Write burst 추적 — 연속 write (gap < 5ms) 의 최대 지속시간.
- * Hot Buffer margin 요구치 도출용. DataLoggerTask 단일 컨텍스트 → atomic 불필요. */
-#define USBH_BURST_GAP_THRESHOLD_US  (5000U)
-static volatile uint32_t s_diag_burst_start_cyc   = 0;
-static volatile uint32_t s_diag_burst_last_end_cyc = 0;
-static volatile uint32_t s_diag_burst_max_us      = 0;
-static volatile bool     s_diag_burst_active      = false;
-
-/** write 1회 완료 시점에 호출. burst 연장 또는 갱신. */
-static inline void _usbh_diag_update_burst(uint32_t write_start_cyc, uint32_t write_end_cyc)
-{
-    if (s_diag_burst_active) {
-        uint32_t gap_us = IOIF_DWT_CyclesToUs(write_start_cyc - s_diag_burst_last_end_cyc);
-        if (gap_us >= USBH_BURST_GAP_THRESHOLD_US) {
-            /* Gap 커서 burst 종료. 새 burst 시작. */
-            s_diag_burst_start_cyc = write_start_cyc;
-        }
-    } else {
-        s_diag_burst_start_cyc = write_start_cyc;
-        s_diag_burst_active = true;
-    }
-    s_diag_burst_last_end_cyc = write_end_cyc;
-    uint32_t burst_us = IOIF_DWT_CyclesToUs(write_end_cyc - s_diag_burst_start_cyc);
-    if (burst_us > s_diag_burst_max_us) s_diag_burst_max_us = burst_us;
-}
 
 /**
  * @brief polling loop 진입 시 카운터 증분 + iter 최대값 갱신.
@@ -243,22 +216,20 @@ DRESULT USBH_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
   }
   else
   {
-    /* [Fix] GetLUNInfo 반환값 확인: USB 분리 시 USBH_FAIL 반환 → info 미초기화 접근 방지 */
-    if (USBH_MSC_GetLUNInfo(&hUSB_Host, lun, &info) == USBH_OK)
-    {
-      switch (info.sense.asc)
-      {
-      case SCSI_ASC_LOGICAL_UNIT_NOT_READY:
-      case SCSI_ASC_MEDIUM_NOT_PRESENT:
-      case SCSI_ASC_NOT_READY_TO_READY_CHANGE:
-        USBH_ErrLog ("USB Disk is not ready!");
-        res = RES_NOTRDY;
-        break;
+    USBH_MSC_GetLUNInfo(&hUSB_Host, lun, &info);
 
-      default:
-        res = RES_ERROR;
-        break;
-      }
+    switch (info.sense.asc)
+    {
+    case SCSI_ASC_LOGICAL_UNIT_NOT_READY:
+    case SCSI_ASC_MEDIUM_NOT_PRESENT:
+    case SCSI_ASC_NOT_READY_TO_READY_CHANGE:
+      USBH_ErrLog ("USB Disk is not ready!");
+      res = RES_NOTRDY;
+      break;
+
+    default:
+      res = RES_ERROR;
+      break;
     }
   }
 
@@ -298,12 +269,10 @@ DRESULT USBH_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
       /* [Diag] USBH_MSC_Write DWT 실측 — tight spin 시간 측정 */
       uint32_t _diag_write_start = IOIF_DWT_GetCycles();
       status = USBH_MSC_Write(&hUSB_Host, lun, sector + count, (BYTE *)scratch, 1) ;
-      uint32_t _diag_write_end = IOIF_DWT_GetCycles();
-      uint32_t _diag_write_us = IOIF_DWT_CyclesToUs(_diag_write_end - _diag_write_start);
+      uint32_t _diag_write_us = IOIF_DWT_CyclesToUs(IOIF_DWT_GetCycles() - _diag_write_start);
       s_diag_write_call_count++;
       s_diag_write_us_sum += _diag_write_us;
       if (_diag_write_us > s_diag_write_us_max) { s_diag_write_us_max = _diag_write_us; }
-      _usbh_diag_update_burst(_diag_write_start, _diag_write_end);
 
       /* USER CODE BEGIN 8 */
       // [신규] 완료 대기
@@ -331,12 +300,10 @@ DRESULT USBH_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
     /* [Diag] USBH_MSC_Write DWT 실측 — tight spin 시간 측정 */
     uint32_t _diag_write_start = IOIF_DWT_GetCycles();
     status = USBH_MSC_Write(&hUSB_Host, lun, sector, (BYTE *)buff, count);
-    uint32_t _diag_write_end = IOIF_DWT_GetCycles();
-    uint32_t _diag_write_us = IOIF_DWT_CyclesToUs(_diag_write_end - _diag_write_start);
+    uint32_t _diag_write_us = IOIF_DWT_CyclesToUs(IOIF_DWT_GetCycles() - _diag_write_start);
     s_diag_write_call_count++;
     s_diag_write_us_sum += _diag_write_us;
     if (_diag_write_us > s_diag_write_us_max) { s_diag_write_us_max = _diag_write_us; }
-    _usbh_diag_update_burst(_diag_write_start, _diag_write_end);
 
     /* USER CODE BEGIN 9 */
     // [핵심 수정] 작업 완료 대기 (Blocking)
@@ -360,27 +327,25 @@ DRESULT USBH_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
   }
   else
   {
-    /* [Fix] GetLUNInfo 반환값 확인: USB 분리 시 USBH_FAIL 반환 → info 미초기화 접근 방지 */
-    if (USBH_MSC_GetLUNInfo(&hUSB_Host, lun, &info) == USBH_OK)
+    USBH_MSC_GetLUNInfo(&hUSB_Host, lun, &info);
+
+    switch (info.sense.asc)
     {
-      switch (info.sense.asc)
-      {
-      case SCSI_ASC_WRITE_PROTECTED:
-        USBH_ErrLog("USB Disk is Write protected!");
-        res = RES_WRPRT;
-        break;
+    case SCSI_ASC_WRITE_PROTECTED:
+      USBH_ErrLog("USB Disk is Write protected!");
+      res = RES_WRPRT;
+      break;
 
-      case SCSI_ASC_LOGICAL_UNIT_NOT_READY:
-      case SCSI_ASC_MEDIUM_NOT_PRESENT:
-      case SCSI_ASC_NOT_READY_TO_READY_CHANGE:
-        USBH_ErrLog("USB Disk is not ready!");
-        res = RES_NOTRDY;
-        break;
+    case SCSI_ASC_LOGICAL_UNIT_NOT_READY:
+    case SCSI_ASC_MEDIUM_NOT_PRESENT:
+    case SCSI_ASC_NOT_READY_TO_READY_CHANGE:
+      USBH_ErrLog("USB Disk is not ready!");
+      res = RES_NOTRDY;
+      break;
 
-      default:
-        res = RES_ERROR;
-        break;
-      }
+    default:
+      res = RES_ERROR;
+      break;
     }
   }
 
@@ -473,7 +438,6 @@ void USBH_DiskIO_GetDiag(USBH_DiskIO_Diag_t* diag)
     diag->write_us_max      = s_diag_write_us_max;
     diag->write_us_sum      = s_diag_write_us_sum;
     diag->write_call_count  = s_diag_write_call_count;
-    diag->write_burst_max_us = s_diag_burst_max_us;
 }
 
 /**
@@ -481,14 +445,10 @@ void USBH_DiskIO_GetDiag(USBH_DiskIO_Diag_t* diag)
  */
 void USBH_DiskIO_ResetDiag(void)
 {
-    s_diag_polling_entries    = 0;
-    s_diag_polling_iters_max  = 0;
-    s_diag_write_us_max       = 0;
-    s_diag_write_us_sum       = 0;
-    s_diag_write_call_count   = 0;
-    s_diag_burst_start_cyc    = 0;
-    s_diag_burst_last_end_cyc = 0;
-    s_diag_burst_max_us       = 0;
-    s_diag_burst_active       = false;
+    s_diag_polling_entries   = 0;
+    s_diag_polling_iters_max = 0;
+    s_diag_write_us_max      = 0;
+    s_diag_write_us_sum      = 0;
+    s_diag_write_call_count  = 0;
 }
 /* USER CODE END lastSection */

@@ -7,7 +7,7 @@
  * 로봇의 모든 센서 데이터(Input)를 읽고, 제어 명령(Output)을 내리는 핵심 API입니다.
  * 사용자는 전역 객체 'XM'을 통해 모든 데이터에 접근할 수 있습니다.
  * * @note    [데이터 흐름]
- * 1. Input (Read):  XM.status 구조체 (센서값, 2ms마다 자동 갱신됨)
+ * 1. Input (Read):  XM.status 구조체 (센서값, 1ms(1kHz)마다 자동 갱신됨)
  * 2. Output (Write): XM_SetAssistTorque() 함수 사용 (명령 전달)
  * @version 0.1
  * @date    Nov 17, 2025
@@ -62,7 +62,7 @@ typedef enum {
 
 // P-Vector 데이터 구조체
 typedef struct {
-    int16_t  yd; // Desired Position (unit: deg, scaled by 100)
+    int16_t  yd; // Desired Position (unit: deg, scaled by 10 — 실동작 검증값. 예: 25.0deg → 250)
     uint16_t L;  // Trajectory Duration (ms)
     uint8_t  s0; // Acceleration Profile (deg/s^2)
     uint8_t  sd; // Deceleration Profile (deg/s^2)
@@ -263,7 +263,7 @@ typedef struct {
     bool     is_active;           /**< 근수축 감지 (Schmitt trigger) */
 
     /* Status Flags (비트 필드) */
-    uint8_t  status_flags;        /**< bit0: ADC_OK, bit1: IS_ACTIVE, bit2: SATURATED */
+    uint8_t  status_flags;        /**< bit0: ADC_OK, bit1: IS_ACTIVE, bit2: SATURATED, bit3: CALIB_VALID(MVC 유효) */
 } XmEmgHubData_t;
 
 /**

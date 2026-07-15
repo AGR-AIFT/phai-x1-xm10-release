@@ -76,8 +76,8 @@
  *  ────  ───────────────────  ──────────────  ──────  ──────────────────────
  *  55    StartupTask          main.c (IOC)    once    시스템 초기화 후 자기 삭제
  *  55    FDCAN RxTask         ioif_conf.h     event   PDO 수신, 즉시 선점 처리
- *  55    UART RxTask          ioif_conf.h     event   센서 패킷 파싱 (DMA→파서)
- *  54    UserTask             main.c (IOC)    1ms     IPO Control Loop
+ *  54    UART RxTask          ioif_conf.h     event   센서 패킷 파싱 (DMA→파서) [2026-07-14: 55→54]
+ *  53    UserTask             main.c (IOC)    1ms     IPO Control Loop [2026-07-14: 54→53]
  *  51    SDO Processor        module.h        event   PnP/설정 (비실시간)
  *  25    PnP Manager          module.h        100ms   연결 관리
  *  24    USB Control          module.h        10ms    USB 모드 전환
@@ -86,13 +86,16 @@
  *   8    DefaultTask          main.c (IOC)    —       FreeRTOS idle (suspended)
  *
  *  [설계 원칙]
- *  RxTask(55) > UserTask(54): 데이터 도착 즉시 선점 → stale data 방지
+ *  55(FDCAN) > 54(UART) > 53(UserTask) [2026-07-14 재배치]:
+ *   - 두 RxTask > UserTask: 데이터 도착 즉시 선점 → stale data 방지 (불변식 유지)
+ *   - FDCAN > UART: 동급(55=55) 라운드로빈 비결정성 제거, FDCAN(로봇/IMU/EMG) 우선.
+ *     두 RxTask 모두 짧아(SDO/NMT 는 51 로 위임) FDCAN 선점 유계 → GRF 1ms 데드라인 안전.
  *  RxTask 실행 ~10-50us/선점 → UserTask 지터 무시 가능 (<100us/1ms)
  *  FDCAN/UART RxTask는 IOIF 내부 생성 → ioif_conf.h에서 오버라이드
  */
 
-/* ----- FDCAN/UART RxTask (55) — ioif_conf.h 참조 ----- */
-/* ----- UserTask (54) — main.c IOC 참조 ----- */
+/* ----- FDCAN RxTask (55) / UART RxTask (54) — ioif_conf.h 참조 ----- */
+/* ----- UserTask (53) — main.c IOC 참조 ----- */
 
 /* ----- SDO Processor (51) ----- */
 #define TASK_PRIO_SDO_PROCESSOR     osPriorityRealtime3  /**< (51) SDO/PnP 설정 처리 */

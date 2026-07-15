@@ -2,9 +2,12 @@
  ******************************************************************************
  * @file    xm_api_rtc.h
  * @author  HyundoKim
- * @brief   XM10 RTC (Real-Time Clock) API
+ * @brief   [Rev2.0] XM10 RTC (Real-Time Clock) API
  * @details MCP79510 RTC를 통한 날짜/시간 관리 API.
  *          내부적으로 2-digit year(0~99)를 4-digit year(2000~2099)로 변환합니다.
+ * @warning **RTC 하드웨어(MCP79510)는 XM10 Rev2.0 전용입니다.** Rev1.1 보드에는 RTC 칩이
+ *          없어 본 API 는 stub(항상 false/무동작)으로 동작합니다 — Rev1.1 에서는
+ *          XM_GetTick() 기반 시간으로 대체하세요. 참고: docs/hardware/README.md (보드 리비전 비교)
  * @version 1.0.0
  * @date    2026-03-02
  *

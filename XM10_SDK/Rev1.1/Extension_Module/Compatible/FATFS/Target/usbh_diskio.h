@@ -50,10 +50,6 @@ typedef struct {
     uint32_t write_us_max;
     uint64_t write_us_sum;
     uint32_t write_call_count;
-    /* [2026-04-18] 연속 write burst 지속시간 — Hot Buffer margin 요구치.
-     * burst = 직전 write end ~ 다음 write start gap < 5ms 로 묶인 연속 구간.
-     * max = session 내 가장 긴 burst. C안(Cold 제거) 결정 근거. */
-    uint32_t write_burst_max_us;
 } USBH_DiskIO_Diag_t;
 
 void USBH_DiskIO_GetDiag(USBH_DiskIO_Diag_t* diag);

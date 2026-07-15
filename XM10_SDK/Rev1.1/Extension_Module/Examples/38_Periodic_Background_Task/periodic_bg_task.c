@@ -1,7 +1,7 @@
 /**
  ******************************************************************************
  * @file    periodic_bg_task.c
- * @brief   Ex.38 — 100Hz Periodic Background Task + Mutex+Snapshot
+ * @brief   [중급] Ex.38 — 100Hz Periodic Background Task + Mutex+Snapshot
  *
  * 학습 포인트
  *   1. XM_Task_CreatePeriodic() 로 보조 task 생성 (Control_Loop 와 동시 동작)

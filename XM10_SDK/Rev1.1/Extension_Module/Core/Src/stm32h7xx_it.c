@@ -24,8 +24,9 @@
 #include "stm32h7xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "ioif_conf.h"         /* IOIF_FDCAN_ISR_DIRECT_ENABLE */
-#include "canfd_rx_handler.h"  /* FDCANRxHandler_SwIrqNotify() — TIM7 SW IRQ */
+#include "canfd_rx_handler.h"
+#include "diag_perf.h"         /* ISR breakdown — DIAG_ISR_ENTER/EXIT */
+#include "hardfault_dump.h"    /* fault context capture → .noinit → warm reset */
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -98,64 +99,64 @@ void NMI_Handler(void)
   /* USER CODE END NonMaskableInt_IRQn 1 */
 }
 
-/**
-  * @brief This function handles Hard fault interrupt.
-  */
+/* Fault handlers — naked dispatcher → HardFault_CaptureAndReset()
+ * 현재 SP(MSP/PSP EXC_RETURN bit2 판정) + EXC_RETURN + 예외 타입 전달 →
+ * `.noinit` 덤프 + D-Cache clean + NVIC_SystemReset.
+ * 부팅 직후 main() 이 HardFault_LoadBootDump() 로 확인, USB mount 뒤 파일 영속화. */
+__attribute__((naked, noreturn))
 void HardFault_Handler(void)
 {
-  /* USER CODE BEGIN HardFault_IRQn 0 */
-
-  /* USER CODE END HardFault_IRQn 0 */
-  while (1)
-  {
-    /* USER CODE BEGIN W1_HardFault_IRQn 0 */
-    /* USER CODE END W1_HardFault_IRQn 0 */
-  }
+    __asm volatile (
+        "tst   lr, #4                       \n"
+        "ite   eq                           \n"
+        "mrseq r0, msp                      \n"
+        "mrsne r0, psp                      \n"
+        "mov   r1, lr                       \n"
+        "mov   r2, #3                       \n"  /* HF_EXC_HARDFAULT */
+        "b     HardFault_CaptureAndReset    \n"
+    );
 }
 
-/**
-  * @brief This function handles Memory management fault.
-  */
+__attribute__((naked, noreturn))
 void MemManage_Handler(void)
 {
-  /* USER CODE BEGIN MemoryManagement_IRQn 0 */
-
-  /* USER CODE END MemoryManagement_IRQn 0 */
-  while (1)
-  {
-    /* USER CODE BEGIN W1_MemoryManagement_IRQn 0 */
-    /* USER CODE END W1_MemoryManagement_IRQn 0 */
-  }
+    __asm volatile (
+        "tst   lr, #4                       \n"
+        "ite   eq                           \n"
+        "mrseq r0, msp                      \n"
+        "mrsne r0, psp                      \n"
+        "mov   r1, lr                       \n"
+        "mov   r2, #4                       \n"  /* HF_EXC_MEMMANAGE */
+        "b     HardFault_CaptureAndReset    \n"
+    );
 }
 
-/**
-  * @brief This function handles Pre-fetch fault, memory access fault.
-  */
+__attribute__((naked, noreturn))
 void BusFault_Handler(void)
 {
-  /* USER CODE BEGIN BusFault_IRQn 0 */
-
-  /* USER CODE END BusFault_IRQn 0 */
-  while (1)
-  {
-    /* USER CODE BEGIN W1_BusFault_IRQn 0 */
-    /* USER CODE END W1_BusFault_IRQn 0 */
-  }
+    __asm volatile (
+        "tst   lr, #4                       \n"
+        "ite   eq                           \n"
+        "mrseq r0, msp                      \n"
+        "mrsne r0, psp                      \n"
+        "mov   r1, lr                       \n"
+        "mov   r2, #5                       \n"  /* HF_EXC_BUSFAULT */
+        "b     HardFault_CaptureAndReset    \n"
+    );
 }
 
-/**
-  * @brief This function handles Undefined instruction or illegal state.
-  */
+__attribute__((naked, noreturn))
 void UsageFault_Handler(void)
 {
-  /* USER CODE BEGIN UsageFault_IRQn 0 */
-
-  /* USER CODE END UsageFault_IRQn 0 */
-  while (1)
-  {
-    /* USER CODE BEGIN W1_UsageFault_IRQn 0 */
-    /* USER CODE END W1_UsageFault_IRQn 0 */
-  }
+    __asm volatile (
+        "tst   lr, #4                       \n"
+        "ite   eq                           \n"
+        "mrseq r0, msp                      \n"
+        "mrsne r0, psp                      \n"
+        "mov   r1, lr                       \n"
+        "mov   r2, #6                       \n"  /* HF_EXC_USAGEFAULT */
+        "b     HardFault_CaptureAndReset    \n"
+    );
 }
 
 /**
@@ -255,11 +256,11 @@ void ADC_IRQHandler(void)
 void FDCAN1_IT0_IRQHandler(void)
 {
   /* USER CODE BEGIN FDCAN1_IT0_IRQn 0 */
-
+  DIAG_ISR_ENTER(DIAG_ISR_FDCAN1_IT0);
   /* USER CODE END FDCAN1_IT0_IRQn 0 */
   HAL_FDCAN_IRQHandler(&hfdcan1);
   /* USER CODE BEGIN FDCAN1_IT0_IRQn 1 */
-
+  DIAG_ISR_EXIT();
   /* USER CODE END FDCAN1_IT0_IRQn 1 */
 }
 
@@ -325,17 +326,11 @@ void TIM1_UP_IRQHandler(void)
 void TIM7_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM7_IRQn 0 */
-#if defined(IOIF_FDCAN_ISR_DIRECT_ENABLE)
-  /* [V5.0] SW IRQ: FDCAN ISR(NVIC 4) → NVIC_SetPendingIRQ(TIM7) → here (NVIC 6)
-   * TIM7은 타이머로 사용하지 않고 SW IRQ 벡터로만 활용.
-   * xSemaphoreGiveFromISR → NonRealtimeTask 깨우기 */
-  FDCANRxHandler_SwIrqNotify();
-  return;  /* HAL_TIM_IRQHandler 불필요 (HW 타이머 이벤트 없음) */
-#endif
+  DIAG_ISR_ENTER(DIAG_ISR_TIM7);
   /* USER CODE END TIM7_IRQn 0 */
   HAL_TIM_IRQHandler(&htim7);
   /* USER CODE BEGIN TIM7_IRQn 1 */
-
+  DIAG_ISR_EXIT();
   /* USER CODE END TIM7_IRQn 1 */
 }
 
@@ -375,7 +370,9 @@ void UART8_IRQHandler(void)
 void DMA2_Stream0_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
+  DIAG_ISR_ENTER(DIAG_ISR_DMA2_S0);  /* Rev1.1: UART4 RX DMA */
   System_ISR_UART4_RX_DMA();  /* ✅ System Layer 호출 */
+  DIAG_ISR_EXIT();
   /* USER CODE END DMA2_Stream0_IRQn 0 */
 }
 
@@ -386,7 +383,9 @@ void DMA2_Stream0_IRQHandler(void)
 void DMA2_Stream1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA2_Stream1_IRQn 0 */
+  DIAG_ISR_ENTER(DIAG_ISR_DMA2_S1);  /* Rev1.1: UART4 TX DMA */
   System_ISR_UART4_TX_DMA();  /* ✅ System Layer 호출 */
+  DIAG_ISR_EXIT();
   /* USER CODE END DMA2_Stream1_IRQn 0 */
 }
 
@@ -397,7 +396,9 @@ void DMA2_Stream1_IRQHandler(void)
 void DMA2_Stream2_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA2_Stream2_IRQn 0 */
+  DIAG_ISR_ENTER(DIAG_ISR_DMA2_S2);  /* Rev1.1: ADC3 DMA */
   System_ISR_ADC3_DMA();  /* ✅ System Layer 호출 */
+  DIAG_ISR_EXIT();
   /* USER CODE END DMA2_Stream2_IRQn 0 */
 }
 

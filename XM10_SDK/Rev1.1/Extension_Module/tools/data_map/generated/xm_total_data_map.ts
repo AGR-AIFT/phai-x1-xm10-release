@@ -1,5 +1,5 @@
-/* AUTO-GENERATED from xm_total_data.yaml v2.5 — DO NOT EDIT MANUALLY */
-/* Generated: 2026-04-01 16:20:40 */
+/* AUTO-GENERATED from xm_total_data.yaml v2.6 — DO NOT EDIT MANUALLY */
+/* Generated: 2026-05-13 00:11:20 */
 
 export interface ChannelDef {
   offset: number;
@@ -127,10 +127,14 @@ export const TOTAL_DATA_MAP: ChannelDef[] = [
   { offset: 334, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'fdcan2_bus_status', group: 'FDCAN2_Diag' },
   { offset: 335, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan2_rx_fifo0_fill', group: 'FDCAN2_Diag' },
   { offset: 336, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan2_tx_fifo_free', group: 'FDCAN2_Diag' },
+  { offset: 337, type: 'float32' , scale:        1, scaleFormula: 'none', unit: 'user', name: 'user_f', group: 'User_Custom', count: 4 },
+  { offset: 353, type: 'int16'   , scale:        1, scaleFormula: 'none', unit: 'user', name: 'user_i16', group: 'User_Custom', count: 4 },
+  { offset: 361, type: 'uint16'  , scale:        1, scaleFormula: 'none', unit: 'flags', name: 'user_flags', group: 'User_Custom' },
+  { offset: 363, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'user', name: 'user_u8', group: 'User_Custom', count: 2 },
 ];
 
 export const TOTAL_PACKET_SIZE = 365;
-export const DATA_MAP_VERSION = '2.5';
+export const DATA_MAP_VERSION = '2.6';
 export const MODULE_ID_TOTAL = 0x20;
 export const MODULE_ID_USER_META = 0xEF;
 export const MODULE_ID_USER_CUSTOM_START = 0xF0;

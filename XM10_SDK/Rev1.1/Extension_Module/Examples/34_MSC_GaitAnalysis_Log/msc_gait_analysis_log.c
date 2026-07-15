@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    msc_gait_analysis_log.c
  * @author  HyundoKim
- * @brief   [Application] H10 SUIT 동작분석 데이터 USB-MSC 로깅
+ * @brief   [중급] H10 SUIT 동작분석 데이터 USB-MSC 로깅
  * @details
  * H10 CM에서 PDO로 수신한 보행 분석 데이터를 USB 메모리에 저장합니다.
  * 저장된 바이너리를 Python 디코더로 변환하면, MATLAB GaitAnalysis_RT/PP에서

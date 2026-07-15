@@ -138,6 +138,24 @@ AGRBStatusDef IOIF_UART_Start(IOIF_UARTx_t id);
 AGRBStatusDef IOIF_UART_SetRxIdleCallback(IOIF_UARTx_t id, IOIF_UART_RxEventCallback_t callback);
 
 /**
+ * @brief IDLE_EVENT RX 무장 상태 보장 (앱 주기 watchdog 용, 멱등)
+ * @param id UART Instance ID
+ * @return AGRBStatus_OK=무장 상태(정상 수신 중 포함),
+ *         AGRBStatus_BUSY=복구 예약됨(RTOS: 공유 RxTask 가 즉시 재무장 수행),
+ *         AGRBStatus_ERROR=재무장 실패/보류(BareMetal, 다음 호출 재시도)
+ *
+ * @note
+ * - HAL 은 DMA 수신 중 에러(FE/NE/ORE)를 blocking 으로 취급해 수신을 정지시킴
+ *   (RxState→READY). 에러콜백 경로가 놓친 침묵 정지까지, 앱 주기 태스크
+ *   (권장 ~100ms)에서 호출하면 복구됨.
+ * - single-writer 계약: RTOS 에서 실제 재무장은 공유 RxTask 단독 실행 (본 API 는
+ *   pending 예약+알림만 — 락 없이 동시 재무장 레이스 원천 차단, Rule 01 §7.6 정합).
+ * - 정상 수신 중이면 상태 읽기 1회 비용의 no-op. POLLING_TASK 모드는 대상 아님(OK).
+ * - Call context: Task 전용 (ISR 호출 금지). RTOS/BareMetal 공통.
+ */
+AGRBStatusDef IOIF_UART_EnsureRxArmed(IOIF_UARTx_t id);
+
+/**
  * @brief UART 데이터 전송 (Polling 모드, Blocking)
  * @param id UART Instance ID
  * @param tx_buf 전송할 데이터 버퍼
@@ -190,6 +208,19 @@ AGRBStatusDef IOIF_UART_SetBaudrate(IOIF_UARTx_t id, IOIF_UART_Baudrate_e baudra
  * - 전송 완료는 HAL_UART_TxCpltCallback에서 flag 클리어
  */
 AGRBStatusDef IOIF_UART_Write_DMA(IOIF_UARTx_t id, const uint8_t* tx_buf, uint32_t size);
+
+/**
+ * @brief UART 데이터 전송 (DMA 모드, 호출자 지정 대기시간)
+ * @param id UART Instance ID
+ * @param tx_buf 전송할 데이터 버퍼
+ * @param size 전송할 데이터 크기 (bytes, 최대 256)
+ * @param timeout_ms RTOS TX 세마포어 대기시간. 0이면 non-blocking try.
+ * @return AGRBStatus_OK=성공, AGRBStatus_BUSY=이미 TX 중, AGRBStatus_TIMEOUT=타임아웃
+ *
+ * @note 기존 IOIF_UART_Write_DMA()는 5초 대기 호환 동작을 유지한다.
+ */
+AGRBStatusDef IOIF_UART_Write_DMA_Timeout(IOIF_UARTx_t id, const uint8_t* tx_buf,
+                                          uint32_t size, uint32_t timeout_ms);
 
 /**
  * @brief UART 버퍼를 비웁니다.

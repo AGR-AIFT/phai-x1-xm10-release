@@ -17,13 +17,15 @@
  *   - 멀티 워드 구조체 공유 → XM_Mutex_* 필수
  *   - Control_Loop 안에서 mutex 는 항상 timeout=0 (절대 블로킹 금지)
  *
- * 시스템 task 우선순위 (참고):
- *   55  Realtime7  StartupTask / IOIF_UartRx
- *   54  Realtime6  Control_Loop                  ← 1kHz 제어 루프
- *   51  Realtime3  NRT_Proc (SDO)
- *   48  Realtime   ← XM_PRIO_NEAR_REALTIME (PnP 경합 주의)
+ * 시스템 task 우선순위 (module.h SSOT — 2026-07-14 재배치):
+ *   55  Realtime7  StartupTask / FDCAN RxTask    ← PDO 수신 즉시 선점
+ *   54  Realtime6  UART RxTask                   ← 센서 패킷 파싱 (DMA→파서)
+ *   53  Realtime5  Control_Loop (UserTask)       ← 1kHz 제어 루프
+ *   51  Realtime3  NRT_Proc (SDO/PnP 설정 처리)
+ *   48  Realtime   ← XM_PRIO_NEAR_REALTIME
  *   40  High       ← XM_PRIO_ABOVE_CONTROL
  *   32  AboveNormal← XM_PRIO_BELOW_CONTROL
+ *   25  Normal1    PnP Manager
  *   24  Normal     ← XM_PRIO_BACKGROUND (권장 기본값)
  *    8  Low        ← XM_PRIO_IDLE
  *

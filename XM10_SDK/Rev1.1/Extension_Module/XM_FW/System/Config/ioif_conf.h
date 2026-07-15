@@ -30,24 +30,38 @@
  * 비활성 모듈은 빈 번역 단위로 컴파일됩니다 (오버헤드 없음).
  */
 
-/* ===== FDCAN ISR-Direct Mode (V5.0) ===== */
+/* ===== FDCAN Rx 처리 모드 (RxTask — CM-WH 공통 RTOS Best Practice) ===== */
 /**
- * @brief FDCAN ISR에서 직접 FIFO drain + 콜백 호출 (RxTask 제거)
+ * @brief FDCAN 수신 = ISR(sem give) → RxTask → NonRealtimeTask 3계층 RTOS 패턴.
  * @details
- * - FDCAN NVIC = 4 (configMAX_SYSCALL(5) 위) → FreeRTOS critical section 마스킹 불가
- * - ISR에서 PDO 직접 처리 (Seqlock) + SDO는 Lock-Free Ring Buffer → SW IRQ → NonRealtimeTask
- * - f_sync/f_write 중에도 PDO 수신 보장 → Real Gap 해결
- * - 활성화 시 RxTask/Semaphore 생성 생략, Device Layer는 Mutex 대신 Seqlock 사용 필수
+ * - FDCAN NVIC = 5 (configMAX_SYSCALL 경계) → ISR에서 xSemaphoreGiveFromISR 합법
+ *   (전제: .ioc NVIC.FDCAN1/2_IT0/1 preemption = 5. 4이면 FromISR @ NVIC4 = configASSERT HardFault)
+ * - ISR(sem give만) → RxTask(55, > UserTask 54): 빠른 PDO를 Mutex+Snapshot으로 DataLake 기록
+ *                   → NonRealtimeTask(51, < UserTask 54): 느린 SDO/NMT 처리
+ * - Device Layer = Mutex + Snapshot (Reader timeout=0 / Writer timeout=1)
  */
-#define IOIF_FDCAN_ISR_DIRECT_ENABLE
 
 /* ===== IOIF Task Priority Override ===== */
 /**
- * @brief UART RxTask 우선순위를 UserTask(54)보다 높게 설정
- * @details 데이터 도착 즉시 선점 처리하여 stale data(duplicate) 방지.
+ * @brief UART/FDCAN RxTask 우선순위를 UserTask(54)보다 높게 설정
+ * @details 데이터 도착 즉시 선점 처리하여 stale data(duplicate) 방지 (B001 실증).
  *          RxTask 실행 시간 ~10-50µs/선점 → UserTask 지터 무시 가능.
+ *          [2026-07-14] 우선순위 재배치 55(FDCAN) > 54(UART) > 53(UserTask):
+ *          동급(55=55) 라운드로빈 비결정성을 없애 FDCAN(로봇/IMU/EMG 1kHz)이 UART
+ *          (GRF 1kHz)를 결정론적으로 앞서게 한다. 두 RxTask 모두 '짧은' 태스크(큐잉/
+ *          스냅샷, 무거운 SDO/NMT 는 NonRealtimeTask 51 로 위임)라 FDCAN 선점 시간은
+ *          유계(수~수십µs) → 정상동작에서 UART GRF 1ms 데드라인 안전. 두 RxTask 모두
+ *          UserTask(53) 위라 stale-data 방지 불변식 유지.
  */
-#define IOIF_UART_RX_TASK_PRIORITY      (osPriorityRealtime7)  /**< 기본 50 → 55 */
+#define IOIF_UART_RX_TASK_PRIORITY      (osPriorityRealtime6)  /**< 54: FDCAN(55) > UART(54) > UserTask(53) */
+#define IOIF_FDCAN_RX_TASK_PRIORITY     (osPriorityRealtime7)  /**< 55: 로봇/IMU/EMG PDO, UART(54)보다 우선 */
+
+/* [2026-07-14] 공유 UART RxTask drain-cap backoff 무력화 (XM 전용).
+ * IOIF 기본 BACKOFF_TICKS=1 은 한 인스턴스 백로그(>4×128=512B) 시 vTaskDelay(1ms) 로
+ * 공유 RxTask 전체를 블로킹 → UART7·UART8(좌우 GRF, 둘 다 활성 1kHz RX) 상호 지연.
+ * 0 = taskYIELD (고정 1ms 블록 제거). XM 은 다중 활성 RX 인스턴스라 유일하게 필요 —
+ * IMU(BareMetal, 경로 배제)·GRF(RX discard-only, 단일 인스턴스)는 불필요. */
+#define IOIF_UART_RX_TASK_BACKOFF_TICKS (0U)
 
 /* ===== IOIF Task Stack Size Override =====
  * [2026-05-12] vApplicationStackOverflowHook 으로 "IOIF_UartRx" overflow 검출.
