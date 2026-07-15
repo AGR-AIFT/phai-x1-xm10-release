@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    ex_fes_control.c
  * @author  HyundoKim
- * @brief   [Example] FES Hub ES-vector Control via CAN-FD DOP V3
+ * @brief   [고급] FES Hub ES-vector Control via CAN-FD DOP V3
  * @version 1.0
  * @date    2026-04-09
  *
@@ -41,9 +41,14 @@
  *    - LED1 빠른 깜빡임 (200ms)
  *    - CH1 자극 중 — PID가 target_amplitude_mA(20mA) 추종
  *    - TPDO 10ms 주기로 XM.status.fes_hub 자동 갱신 (core_process)
- *    - [BTN2 클릭]: setpoint mid-update
+ *    - [BTN2 클릭]: setpoint mid-update (SDO 경로)
  *        - ES-vector SDO (0x6300) 전송 → amplitude 20→40mA
  *        - PID가 즉시 40mA 추종 시작 (KHJ FW 동작)
+ *    - [BTN2 롱프레스 (1초+)]: Command Vector 채널 테스트
+ *        - ES-vector를 신규 Command Vector(0x10C Req → 0x68C ACK)로 전송
+ *        - amplitude → 30mA (SDO 경로의 40mA와 구분용)
+ *        - 확인: XM s_diag_vec_ack_ok / FES s_diag_vec_ok·esv_trigger_cnt
+ *          (Live Expression) — 벤치 I 시나리오의 두 채널 A/B 비교
  *    - [BTN1 클릭]: 자극 정지
  *        - Master Command SDO (0x6310) cmd=1 → EXT7 다시 set
  *        - FSM: CH1_STIM → CH1_READY (토글)
@@ -106,6 +111,9 @@
 
 /** @brief Mid-update 파라미터 */
 #define FES_UPDATE_AMPLITUDE_MA     40      /* 전류 진폭 40mA (변경) */
+
+/** @brief Command Vector 채널 테스트 파라미터 (BTN2 롱프레스) */
+#define FES_VEC_TEST_AMPLITUDE_MA   30      /* 30mA — SDO 경로(40mA)와 구분용 */
 
 /** @brief TOGGLE → ES Vector 전송 대기 시간 (ms) */
 #define FES_STIM_TRANSITION_MS      10
@@ -258,8 +266,13 @@ static void Active_Loop(void)
         s_pending_es_vector = false;
     }
 
-    /* BTN2 클릭 → amplitude mid-update (20mA → 40mA) */
-    if (XM_GetButtonEvent(XM_BTN_2) == XM_BTN_CLICK) {
+    /* BTN2 — 이벤트는 Read-Clear 이므로 한 번만 읽어 분기 (xm_api_led_btn.h 권고)
+     *   클릭     : amplitude mid-update via SDO 경로 (0x6300, 40mA)
+     *   롱프레스 : 동일 mid-update via Command Vector 채널 (0x10C→0x68C, 30mA)
+     *              — 두 채널 A/B 비교 테스트 (벤치 I). ACK/적용 확인은
+     *              XM s_diag_vec_ack_ok / FES s_diag_vec_ok (Live Expression) */
+    XmBtnEvent_t btn2_evt = XM_GetButtonEvent(XM_BTN_2);
+    if (btn2_evt == XM_BTN_CLICK) {
         FesHub_ESVector_t esv_update = {
             .ch_select     = 1,
             .amplitude_mA  = FES_UPDATE_AMPLITUDE_MA,   /* 40mA */
@@ -268,6 +281,16 @@ static void Active_Loop(void)
             .burst_ms      = FES_DEFAULT_BURST_MS,
         };
         FesHub_Drv_SendESVector(&esv_update);
+    } else if (btn2_evt == XM_BTN_LONG_PRESS) {
+        FesHub_ESVector_t esv_vec = {
+            .ch_select     = 1,
+            .amplitude_mA  = FES_VEC_TEST_AMPLITUDE_MA, /* 30mA */
+            .duty_x1000    = FES_DEFAULT_DUTY_X1000,
+            .frequency_Hz  = FES_DEFAULT_FREQUENCY_HZ,
+            .burst_ms      = FES_DEFAULT_BURST_MS,
+        };
+        /* -1 = 이전 명령 ACK 대기 중 (소비가 pnp_task 100ms 격자 — 연타 시 정상) */
+        (void)FesHub_Drv_SendESVectorCmd(&esv_vec);
     }
 
     /* BTN1 클릭 → CH1 자극 정지 → STANDBY */

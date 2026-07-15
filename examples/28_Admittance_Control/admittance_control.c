@@ -284,6 +284,10 @@ static void Active_Loop(void)
     s_torque_rh = _ComputeAdmittanceTorque(&s_adm_r, tau_ext_r, theta_r, s_theta_eq_r);
     s_torque_lh = _ComputeAdmittanceTorque(&s_adm_l, tau_ext_l, theta_l, s_theta_eq_l);
 
+    /* 좌/우 독립 전송 (각 1회) */
+    XM_SetAssistTorqueRH(s_torque_rh);
+    XM_SetAssistTorqueLH(s_torque_lh);
+
     /* LED2: 외력 감지 시 ON (|τ_ext| > 0.5 Nm) */
     XM_SetLedState(XM_LED_2, (fabsf(tau_ext_r) > 0.5f) ? XM_ON : XM_OFF);
 
@@ -353,8 +357,7 @@ static float _ComputeAdmittanceTorque(AdmState_t *state, float tau_ext,
 
     /* Step 5: 포화 후 전송 */
     float tau_out = _ClampFloat(tau_raw, -MAX_TORQUE_NM, MAX_TORQUE_NM);
-    XM_SetAssistTorqueRH(s_torque_rh); /* 실제 전송은 호출자에서 */
-    return tau_out;
+    return tau_out;  /* 순수 계산 — 실제 전송은 호출자(Active_Loop)에서 RH/LH 각각 1회 */
 }
 
 static void _ResetAdmState(AdmState_t *state, float current_angle)

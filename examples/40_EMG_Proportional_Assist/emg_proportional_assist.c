@@ -1,7 +1,8 @@
 /**
  ******************************************************************************
  * @file    emg_proportional_assist.c
- * @brief   EMG proportional assist torque control using external ADC inputs.
+ * @author  HyundoKim
+ * @brief   [고급] EMG 비례 보조 토크 — 외부 ADC 4채널 EMG → 포락선 → 비례 고관절 보조 (경진대회 토대)
  * @details
  * ============================================================================
  * 1. Purpose
@@ -168,6 +169,17 @@
  *   approx. 656-685 : EMG filtering, rectification, and envelope extraction
  *   approx. 686-717 : _SelectTorquePair() selected right/left command routing
  *   approx. 764-787 : _EnvelopeToTorque() proportional mapping and clamp
+ *
+ * @warning **본 예제는 XM10 Rev 2.0 전용** — Rev 1.1 SDK 에서는 link 실패.
+ *          외부 센서 전원 제어 API `XM_SetExtPowerVoltage()` (XM_EXT_PWR_5V)
+ *          가 Rev 2.0 lib 에만 존재하며, Rev 1.1 lib 에는 해당 심볼이 없어
+ *          링크되지 않습니다. 본인 보드가 Rev 1.1 이면 이 예제는 빌드할 수
+ *          없습니다. 참고: docs/hardware/README.md - 보드 리비전 비교
+ *
+ * @see     Ex.05 ext_io_analog (외부 ADC 입문), Ex.09 cdc_stream (0xF0 스트리밍)
+ * @version 1.0
+ * @date    2026-06-23
+ * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
  */
 

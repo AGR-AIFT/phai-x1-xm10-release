@@ -57,6 +57,7 @@ static GaitLog_t s_log;
 static XmTsmHandle_t s_tsm;
 static uint32_t s_session_counter = 0;
 static char s_session_name[32];
+static bool s_log_start_failed = false;  /* 로그 시작 실패 → Active_Loop 에서 STANDBY 복귀 */
 
 /**
  *------------------------------------------------------------
@@ -141,12 +142,21 @@ static void Active_Entry(void)
         /* 세션 시작 마커 삽입 (type=1: session start) */
         XM_InsertUsbLogMarker(1, (uint16_t)s_session_counter);
     } else {
-        XM_TSM_TransitionTo(s_tsm, XM_STATE_STANDBY);
+        /* on_entry 안의 TransitionTo 는 TSM 엔진이 무시(ENTRY→LOOP 강제)하므로,
+         * 플래그만 세우고 다음 tick 의 Active_Loop(on_loop)에서 STANDBY 로 복귀한다. */
+        s_log_start_failed = true;
     }
 }
 
 static void Active_Loop(void)
 {
+    /* 0. 로그 시작 실패 폴백 (on_entry 에서 이월) */
+    if (s_log_start_failed) {
+        s_log_start_failed = false;
+        XM_TSM_TransitionTo(s_tsm, XM_STATE_STANDBY);
+        return;
+    }
+
     /* 1. 데이터 갱신 */
     s_log.hip_L    = XM.status.h10.leftHipAngle;
     s_log.hip_R    = XM.status.h10.rightHipAngle;

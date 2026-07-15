@@ -1,7 +1,7 @@
 /**
  ******************************************************************************
  * @file    task_lifecycle.c
- * @brief   Ex.39 — OneShot Task Lifecycle (Create → IsComplete → Delete)
+ * @brief   [고급] Ex.39 — OneShot Task Lifecycle (Create → IsComplete → Delete)
  *
  * 학습 포인트
  *   1. XM_Task_CreateOneShot() — 1회 실행하고 끝나는 보조 task

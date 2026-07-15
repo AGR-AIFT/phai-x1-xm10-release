@@ -47,6 +47,7 @@
 
 #include "xm_api.h"
 #include <math.h>
+#include <stdlib.h>   // abs()
 
 /**
  *-----------------------------------------------------------
