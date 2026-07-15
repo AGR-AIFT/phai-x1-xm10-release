@@ -36,7 +36,9 @@ set(MX_Application_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/stm32h7xx_hal_timebase_tim.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/sysmem.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/syscalls.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../startup_stm32h743xx.s
+    # startup: CubeIDE(.cproject) 와 동일한 XIHX 단일 사용 — 구 startup_stm32h743xx.s(XX)는
+    # XIHX_FLASH.ld 섹션 초기화와 짝이 맞지 않아 제거됨 (v2.3.0 빌드 통일)
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Startup/startup_stm32h743xihx.s
 )
 
 # STM32 HAL/LL Drivers
