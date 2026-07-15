@@ -1,6 +1,6 @@
-# Tutorials — 48 개 예제로 배우기
+# Tutorials — 50 개 예제로 배우기
 
-XM10 기능을 단계적으로 익힐 수 있도록 48 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.10 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.
+XM10 기능을 단계적으로 익힐 수 있도록 50 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.10 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.
 
 예제 전체 카탈로그는 [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) 에 있고, 막히면 각 README 맨 아래의 "흔한 실수" 섹션을 먼저 보세요. Claude Code 사용자라면 `"Ex.XX 가 안 돼"` 라고만 말해도 `example-helper` 가 해당 예제의 흔한 실수 + 트러블슈팅 문서를 인용해 답해줍니다.
 
@@ -49,7 +49,7 @@ XM10 기능을 단계적으로 익힐 수 있도록 48 개 예제를 준비했�
 - 8 주차 미니 프로젝트는 사용자의 동기 유지에 효과적입니다. "Ex.05~10a 까지 익힌 걸로 무엇이든" 같은 열린 주제로 운영하세요.
 - 16 주차 기말은 팀 단위 (3~4 명) 권장합니다. Physical AI 응용 트랙 (Ex.21, 31, 32, 33) 을 마지막에 깊이 다루는 팀이 보통 나옵니다.
 
-진도표에 빠진 예제 (Ex.05d, 15, 22, 24, 28~40) 는 자기주도 학습 또는 다음 학기 후속 과목용으로 남겨두는 것이 분량 면에서 자연스럽습니다.
+진도표에 빠진 예제 (Ex.05d, 15, 22, 24, 28~42) 는 자기주도 학습 또는 다음 학기 후속 과목용으로 남겨두는 것이 분량 면에서 자연스럽습니다.
 
 ---
 
@@ -188,6 +188,8 @@ PC 와 실시간으로 메시지를 주고받거나 USB 메모리에 데이터�
 | [38](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/38_Periodic_Background_Task/) | 주기적 백그라운드 태스크 | ⭐⭐ | 저주기 보조 작업 분리, 제어 루프 지터 최소화 |
 | [39](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/39_Task_Lifecycle/) | 태스크 생명주기 관리 | ⭐⭐⭐ | 태스크 생성·일시정지·종료, RTOS 태스크 상태 머신 패턴 |
 | [40](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/40_EMG_Proportional_Assist/) | EMG 비례 보조 토크 🛑 **Rev 2.0 전용** | ⭐⭐⭐⭐ | 외부 ADC 4채널 EMG → envelope → 비례 토크, BTN 캘리브 + PhAI Studio 0xF0 스트리밍 (EMG 경진대회 토대) |
+| [41](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/41_IMU_Hub_Dashboard/) | IMU Hub 자세 대시보드 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 최대 6개 IMU 쿼터니언→오일러(r/p/y) 변환, 연결 자동감지 + PhAI Studio 0xF0 18채널(50Hz) 스트리밍 (FDCAN2 센서허브) |
+| [42](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/42_EMG_Hub_Biofeedback/) | EMG Hub 바이오피드백 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 허브 처리 근활성도(envelope/MVC%) 수신, BTN 캘리브 + LED/PhAI Studio 0xF0 4채널(50Hz) 실시간 피드백 (FDCAN2 센서허브, 모터 미구동) |
 
 ---
 

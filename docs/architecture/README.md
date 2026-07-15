@@ -122,7 +122,7 @@ Extension_Module/
 │   │   └── Control_Task/
 │   │       └── control_task.c     ← 여기가 사용자 작업 공간
 │   └── (그 외 폴더는 모두 XM 라이브러리 — 건드리지 않습니다)
-└── examples/                  ← 47 개 예제의 control_task.c 모음
+└── examples/                  ← 50 개 예제의 control_task.c 모음
     ├── 00_Quick_Start/quick_start.c
     ├── 14_PD_Realtime_Control/pd_realtime_control.c
     └── ...

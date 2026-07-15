@@ -27,7 +27,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **MCU** | STM32H743XIH6 (Cortex-M7, 480 MHz, BGA265) |
 | **OS** | FreeRTOS + CMSIS-OS2 |
 | **레포 역할** | 사용자 (개발자/연구자/수강생) 대상 **공개 릴리즈** (SDK + 예제 + 문서) |
-| **개발 원본** | 사내 `ARC_ExtensionBoard` (private) — 본 레포는 동기화된 공개판 |
+| **개발 원본** | 내부 개발 레포 (비공개) — 본 레포는 동기화된 공개판 |
 | **License** | MIT |
 | **Latest** | [`v2.2.2`](https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.2.2) (Releases → `Rev2.0.zip` / `Rev1.1.zip` 다운로드) |
 
@@ -41,7 +41,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 2. **[하드웨어 셋업](docs/getting-started/01-hardware-setup.md)** → **[소프트웨어 셋업](docs/getting-started/02-software-setup.md)** → **[첫 빌드](docs/getting-started/03-first-build.md)** — 수동 절차
 3. **[Ex.00 Quick Start](examples/00_Quick_Start/)** — 보드 smoke test (⭐)
 4. **[Ex.01~03 Button & LED](examples/01_Button_LED_Basic/)** — 디지털 IO 기본 (⭐~⭐⭐)
-5. **[전체 학습 로드맵](docs/tutorials/README.md)** — 47 예제 트랙 (난이도 별 표시)
+5. **[전체 학습 로드맵](docs/tutorials/README.md)** — 50 예제 트랙 (난이도 별 표시)
 
 ---
 
@@ -94,12 +94,12 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 ---
 
-## 다른 사내 도구와의 관계
+## 관련 도구와의 관계
 
 | 도구 | 역할 | XM10 과의 관계 |
 |------|------|---------------|
 | **PhAI Studio** | 실시간 데이터 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
-| **angel Sensor Studio** | 사내 진단/검증 GUI (Python/PySide6) | EMG/IMU Hub — XM10 과 CAN-FD 로 연계 가능 |
+| **angel Sensor Studio** | 진단/검증 GUI (Python/PySide6, 별도 배포) | EMG/IMU Hub — XM10 과 CAN-FD 로 연계 가능 |
 | **PythonDecoder** (`PythonDecoder/`) | USB MSC 로그 CSV 후처리 | 본 레포 내장 |
 
 ---
@@ -109,7 +109,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 - 공식 문서: [docs/](docs/README.md)
 - 트러블슈팅: [docs/troubleshooting.md](docs/troubleshooting.md)
 - 이슈 제출: GitHub Issues (`.github/ISSUE_TEMPLATE/` 4종 제공 — bug / feature / hardware / config)
-- 학습용 외부 자료: [onephai.com](https://onephai.com) (사내 온라인 학습 플랫폼)
+- 학습용 외부 자료: [onephai.com](https://onephai.com)
 
 ---
 

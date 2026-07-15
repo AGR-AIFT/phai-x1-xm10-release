@@ -108,5 +108,5 @@ XM10 보드의 LED 1 이 1 초 주기로 두근-두근 깜빡이면 → 펌웨�
 환경 구축 끝났습니다. 이제 본격적으로 코드 작성으로 넘어갑니다.
 
 - 첫 예제 → [Ex.00 Quick Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/README.md) (보드 동작 확인용)
-- 학습 경로 → [tutorials/README.md](../tutorials/README.md) (47 예제 + 추천 순서)
+- 학습 경로 → [tutorials/README.md](../tutorials/README.md) (50 예제 + 추천 순서)
 - 추천 시작: Ex.00 → Ex.01 → Ex.02 → Ex.03 (버튼 + LED 4 종, ⭐~⭐⭐)

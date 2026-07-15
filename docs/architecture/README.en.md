@@ -122,7 +122,7 @@ Extension_Module/
 │   │   └── Control_Task/
 │   │       └── control_task.c     ← your workspace
 │   └── (all other folders are XM library — do not modify)
-└── examples/                  ← 47 example control_task.c files
+└── examples/                  ← 50 example control_task.c files
     ├── 00_Quick_Start/quick_start.c
     ├── 14_PD_Realtime_Control/pd_realtime_control.c
     └── ...

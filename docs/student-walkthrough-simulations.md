@@ -194,7 +194,7 @@ if (XM_GetButtonState(BUTTON_USER1) == BUTTON_PRESSED) {
 | 단계 | 보는 페이지 | 평가 |
 |------|------------|------|
 | 루트 README | "한 학기 분량인가" | 학습 경로 표 (입문 3 시간 / 중급 1 주 / 고급 한 학기) ✅ |
-| `docs/tutorials/README.md` | 47 개 예제 인덱스 | Part 0~7 분할 + Body Data 전제 ✅ |
+| `docs/tutorials/README.md` | 50 개 예제 인덱스 | Part 0~7 분할 + Body Data 전제 ✅ |
 | `examples/README.md` | Stage 1~5 큰 그림 | 학기 후반부 Physical AI 흐름 ✅ |
 | **추천 학습 경로** | 5 가지 트랙 | "수업용 / 자기주도 / 응용 프로젝트" 명확 ✅ |
 

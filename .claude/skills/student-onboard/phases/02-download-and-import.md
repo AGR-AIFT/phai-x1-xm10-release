@@ -84,7 +84,7 @@ CubeIDE 메뉴:
   - 권장: `C:\dev\Extension_Module\` (`.project` / `.cproject` 가 이 폴더 root 에 있음)
 - 자동으로 프로젝트 1개 감지됨 → 체크박스 활성화 확인 → `Finish`
 
-> 💡 본 ZIP 은 Rev 별로 평탄화 배포라 **Rev 폴더 안으로 들어갈 필요 없습니다**. ZIP root 가 곧 SDK root. (사내 개발 레포의 `XM10_SDK/Rev*/Extension_Module/` 깊은 구조와는 다릅니다.)
+> 💡 본 ZIP 은 Rev 별로 평탄화 배포라 **Rev 폴더 안으로 들어갈 필요 없습니다**. ZIP root 가 곧 SDK root. (GitHub 레포의 `XM10_SDK/Rev*/Extension_Module/` 깊은 구조와는 다릅니다.)
 
 ### 6. 검증
 

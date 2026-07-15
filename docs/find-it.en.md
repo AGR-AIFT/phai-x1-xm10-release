@@ -35,7 +35,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 
 | Situation | Where to go |
 |-----------|-------------|
-| Full index of all 47 examples | [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) |
+| Full index of all 50 examples | [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) |
 | Learning paths by difficulty and track | [docs/tutorials/README.md](tutorials/README.md) |
 | 16-week semester schedule | [tutorials/README.md — Semester Schedule section](tutorials/README.md#한-학기-16-주-수업-진도표-예시) |
 | An example (Ex.XX) isn't working | See the "⚠️ Common Mistakes" section in `examples/XX_*/README.md` |
@@ -50,7 +50,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | External GPIO pinmap (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | External GPIO pinmap (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | Is my board Rev 1.1 or Rev 2.0? | [hardware/README.md — Board Revision Comparison](hardware/README.md#보드-리비전-비교) |
-| Which board revision do the 47 examples support? | [examples/README.md — Board Revision Compatibility](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) (both work; only the external GPIO pinmap differs) |
+| Which board revision do the 50 examples support? | [examples/README.md — Board Revision Compatibility](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) (47 work on both; Ex.40/41/42 are Rev 2.0-only) |
 
 ## 📥 Firmware Upload
 

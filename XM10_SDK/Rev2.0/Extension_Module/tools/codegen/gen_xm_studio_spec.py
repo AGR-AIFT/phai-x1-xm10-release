@@ -406,7 +406,7 @@ def build_xm_studio_spec_kr(doc):
     add_table(doc,
         ["항목", "내용"],
         [
-            ["예제 소스", "52개 기존 예제\n(ARC_ExtensionBoard/.../Examples/)"],
+            ["예제 소스", "52개 기존 예제\n(examples/ 폴더)"],
             ["카테고리", "입문(6), 초급(12), 중급(15), 고급(19)"],
             ["메타데이터", "JSON: id, title, category, difficulty,\ndescription, files[], required_hw"],
             ["워크플로우", "예제 선택 → Editor 로드 → 수정 → 빌드 → 업로드"],
@@ -955,7 +955,7 @@ def build_xm_studio_spec_en(doc):
     add_table(doc,
         ["Item", "Content"],
         [
-            ["Source", "52 existing examples (ARC_ExtensionBoard/.../Examples/)"],
+            ["Source", "52 existing examples (examples/ folder)"],
             ["Categories", "Beginner(6), Elementary(12), Intermediate(15), Advanced(19)"],
             ["Metadata", "JSON: id, title, category, difficulty, description, files[], required_hw"],
             ["Workflow", "Select example -> Load in Editor -> Modify -> Build -> Upload"],

@@ -4,6 +4,35 @@
 
 ---
 
+## [v2.3.0] — 2026-07-15
+
+> 센서 허브 연동 예제 2 종(IMU Hub · EMG Hub)을 새로 추가하고, SDK 안의 펌웨어·예제를 개발 원본과 완전히 동일하게 다시 정합한 마이너 릴리즈. Rev 1.1 / Rev 2.0 두 버전을 다시 정렬했으며, 펌웨어 버전 표기(version.h)를 실제 릴리즈에 맞춰 정정했습니다.
+
+### Added (예제)
+* **Ex.41 IMU Hub Dashboard** 🛑 Rev 2.0 전용 — IMU Hub Module 최대 6채널의 방위(쿼터니언)를 받아 오일러 각으로 변환, 연결 자동감지 + PhAI Studio 18채널 스트리밍. (관찰형, 모터 없음)
+* **Ex.42 EMG Hub Biofeedback** 🛑 Rev 2.0 전용 — EMG Hub Module의 근활성도를 받아 MVC 정규화 + LED / PhAI Studio 바이오피드백. (모터 없음)
+
+### Fixed (예제 실동작)
+* **Ex.28 Admittance** — 어드미턴스 토크가 좌/우 계산 완료 전에 인가되던 순서 정정(좌우 각각 계산 후 인가).
+* **Ex.17 FSM Gait Intent** — 체중 파라미터 단위(g) 및 레벨 스케일 계수 정정.
+* **Ex.12 Active Assist** — 앵커 각도 스케일(×10) 정정.
+* **Ex.10 / 10c MSC Log** — 로그 시작을 진입(on_entry) 시점으로 정합 + 시작 실패 시 안전 복귀.
+
+### Changed
+* **SDK 펌웨어·시스템 코드 정합** — `libXM_Lib.a` 재빌드(개발 원본과 byte-identical 검증) + `Core/`(NVIC 우선순위·fault 핸들러·RTOS 설정)·`Compatible/`·`LWIP/` 를 개발 원본과 동일하게 갱신. 릴리즈 SDK 클린빌드 0 error 로 개발 펌웨어와 동일 동작 확인.
+* **예제 정합** — 진입점 주석(Control_Setup/Loop)·난이도 표기 일관화, Ex.40 을 Rev 2.0 SDK 번들에도 포함.
+* **문서 정합** — 예제 수 표기 50 개로 갱신(Rev 1.1 SDK 는 47 개), Ex.41/42 카탈로그 반영, 내부 레포·경로 참조 정리.
+
+### Documentation
+* **API 참조 정확화** — P-Vector 목표각 스케일, RTOS task 우선순위표, RTC / PSRAM Rev 2.0 전용 표기 정정.
+* **`version.h` 2.3.0 정합** — v2.2.1 / v2.2.2 패치 때 누락된 버전 bump 반영(그동안 2.2.0 으로 보고되던 갭 해소).
+
+### Compatibility
+* Ex.40 / 41 / 42 는 **Rev 2.0 전용**(센서 허브 · 외부 전원 API). Rev 1.1 SDK 에는 포함되지 않습니다.
+* 사용자 코드 / 공개 API 시그니처 변경 없음.
+
+---
+
 ## [v2.2.2] — 2026-05-20
 
 > SDK 안의 예제 코드 47 개를 다시 한 번 훑어 사용자 혼선 포인트 9 건을 정리한 패치 릴리즈. Ex.36 이 Rev 2.0 전용임을 4 곳에 일관 표기. 사용자 코드 / API / KIT H10 펌웨어 변경 없음.
@@ -225,7 +254,7 @@
 * **AGR_DOP 리팩토링 구조 반영**: `agr_dop.c` → `Core/` + `Transport/` 분리 구조로 업데이트
 * **SDK 링커 설정 수정**: `--whole-archive` 적용으로 `__weak` 심볼 정상 오버라이드
   * Libraries(-l) → Other flags 이동 (CubeIDE makefile 명령줄 순서 문제 해결)
-* **SDK XM_FW 헤더 동기화**: ARC_ExtensionBoard 원본과 완전 동기화
+* **SDK XM_FW 헤더 동기화**: 내부 개발 레포 원본과 완전 동기화
   * AGR_DOP Core/Transport 헤더 추가, 폐기된 `agr_dop.h` 제거
 * **CMake CLI 빌드 도구 추가**: `cproject_to_cmake.py`, `stm32_gcc_toolchain.cmake`
 

@@ -108,5 +108,5 @@ If you applied example code, follow the "Experiment" steps in that example's REA
 Your development environment is ready. Time to start writing code.
 
 - First example → [Ex.00 Quick Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/README.md) (verifies board operation)
-- Learning path → [tutorials/README.md](../tutorials/README.md) (47 examples + recommended order)
+- Learning path → [tutorials/README.md](../tutorials/README.md) (50 examples + recommended order)
 - Suggested starting sequence: Ex.00 → Ex.01 → Ex.02 → Ex.03 (buttons + LEDs, ⭐~⭐⭐)

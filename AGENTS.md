@@ -13,14 +13,14 @@
 ## 정체성
 
 - **모듈**: XM10 (STM32H743XIH6, FreeRTOS)
-- **레포 역할**: 공개 릴리즈 (사내 `ARC_ExtensionBoard` 의 동기화 공개판)
+- **레포 역할**: 공개 릴리즈 (내부 개발 레포의 동기화 공개판)
 - **License**: MIT
 
 ## 학습 경로 요약
 
 1. [docs/getting-started/00-claude-code-quickstart.md](docs/getting-started/00-claude-code-quickstart.md) — AI 자동 안내
 2. [examples/00_Quick_Start/](examples/00_Quick_Start/) — Hello board
-3. [docs/tutorials/README.md](docs/tutorials/README.md) — 47 예제 전체 로드맵
+3. [docs/tutorials/README.md](docs/tutorials/README.md) — 50 예제 전체 로드맵
 
 ## 절대 룰
 

@@ -29,7 +29,7 @@ Start here if this is your first time.
 
 ---
 
-## 2. [Tutorials](tutorials/) — Step-by-Step Learning with 47 Examples
+## 2. [Tutorials](tutorials/) — Step-by-Step Learning with 50 Examples
 
 Each example follows a consistent 5-step structure: `Goal → Prerequisites → Key Code → Experiment → Next Steps`. Introductory examples are designed to be completable in under 30 minutes.
 
@@ -43,6 +43,7 @@ Each example follows a consistent 5-step structure: `Goal → Prerequisites → 
 | 5 | Advanced control algorithms (Hogan, HZD, CPG, etc.) | Ex.20–25 |
 | 6 | Learning & adaptive control (ILC, MRAC, etc.) | Ex.26–30 |
 | 7 | Physical AI applications | Ex.31–36 |
+| 8 | External module integration + RTOS utilities + Sensor Hub | Ex.37–42 |
 
 Full learning path and recommended order: **[Tutorials README](tutorials/)**
 
@@ -104,7 +105,7 @@ Common issues covering build errors, USB connection problems, communication fail
 ## Additional Resources
 
 - [🧭 find-it.md](find-it.md) — Quick keyword-to-page lookup
-- [Examples](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/) — Source code for all 47 examples (each folder includes a 5-step README)
+- [Examples](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/) — Source code for all 50 examples (each folder includes a 5-step README)
 - [Python Tools](https://github.com/AGR-EXO/Extension_Module/tree/Develop/PythonDecoder/) — USB serial receiver, USB memory decoder
 - [Release Notes](release-notes/) — Per-version attachments and compatibility matrix
 - [Changelog](https://github.com/AGR-EXO/Extension_Module/blob/Develop/CHANGELOG.md) — Summary of changes by version

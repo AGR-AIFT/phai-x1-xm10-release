@@ -31,7 +31,7 @@ Rev1.1.zip (압축 풀면) → Extension_Module/
 │   └── CMakeLists.txt
 │
 ├── 📖 docs/      ← 학습 문서 (release repo top-level 사본)
-├── 🎓 examples/  ← 51 README + 47 .c (예제별 학습 가이드)
+├── 🎓 examples/  ← 51 README + 50 .c (예제별 학습 가이드)
 ├── 🤖 .claude/   ← Claude Code 진입점 (student-onboard, example-helper)
 ├── 📌 CLAUDE.md  (Rev 특화 — 1.1 또는 2.0)
 ├── 📌 AGENTS.md  (Codex 진입점)
