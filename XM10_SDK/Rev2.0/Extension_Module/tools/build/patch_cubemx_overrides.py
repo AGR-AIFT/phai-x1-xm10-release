@@ -213,7 +213,7 @@ def patch_ethernetif_eth_static_alloc(file_path: Path) -> bool:
 # HardFault/MemManage/BusFault/UsageFault 를 stock while(1) 스텁으로 되돌린다 (2026-06-24
 # 509ceb3 실사고 — fault-dump 인프라 무력화). 4개를 HardFault_CaptureAndReset() 로 분기하는
 # naked dispatcher 로 복원 → .noinit 덤프 + D-Cache clean + warm reset 유지. 대상 함수
-# 정의(hardfault_dump.c)와 include(hardfault_dump.h)는 사내 코드라 상존.
+# 정의(hardfault_dump.c)와 include(hardfault_dump.h)는 XM_FW(System/Diag) 쪽에 상존.
 # ------------------------------------------------------------
 _IT_FAULT_EXC = [
     ("HardFault",  "3", "HF_EXC_HARDFAULT"),
