@@ -40,12 +40,12 @@ def get_git_version() -> str:
         ).strip().decode('utf-8')
     except subprocess.CalledProcessError as e:
         print(f"WARNING: git describe failed: {e.output.decode('utf-8').strip()}")
-        print("  Using default version v1.0.0.0 (no tag found)")
-        version = "v1.0.0.0"
+        print("  Keeping existing version.h (no git tag -- release archive)")
+        version = ""
     except FileNotFoundError:
         print("WARNING: git not found in PATH")
-        print("  Using default version v1.0.0.0")
-        version = "v1.0.0.0"
+        print("  Keeping existing version.h (git not available)")
+        version = ""
     return version
 
 
@@ -108,6 +108,9 @@ def main() -> None:
     args = parser.parse_args()
 
     version = get_git_version()
+    if not version:
+        print("No git tag available -- keeping existing version.h (release archive build).")
+        return
     major, minor, patch, debug = parse_version(version)
 
     print(f"Git tag: {version} -> v{major}.{minor}.{patch}.{debug}")
