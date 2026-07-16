@@ -81,18 +81,17 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/System/Comm/UART}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/System/Comm/USB}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/System/Config}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/System/Diag}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/System/Core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/Devices/Marveldex}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/Devices/XSENS}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/Devices/AGR/Control_Module}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/Devices/AGR/EMG_Module}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/Devices/AGR/FES_Module}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/Devices/AGR/FSR_Module}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/Devices/AGR/IMU_Module}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/AGR_MW/DOP}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/AGR_MW/DOP/Core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/AGR_MW/DOP/Transport/CAN_FD}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/AGR_MW/DOP/Transport/CoE}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/AGR_MW/DOP/Transport/Serial}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/AGR_MW/DOP/Transport/UDP}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/XM_FW/AGR_MW/PnP}&quot;"/>
