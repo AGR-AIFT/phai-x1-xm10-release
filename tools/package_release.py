@@ -25,6 +25,22 @@ EXCLUDE_DIRS = {
     "build_rev1.1", "build_rev2.0", ".settings",
 }
 
+# ⚠️ "build" 를 경로의 아무 부분에나 단순 매칭하면 SDK 의 tools/build/(pre/post-build
+# 스크립트 5종 — patch_cubemx_overrides/size_report/version_generator/patch_fw_info/
+# fw_packager)까지 제외되어 CubeIDE 관리빌드가 pre-build 에서 죽는다 (v2.3.0 실사고,
+# 2026-07-16). 아래 예외 목록의 디렉토리는 EXCLUDE_DIRS 부분 매칭에서 면제.
+EXCLUDE_ALLOW_PARENTS = {"tools"}  # 부모가 tools 인 build/ 는 배포 대상
+
+
+def _is_excluded(rel: Path) -> bool:
+    parts = rel.parts
+    for i, part in enumerate(parts):
+        if part in EXCLUDE_DIRS:
+            if part == "build" and i > 0 and parts[i - 1] in EXCLUDE_ALLOW_PARENTS:
+                continue
+            return True
+    return False
+
 # ZIP root 의 Extension_Module/ 에 직접 들어갈 top-level 자산 (레포 루트 기준)
 # 주의: 루트 "examples"(소문자) 는 의도적으로 제외 — SDK 가 이미 Rev 버전정합
 # Examples/(대문자, Rev1.1=47/Rev2.0=50) 를 포함하며, Windows 스테이징에서
@@ -68,7 +84,7 @@ def copy_tree_filtered(src: Path, dst: Path) -> int:
     count = 0
     for src_f in git_tracked_files(src):
         rel = src_f.relative_to(src)
-        if any(part in EXCLUDE_DIRS for part in rel.parts):
+        if _is_excluded(rel):
             continue
         if not src_f.is_file():  # 추적됐지만 워킹트리에서 삭제된 경우 방어
             continue
@@ -132,7 +148,7 @@ def package_one_rev(rev_tag: str, version: str, out_dir: Path) -> None:
             n_asset = 0
             for src_f in git_tracked_files(src):
                 rel = src_f.relative_to(REPO_ROOT)
-                if any(part in EXCLUDE_DIRS for part in rel.parts):
+                if _is_excluded(rel):
                     continue
                 if not src_f.is_file():
                     continue
