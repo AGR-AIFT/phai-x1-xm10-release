@@ -815,8 +815,6 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 
 }
 
-static uint32_t HAL_RCC_USB_OTG_FS_CLK_ENABLED=0;
-
 /**
   * @brief PCD MSP Initialization
   * This function configures the hardware resources used in this example
