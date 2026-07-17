@@ -228,6 +228,20 @@ SECTIONS
     . = ALIGN(4);
   } > RAM_D2
 
+  /* [P1-b / C-P2-05] DMA-facing 버퍼(FATFS/SDMMC IDMA, SAI) 전용 D2 Non-Cacheable 배치.
+   * ioif_agrb_fs.c / ioif_agrb_sai_audioplayer.c 의 __attribute__((section(".dma_buffer")))
+   * 대상. 이전에는 링커에 섹션 정의가 없어 cacheable D1(orphan, 0x24000460)로 밀려나
+   *   ① SDMMC2 IDMA / SAI DMA 에서 D-Cache stale (Rule16 §13.3 링커↔MPU 부정합),
+   *   ② uninitialized static 인데 orphan 이 flash LMA 26KB 낭비.
+   * NOLOAD = 비초기화 유지(ioif_agrb_fs.c:213 수동 init 전제와 정합). */
+  .dma_buffer (NOLOAD) :
+  {
+    . = ALIGN(32);
+    *(.dma_buffer)
+    *(.dma_buffer*)
+    . = ALIGN(32);
+  } > RAM_D2
+
   .RAM_D3_data (NOLOAD) :
   {
     . = ALIGN(4);
@@ -252,7 +266,17 @@ SECTIONS
     *(.lwip_sec)
     *(.lwip_sec*)
     . = ALIGN(4);
+    _end_d2_linker_sections = .;   /* [P1-C] D2 linker 관리 섹션의 최상단 주소 */
   } > RAM_D2
+
+  /* [P1-C guard] lwIP mem_heap 은 lwipopts.h LWIP_RAM_HEAP_POINTER = 0x30030000 에
+   * 고정 배치되며(32KB, MEM_SIZE), 링커가 이 영역을 모른다(magic constant).
+   * D2 linker 섹션(.RAM_D2_data[DataLogger 링]+.dma_buffer+.lwip_sec)이 0x30030000 을
+   * 침범하면 로그 payload ↔ lwIP allocator metadata 가 동일주소 충돌(silent corruption).
+   * → 빌드시간에 disjoint 강제. 위반 시 DataLogger LOG_BUFFER_SIZE(data_logger.c) 축소 또는
+   *   lwIP heap 재배치 필요. (256KB 링 시절 이 ASSERT 가 있었다면 P1-C 를 빌드에서 잡았을 것.) */
+  ASSERT(_end_d2_linker_sections <= 0x30030000,
+         "P1-C: D2 sections (DataLogger ring + .dma_buffer + .lwip_sec) overlap lwIP heap at 0x30030000 — reduce LOG_BUFFER_SIZE in data_logger.c")
 
   /* Rev2.0: PSRAM sections (NOLOAD - available after QSPI Memory-Mapped init) */
   .PSRAM_data (NOLOAD) :

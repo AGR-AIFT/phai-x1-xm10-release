@@ -67,8 +67,12 @@ static void Error_Loop(void);
 void Control_Setup(void)
 {
     // 핀 설정
-    XM_SetPinMode(XM_EXT_DIO_3, XM_EXT_DIO_MODE_INPUT_PULLUP); // 시작 버튼
-    XM_SetPinMode(XM_EXT_DIO_4, XM_EXT_DIO_MODE_INPUT);        // 리미트 스위치
+    XM_SetPinMode(XM_EXT_DIO_3, XM_EXT_DIO_MODE_INPUT_PULLUP); // 시작 버튼 (Active-Low, 눌림=LOW)
+    /* [W-P2-18] 리미트 스위치는 Active-High 가정(Active_Loop 에서 HIGH=눌림 판정)이므로
+     * 내부 Pull-DOWN 으로 미눌림 시 확정 LOW 를 만든다. 기존 Floating(INPUT)은 노이즈로
+     * 안전정지가 오/미트리거될 수 있어 안전예제에 부적합. (스위치가 GND-normally-closed
+     * 배선이면 Pull-UP + 극성 반전으로 대체 — 실제 HW fail-safe 극성에 맞출 것.) */
+    XM_SetPinMode(XM_EXT_DIO_4, XM_EXT_DIO_MODE_INPUT_PULLDOWN); // 리미트 스위치 (Active-High, 눌림=HIGH)
 
     // TSM 설정
     s_tsm = XM_TSM_Create(XM_STATE_STANDBY);

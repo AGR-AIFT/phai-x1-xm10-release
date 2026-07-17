@@ -108,6 +108,27 @@ void System_SendSync_Ch1(void);
 void System_SendSync_Ch2(void);
 
 /**
+ * @brief FDCAN1/FDCAN2 의 bus-off 복구 flush 를 서비스합니다 (IOIF ServicePeriodic wrapper).
+ * @details bus-off ISR(HAL_FDCAN_ErrorStatusCallback)은 busoff_flush_pending 플래그만 세트하고,
+ *          실제 flush(HW Tx abort + SW queue clear)는 task context 에서 소비해야 한다.
+ *          IOIF 는 그 소비를 IOIF_FDCAN_ProcessQueue 에서 수행하는데, XM 은 direct-transmit
+ *          구조(IOIF_FDCAN_Transmit 직접 호출·SW Tx Queue 미사용)라 ProcessQueue 를 호출하지
+ *          않는다 → 이 wrapper 가 XM 의 유일한 소비 지점이다.
+ *
+ *          Ch1(FDCAN1/CM): 별도 recovery 상태머신이 없어 이 호출이 유일한 bus-off 보호.
+ *          Ch2(FDCAN2/SM): s_fdcan2_* recovery 상태머신과 동일 플래그를 mutex 안 test-and-clear
+ *                          로 공유 → 겹쳐도 flush 1회(idempotent).
+ *
+ * @note UserTask(1kHz) 등에서 **연결/모드 게이트와 무관하게 매 tick 무조건** 호출할 것.
+ *       bus-off 는 링크가 끊긴 상태에서도 발생하므로 게이트 안에 넣으면 안 된다.
+ * @note System_Startup() 완료 전(FDCAN ID 미할당)에 호출돼도 안전 — IOIF 내부 invalid-id
+ *       가드가 크래시 없이 false 를 반환한다.
+ * @note 평상시(flush 미대기)에는 lockless — 뮤텍스 오버헤드 0.
+ * @warning ISR 에서 호출 금지 — IOIF 내부 TX_LOCK 이 FreeRTOS mutex(task context 전용).
+ */
+void System_Fdcan_ServicePeriodic(void);
+
+/**
  * @brief Notify FDCAN2 bus manager that a sensor-module bootup/heartbeat was seen.
  * @details Called from the FDCAN Rx routing task. This is non-blocking and only
  *          marks Tx cleanup for the next task-context FDCAN2 transmit.

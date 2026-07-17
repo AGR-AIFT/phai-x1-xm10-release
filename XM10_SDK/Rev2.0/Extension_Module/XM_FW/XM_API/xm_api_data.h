@@ -121,13 +121,12 @@ typedef struct {
     float forwardVelocity;  // 전방 보행 속도 (m/s)
 
     // --- Motor Data (모터 상태) ---
-    // [주의] leftHipTorque / rightHipTorque는 필드명과 달리 모터 전류(A)입니다.
-    // 내부: int16_raw / CURRENT_SCALING_FACTOR(60) → 범위 -30 ~ +30 A
-    // 관절 토크 추정: τ_joint [Nm] = Kt_motor [Nm/A] × gear_ratio × hipTorque [A]
-    //                             = 0.085 × 18.75 × hipTorque ≈ 1.594 × hipTorque
-    // 실제 토크 센서가 없으므로 전류 기반 추정값입니다.
-    float leftHipTorque;      // 왼쪽 모터 전류 (A) — 필드명 주의: 단위는 Nm이 아닌 A
-    float rightHipTorque;     // 오른쪽 모터 전류 (A) — 필드명 주의: 단위는 Nm이 아닌 A
+    // leftHipTorque / rightHipTorque : 관절 토크 추정값 [Nm].
+    // 실제 토크 센서는 없으며, 모터 전류(A)에서 내부 환산한 추정값입니다:
+    //   τ_joint [Nm] = Kt[Nm/A] × gear_ratio × I[A] = 0.085 × 18.75 × I ≈ 1.594 × I
+    // (환산은 cm_drv.c 에서 수행. USB Total Data 텔레메트리는 CM raw int16 = 전류(A) 원본을 별도 사용.)
+    float leftHipTorque;      // 왼쪽 관절 토크 추정 [Nm]
+    float rightHipTorque;     // 오른쪽 관절 토크 추정 [Nm]
     float leftHipMotorAngle;  // 왼쪽 모터 엔코더 각도 (Degree) — 고관절 각도와 다를 수 있음(감속기 비율)
     float rightHipMotorAngle; // 오른쪽 모터 엔코더 각도 (Degree) — 고관절 각도와 다를 수 있음
 

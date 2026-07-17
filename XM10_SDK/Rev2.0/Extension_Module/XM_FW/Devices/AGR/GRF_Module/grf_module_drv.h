@@ -34,11 +34,21 @@
  *      [72..73 ] checksum    uint16 LE, CRC-16/CCITT-FALSE(frame[2..71])
  *
  * [스레드 모델]
- *  Writer = IOIF UART 공유 RxTask (RxIdle 콜백 → fixed frame parser).
- *  Reader = Core Process (GetLatest). Mutex + Snapshot (13-comm-core-patterns).
- *  osMutex(PrioInherit), Reader/Writer 모두 timeout 0. Reader 획득 실패 시
- *  false(직전 snapshot 유지), Writer 실패 시 해당 프레임 drop. RxTask 는 태스크
- *  컨텍스트(ISR 아님) → mutex 사용 안전.
+ *  Writer = IOIF UART 공유 RxTask (RxIdle 콜백 → fixed frame parser), prio 54.
+ *  Reader = Core Process (GetLatest), prio 53. / PnP Task(LED), prio 25.
+ *  Mutex + Snapshot (13-comm-core-patterns). osMutex(PrioInherit).
+ *  timeout 은 XM 표준대로 역할별 분리 — **Reader 0 / Writer 1 tick**.
+ *   - Reader 0: 획득 실패 시 false 반환 → 직전 snapshot 유지 (제어 루프 블로킹 금지).
+ *   - Writer 1: Reader 가 mutex 를 쥔 채 선점당한 경우(RxTask 54 > UserTask 53 →
+ *     priority inversion) PrioInherit 가 Reader 를 boost 해 즉시 해제시키게 한다.
+ *     timeout=0(trylock)이면 '대기'가 없어 PI 가 영원히 발동 못 하고, inversion 마다
+ *     프레임을 조용히 버린다 (2026-07-17 실측 6667 drop = 0.17%). 임계구역이 76B 구조체
+ *     복사뿐이라 실 대기는 sub-us — 1 tick 은 도달할 일 없는 상한이며, 도달 시 거동은
+ *     trylock 과 동일(drop)하다.
+ *  RxTask 는 태스크 컨텍스트(ISR 아님) → mutex 사용 안전.
+ *  [drop-free 관측] g_dbg_grf_last_parsed[] / g_dbg_grf_parsed_count[] 는 mutex '전'에
+ *  무조건 갱신 → snapshot drop 과 무관하게 모든 CRC-valid 프레임을 담는다.
+ *  관계식: g_dbg_grf_parsed_count == frame_count + snapshot_drop_count.
  *
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************
@@ -85,6 +95,21 @@
 /** @brief Auto-Sense 타임아웃 (ms). GRF 1kHz 스트림 → 500ms 무수신 = 단선. */
 #ifndef GRF_MODULE_AUTOSENSE_TIMEOUT_MS
 #define GRF_MODULE_AUTOSENSE_TIMEOUT_MS (500U)
+#endif
+
+/**
+ * @brief update_gap_cycles_max 통계 상한 (DWT cycle). 초과 간격은 max 갱신에서 제외.
+ * @details 480MHz × 10ms = 4,800,000. 상한의 유일한 목적은 "정상 주기 지터"와 "통신 공백"의
+ *          분리다. 500ms 이상 단선은 GrfModule_RunPeriodic 의 s_last_update_cycles=0 리셋이
+ *          이미 구조적으로 배제하므로, 이 상한은 타임아웃에 못 미치는 짧은 순단만 걸러내는
+ *          backstop 이다.
+ *          ⚠️ 구값 960000(2ms)은 snapshot drop 1회의 간격(≈2×485000=970000cyc)보다 낮아
+ *          정작 관측 대상인 drop 흔적을 max 통계에서 전부 배제했다 (2026-07-17 실측:
+ *          drop 6667 건에도 max 가 캡 경계 960000 에 붙어 있었음). 10ms 로 올려 drop
+ *          최대 ~9 연속까지 관측 가능하게 한다.
+ */
+#ifndef GRF_MODULE_UPDATE_GAP_MAX_CAP_CYC
+#define GRF_MODULE_UPDATE_GAP_MAX_CAP_CYC (4800000UL)   /* 10ms @480MHz */
 #endif
 
 /**
@@ -139,7 +164,9 @@ typedef struct {
      * end-to-end 절대지연은 오실로 GPIO-토글(양 보드) 필요(F17). */
     uint32_t proc_cycles_last;        /**< _RxCallback 1회 처리 소요 cycle (CPU 비용) */
     uint32_t update_gap_cycles_last;  /**< DataLake 갱신 간 간격 cycle (≈480000=1ms) */
-    uint32_t update_gap_cycles_max;   /**< 위 간격의 관측 최대 (지터 상한, 재연결 시 큰 값) */
+    uint32_t update_gap_cycles_max;   /**< 위 간격의 관측 최대 (지터 상한).
+                                       *   GRF_MODULE_UPDATE_GAP_MAX_CAP_CYC 초과분은 제외 —
+                                       *   값이 캡에 붙어 있으면 '초과 간격이 잘렸다'는 신호. */
 } GrfModule_Diag_t;
 
 /**

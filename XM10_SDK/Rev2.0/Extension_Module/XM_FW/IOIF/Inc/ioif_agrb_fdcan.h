@@ -248,6 +248,25 @@ AGRBStatusDef IOIF_FDCAN_QueueMessage(IOIF_FDCANx_t id, uint32_t can_id, const u
 uint32_t IOIF_FDCAN_ProcessQueue(IOIF_FDCANx_t id, uint8_t reserved_slots);
 
 /**
+ * @brief [필수 주기 서비스] Bus-Off 복구 flush 전용 경량 서비스 (SW queue drain 없음)
+ * @details direct-transmit 모듈(XM10/CM-WH 등 IOIF_FDCAN_Transmit 직접 호출·SW Tx
+ *          Queue 미사용)이 IOIF_FDCAN_ProcessQueue 를 주기 호출하지 않아도, bus-off
+ *          복구 직후 stale HW Tx 버퍼가 복구된 버스로 버스트 송신되는 것을 막을 수 있도록
+ *          bus-off flush(test-and-clear + HW Tx abort + SW queue flush)만 떼어낸 필수
+ *          서비스. **모든 FDCAN 사용 모듈은 ProcessQueue 또는 본 함수 중 하나를 반드시
+ *          주기 호출**해야 bus-off 보호를 받는다.
+ * @param id IOIF_FDCANx_t 핸들
+ * @return true = 이번 호출에서 bus-off flush 수행, false = no-op(정상 상태)
+ * @note ProcessQueue 를 이미 주기 호출하는 모듈(IMU/EMG 등)은 그 안에서 동일 처리가
+ *       일어나므로 본 함수를 추가로 부를 필요 없음. 설령 둘 다 불러도 mutex 안
+ *       test-and-clear 라 flush 는 1회만 수행됨(idempotent, double-flush 없음).
+ * @note Thread-Safe: 내부 TX_LOCK 으로 flush 원자성 보장. Task context 에서 주기 호출.
+ * @note 평상시(flush 불필요) 경로는 lockless(volatile flag pre-check) — 1kHz 주기
+ *       호출에도 뮤텍스 오버헤드가 없다. 실제 flush 발생 시에만 TX_LOCK 획득.
+ */
+bool IOIF_FDCAN_ServicePeriodic(IOIF_FDCANx_t id);
+
+/**
  * @brief 모든 Pending Tx 요청 취소 (Thread-Safe)
  * @param id IOIF_FDCANx_t 핸들
  */

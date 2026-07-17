@@ -377,11 +377,17 @@ void XM_USB_RegisterModeChangeCallback(XM_USB_ModeChangeCb_t cb);
 bool XM_USB_RequestProductionLatch(void);
 
 /**
- * @brief [Internal] DTR=0 (USB 분리 / re-enumerate) 시 cdc_handler 가 호출.
- *        PHAI 로 자동 복귀 + 사용자 lock 해제. 다음 DTR=1 시 다시 PHAI →
- *        (첫 DOP frame 도착 시) PRODUCTION 라이프사이클 재개.
+ * @brief [Internal] DTR=0 (USB 분리 / re-enumerate) 시 PHAI 로 자동 복귀 + 사용자 lock 해제.
+ *        ⚠ heavy·non-ISR-safe → TASK 문맥에서만 호출(XM_USB_ProcessPeriodic 내부/edge 경로).
+ *        ISR(cdc DTR callback)에서는 XM_USB_NotifyDtrLostFromISR() 를 대신 사용 [P1-G].
  */
 void XM_USB_OnDtrLost(void);
+
+/**
+ * @brief [Internal/ISR-safe] ISR 문맥에서 DTR-lost 를 표시(atomic set)만 하고 즉시 복귀.
+ *        실제 heavy 복귀(XM_USB_OnDtrLost)는 XM_USB_ProcessPeriodic(UserTask 1kHz)이 소비 [P1-G].
+ */
+void XM_USB_NotifyDtrLostFromISR(void);
 
 /**
  * @brief [실시간] USB CDC로 데이터를 PhAI 패킷으로 래핑하여 전송합니다.

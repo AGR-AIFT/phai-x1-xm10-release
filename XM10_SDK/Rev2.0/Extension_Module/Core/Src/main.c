@@ -203,6 +203,80 @@ static void XM_BootDiagClear(void)
         g_xm_boot_diag.line = __LINE__;    \
     } while (0)
 
+/* ─────────────────────────────────────────────────────────────
+ * [2026-07-18 진단] 리셋 원인 누적기 — GRF-plug 무한리셋의 정체(BOR vs HardFault) 규명.
+ *
+ * 사용법: GRF 꽂고 무한리셋 몇 초 돌린 뒤 → GRF 뽑아 루프를 깨고 clean 부팅 →
+ *   halt/CubeProgrammer 로 g_reset_cause_log 한 번 읽어 판독.
+ *   g_last_rcc_rsr(단일 스냅샷)은 clean 부팅이 덮어써 루프 이력이 날아가는데,
+ *   본 누적기는 매 부팅 RSR 을 카운트/링에 쌓아 이력을 보존한다.
+ *
+ * 판독:
+ *   - bor_count 우세      → BOR(전원 droop) = 전기적 확정
+ *   - sftrst_count 우세    → NVIC_SystemReset(HardFault) = 소프트웨어 fault (코드 재수색)
+ *   - ring[] 원시 RSR      → 실제 비트패턴 ground truth (BORRSTF 0x200000 / SFTRSTF 0x1000000)
+ *   - total_boots 큼       → SRAM 유지 = 얕은 BOR 또는 warm reset
+ *   - total_boots 안 큼 + 매번 재초기화 → 깊은 BOR/POR 로 SRAM wipe (그 자체가 전기적 신호)
+ *
+ * BOR·SRAM: 얕은 droop-BOR(임계~2.4V)은 SRAM 유지전압(~1.5V)보다 높아 .noinit 생존 →
+ *   카운트 누적. 깊은 BOR/POR 은 SRAM 소거로 magic 무효화 → 재초기화(그 자체가 신호).
+ * ⚠️ 반드시 SCB_EnableDCache() 이전에 Record 호출(현 main() 배치상 :253 보다 앞) →
+ *   SRAM 직접 write 라 cache maintenance 불필요.
+ * ───────────────────────────────────────────────────────────── */
+#define RESET_CAUSE_LOG_MAGIC   0x52435F31u   /* 'RC_1' */
+#define RESET_CAUSE_RING_SLOTS  32u
+
+typedef struct {
+    uint32_t magic;
+    uint32_t total_boots;    /* magic 유효 이래 부팅 횟수 */
+    uint32_t wipe_events;    /* magic 무효 관측(=SRAM wipe=깊은 BOR/POR/최초부팅) */
+    uint32_t bor_count;      /* BORRSTF */
+    uint32_t sftrst_count;   /* SFTRSTF (NVIC_SystemReset = HardFault / FW update) */
+    uint32_t pin_count;      /* PINRSTF (핀/디버거) */
+    uint32_t por_count;      /* PORRSTF (전원 투입) */
+    uint32_t iwdg_count;     /* IWDG1RSTF */
+    uint32_t wwdg_count;     /* WWDG1RSTF */
+    uint32_t other_count;    /* 위 어디에도 안 잡힘 */
+    uint32_t last_rsr;       /* 마지막 원시 RSR */
+    uint32_t ring_idx;       /* 다음 기록 슬롯(모듈러 전 누계) */
+    uint32_t ring[RESET_CAUSE_RING_SLOTS];  /* 최근 N개 원시 RSR (시간순) */
+} ResetCauseLog_t;
+
+__attribute__((section(".noinit"), used))
+volatile ResetCauseLog_t g_reset_cause_log;
+
+/* 부팅 초기(단일 컨텍스트, RTOS/ISR 이전, D-Cache enable 이전) 1회 호출. */
+static void ResetCause_Record(uint32_t rsr)
+{
+    if (g_reset_cause_log.magic != RESET_CAUSE_LOG_MAGIC) {
+        for (uint32_t i = 0; i < RESET_CAUSE_RING_SLOTS; ++i) {
+            g_reset_cause_log.ring[i] = 0u;
+        }
+        g_reset_cause_log.magic        = RESET_CAUSE_LOG_MAGIC;
+        g_reset_cause_log.total_boots  = 0u;
+        g_reset_cause_log.bor_count    = 0u;
+        g_reset_cause_log.sftrst_count = 0u;
+        g_reset_cause_log.pin_count    = 0u;
+        g_reset_cause_log.por_count    = 0u;
+        g_reset_cause_log.iwdg_count   = 0u;
+        g_reset_cause_log.wwdg_count   = 0u;
+        g_reset_cause_log.other_count  = 0u;
+        g_reset_cause_log.ring_idx     = 0u;
+        g_reset_cause_log.wipe_events  = 1u;  /* wipe 후 첫 부팅(최초 POR 포함) */
+    }
+    g_reset_cause_log.total_boots++;
+    g_reset_cause_log.last_rsr = rsr;
+    if      (rsr & RCC_RSR_BORRSTF)   { g_reset_cause_log.bor_count++;   }
+    else if (rsr & RCC_RSR_SFTRSTF)   { g_reset_cause_log.sftrst_count++; }
+    else if (rsr & RCC_RSR_IWDG1RSTF) { g_reset_cause_log.iwdg_count++;  }
+    else if (rsr & RCC_RSR_WWDG1RSTF) { g_reset_cause_log.wwdg_count++;  }
+    else if (rsr & RCC_RSR_PINRSTF)   { g_reset_cause_log.pin_count++;   }
+    else if (rsr & RCC_RSR_PORRSTF)   { g_reset_cause_log.por_count++;   }
+    else                              { g_reset_cause_log.other_count++; }
+    g_reset_cause_log.ring[g_reset_cause_log.ring_idx % RESET_CAUSE_RING_SLOTS] = rsr;
+    g_reset_cause_log.ring_idx++;
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -233,6 +307,7 @@ int main(void)
       extern volatile uint32_t g_last_rcc_rsr;
       g_last_rcc_rsr = RCC->RSR;
       g_xm_boot_diag.reset_flags = g_last_rcc_rsr;
+      ResetCause_Record(g_last_rcc_rsr);   /* [진단] 리셋원인 이력 누적 (D-Cache enable 이전) */
       __HAL_RCC_CLEAR_RESET_FLAGS();
   }
   XM_BOOT_DIAG_MARK(0x1003u);

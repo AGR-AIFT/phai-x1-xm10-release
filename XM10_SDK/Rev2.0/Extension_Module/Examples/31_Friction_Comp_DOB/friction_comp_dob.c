@@ -468,14 +468,9 @@ static void _RunDobCompensation(void)
     float angle_r_rad = DEG_TO_RAD(angle_r_deg);
     float angle_l_rad = DEG_TO_RAD(angle_l_deg);
 
-    // 모터 전류 획득 후 관절 토크로 변환
-    // rightHipTorque / leftHipTorque 필드는 실제 단위가 모터 전류(A)입니다.
-    // τ_joint [Nm] = Kt_motor [Nm/A] × gear_ratio × i_motor [A]
-    //             = KT_JOINT_NM_PER_A × i_motor  (≈ 1.594 × i)
-    float current_r_a = XM.status.h10.rightHipTorque;  // 모터 전류 (A), 필드명 주의
-    float current_l_a = XM.status.h10.leftHipTorque;
-    float tau_meas_r  = KT_JOINT_NM_PER_A * current_r_a;  // 관절 토크 추정 (Nm)
-    float tau_meas_l  = KT_JOINT_NM_PER_A * current_l_a;
+    // 관절 토크 추정값 획득 — XM API 가 전류(A)→토크(Nm) 환산을 내부 수행하므로 직접 사용.
+    float tau_meas_r  = XM.status.h10.rightHipTorque;  // 관절 토크 추정 (Nm)
+    float tau_meas_l  = XM.status.h10.leftHipTorque;
 
     // --- 2. 각속도 추정: θ̇ ≈ (θ[k] - θ[k-1]) / dt ---
     float vel_r_rads = 0.0f;
