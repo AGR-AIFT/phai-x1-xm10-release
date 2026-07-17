@@ -24,10 +24,9 @@
  *   load_decoded_data.m이 CSV 컬럼을 workspace 변수로 직접 생성하므로,
  *   GaitAnalysis_RT.m에서 추가 변환 없이 바로 사용 가능합니다.
  *
- * [토크 단위 — 중요]
- *   XM API의 leftHipTorque/rightHipTorque는 모터 전류(A)입니다.
- *   MATLAB에서 관절 토크로 변환: torque[Nm] = current[A] × 0.085 × 18.75
- *   이 예제에서는 Nm 변환 후 저장하여 MATLAB에서 추가 변환이 불필요합니다.
+ * [토크 단위]
+ *   XM API의 leftHipTorque/rightHipTorque는 관절 토크 추정값 [Nm]입니다.
+ *   (모터 전류 기반 추정, 환산은 XM 펌웨어가 수행 — 예제 추가 변환 불필요)
  *
  * [H10 동작 모드]
  *   XM10은 제어를 수행하지 않으며, H10의 기존 보조 알고리즘을 그대로 사용합니다.
@@ -65,9 +64,6 @@ extern FDCAN_HandleTypeDef hfdcan1;
 /* ===================================================================
  * CONSTANTS
  * =================================================================== */
-
-/** PhAI X1 SAM10 Actuator: Kt × Gear Ratio = 0.085 × 18.75 */
-#define TORQUE_SCALE    (0.085f * 18.75f)
 
 /** 파일 롤링 크기 (MB) — 10MB마다 분할 */
 #define ROLLING_SIZE_MB     10
@@ -457,10 +453,9 @@ static void _Logging_Exit(void)
  * @details
  * XM API에서 H10 PDO 데이터를 읽어 로그 구조체에 채웁니다.
  *
- * [토크 변환]
- *   XM.status.h10.leftHipTorque  = 모터 전류 [A]
- *   저장값 = 전류 × TORQUE_SCALE = 관절 토크 [Nm]
- *   MATLAB에서 추가 변환 없이 직접 사용 가능
+ * [토크 단위]
+ *   XM.status.h10.leftHipTorque = 관절 토크 추정 [Nm] (XM 펌웨어 환산)
+ *   → 그대로 저장, MATLAB에서 추가 변환 없이 직접 사용 가능
  */
 static void _UpdateLogData(void)
 {
@@ -471,8 +466,8 @@ static void _UpdateLogData(void)
     s_log.theta_trunk_improved  = h10->pelvicAngle;
     s_log.thigh_angle_lh        = h10->leftThighAngle;
     s_log.thigh_angle_rh        = h10->rightThighAngle;
-    s_log.LeftHipTorque         = h10->leftHipTorque  * TORQUE_SCALE;
-    s_log.RightHipTorque        = h10->rightHipTorque * TORQUE_SCALE;
+    s_log.LeftHipTorque         = h10->leftHipTorque;   /* 이미 관절 토크 [Nm] */
+    s_log.RightHipTorque        = h10->rightHipTorque;
     s_log.velX                  = h10->forwardVelocity;
     s_log.LeftFootContact       = h10->isLeftFootContact  ? 1 : 0;
     s_log.RightFootContact      = h10->isRightFootContact ? 1 : 0;

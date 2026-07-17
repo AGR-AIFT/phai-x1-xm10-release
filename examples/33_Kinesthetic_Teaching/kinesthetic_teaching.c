@@ -164,7 +164,7 @@ static XmTsmHandle_t s_tsm;
 
 // --- 교시 버퍼 ---
 // [메모리 주의] 2000×8bytes = 16KB — SRAM에 정적 할당
-// 더 큰 버퍼 필요 시: XM PSRAM(8MB) 활용 → Ex.10b의 PSRAM 패턴 참조
+// 더 큰 버퍼 필요 시: XM10 User Workspace(RAM_D1, 200KB) 활용 → XM_GetUserWorkspace()
 static TeachPoint_t s_teach_buf[MAX_TEACH_POINTS];
 static uint32_t     s_teach_count   = 0;    // 현재 기록된 포인트 수
 static uint32_t     s_replay_idx    = 0;    // 재생 인덱스 (0 ~ s_teach_count-1)
