@@ -2,644 +2,658 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/find-it/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/find-it/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/find-it/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/student-walkthrough-simulations/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/student-walkthrough-simulations/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/student-walkthrough-simulations/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/troubleshooting/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/troubleshooting/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/troubleshooting/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/advanced/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/advanced/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/advanced/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/advanced/ai-data-pipeline/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/advanced/ai-data-pipeline/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/advanced/ai-data-pipeline/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/01-task-state-machine/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/01-task-state-machine/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/01-task-state-machine/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/02-h10-control-n-data/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/02-h10-control-n-data/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/02-h10-control-n-data/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/03-led-btn-control/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/03-led-btn-control/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/03-led-btn-control/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/04-external-io/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/04-external-io/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/04-external-io/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/05-usb-connectivity/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/05-usb-connectivity/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/05-usb-connectivity/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/06-usb-data-logging/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/06-usb-data-logging/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/06-usb-data-logging/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/07-memory-management/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/07-memory-management/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/07-memory-management/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/08-rtc-clock/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/08-rtc-clock/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/08-rtc-clock/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/09-task-creation/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/09-task-creation/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/09-task-creation/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-data/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-data/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-data/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-external-io/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-external-io/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-external-io/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-freertos/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-freertos/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-freertos/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-led-btn/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-led-btn/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-led-btn/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-memory/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-memory/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-memory/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-rtc/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-rtc/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-rtc/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-tsm/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-tsm/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-tsm/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-usb/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-usb/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-usb/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-user-custom/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-user-custom/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-user-custom/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/architecture/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/architecture/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/architecture/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/bootloader/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/bootloader/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/bootloader/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/getting-started/00-claude-code-quickstart/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/getting-started/00-claude-code-quickstart/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/getting-started/00-claude-code-quickstart/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/getting-started/01-hardware-setup/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/getting-started/01-hardware-setup/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/getting-started/01-hardware-setup/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/getting-started/02-software-setup/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/getting-started/02-software-setup/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/getting-started/02-software-setup/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/getting-started/03-first-build/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/getting-started/03-first-build/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/getting-started/03-first-build/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/hardware/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/hardware/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/hardware/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/hardware/external-gpio-rev1.1/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/hardware/external-gpio-rev1.1/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/hardware/external-gpio-rev1.1/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/hardware/external-gpio-rev2.0/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/hardware/external-gpio-rev2.0/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/hardware/external-gpio-rev2.0/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/kit-h10-firmware/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/kit-h10-firmware/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/kit-h10-firmware/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/release-notes/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/release-notes/v2.1.1/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.1.1/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.1.1/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/release-notes/v2.2.0/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.2.0/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.2.0/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/release-notes/v2.2.1/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.2.1/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.2.1/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/release-notes/v2.2.2/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.2.2/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.2.2/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/release-notes/v2.3.0/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.3.0/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.3.0/"/>
     </url>
     <url>
+        <loc>https://agr-exo.github.io/Extension_Module/release-notes/v2.3.1/</loc>
+        <lastmod>2026-07-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.3.1/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.3.1/"/>
+    </url>
+    <url>
         <loc>https://agr-exo.github.io/Extension_Module/safety/wearable-safety/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/safety/wearable-safety/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/safety/wearable-safety/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/tutorials/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/tutorials/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/tutorials/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/find-it/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/find-it/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/find-it/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/student-walkthrough-simulations/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/student-walkthrough-simulations/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/student-walkthrough-simulations/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/troubleshooting/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/troubleshooting/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/troubleshooting/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/advanced/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/advanced/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/advanced/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/advanced/ai-data-pipeline/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/advanced/ai-data-pipeline/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/advanced/ai-data-pipeline/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/01-task-state-machine/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/01-task-state-machine/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/01-task-state-machine/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/02-h10-control-n-data/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/02-h10-control-n-data/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/02-h10-control-n-data/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/03-led-btn-control/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/03-led-btn-control/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/03-led-btn-control/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/04-external-io/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/04-external-io/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/04-external-io/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/05-usb-connectivity/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/05-usb-connectivity/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/05-usb-connectivity/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/06-usb-data-logging/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/06-usb-data-logging/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/06-usb-data-logging/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/07-memory-management/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/07-memory-management/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/07-memory-management/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/08-rtc-clock/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/08-rtc-clock/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/08-rtc-clock/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/09-task-creation/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/09-task-creation/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/09-task-creation/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-data/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-data/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-data/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-external-io/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-external-io/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-external-io/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-freertos/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-freertos/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-freertos/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-led-btn/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-led-btn/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-led-btn/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-memory/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-memory/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-memory/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-rtc/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-rtc/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-rtc/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-tsm/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-tsm/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-tsm/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-usb/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-usb/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-usb/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-user-custom/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api-user-custom/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api-user-custom/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/api-reference/ref/xm-api/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/api-reference/ref/xm-api/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/architecture/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/architecture/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/architecture/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/bootloader/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/bootloader/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/bootloader/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/bootloader/XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/getting-started/00-claude-code-quickstart/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/getting-started/00-claude-code-quickstart/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/getting-started/00-claude-code-quickstart/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/getting-started/01-hardware-setup/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/getting-started/01-hardware-setup/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/getting-started/01-hardware-setup/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/getting-started/02-software-setup/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/getting-started/02-software-setup/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/getting-started/02-software-setup/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/getting-started/03-first-build/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/getting-started/03-first-build/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/getting-started/03-first-build/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/hardware/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/hardware/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/hardware/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/hardware/external-gpio-rev1.1/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/hardware/external-gpio-rev1.1/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/hardware/external-gpio-rev1.1/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/hardware/external-gpio-rev2.0/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/hardware/external-gpio-rev2.0/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/hardware/external-gpio-rev2.0/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/kit-h10-firmware/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/kit-h10-firmware/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/kit-h10-firmware/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/release-notes/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/release-notes/v2.1.1/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.1.1/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.1.1/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/release-notes/v2.2.0/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.2.0/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.2.0/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/release-notes/v2.2.1/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.2.1/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.2.1/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/release-notes/v2.2.2/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.2.2/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.2.2/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/release-notes/v2.3.0/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.3.0/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.3.0/"/>
     </url>
     <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/release-notes/v2.3.1/</loc>
+        <lastmod>2026-07-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.3.1/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.3.1/"/>
+    </url>
+    <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/safety/wearable-safety/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/safety/wearable-safety/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/safety/wearable-safety/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/tutorials/</loc>
-        <lastmod>2026-07-15</lastmod>
+        <lastmod>2026-07-17</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/tutorials/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/tutorials/"/>

@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -35,7 +35,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1900,6 +1900,8 @@
       
         
       
+        
+      
     
     
     
@@ -1952,6 +1954,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.3.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2283,6 +2313,12 @@
 <td><a href="https://www.st.com/en/development-tools/stm32cubeide.html">st.com</a> (free ST account required)</td>
 </tr>
 <tr>
+<td>Python 3.10+</td>
+<td>Required</td>
+<td>Invoked automatically by the build's final step (creates the upload <code>.bin</code>) + log CSV conversion</td>
+<td><a href="https://www.python.org/downloads/">python.org</a> (check <strong>"Add python.exe to PATH"</strong> during install)</td>
+</tr>
+<tr>
 <td>7-Zip</td>
 <td>Optional</td>
 <td>Extract ZIP files (fallback when the Windows built-in tool corrupts large archives)</td>
@@ -2291,6 +2327,12 @@
 </tbody>
 </table>
 <p>CubeIDE installs the cross-compiler, the ST-Link USB driver, and the J-Link driver all at once. You do not need git — the SDK is distributed as a ZIP from GitHub Releases.</p>
+<blockquote>
+<p><strong>Why Python?</strong> After each build, scripts bundled with the project run automatically to produce
+the firmware file for PhAI Studio upload (<code>XM10_x_x_x_x.bin</code>). If Python is not on your PATH,
+the build fails at that step — after installing, confirm <code>python --version</code> works in a
+command prompt.</p>
+</blockquote>
 <hr />
 <h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
 <h3 id="1-install-stm32cubeide">1. Install STM32CubeIDE<a class="headerlink" href="#1-install-stm32cubeide" title="Permanent link">&para;</a></h3>
@@ -2551,7 +2593,7 @@ Both returning <code>True</code> means success. The extracted folder (<code>C:\d
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

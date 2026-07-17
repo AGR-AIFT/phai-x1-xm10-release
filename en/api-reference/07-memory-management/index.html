@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -35,7 +35,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1096,45 +1096,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#psram-api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PSRAM API
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="PSRAM API">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#xm_getuserpsram" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_GetUserPSRAM()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#xm_getuserpsramsize" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_GetUserPSRAMSize()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#dtcm-api" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2061,6 +2022,8 @@
       
         
       
+        
+      
     
     
     
@@ -2113,6 +2076,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.3.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2378,45 +2369,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#psram-api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PSRAM API
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="PSRAM API">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#xm_getuserpsram" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_GetUserPSRAM()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#xm_getuserpsramsize" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_GetUserPSRAMSize()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#dtcm-api" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2582,7 +2534,7 @@
 
 <h1 id="api-07-memory-management">API 07: Memory Management<a class="headerlink" href="#api-07-memory-management" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>📌 <strong>After reading this page</strong>: You will know how to select the right memory region on XM10 — RAM_D1 / PSRAM / DTCM / Flash NV — based on your use case.
+<p>📌 <strong>After reading this page</strong>: You will know how to select the right memory region on XM10 — RAM_D1 / DTCM / Flash NV — based on your use case.
 ⏱️ Estimated reading time: 15 minutes
 🧰 Prerequisites: Static data-structure patterns from <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/">Ex.19 Memory Aware Design</a>
 🎯 Key APIs: <code>XM_RAMFUNC</code> / <code>XM_DTCM_VAR</code> macros + <code>XM_UserNV_Read/Write/Erase</code> Flash API</p>
@@ -2606,12 +2558,6 @@
 <td>Cacheable, volatile</td>
 <td>Fast</td>
 <td>Algorithm variables, sensor buffers</td>
-</tr>
-<tr>
-<td><strong>PSRAM</strong></td>
-<td>Write-Through, volatile</td>
-<td>Medium (~30 MB/s)</td>
-<td>AI/ML weights, large LUTs</td>
 </tr>
 <tr>
 <td><strong>DTCM</strong></td>
@@ -2662,27 +2608,9 @@
 </code></pre></div>
 <p>Returns the size of the user workspace in bytes.</p>
 <hr />
-<h2 id="psram-api">PSRAM API<a class="headerlink" href="#psram-api" title="Permanent link">&para;</a></h2>
-<h3 id="xm_getuserpsram"><code>XM_GetUserPSRAM()</code><a class="headerlink" href="#xm_getuserpsram" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">XM_GetUserPSRAM</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-</code></pre></div>
-<p>Returns the base address of the PSRAM user region (0x90700000).</p>
-<ul>
-<li>Write-Through Cacheable</li>
-<li>Available after QSPI Memory-Mapped initialization</li>
-<li>Best suited for AI/ML model weights and large lookup tables</li>
-</ul>
-<blockquote>
-<p><strong>Caution</strong>: Safe to access only after <code>Control_Setup()</code> returns. Accessing PSRAM before that point will trigger a HardFault.</p>
-</blockquote>
-<h3 id="xm_getuserpsramsize"><code>XM_GetUserPSRAMSize()</code><a class="headerlink" href="#xm_getuserpsramsize" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserPSRAMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-</code></pre></div>
-<p>Returns the size of the PSRAM user region in bytes.</p>
-<hr />
 <h2 id="dtcm-api">DTCM API<a class="headerlink" href="#dtcm-api" title="Permanent link">&para;</a></h2>
 <h3 id="xm_getuserdtcm"><code>XM_GetUserDTCM()</code><a class="headerlink" href="#xm_getuserdtcm" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">XM_GetUserDTCM</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">XM_GetUserDTCM</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Returns the base address of the DTCM user variable region.</p>
 <ul>
@@ -2691,7 +2619,7 @@
 <li>Use when you need a large contiguous block (for individual variables, the <code>XM_DTCM_VAR</code> macro is more convenient)</li>
 </ul>
 <h3 id="xm_getuserdtcmsize"><code>XM_GetUserDTCMSize()</code><a class="headerlink" href="#xm_getuserdtcmsize" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserDTCMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserDTCMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Returns the size of the DTCM user region in bytes.</p>
 <hr />
@@ -2701,11 +2629,11 @@
 <p>Uses <strong>Flash Bank 2, Sector 7 (128 KB)</strong>. Minimum guaranteed endurance: 10,000 erase cycles.</p>
 </blockquote>
 <h3 id="xm_usernv_getsize"><code>XM_UserNV_GetSize()</code><a class="headerlink" href="#xm_usernv_getsize" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_UserNV_GetSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_UserNV_GetSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Returns the size of the User NV region in bytes.</p>
 <h3 id="xm_usernv_read"><code>XM_UserNV_Read()</code><a class="headerlink" href="#xm_usernv_read" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Read</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Read</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
 </code></pre></div>
 <p>Reads data from Flash User NV.</p>
 <table>
@@ -2749,7 +2677,7 @@
 </tbody>
 </table>
 <h3 id="xm_usernv_write"><code>XM_UserNV_Write()</code><a class="headerlink" href="#xm_usernv_write" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Write</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Write</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
 </code></pre></div>
 <p>Writes data to Flash User NV.</p>
 <table>
@@ -2802,7 +2730,7 @@ STM32H7 Flash is programmed in 32-byte (256-bit) units.
 Frequent writes wear out Flash. The recommended pattern is: read once at boot, write once on shutdown or configuration change.</p>
 </blockquote>
 <h3 id="xm_usernv_erase"><code>XM_UserNV_Erase()</code><a class="headerlink" href="#xm_usernv_erase" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Erase</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Erase</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Erases the entire Flash User NV region (fills with 0xFF).</p>
 <table>
@@ -2827,34 +2755,34 @@ Frequent writes wear out Flash. The recommended pattern is: read once at boot, w
 <p>Erases the full 128 KB sector. Takes approximately 1–2 seconds. <strong>Do not call this from a real-time control loop.</strong></p>
 </blockquote>
 <h3 id="xm_usernv_iserased"><code>XM_UserNV_IsErased()</code><a class="headerlink" href="#xm_usernv_iserased" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_UserNV_IsErased</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_UserNV_IsErased</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Checks whether the Flash User NV region is blank (entirely 0xFF).</p>
 <hr />
 <h2 id="usage-example">Usage Example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1">// Settings structure definition</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">kp_gain</span><span class="p">;</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">kd_gain</span><span class="p">;</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">magic</span><span class="p">;</span><span class="w">  </span><span class="c1">// Validity sentinel</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="p">}</span><span class="w"> </span><span class="n">UserSettings_t</span><span class="p">;</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="cp">#define SETTINGS_MAGIC 0xCAFEBEEF</span>
-<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
-<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="kt">void</span><span class="w"> </span><span class="nf">LoadSettings</span><span class="p">(</span><span class="n">UserSettings_t</span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">    </span><span class="n">XM_UserNV_Read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">UserSettings_t</span><span class="p">));</span>
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">magic</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">SETTINGS_MAGIC</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">        </span><span class="c1">// Use default values</span>
-<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">kp_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">4.8f</span><span class="p">;</span>
-<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">kd_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.6f</span><span class="p">;</span>
-<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">magic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SETTINGS_MAGIC</span><span class="p">;</span>
-<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="p">}</span>
-<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>
-<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="kt">void</span><span class="w"> </span><span class="nf">SaveSettings</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">UserSettings_t</span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="w">    </span><span class="n">XM_UserNV_Erase</span><span class="p">();</span><span class="w">  </span><span class="c1">// Erase the full sector first (required)</span>
-<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="w">    </span><span class="n">XM_UserNV_Write</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">UserSettings_t</span><span class="p">));</span>
-<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// Settings structure definition</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">kp_gain</span><span class="p">;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">kd_gain</span><span class="p">;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">magic</span><span class="p">;</span><span class="w">  </span><span class="c1">// Validity sentinel</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="p">}</span><span class="w"> </span><span class="n">UserSettings_t</span><span class="p">;</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="cp">#define SETTINGS_MAGIC 0xCAFEBEEF</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="kt">void</span><span class="w"> </span><span class="nf">LoadSettings</span><span class="p">(</span><span class="n">UserSettings_t</span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">    </span><span class="n">XM_UserNV_Read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">UserSettings_t</span><span class="p">));</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">magic</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">SETTINGS_MAGIC</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">        </span><span class="c1">// Use default values</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">kp_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">4.8f</span><span class="p">;</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">kd_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.6f</span><span class="p">;</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">magic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SETTINGS_MAGIC</span><span class="p">;</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="p">}</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="kt">void</span><span class="w"> </span><span class="nf">SaveSettings</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">UserSettings_t</span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="w">    </span><span class="n">XM_UserNV_Erase</span><span class="p">();</span><span class="w">  </span><span class="c1">// Erase the full sector first (required)</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="w">    </span><span class="n">XM_UserNV_Write</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">UserSettings_t</span><span class="p">));</span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="p">}</span>
 </code></pre></div>
 <hr />
 <h2 id="-common-mistakes">⚠️ Common Mistakes<a class="headerlink" href="#-common-mistakes" title="Permanent link">&para;</a></h2>
@@ -2867,11 +2795,6 @@ Frequent writes wear out Flash. The recommended pattern is: read once at boot, w
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>HardFault when accessing <code>XM_GetUserPSRAM()</code> result</td>
-<td>PSRAM accessed before <code>Control_Setup()</code> (QSPI Memory-Mapped not yet initialized)</td>
-<td>Move all PSRAM access to after <code>Control_Setup</code></td>
-</tr>
 <tr>
 <td><code>XM_UserNV_Write</code> returns <code>-2</code></td>
 <td>Write attempted without erasing first (Flash bits can only go 1 → 0)</td>
@@ -2896,11 +2819,6 @@ Frequent writes wear out Flash. The recommended pattern is: read once at boot, w
 <td>Large array declared inside an <code>XM_RAMFUNC</code> function</td>
 <td>ITCM has a limited size (64 KB)</td>
 <td>Keep large data in RAM_D1; place only the function itself in ITCM</td>
-</tr>
-<tr>
-<td>AI weights written to PSRAM produce incorrect results</td>
-<td>Write-Through cache coherency issue (PSRAM is cached)</td>
-<td>When using DMA, perform D-Cache Clean/Invalidate as needed</td>
 </tr>
 <tr>
 <td><code>XM_UserNV_Read</code> returns all 0xFF</td>
@@ -2928,7 +2846,7 @@ Frequent writes wear out Flash. The recommended pattern is: read once at boot, w
 <tr>
 <td><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/16_TinyAI_Sensor_Fusion/">16_TinyAI_Sensor_Fusion</a></td>
 <td>Advanced</td>
-<td>NN weights (small models in <code>.rodata</code>, large models in PSRAM)</td>
+<td>NN weights (<code>.rodata</code> constant arrays)</td>
 </tr>
 <tr>
 <td><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/">19_Memory_Aware_Design</a></td>
@@ -3040,7 +2958,7 @@ Frequent writes wear out Flash. The recommended pattern is: read once at boot, w
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

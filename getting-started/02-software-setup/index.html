@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -35,7 +35,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1900,6 +1900,8 @@
       
         
       
+        
+      
     
     
     
@@ -1952,6 +1954,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.3.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2283,6 +2313,12 @@
 <td><a href="https://www.st.com/en/development-tools/stm32cubeide.html">st.com</a> (ST 계정 무료 가입 필요)</td>
 </tr>
 <tr>
+<td>Python 3.10+</td>
+<td>필수</td>
+<td>빌드 마무리 단계(업로드용 <code>.bin</code> 생성)가 자동으로 호출 + 로그 CSV 변환</td>
+<td><a href="https://www.python.org/downloads/">python.org</a> (설치 시 <strong>"Add python.exe to PATH" 체크 필수</strong>)</td>
+</tr>
+<tr>
 <td>7-Zip</td>
 <td>선택</td>
 <td>ZIP 압축 해제 (Windows 기본 도구가 깨질 때 대안)</td>
@@ -2291,6 +2327,12 @@
 </tbody>
 </table>
 <p>CubeIDE 가 컴파일러 + ST-Link USB 드라이버 + J-Link 드라이버까지 같이 깔아줍니다. git 은 필요하지 않습니다 — SDK 는 GitHub Releases 의 ZIP 으로 받습니다.</p>
+<blockquote>
+<p><strong>Python 이 왜 필요한가요?</strong> 빌드가 끝나면 프로젝트에 들어 있는 스크립트가 자동으로 실행되어
+PhAI Studio 업로드용 펌웨어 파일(<code>XM10_x_x_x_x.bin</code>)을 만들어 줍니다. Python 이 PATH 에
+없으면 이 단계에서 빌드가 실패하니, 설치 후 명령 프롬프트에서 <code>python --version</code> 이
+동작하는지 확인해 주세요.</p>
+</blockquote>
 <hr />
 <h2 id="단계">단계<a class="headerlink" href="#단계" title="Permanent link">&para;</a></h2>
 <h3 id="1-stm32cubeide-설치">1. STM32CubeIDE 설치<a class="headerlink" href="#1-stm32cubeide-설치" title="Permanent link">&para;</a></h3>
@@ -2551,7 +2593,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -35,7 +35,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1096,45 +1096,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#psram-api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PSRAM API
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="PSRAM API">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#xm_getuserpsram" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_GetUserPSRAM()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#xm_getuserpsramsize" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_GetUserPSRAMSize()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#dtcm-api" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2061,6 +2022,8 @@
       
         
       
+        
+      
     
     
     
@@ -2113,6 +2076,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.3.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2378,45 +2369,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#psram-api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PSRAM API
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="PSRAM API">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#xm_getuserpsram" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_GetUserPSRAM()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#xm_getuserpsramsize" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_GetUserPSRAMSize()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#dtcm-api" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2582,7 +2534,7 @@
 
 <h1 id="api-07-memory-management">API 07: Memory Management<a class="headerlink" href="#api-07-memory-management" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>📌 <strong>이 페이지를 읽고 나면</strong>: XM10 의 4개 메모리 영역 (RAM_D1 / PSRAM / DTCM / Flash NV) 을 용도별로 골라 쓸 수 있습니다.
+<p>📌 <strong>이 페이지를 읽고 나면</strong>: XM10 의 3개 메모리 영역 (RAM_D1 / DTCM / Flash NV) 을 용도별로 골라 쓸 수 있습니다.
 ⏱️ 예상 학습 시간: 15분
 🧰 사전 지식: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/">Ex.19 Memory Aware Design</a> 의 정적 자료구조 패턴
 🎯 핵심: <code>XM_RAMFUNC</code> / <code>XM_DTCM_VAR</code> 매크로 + <code>XM_UserNV_Read/Write/Erase</code> Flash API</p>
@@ -2606,12 +2558,6 @@
 <td>Cacheable, 휘발성</td>
 <td>고속</td>
 <td>알고리즘 변수, 센서 버퍼</td>
-</tr>
-<tr>
-<td><strong>PSRAM</strong></td>
-<td>Write-Through, 휘발성</td>
-<td>중속 (~30MB/s)</td>
-<td>AI/ML 가중치, 대용량 LUT</td>
 </tr>
 <tr>
 <td><strong>DTCM</strong></td>
@@ -2662,27 +2608,9 @@
 </code></pre></div>
 <p>사용자 워크스페이스 크기(바이트)를 반환합니다.</p>
 <hr />
-<h2 id="psram-api">PSRAM API<a class="headerlink" href="#psram-api" title="Permanent link">&para;</a></h2>
-<h3 id="xm_getuserpsram"><code>XM_GetUserPSRAM()</code><a class="headerlink" href="#xm_getuserpsram" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">XM_GetUserPSRAM</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-</code></pre></div>
-<p>PSRAM 사용자 영역의 시작 주소(0x90700000)를 반환합니다.</p>
-<ul>
-<li>Write-Through Cacheable</li>
-<li>QSPI Memory-Mapped 초기화 후 사용 가능</li>
-<li>AI/ML 모델 가중치, 대용량 Lookup Table에 적합</li>
-</ul>
-<blockquote>
-<p><strong>주의</strong>: <code>Control_Setup()</code> 이후부터 안전하게 접근 가능합니다. 이전 접근 시 HardFault 발생.</p>
-</blockquote>
-<h3 id="xm_getuserpsramsize"><code>XM_GetUserPSRAMSize()</code><a class="headerlink" href="#xm_getuserpsramsize" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserPSRAMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-</code></pre></div>
-<p>PSRAM 사용자 영역 크기(바이트)를 반환합니다.</p>
-<hr />
 <h2 id="dtcm-api">DTCM API<a class="headerlink" href="#dtcm-api" title="Permanent link">&para;</a></h2>
 <h3 id="xm_getuserdtcm"><code>XM_GetUserDTCM()</code><a class="headerlink" href="#xm_getuserdtcm" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">XM_GetUserDTCM</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">XM_GetUserDTCM</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>DTCM 사용자 변수 영역의 시작 주소를 반환합니다.</p>
 <ul>
@@ -2691,7 +2619,7 @@
 <li>큰 연속 블록이 필요한 경우 사용 (개별 변수는 <code>XM_DTCM_VAR</code> 매크로가 더 편리)</li>
 </ul>
 <h3 id="xm_getuserdtcmsize"><code>XM_GetUserDTCMSize()</code><a class="headerlink" href="#xm_getuserdtcmsize" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserDTCMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserDTCMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>DTCM 사용자 영역 크기(바이트)를 반환합니다.</p>
 <hr />
@@ -2701,11 +2629,11 @@
 <p><strong>Flash Bank 2, Sector 7 (128KB)</strong> 사용. 최소 10,000 erase 사이클 보장.</p>
 </blockquote>
 <h3 id="xm_usernv_getsize"><code>XM_UserNV_GetSize()</code><a class="headerlink" href="#xm_usernv_getsize" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_UserNV_GetSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_UserNV_GetSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>User NV 영역 크기(바이트)를 반환합니다.</p>
 <h3 id="xm_usernv_read"><code>XM_UserNV_Read()</code><a class="headerlink" href="#xm_usernv_read" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Read</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Read</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
 </code></pre></div>
 <p>Flash User NV에서 데이터를 읽습니다.</p>
 <table>
@@ -2749,7 +2677,7 @@
 </tbody>
 </table>
 <h3 id="xm_usernv_write"><code>XM_UserNV_Write()</code><a class="headerlink" href="#xm_usernv_write" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Write</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Write</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
 </code></pre></div>
 <p>Flash User NV에 데이터를 기록합니다.</p>
 <table>
@@ -2802,7 +2730,7 @@ STM32H7 Flash는 32바이트(256-bit) 단위로 기록됩니다.
 빈번한 Write는 Flash 수명에 영향을 줍니다. 부팅 시 1회 읽기, 종료/설정변경 시 1회 쓰기를 권장합니다.</p>
 </blockquote>
 <h3 id="xm_usernv_erase"><code>XM_UserNV_Erase()</code><a class="headerlink" href="#xm_usernv_erase" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Erase</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Erase</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Flash User NV 전체 영역을 지웁니다 (0xFF로 초기화).</p>
 <table>
@@ -2827,34 +2755,34 @@ STM32H7 Flash는 32바이트(256-bit) 단위로 기록됩니다.
 <p>128KB 전체 섹터가 지워집니다. 약 1~2초 소요. <strong>실시간 제어 루프에서 호출하지 마세요.</strong></p>
 </blockquote>
 <h3 id="xm_usernv_iserased"><code>XM_UserNV_IsErased()</code><a class="headerlink" href="#xm_usernv_iserased" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_UserNV_IsErased</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_UserNV_IsErased</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Flash User NV 영역이 비어있는지(Erased, 전체 0xFF) 확인합니다.</p>
 <hr />
 <h2 id="사용-예시">사용 예시<a class="headerlink" href="#사용-예시" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1">// 설정 구조체 정의</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">kp_gain</span><span class="p">;</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">kd_gain</span><span class="p">;</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">magic</span><span class="p">;</span><span class="w">  </span><span class="c1">// 유효성 검사용</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="p">}</span><span class="w"> </span><span class="n">UserSettings_t</span><span class="p">;</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="cp">#define SETTINGS_MAGIC 0xCAFEBEEF</span>
-<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
-<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="kt">void</span><span class="w"> </span><span class="nf">LoadSettings</span><span class="p">(</span><span class="n">UserSettings_t</span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">    </span><span class="n">XM_UserNV_Read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">UserSettings_t</span><span class="p">));</span>
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">magic</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">SETTINGS_MAGIC</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">        </span><span class="c1">// 기본값 사용</span>
-<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">kp_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">4.8f</span><span class="p">;</span>
-<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">kd_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.6f</span><span class="p">;</span>
-<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">magic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SETTINGS_MAGIC</span><span class="p">;</span>
-<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="p">}</span>
-<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>
-<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="kt">void</span><span class="w"> </span><span class="nf">SaveSettings</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">UserSettings_t</span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="w">    </span><span class="n">XM_UserNV_Erase</span><span class="p">();</span><span class="w">  </span><span class="c1">// 전체 섹터 지우기 (필수)</span>
-<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="w">    </span><span class="n">XM_UserNV_Write</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">UserSettings_t</span><span class="p">));</span>
-<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// 설정 구조체 정의</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">kp_gain</span><span class="p">;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">kd_gain</span><span class="p">;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">magic</span><span class="p">;</span><span class="w">  </span><span class="c1">// 유효성 검사용</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="p">}</span><span class="w"> </span><span class="n">UserSettings_t</span><span class="p">;</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="cp">#define SETTINGS_MAGIC 0xCAFEBEEF</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="kt">void</span><span class="w"> </span><span class="nf">LoadSettings</span><span class="p">(</span><span class="n">UserSettings_t</span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">    </span><span class="n">XM_UserNV_Read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">UserSettings_t</span><span class="p">));</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">magic</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">SETTINGS_MAGIC</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">        </span><span class="c1">// 기본값 사용</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">kp_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">4.8f</span><span class="p">;</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">kd_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.6f</span><span class="p">;</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">magic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SETTINGS_MAGIC</span><span class="p">;</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="p">}</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="kt">void</span><span class="w"> </span><span class="nf">SaveSettings</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">UserSettings_t</span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="w">    </span><span class="n">XM_UserNV_Erase</span><span class="p">();</span><span class="w">  </span><span class="c1">// 전체 섹터 지우기 (필수)</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="w">    </span><span class="n">XM_UserNV_Write</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">UserSettings_t</span><span class="p">));</span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="p">}</span>
 </code></pre></div>
 <hr />
 <h2 id="-흔한-실수">⚠️ 흔한 실수<a class="headerlink" href="#-흔한-실수" title="Permanent link">&para;</a></h2>
@@ -2867,11 +2795,6 @@ STM32H7 Flash는 32바이트(256-bit) 단위로 기록됩니다.
 </tr>
 </thead>
 <tbody>
-<tr>
-<td><code>XM_GetUserPSRAM()</code> 결과 접근 시 HardFault</td>
-<td><code>Control_Setup()</code> 이전 (QSPI Memory-Mapped 초기화 전) 접근</td>
-<td>PSRAM 사용 코드는 <code>Control_Setup</code> 이후로만</td>
-</tr>
 <tr>
 <td><code>XM_UserNV_Write</code> 가 <code>-2</code> 반환</td>
 <td>Erase 안 한 상태에서 Write (Flash 는 1→0 만 가능)</td>
@@ -2896,11 +2819,6 @@ STM32H7 Flash는 32바이트(256-bit) 단위로 기록됩니다.
 <td><code>XM_RAMFUNC</code> 함수에서 큰 배열 선언</td>
 <td>ITCM 은 크기 제한 (64 KB)</td>
 <td>큰 데이터는 RAM_D1, 함수만 ITCM</td>
-</tr>
-<tr>
-<td>PSRAM 에 AI 가중치 쓰고 결과가 이상</td>
-<td>Write-Through cache 미일치 (PSRAM 은 캐시됨)</td>
-<td>DMA 사용 시 D-Cache Clean/Invalidate 필요</td>
 </tr>
 <tr>
 <td><code>XM_UserNV_Read</code> 가 모두 0xFF</td>
@@ -2928,7 +2846,7 @@ STM32H7 Flash는 32바이트(256-bit) 단위로 기록됩니다.
 <tr>
 <td><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/16_TinyAI_Sensor_Fusion/">16_TinyAI_Sensor_Fusion</a></td>
 <td>고급</td>
-<td>NN 가중치 (작은 모델은 .rodata, 큰 모델은 PSRAM)</td>
+<td>NN 가중치 (.rodata 상수 배열)</td>
 </tr>
 <tr>
 <td><a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/">19_Memory_Aware_Design</a></td>
@@ -3040,7 +2958,7 @@ STM32H7 Flash는 32바이트(256-bit) 단위로 기록됩니다.
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

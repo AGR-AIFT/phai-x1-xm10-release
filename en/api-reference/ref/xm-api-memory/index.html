@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -35,7 +35,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1418,45 +1418,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#psram-user-area--rev-20-only" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PSRAM User Area 🟢 Rev 2.0 only
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="PSRAM User Area 🟢 Rev 2.0 only">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#xm_getuserpsram" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_GetUserPSRAM()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#xm_getuserpsramsize" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_GetUserPSRAMSize()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#dtcm-user-area" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2080,6 +2041,8 @@
       
         
       
+        
+      
     
     
     
@@ -2132,6 +2095,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2381,45 +2372,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#psram-user-area--rev-20-only" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PSRAM User Area 🟢 Rev 2.0 only
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="PSRAM User Area 🟢 Rev 2.0 only">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#xm_getuserpsram" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_GetUserPSRAM()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#xm_getuserpsramsize" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_GetUserPSRAMSize()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#dtcm-user-area" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2647,14 +2599,6 @@
 <td>Returns the size (bytes) of the RAM_D1 workspace</td>
 </tr>
 <tr>
-<td><a href="#xm_getuserpsram"><code>XM_GetUserPSRAM()</code></a> 🟢</td>
-<td>Returns the base address of the PSRAM user area</td>
-</tr>
-<tr>
-<td><a href="#xm_getuserpsramsize"><code>XM_GetUserPSRAMSize()</code></a> 🟢</td>
-<td>Returns the size (bytes) of the PSRAM user area</td>
-</tr>
-<tr>
 <td><a href="#xm_getuserdtcm"><code>XM_GetUserDTCM()</code></a></td>
 <td>Returns the base address of the DTCM user area</td>
 </tr>
@@ -2684,6 +2628,9 @@
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p>ℹ️ <code>XM_GetUserPSRAM()</code> / <code>XM_GetUserPSRAMSize()</code> from earlier releases have been removed from the public API. For large buffers, use <code>XM_GetUserWorkspace()</code> (RAM_D1, 200KB).</p>
+</blockquote>
 <p>The two macros (<code>XM_RAMFUNC</code>, <code>XM_DTCM_VAR</code>) are covered in <a href="#typesmacros">Types/Macros</a>.</p>
 <hr />
 <h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
@@ -2722,45 +2669,9 @@
 <p>Returns the total size, in bytes, of the block returned by <code>XM_GetUserWorkspace()</code>. Use it to check bounds when you manually partition the workspace by offset.</p>
 <p><strong>Parameters</strong>: none · <strong>Return value</strong>: workspace size (bytes)</p>
 <hr />
-<h3 id="psram-user-area--rev-20-only">PSRAM User Area 🟢 Rev 2.0 only<a class="headerlink" href="#psram-user-area--rev-20-only" title="Permanent link">&para;</a></h3>
-<h4 id="xm_getuserpsram"><code>XM_GetUserPSRAM()</code><a class="headerlink" href="#xm_getuserpsram" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">XM_GetUserPSRAM</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-</code></pre></div>
-<p>Returns the base address (<code>0x90700000</code>) of the user area inside the external PSRAM (APS6404L, QSPI memory-mapped). It is write-through cacheable, has far more capacity than RAM_D1, but only medium-speed access (~30MB/s). Suited for data that is "large but doesn't need to be that fast" — AI/ML model weights, large lookup tables.</p>
-<p><strong>Parameters</strong>: none</p>
-<p><strong>Return value</strong></p>
-<table>
-<thead>
-<tr>
-<th>Return</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>void*</code></td>
-<td>Base address of the PSRAM contiguous memory block (<code>0x90700000</code>)</td>
-</tr>
-</tbody>
-</table>
-<p><strong>⚠️ Calling context</strong>: Safe from <code>Control_Setup()</code> onward. QSPI memory-mapped initialization completes automatically during system startup, so dereferencing this pointer before that (e.g. in global-variable initializers) can cause a <strong>HardFault</strong>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">s_nn_weights</span><span class="p">;</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">s_nn_weights</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">)</span><span class="n">XM_GetUserPSRAM</span><span class="p">();</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="c1">// safe to read/write from this point on</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">}</span>
-</code></pre></div>
-<p><strong>See also</strong>: PSRAM is Rev 2.0-only hardware — not populated on Rev 1.1 boards. <a href="../../07-memory-management/#psram-api">07. Memory Management — PSRAM API</a></p>
-<h4 id="xm_getuserpsramsize"><code>XM_GetUserPSRAMSize()</code><a class="headerlink" href="#xm_getuserpsramsize" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserPSRAMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-</code></pre></div>
-<p>Returns the total size, in bytes, of the block returned by <code>XM_GetUserPSRAM()</code>.</p>
-<p><strong>Parameters</strong>: none · <strong>Return value</strong>: PSRAM user area size (bytes)</p>
-<hr />
 <h3 id="dtcm-user-area">DTCM User Area<a class="headerlink" href="#dtcm-user-area" title="Permanent link">&para;</a></h3>
 <h4 id="xm_getuserdtcm"><code>XM_GetUserDTCM()</code><a class="headerlink" href="#xm_getuserdtcm" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">XM_GetUserDTCM</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">XM_GetUserDTCM</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Returns the base address of the user variable area inside DTCMRAM. It is accessed with zero wait states at 480MHz and bypasses D-Cache, so access latency is deterministic — but <strong>it cannot be reached by DMA.</strong> If you only need a handful of individual variables, the <code>XM_DTCM_VAR</code> macro is more convenient; use this function when you need a single large contiguous block, such as a LUT.</p>
 <p><strong>Parameters</strong>: none</p>
@@ -2782,7 +2693,7 @@
 <p><strong>⚠️ Calling context</strong>: The header does not state any specific restriction. This page is written conservatively against a <code>Control_Setup()</code>/<code>Control_Loop()</code> task context. Do not place DMA buffers in this block — the DMA controller cannot access the DTCM address space.</p>
 <p><strong>See also</strong>: <a href="../../07-memory-management/#dtcm-api">07. Memory Management — DTCM API</a></p>
 <h4 id="xm_getuserdtcmsize"><code>XM_GetUserDTCMSize()</code><a class="headerlink" href="#xm_getuserdtcmsize" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserDTCMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserDTCMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Returns the total size, in bytes, of the block returned by <code>XM_GetUserDTCM()</code>.</p>
 <p><strong>Parameters</strong>: none · <strong>Return value</strong>: DTCM user area size (bytes)</p>
@@ -2790,12 +2701,12 @@
 <h3 id="flash-user-nv-non-volatile-storage">Flash User NV (Non-Volatile Storage)<a class="headerlink" href="#flash-user-nv-non-volatile-storage" title="Permanent link">&para;</a></h3>
 <p>A non-volatile storage area using Flash Bank 2, Sector 7 (128KB). Values survive a power cycle, but the usual Flash constraints still apply (write only possible after erase, finite erase-cycle count).</p>
 <h4 id="xm_usernv_getsize"><code>XM_UserNV_GetSize()</code><a class="headerlink" href="#xm_usernv_getsize" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_UserNV_GetSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_UserNV_GetSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Returns the total size (bytes) of the User NV area.</p>
 <p><strong>Parameters</strong>: none · <strong>Return value</strong>: User NV area size (bytes, fixed at 128KB)</p>
 <h4 id="xm_usernv_read"><code>XM_UserNV_Read()</code><a class="headerlink" href="#xm_usernv_read" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Read</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Read</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
 </code></pre></div>
 <p>Reads data from the Flash User NV area into the <code>data</code> buffer.</p>
 <p><strong>Parameters</strong></p>
@@ -2847,7 +2758,7 @@
 <p><strong>⚠️ Calling context</strong>: The header does not state any specific restriction. This page is written conservatively against a <code>Control_Setup()</code>/<code>Control_Loop()</code> task context; the usual pattern is to call this once at boot, from <code>Control_Setup()</code>.</p>
 <p><strong>See also</strong>: It's safer to check <a href="#xm_usernv_iserased"><code>XM_UserNV_IsErased()</code></a> first to see whether valid data exists — right after an erase, the whole area is <code>0xFF</code>.</p>
 <h4 id="xm_usernv_write"><code>XM_UserNV_Write()</code><a class="headerlink" href="#xm_usernv_write" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Write</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Write</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
 </code></pre></div>
 <p>Writes data to the Flash User NV area.</p>
 <p><strong>Parameters</strong></p>
@@ -2906,18 +2817,18 @@
 <li>STM32H7 Flash is programmed in 32-byte (256-bit) units; if <code>offset</code> isn't aligned, it is automatically aligned before writing.</li>
 <li>Frequent writes affect Flash lifetime (minimum 10,000 erase cycles guaranteed). A "read once at boot, write once on setting-change/shutdown" pattern is recommended.</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// Ex.36 pattern — define offsets as constants and write per struct field</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="cp">#define NV_MAGIC          0xCA5E0A01</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="cp">#define NV_OFFSET_MAGIC   0</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="cp">#define NV_OFFSET_WEIGHTS 4</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="n">XM_UserNV_Erase</span><span class="p">();</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="n">XM_UserNV_Write</span><span class="p">(</span><span class="n">NV_OFFSET_MAGIC</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">magic</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">magic</span><span class="p">));</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="n">XM_UserNV_Write</span><span class="p">(</span><span class="n">NV_OFFSET_WEIGHTS</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s_nn</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">s_nn</span><span class="p">));</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">// Ex.36 pattern — define offsets as constants and write per struct field</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="cp">#define NV_MAGIC          0xCA5E0A01</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="cp">#define NV_OFFSET_MAGIC   0</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="cp">#define NV_OFFSET_WEIGHTS 4</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">XM_UserNV_Erase</span><span class="p">();</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="n">XM_UserNV_Write</span><span class="p">(</span><span class="n">NV_OFFSET_MAGIC</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">magic</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">magic</span><span class="p">));</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">XM_UserNV_Write</span><span class="p">(</span><span class="n">NV_OFFSET_WEIGHTS</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s_nn</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">s_nn</span><span class="p">));</span>
 </code></pre></div>
 <p><strong>See also</strong>: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/">Ex.36 OnDevice Kinesthetic Learning</a> saves trained neural-network weights this way.</p>
 <h4 id="xm_usernv_erase"><code>XM_UserNV_Erase()</code><a class="headerlink" href="#xm_usernv_erase" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Erase</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Erase</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Erases the entire Flash User NV area (128KB), resetting it to all <code>0xFF</code>.</p>
 <p><strong>Parameters</strong>: none</p>
@@ -2942,7 +2853,7 @@
 </table>
 <p><strong>⚠️ Calling context</strong>: Erasing the full 128KB sector takes roughly 1–2 seconds — the header explicitly warns <strong>"do not call from a real-time control loop."</strong> Never call this from inside a 1kHz <code>Control_Loop()</code>; only use it from a one-shot path such as button-event handling or boot-time initialization.</p>
 <h4 id="xm_usernv_iserased"><code>XM_UserNV_IsErased()</code><a class="headerlink" href="#xm_usernv_iserased" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_UserNV_IsErased</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_UserNV_IsErased</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Checks whether the entire Flash User NV area is empty (all <code>0xFF</code>, i.e. right after an erase).</p>
 <p><strong>Parameters</strong>: none</p>
@@ -2969,7 +2880,7 @@
 <hr />
 <h2 id="typesmacros">Types/Macros<a class="headerlink" href="#typesmacros" title="Permanent link">&para;</a></h2>
 <h3 id="xm_ramfunc"><code>XM_RAMFUNC</code><a class="headerlink" href="#xm_ramfunc" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="cp">#define XM_RAMFUNC  __attribute__((section(&quot;.itcm_text&quot;)))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="cp">#define XM_RAMFUNC  __attribute__((section(&quot;.itcm_text&quot;)))</span>
 </code></pre></div>
 <p>A function attribute macro that places a function in ITCMRAM so it executes with zero wait states. Because it avoids the branch-prediction-miss latency of executing directly from Flash, it's suited to functions whose execution time must be deterministic, such as ISRs and control loops. Startup code automatically handles the Flash → ITCM copy, so no manual copying is required.</p>
 <table>
@@ -2994,12 +2905,12 @@
 </tr>
 </tbody>
 </table>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">XM_RAMFUNC</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">MyControlLoop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="c1">// This function runs from ITCMRAM (1-cycle fetch @ 480MHz)</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">XM_RAMFUNC</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">MyControlLoop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="c1">// This function runs from ITCMRAM (1-cycle fetch @ 480MHz)</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="xm_dtcm_var"><code>XM_DTCM_VAR</code><a class="headerlink" href="#xm_dtcm_var" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="cp">#define XM_DTCM_VAR  __attribute__((section(&quot;.dtcm_data&quot;)))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cp">#define XM_DTCM_VAR  __attribute__((section(&quot;.dtcm_data&quot;)))</span>
 </code></pre></div>
 <p>A variable attribute macro that places a variable in DTCMRAM for zero-wait-state access. Because it bypasses D-Cache, access latency is deterministic, making it suitable for individual variables that need fast, per-variable access — control-algorithm state variables, lookup tables.</p>
 <table>
@@ -3024,8 +2935,8 @@
 </tr>
 </tbody>
 </table>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">XM_DTCM_VAR</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">s_pid_state</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">XM_DTCM_VAR</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">s_lookup_table</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">XM_DTCM_VAR</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">s_pid_state</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">XM_DTCM_VAR</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">s_lookup_table</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
 </code></pre></div>
 <p><strong>See also</strong>: If you need one large contiguous block rather than a few variables, use <a href="#xm_getuserdtcm"><code>XM_GetUserDTCM()</code></a>.</p>
 <hr />
@@ -3135,7 +3046,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
