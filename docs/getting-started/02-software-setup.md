@@ -13,9 +13,15 @@ XM10 보드의 프로세서는 PC 와 종류가 다르기 때문에, C 코드를
 | 항목 | 필수 여부 | 용도 | 다운로드 |
 |------|---------|------|---------|
 | STM32CubeIDE v2.0.0+ | 필수 | C 코드 → 보드 기계어 변환 + 디버거 | [st.com](https://www.st.com/en/development-tools/stm32cubeide.html) (ST 계정 무료 가입 필요) |
+| Python 3.10+ | 필수 | 빌드 마무리 단계(업로드용 `.bin` 생성)가 자동으로 호출 + 로그 CSV 변환 | [python.org](https://www.python.org/downloads/) (설치 시 **"Add python.exe to PATH" 체크 필수**) |
 | 7-Zip | 선택 | ZIP 압축 해제 (Windows 기본 도구가 깨질 때 대안) | [7-zip.org](https://www.7-zip.org/) |
 
 CubeIDE 가 컴파일러 + ST-Link USB 드라이버 + J-Link 드라이버까지 같이 깔아줍니다. git 은 필요하지 않습니다 — SDK 는 GitHub Releases 의 ZIP 으로 받습니다.
+
+> **Python 이 왜 필요한가요?** 빌드가 끝나면 프로젝트에 들어 있는 스크립트가 자동으로 실행되어
+> PhAI Studio 업로드용 펌웨어 파일(`XM10_x_x_x_x.bin`)을 만들어 줍니다. Python 이 PATH 에
+> 없으면 이 단계에서 빌드가 실패하니, 설치 후 명령 프롬프트에서 `python --version` 이
+> 동작하는지 확인해 주세요.
 
 ---
 

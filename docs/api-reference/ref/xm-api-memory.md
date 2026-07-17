@@ -20,8 +20,6 @@
 |------|-----------|
 | [`XM_GetUserWorkspace()`](#xm_getuserworkspace) | RAM_D1 사용자 워크스페이스 시작 주소 반환 |
 | [`XM_GetUserWorkspaceSize()`](#xm_getuserworkspacesize) | RAM_D1 워크스페이스 크기(바이트) 반환 |
-| [`XM_GetUserPSRAM()`](#xm_getuserpsram) 🟢 | PSRAM 사용자 영역 시작 주소 반환 |
-| [`XM_GetUserPSRAMSize()`](#xm_getuserpsramsize) 🟢 | PSRAM 사용자 영역 크기(바이트) 반환 |
 | [`XM_GetUserDTCM()`](#xm_getuserdtcm) | DTCM 사용자 영역 시작 주소 반환 |
 | [`XM_GetUserDTCMSize()`](#xm_getuserdtcmsize) | DTCM 사용자 영역 크기(바이트) 반환 |
 | [`XM_UserNV_GetSize()`](#xm_usernv_getsize) | Flash User NV 영역 크기(바이트) 반환 |
@@ -29,6 +27,8 @@
 | [`XM_UserNV_Write()`](#xm_usernv_write) | Flash User NV에 데이터 쓰기 |
 | [`XM_UserNV_Erase()`](#xm_usernv_erase) | Flash User NV 전체 영역 지우기 |
 | [`XM_UserNV_IsErased()`](#xm_usernv_iserased) | Flash User NV가 비어있는지(전체 0xFF) 확인 |
+
+> ℹ️ 이전 버전에 있던 `XM_GetUserPSRAM()` / `XM_GetUserPSRAMSize()` 는 공개 API에서 제외되었습니다. 대용량 버퍼가 필요하면 `XM_GetUserWorkspace()`(RAM_D1, 200KB)를 사용하세요.
 
 매크로 2종(`XM_RAMFUNC`, `XM_DTCM_VAR`)은 [타입/매크로](#타입매크로)에서 다룹니다.
 
@@ -75,49 +75,6 @@ uint32_t XM_GetUserWorkspaceSize(void);
 `XM_GetUserWorkspace()`가 반환한 블록의 전체 크기를 바이트 단위로 반환합니다. 워크스페이스 안에서 직접 오프셋을 나누어 쓸 때 경계를 벗어나지 않는지 확인하는 용도로 사용합니다.
 
 **파라미터**: 없음 · **반환값**: 워크스페이스 크기 (바이트)
-
----
-
-### PSRAM 사용자 영역 🟢 Rev 2.0 전용
-
-#### `XM_GetUserPSRAM()`
-
-```c
-void* XM_GetUserPSRAM(void);
-```
-
-외장 PSRAM(APS6404L, QSPI Memory-Mapped) 안의 사용자 영역 시작 주소(`0x90700000`)를 반환합니다. Write-Through Cacheable이며 RAM_D1보다 용량이 훨씬 크지만 접근 속도는 중간 수준(~30MB/s)입니다. AI/ML 모델 가중치, 대용량 Lookup Table처럼 "크지만 그렇게까지 빠르지 않아도 되는" 데이터에 적합합니다.
-
-**파라미터**: 없음
-
-**반환값**
-
-| 반환값 | 의미 |
-|--------|------|
-| `void*` | PSRAM 연속 메모리 블록의 시작 주소 (`0x90700000`) |
-
-**⚠️ 호출 컨텍스트**: `Control_Setup()` 이후부터 안전합니다. QSPI Memory-Mapped 초기화가 System Startup 단계에서 자동으로 끝나므로, 그 이전(전역 변수 초기화 구문 등)에 이 포인터를 역참조하면 **HardFault**가 발생할 수 있습니다.
-
-```c
-static float* s_nn_weights;
-
-void Control_Setup(void) {
-    s_nn_weights = (float*)XM_GetUserPSRAM();
-    // 이 시점부터는 안전하게 읽기/쓰기 가능
-}
-```
-
-**참고**: PSRAM은 XM10 Rev 2.0 전용 하드웨어입니다 — Rev 1.1 보드에는 미탑재. [07. 메모리 영역 — PSRAM API](../07-memory-management.md#psram-api)
-
-#### `XM_GetUserPSRAMSize()`
-
-```c
-uint32_t XM_GetUserPSRAMSize(void);
-```
-
-`XM_GetUserPSRAM()`이 반환한 블록의 전체 크기를 바이트 단위로 반환합니다.
-
-**파라미터**: 없음 · **반환값**: PSRAM 사용자 영역 크기 (바이트)
 
 ---
 

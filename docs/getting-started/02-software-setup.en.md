@@ -13,9 +13,15 @@ Because the XM10 board's processor is a different architecture from your PC, you
 | Item | Required | Purpose | Download |
 |------|----------|---------|---------|
 | STM32CubeIDE v2.0.0+ | Required | Cross-compile C code for the board + debugger | [st.com](https://www.st.com/en/development-tools/stm32cubeide.html) (free ST account required) |
+| Python 3.10+ | Required | Invoked automatically by the build's final step (creates the upload `.bin`) + log CSV conversion | [python.org](https://www.python.org/downloads/) (check **"Add python.exe to PATH"** during install) |
 | 7-Zip | Optional | Extract ZIP files (fallback when the Windows built-in tool corrupts large archives) | [7-zip.org](https://www.7-zip.org/) |
 
 CubeIDE installs the cross-compiler, the ST-Link USB driver, and the J-Link driver all at once. You do not need git — the SDK is distributed as a ZIP from GitHub Releases.
+
+> **Why Python?** After each build, scripts bundled with the project run automatically to produce
+> the firmware file for PhAI Studio upload (`XM10_x_x_x_x.bin`). If Python is not on your PATH,
+> the build fails at that step — after installing, confirm `python --version` works in a
+> command prompt.
 
 ---
 

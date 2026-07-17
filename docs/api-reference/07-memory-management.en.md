@@ -1,6 +1,6 @@
 # API 07: Memory Management
 
-> 📌 **After reading this page**: You will know how to select the right memory region on XM10 — RAM_D1 / PSRAM / DTCM / Flash NV — based on your use case.
+> 📌 **After reading this page**: You will know how to select the right memory region on XM10 — RAM_D1 / DTCM / Flash NV — based on your use case.
 > ⏱️ Estimated reading time: 15 minutes
 > 🧰 Prerequisites: Static data-structure patterns from [Ex.19 Memory Aware Design](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/)
 > 🎯 Key APIs: `XM_RAMFUNC` / `XM_DTCM_VAR` macros + `XM_UserNV_Read/Write/Erase` Flash API
@@ -16,7 +16,6 @@ This API provides access to the various memory regions available on XM10.
 | Region | Characteristics | Speed | Typical Use |
 |--------|-----------------|-------|-------------|
 | **RAM_D1 Workspace** | Cacheable, volatile | Fast | Algorithm variables, sensor buffers |
-| **PSRAM** | Write-Through, volatile | Medium (~30 MB/s) | AI/ML weights, large LUTs |
 | **DTCM** | Zero-Wait-State, no DMA | Fastest | Real-time control variables |
 | **Flash NV** | Non-volatile, slow write | Slow | Configuration, calibration data |
 
@@ -70,32 +69,6 @@ uint32_t XM_GetUserWorkspaceSize(void);
 ```
 
 Returns the size of the user workspace in bytes.
-
----
-
-## PSRAM API
-
-### `XM_GetUserPSRAM()`
-
-```c
-void* XM_GetUserPSRAM(void);
-```
-
-Returns the base address of the PSRAM user region (0x90700000).
-
-- Write-Through Cacheable
-- Available after QSPI Memory-Mapped initialization
-- Best suited for AI/ML model weights and large lookup tables
-
-> **Caution**: Safe to access only after `Control_Setup()` returns. Accessing PSRAM before that point will trigger a HardFault.
-
-### `XM_GetUserPSRAMSize()`
-
-```c
-uint32_t XM_GetUserPSRAMSize(void);
-```
-
-Returns the size of the PSRAM user region in bytes.
 
 ---
 
@@ -239,13 +212,11 @@ void SaveSettings(const UserSettings_t* s) {
 
 | Symptom | Cause | Fix |
 |---------|-------|-----|
-| HardFault when accessing `XM_GetUserPSRAM()` result | PSRAM accessed before `Control_Setup()` (QSPI Memory-Mapped not yet initialized) | Move all PSRAM access to after `Control_Setup` |
 | `XM_UserNV_Write` returns `-2` | Write attempted without erasing first (Flash bits can only go 1 → 0) | Call `XM_UserNV_Erase()` first |
 | Flash wears out quickly | Write called every cycle or every second | Read once at boot; write only on shutdown or configuration change |
 | DMA does not work with DTCM variables | DTCM is CPU-only; DMA cannot access it | Move the buffer to RAM_D1 or SRAM |
 | `XM_DTCM_VAR` variable contains garbage instead of zero | DTCM `.bss` is not zero-initialized in some cases | Add explicit `= 0` initializers or call `memset` in `Control_Setup` |
 | Large array declared inside an `XM_RAMFUNC` function | ITCM has a limited size (64 KB) | Keep large data in RAM_D1; place only the function itself in ITCM |
-| AI weights written to PSRAM produce incorrect results | Write-Through cache coherency issue (PSRAM is cached) | When using DMA, perform D-Cache Clean/Invalidate as needed |
 | `XM_UserNV_Read` returns all 0xFF | Region was erased but never written (erased state = 0xFF) | Check with `XM_UserNV_IsErased()` first and load defaults if blank |
 | Settings structure stored without a magic field | Garbage values mistaken for valid data on first boot | Add a sentinel field such as `magic = 0xCAFEBEEF` to validate stored data |
 
@@ -255,6 +226,6 @@ void SaveSettings(const UserSettings_t* s) {
 
 | Example | Difficulty | Memory Usage |
 |---------|------------|--------------|
-| [16_TinyAI_Sensor_Fusion](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) | Advanced | NN weights (small models in `.rodata`, large models in PSRAM) |
+| [16_TinyAI_Sensor_Fusion](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) | Advanced | NN weights (`.rodata` constant arrays) |
 | [19_Memory_Aware_Design](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/) | Advanced | Ring buffer + pool allocator (static `.bss` allocation) |
 | [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | Advanced | Persistent user settings pattern (Flash NV) |

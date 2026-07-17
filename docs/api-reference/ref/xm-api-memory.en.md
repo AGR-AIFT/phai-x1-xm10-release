@@ -20,8 +20,6 @@ Reach for this API when plain global variables (`.bss`/`.data`) aren't enough �
 |----------|----------------------|
 | [`XM_GetUserWorkspace()`](#xm_getuserworkspace) | Returns the base address of the RAM_D1 user workspace |
 | [`XM_GetUserWorkspaceSize()`](#xm_getuserworkspacesize) | Returns the size (bytes) of the RAM_D1 workspace |
-| [`XM_GetUserPSRAM()`](#xm_getuserpsram) 🟢 | Returns the base address of the PSRAM user area |
-| [`XM_GetUserPSRAMSize()`](#xm_getuserpsramsize) 🟢 | Returns the size (bytes) of the PSRAM user area |
 | [`XM_GetUserDTCM()`](#xm_getuserdtcm) | Returns the base address of the DTCM user area |
 | [`XM_GetUserDTCMSize()`](#xm_getuserdtcmsize) | Returns the size (bytes) of the DTCM user area |
 | [`XM_UserNV_GetSize()`](#xm_usernv_getsize) | Returns the size (bytes) of the Flash User NV area |
@@ -29,6 +27,8 @@ Reach for this API when plain global variables (`.bss`/`.data`) aren't enough �
 | [`XM_UserNV_Write()`](#xm_usernv_write) | Writes data to Flash User NV |
 | [`XM_UserNV_Erase()`](#xm_usernv_erase) | Erases the entire Flash User NV area |
 | [`XM_UserNV_IsErased()`](#xm_usernv_iserased) | Checks whether Flash User NV is empty (all `0xFF`) |
+
+> ℹ️ `XM_GetUserPSRAM()` / `XM_GetUserPSRAMSize()` from earlier releases have been removed from the public API. For large buffers, use `XM_GetUserWorkspace()` (RAM_D1, 200KB).
 
 The two macros (`XM_RAMFUNC`, `XM_DTCM_VAR`) are covered in [Types/Macros](#typesmacros).
 
@@ -75,49 +75,6 @@ uint32_t XM_GetUserWorkspaceSize(void);
 Returns the total size, in bytes, of the block returned by `XM_GetUserWorkspace()`. Use it to check bounds when you manually partition the workspace by offset.
 
 **Parameters**: none · **Return value**: workspace size (bytes)
-
----
-
-### PSRAM User Area 🟢 Rev 2.0 only
-
-#### `XM_GetUserPSRAM()`
-
-```c
-void* XM_GetUserPSRAM(void);
-```
-
-Returns the base address (`0x90700000`) of the user area inside the external PSRAM (APS6404L, QSPI memory-mapped). It is write-through cacheable, has far more capacity than RAM_D1, but only medium-speed access (~30MB/s). Suited for data that is "large but doesn't need to be that fast" — AI/ML model weights, large lookup tables.
-
-**Parameters**: none
-
-**Return value**
-
-| Return | Meaning |
-|--------|---------|
-| `void*` | Base address of the PSRAM contiguous memory block (`0x90700000`) |
-
-**⚠️ Calling context**: Safe from `Control_Setup()` onward. QSPI memory-mapped initialization completes automatically during system startup, so dereferencing this pointer before that (e.g. in global-variable initializers) can cause a **HardFault**.
-
-```c
-static float* s_nn_weights;
-
-void Control_Setup(void) {
-    s_nn_weights = (float*)XM_GetUserPSRAM();
-    // safe to read/write from this point on
-}
-```
-
-**See also**: PSRAM is Rev 2.0-only hardware — not populated on Rev 1.1 boards. [07. Memory Management — PSRAM API](../07-memory-management.en.md#psram-api)
-
-#### `XM_GetUserPSRAMSize()`
-
-```c
-uint32_t XM_GetUserPSRAMSize(void);
-```
-
-Returns the total size, in bytes, of the block returned by `XM_GetUserPSRAM()`.
-
-**Parameters**: none · **Return value**: PSRAM user area size (bytes)
 
 ---
 

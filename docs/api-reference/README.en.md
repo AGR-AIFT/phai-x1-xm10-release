@@ -31,7 +31,7 @@ The two layers don't replace each other. Each concept-guide entry links to its m
 | 04 | [External IO](04-external-io.md) | Expansion port GPIO/ADC | `XM_SetPinMode`, `XM_DigitalRead/Write`, `XM_AnalogReadMillivolts` |
 | 05 | [USB Serial Communication](05-usb-connectivity.md) | Send text/binary data to a PC | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId`, `XM_SetUsbCustomMeta` |
 | 06 | [USB Memory Logging](06-usb-data-logging.md) | Automatic save to USB storage | `XM_SetUsbLogSource`, `XM_StartUsbDataLog`, `XM_StopUsbDataLog` |
-| 07 | [Memory Regions](07-memory-management.md) | Fast memory + non-volatile storage | `XM_GetUserWorkspace`, `XM_GetUserPSRAM`, `XM_UserNV_Read/Write` |
+| 07 | [Memory Regions](07-memory-management.md) | Fast memory + non-volatile storage | `XM_GetUserWorkspace`, `XM_UserNV_Read/Write` |
 | 08 | [Real-Time Clock](08-rtc-clock.md) | Read and write date/time | `XM_RTC_SetDateTime`, `XM_RTC_GetDateTime`, `XM_RTC_IsRunning` |
 | 09 | [Auxiliary Tasks + Data Sharing](09-task-creation.md) | Tasks separate from the 1 kHz control loop + safe data sharing | `XM_Task_CreateOneShot/Periodic`, `XM_Mutex_Lock/Unlock` |
 
