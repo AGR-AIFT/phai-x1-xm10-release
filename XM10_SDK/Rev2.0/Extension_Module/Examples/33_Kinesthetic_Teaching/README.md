@@ -214,10 +214,9 @@ target = prev_target + delta;
 |----------|--------|----------|--------|------------|
 | 현재: 100Hz, 2000pt | 16KB | 20초 | 10ms | 보행 교시 |
 | 고급: 200Hz, 4000pt | 32KB | 20초 | 5ms | 빠른 동작 |
-| PSRAM: 100Hz, 30000pt | 240KB | 300초 | 10ms | 장시간 교시 |
-| PSRAM: 1kHz, 60000pt | 480KB | 60초 | 1ms | 고정밀 교시 |
+| Workspace: 100Hz, 20000pt | 160KB | 200초 | 10ms | 장시간 교시 |
 
-더 큰 버퍼는 PSRAM(8MB) 활용. Ex.10b의 PSRAM 패턴 참조.
+더 큰 버퍼는 `XM_GetUserWorkspace()`(RAM_D1, 200KB) 활용 — [07. 메모리 영역](../../docs/api-reference/07-memory-management.md) 참조.
 
 ---
 
@@ -289,7 +288,7 @@ target = prev_target + delta;
 
 ## 주의사항
 
-> **메모리**: `s_teach_buf[2000]` = 16KB SRAM 정적 할당. 더 큰 버퍼가 필요하면 XM10의 PSRAM(8MB)을 활용하세요.
+> **메모리**: `s_teach_buf[2000]` = 16KB SRAM 정적 할당. 더 큰 버퍼가 필요하면 `XM_GetUserWorkspace()`(RAM_D1, 200KB)를 활용하세요.
 
 > **재생 안전**: 재생 중 외골격이 예상치 못한 방향으로 움직일 수 있습니다. BTN3는 언제든 비상 정지로 사용 가능합니다. 처음 재생 시 `KP_REPLAY = 0.5 Nm/deg` (낮은 게인)부터 시작하세요.
 

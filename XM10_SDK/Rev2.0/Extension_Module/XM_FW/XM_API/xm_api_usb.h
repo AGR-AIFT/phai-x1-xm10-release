@@ -79,35 +79,15 @@ typedef enum {
 } XmLogMarkerType_e;
 
 /**
- * @brief USB-CDC 통신 모드.
- * @details 한 보드/한 케이블에서 3가지 호스트 클래스를 분리 지원하기 위한
- *          모드 분류. wire-level transport 와 역할(목적)을 함께 표현.
- *          - PHAI       : PhAI Studio 실시간 telemetry (Total Data auto-pump)
- *          - PRODUCTION : Extension_Module_GUI_ForProduction HW 검증 / SI 측정 / 양산 (COBS+CRC DOP)
- *          - TERMINAL   : 예제 / Raw 터미널 — auto-pump OFF, 사용자 명시 TX 만
- *
- *          모드 전환 규칙:
- *          - default (DTR=1) → PHAI
- *          - 첫 유효 DOP frame (SDO Request 도달) → 자동 PRODUCTION latch
- *          - DTR=0 / disconnect → PHAI 로 자동 복귀 (latch reset)
- *          - 사용자 예제가 setup 에서 XM_USB_SetMode(TERMINAL) 호출 시 → 명시
- *            전환, 자동 전환 비활성. TERMINAL 은 wire 신호로 식별 불가.
+ * @brief USB-CDC 호스트 프로파일 (사용자 선택 — 2가지).
+ * @details 한 보드/한 케이블에 붙는 PC 앱의 종류를 사용자가 명시합니다. 기본은
+ *          PHAI_STUDIO 이므로 미설정 시 현재 동작(실시간 스트리밍)이 그대로 유지됩니다.
+ *          양산 검사 GUI 대응은 내부에서 자동 처리되므로 사용자 선택지에 없습니다.
  */
 typedef enum {
-    XM_USB_MODE_PHAI       = 0,
-    XM_USB_MODE_PRODUCTION = 1,
-    XM_USB_MODE_TERMINAL   = 2,
-} XM_USB_Mode_e;
-
-/**
- * @brief USB-CDC 모드 변경 콜백.
- * @details 모드가 실제 전환된 직후 호출. 향후 OD 모드 플래그(0x6000/0x7000)
- *          양방향 동기화, LED 패턴 전환, Extension_Module_GUI_ForProduction Test Mode 진입/이탈
- *          외부 알림 등에 사용. ISR 컨텍스트 호출 가능하므로 짧고 비차단.
- * @param[in] prev 이전 모드
- * @param[in] next 새 모드
- */
-typedef void (*XM_USB_ModeChangeCb_t)(XM_USB_Mode_e prev, XM_USB_Mode_e next);
+    XM_USB_HOST_PHAI_STUDIO = 0,  /**< 기본: PhAI Studio 실시간 스트리밍 */
+    XM_USB_HOST_TERMINAL    = 1,  /**< 일반 터미널 / 커스텀 프로그램 — auto-pump OFF */
+} XM_USB_HostProfile_e;
 
 /**
  *-----------------------------------------------------------
@@ -340,54 +320,15 @@ bool XM_IsUsbStreamingActive(void);
 void XM_SetUsbAutoStream(bool enabled);
 
 /**
- * @brief 현재 USB-CDC 통신 모드를 조회합니다.
- * @return XM_USB_Mode_e (PHAI / PRODUCTION / TERMINAL)
+ * @brief USB-CDC 호스트 프로파일을 설정합니다. (예제 Control_Setup 에서 1회)
+ * @details 미호출 시 기본 PHAI_STUDIO — PhAI Studio 실시간 스트리밍으로 동작합니다.
+ *          일반 시리얼 터미널 / 커스텀 프로그램(Tera Term · VS Code Serial Monitor ·
+ *          자작 Python GUI 등)으로 깨끗한 텍스트/커스텀 IO 만 쓰려면 setup 에서
+ *          XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL) 을 1회 호출하세요.
+ *          1kHz Total Data auto-pump 가 꺼지고, DTR 재토글/재접속에도 유지됩니다.
+ * @param[in] profile XM_USB_HOST_PHAI_STUDIO(기본) 또는 XM_USB_HOST_TERMINAL.
  */
-XM_USB_Mode_e XM_USB_GetMode(void);
-
-/**
- * @brief USB-CDC 통신 모드를 명시적으로 전환합니다.
- * @details 예제·터미널 사용자는 setup 에서 XM_USB_SetMode(XM_USB_MODE_TERMINAL)
- *          를 1회 호출하여 PhAI auto-pump 를 차단하고 깨끗한 텍스트 IO 만 사용.
- *          PRODUCTION 으로의 자동 전환은 Extension_Module_GUI_ForProduction 의 첫 유효 DOP frame
- *          수신 시 cdc_dop_router 가 수행하므로 명시 호출 불필요.
- * @param[in] mode  전환할 모드.
- * @note  TERMINAL 명시 후에는 PRODUCTION 자동 전환이 비활성화됨.
- */
-void XM_USB_SetMode(XM_USB_Mode_e mode);
-
-/**
- * @brief 모드 변경 콜백을 등록합니다.
- * @details 향후 OD 모드 플래그 양방향 동기화, LED 패턴, 외부 표시기 트리거
- *          용도. 등록은 1개만 유지 (마지막 등록자 우선). NULL 전달 시 해제.
- * @param[in] cb  콜백 함수 포인터 (NULL 허용 = 해제)
- */
-void XM_USB_RegisterModeChangeCallback(XM_USB_ModeChangeCb_t cb);
-
-/* ==========================================================================
- * Internal — cdc_dop_router 전용 (사용자 호출 금지)
- * ========================================================================== */
-
-/**
- * @brief [Internal] 첫 유효 DOP frame 수신 시 cdc_dop_router 가 호출.
- *        TERMINAL 모드(사용자 lock 상태) 가 아니면 PRODUCTION 으로 latch.
- *        idempotent — 이미 PRODUCTION 이면 무동작.
- * @return true: 이 호출이 실제 전환을 일으킴, false: 무변화
- */
-bool XM_USB_RequestProductionLatch(void);
-
-/**
- * @brief [Internal] DTR=0 (USB 분리 / re-enumerate) 시 PHAI 로 자동 복귀 + 사용자 lock 해제.
- *        ⚠ heavy·non-ISR-safe → TASK 문맥에서만 호출(XM_USB_ProcessPeriodic 내부/edge 경로).
- *        ISR(cdc DTR callback)에서는 XM_USB_NotifyDtrLostFromISR() 를 대신 사용 [P1-G].
- */
-void XM_USB_OnDtrLost(void);
-
-/**
- * @brief [Internal/ISR-safe] ISR 문맥에서 DTR-lost 를 표시(atomic set)만 하고 즉시 복귀.
- *        실제 heavy 복귀(XM_USB_OnDtrLost)는 XM_USB_ProcessPeriodic(UserTask 1kHz)이 소비 [P1-G].
- */
-void XM_USB_NotifyDtrLostFromISR(void);
+void XM_USB_SetHostProfile(XM_USB_HostProfile_e profile);
 
 /**
  * @brief [실시간] USB CDC로 데이터를 PhAI 패킷으로 래핑하여 전송합니다.

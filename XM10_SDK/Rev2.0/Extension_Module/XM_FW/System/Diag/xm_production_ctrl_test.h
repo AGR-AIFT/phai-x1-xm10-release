@@ -13,7 +13,7 @@
  *
  *   F1 — XM_API 완전 미경유: 이 헤더/구현부 어디에도 xm_api.h 또는
  *        xm_api_*.h 를 include 하지 않는다. PRODUCTION 모드 판정은
- *        core_process.c 가 XM_USB_GetMode() 를 1회 평가해 bool 로 주입한다
+ *        core_process.c 가 UsbHostMode_Get() 를 1회 평가해 bool 로 주입한다
  *        (XM_ProductionCtrlTest_Poll 의 인자) — 타입 레벨에서 XM_API 의존을
  *        차단하기 위한 의도적 설계.
  *   F2 — DTR 손실 = fault: core_process.c 의 게이트는 USB 모드가 아니라
@@ -55,7 +55,7 @@ typedef enum {
 /**
  * @brief 1ms tick 마다 무조건 호출 — OD 커맨드 엣지 처리, 워치독, mode-loss 감지,
  *        모터 각도/토크 미러 갱신. 모터로 SDO 를 보내지 않는다(Step() 전용).
- * @param[in] is_production_mode  core_process.c 가 XM_USB_GetMode()==PRODUCTION
+ * @param[in] is_production_mode  core_process.c 가 UsbHostMode_Get()==PRODUCTION
  *            여부를 미리 계산해 전달 (본 모듈이 xm_api_usb.h 를 include 하지
  *            않기 위한 의도적 설계 — F1 "XM_API 완전 미경유"를 타입 레벨까지
  *            강제).

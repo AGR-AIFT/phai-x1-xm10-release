@@ -1435,9 +1435,6 @@ static void MX_GPIO_Init(void)
                           |MCU_PHY_RST_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(MCU_RESET_N_GPIO_Port, MCU_RESET_N_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_DRV_SPI_NSSA_GPIO_Port, LED_DRV_SPI_NSSA_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : L_GRF_PWR_EN_Pin R_GRF_PWR_EN_Pin HMMG_PWR_EN_Pin IMU_PWR_EN_Pin
@@ -1528,9 +1525,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : MCU_RESET_N_Pin */
   GPIO_InitStruct.Pin = MCU_RESET_N_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(MCU_RESET_N_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : EXT_GPIO_1_Pin EXT_GPIO_3_Pin EXT_GPIO_2_Pin EXT_GPIO_4_Pin
