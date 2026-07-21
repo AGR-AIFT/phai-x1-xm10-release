@@ -4,6 +4,28 @@
 
 ---
 
+## [v2.4.0] — 2026-07-21
+
+> USB 시리얼 사용성을 개선한 **Rev 2.0 전용** 릴리즈. 일반 터미널에서 텍스트 예제가 보이지 않던 문제 해결 + USB 통신 모드 API 단순화. Rev 1.1 은 v2.3.1 그대로.
+
+### Changed (동작 변경 — 주의)
+* **USB 통신 모드 API 교체 (Rev 2.0, breaking)** — `XM_USB_GetMode()` / `XM_USB_SetMode()` / `XM_USB_RegisterModeChangeCallback()` 및 타입 `XM_USB_Mode_e` / `XM_USB_ModeChangeCb_t` **제거**. 대체: `XM_USB_SetHostProfile(XM_USB_HostProfile_e)` — 선택지 2개(`XM_USB_HOST_PHAI_STUDIO`(기본) / `XM_USB_HOST_TERMINAL`). 마이그레이션: `XM_USB_SetMode(XM_USB_MODE_TERMINAL)` → `XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL)`. 미호출 코드는 기본 PhAI Studio 스트리밍으로 변경 없이 동작. 생산검사(PRODUCTION) 모드는 내부 자동 처리로 전환되어 사용자 비노출.
+
+### Added
+* **Ex.07 / Ex.08 텍스트 예제 터미널 프로파일 자동 지정** — `Control_Setup()` 에서 `XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL)` 호출. 1kHz auto-pump 를 꺼 일반 시리얼 터미널(Tera Term · VS Code Serial Monitor · PuTTY)에 깨끗한 텍스트만 출력, DTR 조작 불필요. 프로파일은 재접속에도 유지.
+
+### Fixed (펌웨어)
+* **GRF 센서 모듈 안정성 추가 개선** — fault 발생 시 센서 전원 재순환(power cycling) 비활성화로 불필요한 리셋 반복 완화 (v2.3.1 GRF 부팅 안정화 후속).
+* **MCU 리셋 핀 처리 정리** — 리셋 핀 released 유지로 외부 리셋 오동작 여지 제거.
+
+### Fixed (SDK 빌드)
+* **CubeIDE 빌드 파이프라인 견고화** — pre-build 스크립트 단일 진입점 통합(CubeMX 코드 재생성 시 빌드 붕괴 방지), 미사용 USB 클럭 설정 자동 정리, LwIP(Ethernet) include 경로 자동 반영.
+
+### Docs
+* **부트로더 디버그 문서 보강** — 디버그 설정에 벡터 테이블 주소 `0x08040400` 명시(미지정 시 signal handler 정지 방지), `main()` 자동 정지가 정상 동작임을 안내.
+
+---
+
 ## [v2.3.1] — 2026-07-18
 
 > 부팅·통신 안정성과 SDK 사용성을 다듬은 패치 릴리즈. 새 예제/API 없음.
