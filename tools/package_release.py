@@ -17,6 +17,11 @@ import tempfile
 import zipfile
 from pathlib import Path
 
+# Windows cp949 콘솔에서 진행 메시지의 유니코드(em-dash 등) 출력 크래시 방지
+# (verify_release_zip.py 와 동일 패턴 — ZIP 생성/검증 후 최종 print 에서 죽던 문제)
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # robocopy /XD 와 동일 — staging 시 제외할 디렉토리 (git-추적 스테이징의 2차 안전망)
