@@ -155,6 +155,8 @@ This is the most common method during development. It writes directly to Flash o
 3. Click **Debug** (F11) → the app firmware is written to 0x08040000 over SWD
 4. Debug normally (breakpoints, variable watch, etc.)
 
+> **Note — halting at `main()` is normal.** When the debug session starts, the debugger stopping at `Thread #1 suspended: breakpoint main()` is not an error — it is CubeIDE's default behavior (Debug Configuration → Startup tab → *Set breakpoint at: main*, checked by default). Press **`Resume`(F8)** to run. If you don't want it to stop every time, uncheck *Set breakpoint at: main*. (This is a normal halt, **different** from the signal-handler halt caused by a wrong vector table — see the vector-table note in Section 4.)
+
 ### Why SWD Debugging is Compatible with the Bootloader
 
 - The linker script (`STM32H743XIHX_FLASH.ld`) places app code at `0x08040400`

@@ -155,6 +155,8 @@ STM32H743XI는 2MB 내부 Flash (Bank1 + Bank2)를 가집니다.
 3. **Debug** (F11) 클릭 → SWD를 통해 0x08040000에 앱 펌웨어 기록
 4. 디버깅 시작 (브레이크포인트, 변수 감시 등 정상 사용 가능)
 
+> **참고 — `main()`에서 자동 정지는 정상입니다.** 디버그 시작 시 `Thread #1 suspended: breakpoint main()` 으로 멈추는 것은 오류가 아니라 CubeIDE 기본 동작입니다 (Debug Configuration → Startup 탭 → *Set breakpoint at: main* 기본 체크). **`Resume`(F8)** 를 누르면 실행됩니다. 매번 멈추는 게 싫으면 위 *Set breakpoint at: main* 체크를 해제하세요. (이는 벡터 테이블 오설정으로 인한 signal handler 정지와 **다른** 정상 정지입니다 — 섹션 4 벡터 테이블 주의사항 참조.)
+
 ### SWD 디버깅이 부트로더와 호환되는 이유
 
 - 링커 스크립트(`STM32H743XIHX_FLASH.ld`)가 앱 코드를 `0x08040400`에 배치
