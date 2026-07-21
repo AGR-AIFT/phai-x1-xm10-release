@@ -1744,6 +1744,8 @@
       
         
       
+        
+      
     
     
     
@@ -1796,6 +1798,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.4.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2606,6 +2636,9 @@ The two addresses play different roles:
 <li>Click <strong>Debug</strong> (F11) → the app firmware is written to 0x08040000 over SWD</li>
 <li>Debug normally (breakpoints, variable watch, etc.)</li>
 </ol>
+<blockquote>
+<p><strong>Note — halting at <code>main()</code> is normal.</strong> When the debug session starts, the debugger stopping at <code>Thread #1 suspended: breakpoint main()</code> is not an error — it is CubeIDE's default behavior (Debug Configuration → Startup tab → <em>Set breakpoint at: main</em>, checked by default). Press <strong><code>Resume</code>(F8)</strong> to run. If you don't want it to stop every time, uncheck <em>Set breakpoint at: main</em>. (This is a normal halt, <strong>different</strong> from the signal-handler halt caused by a wrong vector table — see the vector-table note in Section 4.)</p>
+</blockquote>
 <h3 id="why-swd-debugging-is-compatible-with-the-bootloader">Why SWD Debugging is Compatible with the Bootloader<a class="headerlink" href="#why-swd-debugging-is-compatible-with-the-bootloader" title="Permanent link">&para;</a></h3>
 <ul>
 <li>The linker script (<code>STM32H743XIHX_FLASH.ld</code>) places app code at <code>0x08040400</code></li>
