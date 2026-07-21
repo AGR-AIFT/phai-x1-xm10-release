@@ -2312,6 +2312,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#execution-halts-in-a-signal-handler-eg-sigtrap-the-moment-i-click-debug-f11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Execution halts in a signal handler (e.g. SIGTRAP) the moment I click Debug (F11)"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#phai-studio-cannot-find-the-device" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2435,7 +2446,8 @@
 <p>📌 <strong>What you'll learn</strong>: Two firmware upload methods — STM32CubeIDE SWD debugging vs. PhAI Studio USB FTP — plus how to avoid corrupting the bootloader and how the automatic rollback mechanism works.
 ⏱️ Estimated reading time: 30 minutes (60 minutes including hands-on)
 🧰 Prerequisites: STM32CubeIDE installed (<a href="../getting-started/02-software-setup/">docs/getting-started/02-software-setup.md</a>)
-🎯 Key point: <strong>Debug Configuration Start address = <code>0x08040000</code></strong> (leaving it at the default <code>0x08000000</code> destroys the bootloader)</p>
+🎯 Key point ①: <strong>Debug Configuration Start address = <code>0x08040000</code></strong> (leaving it at the default <code>0x08000000</code> destroys the bootloader)
+🎯 Key point ②: <strong>Specify vector table (hex) = <code>0x08040400</code></strong> (a <strong>different value</strong> from Start address — get it wrong and the debugger halts in a signal handler right after boot)</p>
 <p>⚠️ <strong>Never do this</strong>: STM32CubeIDE Debug → Start address <code>0x08000000</code> → bootloader corrupted. Always use <code>0x08040000</code>.</p>
 <p><strong>Version</strong>: v1.1.0 | <strong>Target module</strong>: XM10 Extension Module (STM32H743XI) | <strong>Created</strong>: 2026-04-02</p>
 </blockquote>
@@ -2569,13 +2581,19 @@ Flashing the app over SWD does <strong>not</strong> damage the bootloader.</p>
 <li>Create a new configuration or select an existing one</li>
 <li>Under the <strong>Debugger</strong> tab:</li>
 <li><strong>Download</strong>: ✅ checked</li>
-<li><strong>Start address</strong>: <code>0x08040000</code> (⚠️ not the default 0x08000000!)</li>
+<li><strong>Start address</strong>: <code>0x08040000</code> (⚠️ not the default 0x08000000! — the <code>.bin</code> <strong>download</strong> address)</li>
 <li><strong>Size</strong>: <code>0x000C0000</code> (768 KB = Active Slot)</li>
+<li><strong>Specify vector table (hex)</strong>: <code>0x08040400</code> (⚠️ a <strong>different value</strong> from Start address! — the actual app <strong>vector table</strong> location)</li>
 <li><strong>Reset behaviour</strong>: Software Reset</li>
 </ol>
 <blockquote>
-<p><strong>⚠️ Critical</strong>: Set Start address to <code>0x08040000</code>.<br />
+<p><strong>⚠️ Critical 1</strong>: Set Start address (the download address) to <code>0x08040000</code>.<br />
 Leaving it at the default (0x08000000) <strong>overwrites the bootloader</strong>.</p>
+<p><strong>⚠️ Critical 2</strong>: <strong>Specify vector table (hex)</strong> must be <code>0x08040400</code> (a <strong>different value</strong> from Start address).<br />
+The two addresses play different roles:
+- <strong>Start address <code>0x08040000</code></strong> = where the <code>.bin</code> is written to Flash. The <code>.bin</code> is <code>1 KB FW Header + app</code>, so this is the <strong>header start address</strong>.
+- <strong>Vector table <code>0x08040400</code></strong> = the app's actual vector table (initial SP + <code>Reset_Handler</code>), located <strong>after</strong> the 1 KB header.</p>
+<p>If you leave the vector table at <code>0x08040000</code>, the debugger reads the FW Header bytes (<code>AGRBOOT…</code>) as the initial stack pointer / reset vector, causing a <strong>HardFault right after boot → the session keeps halting in a signal handler (e.g. SIGTRAP)</strong>. The SDK ZIP's <code>Extension_Module.launch</code> already ships <code>0x08040400</code> as the default.</p>
 </blockquote>
 <h3 id="build--debug">Build &amp; Debug<a class="headerlink" href="#build--debug" title="Permanent link">&para;</a></h3>
 <ol>
@@ -2729,6 +2747,11 @@ Run <code>pip install pyyaml</code> (required for Data Map code generation).</p>
 <p><strong>Cause</strong>: The Debug Configuration Start address was set to <code>0x08000000</code>.
 1. Change it to <code>0x08040000</code> (see Section 4)
 2. Reinstall the bootloader (see Section 3)</p>
+<h3 id="execution-halts-in-a-signal-handler-eg-sigtrap-the-moment-i-click-debug-f11">"Execution halts in a signal handler (e.g. SIGTRAP) the moment I click Debug (F11)"<a class="headerlink" href="#execution-halts-in-a-signal-handler-eg-sigtrap-the-moment-i-click-debug-f11" title="Permanent link">&para;</a></h3>
+<p><strong>Cause</strong>: The Debug Configuration's <strong>Specify vector table (hex)</strong> is not <code>0x08040400</code> (e.g. it was set to <code>0x08040000</code>, the same as the Start address). The debugger reads the 1 KB FW Header as the vector table, so the initial SP/PC are garbage.
+- Under the <strong>Debugger</strong> tab, set <strong>Specify vector table (hex)</strong> to <code>0x08040400</code> (see Section 4)
+- Keep the Download <strong>Start address</strong> at <code>0x08040000</code> — <strong>the two values are different</strong>.
+- If you import the SDK ZIP as-is, <code>Extension_Module.launch</code> already defaults to <code>0x08040400</code>, so this problem does not occur.</p>
 <h3 id="phai-studio-cannot-find-the-device">"PhAI Studio cannot find the device"<a class="headerlink" href="#phai-studio-cannot-find-the-device" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Check the USB cable connection</li>
