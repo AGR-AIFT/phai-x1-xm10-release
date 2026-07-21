@@ -3,7 +3,8 @@
 > 📌 **What you'll learn**: Two firmware upload methods — STM32CubeIDE SWD debugging vs. PhAI Studio USB FTP — plus how to avoid corrupting the bootloader and how the automatic rollback mechanism works.
 > ⏱️ Estimated reading time: 30 minutes (60 minutes including hands-on)
 > 🧰 Prerequisites: STM32CubeIDE installed ([docs/getting-started/02-software-setup.md](../getting-started/02-software-setup.md))
-> 🎯 Key point: **Debug Configuration Start address = `0x08040000`** (leaving it at the default `0x08000000` destroys the bootloader)
+> 🎯 Key point ①: **Debug Configuration Start address = `0x08040000`** (leaving it at the default `0x08000000` destroys the bootloader)
+> 🎯 Key point ②: **Specify vector table (hex) = `0x08040400`** (a **different value** from Start address — get it wrong and the debugger halts in a signal handler right after boot)
 
 > ⚠️ **Never do this**: STM32CubeIDE Debug → Start address `0x08000000` → bootloader corrupted. Always use `0x08040000`.
 
@@ -128,12 +129,20 @@ This is the most common method during development. It writes directly to Flash o
 2. Create a new configuration or select an existing one
 3. Under the **Debugger** tab:
    - **Download**: ✅ checked
-   - **Start address**: `0x08040000` (⚠️ not the default 0x08000000!)
+   - **Start address**: `0x08040000` (⚠️ not the default 0x08000000! — the `.bin` **download** address)
    - **Size**: `0x000C0000` (768 KB = Active Slot)
+   - **Specify vector table (hex)**: `0x08040400` (⚠️ a **different value** from Start address! — the actual app **vector table** location)
    - **Reset behaviour**: Software Reset
 
-> **⚠️ Critical**: Set Start address to `0x08040000`.  
+> **⚠️ Critical 1**: Set Start address (the download address) to `0x08040000`.  
 > Leaving it at the default (0x08000000) **overwrites the bootloader**.
+>
+> **⚠️ Critical 2**: **Specify vector table (hex)** must be `0x08040400` (a **different value** from Start address).  
+> The two addresses play different roles:
+> - **Start address `0x08040000`** = where the `.bin` is written to Flash. The `.bin` is `1 KB FW Header + app`, so this is the **header start address**.
+> - **Vector table `0x08040400`** = the app's actual vector table (initial SP + `Reset_Handler`), located **after** the 1 KB header.
+>
+> If you leave the vector table at `0x08040000`, the debugger reads the FW Header bytes (`AGRBOOT…`) as the initial stack pointer / reset vector, causing a **HardFault right after boot → the session keeps halting in a signal handler (e.g. SIGTRAP)**. The SDK ZIP's `Extension_Module.launch` already ships `0x08040400` as the default.
 
 ### Build & Debug
 
@@ -279,6 +288,13 @@ FW Upload initiated from PhAI Studio
 **Cause**: The Debug Configuration Start address was set to `0x08000000`.
 1. Change it to `0x08040000` (see Section 4)
 2. Reinstall the bootloader (see Section 3)
+
+### "Execution halts in a signal handler (e.g. SIGTRAP) the moment I click Debug (F11)"
+
+**Cause**: The Debug Configuration's **Specify vector table (hex)** is not `0x08040400` (e.g. it was set to `0x08040000`, the same as the Start address). The debugger reads the 1 KB FW Header as the vector table, so the initial SP/PC are garbage.
+- Under the **Debugger** tab, set **Specify vector table (hex)** to `0x08040400` (see Section 4)
+- Keep the Download **Start address** at `0x08040000` — **the two values are different**.
+- If you import the SDK ZIP as-is, `Extension_Module.launch` already defaults to `0x08040400`, so this problem does not occur.
 
 ### "PhAI Studio cannot find the device"
 

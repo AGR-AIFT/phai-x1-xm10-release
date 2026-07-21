@@ -3,7 +3,8 @@
 > 📌 **이 페이지를 읽고 나면**: STM32CubeIDE SWD 디버깅 vs PhAI Studio USB FTP 두 가지 펌웨어 업로드 방법 + 부트로더 파괴 방지 + 자동 롤백 메커니즘을 이해합니다.
 > ⏱️ 예상 학습 시간: 30분 (실습 포함 60분)
 > 🧰 사전 지식: STM32CubeIDE 설치 ([docs/getting-started/02-software-setup.md](../getting-started/02-software-setup.md))
-> 🎯 핵심: **Debug Configuration Start address = `0x08040000`** (기본값 `0x08000000` 으로 두면 부트로더 파괴)
+> 🎯 핵심 ①: **Debug Configuration Start address = `0x08040000`** (기본값 `0x08000000` 으로 두면 부트로더 파괴)
+> 🎯 핵심 ②: **Specify vector table (hex) = `0x08040400`** (Start address와 **다른 값** — 틀리면 부팅 직후 signal handler 에 멈춤)
 
 > ⚠️ **절대 금지**: STM32CubeIDE Debug → Start address `0x08000000` 설정 → 부트로더 파괴. 항상 `0x08040000` 사용.
 
@@ -128,12 +129,20 @@ STM32H743XI는 2MB 내부 Flash (Bank1 + Bank2)를 가집니다.
 2. 새 설정 생성 또는 기존 설정 선택
 3. **Debugger** 탭에서:
    - **Download**: ✅ 체크
-   - **Start address**: `0x08040000` (⚠️ 기본값 0x08000000이 아닙니다!)
+   - **Start address**: `0x08040000` (⚠️ 기본값 0x08000000이 아닙니다! — `.bin` **다운로드** 주소)
    - **Size**: `0x000C0000` (768 KB = Active Slot)
+   - **Specify vector table (hex)**: `0x08040400` (⚠️ Start address와 **다른 값**! — 실제 앱 **벡터 테이블** 위치)
    - **Reset behaviour**: Software Reset
 
-> **⚠️ 핵심 주의사항**: Start address를 `0x08040000`으로 설정해야 합니다!  
+> **⚠️ 핵심 주의사항 1**: Start address(다운로드 주소)를 `0x08040000`으로 설정해야 합니다!  
 > 기본값(0x08000000)으로 두면 **부트로더를 덮어씁니다**.
+>
+> **⚠️ 핵심 주의사항 2**: **Specify vector table (hex)** 는 `0x08040400` 이어야 합니다 (Start address와 **다른 값**).  
+> 두 주소는 역할이 다릅니다:
+> - **Start address `0x08040000`** = `.bin` 을 Flash 에 기록하는 위치. `.bin` 은 `1 KB FW Header + 앱` 이므로 **헤더 시작 주소**.
+> - **Vector table `0x08040400`** = 앱의 실제 벡터 테이블(초기 SP + `Reset_Handler`) 위치. 1 KB 헤더 **뒤**.
+>
+> Vector table 을 `0x08040000` 으로 잘못 두면, 디버거가 FW Header 바이트(`AGRBOOT…`)를 초기 스택 포인터/리셋 벡터로 잘못 읽어 **부팅 직후 HardFault → signal handler(SIGTRAP 등)에 계속 멈춥니다**. SDK ZIP 의 `Extension_Module.launch` 에는 `0x08040400` 이 이미 기본값으로 들어 있습니다.
 
 ### 빌드 & 디버깅
 
@@ -279,6 +288,13 @@ PhAI Studio에서 FW Upload 시작
 **원인**: Debug Configuration의 Start address가 `0x08000000`으로 되어 있었습니다.
 1. `0x08040000`으로 수정 (섹션 4 참조)
 2. 부트로더 재설치 필요 (섹션 3 참조)
+
+### "Debug(F11) 하자마자 실행이 멈추고 signal handler(SIGTRAP 등)에 빠집니다"
+
+**원인**: Debug Configuration 의 **Specify vector table (hex)** 가 `0x08040400` 이 아닙니다 (예: Start address와 같은 `0x08040000` 으로 설정). 디버거가 1 KB FW Header 를 벡터 테이블로 잘못 읽어 초기 SP/PC 가 깨집니다.
+- **Debugger** 탭에서 **Specify vector table (hex)**: `0x08040400` 으로 수정 (섹션 4 참조)
+- Download **Start address** 는 `0x08040000` 그대로 유지 — **두 값은 다릅니다**.
+- SDK ZIP 을 그대로 임포트하면 `Extension_Module.launch` 기본값이 이미 `0x08040400` 이므로 이 문제가 없습니다.
 
 ### "PhAI Studio에서 디바이스를 찾지 못합니다"
 
