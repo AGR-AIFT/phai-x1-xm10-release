@@ -4,13 +4,13 @@
 > **Related concept docs**: [05. USB Serial](../05-usb-connectivity.en.md) · [06. USB Mass-Storage Logging](../06-usb-data-logging.en.md)
 > **Related examples**: [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) · [07_CDC_Basic_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) · [08_CDC_Sensor_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) · [09_CDC_Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) · [10a_MSC_Basic_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10a_MSC_Basic_Log/) · [10b_MSC_Custom_Struct](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10b_MSC_Custom_Struct/) · [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) · [18_Debug_Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) · [34_MSC_GaitAnalysis_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/)
 
-This single header defines two domains together: **USB mass-storage logging (MSC)** and **real-time PC communication (CDC)**. On the MSC side, once you register a user struct, a background task automatically stores it to USB storage; on the CDC side, you exchange text/binary data with a PC client such as PhAI Studio or PuTTY. Starting with Rev2.0, a mode-management API has also been added that **automatically/manually distinguishes three roles — PhAI, production inspection (PRODUCTION), and user terminal (TERMINAL) — over a single USB-CDC cable**.
+This single header defines two domains together: **USB mass-storage logging (MSC)** and **real-time PC communication (CDC)**. On the MSC side, once you register a user struct, a background task automatically stores it to USB storage; on the CDC side, you exchange text/binary data with a PC client such as PhAI Studio or PuTTY. Starting with Rev2.0, a host-profile API (`XM_USB_SetHostProfile`) has also been added that lets you **choose whether a single USB-CDC cable is used for PhAI Studio real-time streaming or a plain terminal**. (Production-inspection GUI support is handled automatically inside the board, so it is not a user option.)
 
 ---
 
 ## When to use it
 
-Use this API when you want to log sensor data to USB storage over a long period, or exchange real-time data with a PC over a serial connection. For the registration-based automation principle (register a source in Setup → the System processes it automatically on a periodic basis) and the big picture — file format, Python decoder usage, and so on — we recommend reading [05. USB Serial](../05-usb-connectivity.en.md) and [06. USB Mass-Storage Logging](../06-usb-data-logging.en.md) first. This page only covers the detailed **signatures/parameters of every function and type** declared in the header, and it also includes the new Rev2.0 **USB-CDC communication mode management API**, which the two concept docs do not yet cover.
+Use this API when you want to log sensor data to USB storage over a long period, or exchange real-time data with a PC over a serial connection. For the registration-based automation principle (register a source in Setup → the System processes it automatically on a periodic basis) and the big picture — file format, Python decoder usage, and so on — we recommend reading [05. USB Serial](../05-usb-connectivity.en.md) and [06. USB Mass-Storage Logging](../06-usb-data-logging.en.md) first. This page only covers the detailed **signatures/parameters of every function and type** declared in the header, and it also includes the new Rev2.0 **USB-CDC host-profile API**, which the two concept docs do not yet cover.
 
 ---
 
@@ -61,13 +61,11 @@ Use this API when you want to log sensor data to USB storage over a long period,
 | [`XM_IsUsbStreamingActive`](#xm_isusbstreamingactive) | Whether streaming is active |
 | [`XM_SetUsbAutoStream`](#xm_setusbautostream) | Turns Auto-Stream mode on/off |
 
-**CDC — Communication Mode Management** 🟢 Rev 2.0 only
+**CDC — Host Profile** 🟢 Rev 2.0 only
 
 | Function | One-line description |
 |------|-----------|
-| [`XM_USB_GetMode`](#xm_usb_getmode) 🟢 | Queries the current USB-CDC communication mode |
-| [`XM_USB_SetMode`](#xm_usb_setmode) 🟢 | Explicitly switches the USB-CDC communication mode |
-| [`XM_USB_RegisterModeChangeCallback`](#xm_usb_registermodechangecallback) 🟢 | Registers a mode-change callback |
+| [`XM_USB_SetHostProfile`](#xm_usb_sethostprofile) 🟢 | Selects the USB-CDC host profile (PhAI Studio / terminal) |
 
 **CDC — Data Transmission (Legacy + Custom Data)**
 
@@ -463,98 +461,40 @@ Sets Auto-Stream mode. Default is ON — streaming starts automatically when USB
 
 ---
 
-### `XM_USB_GetMode` 🟢 Rev 2.0 only
+### `XM_USB_SetHostProfile` 🟢 Rev 2.0 only
 
 ```c
-XM_USB_Mode_e XM_USB_GetMode(void);
+void XM_USB_SetHostProfile(XM_USB_HostProfile_e profile);
 ```
 
-> 🟢 **Rev 2.0 only** — This function and the [`XM_USB_Mode_e`](#xm_usb_mode_e) type itself do not exist at all in the Rev1.1 header.
+> 🟢 **Rev 2.0 only** — This function and the [`XM_USB_HostProfile_e`](#xm_usb_hostprofile_e) type itself do not exist at all in the Rev1.1 header.
 
-Queries the current USB-CDC communication mode (PHAI / PRODUCTION / TERMINAL).
+Specifies the kind of PC app attached to this board's USB-CDC cable. **If never called, the default is `XM_USB_HOST_PHAI_STUDIO`**, so leaving the profile untouched keeps the existing PhAI Studio real-time streaming behavior unchanged.
 
-**Parameters**: none
-
-**Return value**: [`XM_USB_Mode_e`](#xm_usb_mode_e)
-
-**⚠️ Call context**: Assume `Control_Setup()` / `Control_Loop()` context.
-
-**See also**: [`XM_USB_Mode_e`](#xm_usb_mode_e), [`XM_USB_SetMode`](#xm_usb_setmode)
-
----
-
-### `XM_USB_SetMode` 🟢 Rev 2.0 only
-
-```c
-void XM_USB_SetMode(XM_USB_Mode_e mode);
-```
-
-> 🟢 **Rev 2.0 only** — Does not exist in the Rev1.1 header.
-
-Explicitly switches the USB-CDC communication mode. Example/terminal users can call `XM_USB_SetMode(XM_USB_MODE_TERMINAL)` once in `Control_Setup()` to block PhAI Studio's auto-pump transmission and use nothing but clean text input/output.
+To use a plain serial terminal / custom program (Tera Term · VS Code Serial Monitor · your own Python GUI, etc.) with **clean text / custom IO only**, call `XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL)` once in `Control_Setup()`. The 1 kHz Total Data auto-pump is turned off, and this setting **persists across DTR re-toggle / cable reconnect**.
 
 **Parameters**
 
 | Name | Type | Description |
 |------|------|------|
-| `mode` | `XM_USB_Mode_e` | Mode to switch to |
+| `profile` | [`XM_USB_HostProfile_e`](#xm_usb_hostprofile_e) | `XM_USB_HOST_PHAI_STUDIO` (default) or `XM_USB_HOST_TERMINAL` |
 
 **Return value**: none (`void`)
 
-**⚠️ Call context**: Assume `Control_Setup()` context.
-
-**⚠️ Side effect to note**: Explicitly setting `XM_USB_MODE_TERMINAL` **disables the automatic transition** to PRODUCTION mode afterward. Automatic PRODUCTION transition (on receiving the first valid DOP frame) exists solely for integration with `Extension_Module_GUI_ForProduction`, so ordinary example/user code will rarely need to call this function at all.
+**⚠️ Call context**: Assume `Control_Setup()` context. Call it once.
 
 **Example**
 
 ```c
 void Control_Setup(void) {
-    // Call only when you want to turn off the PhAI auto-pump for example/terminal purposes
-    XM_USB_SetMode(XM_USB_MODE_TERMINAL);
+    // When you just want to read text in a plain serial terminal (the Ex.07 / Ex.08 way)
+    XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL);
 }
 ```
 
-**See also**: [`XM_USB_Mode_e`](#xm_usb_mode_e) mode-transition rules, [`XM_USB_GetMode`](#xm_usb_getmode)
+> The production-inspection (PRODUCTION) behavior is entered/exited automatically inside the board on receiving the first valid DOP frame, and is not a user option. Setting `XM_USB_HOST_TERMINAL` disables that automatic entry so it does not interfere with your terminal output.
 
----
-
-### `XM_USB_RegisterModeChangeCallback` 🟢 Rev 2.0 only
-
-```c
-void XM_USB_RegisterModeChangeCallback(XM_USB_ModeChangeCb_t cb);
-```
-
-> 🟢 **Rev 2.0 only** — Does not exist in the Rev1.1 header.
-
-Registers a callback to be invoked right after the mode actually switches. This can be used for future two-way synchronization of OD mode flags (0x6000/0x7000), LED pattern transitions, notifying entry/exit of `Extension_Module_GUI_ForProduction` Test Mode, and so on.
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|------|
-| `cb` | [`XM_USB_ModeChangeCb_t`](#xm_usb_modechangecb_t) | Callback function pointer. Pass `NULL` to unregister |
-
-**Return value**: none (`void`)
-
-**⚠️ Call context**: The registration call itself assumes `Control_Setup()` context. However, the header comment states that the callback **body** must be "short and non-blocking, since it may be called from ISR context" — avoid blocking calls (such as logging Start/Stop) inside the callback.
-
-**⚠️ Only one registration is kept**: The most recently registered callback overwrites the previous one (single slot).
-
-**Example**
-
-```c
-void OnUsbModeChanged(XM_USB_Mode_e prev, XM_USB_Mode_e next) {
-    if (next == XM_USB_MODE_PRODUCTION) {
-        XM_SetLedEffect(XM_LED_3, XM_LED_BLINK, 200);
-    }
-}
-
-void Control_Setup(void) {
-    XM_USB_RegisterModeChangeCallback(OnUsbModeChanged);
-}
-```
-
-**See also**: [`XM_USB_ModeChangeCb_t`](#xm_usb_modechangecb_t), [`XM_USB_Mode_e`](#xm_usb_mode_e)
+**See also**: [`XM_USB_HostProfile_e`](#xm_usb_hostprofile_e), [05. USB Serial](../05-usb-connectivity.en.md)
 
 ---
 
@@ -767,58 +707,30 @@ An enum representing the type of an event marker during logging.
 | `XM_LOG_MARKER_ERROR` = 0x03 | Error occurred |
 | `XM_LOG_MARKER_SYNC` = 0x04 | Time synchronization point |
 
-### `XM_USB_Mode_e` 🟢 Rev 2.0 only
+### `XM_USB_HostProfile_e` 🟢 Rev 2.0 only
 
 > Not defined in the Rev1.1 header.
 
-The USB-CDC communication mode used to separately support three host classes on one board/one cable.
+The USB-CDC host profile you set to say what a single board/cable is used for. There are two choices, set with [`XM_USB_SetHostProfile()`](#xm_usb_sethostprofile).
 
 | Value | Description |
 |----|------|
-| `XM_USB_MODE_PHAI` = 0 | PhAI Studio real-time telemetry (Total Data auto-pump). Default mode |
-| `XM_USB_MODE_PRODUCTION` = 1 | `Extension_Module_GUI_ForProduction` HW verification / SI measurement / production (COBS+CRC DOP) |
-| `XM_USB_MODE_TERMINAL` = 2 | Example/raw terminal — auto-pump OFF, user-initiated TX only |
+| `XM_USB_HOST_PHAI_STUDIO` = 0 | **Default** — PhAI Studio real-time streaming (Total Data auto-pump ON) |
+| `XM_USB_HOST_TERMINAL` = 1 | Plain terminal / custom program — auto-pump OFF, user-initiated TX only |
 
-**Mode-transition rules** (per the header comment):
-
-```
-(boot / DTR=1) ──▶ PHAI ──(first valid DOP frame received)──▶ PRODUCTION
-     ▲                                                    │
-     └────────────────(DTR=0 / USB unplugged)─────────────┘
-
-When the user calls XM_USB_SetMode(TERMINAL) from Control_Setup():
-→ explicitly switches to TERMINAL, and the automatic PRODUCTION transition is disabled afterward
-  (TERMINAL cannot be identified from wire signals alone, so it must always be set explicitly)
-```
-
-### `XM_USB_ModeChangeCb_t` 🟢 Rev 2.0 only
-
-> Not defined in the Rev1.1 header.
-
-```c
-typedef void (*XM_USB_ModeChangeCb_t)(XM_USB_Mode_e prev, XM_USB_Mode_e next);
-```
-
-The function pointer type for the USB-CDC mode-change callback. Registered with [`XM_USB_RegisterModeChangeCallback()`](#xm_usb_registermodechangecallback).
-
-| Parameter | Type | Description |
-|----------|------|------|
-| `prev` | `XM_USB_Mode_e` | Previous mode |
-| `next` | `XM_USB_Mode_e` | New mode |
-
-> ⚠️ The header comment states this callback must be "short and non-blocking, since it may be called from ISR context." The registration call itself happens in `Control_Setup()`, but write the callback **body** to be ISR-safe (no blocking calls).
+> The production-inspection (PRODUCTION) behavior is not a user choice — it is handled **automatically inside the board**: entered on receiving the first valid DOP frame, exited on DTR=0 (cable unplug). Setting the profile to `XM_USB_HOST_TERMINAL` disables that automatic entry (protecting your terminal output). The profile setting persists across DTR re-toggle / reconnect.
 
 ---
 
 ## Internal-only (do not call)
 
-The 3 functions below are for exclusive use by internal system components (the router / DTR handler / core_process). User code does not need to call them directly, and calling them does not guarantee the intended behavior.
+The function below is for exclusive use by an internal system component (core_process). User code does not need to call it directly, and calling it does not guarantee the intended behavior.
 
 | Function | Actual caller | Description |
 |------|--------------|------|
-| `bool XM_USB_RequestProductionLatch(void)` 🟢 Rev 2.0 only | `cdc_dop_router` | Called when the first valid DOP frame is received. Latches to PRODUCTION unless in the TERMINAL (user-locked) state. Idempotent — a no-op if already in PRODUCTION. The return value indicates whether this call actually caused a transition |
-| `void XM_USB_OnDtrLost(void)` 🟢 Rev 2.0 only | `cdc_handler` | Called when DTR=0 (USB unplugged/re-enumerated). Automatically returns to PHAI mode and releases the user lock |
 | `void XM_USB_ProcessPeriodic(void)` | `core_process` | The periodic-processing engine for USB logging/streaming logic. `core_process` calls this automatically, so user code does not need to call it directly |
+
+> 🟢 **Rev 2.0 note** — The PRODUCTION auto-latch / DTR handling that used to live here in v2.3.1 (the former `XM_USB_RequestProductionLatch` / `XM_USB_OnDtrLost`) was moved inside the System layer (`usb_host_mode`) in v2.4.0 and is no longer in the public header. The only public user-facing API is [`XM_USB_SetHostProfile()`](#xm_usb_sethostprofile).
 
 ---
 
@@ -829,8 +741,8 @@ The 3 functions below are for exclusive use by internal system components (the r
 | MSC logging basic API (Start/Stop/Status/Stats/Marker/disk query) | ✅ | ✅ |
 | CDC streaming basic API (`SendUsbDataWithId`/`SetUsbCustomMeta`/`SendUsbDebugMessage`) | ✅ | ✅ |
 | `XmLogStats_t.cold_buffer_percent` field | ❌ Absent (8 fields) | 🟢 Present (9 fields — legacy, currently always 0) |
-| `XM_USB_Mode_e` / `XM_USB_GetMode` / `XM_USB_SetMode` / `XM_USB_RegisterModeChangeCallback` (PHAI/PRODUCTION/TERMINAL mode management) | ❌ Absent | 🟢 Exclusive |
-| `XM_USB_RequestProductionLatch` / `XM_USB_OnDtrLost` (Internal, automatic PRODUCTION latch) | ❌ Absent | 🟢 Exclusive (Internal) |
+| `XM_USB_HostProfile_e` / `XM_USB_SetHostProfile` (PhAI Studio / terminal host-profile selection) | ❌ Absent | 🟢 Exclusive |
+| PRODUCTION auto-entry / DTR handling (inside System `usb_host_mode`, not a public API) | ❌ Absent | 🟢 Exclusive (Internal) |
 | MSC logging internal pipeline stages | 2-stage — UserTask writes directly into a lock-free SPSC ring buffer → `DataLoggerTask` calls `f_write()` | 3-stage — UserTask enqueues into a primary queue → `DataLoggerTask` converts to binary and enqueues into a secondary queue → the low-priority task calls `f_write()` |
 
 ---

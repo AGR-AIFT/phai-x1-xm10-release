@@ -4,13 +4,13 @@
 > **관련 개념 문서**: [05. USB 시리얼](../05-usb-connectivity.md) · [06. USB 메모리 로깅](../06-usb-data-logging.md)
 > **관련 예제**: [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) · [07_CDC_Basic_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) · [08_CDC_Sensor_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) · [09_CDC_Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) · [10a_MSC_Basic_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10a_MSC_Basic_Log/) · [10b_MSC_Custom_Struct](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10b_MSC_Custom_Struct/) · [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) · [18_Debug_Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) · [34_MSC_GaitAnalysis_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/)
 
-이 헤더 하나에 **USB 메모리 로깅(MSC)** 과 **PC 실시간 통신(CDC)** 두 도메인이 함께 정의되어 있습니다. MSC 쪽은 사용자 구조체를 등록해두면 백그라운드 태스크가 알아서 USB 메모리에 저장하고, CDC 쪽은 PhAI Studio·PuTTY 같은 PC 클라이언트와 텍스트/바이너리를 주고받습니다. Rev2.0 부터는 여기에 더해 **하나의 USB-CDC 케이블에서 PhAI / 생산검사(PRODUCTION) / 사용자 터미널(TERMINAL) 세 가지 역할을 자동/수동으로 구분**하는 모드 관리 API가 추가되었습니다.
+이 헤더 하나에 **USB 메모리 로깅(MSC)** 과 **PC 실시간 통신(CDC)** 두 도메인이 함께 정의되어 있습니다. MSC 쪽은 사용자 구조체를 등록해두면 백그라운드 태스크가 알아서 USB 메모리에 저장하고, CDC 쪽은 PhAI Studio·PuTTY 같은 PC 클라이언트와 텍스트/바이너리를 주고받습니다. Rev2.0 부터는 여기에 더해 **하나의 USB-CDC 케이블을 PhAI Studio 실시간 스트리밍 / 일반 터미널 두 가지 용도 중 무엇으로 쓸지 지정**하는 호스트 프로파일 API(`XM_USB_SetHostProfile`)가 추가되었습니다. (생산 검사 GUI 대응은 보드 내부에서 자동 처리되므로 사용자 선택지에는 없습니다.)
 
 ---
 
 ## 언제 사용하나
 
-센서 데이터를 USB 메모리에 장시간 기록하고 싶거나, PC와 시리얼로 실시간 데이터를 주고받고 싶을 때 사용합니다. 등록 기반 자동화(Setup에서 소스 등록 → System이 주기적으로 자동 처리) 원리와 파일 포맷·Python 디코더 사용법 같은 전체 그림은 [05. USB 시리얼](../05-usb-connectivity.md), [06. USB 메모리 로깅](../06-usb-data-logging.md) 두 문서를 먼저 읽어보는 것을 권장합니다 — 이 페이지는 헤더에 선언된 **모든 함수·타입의 시그니처/파라미터 상세**만 다루며, 두 개념 문서가 아직 다루지 않는 Rev2.0 신규 **USB-CDC 통신 모드 관리 API** 도 포함합니다.
+센서 데이터를 USB 메모리에 장시간 기록하고 싶거나, PC와 시리얼로 실시간 데이터를 주고받고 싶을 때 사용합니다. 등록 기반 자동화(Setup에서 소스 등록 → System이 주기적으로 자동 처리) 원리와 파일 포맷·Python 디코더 사용법 같은 전체 그림은 [05. USB 시리얼](../05-usb-connectivity.md), [06. USB 메모리 로깅](../06-usb-data-logging.md) 두 문서를 먼저 읽어보는 것을 권장합니다 — 이 페이지는 헤더에 선언된 **모든 함수·타입의 시그니처/파라미터 상세**만 다루며, 두 개념 문서가 아직 다루지 않는 Rev2.0 신규 **USB-CDC 호스트 프로파일 API** 도 포함합니다.
 
 ---
 
@@ -61,13 +61,11 @@
 | [`XM_IsUsbStreamingActive`](#xm_isusbstreamingactive) | 스트리밍 활성 여부 |
 | [`XM_SetUsbAutoStream`](#xm_setusbautostream) | Auto-Stream 모드 on/off |
 
-**CDC — 통신 모드 관리** 🟢 Rev 2.0 전용
+**CDC — 호스트 프로파일** 🟢 Rev 2.0 전용
 
 | 함수 | 한 줄 설명 |
 |------|-----------|
-| [`XM_USB_GetMode`](#xm_usb_getmode) 🟢 | 현재 USB-CDC 통신 모드 조회 |
-| [`XM_USB_SetMode`](#xm_usb_setmode) 🟢 | USB-CDC 통신 모드 명시적 전환 |
-| [`XM_USB_RegisterModeChangeCallback`](#xm_usb_registermodechangecallback) 🟢 | 모드 전환 콜백 등록 |
+| [`XM_USB_SetHostProfile`](#xm_usb_sethostprofile) 🟢 | USB-CDC 호스트 프로파일 지정 (PhAI Studio / 터미널) |
 
 **CDC — 데이터 전송 (레거시 + Custom Data)**
 
@@ -463,98 +461,40 @@ Auto-Stream 모드를 설정합니다. 기본값은 ON — USB 연결 시 자동
 
 ---
 
-### `XM_USB_GetMode` 🟢 Rev 2.0 전용
+### `XM_USB_SetHostProfile` 🟢 Rev 2.0 전용
 
 ```c
-XM_USB_Mode_e XM_USB_GetMode(void);
+void XM_USB_SetHostProfile(XM_USB_HostProfile_e profile);
 ```
 
-> 🟢 **Rev 2.0 전용** — Rev1.1 헤더에는 이 함수와 [`XM_USB_Mode_e`](#xm_usb_mode_e) 타입 자체가 존재하지 않습니다.
+> 🟢 **Rev 2.0 전용** — Rev1.1 헤더에는 이 함수와 [`XM_USB_HostProfile_e`](#xm_usb_hostprofile_e) 타입 자체가 존재하지 않습니다.
 
-현재 USB-CDC 통신 모드(PHAI / PRODUCTION / TERMINAL)를 조회합니다.
+이 보드의 USB-CDC 케이블에 붙는 PC 앱의 종류를 지정합니다. **미호출 시 기본값은 `XM_USB_HOST_PHAI_STUDIO`** 이므로, 프로파일을 따로 만지지 않으면 기존 PhAI Studio 실시간 스트리밍 동작이 그대로 유지됩니다.
 
-**파라미터**: 없음
-
-**반환값**: [`XM_USB_Mode_e`](#xm_usb_mode_e)
-
-**⚠️ 호출 컨텍스트**: `Control_Setup()` / `Control_Loop()` 컨텍스트 기준.
-
-**참고**: [`XM_USB_Mode_e`](#xm_usb_mode_e), [`XM_USB_SetMode`](#xm_usb_setmode)
-
----
-
-### `XM_USB_SetMode` 🟢 Rev 2.0 전용
-
-```c
-void XM_USB_SetMode(XM_USB_Mode_e mode);
-```
-
-> 🟢 **Rev 2.0 전용** — Rev1.1 헤더에는 존재하지 않습니다.
-
-USB-CDC 통신 모드를 명시적으로 전환합니다. 예제/터미널 사용자는 `Control_Setup()`에서 `XM_USB_SetMode(XM_USB_MODE_TERMINAL)`을 1회 호출하여 PhAI Studio 의 auto-pump 전송을 차단하고, 깨끗한 텍스트 입출력만 사용할 수 있습니다.
+일반 시리얼 터미널 / 커스텀 프로그램(Tera Term · VS Code Serial Monitor · 자작 Python GUI 등)으로 **깨끗한 텍스트/커스텀 IO 만** 쓰려면 `Control_Setup()`에서 `XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL)`을 1회 호출하세요. 1kHz Total Data auto-pump 가 꺼지고, 이 설정은 **DTR 재토글/케이블 재접속에도 유지**됩니다.
 
 **파라미터**
 
 | 이름 | 타입 | 설명 |
 |------|------|------|
-| `mode` | `XM_USB_Mode_e` | 전환할 모드 |
+| `profile` | [`XM_USB_HostProfile_e`](#xm_usb_hostprofile_e) | `XM_USB_HOST_PHAI_STUDIO`(기본) 또는 `XM_USB_HOST_TERMINAL` |
 
 **반환값**: 없음 (`void`)
 
-**⚠️ 호출 컨텍스트**: `Control_Setup()` 컨텍스트 기준.
-
-**⚠️ 참고할 부작용**: `XM_USB_MODE_TERMINAL`을 명시적으로 설정하면 이후 PRODUCTION 모드로의 **자동 전환이 비활성화됩니다**. PRODUCTION 자동 전환(첫 유효 DOP 프레임 수신 시)은 `Extension_Module_GUI_ForProduction` 연동 전용이므로, 이 함수를 일반 예제/사용자 코드에서 호출할 필요는 대부분 없습니다.
+**⚠️ 호출 컨텍스트**: `Control_Setup()` 컨텍스트 기준. 1회 호출하면 됩니다.
 
 **예제**
 
 ```c
 void Control_Setup(void) {
-    // 예제/터미널 용도로 PhAI auto-pump 를 끄고 싶을 때만 호출
-    XM_USB_SetMode(XM_USB_MODE_TERMINAL);
+    // 일반 시리얼 터미널로 텍스트만 확인할 때 (Ex.07 / Ex.08 방식)
+    XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL);
 }
 ```
 
-**참고**: [`XM_USB_Mode_e`](#xm_usb_mode_e) 모드 전환 규칙, [`XM_USB_GetMode`](#xm_usb_getmode)
+> 생산 검사(PRODUCTION) 동작은 보드 내부에서 첫 유효 DOP 프레임 수신 시 자동으로 진입/이탈하며, 사용자 선택지에 없습니다. `XM_USB_HOST_TERMINAL` 로 지정해두면 이 자동 진입이 비활성화되어 터미널 출력이 방해받지 않습니다.
 
----
-
-### `XM_USB_RegisterModeChangeCallback` 🟢 Rev 2.0 전용
-
-```c
-void XM_USB_RegisterModeChangeCallback(XM_USB_ModeChangeCb_t cb);
-```
-
-> 🟢 **Rev 2.0 전용** — Rev1.1 헤더에는 존재하지 않습니다.
-
-모드가 실제로 전환된 직후 호출될 콜백을 등록합니다. 향후 OD 모드 플래그(0x6000/0x7000) 양방향 동기화, LED 패턴 전환, `Extension_Module_GUI_ForProduction` Test Mode 진입/이탈 알림 등에 사용할 수 있습니다.
-
-**파라미터**
-
-| 이름 | 타입 | 설명 |
-|------|------|------|
-| `cb` | [`XM_USB_ModeChangeCb_t`](#xm_usb_modechangecb_t) | 콜백 함수 포인터. `NULL` 전달 시 등록 해제 |
-
-**반환값**: 없음 (`void`)
-
-**⚠️ 호출 컨텍스트**: 등록 자체는 `Control_Setup()` 컨텍스트 기준입니다. 다만 헤더 주석은 콜백 **본문**이 "ISR 컨텍스트 호출 가능하므로 짧고 비차단"이어야 한다고 명시합니다 — 콜백 안에서는 blocking 호출(로깅 Start/Stop 등)을 피하세요.
-
-**⚠️ 등록은 1개만 유지**: 마지막에 등록한 콜백이 이전 콜백을 덮어씁니다 (단일 슬롯).
-
-**예제**
-
-```c
-void OnUsbModeChanged(XM_USB_Mode_e prev, XM_USB_Mode_e next) {
-    if (next == XM_USB_MODE_PRODUCTION) {
-        XM_SetLedEffect(XM_LED_3, XM_LED_BLINK, 200);
-    }
-}
-
-void Control_Setup(void) {
-    XM_USB_RegisterModeChangeCallback(OnUsbModeChanged);
-}
-```
-
-**참고**: [`XM_USB_ModeChangeCb_t`](#xm_usb_modechangecb_t), [`XM_USB_Mode_e`](#xm_usb_mode_e)
+**참고**: [`XM_USB_HostProfile_e`](#xm_usb_hostprofile_e), [05. USB 시리얼](../05-usb-connectivity.md)
 
 ---
 
@@ -767,58 +707,30 @@ PC로부터 데이터를 수신합니다 (Non-Blocking).
 | `XM_LOG_MARKER_ERROR` = 0x03 | 에러 발생 |
 | `XM_LOG_MARKER_SYNC` = 0x04 | 시간 동기점 |
 
-### `XM_USB_Mode_e` 🟢 Rev 2.0 전용
+### `XM_USB_HostProfile_e` 🟢 Rev 2.0 전용
 
 > Rev1.1 헤더에는 정의되어 있지 않습니다.
 
-한 보드/한 케이블에서 3가지 호스트 클래스를 분리 지원하기 위한 USB-CDC 통신 모드입니다.
+한 보드/한 케이블을 어떤 PC 앱 용도로 쓸지 사용자가 지정하는 USB-CDC 호스트 프로파일입니다. 선택지는 2가지이며, [`XM_USB_SetHostProfile()`](#xm_usb_sethostprofile)로 지정합니다.
 
 | 값 | 설명 |
 |----|------|
-| `XM_USB_MODE_PHAI` = 0 | PhAI Studio 실시간 telemetry (Total Data auto-pump). 기본 모드 |
-| `XM_USB_MODE_PRODUCTION` = 1 | `Extension_Module_GUI_ForProduction` HW 검증 / SI 측정 / 양산 (COBS+CRC DOP) |
-| `XM_USB_MODE_TERMINAL` = 2 | 예제/Raw 터미널 — auto-pump OFF, 사용자 명시 TX만 |
+| `XM_USB_HOST_PHAI_STUDIO` = 0 | **기본값** — PhAI Studio 실시간 스트리밍 (Total Data auto-pump ON) |
+| `XM_USB_HOST_TERMINAL` = 1 | 일반 터미널 / 커스텀 프로그램 — auto-pump OFF, 사용자 명시 TX 만 |
 
-**모드 전환 규칙** (헤더 주석 기준):
-
-```
-(부팅 / DTR=1) ──▶ PHAI ──(첫 유효 DOP frame 수신)──▶ PRODUCTION
-     ▲                                                    │
-     └────────────────(DTR=0 / USB 분리)──────────────────┘
-
-사용자가 Control_Setup() 에서 XM_USB_SetMode(TERMINAL) 호출 시:
-→ TERMINAL 로 명시 전환, 이후 PRODUCTION 자동 전환 비활성화
-  (TERMINAL 은 wire 신호만으로는 식별 불가하므로 반드시 명시 호출 필요)
-```
-
-### `XM_USB_ModeChangeCb_t` 🟢 Rev 2.0 전용
-
-> Rev1.1 헤더에는 정의되어 있지 않습니다.
-
-```c
-typedef void (*XM_USB_ModeChangeCb_t)(XM_USB_Mode_e prev, XM_USB_Mode_e next);
-```
-
-USB-CDC 모드 변경 콜백 함수 포인터 타입입니다. [`XM_USB_RegisterModeChangeCallback()`](#xm_usb_registermodechangecallback)로 등록합니다.
-
-| 파라미터 | 타입 | 설명 |
-|----------|------|------|
-| `prev` | `XM_USB_Mode_e` | 이전 모드 |
-| `next` | `XM_USB_Mode_e` | 새 모드 |
-
-> ⚠️ 헤더 주석은 이 콜백이 "ISR 컨텍스트 호출 가능하므로 짧고 비차단"이어야 한다고 명시합니다. 등록 자체는 `Control_Setup()`에서 하지만, 콜백 **본문**은 ISR-safe 하게 작성하세요 (blocking 호출 금지).
+> 생산 검사(PRODUCTION) 동작은 사용자 선택지가 아니라 **보드 내부에서 자동 처리**됩니다: 첫 유효 DOP 프레임 수신 시 진입, DTR=0(케이블 분리) 시 이탈. 단, 프로파일을 `XM_USB_HOST_TERMINAL` 로 지정해두면 이 자동 진입이 비활성화됩니다(터미널 출력 보호). 프로파일 지정은 DTR 재토글/재접속에도 유지됩니다.
 
 ---
 
 ## 내부 전용 (호출 금지)
 
-아래 3개 함수는 시스템 내부(라우터 / DTR 핸들러 / core_process)가 호출하는 전용 함수입니다. 사용자 코드에서 직접 호출할 필요가 없으며, 호출해도 의도한 동작을 보장하지 않습니다.
+아래 함수는 시스템 내부(core_process)가 호출하는 전용 함수입니다. 사용자 코드에서 직접 호출할 필요가 없으며, 호출해도 의도한 동작을 보장하지 않습니다.
 
 | 함수 | 실제 호출 주체 | 설명 |
 |------|--------------|------|
-| `bool XM_USB_RequestProductionLatch(void)` 🟢 Rev 2.0 전용 | `cdc_dop_router` | 첫 유효 DOP frame 수신 시 호출. TERMINAL(사용자 lock) 상태가 아니면 PRODUCTION으로 latch. idempotent — 이미 PRODUCTION이면 무동작. 반환값은 "이 호출이 실제 전환을 일으켰는지" 여부 |
-| `void XM_USB_OnDtrLost(void)` 🟢 Rev 2.0 전용 | `cdc_handler` | DTR=0 (USB 분리/재열거) 시 호출. PHAI 모드로 자동 복귀 + 사용자 lock 해제 |
 | `void XM_USB_ProcessPeriodic(void)` | `core_process` | USB 로깅·스트리밍 로직의 주기 처리 엔진. `core_process`가 자동 호출하므로 사용자가 직접 호출할 필요 없음 |
+
+> 🟢 **Rev 2.0 참고** — 이전(v2.3.1)에 이 자리에 있던 PRODUCTION 자동 latch / DTR 처리(구 `XM_USB_RequestProductionLatch` / `XM_USB_OnDtrLost`)는 v2.4.0 에서 System 레이어(`usb_host_mode`) 내부로 이관되어 공개 헤더에서 빠졌습니다. 사용자 공개 API 는 [`XM_USB_SetHostProfile()`](#xm_usb_sethostprofile) 하나입니다.
 
 ---
 
@@ -829,8 +741,8 @@ USB-CDC 모드 변경 콜백 함수 포인터 타입입니다. [`XM_USB_Register
 | MSC 로깅 기본 API (Start/Stop/Status/Stats/Marker/디스크 조회) | ✅ | ✅ |
 | CDC 스트리밍 기본 API (`SendUsbDataWithId`/`SetUsbCustomMeta`/`SendUsbDebugMessage`) | ✅ | ✅ |
 | `XmLogStats_t.cold_buffer_percent` 필드 | ❌ 없음 (8개 필드) | 🟢 있음 (9개 필드 — 레거시, 현재 항상 0) |
-| `XM_USB_Mode_e` / `XM_USB_GetMode` / `XM_USB_SetMode` / `XM_USB_RegisterModeChangeCallback` (PHAI/PRODUCTION/TERMINAL 모드 관리) | ❌ 없음 | 🟢 전용 |
-| `XM_USB_RequestProductionLatch` / `XM_USB_OnDtrLost` (Internal, PRODUCTION 자동 latch) | ❌ 없음 | 🟢 전용 (Internal) |
+| `XM_USB_HostProfile_e` / `XM_USB_SetHostProfile` (PhAI Studio / 터미널 호스트 프로파일 지정) | ❌ 없음 | 🟢 전용 |
+| PRODUCTION 자동 진입 / DTR 처리 (System `usb_host_mode` 내부, 공개 API 아님) | ❌ 없음 | 🟢 전용 (Internal) |
 | MSC 로깅 내부 파이프라인 단계 | 2단계 — UserTask가 Lock-Free SPSC 링 버퍼에 직접 기록 → `DataLoggerTask`가 `f_write()` | 3단계 — UserTask가 1차 큐 적재 → `DataLoggerTask`가 Binary 변환 후 2차 큐 적재 → 저순위 태스크가 `f_write()` |
 
 ---
