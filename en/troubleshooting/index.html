@@ -1968,6 +1968,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#debug-halts-at-main--break-at-address-0x800xxxx-with-no-debug-information-popup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debug halts at main() / Break at address "0x800xxxx" with no debug information popup
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2225,6 +2236,8 @@
       
         
       
+        
+      
     
     
     
@@ -2277,6 +2290,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.4.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2720,6 +2761,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#debug-halts-at-main--break-at-address-0x800xxxx-with-no-debug-information-popup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debug halts at main() / Break at address "0x800xxxx" with no debug information popup
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3131,6 +3183,15 @@
 <h3 id="variable-shows-as-optimized-out-during-debugging">Variable Shows as "Optimized Out" During Debugging<a class="headerlink" href="#variable-shows-as-optimized-out-during-debugging" title="Permanent link">&para;</a></h3>
 <p><strong>Cause:</strong> In a Release build (<code>-O2</code>), the compiler optimizes away variables that it considers unnecessary.</p>
 <p><strong>Resolution:</strong> Build using the Debug configuration (<code>-Og -g3</code>). You can verify the optimization setting under <code>Project &gt; Properties &gt; C/C++ Build &gt; Settings &gt; Optimization</code>.</p>
+<h3 id="debug-halts-at-main--break-at-address-0x800xxxx-with-no-debug-information-popup">Debug halts at <code>main()</code> / <code>Break at address "0x800xxxx" with no debug information</code> popup<a class="headerlink" href="#debug-halts-at-main--break-at-address-0x800xxxx-with-no-debug-information-popup" title="Permanent link">&para;</a></h3>
+<p><strong>This is normal — not a bug.</strong> XM10 boots as <strong>two independent images on one chip</strong> — the bootloader (AGR_BOOT) and the application firmware — so the debugger may show either of the following:</p>
+<ol>
+<li><strong>Halt at <code>Thread #1 suspended: breakpoint main()</code></strong> — caused by STM32CubeIDE's default <code>Set breakpoint at: main</code> (present in every CubeIDE project). Press <code>Resume</code> (F8) to run. To stop it halting every time, uncheck <code>Set breakpoint at: main</code> under <code>Debug Configuration &gt; Startup</code>.</li>
+<li><strong><code>Break at address "0x0800xxxx" with no debug information available, or outside of program code</code></strong> — <code>0x0800xxxx</code> (e.g. <code>0x0800bf14</code>) is <strong>below <code>0x08040000</code> (the app start) = the bootloader region</strong>. The bootloader is a separate binary with no debug symbols in the app project, so the debugger is correctly reporting "no symbols" for that address. Press <code>Resume</code> (F8) to continue.</li>
+</ol>
+<blockquote>
+<p>Note: pressing Restart during a debug session (<em>Software system reset</em> / <em>Hardware reset</em>) makes the CPU re-run the physical bootloader first, so case 2 appears more often. If that bothers you, switch <code>Debug Configuration &gt; Startup &gt; Reset Behaviour</code> to <em>Core reset</em> or <em>None</em>. (This is a normal halt, different from falling into a signal handler due to an unset vector table — see <a href="../bootloader/">Bootloader debug setup</a>.)</p>
+</blockquote>
 <hr />
 <h2 id="common-pitfalls">Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Permanent link">&para;</a></h2>
 <h3 id="code-patterns">Code Patterns<a class="headerlink" href="#code-patterns" title="Permanent link">&para;</a></h3>

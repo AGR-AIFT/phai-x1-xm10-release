@@ -1968,6 +1968,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#디버그-시작-시-main-에서-멈춤--break-at-address-0x800xxxx-with-no-debug-information-팝업" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        디버그 시작 시 main() 에서 멈춤 / Break at address "0x800xxxx" with no debug information 팝업
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2225,6 +2236,8 @@
       
         
       
+        
+      
     
     
     
@@ -2277,6 +2290,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.4.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2720,6 +2761,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#디버그-시작-시-main-에서-멈춤--break-at-address-0x800xxxx-with-no-debug-information-팝업" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        디버그 시작 시 main() 에서 멈춤 / Break at address "0x800xxxx" with no debug information 팝업
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3131,6 +3183,15 @@
 <h3 id="디버깅-시-변수-값이-optimized-out">디버깅 시 변수 값이 Optimized Out<a class="headerlink" href="#디버깅-시-변수-값이-optimized-out" title="Permanent link">&para;</a></h3>
 <p><strong>원인:</strong> Release 빌드 설정(<code>-O2</code>)에서 컴파일러 최적화로 변수가 제거됨</p>
 <p><strong>해결:</strong> Debug 빌드 설정(<code>-Og -g3</code>)으로 빌드하세요. <code>Project &gt; Properties &gt; C/C++ Build &gt; Settings &gt; Optimization</code> 에서 확인할 수 있습니다.</p>
+<h3 id="디버그-시작-시-main-에서-멈춤--break-at-address-0x800xxxx-with-no-debug-information-팝업">디버그 시작 시 <code>main()</code> 에서 멈춤 / <code>Break at address "0x800xxxx" with no debug information</code> 팝업<a class="headerlink" href="#디버그-시작-시-main-에서-멈춤--break-at-address-0x800xxxx-with-no-debug-information-팝업" title="Permanent link">&para;</a></h3>
+<p><strong>정상 동작입니다 — 버그가 아닙니다.</strong> XM10 은 부트로더(AGR_BOOT)와 앱 펌웨어가 <strong>하나의 칩에 두 개의 독립 이미지</strong>로 올라가는 구조라, 디버거에서 다음 두 가지가 보일 수 있습니다.</p>
+<ol>
+<li><strong><code>Thread #1 suspended: breakpoint main()</code> 로 멈춤</strong> — STM32CubeIDE 기본 설정 <code>Set breakpoint at: main</code> 때문입니다(모든 CubeIDE 프로젝트 공통). <code>Resume</code>(F8) 를 누르면 실행됩니다. 매번 멈추는 게 싫으면 <code>Debug Configuration &gt; Startup</code> 탭에서 <code>Set breakpoint at: main</code> 체크를 해제하세요.</li>
+<li><strong><code>Break at address "0x0800xxxx" with no debug information available, or outside of program code</code></strong> — <code>0x0800xxxx</code>(예: <code>0x0800bf14</code>)는 <code>0x08040000</code>(앱 시작) <strong>아래 = 부트로더 영역</strong>입니다. 부트로더는 앱과 별개 바이너리라 앱 프로젝트에 디버그 심볼이 없으므로, 디버거가 "심볼 없음"을 정확히 알리는 것뿐입니다. <code>Resume</code>(F8) 로 진행하면 됩니다.</li>
+</ol>
+<blockquote>
+<p>참고: 디버그 중 리셋(Restart 버튼의 <em>Software system reset</em> / <em>Hardware reset</em>)을 누르면 CPU 가 실제 부트로더부터 다시 실행하므로 위 2번이 더 자주 보일 수 있습니다. 이게 거슬리면 <code>Debug Configuration &gt; Startup &gt; Reset Behaviour</code> 를 <em>Core reset</em> 또는 <em>None</em> 으로 바꿔보세요. (벡터 테이블 미설정으로 signal handler 에 빠지는 것과는 다른, 정상 정지입니다 — <a href="../bootloader/">부트로더 디버그 설정</a> 참고.)</p>
+</blockquote>
 <hr />
 <h2 id="자주-마주치는-함정">자주 마주치는 함정<a class="headerlink" href="#자주-마주치는-함정" title="Permanent link">&para;</a></h2>
 <h3 id="코드-작성-패턴">코드 작성 패턴<a class="headerlink" href="#코드-작성-패턴" title="Permanent link">&para;</a></h3>
