@@ -40,6 +40,14 @@ _estack = ORIGIN(DTCMRAM) + LENGTH(DTCMRAM);  /* MSP stack in DTCMRAM top */
 _Min_Heap_Size = 0x2000;      /* required amount of heap  */
 _Min_Stack_Size = 0x2000; /* required amount of stack */
 
+/* AGR (v2.4.1): newlib heap ceiling for _sbrk() (Core/Src/agr_retarget.c, __wrap__sbrk).
+ * The newlib heap grows inside RAM_D1 (see ._user_heap_stack, placed >RAM_D1),
+ * but the Phase-2 stack move put _estack at DTCMRAM top (0x20020000) — a
+ * different, lower memory region. Bounding the heap against _estack made
+ * _sbrk() fail on its very first call (RAM_D1 pointer > DTCMRAM ceiling), so
+ * malloc()/float-printf never worked. Bound the heap against RAM_D1's own top. */
+_heap_limit = ORIGIN(RAM_D1) + LENGTH(RAM_D1);
+
 /* Specify the memory areas
  *
  * Flash Layout (AGR_BOOT V2):

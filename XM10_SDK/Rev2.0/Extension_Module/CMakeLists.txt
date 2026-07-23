@@ -64,6 +64,7 @@ set(SOURCES
     Core/Src/stm32h7xx_it.c
     Core/Src/syscalls.c
     Core/Src/sysmem.c
+    Core/Src/agr_retarget.c
     Core/Src/system_stm32h7xx.c
     Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c
     Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c
@@ -298,9 +299,17 @@ set(XM_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/libXM_Lib.a)
 
 # --whole-archive: HAL __weak 콜백을 libXM_Lib.a의 강한 심볼로 오버라이드 필수
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    -u _printf_float
-    -u _scanf_float
     -Wl,--whole-archive ${XM_LIB_PATH} -Wl,--no-whole-archive
+)
+
+# Float printf/scanf + _sbrk wrap — MUST be link OPTIONS with SHELL: (in
+# target_link_libraries CMake rewrites "_printf_float" -> "-l_printf_float" and
+# drops it). -Wl,--wrap=_sbrk routes _sbrk to __wrap__sbrk in Core/Src/agr_retarget.c
+# (RAM_D1 heap ceiling); without it the stock _sbrk runs and float printf hangs.
+target_link_options(${PROJECT_NAME} PRIVATE
+    "SHELL:-u _printf_float"
+    "SHELL:-u _scanf_float"
+    "-Wl,--wrap=_sbrk"
 )
 
 # --- Post-build: generate .bin and .hex ---

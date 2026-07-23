@@ -40,6 +40,13 @@ _estack = ORIGIN(DTCMRAM) + LENGTH(DTCMRAM);    /* end of RAM */
 _Min_Heap_Size = 0x200;      /* required amount of heap  */
 _Min_Stack_Size = 0x400; /* required amount of stack */
 
+/* AGR (v2.4.1): newlib heap ceiling for _sbrk() (Core/Src/agr_retarget.c, __wrap__sbrk).
+ * In this RAM-target layout the heap (._user_heap_stack) and the MSP stack
+ * both live in DTCMRAM, so the classic "_estack minus reserved stack" ceiling
+ * is self-consistent here (unlike the FLASH layout where the heap is in RAM_D1).
+ * Defined so the shared agr_retarget.c compiles against either linker script. */
+_heap_limit = _estack - _Min_Stack_Size;
+
 /* Specify the memory areas */
 MEMORY
 {
