@@ -193,6 +193,15 @@ collect2.exe: error: ld returned 1 exit status
 
 **해결:** Debug 빌드 설정(`-Og -g3`)으로 빌드하세요. `Project > Properties > C/C++ Build > Settings > Optimization` 에서 확인할 수 있습니다.
 
+### 디버그 시작 시 `main()` 에서 멈춤 / `Break at address "0x800xxxx" with no debug information` 팝업
+
+**정상 동작입니다 — 버그가 아닙니다.** XM10 은 부트로더(AGR_BOOT)와 앱 펌웨어가 **하나의 칩에 두 개의 독립 이미지**로 올라가는 구조라, 디버거에서 다음 두 가지가 보일 수 있습니다.
+
+1. **`Thread #1 suspended: breakpoint main()` 로 멈춤** — STM32CubeIDE 기본 설정 `Set breakpoint at: main` 때문입니다(모든 CubeIDE 프로젝트 공통). `Resume`(F8) 를 누르면 실행됩니다. 매번 멈추는 게 싫으면 `Debug Configuration > Startup` 탭에서 `Set breakpoint at: main` 체크를 해제하세요.
+2. **`Break at address "0x0800xxxx" with no debug information available, or outside of program code`** — `0x0800xxxx`(예: `0x0800bf14`)는 `0x08040000`(앱 시작) **아래 = 부트로더 영역**입니다. 부트로더는 앱과 별개 바이너리라 앱 프로젝트에 디버그 심볼이 없으므로, 디버거가 "심볼 없음"을 정확히 알리는 것뿐입니다. `Resume`(F8) 로 진행하면 됩니다.
+
+> 참고: 디버그 중 리셋(Restart 버튼의 *Software system reset* / *Hardware reset*)을 누르면 CPU 가 실제 부트로더부터 다시 실행하므로 위 2번이 더 자주 보일 수 있습니다. 이게 거슬리면 `Debug Configuration > Startup > Reset Behaviour` 를 *Core reset* 또는 *None* 으로 바꿔보세요. (벡터 테이블 미설정으로 signal handler 에 빠지는 것과는 다른, 정상 정지입니다 — [부트로더 디버그 설정](bootloader/README.md) 참고.)
+
 ---
 
 ## 자주 마주치는 함정

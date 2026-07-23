@@ -193,6 +193,15 @@ collect2.exe: error: ld returned 1 exit status
 
 **Resolution:** Build using the Debug configuration (`-Og -g3`). You can verify the optimization setting under `Project > Properties > C/C++ Build > Settings > Optimization`.
 
+### Debug halts at `main()` / `Break at address "0x800xxxx" with no debug information` popup
+
+**This is normal — not a bug.** XM10 boots as **two independent images on one chip** — the bootloader (AGR_BOOT) and the application firmware — so the debugger may show either of the following:
+
+1. **Halt at `Thread #1 suspended: breakpoint main()`** — caused by STM32CubeIDE's default `Set breakpoint at: main` (present in every CubeIDE project). Press `Resume` (F8) to run. To stop it halting every time, uncheck `Set breakpoint at: main` under `Debug Configuration > Startup`.
+2. **`Break at address "0x0800xxxx" with no debug information available, or outside of program code`** — `0x0800xxxx` (e.g. `0x0800bf14`) is **below `0x08040000` (the app start) = the bootloader region**. The bootloader is a separate binary with no debug symbols in the app project, so the debugger is correctly reporting "no symbols" for that address. Press `Resume` (F8) to continue.
+
+> Note: pressing Restart during a debug session (*Software system reset* / *Hardware reset*) makes the CPU re-run the physical bootloader first, so case 2 appears more often. If that bothers you, switch `Debug Configuration > Startup > Reset Behaviour` to *Core reset* or *None*. (This is a normal halt, different from falling into a signal handler due to an unset vector table — see [Bootloader debug setup](bootloader/README.en.md).)
+
 ---
 
 ## Common Pitfalls
