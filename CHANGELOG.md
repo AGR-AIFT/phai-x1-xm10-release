@@ -4,6 +4,22 @@
 
 ---
 
+## [v2.5.0] — 2026-07-24
+
+> **Rev 1.1 · Rev 2.0 공통.** USB 메모리(MSC)에 데이터를 저장하던 기능을 제거했습니다. 저장 속도 한계로 데이터가 조용히 누락될 수 있어(loop count 는 멀쩡해 보여 발견 어려움), 데이터 수집을 **USB-CDC 실시간 스트리밍(PhAI Studio / PythonDecoder CDC)** 으로 일원화했습니다. 온보드 저장(SD카드)은 향후 HW 리비전에서 지원 예정.
+
+### Removed
+* **USB-MSC 파일 로깅 제거** — 파일 로깅 예제 5종(`10`/`10a`/`10b`/`10c`/`34`), 관련 public API(`XM_SetUsbLogSource` / `XM_StartUsbDataLog` / `XM_StopUsbDataLog` / `XM_GetUsbLogStats` / `XM_InsertUsbLogMarker` 등), "USB 메모리 로깅" 문서 페이지를 제거했습니다. CDC(실시간 스트리밍) API 는 전부 유지됩니다.
+
+### Changed
+* **예제 11 · 12 · 17 데이터 캡처 CDC 전환** — USB 메모리 세션 로깅 대신 USB-CDC 실시간 스트리밍(`XM_SetUsbStreamSource` + `XM_SetUsbAutoStream`)으로 전환했습니다.
+* **예제 개수** — Rev 2.0 45 개 / Rev 1.1 42 개 (MSC 예제 5 종 제거 반영).
+
+### Docs
+* **데이터 수집 안내 CDC 일원화** — API 레퍼런스 · 튜토리얼 · AI 데이터 파이프라인을 USB-CDC 기준으로 정리하고, 삭제된 예제로 향하던 링크를 CDC(Ex.09)·PhAI Studio 로 연결했습니다. `PythonDecoder/README` 를 CDC 실시간 수신 샘플 전용으로 재작성했습니다.
+
+---
+
 ## [v2.4.1] — 2026-07-24
 
 > **Rev 2.0 전용** 패치 릴리즈. C 표준 라이브러리(실수 `printf` · `malloc`)가 Rev 2.0 에서 정상 동작하도록 힙 설정을 바로잡고, 멀티태스크 안전성을 확보했습니다. 새 예제/API 없음. Rev 1.1 은 v2.3.1 그대로.
