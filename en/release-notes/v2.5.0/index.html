@@ -2486,8 +2486,31 @@
 <p>Download the ZIP that matches your board revision. <strong>RJ45 Ethernet port = Rev 2.0; no Ethernet port = Rev 1.1.</strong></p>
 </blockquote>
 <h3 id="release-attachments">Release Attachments<a class="headerlink" href="#release-attachments" title="Permanent link">&para;</a></h3>
+<p>This release also includes the files below. You need <strong>one <code>RevX.X.zip</code> for your board revision</strong>, plus the following 3 files if you use KIT H10.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AGR_Bootloader.bin</code></td>
+<td>XM10 bootloader (flash once via SWD; afterwards upload FW over USB in PhAI Studio)</td>
+</tr>
+<tr>
+<td><code>SUIT_H10_Binary_20260716.zip</code></td>
+<td>KIT H10 (CM · MD · ESP32) firmware — update via USB stick</td>
+</tr>
+<tr>
+<td><code>SUIT_ContentsFiles.zip</code></td>
+<td>KIT H10 content files (motions · sounds, etc.) — on the same USB stick</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
-<p><strong>Bootloader, KIT H10 firmware, and content files are unchanged from previous releases.</strong> If you have already installed/updated them, there is nothing more to do.</p>
+<p><strong>The bootloader, KIT H10 firmware, and content files are identical to a previous release (v2.3.0).</strong> They are re-attached to v2.5.0 for convenience, so if you already installed/updated them since v2.3.0 there is <strong>nothing more to do.</strong> See the <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.5.0/docs/bootloader/README.en.md">Bootloader upload</a> and <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.5.0/docs/kit-h10-firmware/README.en.md">KIT H10 firmware</a> docs for installation.</p>
 </blockquote>
 <h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h3>
 <p>The final build step (generating the uploadable <code>.bin</code>) uses <strong>Python</strong>. If you haven't installed it yet, follow <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.5.0/docs/getting-started/02-software-setup.md">Software Setup</a> to install Python 3.10+ (make sure it's on your PATH).</p>
