@@ -111,7 +111,7 @@ static void Run_Loop(void)
 
 - 외부 IO + 안전 인터록 + FSM: [Ex.06 Safety Switch](../06_Ext_IO_Safety_Switch/)
 - 12채널 데이터를 PC 로 스트리밍: [Ex.09 CDC Stream](../09_CDC_Stream/)
-- 데이터 저장: [Ex.10b MSC Custom Struct](../10b_MSC_Custom_Struct/)
+- 데이터를 PC 로 실시간 전송: [Ex.09 CDC Stream](../09_CDC_Stream/)
 
 ---
 

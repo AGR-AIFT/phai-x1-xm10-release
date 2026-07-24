@@ -146,7 +146,7 @@ static void Active_Loop(void)
 
 - 보행 위상 연속 보조: [Ex.23 Gait Phase Adaptive](../23_Gait_Phase_Adaptive_Torque/)
 - Hogan 임피던스 (강성 일반화): [Ex.20 Impedance Control](../20_Impedance_Control/)
-- 보행 분석 데이터 로깅: [Ex.34 MSC GaitAnalysis Log](../34_MSC_GaitAnalysis_Log/)
+- 보행 데이터 실시간 스트리밍: [Ex.09 CDC Stream](../09_CDC_Stream/)
 
 ---
 

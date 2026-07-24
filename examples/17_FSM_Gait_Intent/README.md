@@ -7,7 +7,7 @@
 > - **Body Data 전제조건** — `XM_SendUserBodyData` 필수 (보행 분석 추정치 정확도).
 >
 > ⏱️ 권장 시간: 50분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.14 PD](../14_PD_Realtime_Control/) + [Ex.10c MSC Advanced](../10c_MSC_Advanced_Log/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [TSM](../../docs/api-reference/01-task-state-machine.md)
+> 🧰 사전 예제: [Ex.14 PD](../14_PD_Realtime_Control/) + [Ex.09 CDC Stream](../09_CDC_Stream/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [TSM](../../docs/api-reference/01-task-state-machine.md)
 
 ---
 
@@ -42,7 +42,7 @@ XM_SendUserBodyData(bodyData);
 | 6 Mid-Swing | 무릎 최대 굴곡 | 0 Nm |
 | 7 Terminal Swing | 착지 준비 | 0 Nm |
 
-모든 토크에 **LPF 스무딩** (시상수 ~100 ms) + AssistLevel × 비례 스케일 + USB MSC 로깅 (BTN 1 토글) + PhAI 0xF0 6축.
+모든 토크에 **LPF 스무딩** (시상수 ~100 ms) + AssistLevel × 비례 스케일 + USB-CDC 실시간 스트리밍 (상시) + PhAI 0xF0 6축.
 
 > 📸 `![7-phase Gait Cycle](../assets/img/17_gait_phases.png)` placeholder
 
@@ -177,13 +177,12 @@ static void Active_Loop(void)
 2. **실제 보행** → ✅ LED 1 (Stance) / LED 2 (Swing) 가 우측 다리 보행 주기에 맞춰 토글
 3. **USB CDC** → `Gait | RH:TERMINAL LH:INI_SWNG Tau_R:1.42 Tau_L:-0.85` 매 200 ms
 4. **PhAI 0xF0** → 좌·우 phase + torque + thigh angle 6축 실시간 그래프
-5. **BTN 1 클릭** → ✅ USB MSC 로깅 시작 `/LOGS/GaitIntent/...`, LED 3 깜빡
-6. **다시 BTN 1** → ✅ 로깅 정지 + summary.txt 생성
-7. **변형 1 — 임계치 조정**: `MIDSTANCE_ANGLE_THRESHOLD` 5° → 3° (조기 전환) or 8° (지연 전환)
-8. **변형 2 — 토크 크기**: `TERMINAL_STANCE_ASSIST_NM` 1.5 → 3.0 (강한 추진) 또는 0.5 (약함)
-9. **변형 3 — LPF 시상수**: `TORQUE_LPF_FACTOR` 0.01 → 0.1 (10배 빠른 반응, 덜 부드러움)
-10. **변형 4 — 좌·우 비대칭**: 한쪽 다리만 보조 (`SetAssistTorqueLH(0)`) → 사용자 적응 관찰
-11. **변형 5 — phase 추가**: 8단계 (Mid-Stance 를 둘로 분할) → enum 확장 + 임계치 추가
+5. **PhAI Studio** → 실시간 데이터 스트리밍으로 확인
+6. **변형 1 — 임계치 조정**: `MIDSTANCE_ANGLE_THRESHOLD` 5° → 3° (조기 전환) or 8° (지연 전환)
+7. **변형 2 — 토크 크기**: `TERMINAL_STANCE_ASSIST_NM` 1.5 → 3.0 (강한 추진) 또는 0.5 (약함)
+8. **변형 3 — LPF 시상수**: `TORQUE_LPF_FACTOR` 0.01 → 0.1 (10배 빠른 반응, 덜 부드러움)
+9. **변형 4 — 좌·우 비대칭**: 한쪽 다리만 보조 (`SetAssistTorqueLH(0)`) → 사용자 적응 관찰
+10. **변형 5 — phase 추가**: 8단계 (Mid-Stance 를 둘로 분할) → enum 확장 + 임계치 추가
 
 ---
 
@@ -207,6 +206,6 @@ static void Active_Loop(void)
 | LPF 가 너무 느려 transition 놓침 | factor 0.01 = 100 ms 시상수 | 0.05~0.1 로 ↑ |
 | `H10 AssistLevel=0` 이라 모든 토크 0 | 정상 동작 (사용자가 보조 끔) | 슈트 다이얼 1~9 조정 |
 | FSM 가 자주 한 단계 건너뜀 | 보행이 매우 빠르거나 임계치 가까이 노이즈 | 임계치 hysteresis 추가 |
-| 로깅 시작했는데 .bin 0 byte | `XM_SetUsbLogSource` 누락 | Setup 에서 호출 확인 |
+| PhAI Studio 데이터 안 보임 | 스트림 소스 미등록 | `XM_SetUsbStreamSource` 확인 |
 
 막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)
