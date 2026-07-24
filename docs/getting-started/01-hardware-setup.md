@@ -14,7 +14,7 @@ XM10 은 KIT H10 본체에서 24V 전원과 통신을 받습니다. 한 가닥�
 | 보드 | XM10 보드, Sensor Hub Module 보드 |
 | 케이블 | XM10 ↔ KIT H10 연결 케이블, XM10 ↔ Sensor Hub 케이블 |
 | 디버깅 | ST-Link V2 디버거 + 20-to-4 핀 변환 보드 + 4-pin SWD 케이블 |
-| 액세서리 | USB-C 케이블 (데이터 모니터링용), SanDisk Ultra Dual Drive Type-C 32 GB (MSC 로깅용) |
+| 액세서리 | USB-C 케이블 (데이터 모니터링/디버그용) |
 | PC | STM32CubeIDE 가 설치된 PC, (선택) Jetson Orin NX 등 AM |
 
 ### H10 펌웨어 버전 확인
@@ -76,7 +76,7 @@ EMG, 발 접지 (GRF), FSR 같은 센서를 쓰려면 센서 허브 보드를 XM
 
 ### 4. USB-C 데이터 케이블 (선택)
 
-PhAI Studio 실시간 모니터링이나 USB 메모리 로깅에 사용합니다. Ex.07 ~ Ex.10c 단계에서 필요합니다.
+PhAI Studio 실시간 모니터링과 USB 시리얼(CDC) 통신에 사용합니다. Ex.07 ~ Ex.09 단계에서 필요합니다.
 
 ---
 

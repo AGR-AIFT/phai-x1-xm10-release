@@ -2,82 +2,72 @@
 
 XM10 보드에서 모은 외골격 데이터를 PyTorch / scikit-learn 같은 학습 프레임워크로 가져가는 흐름을 한 페이지에 정리했습니다. AI 모델 학습이 목표라면 이 페이지를 흐름표로 두고 작업하세요.
 
+> USB 메모리(MSC) 파일 로깅 기능은 v2.5.0 에서 제거되었습니다. 데이터 수집은 **USB-CDC 실시간 스트리밍**으로 하며, 아래 길 A 가 표준 경로입니다. 온보드 저장(SD카드)은 향후 HW 리비전에서 지원 예정입니다.
+
 ---
 
 ## 큰 그림
 
 ```
-[보드 동작]                [수집]                  [변환]                    [학습]
-  ↓                          ↓                      ↓                        ↓
-KIT H10 착용  →  USB 메모리 기록     →  Python 디코더    →  PyTorch DataLoader
-              또는 PhAI Studio 실시간     CSV / npy 출력         또는 sklearn
-                  스트리밍
+[보드 동작]              [수집]                      [변환]                 [학습]
+  ↓                        ↓                          ↓                     ↓
+KIT H10 착용  →  USB-CDC 실시간 스트리밍   →   CSV / npy 출력   →  PyTorch DataLoader
+                 (PhAI Studio 또는                                    또는 sklearn
+                  PythonDecoder/CDC)
 ```
 
-세 가지 길이 있습니다. 목적에 따라 골라가세요.
+두 가지 길이 있습니다. 목적에 따라 골라가세요.
 
 | 길 | 적합한 상황 | 데이터량 | 지연 |
 |----|-----------|---------|------|
-| A. USB 메모리 로깅 | 오프라인 학습 (대부분) | 시간 단위 | — |
-| B. PhAI Studio 스트리밍 | 실시간 시각화 + 짧은 세션 | 분 단위 | < 100 ms |
-| C. 보드 내 추론 | 학습된 모델을 보드로 배포 | — | 1 ms |
+| A. USB-CDC 스트리밍 수집 | 오프라인 학습 (대부분) | 분 ~ 시간 | < 100 ms |
+| B. 보드 내 추론 | 학습된 모델을 보드로 배포 | — | 1 ms |
 
 ---
 
-## 길 A — USB 메모리 로깅 (가장 일반적)
+## 길 A — USB-CDC 스트리밍 수집 (표준)
 
-### 1. 보드 측 — 데이터 기록
+### 1. 보드 측 — 커스텀 채널 스트리밍
 
-`examples/10c_MSC_Advanced_Log/` 또는 `examples/34_MSC_GaitAnalysis_Log/` 패턴을 사용합니다.
-
-핵심 호출 3 가지:
+`examples/09_CDC_Stream/` 패턴을 사용합니다. 학습에 쓸 데이터를 커스텀 채널로 실시간 전송합니다.
 
 ```c
-// 1. 로깅 소스 등록 (Control_Setup 에서 1회) — 등록한 구조체가 자동 기록됨
-XM_SetUsbLogSource(&my_data, sizeof(my_data));
+void Control_Setup(void) {
+    // 채널 메타데이터(JSON): 인자는 module_id, json_str 2개
+    XM_SetUsbCustomMeta(0xF0, "[{\"name\":\"hip_L\",\"unit\":\"deg\"},{\"name\":\"hip_R\",\"unit\":\"deg\"}]");
+}
 
-// 2. 세션 시작 (상태 전이 함수에서 1회 — 1ms 제어 루프 안에서는 호출 금지)
-//    sessionName 에 NULL 을 주면 S_001, S_002 ... 자동 넘버링
-XM_StartUsbDataLog(NULL, "hip_L(float), hip_R(float)");
-
-// 3. 기록은 매 루프 백그라운드 자동 — 별도의 per-loop write 호출이 없음
-//    파일 분할 크기:  XM_SetUsbLogRollingSize(MB)  (기본 10MB)
-//    상태 확인:       XmLogStatus_e st = XM_GetUsbLogStatus();
-//    세션 종료:       XM_StopUsbDataLog();   // 역시 1ms 루프 밖에서
+void Control_Loop(void) {
+    float sample[2] = { hip_L, hip_R };
+    XM_SendUsbDataWithId(sample, sizeof(sample), 0xF0);  // (data, len, id) 순서 — 매 루프 전송
+}
 ```
 
-자세한 API: [docs/api-reference/06-usb-data-logging.md](../api-reference/06-usb-data-logging.md).
+### 2. PC 측 — 스트림 수신 + CSV 저장
 
-### 2. 파일 회수
+두 가지 방법이 있습니다.
 
-USB 메모리를 PC 에 꽂으면 `.bin` 또는 `.csv` 파일이 보입니다. 권장은 `.bin` (디코더가 처리).
-
-### 3. PythonDecoder 로 변환
-
-`PythonDecoder/MSC/` 의 디코더가 세션 폴더의 `.bin` → `decoded_output.csv` 로 변환합니다.
+- **PhAI Studio** — USB 연결 → 채널 `0xF0` 선택 → 실시간 그래프 확인 + 녹화 버튼 → export 로 `.csv` 저장. 가장 간단합니다.
+- **PythonDecoder/CDC** — 직접 파싱이 필요하면 레포 내 파이썬 샘플로 수신하면서 CSV 를 자동 저장합니다.
 
 ```bash
-cd PythonDecoder/MSC
-python data_decoder_xm10.py /LOGS/S_001        # 세션 폴더를 인자로 전달
+python PythonDecoder/CDC/cdc_phai_receiver.py --cli --port COM6   # CSV 자동 저장
 ```
 
-산출물:
-- `.csv` — 사람이 보기 좋음, pandas 로 바로 읽기
-- `.npy` — PyTorch / numpy 빠른 로드
-- `.mat` — MATLAB 사용자용
-
-### 4. 학습 프레임워크에서 로드
+### 3. 학습 프레임워크에서 로드
 
 #### PyTorch 예시
 
 ```python
+import pandas as pd
+import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
-import numpy as np
 
 class XM10Dataset(Dataset):
-    def __init__(self, npy_path):
-        self.data = np.load(npy_path)  # shape (N, features)
+    def __init__(self, csv_path):
+        df = pd.read_csv(csv_path)
+        self.data = df.select_dtypes("number").values.astype("float32")  # (N, features)
 
     def __len__(self):
         return len(self.data) - 100  # 100-step window
@@ -85,11 +75,13 @@ class XM10Dataset(Dataset):
     def __getitem__(self, idx):
         x = self.data[idx : idx + 100]
         y = self.data[idx + 100, 0]  # 다음 스텝의 첫 채널 예측
-        return torch.tensor(x, dtype=torch.float32), torch.tensor(y, dtype=torch.float32)
+        return torch.tensor(x), torch.tensor(y, dtype=torch.float32)
 
-ds = XM10Dataset("my_log.npy")
+ds = XM10Dataset("cdc_phai_20260224_120000.csv")
 loader = DataLoader(ds, batch_size=64, shuffle=True)
 ```
+
+> 큰 데이터셋은 CSV 를 한 번 `np.save()` 로 `.npy` 로 변환해두면 로드가 훨씬 빠릅니다.
 
 #### scikit-learn 예시 (간단 분류)
 
@@ -97,7 +89,7 @@ loader = DataLoader(ds, batch_size=64, shuffle=True)
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 
-df = pd.read_csv("my_log.csv")
+df = pd.read_csv("cdc_phai_20260224_120000.csv")
 X = df[["imu_ax", "imu_ay", "imu_az", "knee_angle"]].values
 y = df["gait_phase"].values
 
@@ -107,37 +99,9 @@ clf.fit(X, y)
 
 ---
 
-## 길 B — PhAI Studio 실시간 스트리밍
+## 길 B — 보드 내 추론 (학습된 모델 배포)
 
-짧은 세션 + 시각 검증이 목적이면 이쪽이 빠릅니다.
-
-### 1. 보드 측 — 커스텀 채널 등록
-
-```c
-void Control_Setup(void) {
-    // 채널 메타데이터(JSON): 인자는 module_id, json_str 2개
-    XM_SetUsbCustomMeta(0xF0, "[{\"name\":\"my_signal\",\"unit\":\"V\"}]");
-}
-
-void Control_Loop(void) {
-    float my_value = read_my_sensor();
-    XM_SendUsbDataWithId(&my_value, sizeof(my_value), 0xF0);  // (data, len, id) 순서
-}
-```
-
-### 2. PhAI Studio 측 — 실시간 그래프 + 녹화
-
-PhAI Studio 에서 USB 연결 → 채널 `0xF0` 선택 → 그래프 보면서 동시에 녹화 버튼.
-
-녹화된 데이터는 PhAI Studio 의 export 기능으로 `.csv` 출력 가능. 이후 길 A 의 PyTorch / sklearn 단계로 동일하게 진행.
-
-자세한 PhAI Studio 사용법은 별도 자료.
-
----
-
-## 길 C — 보드 내 추론 (학습된 모델 배포)
-
-길 A 로 학습한 모델을 보드에 다시 올려서 1 ms 루프 안에서 추론.
+길 A 로 학습한 모델을 보드에 다시 올려서 1 ms 루프 안에서 추론합니다.
 
 ### 1. 모델 경량화
 
@@ -175,9 +139,8 @@ void Control_Loop(void) {
 
 ## 자주 막히는 부분
 
-- **로그 파일이 너무 큼** — 1 ms × 1 시간 = 360 만 샘플. 등록한 구조체가 매 루프 자동 기록되므로, 다 필요 없으면 **관심 필드만 골라 작은 구조체로** 저장하거나 파일 분할(`XM_SetUsbLogRollingSize`)로 나누세요.
-- **CSV 가 너무 느림** — 큰 데이터셋은 `.npy` 또는 `.parquet` 로. CSV 는 사람 확인용으로만.
-- **타임스탬프가 안 맞음** — `Ex.10b` 패턴의 수동 타임스탬프 사용. 자동 모드는 파일 단위만 기록.
+- **CSV 가 너무 큼/느림** — 큰 데이터셋은 `.npy` 또는 `.parquet` 로 변환해 로드. CSV 는 사람 확인용으로만.
+- **스트리밍 중 패킷 누락** — `PythonDecoder/CDC/cdc_csv_reviewer.py` 의 Sequence Gap(ΔSeq) / Tx Drop 분석으로 누락 시점을 확인하고, 전송 데이터량을 줄이거나 채널을 간추리세요.
 - **NaN / Inf 값** — 보드 측에서 `assert(isfinite(value))` 추가. 학습 직전에 `np.isfinite()` 로 필터링.
 - **클래스 불균형** — Stance/Swing 같은 보행 phase 는 7:3 정도로 비균등. `class_weight` 옵션 또는 SMOTE 사용.
 - **보드에서 추론이 1 ms 를 넘김** — 모델 양자화 (int8) 또는 layer 수 감소. STM32H7 의 FPU 활용 확인.
@@ -186,8 +149,7 @@ void Control_Loop(void) {
 
 ## 다음
 
-- `Ex.10c MSC Advanced Log` 로 로깅 패턴 익히기
-- `Ex.34 MSC GaitAnalysis Log` 로 보행 분석 데이터 직접 수집
+- `Ex.09 CDC Stream` 으로 커스텀 채널 스트리밍 패턴 익히기
 - `Ex.16 TinyAI Sensor Fusion` → `Ex.36 OnDevice Kinesthetic Learning` 으로 보드 내 추론 학습
 - 학습 모델을 보드에 올린 뒤에는 `Ex.33 Kinesthetic Teaching` 처럼 전문가 시연 → 모델 학습 → 재생 의 전체 사이클 시도
 

@@ -29,7 +29,7 @@ Start here if this is your first time.
 
 ---
 
-## 2. [Tutorials](tutorials/) — Step-by-Step Learning with 50 Examples
+## 2. [Tutorials](tutorials/) — Step-by-Step Learning with 45 Examples
 
 Each example follows a consistent 5-step structure: `Goal → Prerequisites → Key Code → Experiment → Next Steps`. Introductory examples are designed to be completable in under 30 minutes.
 
@@ -37,7 +37,7 @@ Each example follows a consistent 5-step structure: `Goal → Prerequisites → 
 | :---: | :--- | :--- |
 | 0 | Board verification | Ex.00 |
 | 1 | Basic I/O (LED, button, external IO) | Ex.01–06 |
-| 2 | USB communication + memory logging | Ex.07–10c |
+| 2 | USB communication | Ex.07–09 |
 | 3 | KIT H10 exoskeleton basic modes | Ex.11–13 |
 | 4 | Control algorithm fundamentals + debugging | Ex.14–19 |
 | 5 | Advanced control algorithms (Hogan, HZD, CPG, etc.) | Ex.20–25 |
@@ -60,7 +60,6 @@ Keep this open while writing your algorithms. You do not need to read it all at 
 | [LED & Button](api-reference/03-led-btn-control.md) | Board LED control, button input |
 | [External IO](api-reference/04-external-io.md) | GPIO and ADC pin control |
 | [USB Serial Communication](api-reference/05-usb-connectivity.md) | Send messages and data to a PC |
-| [USB Memory Logging](api-reference/06-usb-data-logging.md) | Automatically save data to USB storage |
 | [Memory Regions](api-reference/07-memory-management.md) | Fast memory and non-volatile storage |
 | [Real-Time Clock](api-reference/08-rtc-clock.md) | Read and write date/time |
 
@@ -105,8 +104,8 @@ Common issues covering build errors, USB connection problems, communication fail
 ## Additional Resources
 
 - [🧭 find-it.md](find-it.md) — Quick keyword-to-page lookup
-- [Examples](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/) — Source code for all 50 examples (each folder includes a 5-step README)
-- [Python Tools](https://github.com/AGR-EXO/Extension_Module/tree/Develop/PythonDecoder/) — USB serial receiver, USB memory decoder
+- [Examples](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/) — Source code for all 45 examples (each folder includes a 5-step README)
+- [Python Tools](https://github.com/AGR-EXO/Extension_Module/tree/Develop/PythonDecoder/) — USB-CDC real-time receiver samples
 - [Release Notes](release-notes/) — Per-version attachments and compatibility matrix
 - [Changelog](https://github.com/AGR-EXO/Extension_Module/blob/Develop/CHANGELOG.md) — Summary of changes by version
 - [XM10 SDK](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM10_SDK/) — Rev1.1 / Rev2.0 SDK projects

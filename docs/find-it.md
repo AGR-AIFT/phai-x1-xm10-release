@@ -25,17 +25,17 @@
 | 버튼 / LED 제어 | [api-reference/03-led-btn-control.md](api-reference/03-led-btn-control.md) + Ex.01~03 |
 | 외부 GPIO / ADC | [api-reference/04-external-io.md](api-reference/04-external-io.md) + Ex.04~06 |
 | USB 시리얼로 PC 에 데이터 보내기 | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.07~09 |
-| USB 메모리에 로깅 | [api-reference/06-usb-data-logging.md](api-reference/06-usb-data-logging.md) + Ex.10~10c |
+| USB 로 데이터 내보내기 (실시간) | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.09 CDC Stream · PhAI Studio |
 | 메모리 영역 (PSRAM, Workspace) | [api-reference/07-memory-management.md](api-reference/07-memory-management.md) + Ex.19 |
 | 날짜·시간 (RTC) | [api-reference/08-rtc-clock.md](api-reference/08-rtc-clock.md) |
 | KIT H10 외골격 제어 | [api-reference/02-h10-control-n-data.md](api-reference/02-h10-control-n-data.md) + Ex.11~13 |
-| 상태 머신 (TSM) | [api-reference/01-task-state-machine.md](api-reference/01-task-state-machine.md) + Ex.03, Ex.10c |
+| 상태 머신 (TSM) | [api-reference/01-task-state-machine.md](api-reference/01-task-state-machine.md) + Ex.03 |
 
 ## 📚 예제
 
 | 상황 | 어디로 |
 |------|--------|
-| 50 개 예제 전체 인덱스 | [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) |
+| 45 개 예제 전체 인덱스 | [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) |
 | 난이도별·트랙별 학습 경로 | [docs/tutorials/README.md](tutorials/README.md) |
 | 한 학기 수업 진도표 (16 주) | [tutorials/README.md - 한 학기 진도표 섹션](tutorials/README.md#한-학기-16-주-수업-진도표-예시) |
 | Ex.XX 예제가 잘 안 됩니다 | 해당 `examples/XX_*/README.md` 의 "⚠️ 흔한 실수" 섹션 |
@@ -50,7 +50,7 @@
 | 외부 GPIO 핀맵 (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | 외부 GPIO 핀맵 (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | 내 보드가 Rev 1.1 인지 Rev 2.0 인지 | [hardware/README.md - 보드 리비전 비교](hardware/README.md#보드-리비전-비교) |
-| 50 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) (47 개는 양쪽 모두 동작·외부 GPIO 핀맵만 다름, Ex.40/41/42 는 Rev 2.0 전용) |
+| 45 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) (42 개는 양쪽 모두 동작·외부 GPIO 핀맵만 다름, Ex.40/41/42 는 Rev 2.0 전용) |
 
 ## 📥 펌웨어 업로드
 
@@ -102,7 +102,7 @@
 위 표를 외울 필요 없습니다. Claude Code 에서 다음과 같이 자연스럽게 물어보세요.
 
 ```
-"USB 메모리 로깅 어떻게 해?"
+"USB 로 실시간 데이터 어떻게 받아?"
 "Ex.14 빌드 에러 났어"
 "보드 리비전 확인하는 법"
 "AI 학습 데이터 어떻게 모아?"

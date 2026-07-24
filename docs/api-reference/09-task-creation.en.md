@@ -25,8 +25,8 @@ them directly** — doing so will compromise system stability.
 | Realtime3 | 51 | `NRT_Proc`        | 2 KB  | Semaphore     | SDO/NMT processing |
 | High      | 40 | `USBH_Queue`      | 2 KB  | Event         | USB Host events |
 | Normal1   | 25 | `PnP_Task`        | 2 KB  | 100 ms        | Plug & Play (automatic module registration) |
-| Normal    | 24 | `usbContolTask`   | 2 KB  | 10 ms         | USB mode switching / CDC/MSC |
-| Normal    | 24 | `DataLoggerTask`  | 8 KB  | Event         | USB MSC logging drain |
+| Normal    | 24 | `usbContolTask`   | 2 KB  | 10 ms         | USB mode switching / CDC |
+| Normal    | 24 | `DataLoggerTask`  | 8 KB  | Event         | internal, reserved (currently unused) |
 | **Normal** | **24** | **`XM_Task_*` (user)** | **Per prio_hint** | OneShot/Periodic | **Auxiliary tasks created by the user** |
 | Low       | 8  | `DefaultTask`     | 2 KB  | Suspended     | (Unused) |
 

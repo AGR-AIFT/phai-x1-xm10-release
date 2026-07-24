@@ -1,8 +1,8 @@
 # `xm_api_rtc.h` — 실시간 시계(RTC) API
 
 > **대상 헤더**: `XM_FW/XM_API/xm_api_rtc.h`
-> **관련 개념 문서**: [08. 실시간 시계](../08-rtc-clock.md) · [06. USB 메모리 로깅](../06-usb-data-logging.md) (RTC 타임스탬프 연동)
-> **관련 예제**: [34_MSC_GaitAnalysis_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) — RTC 로 세션 폴더명을 만들고, RTC 가 없거나 미설정이면 tick 기반 이름으로 자동 대체하는 실제 코드
+> **관련 개념 문서**: [08. 실시간 시계](../08-rtc-clock.md)
+> **관련 예제**: RTC 로 세션/파일 이름에 실제 시각을 넣고, RTC 가 없거나 미설정이면 tick 기반 이름으로 자동 대체하는 패턴
 
 > 🟢 **Rev 2.0 전용 (하드웨어 종속)** — RTC 칩(MCP79510)은 XM10 **Rev2.0** 보드에만 실장되어 있습니다. `xm_api_rtc.h` 헤더 자체는 Rev1.1 / Rev2.0 SDK 양쪽에 완전히 동일하게 포함되어 있지만, **Rev1.1 보드에서는 아래 함수 3개가 모두 stub 으로 동작**합니다 — 항상 `false` 를 반환하고 실제로는 아무 것도 하지 않습니다. Rev1.1 에서 경과 시간이 필요하면 `XM_GetTick()` 기반 타이머로 대체하세요.
 
@@ -10,9 +10,9 @@
 
 ## 언제 사용하나
 
-로그 파일이나 세션 폴더 이름에 실제 날짜/시간을 남기고 싶을 때, 또는 USB 메모리 로깅으로 저장되는 파일의 타임스탬프를 정확히 찍고 싶을 때 사용합니다. RTC 개념 자체와 흔한 실수(배터리 방전, weekday 미계산 등)는 [08. 실시간 시계](../08-rtc-clock.md) 문서에서 먼저 확인하세요. 본 페이지는 `xm_api_rtc.h` 에 선언된 함수와 타입의 세부 명세만 다룹니다.
+로그 파일이나 세션 폴더 이름에 실제 날짜/시간을 남기고 싶을 때, 또는 CDC 데이터/세션 이름에 정확한 시각을 넣고 싶을 때 사용합니다. RTC 개념 자체와 흔한 실수(배터리 방전, weekday 미계산 등)는 [08. 실시간 시계](../08-rtc-clock.md) 문서에서 먼저 확인하세요. 본 페이지는 `xm_api_rtc.h` 에 선언된 함수와 타입의 세부 명세만 다룹니다.
 
-RTC 를 설정하지 않은 채로 USB 메모리 로깅을 시작하면 파일 타임스탬프가 기본값(2025-01-01)으로 찍히므로, `Control_Setup()` 에서 한 번 `XM_RTC_IsRunning()` 으로 확인하고 필요하면 `XM_RTC_SetDateTime()` 으로 설정하는 것이 표준 패턴입니다 (자세한 내용은 [06. USB 메모리 로깅 — 주의사항](../06-usb-data-logging.md) 참고).
+RTC 를 설정하지 않으면 시각 값이 기본값(2025-01-01)으로 찍히므로, `Control_Setup()` 에서 한 번 `XM_RTC_IsRunning()` 으로 확인하고 필요하면 `XM_RTC_SetDateTime()` 으로 설정하는 것이 표준 패턴입니다.
 
 ## 함수 목록
 
@@ -83,7 +83,7 @@ RTC 에서 현재 날짜/시간을 읽어 `dt` 에 채웁니다.
 
 **예제 — 실패(Rev1.1/미설정)를 항상 대비하는 실전 패턴**
 
-아래는 [`34_MSC_GaitAnalysis_Log`](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) 예제에서 실제로 쓰는 방식입니다. `GetDateTime` 이 `false` 를 반환하거나 `year` 가 비정상이면(= Rev1.1 stub 또는 RTC 미설정) tick 기반 이름으로 자동 전환합니다.
+아래는 RTC 로 세션/파일 이름을 만들 때 쓰는 방식입니다. `GetDateTime` 이 `false` 를 반환하거나 `year` 가 비정상이면(= Rev1.1 stub 또는 RTC 미설정) tick 기반 이름으로 자동 전환합니다.
 
 ```c
 static void _GenerateSessionName(char* buf, uint32_t buf_size)
@@ -101,7 +101,7 @@ static void _GenerateSessionName(char* buf, uint32_t buf_size)
 }
 ```
 
-**참고**: [`XM_RTC_SetDateTime`](#xm_rtc_setdatetime) · [06. USB 메모리 로깅](../06-usb-data-logging.md)
+**참고**: [`XM_RTC_SetDateTime`](#xm_rtc_setdatetime)
 
 ---
 

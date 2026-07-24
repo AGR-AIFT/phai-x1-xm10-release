@@ -116,12 +116,3 @@ void Control_Setup(void) {
 | Weekday 값이 안 맞음 | 1=월요일 ~ 7=일요일 규칙 미숙지 | 표준 ISO 8601 `1=Mon ... 7=Sun` 준수 |
 | 시간 설정 후 전원 OFF/ON 시 리셋 | 백업 배터리 미장착 또는 방전 | 배터리 점검 — 약 5년 수명 |
 | `weekday` 자동 계산 안 됨 | MCP79510 은 weekday 도 사용자 입력 필수 | Zeller 공식 또는 `<time.h>` 로 사전 계산 |
-
----
-
-## 관련 예제
-
-| 예제 | 활용 |
-|------|------|
-| [10_MSC_Manual_log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10_MSC_Manual_log/) | 로그 파일명에 timestamp 사용 (`/LOGS/20260512_143000.bin`) |
-| [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | summary.txt 에 시작/종료 시각 기록 |

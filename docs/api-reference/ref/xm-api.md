@@ -26,7 +26,7 @@ XM10 예제(`.c`) 파일 맨 위에 아래 한 줄만 추가하면 로봇 제어
 | 2 | `xm_api_tsm.h` | 태스크 상태 머신 (FSM) | [01 상태 머신 (TSM)](../01-task-state-machine.md) |
 | 3 | `xm_api_led_btn.h` | 내장 LED 및 버튼 제어 | [03 LED + 버튼](../03-led-btn-control.md) |
 | 4 | `xm_api_external_io.h` | 확장 포트 GPIO/ADC | [04 외부 IO](../04-external-io.md) |
-| 5 | `xm_api_usb.h` | USB 시리얼 통신 + USB 메모리 로깅 | [05 USB 시리얼 통신](../05-usb-connectivity.md) · [06 USB 메모리 로깅](../06-usb-data-logging.md) |
+| 5 | `xm_api_usb.h` | USB 시리얼 통신 (CDC) | [05 USB 시리얼 통신](../05-usb-connectivity.md) |
 | 6 | `xm_api_user_custom.h` | Total Data(0x20) 패킷 내 사용자 커스텀 슬롯(28B) — PhAI Studio 스트리밍/녹화에 자동 포함 | 전용 개념 문서 없음 — 헤더 안 Doxygen 예제(`@code` 블록) 참고 |
 | 7 | `xm_api_memory.h` | 메모리 영역 접근 (Workspace/PSRAM/DTCM/비휘발성 저장소) | [07 메모리 영역](../07-memory-management.md) — 🟢 **Rev 2.0 전용** |
 | 8 | `xm_api_rtc.h` | RTC 날짜/시간 관리 | [08 실시간 시계](../08-rtc-clock.md) — ⚠️ Rev1.1 에서는 stub |

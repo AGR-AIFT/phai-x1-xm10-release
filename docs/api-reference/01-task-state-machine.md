@@ -119,7 +119,6 @@ TSM을 실행합니다. **User Task의 무한 루프 내에서 반드시 호출*
 | [01_Button_LED_Basic](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/01_Button_LED_Basic/) | 초급 | 단일 상태 기본 |
 | [03_Button_LED_FSM](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/03_Button_LED_FSM/) | 중급 | STANDBY ↔ ACTIVE 전환 |
 | [06_Ext_IO_Safety_Switch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/) | 중급 | 3상태 + ERROR 처리 |
-| [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | 고급 | TSM + 에러 복구 |
 | [11_Passive_Mode](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/) | 고급 | Homing + 모드 전환 |
 | [12_Active_Assist_Mode](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/12_Active_Assist_Mode/) | 고급 | 계층적 FSM |
 | [17_FSM_Gait_Intent](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/17_FSM_Gait_Intent/) | 고급 | 보행 7단계 FSM |

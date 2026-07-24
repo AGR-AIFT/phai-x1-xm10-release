@@ -25,17 +25,17 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | Button / LED control | [api-reference/03-led-btn-control.md](api-reference/03-led-btn-control.md) + Ex.01–03 |
 | External GPIO / ADC | [api-reference/04-external-io.md](api-reference/04-external-io.md) + Ex.04–06 |
 | Sending data to PC over USB serial | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.07–09 |
-| Logging to USB storage | [api-reference/06-usb-data-logging.md](api-reference/06-usb-data-logging.md) + Ex.10–10c |
+| Exporting data over USB (real-time) | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.09 CDC Stream · PhAI Studio |
 | Memory regions (PSRAM, Workspace) | [api-reference/07-memory-management.md](api-reference/07-memory-management.md) + Ex.19 |
 | Date / time (RTC) | [api-reference/08-rtc-clock.md](api-reference/08-rtc-clock.md) |
 | KIT H10 exoskeleton control | [api-reference/02-h10-control-n-data.md](api-reference/02-h10-control-n-data.md) + Ex.11–13 |
-| State machine (TSM) | [api-reference/01-task-state-machine.md](api-reference/01-task-state-machine.md) + Ex.03, Ex.10c |
+| State machine (TSM) | [api-reference/01-task-state-machine.md](api-reference/01-task-state-machine.md) + Ex.03 |
 
 ## 📚 Examples
 
 | Situation | Where to go |
 |-----------|-------------|
-| Full index of all 50 examples | [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) |
+| Full index of all 45 examples | [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) |
 | Learning paths by difficulty and track | [docs/tutorials/README.md](tutorials/README.md) |
 | 16-week semester schedule | [tutorials/README.md — Semester Schedule section](tutorials/README.md#한-학기-16-주-수업-진도표-예시) |
 | An example (Ex.XX) isn't working | See the "⚠️ Common Mistakes" section in `examples/XX_*/README.md` |
@@ -50,7 +50,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | External GPIO pinmap (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | External GPIO pinmap (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | Is my board Rev 1.1 or Rev 2.0? | [hardware/README.md — Board Revision Comparison](hardware/README.md#보드-리비전-비교) |
-| Which board revision do the 50 examples support? | [examples/README.md — Board Revision Compatibility](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) (47 work on both; Ex.40/41/42 are Rev 2.0-only) |
+| Which board revision do the 45 examples support? | [examples/README.md — Board Revision Compatibility](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) (42 work on both; Ex.40/41/42 are Rev 2.0-only) |
 
 ## 📥 Firmware Upload
 
@@ -102,7 +102,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 You don't need to memorize the tables above. Just ask Claude Code naturally:
 
 ```
-"How do I log data to USB storage?"
+"How do I stream data to my PC over USB?"
 "I'm getting a build error in Ex.14"
 "How do I check my board revision?"
 "How do I collect data for AI training?"

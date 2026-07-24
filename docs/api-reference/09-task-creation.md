@@ -25,8 +25,8 @@ XM10 SDK 가 부팅 시 자동으로 생성하는 task 목록. **사용자가 �
 | Realtime3 | 51 | `NRT_Proc`        | 2 KB  | semaphore     | SDO/NMT 처리 |
 | High      | 40 | `USBH_Queue`      | 2 KB  | event         | USB Host 이벤트 |
 | Normal1   | 25 | `PnP_Task`        | 2 KB  | 100 ms        | Plug & Play (모듈 자동 등록) |
-| Normal    | 24 | `usbContolTask`   | 2 KB  | 10 ms         | USB 모드 전환 / CDC/MSC |
-| Normal    | 24 | `DataLoggerTask`  | 8 KB  | event         | USB MSC 로깅 drain |
+| Normal    | 24 | `usbContolTask`   | 2 KB  | 10 ms         | USB 모드 전환 / CDC |
+| Normal    | 24 | `DataLoggerTask`  | 8 KB  | event         | 내부 예약 (현재 미사용) |
 | **Normal** | **24** | **`XM_Task_*` (사용자)** | **prio_hint 별** | OneShot/Periodic | **사용자가 만든 보조 task** |
 | Low       | 8  | `DefaultTask`     | 2 KB  | suspended     | (사용 안 함) |
 

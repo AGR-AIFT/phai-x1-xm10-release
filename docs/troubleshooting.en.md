@@ -148,14 +148,6 @@ collect2.exe: error: ld returned 1 exit status
 3. If the driver is missing, install the [STM32 Virtual COM Port Driver](https://www.st.com/en/development-tools/stsw-stm32102.html)
 4. Verify that the USB CDC initialization in the XM10 firmware completed successfully
 
-### USB-MSC Not Recognized
-
-**Checklist:**
-1. Confirm the USB drive is fully inserted into the XM10 board's USB Host port
-2. Verify the USB drive is formatted as **FAT32** (NTFS and exFAT are not supported)
-3. Check that the drive capacity is **32 GB or less** (recommended: SanDisk Ultra Dual Drive Type-C 32 GB)
-4. Confirm that the MSC initialization in the XM10 firmware succeeded and the filesystem is mounted
-
 ---
 
 ## CAN-FD Communication Issues
@@ -279,15 +271,6 @@ Alternatively, use the read-clear behavior of `XM_GetButtonEvent()` (see Ex.02).
 1. Close all serial clients, then open only one at a time
 2. Use a data-capable USB-C cable (preferably connected directly to a rear USB-A port on the PC — avoid hubs)
 3. Install the [STM32 VCP driver](https://www.st.com/en/development-tools/stsw-stm32102.html)
-
-#### Python Decoder Cannot Read a `.bin` File ("size mismatch")
-
-**Cause:** The struct size does not match the sum declared in `metadata.txt` due to padding or alignment differences.
-
-**Resolution:**
-1. On the board, use `XM_SendUsbDebugMessage` to print `printf("size=%u", sizeof(MyStruct))`
-2. Verify that the field sizes in the metadata sum to the reported value
-3. If they do not match, either add explicit `_pad(Nbytes)` entries or apply `__attribute__((packed))` to the struct
 
 ### KIT H10 / Robot Control Pitfalls
 

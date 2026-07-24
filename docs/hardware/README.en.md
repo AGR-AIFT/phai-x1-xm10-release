@@ -15,7 +15,7 @@ This page is your single reference for all external interfaces on the XM10 board
 | **Buttons** | 3 | BTN 1 (left) · BTN 2 (center) · BTN 3 (right) |
 | **External GPIO** | DIO 8 + ADC 4 (+ dynamic ADC 8) | [See per-revision pinmap](#external-gpio-pinmap) |
 | **CAN-FD ports** | 2 | KIT H10 connection + sensor hub expansion |
-| **USB-C** | 1 | Serial communication (CDC) + memory logging (MSC) — shared port |
+| **USB-C** | 1 | Serial communication (CDC) — PC connection |
 | **External UART** | 1 | Serial communication for external IMUs and similar devices |
 | **SWD debug** | 4-pin | ST-Link firmware upload and debugging |
 | **Main connector** | 1 | KIT H10 body connection (24 V power + CAN-FD) |
@@ -60,14 +60,11 @@ Two ports total. One communicates with KIT H10 through the main connector; the o
 
 ### USB-C Port
 
-Used for data exchange with a PC. The single port supports both serial communication (CDC) and USB memory logging (MSC).
+Used for data exchange with a PC via USB serial communication (CDC) for real-time data streaming and debug messages.
 
 | Mode | Purpose | Functions used |
 |------|---------|----------------|
 | Serial (CDC) | Debug and data transfer via PC terminal / PhAI Studio | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
-| Memory (MSC) | Data logging to USB flash drive (FAT32, 32 KB cluster) | `XM_SetUsbLogSource`, `XM_StartUsbDataLog` |
-
-> Only one mode is active at a time. Inserting a USB flash drive while serial mode is active triggers a mode switch.
 
 ### External UART Port
 
@@ -158,6 +155,5 @@ First, confirm which revision your board is. The board label reads either `Rev 1
 - [External IO API](../api-reference/04-external-io.md) — GPIO/ADC control functions
 - [LED & Button API](../api-reference/03-led-btn-control.md) — LED and button functions
 - [USB Serial Communication API](../api-reference/05-usb-connectivity.md) — USB-C usage
-- [USB Memory Logging API](../api-reference/06-usb-data-logging.md) — USB memory logging
 - [KIT H10 Firmware](../kit-h10-firmware/) — H10 body firmware update
 - [Bootloader](../bootloader/) — XM10 firmware upload procedure

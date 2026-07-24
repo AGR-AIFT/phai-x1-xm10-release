@@ -51,7 +51,7 @@ The advanced topics below already have hands-on examples ready to run in the `ex
 | Topic | Description |
 | :--- | :--- |
 | CDC Receiver Customization | Configuring custom sensor data visualization |
-| MSC Binary Format Design | Designing efficient user-defined data structures |
+| USB-CDC Stream Channel Design | Designing efficient user-defined data structures |
 | Data Post-Processing Pipeline | Analysis workflow using Python + MATLAB |
 
 ---
@@ -68,7 +68,7 @@ Content requests and contributions are welcome via [GitHub Issues](https://githu
 | **Gait Control Algorithms** | [Ex.15 Inverted Pendulum](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/15_Inverted_Pendulum_Control/) → [Ex.17 FSM Gait](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/17_FSM_Gait_Intent/) | [Ex.20–31 Algorithm Series](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/20_Impedance_Control/) |
 | **Disturbance Observer + Transparent Mode** | [Ex.21 Gravity Comp](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/21_Gravity_Compensation/) | [Ex.31 DOB Stage 1](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/31_Friction_Comp_DOB/) → [Ex.35 MultiLayer](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/35_MultiLayer_Transparent_Control/) |
 | **Learning / Adaptive Control** | [Ex.26 ILC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/26_Iterative_Learning_Control/) | [Ex.27 MRAC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/27_MRAC/) → [Ex.33 Kinesthetic Teaching](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/33_Kinesthetic_Teaching/) |
-| **Data Collection / Analysis** | [Ex.10c MSC Advanced Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | [Ex.34 GaitAnalysis Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) → [AI Training Data Pipeline](ai-data-pipeline.md) |
+| **Data Collection / Analysis** | [Ex.09 CDC Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | → [AI Training Data Pipeline](ai-data-pipeline.md) |
 | **System Diagnostics / Debugging** | [Ex.18 Debug Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) | [Ex.19 Memory Aware Design](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/) |
 
 If you get stuck, check [docs/troubleshooting.md](../troubleshooting.md) or tell Claude Code "I'm stuck on Ex.XX".

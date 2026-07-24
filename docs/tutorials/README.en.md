@@ -1,6 +1,6 @@
-# Tutorials — Learning Through 50 Examples
+# Tutorials — Learning Through 45 Examples
 
-XM10's features are covered through 50 progressively structured examples. Each folder contains source code and a README, and every README follows the same format: Goal → Prerequisites → Key Code → Experiments → Next Steps + Common Mistakes. The introductory examples (Ex.10 and below) are designed to complete in under 30 minutes. Control and advanced examples (Ex.11 and above) may take anywhere from 45 minutes to several weeks, depending on difficulty.
+XM10's features are covered through 45 progressively structured examples. Each folder contains source code and a README, and every README follows the same format: Goal → Prerequisites → Key Code → Experiments → Next Steps + Common Mistakes. The introductory examples (Ex.09 and below) are designed to complete in under 30 minutes. Control and advanced examples (Ex.11 and above) may take anywhere from 45 minutes to several weeks, depending on difficulty.
 
 The full example catalog is at [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md). If you get stuck, check the "Common Mistakes" section at the bottom of each README first. Claude Code users can simply say `"Ex.XX isn't working"` and the `example-helper` skill will respond with the relevant common mistakes and troubleshooting documentation.
 
@@ -12,9 +12,9 @@ Choose the path that matches your current level.
 
 | Path | Target Audience | Sequence | Estimated Time |
 |------|-----------------|----------|----------------|
-| Beginner | New to embedded systems — just get it working | Ex.00 → 01 → 04 → 07 → 10a → 11 | About 3 hours |
-| Intermediate | Familiar with embedded basics — communication, logging, real-time control | Ex.02 → 05b → 08 → 10b → 12 → 14 → 18 | About 1 week (1–2 hours/day self-study) |
-| Advanced | Control algorithms + hands-on AI design | Ex.03 → 09 → 10c → 15 → 16 → 17 → 19 → 20+ | About one semester (1–2 weeks per example from Ex.20+) |
+| Beginner | New to embedded systems — just get it working | Ex.00 → 01 → 04 → 07 → 09 → 11 | About 3 hours |
+| Intermediate | Familiar with embedded basics — communication, real-time control | Ex.02 → 05b → 08 → 09 → 12 → 14 → 18 | About 1 week (1–2 hours/day self-study) |
+| Advanced | Control algorithms + hands-on AI design | Ex.03 → 09 → 15 → 16 → 17 → 19 → 20+ | About one semester (1–2 weeks per example from Ex.20+) |
 | Physical AI Applications | Rehabilitation, learning-based control, etc. | Ex.21 → 31 → 32 → 33 → 36 | Self-directed (difficulty: ⭐⭐⭐) |
 
 Estimated times are for typical users. The "one semester" estimate for the Advanced path assumes spending **1–2 weeks per example** for in-depth study. A quick run-through is possible in a few days, but following the variant experiments and cited papers takes significantly longer.
@@ -33,7 +33,7 @@ A suggested semester schedule for university courses. Adjust freely based on stu
 | 4 | Multi-channel ADC + safety switch | Ex.05b → 05c → 06 | Demo simultaneous measurement of 8 FSR channels |
 | 5 | USB serial communication | Ex.07 → 08 | Real-time sensor monitoring via PC terminal |
 | 6 | Binary streaming + PhAI Studio | Ex.09 | Capture 4-channel graph + analysis report |
-| 7 | USB memory logging | Ex.10a → 10b | Collect 10 minutes of data → convert to CSV |
+| 7 | USB-CDC data capture + storage | Ex.09 + PythonDecoder/CDC | Stream 10 minutes of data → save & analyze CSV |
 | 8 | **Midterm / Mini Project 1** | (open) | "My board, my data" mini project presentation |
 | 9 | KIT H10 exoskeleton basic modes | Ex.11 → 12 → 13 | Comparison video of 3 operating modes |
 | 10 | PD real-time control | Ex.14 | Tune your own PD gains + compare step responses |
@@ -46,7 +46,7 @@ A suggested semester schedule for university courses. Adjust freely based on stu
 
 Teaching tips:
 - The first 2 weeks are where students struggle most with environment setup. Schedule dedicated time for TA or instructor-led check-ins.
-- The Week 8 mini project is effective for maintaining motivation. Run it as an open-ended prompt like "build anything using what you've learned from Ex.05–10a."
+- The Week 8 mini project is effective for maintaining motivation. Run it as an open-ended prompt like "build anything using what you've learned from Ex.05–09."
 - For Week 16, teams of 3–4 are recommended. Teams that dive deep into the Physical AI application track (Ex.21, 31, 32, 33) at the end tend to produce the strongest final projects.
 
 Examples not in this schedule (Ex.05d, 15, 22, 24, 28–42) are naturally left for self-directed study or a follow-on course in the next semester.
@@ -89,9 +89,9 @@ From fundamental I/O to state-based programming (FSM) — the core of embedded c
 
 ---
 
-## Part 2 — USB Communication + Data Logging
+## Part 2 — USB Communication
 
-Exchange real-time messages with a PC or save data to a USB drive. Essential for debugging and data collection.
+Exchange real-time messages with a PC and stream data. Essential for debugging and data collection.
 
 > **Note**: The USB serial (CDC) port can only be opened by one program at a time. For Ex.07–09, make sure only a serial terminal **or** PhAI Studio is open — not both. Running them simultaneously will cause a conflict.
 
@@ -103,16 +103,7 @@ Exchange real-time messages with a PC or save data to a USB drive. Essential for
 | [08](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) | Sensor data monitoring | ⭐⭐ | Real-time `sprintf` output of sensor data |
 | [09](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | High-speed binary streaming | ⭐⭐⭐ | PhAI Studio-compatible protocol, 500 Hz transmission |
 
-### USB Memory Logging — Ex.10 ~ 10c
-
-| Example | Title | Difficulty | What You Learn |
-| :---: | :--- | :---: | :--- |
-| [10](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10_MSC_Manual_log/) | Manual logging (legacy) | ⭐⭐ | Use 10a/10b/10c instead |
-| [10a](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10a_MSC_Basic_Log/) | Auto-save with one registration | ⭐⭐ | Register a struct once and logging happens automatically |
-| [10b](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10b_MSC_Custom_Struct/) | Custom struct logging | ⭐⭐⭐ | Your own data fields + manual timestamp |
-| [10c](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | Advanced logging | ⭐⭐⭐ | File rolling, error monitoring, LED feedback |
-
-> Recommended order: Ex.10a → 10b → 10c (Ex.10 is legacy — start with 10a for new projects).
+> To save and analyze a captured stream on the PC, use PhAI Studio recording or the `PythonDecoder/CDC` Python samples in the repo. (On-board file storage was removed in v2.5.0 — SD card support is planned for a future HW revision.)
 
 ---
 
@@ -181,7 +172,6 @@ The key stages of Physical AI — transparency → intent detection → learning
 | [31](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/31_Friction_Comp_DOB/) | Disturbance Observer (DOB) | ⭐⭐⭐ | Estimate remaining disturbances for true transparent mode |
 | [32](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/32_GRF_Gait_Intent/) | Gait intent via foot contact | ⭐⭐⭐ | Gait phase estimation from heel strike events |
 | [33](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/33_Kinesthetic_Teaching/) | Kinesthetic teaching + replay | ⭐⭐⭐ | Human demonstrates by hand → board replays the motion |
-| [34](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) | Gait analysis data logging | ⭐⭐ | H10 → USB drive → Python → MATLAB |
 | [35](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/35_MultiLayer_Transparent_Control/) | Multi-layer transparent control | ⭐⭐⭐ | Real-time switching between transparent / wall / left-right coupling modes |
 | [36](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) | On-device kinesthetic learning 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Train a small neural network on-board → replay with LQR — Internal Flash UserNV API is supported on Rev 2.0 only |
 | [37](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/37_FES_Hub_Module_Ctrl/) | FES Hub module control | ⭐⭐⭐ | Connect FES Hub over CAN-FD, control per-channel electrical stimulation parameters |

@@ -148,14 +148,6 @@ collect2.exe: error: ld returned 1 exit status
 3. 드라이버가 없는 경우: [STM32 Virtual COM Port Driver](https://www.st.com/en/development-tools/stsw-stm32102.html) 설치
 4. XM10 펌웨어에서 USB CDC 초기화가 정상적으로 완료되었는지 확인
 
-### USB-MSC가 인식되지 않음
-
-**체크리스트:**
-1. USB 메모리가 XM10 보드의 USB Host 포트에 올바르게 삽입되었는지 확인
-2. USB 메모리가 **FAT32** 포맷인지 확인 (NTFS, exFAT는 지원하지 않음)
-3. 메모리 용량이 **32GB 이하**인지 확인 (권장: Sandisk Ultra Dual Drive Type C 32GB)
-4. XM10 펌웨어에서 MSC 초기화 완료 후 파일 시스템 마운트 상태 확인
-
 ---
 
 ## CAN-FD 통신 문제
@@ -279,15 +271,6 @@ if (pressed) { /* 1회만 실행 */ }
 1. 모든 시리얼 클라이언트 종료 → 하나만 단독 실행
 2. 데이터 전송 가능 USB-C 케이블 (가능하면 PC 후면 USB-A 직결, 허브 X)
 3. [STM32 VCP 드라이버 설치](https://www.st.com/en/development-tools/stsw-stm32102.html)
-
-#### Python 디코더가 .bin 파일을 못 읽음 ("size mismatch")
-
-**원인:** 구조체 크기와 `metadata.txt` 의 합산이 어긋남 (padding 또는 정렬 차이)
-
-**해결:**
-1. 보드에서 `XM_SendUsbDebugMessage` 로 `printf("size=%u", sizeof(MyStruct))` 출력
-2. metadata 의 필드 크기 합산이 일치하는지 검증
-3. 비정렬 시 `_pad(Nbytes)` 명시 또는 `__attribute__((packed))` 사용
 
 ### KIT H10 / 로봇 제어 함정
 

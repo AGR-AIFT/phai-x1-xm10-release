@@ -14,7 +14,7 @@ The XM10 draws 24 V power and communicates through the KIT H10 chassis. A single
 | Board | XM10 board, Sensor Hub Module board |
 | Cables | XM10 ↔ KIT H10 extension cable, XM10 ↔ Sensor Hub cable |
 | Debugging | ST-Link V2 debugger + 20-to-4 pin adapter board + 4-pin SWD cable |
-| Accessories | USB-C cable (for data monitoring), SanDisk Ultra Dual Drive Type-C 32 GB (for MSC logging) |
+| Accessories | USB-C cable (for data monitoring / debug) |
 | PC | PC with STM32CubeIDE installed, (optional) Jetson Orin NX or similar AM |
 
 ### Checking the KIT H10 Firmware Version
@@ -76,7 +76,7 @@ To use sensors such as EMG, ground reaction force (GRF), or FSR, connect the Sen
 
 ### 4. USB-C Data Cable (Optional)
 
-Used for PhAI Studio real-time monitoring and USB memory logging. Required for examples Ex.07 through Ex.10c.
+Used for PhAI Studio real-time monitoring and USB serial (CDC) communication. Required for examples Ex.07 through Ex.09.
 
 ---
 

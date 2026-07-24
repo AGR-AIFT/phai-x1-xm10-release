@@ -2,7 +2,7 @@
 
 > **Header**: `XM_FW/XM_API/xm_api_external_io.h` (shared file across Rev1.1 / Rev2.0 — some pin mappings and the power-select API are Rev2.0-only, see the 🟢 badges below)
 > **Related concept doc**: [04. External IO Control API](../04-external-io.en.md)
-> **Related examples**: [04_Ext_IO_Basic](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/) · [05_Ext_IO_analog](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05_Ext_IO_analog/) · [05a_Ext_IO_DIO_to_ADC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/) · [05b_Ext_IO_FSR_8ch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05b_Ext_IO_FSR_8ch/) · [05c_Ext_IO_Mixed_ADC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/) · [05d_Ext_IO_DIO_ADC_Hybrid](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/) · [06_Ext_IO_Safety_Switch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/) · [34_MSC_GaitAnalysis_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) (Xsens IMU attach) · [40_EMG_Proportional_Assist](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/40_EMG_Proportional_Assist/) (power voltage switch)
+> **Related examples**: [04_Ext_IO_Basic](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/) · [05_Ext_IO_analog](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05_Ext_IO_analog/) · [05a_Ext_IO_DIO_to_ADC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/) · [05b_Ext_IO_FSR_8ch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05b_Ext_IO_FSR_8ch/) · [05c_Ext_IO_Mixed_ADC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/) · [05d_Ext_IO_DIO_ADC_Hybrid](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/) · [06_Ext_IO_Safety_Switch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/) · [40_EMG_Proportional_Assist](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/40_EMG_Proportional_Assist/) (power voltage switch)
 
 This is the API for the board's side-mounted Extension Port: 8 digital I/O (DIO) pins and 4 analog input (ADC) pins. If needed, DIO pins can be dynamically switched to ADC mode to get up to 12 analog input channels. On Rev2.0, this header also includes switching the extension port's supply voltage (3.3V/5V).
 
@@ -471,7 +471,7 @@ void Control_Setup(void)
 }
 ```
 
-**See also**: [`XM_ConfigureXsensMTi630`](#xm_configurexsensmti630), [04. External IO — Note on External IMU Usage](../04-external-io.en.md#note-on-external-imu-usage), [34_MSC_GaitAnalysis_Log example](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/)
+**See also**: [`XM_ConfigureXsensMTi630`](#xm_configurexsensmti630), [04. External IO — Note on External IMU Usage](../04-external-io.en.md#note-on-external-imu-usage)
 
 ---
 

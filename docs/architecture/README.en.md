@@ -75,7 +75,7 @@ The heart of XM10 is a **control loop that repeats every 1 ms (1 kHz)**. Each mi
 - **Processing (you write this)**: Inside `Control_Loop()`, read that data and run your algorithm.
 - **Output (automatic)**: Call a function such as `XM_SetAssistTorqueRH(...)` and the library converts it to a CAN message and sends it to KIT H10 automatically.
 
-USB communication and data logging work the same way — a single function call is all you need. Your only concern is the algorithm.
+USB communication works the same way — a single function call is all you need. Your only concern is the algorithm.
 
 ---
 
@@ -99,7 +99,7 @@ After you flash firmware with `Debug (F11)`, the board starts up in the followin
   │   • User task       → Control_Setup() once → Control_Loop() every 1 ms  │
   │   • CAN RX          → receives exoskeleton sensor data, updates XM.status │
   │   • CAN TX          → sends motor commands                  │
-  │   • USB task        → serial / mass-storage communication   │
+  │   • USB task        → USB-CDC serial communication          │
   │   • Device discovery → auto-connects sensor hubs            │
   └──────────────────────────────────────────────────────────────┘
 ```
@@ -122,7 +122,7 @@ Extension_Module/
 │   │   └── Control_Task/
 │   │       └── control_task.c     ← your workspace
 │   └── (all other folders are XM library — do not modify)
-└── examples/                  ← 50 example control_task.c files
+└── examples/                  ← 45 example control_task.c files
     ├── 00_Quick_Start/quick_start.c
     ├── 14_PD_Realtime_Control/pd_realtime_control.c
     └── ...
@@ -134,13 +134,12 @@ To try an example, copy the entire contents of that folder's `.c` file into `XM_
 
 ## Communication at a Glance
 
-There are three channels — that is all you need to know.
+There are two channels — that is all you need to know.
 
 | Channel | Who talks to whom | Functions you use |
 |---------|-------------------|------------------|
 | **CAN-FD** | XM10 ↔ KIT H10 exoskeleton | Read `XM.status.h10.*`, write `XM_SetAssistTorque*()` |
 | **USB Serial (CDC)** | XM10 → PC terminal / PhAI Studio | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
-| **USB Mass Storage (MSC)** | XM10 → USB drive (data logging) | `XM_SetUsbLogSource`, `XM_StartUsbDataLog` |
 
 The underlying protocol details are handled by the library. You only need to call the functions.
 

@@ -1,16 +1,18 @@
-# `xm_api_usb.h` — USB Data Logging · Real-Time Streaming
+# `xm_api_usb.h` — USB-CDC Real-Time Streaming
 
 > **Target header**: `XM_FW/XM_API/xm_api_usb.h`
-> **Related concept docs**: [05. USB Serial](../05-usb-connectivity.en.md) · [06. USB Mass-Storage Logging](../06-usb-data-logging.en.md)
-> **Related examples**: [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) · [07_CDC_Basic_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) · [08_CDC_Sensor_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) · [09_CDC_Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) · [10a_MSC_Basic_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10a_MSC_Basic_Log/) · [10b_MSC_Custom_Struct](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10b_MSC_Custom_Struct/) · [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) · [18_Debug_Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) · [34_MSC_GaitAnalysis_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/)
+> **Related concept docs**: [05. USB Serial](../05-usb-connectivity.en.md)
+> **Related examples**: [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) · [07_CDC_Basic_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) · [08_CDC_Sensor_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) · [09_CDC_Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) · [18_Debug_Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/)
 
-This single header defines two domains together: **USB mass-storage logging (MSC)** and **real-time PC communication (CDC)**. On the MSC side, once you register a user struct, a background task automatically stores it to USB storage; on the CDC side, you exchange text/binary data with a PC client such as PhAI Studio or PuTTY. Starting with Rev2.0, a host-profile API (`XM_USB_SetHostProfile`) has also been added that lets you **choose whether a single USB-CDC cable is used for PhAI Studio real-time streaming or a plain terminal**. (Production-inspection GUI support is handled automatically inside the board, so it is not a user option.)
+This header defines the **real-time PC communication (CDC)** domain. You exchange text/binary data with a PC client such as PhAI Studio or PuTTY, and it works via registration-based automation (register a source in Setup → the System transmits it automatically on a periodic basis). Starting with Rev2.0, a host-profile API (`XM_USB_SetHostProfile`) has also been added that lets you **choose whether a single USB-CDC cable is used for PhAI Studio real-time streaming or a plain terminal**. (Production-inspection GUI support is handled automatically inside the board, so it is not a user option.)
+
+> **USB memory (MSC) file logging was removed in v2.5.0.** Data capture now uses USB-CDC real-time streaming (PhAI Studio or the `PythonDecoder/CDC` samples in the repo); on-board storage (SD card) is planned for a future HW revision.
 
 ---
 
 ## When to use it
 
-Use this API when you want to log sensor data to USB storage over a long period, or exchange real-time data with a PC over a serial connection. For the registration-based automation principle (register a source in Setup → the System processes it automatically on a periodic basis) and the big picture — file format, Python decoder usage, and so on — we recommend reading [05. USB Serial](../05-usb-connectivity.en.md) and [06. USB Mass-Storage Logging](../06-usb-data-logging.en.md) first. This page only covers the detailed **signatures/parameters of every function and type** declared in the header, and it also includes the new Rev2.0 **USB-CDC host-profile API**, which the two concept docs do not yet cover.
+Use this API when you want to exchange real-time data with a PC over a serial connection. For the registration-based automation principle (register a source in Setup → the System processes it automatically on a periodic basis) and the big picture — common mistakes, example mapping — we recommend reading [05. USB Serial](../05-usb-connectivity.en.md) first. This page only covers the detailed **signatures/parameters of every function and type** declared in the header, and it also includes the new Rev2.0 **USB-CDC host-profile API**.
 
 ---
 
@@ -20,38 +22,7 @@ Use this API when you want to log sensor data to USB storage over a long period,
 
 | Function | One-line description |
 |------|-----------|
-| [`XM_SetUsbLogSource`](#xm_setusblogsource) | [MSC] Registers a data source to store to USB storage |
 | [`XM_SetUsbStreamSource`](#xm_setusbstreamsource) ⚠️ Deprecated | [CDC] Registers a data source to stream to the PC (legacy) |
-
-**MSC Logging — Session Control**
-
-| Function | One-line description |
-|------|-----------|
-| [`XM_IsUsbLogReady`](#xm_isusblogready) | Checks whether a USB storage device is connected and logging is ready |
-| [`XM_StartUsbDataLog`](#xm_startusbdatalog) | Starts a logging session |
-| [`XM_StopUsbDataLog`](#xm_stopusbdatalog) | Stops a logging session |
-| [`XM_GetActiveUsbSessionName`](#xm_getactiveusbsessionname) | Retrieves the current/last active session name (for Option A re-entry) |
-| [`XM_GetUsbLogStatus`](#xm_getusblogstatus) | Queries the logger state |
-
-**MSC Logging — Configuration**
-
-| Function | One-line description |
-|------|-----------|
-| [`XM_SetUsbLogAutoTimestamp`](#xm_setusblogautotimestamp) | Turns automatic timestamp insertion on/off |
-| [`XM_SetUsbLogRollingSize`](#xm_setusblogrollingsize) | Sets the file rolling (splitting) size |
-
-**MSC Logging — Statistics · Disk Capacity**
-
-| Function | One-line description |
-|------|-----------|
-| [`XM_GetUsbLogStats`](#xm_getusblogstats) | Queries real-time session statistics |
-| [`XM_GetUsbDiskFreeMB` / `XM_GetUsbDiskTotalMB`](#xm_getusbdiskfreemb--xm_getusbdisktotalmb) | Queries USB free/total capacity (10-second cache) |
-
-**MSC Logging — Event Markers**
-
-| Function | One-line description |
-|------|-----------|
-| [`XM_InsertUsbLogMarker`](#xm_insertusblogmarker) | Inserts an event marker into the logging stream |
 
 **CDC — Connection · Streaming Status**
 
@@ -87,44 +58,6 @@ Use this API when you want to log sensor data to USB storage over a long period,
 
 ## Function details
 
-### `XM_SetUsbLogSource`
-
-```c
-void XM_SetUsbLogSource(void* data_ptr, uint32_t size);
-```
-
-**[MSC]** Registers the data source to store to USB storage. The System periodically reads the data at the registered address and writes it to a file.
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|------|
-| `data_ptr` | `void*` | Address of the struct to store (`&myData`) |
-| `size` | `uint32_t` | Size of the struct (`sizeof(myData)`) |
-
-**Return value**: none (`void`)
-
-**⚠️ Call context**: Assume `Control_Setup()` context. Register once before starting logging (`XM_StartUsbDataLog`).
-
-**Example**
-
-```c
-typedef struct {
-    float hip_angle_L;
-    float hip_angle_R;
-} MyLogData_t;
-
-MyLogData_t myData;
-
-void Control_Setup(void) {
-    XM_SetUsbLogSource(&myData, sizeof(myData));
-}
-```
-
-**See also**: [`XM_StartUsbDataLog`](#xm_startusbdatalog), [06. USB Mass-Storage Logging](../06-usb-data-logging.en.md)
-
----
-
 ### `XM_SetUsbStreamSource`
 
 ```c
@@ -147,259 +80,6 @@ void XM_SetUsbStreamSource(void* data_ptr, uint32_t size);
 **⚠️ Call context**: Assume `Control_Setup()` context.
 
 **See also**: [`XM_SetUsbCustomMeta`](#xm_setusbcustommeta), [`XM_SendUsbDataWithId`](#xm_sendusbdatawithid)
-
----
-
-### `XM_IsUsbLogReady`
-
-```c
-bool XM_IsUsbLogReady(void);
-```
-
-Checks whether a USB storage device (MSC) is connected and logging is ready. This is lightweight, since it only reads a status flag managed by the System Layer's `usb_mode_handler`.
-
-**Parameters**: none
-
-**Return value**: `bool` — `true` if ready, `false` otherwise
-
-**⚠️ Call context**: Safe to call from the 2 ms real-time loop in `Control_Loop()` (non-blocking).
-
-**Example**
-
-```c
-if (XM_IsUsbLogReady() && !logging_started) {
-    XM_StartUsbDataLog(NULL, "hip_L(float), hip_R(float)");
-    logging_started = true;
-}
-```
-
-**See also**: [`XM_StartUsbDataLog`](#xm_startusbdatalog)
-
----
-
-### `XM_StartUsbDataLog`
-
-```c
-bool XM_StartUsbDataLog(const char* sessionName, const char* metadata);
-```
-
-Starts a USB data logging session. The low-priority logging task creates the `/LOGS/[sessionName]` folder and `metadata.txt`, and prepares to write `data_000...bin`.
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|------|
-| `sessionName` | `const char*` | Session (folder) name (e.g., `"S_001_TestRun"`). Passing `NULL` or an empty string auto-generates `S_001`, `S_002`, ... |
-| `metadata` | `const char*` | A string describing the binary data to be stored. Written as-is into `metadata.txt` |
-
-**Return value**: `bool` — `true` if the command was successfully queued, `false` if the queue is full or USB is not ready
-
-**⚠️ Call context**: This function sends a command to the low-priority logging task, and **can block for up to 100 ms** if the queue is full. **Never call it from inside the 2 ms real-time loop (`Control_Loop()`)** — it is recommended to call it only once, from a state-transition entry function (such as `EnterActive`).
-
-**Example**
-
-```c
-// Manual session name
-XM_StartUsbDataLog("Gait_001", "hip_L(float), hip_R(float)");
-
-// Automatic session numbering
-XM_StartUsbDataLog(NULL, "hip_L(float), hip_R(float)");
-// → creates /LOGS/S_001/, /LOGS/S_002/, ... in sequence
-```
-
-**See also**: [`XM_StopUsbDataLog`](#xm_stopusbdatalog), [`XM_GetActiveUsbSessionName`](#xm_getactiveusbsessionname), [06. USB Mass-Storage Logging §Session Output File Structure](../06-usb-data-logging.en.md#session-output-file-structure)
-
----
-
-### `XM_StopUsbDataLog`
-
-```c
-void XM_StopUsbDataLog(void);
-```
-
-Stops the USB data logging session. Asynchronously sends the low-priority logging task a command to close the currently open file and end logging.
-
-**Parameters**: none
-
-**Return value**: none (`void`)
-
-**⚠️ Call context**: **Do not call from inside the 2 ms real-time loop (`Control_Loop()`).** You must call this before unplugging USB, so that the file is closed properly.
-
-**See also**: [`XM_StartUsbDataLog`](#xm_startusbdatalog)
-
----
-
-### `XM_GetActiveUsbSessionName`
-
-```c
-void XM_GetActiveUsbSessionName(char* out_buf, uint32_t buf_size);
-```
-
-**[Option A]** Queries the current/last active USB session name. Designed so that, after re-entering following an Emergency Stop, you can **keep appending to the same folder**. The intended usage flow is: call `XM_StartUsbDataLog("", ...)` the first time → an automatic name is generated based on the boot count → query the name with this API → the example code stores it → on re-entry, call `XM_StartUsbDataLog(<stored name>)` → the firmware incrementally creates `data_001_*`, `data_002_*`, and so on in the same folder.
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|------|
-| `out_buf` | `char*` | Buffer into which the session name is copied |
-| `buf_size` | `uint32_t` | Buffer size (32 bytes or more recommended) |
-
-**Return value**: none (`void`)
-
-**⚠️ Call context**: Assume `Control_Setup()` / `Control_Loop()` context. The header does not separately document ISR-safety.
-
-> ⚠️ **Known race condition — caution when calling directly**: The session name is updated asynchronously by the low-priority `DataLoggerTask`. If you call this function **immediately after** `XM_StartUsbDataLog()`, you may get an empty string or the previous session's name, since the update has not happened yet. In practice, [Ex.34 (`msc_gait_analysis_log.c`)](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) ran into exactly this problem, and switched away from relying on this API: instead, **the example code itself generates the session name based on RTC/tick**, passes it synchronously to `XM_StartUsbDataLog()`, and stores that name in its own variable for reuse on re-entry (no race). When implementing re-entry logic, we recommend following the Ex.34 pattern rather than depending on the return timing of this function.
-
-**See also**: [`XM_StartUsbDataLog`](#xm_startusbdatalog), [Ex.34 MSC_GaitAnalysis_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/)
-
----
-
-### `XM_GetUsbLogStatus`
-
-```c
-XmLogStatus_e XM_GetUsbLogStatus(void);
-```
-
-Checks the current logger state. Use this to check whether logging has been forcibly stopped (`ERROR_STOPPED`), whether the buffer is filling up (`WARNING_QUEUE_FULL`), and so on.
-
-**Parameters**: none
-
-**Return value**: an [`XmLogStatus_e`](#xmlogstatus_e) enum value
-
-**⚠️ Call context**: Safe to call from the 2 ms real-time loop in `Control_Loop()`.
-
-**See also**: full list of [`XmLogStatus_e`](#xmlogstatus_e) values
-
----
-
-### `XM_SetUsbLogAutoTimestamp`
-
-```c
-void XM_SetUsbLogAutoTimestamp(bool enabled);
-```
-
-Sets whether an automatic timestamp (4-byte `tick_ms`) is prepended to each record.
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|------|
-| `enabled` | `bool` | `true`: automatically insert the tick before each packet (default). `false`: disable this when the user struct already contains its own tick |
-
-**Return value**: none (`void`)
-
-**⚠️ Call context**: Set this in `Control_Setup()` **before** calling [`XM_StartUsbDataLog`](#xm_startusbdatalog).
-
-**See also**: [`XM_SetUsbLogRollingSize`](#xm_setusblogrollingsize)
-
----
-
-### `XM_SetUsbLogRollingSize`
-
-```c
-void XM_SetUsbLogRollingSize(uint32_t size_mb);
-```
-
-Sets the file rolling (automatic splitting) size.
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|------|
-| `size_mb` | `uint32_t` | File split size (MB). Range 1–100, default 10 |
-
-**Return value**: none (`void`)
-
-**⚠️ Call context**: Set this in `Control_Setup()` **before** calling [`XM_StartUsbDataLog`](#xm_startusbdatalog).
-
-**See also**: [`XM_SetUsbLogAutoTimestamp`](#xm_setusblogautotimestamp)
-
----
-
-### `XM_GetUsbLogStats`
-
-```c
-bool XM_GetUsbLogStats(XmLogStats_t* out_stats);
-```
-
-Queries detailed session statistics, either during logging or after a session has ended. Includes diagnostic information such as Hot/Cold buffer peak utilization and remaining disk space.
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|------|
-| `out_stats` | `XmLogStats_t*` | Pointer to the struct that receives the statistics |
-
-**Return value**: `bool` — `true` on success, `false` on a parameter error or when USB is not connected
-
-**⚠️ Call context**: Safe to call from the 2 ms real-time loop in `Control_Loop()`.
-
-**Example**
-
-```c
-XmLogStats_t stats;
-if (XM_GetUsbLogStats(&stats)) {
-    printf("Records: %lu, Dropped: %lu, Disk: %lu MB\n",
-           stats.total_records, stats.dropped_records, stats.disk_free_mb);
-}
-```
-
-**See also**: [`XmLogStats_t`](#xmlogstats_t)
-
----
-
-### `XM_GetUsbDiskFreeMB` / `XM_GetUsbDiskTotalMB`
-
-```c
-uint32_t XM_GetUsbDiskFreeMB(void);
-uint32_t XM_GetUsbDiskTotalMB(void);
-```
-
-Returns the USB disk's free/total capacity (MB). Since the value is cached and updated on a 10-second cycle and returned immediately, there is no cost to calling it on every tick.
-
-**Parameters**: none
-
-**Return value**: `uint32_t` — capacity (MB). 0 if USB is not connected
-
-**⚠️ Call context**: Safe to call from the 2 ms real-time loop in `Control_Loop()` (non-blocking, returns a cached value).
-
-**See also**: [`XM_GetUsbLogStats`](#xm_getusblogstats) — the same value can also be checked via the `disk_free_mb`/`disk_total_mb` fields
-
----
-
-### `XM_InsertUsbLogMarker`
-
-```c
-bool XM_InsertUsbLogMarker(XmLogMarkerType_e type, uint16_t data);
-```
-
-Marks a specific point in time during logging (mode transition, anomaly detection, manual mark) as a marker. Markers are stored in the same pipeline as normal data, and the Python decoder automatically separates them out to generate an event log (`events.csv`).
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|------|
-| `type` | `XmLogMarkerType_e` | Marker type |
-| `data` | `uint16_t` | Context data (error code, mode ID, etc.; 0 if not needed) |
-
-**Return value**: `bool` — `true` on success, `false` if logging is inactive or the buffer is insufficient
-
-**⚠️ Call context**: Safe to call from the 2 ms real-time loop in `Control_Loop()` (non-blocking).
-
-**Example**
-
-```c
-// On a mode transition
-XM_InsertUsbLogMarker(XM_LOG_MARKER_MODE, newModeId);
-
-// On error detection
-XM_InsertUsbLogMarker(XM_LOG_MARKER_ERROR, errorCode);
-
-// Manual marking
-XM_InsertUsbLogMarker(XM_LOG_MARKER_USER, 0);
-```
-
-**See also**: [`XmLogMarkerType_e`](#xmlogmarkertype_e)
 
 ---
 
@@ -666,47 +346,6 @@ Receives data from the PC (non-blocking).
 
 ## Types / macros
 
-### `XmLogStatus_e`
-
-An enum representing the logger's current state.
-
-| Value | Description |
-|----|------|
-| `XM_LOG_STATUS_IDLE` | Stopped (initial state) |
-| `XM_LOG_STATUS_LOGGING` | Logging normally |
-| `XM_LOG_STATUS_WARNING_QUEUE_FULL` | Buffer utilization is high (`f_write` is being delayed) |
-| `XM_LOG_STATUS_WARNING_DISK_LOW` | Less than 50 MB of USB disk space remains |
-| `XM_LOG_STATUS_ERROR_STOPPED` | Logging was forcibly stopped due to an error |
-
-### `XmLogStats_t`
-
-A struct of real-time statistics for a logging session. Queried with [`XM_GetUsbLogStats()`](#xm_getusblogstats).
-
-| Field | Type | Description |
-|------|------|------|
-| `total_bytes` | `uint32_t` | Total bytes written |
-| `total_records` | `uint32_t` | Total record count |
-| `dropped_records` | `uint32_t` | Number of dropped records (buffer overflow) |
-| `write_errors` | `uint32_t` | Number of write failures |
-| `duration_ms` | `uint32_t` | Session elapsed time (ms) |
-| `hot_buffer_percent` | `uint8_t` | Hot buffer peak utilization (0–100) |
-| `cold_buffer_percent` 🟢 | `uint8_t` | Cold buffer peak utilization (0–100) — legacy field, [always 0 in the current Hot-buffer-only architecture](../06-usb-data-logging.en.md) |
-| `disk_free_mb` | `uint32_t` | USB free capacity (MB) |
-| `disk_total_mb` | `uint32_t` | USB total capacity (MB) |
-
-> 🟢 **Rev 2.0-only field**: `cold_buffer_percent` does not exist in the Rev1.1 header's `XmLogStats_t` (Rev1.1 has 8 fields, Rev2.0 has 9). In code that handles both Rev1.1 and Rev2.0, do not cast or raw-copy this struct directly.
-
-### `XmLogMarkerType_e`
-
-An enum representing the type of an event marker during logging.
-
-| Value | Description |
-|----|------|
-| `XM_LOG_MARKER_USER` = 0x01 | Manual mark (button/command) |
-| `XM_LOG_MARKER_MODE` = 0x02 | Mode transition |
-| `XM_LOG_MARKER_ERROR` = 0x03 | Error occurred |
-| `XM_LOG_MARKER_SYNC` = 0x04 | Time synchronization point |
-
 ### `XM_USB_HostProfile_e` 🟢 Rev 2.0 only
 
 > Not defined in the Rev1.1 header.
@@ -728,7 +367,7 @@ The function below is for exclusive use by an internal system component (core_pr
 
 | Function | Actual caller | Description |
 |------|--------------|------|
-| `void XM_USB_ProcessPeriodic(void)` | `core_process` | The periodic-processing engine for USB logging/streaming logic. `core_process` calls this automatically, so user code does not need to call it directly |
+| `void XM_USB_ProcessPeriodic(void)` | `core_process` | The periodic-processing engine for USB streaming logic. `core_process` calls this automatically, so user code does not need to call it directly |
 
 > 🟢 **Rev 2.0 note** — The PRODUCTION auto-latch / DTR handling that used to live here in v2.3.1 (the former `XM_USB_RequestProductionLatch` / `XM_USB_OnDtrLost`) was moved inside the System layer (`usb_host_mode`) in v2.4.0 and is no longer in the public header. The only public user-facing API is [`XM_USB_SetHostProfile()`](#xm_usb_sethostprofile).
 
@@ -738,16 +377,12 @@ The function below is for exclusive use by an internal system component (core_pr
 
 | Item | Rev1.1 | Rev2.0 |
 |------|--------|--------|
-| MSC logging basic API (Start/Stop/Status/Stats/Marker/disk query) | ✅ | ✅ |
 | CDC streaming basic API (`SendUsbDataWithId`/`SetUsbCustomMeta`/`SendUsbDebugMessage`) | ✅ | ✅ |
-| `XmLogStats_t.cold_buffer_percent` field | ❌ Absent (8 fields) | 🟢 Present (9 fields — legacy, currently always 0) |
 | `XM_USB_HostProfile_e` / `XM_USB_SetHostProfile` (PhAI Studio / terminal host-profile selection) | ❌ Absent | 🟢 Exclusive |
 | PRODUCTION auto-entry / DTR handling (inside System `usb_host_mode`, not a public API) | ❌ Absent | 🟢 Exclusive (Internal) |
-| MSC logging internal pipeline stages | 2-stage — UserTask writes directly into a lock-free SPSC ring buffer → `DataLoggerTask` calls `f_write()` | 3-stage — UserTask enqueues into a primary queue → `DataLoggerTask` converts to binary and enqueues into a secondary queue → the low-priority task calls `f_write()` |
 
 ---
 
 ## Related Documents
 
 - [05. USB Serial (concept)](../05-usb-connectivity.en.md) — CDC operating principles, common mistakes, example mapping
-- [06. USB Mass-Storage Logging (concept)](../06-usb-data-logging.en.md) — MSC file format, Python decoder, session output structure

@@ -93,7 +93,6 @@ plugins:
             LED·버튼: LED & Button
             외부 IO: External IO
             USB 시리얼: USB Serial
-            USB 메모리 로깅: USB Storage Logging
             메모리 영역: Memory Regions
             실시간 시계 (RTC): Real-Time Clock (RTC)
             보조 태스크: Auxiliary Tasks
@@ -170,7 +169,6 @@ nav:
       - LED·버튼: api-reference/03-led-btn-control.md
       - 외부 IO: api-reference/04-external-io.md
       - USB 시리얼: api-reference/05-usb-connectivity.md
-      - USB 메모리 로깅: api-reference/06-usb-data-logging.md
       - 메모리 영역: api-reference/07-memory-management.md
       - 실시간 시계 (RTC): api-reference/08-rtc-clock.md
       - 보조 태스크: api-reference/09-task-creation.md

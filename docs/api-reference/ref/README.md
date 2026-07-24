@@ -35,14 +35,14 @@
 
 | 헤더 | 한 줄 설명 | 레퍼런스 | 관련 개념 문서 | 대표 예제 |
 |------|-----------|----------|---------------|-----------|
-| `xm_api_usb.h` | USB 시리얼(CDC) 실시간 스트리밍 + USB 메모리(MSC) 데이터 로깅 | [xm-api-usb.md](xm-api-usb.md) | [05. USB 시리얼](../05-usb-connectivity.md) · [06. USB 메모리 로깅](../06-usb-data-logging.md) | [09_CDC_Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) |
+| `xm_api_usb.h` | USB 시리얼(CDC) 실시간 스트리밍 | [xm-api-usb.md](xm-api-usb.md) | [05. USB 시리얼](../05-usb-connectivity.md) | [09_CDC_Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) |
 
 ## 메모리 · RTC
 
 | 헤더 | 한 줄 설명 | 레퍼런스 | 관련 개념 문서 | 대표 예제 |
 |------|-----------|----------|---------------|-----------|
 | `xm_api_memory.h` | Workspace/PSRAM/DTCM 빠른 메모리 + 비휘발성(Flash) 저장소 접근 — 🟢 **Rev 2.0 전용**, 11함수 | [xm-api-memory.md](xm-api-memory.md) | [07. 메모리 영역](../07-memory-management.md) | [36_OnDevice_Kinesthetic_Learning](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) |
-| `xm_api_rtc.h` | RTC 날짜/시간 설정·조회 — ⚠️ Rev1.1 은 하드웨어 부재로 stub, 3함수 | [xm-api-rtc.md](xm-api-rtc.md) | [08. 실시간 시계](../08-rtc-clock.md) | [34_MSC_GaitAnalysis_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) |
+| `xm_api_rtc.h` | RTC 날짜/시간 설정·조회 — ⚠️ Rev1.1 은 하드웨어 부재로 stub, 3함수 | [xm-api-rtc.md](xm-api-rtc.md) | [08. 실시간 시계](../08-rtc-clock.md) | — |
 
 ## RTOS
 

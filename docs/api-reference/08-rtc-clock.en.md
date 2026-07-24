@@ -117,11 +117,3 @@ void Control_Setup(void) {
 | Time resets after power cycle | Backup battery not installed or dead | Check the battery — typical lifetime is about 5 years |
 | `weekday` is not calculated automatically | The MCP79510 requires the weekday to be supplied by the user | Pre-calculate it using Zeller's formula or `<time.h>` |
 
----
-
-## Related Examples
-
-| Example | How it uses the RTC |
-|---------|---------------------|
-| [10_MSC_Manual_log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10_MSC_Manual_log/) | Uses a timestamp in the log filename (e.g., `/LOGS/20260512_143000.bin`) |
-| [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | Records start and end times in `summary.txt` |

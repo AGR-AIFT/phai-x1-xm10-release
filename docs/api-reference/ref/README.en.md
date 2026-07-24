@@ -35,14 +35,14 @@ A per-header collection of pages documenting the **exact function signatures, pa
 
 | Header | One-line purpose | Reference | Related concept doc | Representative example |
 |--------|-------------------|-----------|----------------------|-------------------------|
-| `xm_api_usb.h` | USB serial (CDC) real-time streaming + USB storage (MSC) data logging | [xm-api-usb.en.md](xm-api-usb.en.md) | [05. USB Serial](../05-usb-connectivity.en.md) · [06. USB Storage Logging](../06-usb-data-logging.en.md) | [09_CDC_Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) |
+| `xm_api_usb.h` | USB serial (CDC) real-time streaming | [xm-api-usb.en.md](xm-api-usb.en.md) | [05. USB Serial](../05-usb-connectivity.en.md) | [09_CDC_Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) |
 
 ## Memory · RTC
 
 | Header | One-line purpose | Reference | Related concept doc | Representative example |
 |--------|-------------------|-----------|----------------------|-------------------------|
 | `xm_api_memory.h` | Workspace/PSRAM/DTCM fast memory + non-volatile (Flash) storage access — 🟢 **Rev 2.0 only**, 11 functions | [xm-api-memory.en.md](xm-api-memory.en.md) | [07. Memory Regions](../07-memory-management.en.md) | [36_OnDevice_Kinesthetic_Learning](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) |
-| `xm_api_rtc.h` | RTC date/time set & read — ⚠️ stub on Rev1.1 (no hardware), 3 functions | [xm-api-rtc.en.md](xm-api-rtc.en.md) | [08. Real-Time Clock](../08-rtc-clock.en.md) | [34_MSC_GaitAnalysis_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) |
+| `xm_api_rtc.h` | RTC date/time set & read — ⚠️ stub on Rev1.1 (no hardware), 3 functions | [xm-api-rtc.en.md](xm-api-rtc.en.md) | [08. Real-Time Clock](../08-rtc-clock.en.md) | — |
 
 ## RTOS
 

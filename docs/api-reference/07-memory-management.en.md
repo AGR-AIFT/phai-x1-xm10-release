@@ -228,4 +228,3 @@ void SaveSettings(const UserSettings_t* s) {
 |---------|------------|--------------|
 | [16_TinyAI_Sensor_Fusion](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) | Advanced | NN weights (`.rodata` constant arrays) |
 | [19_Memory_Aware_Design](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/) | Advanced | Ring buffer + pool allocator (static `.bss` allocation) |
-| [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | Advanced | Persistent user settings pattern (Flash NV) |

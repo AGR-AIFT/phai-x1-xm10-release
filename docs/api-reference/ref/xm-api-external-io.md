@@ -2,7 +2,7 @@
 
 > **대상 헤더**: `XM_FW/XM_API/xm_api_external_io.h` (Rev1.1 / Rev2.0 공통 파일 — 핀 매핑·전원 전환 API 등 일부는 Rev2.0 전용, 아래 🟢 뱃지 참고)
 > **관련 개념 문서**: [04. 외부 IO 제어 API](../04-external-io.md)
-> **관련 예제**: [04_Ext_IO_Basic](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/) · [05_Ext_IO_analog](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05_Ext_IO_analog/) · [05a_Ext_IO_DIO_to_ADC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/) · [05b_Ext_IO_FSR_8ch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05b_Ext_IO_FSR_8ch/) · [05c_Ext_IO_Mixed_ADC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/) · [05d_Ext_IO_DIO_ADC_Hybrid](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/) · [06_Ext_IO_Safety_Switch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/) · [34_MSC_GaitAnalysis_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) (Xsens IMU 결합) · [40_EMG_Proportional_Assist](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/40_EMG_Proportional_Assist/) (전원 전압 전환)
+> **관련 예제**: [04_Ext_IO_Basic](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/) · [05_Ext_IO_analog](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05_Ext_IO_analog/) · [05a_Ext_IO_DIO_to_ADC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/) · [05b_Ext_IO_FSR_8ch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05b_Ext_IO_FSR_8ch/) · [05c_Ext_IO_Mixed_ADC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/) · [05d_Ext_IO_DIO_ADC_Hybrid](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/) · [06_Ext_IO_Safety_Switch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/) · [40_EMG_Proportional_Assist](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/40_EMG_Proportional_Assist/) (전원 전압 전환)
 
 보드 측면 확장 포트(Extension Port)의 디지털 입출력(DIO) 8핀과 아날로그 입력(ADC) 4핀을 다루는 API 입니다. 필요하면 DIO 핀을 ADC 로 동적 전환해 최대 12채널 아날로그 입력까지 확보할 수 있고, Rev2.0 에서는 여기에 더해 확장 포트 공급 전압 전환(3.3V/5V)도 포함합니다.
 
@@ -471,7 +471,7 @@ void Control_Setup(void)
 }
 ```
 
-**참고**: [`XM_ConfigureXsensMTi630`](#xm_configurexsensmti630), [04. 외부 IO — 외부 IMU 사용 시 주의](../04-external-io.md#외부-imu-사용-시-주의), [34_MSC_GaitAnalysis_Log 예제](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/)
+**참고**: [`XM_ConfigureXsensMTi630`](#xm_configurexsensmti630), [04. 외부 IO — 외부 IMU 사용 시 주의](../04-external-io.md#외부-imu-사용-시-주의)
 
 ---
 

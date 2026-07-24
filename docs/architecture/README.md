@@ -75,7 +75,7 @@ XM10 의 핵심은 **1 ms (1 kHz) 주기로 반복되는 제어 루프**입니�
 - **처리 (내가 작성)**: `Control_Loop()` 안에서 그 데이터를 읽고 알고리즘을 돌립니다.
 - **출력 (자동)**: `XM_SetAssistTorqueRH(...)` 같은 함수를 호출하면, 내부에서 CAN 메시지로 변환해 KIT H10 에 자동으로 보냅니다.
 
-USB 통신, 데이터 로깅도 함수 호출 한 번이면 끝입니다. 내가 신경 쓸 건 알고리즘 본질뿐입니다.
+USB 통신도 함수 호출 한 번이면 끝입니다. 내가 신경 쓸 건 알고리즘 본질뿐입니다.
 
 ---
 
@@ -99,7 +99,7 @@ USB 통신, 데이터 로깅도 함수 호출 한 번이면 끝입니다. 내가
   │   • 사용자 작업    → Control_Setup() 1회 → Control_Loop() 매 1 ms  │
   │   • CAN 수신       → 외골격 센서 데이터 받아 XM.status 갱신   │
   │   • CAN 송신       → 모터 명령 전송                          │
-  │   • USB 작업       → 시리얼/메모리 통신                       │
+  │   • USB 작업       → USB-CDC 시리얼 통신                     │
   │   • 디바이스 검색  → 센서 허브 자동 연결                      │
   └──────────────────────────────────────────────────────────────┘
 ```
@@ -122,7 +122,7 @@ Extension_Module/
 │   │   └── Control_Task/
 │   │       └── control_task.c     ← 여기가 사용자 작업 공간
 │   └── (그 외 폴더는 모두 XM 라이브러리 — 건드리지 않습니다)
-└── examples/                  ← 50 개 예제의 control_task.c 모음
+└── examples/                  ← 45 개 예제의 control_task.c 모음
     ├── 00_Quick_Start/quick_start.c
     ├── 14_PD_Realtime_Control/pd_realtime_control.c
     └── ...
@@ -134,13 +134,12 @@ Extension_Module/
 
 ## 통신 정리
 
-세 종류만 알면 됩니다.
+두 종류만 알면 됩니다.
 
 | 채널 | 누가 누구와 | 내가 쓰는 함수 |
 |------|----------|--------------|
 | **CAN-FD** | XM10 ↔ KIT H10 외골격 | `XM.status.h10.*` 읽기, `XM_SetAssistTorque*()` 쓰기 |
 | **USB 시리얼 (CDC)** | XM10 → PC 터미널/PhAI Studio | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
-| **USB 메모리 (MSC)** | XM10 → USB 메모리 (로깅) | `XM_SetUsbLogSource`, `XM_StartUsbDataLog` |
 
 세부 프로토콜은 라이브러리가 알아서 처리합니다. 사용자는 함수 호출만 하면 됩니다.
 

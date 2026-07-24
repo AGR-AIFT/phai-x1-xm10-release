@@ -51,7 +51,7 @@
 | 주제 | 설명 |
 | :--- | :--- |
 | CDC Receiver 커스터마이징 | 사용자 정의 센서 데이터 시각화 설정 |
-| MSC 바이너리 포맷 설계 | 효율적인 사용자 정의 데이터 구조 설계 |
+| USB-CDC 스트림 채널 설계 | 효율적인 사용자 정의 데이터 구조 설계 |
 | 데이터 후처리 파이프라인 | Python + MATLAB을 활용한 분석 워크플로우 |
 
 ---
@@ -68,7 +68,7 @@
 | **보행 제어 알고리즘** | [Ex.15 Inverted Pendulum](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/15_Inverted_Pendulum_Control/) → [Ex.17 FSM Gait](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/17_FSM_Gait_Intent/) | [Ex.20~31 알고리즘 시리즈](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/20_Impedance_Control/) |
 | **외란 관측 + 투명 모드** | [Ex.21 Gravity Comp](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/21_Gravity_Compensation/) | [Ex.31 DOB Stage 1](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/31_Friction_Comp_DOB/) → [Ex.35 MultiLayer](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/35_MultiLayer_Transparent_Control/) |
 | **학습 / 적응 제어** | [Ex.26 ILC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/26_Iterative_Learning_Control/) | [Ex.27 MRAC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/27_MRAC/) → [Ex.33 Kinesthetic Teaching](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/33_Kinesthetic_Teaching/) |
-| **데이터 수집 / 분석** | [Ex.10c MSC Advanced Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | [Ex.34 GaitAnalysis Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) → [AI 학습 데이터 파이프라인](ai-data-pipeline.md) |
+| **데이터 수집 / 분석** | [Ex.09 CDC Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | → [AI 학습 데이터 파이프라인](ai-data-pipeline.md) |
 | **시스템 진단 / 디버깅** | [Ex.18 Debug Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) | [Ex.19 Memory Aware Design](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/) |
 
 막혔다면 [docs/troubleshooting.md](../troubleshooting.md) 또는 Claude Code 에 "Ex.XX 막혔어" 라고 말해보세요.

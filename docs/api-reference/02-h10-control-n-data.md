@@ -34,14 +34,13 @@ XM10의 제어 시스템은 엄격한 **IPO (Input-Process-Output)** 모델을 �
       * 사용자 루프가 끝나면, 시스템은 `XM.command`에 변경된 사항이 있는지 확인합니다.
       * 제어 모드(`XM_CTRL_TORQUE`)인 경우, 변경된 명령을 실제 하드웨어(CAN Bus)로 전송합니다.
 
-4.	**Data Logging(MSC) or Streaming(CDC):**
+4.	**Streaming (CDC):**
 
-      * Input Data, Process, Output Data가 처리된 후 Data Logging or Data Streaming을 수행합니다.
-      * USB Memory가 연결된 경우 사용자 정의 데이터를 1ms 마다 Memory에 저장합니다.
+      * Input Data, Process, Output Data가 처리된 후 Data Streaming을 수행합니다.
       * PC와 USB로 연결되어 시리얼 포트로 `AGRB MON START`문자열을 XM10으로 전송하면 사용자 정의 데이터를 1ms마다 터미널로 전달합니다. `AGRB MON STOP`을 입력하면 전송을 중단합니다.
 
 > **Note:** 사용자는 데이터를 수신(Receive)하거나 전송(Flush)하는 함수를 직접 호출할 필요가 없습니다. 오직 데이터를 읽고(Read), 설정(Set)하기만 하면 됩니다.
-> **Note:** 데이터를 저장시에 데이터 저장을 위한 복잡한 로직을 수행할 필요가 없습니다. 저장할 데이터 구조체 정의 및 데이터 전송 API 함수를 호출하기만 하면 됩니다.
+> **Note:** 데이터를 전송할 때 복잡한 로직을 수행할 필요가 없습니다. 전송할 데이터 구조체 정의 및 데이터 전송 API 함수를 호출하기만 하면 됩니다.
 
 -----
 
@@ -1007,7 +1006,7 @@ static void ManageModeTransition(void)
 void XM_CaptureLoopCountBase(void);
 ```
 
-H10 Assist Loop Counter의 기준점을 캡처합니다. 호출 시점의 `h10AssistModeLoopCnt`를 기준점(0)으로 저장합니다. 데이터 로깅 세션 시작 시 호출하면, 저장 데이터의 count가 항상 0부터 시작합니다.
+H10 Assist Loop Counter의 기준점을 캡처합니다. 호출 시점의 `h10AssistModeLoopCnt`를 기준점(0)으로 저장합니다. 데이터 수집(스트리밍) 시작 시 호출하면, 데이터의 count가 항상 0부터 시작합니다.
 
 ### `XM_GetRelativeLoopCount()`
 

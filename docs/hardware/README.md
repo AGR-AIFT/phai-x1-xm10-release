@@ -15,7 +15,7 @@ XM10 보드의 외부 인터페이스를 한 곳에 모았습니다. 보드에 �
 | **버튼** | 3 개 | BTN 1 (좌) · BTN 2 (중) · BTN 3 (우) |
 | **외부 GPIO** | DIO 8 + ADC 4 (+ 동적 ADC 8) | [Rev 별 핀맵 참조](#외부-gpio-핀맵) |
 | **CAN-FD 포트** | 2 개 | KIT H10 연결 + 센서 허브 확장 |
-| **USB-C** | 1 개 | 시리얼 통신 (CDC) + 메모리 로깅 (MSC) 겸용 |
+| **USB-C** | 1 개 | 시리얼 통신 (CDC) — PC 실시간 연결 |
 | **외부 UART** | 1 개 | 외부 IMU 등 직렬 통신용 |
 | **SWD 디버그** | 4-pin | ST-Link 펌웨어 업로드·디버깅 |
 | **메인 커넥터** | 1 개 | KIT H10 본체 연결 (24V 전원 + CAN-FD) |
@@ -60,14 +60,11 @@ XM10 의 전원 + 통신을 한 가닥으로 받습니다. Molex 1053081206 6-pi
 
 ### USB-C 포트
 
-PC 와 데이터를 주고받는 데 사용합니다. 시리얼 통신 (CDC) + USB 메모리 로깅 (MSC) 두 모드를 같은 포트로 지원합니다.
+USB 시리얼 통신 (CDC) 로 실시간 데이터 스트리밍과 디버그 메시지를 주고받습니다.
 
 | 모드 | 용도 | 사용하는 함수 |
 |------|------|--------------|
 | 시리얼 (CDC) | PC 터미널 / PhAI Studio 로 디버그·데이터 전송 | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
-| 메모리 (MSC) | USB 메모리에 데이터 로깅 (FAT32, 32 KB cluster) | `XM_SetUsbLogSource`, `XM_StartUsbDataLog` |
-
-> 한 번에 하나의 모드만 활성됩니다. 시리얼 사용 중 USB 메모리 꽂으면 모드 전환 동작.
 
 ### 외부 UART 포트
 
@@ -158,6 +155,5 @@ ST-Link V2/V3 디버거 연결용 4-pin 헤더. 펌웨어를 처음 올릴 때 +
 - [외부 IO API](../api-reference/04-external-io.md) — GPIO/ADC 제어 함수
 - [LED & 버튼 API](../api-reference/03-led-btn-control.md) — LED·버튼 함수
 - [USB 시리얼 통신 API](../api-reference/05-usb-connectivity.md) — USB-C 사용법
-- [USB 메모리 로깅 API](../api-reference/06-usb-data-logging.md) — USB 메모리 로깅
 - [KIT H10 Firmware](../kit-h10-firmware/) — H10 본체 펌웨어 업데이트
 - [Bootloader](../bootloader/) — XM10 펌웨어 업로드 방법

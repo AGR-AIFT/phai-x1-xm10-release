@@ -1,6 +1,6 @@
-# Tutorials — 50 개 예제로 배우기
+# Tutorials — 45 개 예제로 배우기
 
-XM10 기능을 단계적으로 익힐 수 있도록 50 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.10 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.
+XM10 기능을 단계적으로 익힐 수 있도록 45 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.09 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.
 
 예제 전체 카탈로그는 [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) 에 있고, 막히면 각 README 맨 아래의 "흔한 실수" 섹션을 먼저 보세요. Claude Code 사용자라면 `"Ex.XX 가 안 돼"` 라고만 말해도 `example-helper` 가 해당 예제의 흔한 실수 + 트러블슈팅 문서를 인용해 답해줍니다.
 
@@ -12,9 +12,9 @@ XM10 기능을 단계적으로 익힐 수 있도록 50 개 예제를 준비했�
 
 | 경로 | 대상 | 순서 | 예상 시간 |
 |------|------|------|-----------|
-| 입문 | 임베디드 처음 — 일단 동작 확인까지 가보기 | Ex.00 → 01 → 04 → 07 → 10a → 11 | 3 시간 정도 |
-| 중급 | 임베디드 기초 있음 — 통신·로깅·실시간 제어 | Ex.02 → 05b → 08 → 10b → 12 → 14 → 18 | 1 주 정도 (자율 학습 기준 하루 1~2 시간) |
-| 고급 | 제어 알고리즘 + AI 직접 설계 | Ex.03 → 09 → 10c → 15 → 16 → 17 → 19 → 20+ | 한 학기 정도 (Ex.20+ 부터 한 예제당 1~2 주) |
+| 입문 | 임베디드 처음 — 일단 동작 확인까지 가보기 | Ex.00 → 01 → 04 → 07 → 09 → 11 | 3 시간 정도 |
+| 중급 | 임베디드 기초 있음 — 통신·실시간 제어 | Ex.02 → 05b → 08 → 09 → 12 → 14 → 18 | 1 주 정도 (자율 학습 기준 하루 1~2 시간) |
+| 고급 | 제어 알고리즘 + AI 직접 설계 | Ex.03 → 09 → 15 → 16 → 17 → 19 → 20+ | 한 학기 정도 (Ex.20+ 부터 한 예제당 1~2 주) |
 | Physical AI 응용 | 재활·학습 제어 등 | Ex.21 → 31 → 32 → 33 → 36 | 자기주도 학습 (난이도 별로 ⭐⭐⭐) |
 
 예상 시간은 일반 사용자 기준입니다. "고급" 의 한 학기는 **개별 예제마다 1~2 주씩** 들여 깊이 학습한다고 가정한 것입니다. 짧게 훑기만 하면 며칠로도 가능하지만, 변형 실험과 논문 출처까지 따라가면 그만큼 시간이 필요합니다.
@@ -33,7 +33,7 @@ XM10 기능을 단계적으로 익힐 수 있도록 50 개 예제를 준비했�
 | 4 | 다채널 ADC + 안전 스위치 | Ex.05b → 05c → 06 | FSR 8 채널 동시 측정 시연 |
 | 5 | USB 시리얼 통신 | Ex.07 → 08 | PC 터미널로 센서값 실시간 모니터링 |
 | 6 | 바이너리 스트리밍 + PhAI Studio | Ex.09 | 4 채널 그래프 캡처 + 분석 보고서 |
-| 7 | USB 메모리 로깅 | Ex.10a → 10b | 10 분 데이터 수집 → CSV 변환 |
+| 7 | USB-CDC 데이터 수집 + 저장 | Ex.09 + PythonDecoder/CDC | 10 분 데이터 스트리밍 → CSV 저장·분석 |
 | 8 | **중간고사 / 프로젝트 1** | (자유) | "내 보드, 내 데이터" 미니 프로젝트 발표 |
 | 9 | KIT H10 외골격 기본 모드 | Ex.11 → 12 → 13 | 3 가지 모드 비교 영상 |
 | 10 | PD 실시간 제어 | Ex.14 | 자기 PD 게인 튜닝 + 응답 비교 |
@@ -46,7 +46,7 @@ XM10 기능을 단계적으로 익힐 수 있도록 50 개 예제를 준비했�
 
 수업 운영 팁:
 - 첫 2 주는 사용자가 환경 구축에서 가장 많이 막힙니다. TA / 강사가 직접 점검 가능한 시간 배정을 권장합니다.
-- 8 주차 미니 프로젝트는 사용자의 동기 유지에 효과적입니다. "Ex.05~10a 까지 익힌 걸로 무엇이든" 같은 열린 주제로 운영하세요.
+- 8 주차 미니 프로젝트는 사용자의 동기 유지에 효과적입니다. "Ex.05~09 까지 익힌 걸로 무엇이든" 같은 열린 주제로 운영하세요.
 - 16 주차 기말은 팀 단위 (3~4 명) 권장합니다. Physical AI 응용 트랙 (Ex.21, 31, 32, 33) 을 마지막에 깊이 다루는 팀이 보통 나옵니다.
 
 진도표에 빠진 예제 (Ex.05d, 15, 22, 24, 28~42) 는 자기주도 학습 또는 다음 학기 후속 과목용으로 남겨두는 것이 분량 면에서 자연스럽습니다.
@@ -89,9 +89,9 @@ XM10 기능을 단계적으로 익힐 수 있도록 50 개 예제를 준비했�
 
 ---
 
-## Part 2 — USB 통신 + 데이터 로깅
+## Part 2 — USB 통신
 
-PC 와 실시간으로 메시지를 주고받거나 USB 메모리에 데이터를 저장합니다. 디버깅과 데이터 수집의 핵심.
+PC 와 실시간으로 메시지를 주고받고 데이터를 스트리밍합니다. 디버깅과 데이터 수집의 핵심.
 
 > **주의**: USB 시리얼 (CDC) 포트는 한 번에 한 프로그램만 점유 가능. Ex.07~09 는 시리얼 터미널 또는 PhAI Studio 중 하나만 열어둔 상태에서 실행하세요. 동시에 켜면 충돌합니다.
 
@@ -103,16 +103,7 @@ PC 와 실시간으로 메시지를 주고받거나 USB 메모리에 데이터�
 | [08](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) | 센서 데이터 모니터링 | ⭐⭐ | 실시간 데이터 sprintf 출력 |
 | [09](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | 고속 바이너리 스트리밍 | ⭐⭐⭐ | PhAI Studio 호환 프로토콜, 500 Hz 전송 |
 
-### USB 메모리 로깅 — Ex.10 ~ 10c
-
-| 예제 | 제목 | 난이도 | 학습 내용 |
-| :---: | :--- | :---: | :--- |
-| [10](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10_MSC_Manual_log/) | 수동 로깅 (구버전) | ⭐⭐ | 10a/10b/10c 권장 |
-| [10a](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10a_MSC_Basic_Log/) | 등록만 하면 자동 저장 | ⭐⭐ | 구조체 한 번 등록하면 알아서 기록 |
-| [10b](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10b_MSC_Custom_Struct/) | 커스텀 구조체 | ⭐⭐⭐ | 내 데이터 + 직접 시각 찍기 |
-| [10c](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | 고급 로깅 | ⭐⭐⭐ | 파일 분할 (롤링), 에러 모니터링, LED 피드백 |
-
-> 권장 순서: Ex.10a → 10b → 10c (10 은 구버전, 새로 시작하면 10a 부터).
+> 수집한 스트림을 PC 에 저장·분석하려면 PhAI Studio 녹화 또는 레포 내 `PythonDecoder/CDC` 파이썬 샘플을 사용하세요. (온보드 파일 저장은 v2.5.0 에서 제거 — 향후 HW 리비전에서 SD카드로 지원 예정)
 
 ---
 
@@ -181,7 +172,6 @@ PC 와 실시간으로 메시지를 주고받거나 USB 메모리에 데이터�
 | [31](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/31_Friction_Comp_DOB/) | 외란 관측기 (DOB) | ⭐⭐⭐ | 남은 외란까지 추정해서 진정한 투명 모드 |
 | [32](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/32_GRF_Gait_Intent/) | 발 접지로 의도 감지 | ⭐⭐⭐ | Heel Strike 이벤트로 보행 위상 추정 |
 | [33](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/33_Kinesthetic_Teaching/) | 직접 가르치기 + 재생 | ⭐⭐⭐ | 사람이 손으로 시연 → 보드가 그대로 재생 |
-| [34](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) | 보행 분석 데이터 로깅 | ⭐⭐ | H10 → USB 메모리 → Python → MATLAB |
 | [35](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/35_MultiLayer_Transparent_Control/) | 다층 투명 제어 | ⭐⭐⭐ | 투명/벽/좌우 커플링 세 모드 실시간 전환 |
 | [36](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) | 보드 안에서 직접 학습 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 작은 신경망을 보드 위에서 학습 → LQR 재생 — Internal Flash UserNV API 가 Rev 2.0 만 지원 |
 | [37](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/37_FES_Hub_Module_Ctrl/) | FES Hub 모듈 제어 | ⭐⭐⭐ | CAN-FD 로 FES Hub 연결, 채널별 전기 자극 파라미터 제어 |

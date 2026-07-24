@@ -34,10 +34,9 @@ The XM10 control system follows a strict **IPO (Input-Process-Output)** model, e
       * After the user loop finishes, the system checks whether anything in `XM.command` has changed.
       * When in torque control mode (`XM_CTRL_TORQUE`), updated commands are dispatched to the actual hardware (CAN Bus).
 
-4.	**Data Logging (MSC) or Streaming (CDC):**
+4.	**Streaming (CDC):**
 
-      * After Input, Process, and Output are complete, data logging or streaming is performed.
-      * If a USB memory device is connected, user-defined data is saved to it every 1 ms.
+      * After Input, Process, and Output are complete, data streaming is performed.
       * If XM10 is connected to a PC via USB and the string `AGRB MON START` is sent over the serial port, user-defined data is forwarded to the terminal every 1 ms. Send `AGRB MON STOP` to halt streaming.
 
 > **Note:** Users never need to call receive or flush functions manually. Simply read data and set commands.
@@ -1009,7 +1008,7 @@ static void ManageModeTransition(void)
 void XM_CaptureLoopCountBase(void);
 ```
 
-Captures a baseline for the H10 Assist Loop Counter. Stores the value of `h10AssistModeLoopCnt` at the time of the call as the reference point (0). Call this at the start of a data logging session so that the saved count always begins from 0.
+Captures a baseline for the H10 Assist Loop Counter. Stores the value of `h10AssistModeLoopCnt` at the time of the call as the reference point (0). Call this at the start of data capture (streaming) so that the count always begins from 0.
 
 ### `XM_GetRelativeLoopCount()`
 

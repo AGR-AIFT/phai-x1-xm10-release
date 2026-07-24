@@ -26,7 +26,7 @@ Add this single line at the top of any XM10 example (`.c`) file, and you get acc
 | 2 | `xm_api_tsm.h` | Task State Machine (FSM) | [01 Task State Machine (TSM)](../01-task-state-machine.en.md) |
 | 3 | `xm_api_led_btn.h` | Onboard LED and button control | [03 LED & Button](../03-led-btn-control.en.md) |
 | 4 | `xm_api_external_io.h` | Extension port GPIO/ADC | [04 External IO](../04-external-io.en.md) |
-| 5 | `xm_api_usb.h` | USB serial communication + USB storage logging | [05 USB Serial Communication](../05-usb-connectivity.en.md) · [06 USB Data Logging](../06-usb-data-logging.en.md) |
+| 5 | `xm_api_usb.h` | USB serial communication (CDC) | [05 USB Serial Communication](../05-usb-connectivity.en.md) |
 | 6 | `xm_api_user_custom.h` | User custom slot (28B) inside the Total Data (0x20) packet — automatically included in PhAI Studio streaming/recording | No dedicated concept doc yet — see the Doxygen example (`@code` block) inside the header |
 | 7 | `xm_api_memory.h` | Memory region access (Workspace/PSRAM/DTCM/non-volatile storage) | [07 Memory Regions](../07-memory-management.en.md) — 🟢 **Rev 2.0 only** |
 | 8 | `xm_api_rtc.h` | RTC date/time management | [08 Real-Time Clock](../08-rtc-clock.en.md) — ⚠️ stub on Rev1.1 |

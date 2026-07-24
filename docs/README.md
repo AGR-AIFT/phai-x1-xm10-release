@@ -29,7 +29,7 @@ XM10 의 전체 문서 인덱스입니다. 처음 시작하는 분은 위에서 
 
 ---
 
-## 2. [Tutorials](tutorials/) — 50 개 예제로 단계 학습
+## 2. [Tutorials](tutorials/) — 45 개 예제로 단계 학습
 
 각 예제는 `목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계` 5 단계로 통일되어 있습니다. 기초 예제는 30 분 안에 끝나도록 설계했습니다.
 
@@ -37,7 +37,7 @@ XM10 의 전체 문서 인덱스입니다. 처음 시작하는 분은 위에서 
 | :---: | :--- | :--- |
 | 0 | 보드 동작 확인 | Ex.00 |
 | 1 | 기본 입출력 (LED·버튼·외부 IO) | Ex.01~06 |
-| 2 | USB 통신 + 메모리 로깅 | Ex.07~10c |
+| 2 | USB 통신 | Ex.07~09 |
 | 3 | KIT H10 외골격 기본 모드 | Ex.11~13 |
 | 4 | 제어 알고리즘 기초 + 디버깅 | Ex.14~19 |
 | 5 | 제어 알고리즘 심화 (Hogan, HZD, CPG 등) | Ex.20~25 |
@@ -60,7 +60,6 @@ XM10 의 전체 문서 인덱스입니다. 처음 시작하는 분은 위에서 
 | [LED & 버튼](api-reference/03-led-btn-control.md) | 보드 LED 제어, 버튼 입력 |
 | [외부 IO](api-reference/04-external-io.md) | GPIO, ADC 핀 제어 |
 | [USB 시리얼 통신](api-reference/05-usb-connectivity.md) | PC 로 메시지/데이터 보내기 |
-| [USB 메모리 로깅](api-reference/06-usb-data-logging.md) | USB 메모리에 자동 저장 |
 | [메모리 영역](api-reference/07-memory-management.md) | 빠른 메모리, 비휘발성 저장소 |
 | [실시간 시계](api-reference/08-rtc-clock.md) | 날짜/시간 읽기·쓰기 |
 
@@ -105,8 +104,8 @@ ST-Link SWD 직접 업로드 + PhAI Studio USB 업로드 두 가지 방법 + 부
 ## 추가 자료
 
 - [🧭 find-it.md](find-it.md) — 키워드 → 페이지 빠른 찾기
-- [Examples](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/) — 50 개 예제 소스 코드 (각 폴더에 5 단계 README 포함)
-- [Python Tools](https://github.com/AGR-EXO/Extension_Module/tree/Develop/PythonDecoder/) — USB 시리얼 수신기, USB 메모리 디코더
+- [Examples](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/) — 45 개 예제 소스 코드 (각 폴더에 5 단계 README 포함)
+- [Python Tools](https://github.com/AGR-EXO/Extension_Module/tree/Develop/PythonDecoder/) — USB-CDC 실시간 수신 샘플
 - [Release Notes](release-notes/) — 버전별 첨부 파일 + 호환성 매트릭스
 - [Changelog](https://github.com/AGR-EXO/Extension_Module/blob/Develop/CHANGELOG.md) — 버전별 변경 이력 요약
 - [XM10 SDK](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM10_SDK/) — Rev1.1 / Rev2.0 SDK 프로젝트

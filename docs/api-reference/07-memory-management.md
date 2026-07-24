@@ -228,4 +228,3 @@ void SaveSettings(const UserSettings_t* s) {
 |------|--------|------------|
 | [16_TinyAI_Sensor_Fusion](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) | 고급 | NN 가중치 (.rodata 상수 배열) |
 | [19_Memory_Aware_Design](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/) | 고급 | Ring Buffer + Pool Allocator (.bss 정적) |
-| [10c_MSC_Advanced_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/10c_MSC_Advanced_Log/) | 고급 | 사용자 설정 영속화 (Flash NV) 패턴 |

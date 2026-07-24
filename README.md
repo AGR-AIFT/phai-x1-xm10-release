@@ -80,7 +80,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 - **외골격 제어 알고리즘** — C 코드로 직접 작성. 사전 정의 움직임 명령부터 직접 토크 계산까지 자유.
 - **센서 통합** — EMG, 발 접지 (GRF), FSR 같은 센서 허브를 CAN-FD 로 바로 붙여서 사용자 의도에 실시간 반응.
-- **데이터 수집** — 1 ms 주기 USB 메모리 로깅 또는 PC 실시간 스트리밍. MATLAB / Python 으로 바로 분석.
+- **데이터 수집** — USB-CDC 실시간 스트리밍 (PhAI Studio 또는 Python). MATLAB / Python 으로 바로 분석.
 - **AI 상위 제어** — Jetson 시리즈 연동 강화학습부터 MCU 안에서 직접 돌리는 Tiny NN 까지.
 
 ---
@@ -99,7 +99,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 ## 학습 경로
 
-50 개의 예제 모두 같은 형식으로 정돈되어 있습니다 — 목표, 사전 지식, 핵심 코드, 실험, 흔한 실수. 기초 예제 (Ex.10 이하)는 30 분 안에 끝낼 수 있도록 설계했습니다.
+45 개의 예제 모두 같은 형식으로 정돈되어 있습니다 — 목표, 사전 지식, 핵심 코드, 실험, 흔한 실수. 기초 예제 (Ex.09 이하)는 30 분 안에 끝낼 수 있도록 설계했습니다.
 
 | 수준 | 추천 순서 | 시간 |
 | :--- | :--- | :--- |
@@ -123,7 +123,7 @@ Extension_Module/
 │   ├── find-it.md         ← 🧭 빠른 찾기 인덱스 (먼저 가보세요)
 │   ├── getting-started/   ← 환경 구축 + 첫 빌드
 │   ├── hardware/          ← 보드 외부 인터페이스 + GPIO 핀맵
-│   ├── tutorials/         ← 50 개 예제 학습 흐름 + 16 주 진도표
+│   ├── tutorials/         ← 45 개 예제 학습 흐름 + 16 주 진도표
 │   ├── api-reference/     ← XM 함수 전체 명세
 │   ├── architecture/      ← 내 코드가 언제·어디서 동작하는지
 │   ├── advanced/          ← AI 데이터 파이프라인 + 심화 트랙
@@ -131,11 +131,11 @@ Extension_Module/
 │   ├── kit-h10-firmware/  ← H10 외골격 펌웨어 호환성
 │   ├── release-notes/     ← 버전별 첨부 파일 + 호환성 매트릭스
 │   └── troubleshooting.md ← 자주 마주치는 문제 모음
-├── examples/              ← 50 개 실습 예제 (각 폴더에 README, SDK ZIP 배포판에서는 `Examples/` 대문자로 포함)
+├── examples/              ← 45 개 실습 예제 (각 폴더에 README, SDK ZIP 배포판에서는 `Examples/` 대문자로 포함)
 ├── XM10_SDK/              ← STM32CubeIDE 프로젝트
 │   ├── Rev1.1/Extension_Module/  ← PCB Rev 1.1 용
 │   └── Rev2.0/Extension_Module/  ← PCB Rev 2.0 용 (대부분 여기)
-├── PythonDecoder/         ← USB 메모리 / 시리얼 디코더
+├── PythonDecoder/         ← USB-CDC 실시간 수신 샘플
 ├── assets/img/            ← 보드 사진 + 다이어그램 (사용자가 추가)
 ├── .claude/skills/        ← Claude Code 사용자 온보딩 / 예제 트러블슈팅 스킬
 ├── CLAUDE.md / AGENTS.md  ← AI 코딩 도구 진입점 (Claude Code 등)
@@ -152,15 +152,15 @@ Extension_Module/
 | **[🧭 빠른 찾기](docs/find-it.md)** | **"어디 가야 하지" 막힐 때 첫 번째 출구** |
 | [Getting Started](docs/getting-started/) | 하드웨어 연결, 환경 구축, 첫 빌드 — 3 단계 |
 | [Hardware](docs/hardware/) | 보드 외부 인터페이스 + 외부 GPIO 핀맵 (Rev 별) |
-| [Tutorials](docs/tutorials/) | 50 개 예제 학습 로드맵 + 한 학기 진도표 |
+| [Tutorials](docs/tutorials/) | 45 개 예제 학습 로드맵 + 한 학기 진도표 |
 | [API Reference](docs/api-reference/) | XM 함수 전체 명세 + 흔한 실수 |
 | [Architecture](docs/architecture/) | 내 코드가 어디서 어떻게 동작하는지 |
 | [KIT H10 Firmware](docs/kit-h10-firmware/) | H10 펌웨어/컨텐츠 호환성 + 업데이트 |
 | [Bootloader](docs/bootloader/) | 펌웨어 업로드 방법 (SWD 직접 / USB) |
 | [Advanced Topics](docs/advanced/) | AI 데이터 파이프라인 + 관심 분야별 자기주도 학습 |
 | [Troubleshooting](docs/troubleshooting.md) | 자주 마주치는 문제 정리 |
-| [Examples](examples/) | 50 개 예제 (각 폴더에 5 단계 README) |
-| [Python Tools](PythonDecoder/) | USB 시리얼/메모리 디코더, MATLAB 변환 |
+| [Examples](examples/) | 45 개 예제 (각 폴더에 5 단계 README) |
+| [Python Tools](PythonDecoder/) | USB-CDC 실시간 수신 샘플 (Python) |
 | [Release Notes](docs/release-notes/) | 버전별 첨부 파일 + 호환성 매트릭스 |
 | [Changelog](CHANGELOG.md) | 버전별 변경 이력 요약 |
 

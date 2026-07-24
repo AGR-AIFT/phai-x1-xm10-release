@@ -1,8 +1,8 @@
 # `xm_api_rtc.h` — Real-Time Clock (RTC) API
 
 > **Header**: `XM_FW/XM_API/xm_api_rtc.h`
-> **Related concept docs**: [08. Real-Time Clock](../08-rtc-clock.en.md) · [06. USB Mass-Storage Logging](../06-usb-data-logging.en.md) (RTC timestamp integration)
-> **Related examples**: [34_MSC_GaitAnalysis_Log](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) — builds a session folder name from the RTC, with an automatic fallback to a tick-based name when the RTC is absent or unset
+> **Related concept docs**: [08. Real-Time Clock](../08-rtc-clock.en.md)
+> **Related examples**: A pattern that builds a session/file name from the RTC, with automatic fallback to a tick-based name when the RTC is absent or unset
 
 > 🟢 **Rev 2.0 only (hardware-dependent)** — The RTC chip (MCP79510) is only populated on the XM10 **Rev2.0** board. The `xm_api_rtc.h` header itself is included identically in both the Rev1.1 and Rev2.0 SDKs, but **on a Rev1.1 board all three functions below run as stubs** — they always return `false` and do nothing. On Rev1.1, use a `XM_GetTick()`-based timer instead.
 
@@ -10,9 +10,9 @@
 
 ## When to use it
 
-Use this API when you want a real date/time stamped into a log file or session folder name, or when you want accurate file timestamps for USB mass-storage logging. Check the RTC concept and common pitfalls (battery drain, weekday not auto-computed, etc.) first in [08. Real-Time Clock](../08-rtc-clock.en.md). This page only covers the detailed specification of the functions and types declared in `xm_api_rtc.h`.
+Use this API when you want a real date/time stamped into a log file or session folder name, or when you want accurate timestamps for CDC data / session names. Check the RTC concept and common pitfalls (battery drain, weekday not auto-computed, etc.) first in [08. Real-Time Clock](../08-rtc-clock.en.md). This page only covers the detailed specification of the functions and types declared in `xm_api_rtc.h`.
 
-If you start USB data logging without setting the RTC, file timestamps get stamped with a default value (2025-01-01). The standard pattern is to check `XM_RTC_IsRunning()` once in `Control_Setup()` and call `XM_RTC_SetDateTime()` if needed (see [06. USB Mass-Storage Logging — Caveats](../06-usb-data-logging.en.md) for details).
+If you do not set the RTC, time values are stamped with a default (2025-01-01), so the standard pattern is to check `XM_RTC_IsRunning()` once in `Control_Setup()` and call `XM_RTC_SetDateTime()` if needed.
 
 ## Function list
 
@@ -83,7 +83,7 @@ Reads the current date/time from the RTC into `dt`.
 
 **Example — a real pattern that always tolerates failure (Rev1.1 / unset RTC)**
 
-This is the actual pattern used by the [`34_MSC_GaitAnalysis_Log`](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/) example. When `GetDateTime` returns `false` or `year` is out of a sane range (i.e. Rev1.1 stub or RTC never set), it automatically falls back to a tick-based name.
+This is the pattern used to build a session/file name from the RTC. When `GetDateTime` returns `false` or `year` is out of a sane range (i.e. Rev1.1 stub or RTC never set), it automatically falls back to a tick-based name.
 
 ```c
 static void _GenerateSessionName(char* buf, uint32_t buf_size)
@@ -101,7 +101,7 @@ static void _GenerateSessionName(char* buf, uint32_t buf_size)
 }
 ```
 
-**See also**: [`XM_RTC_SetDateTime`](#xm_rtc_setdatetime) · [06. USB Mass-Storage Logging](../06-usb-data-logging.en.md)
+**See also**: [`XM_RTC_SetDateTime`](#xm_rtc_setdatetime)
 
 ---
 
