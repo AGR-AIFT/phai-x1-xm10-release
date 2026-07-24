@@ -86,7 +86,7 @@ static void Run_Loop(void)
 ## 5️⃣ 다음 단계
 
 - 고속 바이너리 (텍스트 → 그래프): [Ex.09 CDC Stream](../09_CDC_Stream/)
-- 데이터를 USB 메모리에 저장: [Ex.10a MSC Basic Log](../10a_MSC_Basic_Log/)
+- 스트리밍 데이터를 PhAI Studio 로 실시간 확인·녹화: [Ex.09 CDC Stream](../09_CDC_Stream/)
 - 실시간 H10 제어와 결합: [Ex.14 PD Realtime Control](../14_PD_Realtime_Control/)
 
 ---

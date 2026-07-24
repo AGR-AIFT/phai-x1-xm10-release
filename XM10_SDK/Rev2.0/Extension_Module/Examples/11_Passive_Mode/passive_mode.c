@@ -162,8 +162,6 @@ typedef struct {
 // --- Task State Machine Handle ---
 static XmTsmHandle_t s_userHandle;
 static uint32_t s_dataSaveLoopCnt;
-static uint32_t s_session_counter = 0;
-static char s_session_name[32];
 
 // --- Init Homing State Management ---
 static HomingState_t s_homingState = HOMING_ENTRY;
@@ -181,7 +179,6 @@ static uint32_t s_lastQueueTick = 0;      // FIFO: 마지막 큐잉 시각 (done
 static uint16_t s_expectedDurationMs = 0; // FIFO: 예상 trajectory 소요 시간
 
 // --- For Dat Save ---
-static bool s_debug_USB_metData = false;
 static MyData_t myData;
 static PhAI_CombinedData_t s_streamData;
 
@@ -256,15 +253,13 @@ void Control_Setup(void)
 
     /* ----------------------------------------------------------------
      * Total Data Packet (Module ID 0x20) 이 모든 H10 센서 데이터를 자동
-     * 스트리밍합니다. XM_SetUsbStreamSource 등록이 불필요합니다.
-     * phai-studio 연결 시 자동 수신됩니다.
+     * 스트리밍하지만, 아래는 'myData' 구조체를 USB-CDC로 실시간
+     * 스트리밍하는 예시입니다. phai-studio 연결 시 자동 수신됩니다.
      * ---------------------------------------------------------------- */
 
-    // 로깅할 때 'myData' 구조체를 저장하겠다!
-    XM_SetUsbLogSource(&myData, sizeof(MyData_t));
-    
-    // 스트리밍할 때도 'myData'를 보내겠다! (서로 달라도 됨)
-    /* PhAI V2: 데이터 소스 등록 (Auto-Stream 시 매 루프 자동 전송) */
+    // USB-CDC로 'myData' 구조체를 실시간 스트리밍하겠다!
+    XM_SetUsbStreamSource(&myData, sizeof(MyData_t));
+    XM_SetUsbAutoStream(true);
 
     /* Module ID 설정 (COMBINED = PhAI Studio 기본 10ch 모드) */
 
@@ -327,26 +322,7 @@ static void Active_Entry(void)
     s_previousSuitMode = XM.status.h10.h10Mode;
     EnterPassiveMode();
 
-    snprintf(s_session_name, sizeof(s_session_name), "Gait_%03lu",
-                 (unsigned long)s_session_counter++);
-
-    if (XM_IsUsbLogReady()) {
-        // "/LOGS/TestRun_001" 폴더를 만들고 "metadata.txt"를 생성함
-        // C언어 문자열 연결 기능을 사용하여 깔끔하게 작성
-        // 각 줄 끝에 공백이나 쉼표가 빠지지 않도록 주의하세요.
-        // meta data를 저장하면서 log status를 LOG_STATUS_LOGGING으로 변경하여 데이터 저장을 수행할 수 있음.
-        s_debug_USB_metData = XM_StartUsbDataLog(
-			s_session_name,
-            "dataSaveLoopCnt, h10Mode, h10AssistLevel,"
-            "leftHipAngle, rightHipAngle, leftThighAngle, rightThighAngle,"
-            "pelvicAngle, leftKneeAngle, rightKneeAngle, isLeftFootContact,"
-            "isRightFootContact, forwardVelocity, leftHipTorque,"
-            "rightHipTorque, leftHipMotorAngle, rightHipMotorAngle,"
-            "leftHipImuGlobalAccX, leftHipImuGlobalAccY, leftHipImuGlobalAccZ,"
-            "leftHipImuGlobalGyrX, leftHipImuGlobalGyrY, leftHipImuGlobalGyrZ,"
-            "rightHipImuGlobalAccX, rightHipImuGlobalAccY, rightHipImuGlobalAccZ,"
-            "rightHipImuGlobalGyrX, rightHipImuGlobalGyrY, rightHipImuGlobalGyrZ\n"); // 마지막에만 \n 추가
-    }
+    // USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신
 }
 
 /**
@@ -408,9 +384,7 @@ static void Active_Loop(void)
 
 static void Active_Exit(void)
 {
-	if (XM_GetUsbLogStatus() == XM_LOG_STATUS_LOGGING) {
-	    XM_StopUsbDataLog();
-	}
+    // USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신 (세션 종료 처리 불필요)
 }
 
 // -------------------- Init Homing --------------------

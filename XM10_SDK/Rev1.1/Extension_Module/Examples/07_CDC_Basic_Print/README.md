@@ -79,7 +79,6 @@ static void Run_Loop(void)
 
 - 센서 값 출력 (sprintf): [Ex.08 CDC Sensor Print](../08_CDC_Sensor_Print/)
 - 고속 바이너리 스트리밍 (PhAI Studio): [Ex.09 CDC Stream](../09_CDC_Stream/)
-- 텍스트 디버깅 대안 (보드에 저장): [Ex.10a MSC Basic Log](../10a_MSC_Basic_Log/)
 
 ---
 

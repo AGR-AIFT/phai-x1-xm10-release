@@ -168,7 +168,7 @@ static void Active_Loop(void)
 - FSM 기반 모드 전환 심화: [Ex.03 Button LED FSM](../03_Button_LED_FSM/)
 - H10 보행 보조와 FES 병행: [Ex.12 Active Assist Mode](../12_Active_Assist_Mode/)
 - 복수 모듈 동기 제어 (IMU + FES): [Ex.29 Bilateral Coordination](../29_Bilateral_Coordination/)
-- SD카드 자극 데이터 로깅: [Ex.10 MSC Manual Log](../10_MSC_Manual_log/)
+- 자극 데이터 실시간 스트리밍: [Ex.09 CDC Stream](../09_CDC_Stream/)
 
 ---
 

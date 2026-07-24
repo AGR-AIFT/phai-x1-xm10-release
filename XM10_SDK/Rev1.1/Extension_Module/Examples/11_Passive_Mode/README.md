@@ -6,7 +6,7 @@
 > - PVector queue 패턴 (현재 → MAX → MIN → MAX → ... 미리 큐잉으로 끊김 없는 운동).
 >
 > ⏱️ 권장 시간: 45분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.03 FSM](../03_Button_LED_FSM/) + [Ex.10c MSC Advanced](../10c_MSC_Advanced_Log/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [TSM](../../docs/api-reference/01-task-state-machine.md)
+> 🧰 사전 예제: [Ex.03 FSM](../03_Button_LED_FSM/) + [Ex.09 CDC Stream](../09_CDC_Stream/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [TSM](../../docs/api-reference/01-task-state-machine.md)
 
 ---
 
@@ -22,7 +22,7 @@ KIT H10 의 좌·우 고관절을 **±25.0 도 사이로 부드럽게 왕복** �
 | ACTIVE (Passive Cycle) | 0도 → +25° → −25° → +25° ... 무한 왕복 (속도 250 deg/s) |
 | ACTIVE Exit | H10 STANDBY 요청 시 모터 정지 → STANDBY 복귀 |
 
-저장: `/LOGS/Gait_000/` 폴더에 30+ 필드 ([H10 각도/토크/IMU 9-축]) 1 kHz 자동 로깅.
+PhAI Studio 로 H10 각도/토크/IMU 9-축 등 30+ 필드를 1 kHz 실시간 스트리밍 확인 가능.
 
 > 📸 `![H10 왕복 운동](../assets/img/11_passive_motion.gif)` placeholder
 
@@ -113,12 +113,12 @@ static void UpdatePassiveMode(void)
 
 ## 4️⃣ 실험 — 직접 해보기 (체크포인트)
 
-1. **HW**: KIT H10 ↔ XM10 CAN-FD 연결 + USB MSC 메모리 + 본체 전원
+1. **HW**: KIT H10 ↔ XM10 CAN-FD 연결 + USB-C 케이블(PC 연결) + 본체 전원
 2. **빌드 + 플래시** → ✅ `0 errors`
 3. **CM 연결 확인** → ✅ OFF → STANDBY 자동 전환 (LED 변화 없음)
 4. **H10 슈트 버튼** 으로 ASSIST 모드 진입 → ✅ Homing 시작 (0도로 정렬)
 5. **Homing 완료** → ✅ Passive 왕복 운동 시작 (±25도, 1초당 한쪽 운동)
-6. **MSC 로깅 확인** → ✅ USB 메모리에 `Gait_000` 폴더 + 30 필드 .bin
+6. **PhAI Studio 로 실시간 데이터 확인** (또는 Ex.09 CDC 방식으로 PC 수신)
 7. **H10 STANDBY 복귀** → ✅ 부드럽게 정지 + STANDBY 상태 복귀
 8. **변형 1 — ROM 변경**: `JOINT_ANGLE_MAX/MIN_ANGLE_INT16` 값 (250 = 25.0°) 을 100 (10°) 또는 400 (40°) 로 변경.
 9. **변형 2 — 속도 변경**: `PM_SPEED_RH/LH` 250 → 100 (느림) 또는 400 (빠름).
@@ -143,7 +143,7 @@ static void UpdatePassiveMode(void)
 | 왕복이 끊김 (도착점에서 멈춤) | Pre-queue 패턴 누락 — 다음 PVector 송신 안 됨 | `START_MOTION` 에서 [1]+[2] 둘 다 송신 |
 | H10 가 안 움직임 | `XM_SetControlMode(XM_CTRL_MONITOR)` 만 호출됨 | Active 진입 시 별도 모드 설정 X — H10 슈트가 ASSIST 모드 요청해야 함 |
 | 모터가 ROM 끝에서 충돌음 | 가속도 `s0/sd` 너무 큼 | 1~2 권장. 큰 값은 도착 시 급정지 |
-| MSC 로깅 안 됨 | USB 미삽입 또는 `XM_SetUsbLogSource` 누락 | Setup 에서 호출 확인 + FAT32 |
+| PhAI Studio 데이터 안 보임 | USB-C 미연결 또는 스트림 소스 미등록 | `XM_SetUsbStreamSource` 확인 |
 | CM 연결 끊김 → 폭주 우려 | OFF 강제 전환으로 안전 | `XM_IsCmConnected()` 가 false 일 때 모든 cycle 첫 줄에서 OFF 전환 |
 | 슈트 STANDBY 복귀 시 H10 잔진동 | `MODE_TRANSITION_*` FSM 미동작 | STOP_PENDING → STOP_COMPLETED → DELAYING 단계 진행 확인 |
 

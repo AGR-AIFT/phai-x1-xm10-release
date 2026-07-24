@@ -111,7 +111,7 @@ s_lh_torque_smooth += (s_lh_torque_target - s_lh_torque_smooth) * TORQUE_SMOOTHI
 
 ## 4️⃣ 실험 — 직접 해보기 (체크포인트)
 
-1. **HW**: KIT H10 ↔ XM10 + 본체 전원 + USB MSC (선택)
+1. **HW**: KIT H10 ↔ XM10 + 본체 전원 + USB-C 케이블(PC, 선택)
 2. **빌드 + 플래시 + CM 연결 + 슈트 ASSIST 모드** → Homing 완료 후 의도 대기
 3. **한쪽 다리만 천천히 움직임** → ✅ 2초 후 그 방향으로 부드러운 보조 토크 시작
 4. **반대 방향으로 다리 의도** → ✅ 보조 토크가 부드럽게 0 으로 복귀 후 새 방향

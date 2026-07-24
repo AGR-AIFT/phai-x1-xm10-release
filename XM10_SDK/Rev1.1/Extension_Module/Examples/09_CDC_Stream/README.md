@@ -100,7 +100,6 @@ static void Run_Loop(void)
 
 ## 5️⃣ 다음 단계
 
-- 데이터를 USB 메모리에 영구 저장: [Ex.10a MSC Basic Log](../10a_MSC_Basic_Log/)
 - Total Data + User Custom 결합 분석: [PythonDecoder/CDC/](../../PythonDecoder/CDC/)
 - 실시간 제어 알고리즘 + PhAI 모니터링: [Ex.14 PD Realtime Control](../14_PD_Realtime_Control/)
 - 다채널 응용: [Ex.16 TinyAI](../16_TinyAI_Sensor_Fusion/) / [Ex.32 GRF Gait Intent](../32_GRF_Gait_Intent/)

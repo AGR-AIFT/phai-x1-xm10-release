@@ -181,7 +181,6 @@ static ActiveAssistFsm_t    s_aaFsm_RH;  // 오른쪽 다리(RH)를 위한 상�
 static ActiveAssistFsm_t    s_aaFsm_LH;  // 왼쪽 다리(LH)를 위한 상태 머신 객체
 
 // --- For Dat Save ---
-static bool s_debug_USB_metData = false;
 static MyData_t myData;
 
 /**
@@ -255,11 +254,13 @@ void Control_Setup(void)
     };
     XM_TSM_AddState(s_userHandle, &act_conf);
 
-    // 로깅할 때 'myData' 구조체를 저장하겠다!
-    XM_SetUsbLogSource(&myData, sizeof(MyData_t));
-    
+    // USB-CDC로 'myData' 구조체를 실시간 스트리밍하겠다!
+    XM_SetUsbStreamSource(&myData, sizeof(MyData_t));
+    XM_SetUsbAutoStream(true);
+
     /* Total Data Packet (Module ID 0x20)이 모든 H10 센서 데이터를
-     * 자동 스트리밍합니다. XM_SetUsbStreamSource 등록 불필요. */
+     * 자동 스트리밍합니다. 위 등록은 'myData' 를 추가로 스트리밍하는
+     * 예시입니다. */
 }
 
 /*
@@ -315,22 +316,7 @@ static void Active_Entry(void)
     // 초기화(Enter) 함수를 호출합니다.
     EnterActiveAssistMode();
 
-    if (XM_IsUsbLogReady()) {
-        // "/LOGS/TestRun_001" 폴더를 만들고 "metadata.txt"를 생성함
-        // C언어 문자열 연결 기능을 사용하여 깔끔하게 작성
-        // 각 줄 끝에 공백이나 쉼표가 빠지지 않도록 주의하세요.
-        // meta data를 저장하면서 log status를 LOG_STATUS_LOGGING으로 변경하여 데이터 저장을 수행할 수 있음.
-        s_debug_USB_metData = XM_StartUsbDataLog("TestRun_001", 
-            "dataSaveLoopCnt, h10Mode, h10AssistLevel,"
-            "leftHipAngle, rightHipAngle, leftThighAngle, rightThighAngle,"
-            "pelvicAngle, leftKneeAngle, rightKneeAngle, isLeftFootContact,"
-            "isRightFootContact, forwardVelocity, leftHipTorque,"
-            "rightHipTorque, leftHipMotorAngle, rightHipMotorAngle,"
-            "leftHipImuGlobalAccX, leftHipImuGlobalAccY, leftHipImuGlobalAccZ,"
-            "leftHipImuGlobalGyrX, leftHipImuGlobalGyrY, leftHipImuGlobalGyrZ,"
-            "rightHipImuGlobalAccX, rightHipImuGlobalAccY, rightHipImuGlobalAccZ,"
-            "rightHipImuGlobalGyrX, rightHipImuGlobalGyrY, rightHipImuGlobalGyrZ\n"); // 마지막에만 \n 추가
-    }
+    // USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신
 
     XM_SetControlMode(XM_CTRL_TORQUE);
 }
@@ -380,9 +366,7 @@ static void Active_Loop(void)
 
 static void Active_Exit(void)
 {
-	if (XM_GetUsbLogStatus() == XM_LOG_STATUS_LOGGING) {
-	    XM_StopUsbDataLog();
-	}
+    // USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신 (세션 종료 처리 불필요)
 }
 
 // -------------------- Mode Management --------------------

@@ -6,7 +6,7 @@
 > - `sizeof()` 실시간 메모리 리포트 + 컴파일러 패딩 체험.
 >
 > ⏱️ 권장 시간: 40분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.10b MSC Custom Struct](../10b_MSC_Custom_Struct/) + [Ex.18 Debug Monitor](../18_Debug_Monitor/) | 📚 관련 docs: [Memory Management](../../docs/api-reference/07-memory-management.md)
+> 🧰 사전 예제: [Ex.09 CDC Stream](../09_CDC_Stream/) + [Ex.18 Debug Monitor](../18_Debug_Monitor/) | 📚 관련 docs: [Memory Management](../../docs/api-reference/07-memory-management.md)
 
 ---
 
@@ -184,7 +184,7 @@ static void Run_Loop(void)                                          // ⑥ 매 1
 ## 5️⃣ 다음 단계
 
 - 메모리 영역 (DTCM/PSRAM/Flash NV): [docs API07](../../docs/api-reference/07-memory-management.md)
-- 빠른 데이터 처리 (USB MSC 로깅): [Ex.10c Advanced Log](../10c_MSC_Advanced_Log/)
+- 빠른 데이터 처리 (CDC 스트리밍): [Ex.09 CDC Stream](../09_CDC_Stream/)
 - Tiny ML 가중치 (PSRAM 사용): [Ex.16 TinyAI](../16_TinyAI_Sensor_Fusion/)
 
 ---

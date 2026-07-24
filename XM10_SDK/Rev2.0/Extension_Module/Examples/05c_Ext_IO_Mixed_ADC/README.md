@@ -102,7 +102,6 @@ static void Run_Loop(void)
 - 동일 포트에서 DIO + ADC 혼용: [Ex.05d Hybrid](../05d_Ext_IO_DIO_ADC_Hybrid/)
 - 안전 인터록 응용: [Ex.06 Safety Switch](../06_Ext_IO_Safety_Switch/)
 - 12채널 데이터를 PC 로 실시간 스트리밍: [Ex.09 CDC Stream](../09_CDC_Stream/)
-- USB 메모리에 12채널 로깅: [Ex.10c MSC Advanced](../10c_MSC_Advanced_Log/)
 
 ---
 

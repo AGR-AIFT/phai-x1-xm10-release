@@ -23,7 +23,7 @@
  *   (θ_rh[t], θ_lh[t]) — 전문가의 운동 궤적
  *
  * 다음 단계 (PhAI Studio 연동):
- *   1. XM_SetUsbLogSource로 SD카드에 저장 (Ex.10b 참조)
+ *   1. XM_SetUsbStreamSource로 phai-studio에 실시간 스트리밍
  *   2. PhAI Studio로 데이터 전송 및 라벨링
  *   3. π0 스타일 VLA(Vision-Language-Action) 모델 학습
  *   → 이 데이터가 π0 스타일 VLA 모델의 학습 데이터가 됩니다
@@ -43,14 +43,14 @@
  * [링 버퍼 vs 선형 버퍼]
  * 이 예제는 선형 버퍼(linear buffer)를 사용합니다.
  * → 단순, 인덱스 관리 직관적, 오버런 명확
- * → 연속 교시가 필요한 경우: 링 버퍼로 교체 (Ex.10b 패턴 참조)
+ * → 연속 교시가 필요한 경우: 링 버퍼로 교체 (Ex.19 메모리 인식 설계 참조)
  *
  * @see     Billard, A. et al. (2008) "Robot Programming by Demonstration"
  *          in Springer Handbook of Robotics, pp.1371-1394
  * @see     Chi, C. et al. (2023) "Diffusion Policy: Visuomotor Policy Learning
  *          via Action Diffusion" RSS 2023 (π0의 전신 개념)
  * @see     Ex.21 gravity_compensation.c (교시 중 투명 모드 기반)
- * @see     Ex.10b msc_custom_struct.c (SD카드 로깅 연동)
+ * @see     Ex.09 cdc_stream.c (PC 실시간 스트리밍 연동)
  * @see     docs/api-reference/XM_Control.md
  * @version 1.0
  * @date    Mar 10, 2026
@@ -546,7 +546,7 @@ static void _RunRecordMode(void)
             s_teach_state = TEACH_STATE_RECORDED;
 
             // 전문가 데이터 캡처 완료 메시지
-            // XM_SetUsbLogSource로 SD카드에도 저장 가능 (Ex.10b 참조)
+            // XM_SetUsbStreamSource로 phai-studio에 실시간 스트리밍 가능
             XM_SendUsbDebugMessage(
                 "[KT] 전문가 데이터 캡처 완료 — "
                 "PhAI Studio로 전송하여 AI 학습에 활용 가능\r\n");
@@ -722,7 +722,7 @@ static void _HandleButtonInput(void)
             XM_SendUsbDebugMessage(buf);
 
             // 전문가 데이터 캡처 완료
-            // XM_SetUsbLogSource로 SD카드에도 저장 가능 (Ex.10b 참조)
+            // XM_SetUsbStreamSource로 phai-studio에 실시간 스트리밍 가능
             XM_SendUsbDebugMessage(
                 "[KT] 전문가 데이터 캡처 완료 — "
                 "PhAI Studio로 전송하여 AI 학습에 활용 가능\r\n");

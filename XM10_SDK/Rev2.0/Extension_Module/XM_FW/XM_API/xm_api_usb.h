@@ -2,14 +2,12 @@
  ******************************************************************************
  * @file    xm_api_usb.h
  * @author  HyundoKim
- * @brief   XM10 USB 데이터 로깅 및 스트리밍 통신 API (PhAI V2)
- * @details 
- * 이 모듈은 두 가지 핵심 기능을 제공합니다.
- * 1. [MSC] USB 메모리에 센서 데이터 로깅 (Start/Stop)
- * 2. [CDC] PhAI 프로토콜 패킷으로 래핑된 실시간 데이터 스트리밍
+ * @brief   XM10 USB-CDC 실시간 데이터 스트리밍 통신 API (PhAI V2)
+ * @details
+ * PhAI 프로토콜 패킷으로 래핑된 실시간 데이터를 USB-CDC로 스트리밍합니다
+ * (phai-studio 로 수신).
  *
- * @note    USB 케이블이 연결되어 있어야 동작하며, 
- * 데이터 로깅의 경우 USB 메모리(Flash Drive)가 인식되어야 합니다.
+ * @note    USB 케이블이 연결되어 있어야 동작합니다.
  * @version 2.0  (PhAI V2 프로토콜 적용)
  * @date    Feb 23, 2026
  *
@@ -39,8 +37,14 @@
  *-----------------------------------------------------------
  */
 
+/* USB-MSC 파일 로깅 API는 v2.5.0에서 제거되었습니다. 데이터 캡처는 USB-CDC 스트리밍
+ * (XM_SetUsbStreamSource -> phai-studio)을 사용하세요.
+ * 단, XmLogStatus_e / XM_GetUsbLogStatus() 는 System/Core/pnp_task.c 의 USB LED
+ * 상태 표시 로직이 내부적으로 계속 참조하므로 예외적으로 유지합니다 (사용자 API 아님). */
+
 /**
  * @brief 로거의 현재 상태
+ * @note  사용자 API 가 아닙니다 — System 내부(pnp_task.c) USB LED 상태 표시 전용으로 유지됩니다.
  */
 typedef enum {
     XM_LOG_STATUS_IDLE,              /**< 중지됨 (초기 상태) */
@@ -49,34 +53,6 @@ typedef enum {
     XM_LOG_STATUS_WARNING_DISK_LOW,  /**< USB 디스크 잔여 용량 50MB 미만 */
     XM_LOG_STATUS_ERROR_STOPPED,     /**< 에러로 로깅이 강제 중지됨 */
 } XmLogStatus_e;
-
-/**
- * @brief 로깅 세션 실시간 통계 (사용자 조회용)
- * @details XM_GetUsbLogStats()로 현재 세션의 통계를 조회할 수 있습니다.
- */
-typedef struct {
-    uint32_t total_bytes;          /**< 총 기록 바이트 수 */
-    uint32_t total_records;        /**< 총 레코드 수 */
-    uint32_t dropped_records;      /**< 누락된 레코드 수 (버퍼 오버플로) */
-    uint32_t write_errors;         /**< 쓰기 실패 횟수 */
-    uint32_t duration_ms;          /**< 세션 경과 시간 (ms) */
-    uint8_t  hot_buffer_percent;   /**< Hot Buffer 피크 사용률 (0~100) */
-    uint8_t  cold_buffer_percent;  /**< Cold Buffer 피크 사용률 (0~100) */
-    uint32_t disk_free_mb;         /**< USB 잔여 용량 (MB) */
-    uint32_t disk_total_mb;        /**< USB 전체 용량 (MB) */
-} XmLogStats_t;
-
-/**
- * @brief 이벤트 마커 타입
- * @details 로깅 중 특정 시점(모드 전환, 이상 감지, 수동 마킹)을 표시하여
- *          후처리 시 시간축에서 해당 이벤트를 빠르게 찾을 수 있습니다.
- */
-typedef enum {
-    XM_LOG_MARKER_USER   = 0x01,  /**< 수동 마킹 (버튼/명령) */
-    XM_LOG_MARKER_MODE   = 0x02,  /**< 모드 전환 */
-    XM_LOG_MARKER_ERROR  = 0x03,  /**< 에러 발생 */
-    XM_LOG_MARKER_SYNC   = 0x04,  /**< 시간 동기점 */
-} XmLogMarkerType_e;
 
 /**
  * @brief USB-CDC 호스트 프로파일 (사용자 선택 — 2가지).
@@ -107,13 +83,6 @@ typedef enum {
  * ========================================================================== */
 
 /**
- * @brief  [MSC] USB 메모리에 저장할 데이터 소스를 등록합니다.
- * @param  data_ptr : 저장할 구조체의 주소 (&myData)
- * @param  size     : 구조체의 크기 (sizeof(myData))
- */
-void XM_SetUsbLogSource(void* data_ptr, uint32_t size);
-
-/**
  * @brief  [CDC] PC로 실시간 스트리밍할 데이터 소스를 등록합니다.
  * @deprecated Total Data(0x20) 자동 전송으로 대체됨. 추가 채널은
  *             XM_SetUsbCustomMeta() + XM_SendUsbDataWithId() 사용.
@@ -123,162 +92,11 @@ void XM_SetUsbLogSource(void* data_ptr, uint32_t size);
 void XM_SetUsbStreamSource(void* data_ptr, uint32_t size);
 
 /**
- * ============================================================================
- * USB 데이터 로깅 API (USB Data Logging API) - Host/MSC Mode
- * ============================================================================
- * @brief UserTask(2ms)의 실시간성을 보장하면서 대용량 데이터를 USB에 저장합니다.
- * @details
- * 이 API는 3단계 비동기 큐 방식으로 동작합니다:
- * 1. [Prio 53, 2ms] UserTask: LogUsbData()를 호출하여 struct를 1단계 큐에 넣습니다. (Non-Blocking)
- * 2. [Prio 24, 100ms] DataLoggerTask: 1단계 큐에서 struct를 꺼내 Binary로 변환(sprintf 아님), 2단계 큐에 넣습니다.
- * 3. [Prio 16, 저순위] UsbMscSaveTask: 2단계 큐에서 데이터를 꺼내 실제 f_write()를 수행합니다.
- */
-
-/**
- * @brief [실시간] USB 저장 장치(MSC)가 연결되고 로깅이 준비되었는지 확인합니다.
- * @details
- * 이 함수는 2ms 실시간 루프에서 안전하게 호출할 수 있습니다.
- * 내부적으로 System Layer의 usb_mode_handler가 관리하는 상태 플래그를 읽습니다.
- * @return USB 저장 장치가 준비되었으면 true, 아니면 false.
- */
-bool XM_IsUsbLogReady(void);
-
-/**
- * @brief [비실시간] USB 데이터 로깅 세션을 시작합니다.
- * @warning
- * 이 함수는 저순위 로깅 태스크(DataLoggerTask)에게 명령을 전송하며,
- * 큐가 꽉 찼을 경우 최대 100ms까지 **블로킹(Blocking)될 수 있습니다.**
- * **절대 2ms 실시간 루프(UserTask) 안에서 호출하지 마십시오.**
- * (예: `EnterActive` 같은 상태 진입 함수에서 1회만 호출)
- * @details
- * 저순위 태스크가 "/LOGS/[sessionName]" 폴더를 생성하고,
- * "metadata.txt" 파일을 생성한 뒤, "data_000.bin" 파일 쓰기를 준비합니다.
- *
- * @param[in] sessionName 저장할 세션(폴더)의 이름입니다. (예: "S_001_TestRun")
- *                        NULL 또는 빈 문자열 전달 시 "S_001", "S_002", ... 자동 생성.
- * @param[in] metadata    저장될 Binary 데이터를 설명하는 메타데이터 문자열입니다.
- * (예: "Offset 0: uint32_t timestamp...")
- * 이 내용은 'metadata.txt' 파일에 저장됩니다.
- * @return 명령 큐 전송에 성공하면 true, 큐가 꽉 찼거나 USB가 준비되지 않았으면 false.
- */
-bool XM_StartUsbDataLog(const char* sessionName, const char* metadata);
-
-/**
- * @brief [비실시간] USB 데이터 로깅 세션을 중지합니다.
- * @warning
- * 이 함수는 **2ms 실시간 루프(UserTask) 안에서 호출하지 마십시오.**
- * @details
- * 저순위 로깅 태스크에게 현재 열린 로그 파일을 닫고 로깅을 종료하라는
- * 명령을 비동기적으로 전송합니다.
- */
-void XM_StopUsbDataLog(void);
-
-/**
- * @brief [Option A] 현재/마지막 활성 USB 세션 이름 조회.
- * @details
- *   Emergency Stop 후 재진입 시 같은 폴더에 이어쓰기 위한 용도.
- *   최초 XM_StartUsbDataLog("")로 시작 → boot_count 기반 자동 이름 생성 →
- *   이 API로 이름 조회 → 예제가 보관 →
- *   재진입 시 XM_StartUsbDataLog(보관_이름) → FW가 같은 폴더에 data_001_*, data_002_* 등 증분.
- * @param[out] out_buf  세션 이름 복사 버퍼
- * @param[in]  buf_size 버퍼 크기 (>=32 권장)
- */
-void XM_GetActiveUsbSessionName(char* out_buf, uint32_t buf_size);
-
-/**
- * @brief [실시간] 2ms 제어 루프에서 로그 데이터를 링 버퍼에 씁니다.
- * @details 이 함수는 비차단(Non-Blocking)이며, 링 버퍼에 memcpy 후
- * 원자적(atomic) 포인터 연산을 수행합니다.
- * @param[in] logPacket  저장할 사용자 정의 struct의 포인터 (예: &myLogData)
- * @param[in] packetSize 전송할 struct의 크기 (예: sizeof(myLogData))
- * @return 쓰기 성공 시 true. (버퍼가 꽉 차서 로깅이 중단되면 false)
- */
-// bool LogUsbData(const void* logPacket, uint32_t packetSize);
-
-/**
  * @brief [실시간] 현재 로거의 상태를 확인합니다.
- * @details UserTask가 이 함수를 호출하여 로깅이 강제 중단되었는지(ERROR_STOPPED)
- * 또는 버퍼가 꽉 차고 있는지(WARNING_BUFFER_HIGH) 확인할 수 있습니다.
+ * @note  사용자 API 가 아닙니다 — System 내부(pnp_task.c) USB LED 상태 표시 전용으로 유지됩니다.
  * @return XmLogStatus_e 열거형 값
  */
 XmLogStatus_e XM_GetUsbLogStatus(void);
-
-/**
- * @brief 자동 타임스탬프(4-byte tick_ms)를 활성화/비활성화합니다.
- * @param[in] enabled  true: 매 패킷 앞에 tick 자동 삽입 (기본값: true)
- *                     false: User 구조체에 이미 tick 포함 시 비활성화
- * @note Control_Setup()에서 XM_StartUsbDataLog() 호출 전에 설정하세요.
- */
-void XM_SetUsbLogAutoTimestamp(bool enabled);
-
-/**
- * @brief 파일 롤링 크기를 설정합니다.
- * @param[in] size_mb  파일 분할 크기 (MB). 1~100, 기본값: 10.
- * @note Control_Setup()에서 XM_StartUsbDataLog() 호출 전에 설정하세요.
- */
-void XM_SetUsbLogRollingSize(uint32_t size_mb);
-
-/* --------------------------------------------------------------------------
- * 상태 모니터링 (Status & Monitoring)
- * -------------------------------------------------------------------------- */
-
-/**
- * @brief [실시간] 로깅 세션의 실시간 통계를 조회합니다.
- * @details 로깅 중 또는 로깅 종료 후 세션의 상세 통계를 확인할 수 있습니다.
- *          Hot/Cold 버퍼 피크 사용률, 디스크 잔여 용량 등 진단 정보를 포함합니다.
- * @param[out] out_stats 통계가 복사될 구조체 포인터
- * @return true: 성공, false: 파라미터 오류 또는 USB 미연결
- *
- * @code
- * XmLogStats_t stats;
- * if (XM_GetUsbLogStats(&stats)) {
- *     printf("Records: %lu, Dropped: %lu, Disk: %lu MB\n",
- *            stats.total_records, stats.dropped_records, stats.disk_free_mb);
- * }
- * @endcode
- */
-bool XM_GetUsbLogStats(XmLogStats_t* out_stats);
-
-/**
- * @brief [실시간] USB 디스크 잔여 용량(MB)을 반환합니다.
- * @details 10초 주기로 캐시된 값을 즉시 반환합니다 (Non-blocking).
- * @return 잔여 용량 (MB). USB 미연결 시 0.
- */
-uint32_t XM_GetUsbDiskFreeMB(void);
-
-/**
- * @brief [실시간] USB 디스크 전체 용량(MB)을 반환합니다.
- * @return 전체 용량 (MB). USB 미연결 시 0.
- */
-uint32_t XM_GetUsbDiskTotalMB(void);
-
-
-/* --------------------------------------------------------------------------
- * 이벤트 마커 (Event Markers)
- * -------------------------------------------------------------------------- */
-
-/**
- * @brief [실시간] 로깅 중 이벤트 마커를 삽입합니다.
- * @details 모드 전환, 에러 발생, 수동 마킹 등 특정 시점을 기록합니다.
- *          마커는 일반 데이터와 동일한 파이프라인으로 저장되며,
- *          Python 디코더가 자동으로 마커를 분리하여 이벤트 로그를 생성합니다.
- * @param[in] type 마커 타입 (XmLogMarkerType_e)
- * @param[in] data 컨텍스트 데이터 (에러 코드, 모드 ID 등. 불필요 시 0)
- * @return true: 성공, false: 로깅 비활성 또는 버퍼 부족
- *
- * @code
- * // 모드 전환 시
- * XM_InsertUsbLogMarker(XM_LOG_MARKER_MODE, newModeId);
- *
- * // 에러 감지 시
- * XM_InsertUsbLogMarker(XM_LOG_MARKER_ERROR, errorCode);
- *
- * // 수동 마킹
- * XM_InsertUsbLogMarker(XM_LOG_MARKER_USER, 0);
- * @endcode
- */
-bool XM_InsertUsbLogMarker(XmLogMarkerType_e type, uint16_t data);
-
 
 /* ============================================================================
  * USB 모니터링 API (USB Monitoring API) - Device/CDC Mode

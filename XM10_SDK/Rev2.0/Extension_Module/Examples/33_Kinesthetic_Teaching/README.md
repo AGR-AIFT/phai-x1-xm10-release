@@ -7,7 +7,7 @@ Physical AI 데이터 파이프라인의 출발점입니다.
 
 > 📖 API 레퍼런스: [H10 Control & Data](../../docs/api-reference/02-h10-control-n-data.md) · [Task State Machine](../../docs/api-reference/01-task-state-machine.md)
 >
-> 📄 전제 예제: [Ex.21 중력+마찰 보상](../21_Gravity_Compensation/) · [Ex.31 DOB 투명 모드](../31_Friction_Comp_DOB/) · [Ex.10b SD카드 로깅](../10b_MSC_Custom_Struct/)
+> 📄 전제 예제: [Ex.21 중력+마찰 보상](../21_Gravity_Compensation/) · [Ex.31 DOB 투명 모드](../31_Friction_Comp_DOB/)
 
 ---
 
@@ -237,9 +237,7 @@ target = prev_target + delta;
 
 ```
 [이 예제] 교시 → RAM 버퍼 (16KB, 최대 20초)
-      ↓ XM_SetUsbLogSource (Ex.10b 참조)
-[SD카드] Binary 저장 (TeachPoint_t 구조체, 8bytes × 2000 = 16KB)
-      ↓ USB Mass Storage 전송
+      ↓ XM_SendUsbDataWithId 로 PC 스트리밍 (Ex.09 참조)
 [PhAI Studio] 데이터 라벨링 · 품질 검증 · 시각화
       ↓ Cloud GPU 전송
 [AI 학습] π0 스타일 VLA 모델 (State: 각도+토크, Action: 다음 각도)
@@ -253,7 +251,7 @@ target = prev_target + delta;
 
 - **투명성 품질 비교**: 투명 모드 없이 교시 → 로봇 무게 저항 느낌. 투명 모드로 교시 → 차이를 직접 체감하세요.
 - **재생 PD 게인 튜닝**: `KP_REPLAY = 0.5 Nm/deg`부터 시작하여 1.0, 1.5로 늘리며 추적 오차와 진동을 PhAI Studio에서 관찰하세요.
-- **SD카드 저장 연동**: Ex.10b의 `XM_SetUsbLogSource` 패턴을 참고하여 교시 데이터를 저장하세요. `TeachPoint_t` 구조체가 그대로 바이너리로 기록됩니다.
+- **데이터 스트리밍**: Ex.09 CDC 패턴(`XM_SendUsbDataWithId`)으로 교시 데이터를 PC(PhAI Studio)로 실시간 전송하세요. 온보드 저장(SD카드)은 향후 HW 리비전에서 지원 예정입니다.
 - **DOB 교시 업그레이드**: `_ComputeTransparentTorque()`를 Ex.31의 DOB 로직으로 교체하면 잔류 마찰이 더 줄어 데이터 품질이 향상됩니다.
 
 ---

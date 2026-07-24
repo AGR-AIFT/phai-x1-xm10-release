@@ -10,7 +10,7 @@
  * ┌─────────────────────────────────────────────────────────────────┐
  * │  Module ID 0x20  │ Total Data Packet  │ System 자동 (1ms 주기) │
  * │  Module ID 0xEF  │ User Meta (JSON)   │ System — 연결 시 1회   │
- * │  Module ID 0xF0  │ User Custom Data   │ Control_Loop에서 호출     │
+ * │  Module ID 0xF0  │ User Custom Data   │ Control_Loop에서 호출  │
  * └─────────────────────────────────────────────────────────────────┘
  *
  * [Total Data Packet (0x20)]

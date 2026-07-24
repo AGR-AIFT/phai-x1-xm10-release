@@ -83,9 +83,6 @@
 /* --- USB 디버그 출력 주기 --- */
 #define DEBUG_PRINT_PERIOD_MS           (200)    /* 200ms마다 CDC 출력 */
 
-/* --- USB 로깅 폴더 --- */
-#define LOG_FOLDER_NAME                 "GaitIntent"
-
 /**
  *-----------------------------------------------------------
  * PRIVATE ENUMERATIONS AND TYPES
@@ -134,7 +131,7 @@ typedef struct __attribute__((packed)) {
 } StreamData_t;
 
 /**
- * @brief USB MSC 로깅용 데이터 구조체
+ * @brief USB-CDC 스트리밍용 데이터 구조체
  */
 typedef struct __attribute__((packed)) {
     uint32_t tick_ms;               /* 타임스탬프 (ms) */
@@ -177,9 +174,6 @@ static uint32_t s_debug_timer;
 /* --- USB 데이터 --- */
 static StreamData_t s_stream;
 static LogData_t    s_log;
-
-/* --- 로깅 상태 --- */
-static bool s_is_logging;
 
 /* --- 보행 단계 이름 (디버그 출력용) --- */
 static const char* const s_phase_names[GAIT_PHASE_COUNT] = {
@@ -228,7 +222,7 @@ static void _UpdateLogData(void);
 
 /**
  * @brief 보행 의도 인식 예제를 초기화합니다.
- * @details 부팅 시 한 번 호출됩니다. TSM 생성, USB 스트리밍/로깅 소스를 등록합니다.
+ * @details 부팅 시 한 번 호출됩니다. TSM 생성, USB-CDC 스트리밍 소스를 등록합니다.
  */
 void Control_Setup(void)
 {
@@ -278,8 +272,9 @@ void Control_Setup(void)
         "{\"name\":\"Thigh Angle R\",\"unit\":\"deg\"},"
         "{\"name\":\"Thigh Angle L\",\"unit\":\"deg\"}]");
 
-    /* USB MSC 로깅 소스 등록 */
-    XM_SetUsbLogSource(&s_log, sizeof(LogData_t));
+    /* USB-CDC 스트리밍 소스 등록 (s_log 구조체 — 연결 시 연속 전송) */
+    XM_SetUsbStreamSource(&s_log, sizeof(LogData_t));
+    XM_SetUsbAutoStream(true);
 }
 
 /**
@@ -328,8 +323,6 @@ static void Standby_Entry(void)
     /* 보행 FSM 초기화 */
     memset(&s_gait_rh, 0, sizeof(GaitLegFsm_t));
     memset(&s_gait_lh, 0, sizeof(GaitLegFsm_t));
-
-    s_is_logging = false;
 }
 
 static void Standby_Loop(void)
@@ -364,9 +357,6 @@ static void Active_Entry(void)
     XM_SetLedState(XM_LED_1, XM_ON);   /* LED 1: Stance 표시 */
     XM_SetLedState(XM_LED_2, XM_OFF);  /* LED 2: Swing 표시 */
 
-    /* 로깅 상태 초기화 */
-    s_is_logging = false;
-
     XM_SendUsbDebugMessage("[Gait] ACTIVE: 보행 의도 인식 시작\r\n");
 }
 
@@ -379,33 +369,11 @@ static void Active_Loop(void)
     }
 
     /* ------------------------------------------------
-     * BTN 1: USB MSC 로깅 시작/정지 토글
+     * BTN 1: (구) USB MSC 로깅 시작/정지 토글 — 제거됨
+     * USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신
      * ------------------------------------------------ */
     if (XM_GetButtonEvent(XM_BTN_1) == XM_BTN_CLICK) {
-        if (!s_is_logging) {
-            /* 로깅 시작 */
-            if (XM_IsUsbLogReady()) {
-                s_is_logging = XM_StartUsbDataLog(
-                    LOG_FOLDER_NAME,
-                    "tick_ms(u32), rh_phase(u8), lh_phase(u8),"
-                    "rh_torque(f32), lh_torque(f32),"
-                    "thigh_angle_r(f32), thigh_angle_l(f32),"
-                    "knee_angle_r(f32), knee_angle_l(f32),"
-                    "pelvic_angle(f32),"
-                    "is_foot_contact_r(bool), is_foot_contact_l(bool)\n"
-                );
-                if (s_is_logging) {
-                    XM_SetLedEffect(XM_LED_3, XM_LED_BLINK, 300);
-                    XM_SendUsbDebugMessage("[Gait] 로깅 시작\r\n");
-                }
-            }
-        } else {
-            /* 로깅 정지 */
-            XM_StopUsbDataLog();
-            XM_SetLedState(XM_LED_3, XM_OFF);
-            s_is_logging = false;
-            XM_SendUsbDebugMessage("[Gait] 로깅 정지\r\n");
-        }
+        // USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신 (start/stop 불필요)
     }
 
     /* ------------------------------------------------
@@ -449,11 +417,9 @@ static void Active_Loop(void)
     _UpdateStreamData();
 
     /* ------------------------------------------------
-     * USB MSC 로깅 데이터 갱신
+     * USB-CDC 스트리밍 데이터 갱신 (s_log — 연결 시 연속 전송)
      * ------------------------------------------------ */
-    if (s_is_logging) {
-        _UpdateLogData();
-    }
+    _UpdateLogData();
 
     /* ------------------------------------------------
      * [매 200ms] USB CDC 디버그 메시지
@@ -472,11 +438,7 @@ static void Active_Exit(void)
     XM_SetAssistTorqueLH(0.0f);
     XM_SetControlMode(XM_CTRL_MONITOR);
 
-    /* 로깅 중이면 정지 */
-    if (s_is_logging) {
-        XM_StopUsbDataLog();
-        s_is_logging = false;
-    }
+    /* USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신 (세션 종료 처리 불필요) */
 
     /* LED 끄기 */
     XM_SetLedState(XM_LED_1, XM_OFF);
@@ -675,7 +637,7 @@ static void _UpdateStreamData(void)
 }
 
 /* ====================================================
- * USB MSC 로깅 데이터 갱신
+ * USB-CDC 스트리밍 데이터 갱신
  * ==================================================== */
 static void _UpdateLogData(void)
 {
