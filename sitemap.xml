@@ -323,6 +323,13 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.4.1/"/>
     </url>
     <url>
+        <loc>https://agr-exo.github.io/Extension_Module/release-notes/v2.5.0/</loc>
+        <lastmod>2026-07-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.5.0/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.5.0/"/>
+    </url>
+    <url>
         <loc>https://agr-exo.github.io/Extension_Module/safety/wearable-safety/</loc>
         <lastmod>2026-07-24</lastmod>
         <changefreq>daily</changefreq>
@@ -657,6 +664,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.4.1/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.4.1/"/>
+    </url>
+    <url>
+        <loc>https://agr-exo.github.io/Extension_Module/en/release-notes/v2.5.0/</loc>
+        <lastmod>2026-07-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/release-notes/v2.5.0/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/release-notes/v2.5.0/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/safety/wearable-safety/</loc>
