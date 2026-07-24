@@ -716,8 +716,6 @@
       
         
       
-        
-      
     
     
     
@@ -919,34 +917,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/06-usb-data-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    USB Storage Logging
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../api-reference/07-memory-management/" class="md-nav__link">
         
   
@@ -1067,7 +1037,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1089,14 +1059,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_11">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2300,7 +2270,7 @@
 <tr>
 <td><strong>USB-C</strong></td>
 <td>1</td>
-<td>Serial communication (CDC) + memory logging (MSC) — shared port</td>
+<td>Serial communication (CDC) — PC connection</td>
 </tr>
 <tr>
 <td><strong>External UART</strong></td>
@@ -2388,7 +2358,7 @@
 </tbody>
 </table>
 <h3 id="usb-c-port">USB-C Port<a class="headerlink" href="#usb-c-port" title="Permanent link">&para;</a></h3>
-<p>Used for data exchange with a PC. The single port supports both serial communication (CDC) and USB memory logging (MSC).</p>
+<p>Used for data exchange with a PC via USB serial communication (CDC) for real-time data streaming and debug messages.</p>
 <table>
 <thead>
 <tr>
@@ -2403,16 +2373,8 @@
 <td>Debug and data transfer via PC terminal / PhAI Studio</td>
 <td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code></td>
 </tr>
-<tr>
-<td>Memory (MSC)</td>
-<td>Data logging to USB flash drive (FAT32, 32 KB cluster)</td>
-<td><code>XM_SetUsbLogSource</code>, <code>XM_StartUsbDataLog</code></td>
-</tr>
 </tbody>
 </table>
-<blockquote>
-<p>Only one mode is active at a time. Inserting a USB flash drive while serial mode is active triggers a mode switch.</p>
-</blockquote>
 <h3 id="external-uart-port">External UART Port<a class="headerlink" href="#external-uart-port" title="Permanent link">&para;</a></h3>
 <p>One port for connecting external serial devices such as XSENS MTi-series IMUs. See the external IMU usage examples for configuration details.</p>
 <h3 id="swd-debug-port">SWD Debug Port<a class="headerlink" href="#swd-debug-port" title="Permanent link">&para;</a></h3>
@@ -2606,7 +2568,6 @@
 <li><a href="../api-reference/04-external-io/">External IO API</a> — GPIO/ADC control functions</li>
 <li><a href="../api-reference/03-led-btn-control/">LED &amp; Button API</a> — LED and button functions</li>
 <li><a href="../api-reference/05-usb-connectivity/">USB Serial Communication API</a> — USB-C usage</li>
-<li><a href="../api-reference/06-usb-data-logging/">USB Memory Logging API</a> — USB memory logging</li>
 <li><a href="../kit-h10-firmware/">KIT H10 Firmware</a> — H10 body firmware update</li>
 <li><a href="../bootloader/">Bootloader</a> — XM10 firmware upload procedure</li>
 </ul>

@@ -716,8 +716,6 @@
       
         
       
-        
-      
     
     
     
@@ -919,34 +917,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-usb-data-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    USB Storage Logging
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../07-memory-management/" class="md-nav__link">
         
   
@@ -1069,7 +1039,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -1091,14 +1061,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_6_11">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2375,14 +2345,14 @@
 <h1 id="xm_api_rtch--real-time-clock-rtc-api"><code>xm_api_rtc.h</code> — Real-Time Clock (RTC) API<a class="headerlink" href="#xm_api_rtch--real-time-clock-rtc-api" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p><strong>Header</strong>: <code>XM_FW/XM_API/xm_api_rtc.h</code>
-<strong>Related concept docs</strong>: <a href="../../08-rtc-clock/">08. Real-Time Clock</a> · <a href="../../06-usb-data-logging/">06. USB Mass-Storage Logging</a> (RTC timestamp integration)
-<strong>Related examples</strong>: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/">34_MSC_GaitAnalysis_Log</a> — builds a session folder name from the RTC, with an automatic fallback to a tick-based name when the RTC is absent or unset</p>
+<strong>Related concept docs</strong>: <a href="../../08-rtc-clock/">08. Real-Time Clock</a>
+<strong>Related examples</strong>: A pattern that builds a session/file name from the RTC, with automatic fallback to a tick-based name when the RTC is absent or unset</p>
 <p>🟢 <strong>Rev 2.0 only (hardware-dependent)</strong> — The RTC chip (MCP79510) is only populated on the XM10 <strong>Rev2.0</strong> board. The <code>xm_api_rtc.h</code> header itself is included identically in both the Rev1.1 and Rev2.0 SDKs, but <strong>on a Rev1.1 board all three functions below run as stubs</strong> — they always return <code>false</code> and do nothing. On Rev1.1, use a <code>XM_GetTick()</code>-based timer instead.</p>
 </blockquote>
 <hr />
 <h2 id="when-to-use-it">When to use it<a class="headerlink" href="#when-to-use-it" title="Permanent link">&para;</a></h2>
-<p>Use this API when you want a real date/time stamped into a log file or session folder name, or when you want accurate file timestamps for USB mass-storage logging. Check the RTC concept and common pitfalls (battery drain, weekday not auto-computed, etc.) first in <a href="../../08-rtc-clock/">08. Real-Time Clock</a>. This page only covers the detailed specification of the functions and types declared in <code>xm_api_rtc.h</code>.</p>
-<p>If you start USB data logging without setting the RTC, file timestamps get stamped with a default value (2025-01-01). The standard pattern is to check <code>XM_RTC_IsRunning()</code> once in <code>Control_Setup()</code> and call <code>XM_RTC_SetDateTime()</code> if needed (see <a href="../../06-usb-data-logging/">06. USB Mass-Storage Logging — Caveats</a> for details).</p>
+<p>Use this API when you want a real date/time stamped into a log file or session folder name, or when you want accurate timestamps for CDC data / session names. Check the RTC concept and common pitfalls (battery drain, weekday not auto-computed, etc.) first in <a href="../../08-rtc-clock/">08. Real-Time Clock</a>. This page only covers the detailed specification of the functions and types declared in <code>xm_api_rtc.h</code>.</p>
+<p>If you do not set the RTC, time values are stamped with a default (2025-01-01), so the standard pattern is to check <code>XM_RTC_IsRunning()</code> once in <code>Control_Setup()</code> and call <code>XM_RTC_SetDateTime()</code> if needed.</p>
 <h2 id="function-list">Function list<a class="headerlink" href="#function-list" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2502,7 +2472,7 @@
 <p>⚠️ <strong>Call context</strong>: assume <code>Control_Setup()</code>/<code>Control_Loop()</code> context. SPI communication costs on the order of milliseconds, so don't call this on every 1 kHz <code>Control_Loop()</code> cycle — only call it when you actually need it (e.g. generating a log filename, at sub-second frequency at most).</p>
 </blockquote>
 <p><strong>Example — a real pattern that always tolerates failure (Rev1.1 / unset RTC)</strong></p>
-<p>This is the actual pattern used by the <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/"><code>34_MSC_GaitAnalysis_Log</code></a> example. When <code>GetDateTime</code> returns <code>false</code> or <code>year</code> is out of a sane range (i.e. Rev1.1 stub or RTC never set), it automatically falls back to a tick-based name.</p>
+<p>This is the pattern used to build a session/file name from the RTC. When <code>GetDateTime</code> returns <code>false</code> or <code>year</code> is out of a sane range (i.e. Rev1.1 stub or RTC never set), it automatically falls back to a tick-based name.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">_GenerateSessionName</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">buf_size</span><span class="p">)</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="n">XmDateTime_t</span><span class="w"> </span><span class="n">rtc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
@@ -2517,7 +2487,7 @@
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="p">}</span>
 </code></pre></div>
-<p><strong>See also</strong>: <a href="#xm_rtc_setdatetime"><code>XM_RTC_SetDateTime</code></a> · <a href="../../06-usb-data-logging/">06. USB Mass-Storage Logging</a></p>
+<p><strong>See also</strong>: <a href="#xm_rtc_setdatetime"><code>XM_RTC_SetDateTime</code></a></p>
 <hr />
 <h3 id="xm_rtc_isrunning"><code>XM_RTC_IsRunning</code><a class="headerlink" href="#xm_rtc_isrunning" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_RTC_IsRunning</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>

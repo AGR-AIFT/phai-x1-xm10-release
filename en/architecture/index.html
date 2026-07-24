@@ -714,8 +714,6 @@
       
         
       
-        
-      
     
     
     
@@ -917,34 +915,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/06-usb-data-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    USB Storage Logging
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../api-reference/07-memory-management/" class="md-nav__link">
         
   
@@ -1065,7 +1035,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1087,14 +1057,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_11">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2387,7 +2357,7 @@ If every user had to implement CAN communication, USB transmission, and motor co
 <li><strong>Processing (you write this)</strong>: Inside <code>Control_Loop()</code>, read that data and run your algorithm.</li>
 <li><strong>Output (automatic)</strong>: Call a function such as <code>XM_SetAssistTorqueRH(...)</code> and the library converts it to a CAN message and sends it to KIT H10 automatically.</li>
 </ul>
-<p>USB communication and data logging work the same way — a single function call is all you need. Your only concern is the algorithm.</p>
+<p>USB communication works the same way — a single function call is all you need. Your only concern is the algorithm.</p>
 <hr />
 <h2 id="from-power-on-to-your-code">From Power-On to Your Code<a class="headerlink" href="#from-power-on-to-your-code" title="Permanent link">&para;</a></h2>
 <p>After you flash firmware with <code>Debug (F11)</code>, the board starts up in the following sequence:</p>
@@ -2406,7 +2376,7 @@ If every user had to implement CAN communication, USB transmission, and motor co
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  │   • User task       → Control_Setup() once → Control_Loop() every 1 ms  │
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  │   • CAN RX          → receives exoskeleton sensor data, updates XM.status │
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  │   • CAN TX          → sends motor commands                  │
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  │   • USB task        → serial / mass-storage communication   │
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  │   • USB task        → USB-CDC serial communication          │
 <a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  │   • Device discovery → auto-connects sensor hubs            │
 <a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>  └──────────────────────────────────────────────────────────────┘
 </code></pre></div>
@@ -2424,7 +2394,7 @@ If every user had to implement CAN communication, USB transmission, and motor co
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   │   └── Control_Task/
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   │       └── control_task.c     ← your workspace
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   └── (all other folders are XM library — do not modify)
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└── examples/                  ← 50 example control_task.c files
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└── examples/                  ← 45 example control_task.c files
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    ├── 00_Quick_Start/quick_start.c
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    ├── 14_PD_Realtime_Control/pd_realtime_control.c
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    └── ...
@@ -2432,7 +2402,7 @@ If every user had to implement CAN communication, USB transmission, and motor co
 <p>To try an example, copy the entire contents of that folder's <code>.c</code> file into <code>XM_Apps/Control_Task/control_task.c</code> and build.</p>
 <hr />
 <h2 id="communication-at-a-glance">Communication at a Glance<a class="headerlink" href="#communication-at-a-glance" title="Permanent link">&para;</a></h2>
-<p>There are three channels — that is all you need to know.</p>
+<p>There are two channels — that is all you need to know.</p>
 <table>
 <thead>
 <tr>
@@ -2451,11 +2421,6 @@ If every user had to implement CAN communication, USB transmission, and motor co
 <td><strong>USB Serial (CDC)</strong></td>
 <td>XM10 → PC terminal / PhAI Studio</td>
 <td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code></td>
-</tr>
-<tr>
-<td><strong>USB Mass Storage (MSC)</strong></td>
-<td>XM10 → USB drive (data logging)</td>
-<td><code>XM_SetUsbLogSource</code>, <code>XM_StartUsbDataLog</code></td>
 </tr>
 </tbody>
 </table>

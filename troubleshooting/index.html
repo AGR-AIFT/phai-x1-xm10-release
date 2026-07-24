@@ -714,8 +714,6 @@
       
         
       
-        
-      
     
     
     
@@ -917,34 +915,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/06-usb-data-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    USB 메모리 로깅
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../api-reference/07-memory-management/" class="md-nav__link">
         
   
@@ -1065,7 +1035,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1087,14 +1057,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_11">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1879,17 +1849,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#usb-msc가-인식되지-않음" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        USB-MSC가 인식되지 않음
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -2085,17 +2044,6 @@
     <span class="md-ellipsis">
       
         USB-CDC 메시지가 PhAI Studio 또는 터미널에 안 보임
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#python-디코더가-bin-파일을-못-읽음-size-mismatch" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Python 디코더가 .bin 파일을 못 읽음 ("size mismatch")
       
     </span>
   </a>
@@ -2672,17 +2620,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#usb-msc가-인식되지-않음" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        USB-MSC가 인식되지 않음
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -2878,17 +2815,6 @@
     <span class="md-ellipsis">
       
         USB-CDC 메시지가 PhAI Studio 또는 터미널에 안 보임
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#python-디코더가-bin-파일을-못-읽음-size-mismatch" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Python 디코더가 .bin 파일을 못 읽음 ("size mismatch")
       
     </span>
   </a>
@@ -3153,12 +3079,6 @@
 2. Windows 장치 관리자에서 <code>Ports (COM &amp; LPT)</code> 아래에 <code>STMicroelectronics Virtual COM Port</code> 확인
 3. 드라이버가 없는 경우: <a href="https://www.st.com/en/development-tools/stsw-stm32102.html">STM32 Virtual COM Port Driver</a> 설치
 4. XM10 펌웨어에서 USB CDC 초기화가 정상적으로 완료되었는지 확인</p>
-<h3 id="usb-msc가-인식되지-않음">USB-MSC가 인식되지 않음<a class="headerlink" href="#usb-msc가-인식되지-않음" title="Permanent link">&para;</a></h3>
-<p><strong>체크리스트:</strong>
-1. USB 메모리가 XM10 보드의 USB Host 포트에 올바르게 삽입되었는지 확인
-2. USB 메모리가 <strong>FAT32</strong> 포맷인지 확인 (NTFS, exFAT는 지원하지 않음)
-3. 메모리 용량이 <strong>32GB 이하</strong>인지 확인 (권장: Sandisk Ultra Dual Drive Type C 32GB)
-4. XM10 펌웨어에서 MSC 초기화 완료 후 파일 시스템 마운트 상태 확인</p>
 <hr />
 <h2 id="can-fd-통신-문제">CAN-FD 통신 문제<a class="headerlink" href="#can-fd-통신-문제" title="Permanent link">&para;</a></h2>
 <h3 id="kit-h10과-통신이-안-됨">KIT H10과 통신이 안 됨<a class="headerlink" href="#kit-h10과-통신이-안-됨" title="Permanent link">&para;</a></h3>
@@ -3240,12 +3160,6 @@
 1. 모든 시리얼 클라이언트 종료 → 하나만 단독 실행
 2. 데이터 전송 가능 USB-C 케이블 (가능하면 PC 후면 USB-A 직결, 허브 X)
 3. <a href="https://www.st.com/en/development-tools/stsw-stm32102.html">STM32 VCP 드라이버 설치</a></p>
-<h4 id="python-디코더가-bin-파일을-못-읽음-size-mismatch">Python 디코더가 .bin 파일을 못 읽음 ("size mismatch")<a class="headerlink" href="#python-디코더가-bin-파일을-못-읽음-size-mismatch" title="Permanent link">&para;</a></h4>
-<p><strong>원인:</strong> 구조체 크기와 <code>metadata.txt</code> 의 합산이 어긋남 (padding 또는 정렬 차이)</p>
-<p><strong>해결:</strong>
-1. 보드에서 <code>XM_SendUsbDebugMessage</code> 로 <code>printf("size=%u", sizeof(MyStruct))</code> 출력
-2. metadata 의 필드 크기 합산이 일치하는지 검증
-3. 비정렬 시 <code>_pad(Nbytes)</code> 명시 또는 <code>__attribute__((packed))</code> 사용</p>
 <h3 id="kit-h10--로봇-제어-함정">KIT H10 / 로봇 제어 함정<a class="headerlink" href="#kit-h10--로봇-제어-함정" title="Permanent link">&para;</a></h3>
 <h4 id="xmstatush10-가-모두-0"><code>XM.status.h10.*</code> 가 모두 0<a class="headerlink" href="#xmstatush10-가-모두-0" title="Permanent link">&para;</a></h4>
 <ul>

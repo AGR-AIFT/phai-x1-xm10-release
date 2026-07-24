@@ -716,8 +716,6 @@
       
         
       
-        
-      
     
     
     
@@ -919,34 +917,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-usb-data-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    USB Storage Logging
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../07-memory-management/" class="md-nav__link">
         
   
@@ -1069,7 +1039,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -1091,14 +1061,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_6_11">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2916,7 +2886,7 @@
 <blockquote>
 <p><strong>Header</strong>: <code>XM_FW/XM_API/xm_api_external_io.h</code> (shared file across Rev1.1 / Rev2.0 — some pin mappings and the power-select API are Rev2.0-only, see the 🟢 badges below)
 <strong>Related concept doc</strong>: <a href="../../04-external-io/">04. External IO Control API</a>
-<strong>Related examples</strong>: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/">04_Ext_IO_Basic</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05_Ext_IO_analog/">05_Ext_IO_analog</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/">05a_Ext_IO_DIO_to_ADC</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05b_Ext_IO_FSR_8ch/">05b_Ext_IO_FSR_8ch</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/">05c_Ext_IO_Mixed_ADC</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/">05d_Ext_IO_DIO_ADC_Hybrid</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/">06_Ext_IO_Safety_Switch</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/">34_MSC_GaitAnalysis_Log</a> (Xsens IMU attach) · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/40_EMG_Proportional_Assist/">40_EMG_Proportional_Assist</a> (power voltage switch)</p>
+<strong>Related examples</strong>: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/">04_Ext_IO_Basic</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05_Ext_IO_analog/">05_Ext_IO_analog</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/">05a_Ext_IO_DIO_to_ADC</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05b_Ext_IO_FSR_8ch/">05b_Ext_IO_FSR_8ch</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/">05c_Ext_IO_Mixed_ADC</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/">05d_Ext_IO_DIO_ADC_Hybrid</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/">06_Ext_IO_Safety_Switch</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/40_EMG_Proportional_Assist/">40_EMG_Proportional_Assist</a> (power voltage switch)</p>
 </blockquote>
 <p>This is the API for the board's side-mounted Extension Port: 8 digital I/O (DIO) pins and 4 analog input (ADC) pins. If needed, DIO pins can be dynamically switched to ADC mode to get up to 12 analog input channels. On Rev2.0, this header also includes switching the extension port's supply voltage (3.3V/5V).</p>
 <hr />
@@ -3416,7 +3386,7 @@
 <a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">    </span><span class="c1">// XM_ConfigureXsensMTi630();</span>
 <a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="p">}</span>
 </code></pre></div>
-<p><strong>See also</strong>: <a href="#xm_configurexsensmti630"><code>XM_ConfigureXsensMTi630</code></a>, <a href="../../04-external-io/#note-on-external-imu-usage">04. External IO — Note on External IMU Usage</a>, <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/">34_MSC_GaitAnalysis_Log example</a></p>
+<p><strong>See also</strong>: <a href="#xm_configurexsensmti630"><code>XM_ConfigureXsensMTi630</code></a>, <a href="../../04-external-io/#note-on-external-imu-usage">04. External IO — Note on External IMU Usage</a></p>
 <hr />
 <h3 id="xm_configurexsensmti630"><code>XM_ConfigureXsensMTi630</code><a class="headerlink" href="#xm_configurexsensmti630" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_ConfigureXsensMTi630</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>

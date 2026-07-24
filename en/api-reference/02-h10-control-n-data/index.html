@@ -716,8 +716,6 @@
       
         
       
-        
-      
     
     
     
@@ -1476,34 +1474,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../06-usb-data-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    USB Storage Logging
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../07-memory-management/" class="md-nav__link">
         
   
@@ -1624,7 +1594,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1646,14 +1616,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_11">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3185,10 +3155,9 @@ The XM10 firmware implements a <strong>Facade pattern</strong> so users can read
 </ul>
 </li>
 <li>
-<p><strong>Data Logging (MSC) or Streaming (CDC):</strong></p>
+<p><strong>Streaming (CDC):</strong></p>
 <ul>
-<li>After Input, Process, and Output are complete, data logging or streaming is performed.</li>
-<li>If a USB memory device is connected, user-defined data is saved to it every 1 ms.</li>
+<li>After Input, Process, and Output are complete, data streaming is performed.</li>
 <li>If XM10 is connected to a PC via USB and the string <code>AGRB MON START</code> is sent over the serial port, user-defined data is forwarded to the terminal every 1 ms. Send <code>AGRB MON STOP</code> to halt streaming.</li>
 </ul>
 </li>
@@ -4514,7 +4483,7 @@ Users only need to compute the desired torque and set it through this function.<
 <h3 id="xm_captureloopcountbase"><code>XM_CaptureLoopCountBase()</code><a class="headerlink" href="#xm_captureloopcountbase" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_CaptureLoopCountBase</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
-<p>Captures a baseline for the H10 Assist Loop Counter. Stores the value of <code>h10AssistModeLoopCnt</code> at the time of the call as the reference point (0). Call this at the start of a data logging session so that the saved count always begins from 0.</p>
+<p>Captures a baseline for the H10 Assist Loop Counter. Stores the value of <code>h10AssistModeLoopCnt</code> at the time of the call as the reference point (0). Call this at the start of data capture (streaming) so that the count always begins from 0.</p>
 <h3 id="xm_getrelativeloopcount"><code>XM_GetRelativeLoopCount()</code><a class="headerlink" href="#xm_getrelativeloopcount" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetRelativeLoopCount</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>

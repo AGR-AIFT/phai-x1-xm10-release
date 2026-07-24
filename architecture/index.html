@@ -714,8 +714,6 @@
       
         
       
-        
-      
     
     
     
@@ -917,34 +915,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/06-usb-data-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    USB 메모리 로깅
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../api-reference/07-memory-management/" class="md-nav__link">
         
   
@@ -1065,7 +1035,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1087,14 +1057,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_11">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2387,7 +2357,7 @@ CAN 통신, USB 송신, 모터 명령 파싱 같은 일을 사용자가 매번 �
 <li><strong>처리 (내가 작성)</strong>: <code>Control_Loop()</code> 안에서 그 데이터를 읽고 알고리즘을 돌립니다.</li>
 <li><strong>출력 (자동)</strong>: <code>XM_SetAssistTorqueRH(...)</code> 같은 함수를 호출하면, 내부에서 CAN 메시지로 변환해 KIT H10 에 자동으로 보냅니다.</li>
 </ul>
-<p>USB 통신, 데이터 로깅도 함수 호출 한 번이면 끝입니다. 내가 신경 쓸 건 알고리즘 본질뿐입니다.</p>
+<p>USB 통신도 함수 호출 한 번이면 끝입니다. 내가 신경 쓸 건 알고리즘 본질뿐입니다.</p>
 <hr />
 <h2 id="전원-켠-순간부터-내-코드까지">전원 켠 순간부터 내 코드까지<a class="headerlink" href="#전원-켠-순간부터-내-코드까지" title="Permanent link">&para;</a></h2>
 <p>사용자가 <code>Debug (F11)</code> 로 펌웨어를 올리고 나면, 다음 흐름으로 보드가 시작됩니다.</p>
@@ -2406,7 +2376,7 @@ CAN 통신, USB 송신, 모터 명령 파싱 같은 일을 사용자가 매번 �
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  │   • 사용자 작업    → Control_Setup() 1회 → Control_Loop() 매 1 ms  │
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  │   • CAN 수신       → 외골격 센서 데이터 받아 XM.status 갱신   │
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  │   • CAN 송신       → 모터 명령 전송                          │
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  │   • USB 작업       → 시리얼/메모리 통신                       │
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  │   • USB 작업       → USB-CDC 시리얼 통신                     │
 <a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  │   • 디바이스 검색  → 센서 허브 자동 연결                      │
 <a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>  └──────────────────────────────────────────────────────────────┘
 </code></pre></div>
@@ -2424,7 +2394,7 @@ CAN 통신, USB 송신, 모터 명령 파싱 같은 일을 사용자가 매번 �
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   │   └── Control_Task/
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   │       └── control_task.c     ← 여기가 사용자 작업 공간
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   └── (그 외 폴더는 모두 XM 라이브러리 — 건드리지 않습니다)
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└── examples/                  ← 50 개 예제의 control_task.c 모음
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└── examples/                  ← 45 개 예제의 control_task.c 모음
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    ├── 00_Quick_Start/quick_start.c
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    ├── 14_PD_Realtime_Control/pd_realtime_control.c
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    └── ...
@@ -2432,7 +2402,7 @@ CAN 통신, USB 송신, 모터 명령 파싱 같은 일을 사용자가 매번 �
 <p>예제를 시험하려면 해당 폴더의 <code>.c</code> 파일 내용을 <code>XM_Apps/Control_Task/control_task.c</code> 에 통째로 복사해서 빌드하면 됩니다.</p>
 <hr />
 <h2 id="통신-정리">통신 정리<a class="headerlink" href="#통신-정리" title="Permanent link">&para;</a></h2>
-<p>세 종류만 알면 됩니다.</p>
+<p>두 종류만 알면 됩니다.</p>
 <table>
 <thead>
 <tr>
@@ -2451,11 +2421,6 @@ CAN 통신, USB 송신, 모터 명령 파싱 같은 일을 사용자가 매번 �
 <td><strong>USB 시리얼 (CDC)</strong></td>
 <td>XM10 → PC 터미널/PhAI Studio</td>
 <td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code></td>
-</tr>
-<tr>
-<td><strong>USB 메모리 (MSC)</strong></td>
-<td>XM10 → USB 메모리 (로깅)</td>
-<td><code>XM_SetUsbLogSource</code>, <code>XM_StartUsbDataLog</code></td>
 </tr>
 </tbody>
 </table>

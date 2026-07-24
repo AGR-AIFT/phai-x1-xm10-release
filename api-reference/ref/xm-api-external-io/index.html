@@ -716,8 +716,6 @@
       
         
       
-        
-      
     
     
     
@@ -919,34 +917,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-usb-data-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    USB 메모리 로깅
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../07-memory-management/" class="md-nav__link">
         
   
@@ -1069,7 +1039,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -1091,14 +1061,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_6_11">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2916,7 +2886,7 @@
 <blockquote>
 <p><strong>대상 헤더</strong>: <code>XM_FW/XM_API/xm_api_external_io.h</code> (Rev1.1 / Rev2.0 공통 파일 — 핀 매핑·전원 전환 API 등 일부는 Rev2.0 전용, 아래 🟢 뱃지 참고)
 <strong>관련 개념 문서</strong>: <a href="../../04-external-io/">04. 외부 IO 제어 API</a>
-<strong>관련 예제</strong>: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/">04_Ext_IO_Basic</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05_Ext_IO_analog/">05_Ext_IO_analog</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/">05a_Ext_IO_DIO_to_ADC</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05b_Ext_IO_FSR_8ch/">05b_Ext_IO_FSR_8ch</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/">05c_Ext_IO_Mixed_ADC</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/">05d_Ext_IO_DIO_ADC_Hybrid</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/">06_Ext_IO_Safety_Switch</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/">34_MSC_GaitAnalysis_Log</a> (Xsens IMU 결합) · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/40_EMG_Proportional_Assist/">40_EMG_Proportional_Assist</a> (전원 전압 전환)</p>
+<strong>관련 예제</strong>: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/">04_Ext_IO_Basic</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05_Ext_IO_analog/">05_Ext_IO_analog</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/">05a_Ext_IO_DIO_to_ADC</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05b_Ext_IO_FSR_8ch/">05b_Ext_IO_FSR_8ch</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/">05c_Ext_IO_Mixed_ADC</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/">05d_Ext_IO_DIO_ADC_Hybrid</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/">06_Ext_IO_Safety_Switch</a> · <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/40_EMG_Proportional_Assist/">40_EMG_Proportional_Assist</a> (전원 전압 전환)</p>
 </blockquote>
 <p>보드 측면 확장 포트(Extension Port)의 디지털 입출력(DIO) 8핀과 아날로그 입력(ADC) 4핀을 다루는 API 입니다. 필요하면 DIO 핀을 ADC 로 동적 전환해 최대 12채널 아날로그 입력까지 확보할 수 있고, Rev2.0 에서는 여기에 더해 확장 포트 공급 전압 전환(3.3V/5V)도 포함합니다.</p>
 <hr />
@@ -3416,7 +3386,7 @@
 <a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">    </span><span class="c1">// XM_ConfigureXsensMTi630();</span>
 <a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="p">}</span>
 </code></pre></div>
-<p><strong>참고</strong>: <a href="#xm_configurexsensmti630"><code>XM_ConfigureXsensMTi630</code></a>, <a href="../../04-external-io/#외부-imu-사용-시-주의">04. 외부 IO — 외부 IMU 사용 시 주의</a>, <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/">34_MSC_GaitAnalysis_Log 예제</a></p>
+<p><strong>참고</strong>: <a href="#xm_configurexsensmti630"><code>XM_ConfigureXsensMTi630</code></a>, <a href="../../04-external-io/#외부-imu-사용-시-주의">04. 외부 IO — 외부 IMU 사용 시 주의</a></p>
 <hr />
 <h3 id="xm_configurexsensmti630"><code>XM_ConfigureXsensMTi630</code><a class="headerlink" href="#xm_configurexsensmti630" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_ConfigureXsensMTi630</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>

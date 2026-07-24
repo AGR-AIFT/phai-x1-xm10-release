@@ -716,8 +716,6 @@
       
         
       
-        
-      
     
     
     
@@ -919,34 +917,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/06-usb-data-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    USB 메모리 로깅
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../api-reference/07-memory-management/" class="md-nav__link">
         
   
@@ -1067,7 +1037,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1089,14 +1059,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_11">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2300,7 +2270,7 @@
 <tr>
 <td><strong>USB-C</strong></td>
 <td>1 개</td>
-<td>시리얼 통신 (CDC) + 메모리 로깅 (MSC) 겸용</td>
+<td>시리얼 통신 (CDC) — PC 실시간 연결</td>
 </tr>
 <tr>
 <td><strong>외부 UART</strong></td>
@@ -2388,7 +2358,7 @@
 </tbody>
 </table>
 <h3 id="usb-c-포트">USB-C 포트<a class="headerlink" href="#usb-c-포트" title="Permanent link">&para;</a></h3>
-<p>PC 와 데이터를 주고받는 데 사용합니다. 시리얼 통신 (CDC) + USB 메모리 로깅 (MSC) 두 모드를 같은 포트로 지원합니다.</p>
+<p>USB 시리얼 통신 (CDC) 로 실시간 데이터 스트리밍과 디버그 메시지를 주고받습니다.</p>
 <table>
 <thead>
 <tr>
@@ -2403,16 +2373,8 @@
 <td>PC 터미널 / PhAI Studio 로 디버그·데이터 전송</td>
 <td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code></td>
 </tr>
-<tr>
-<td>메모리 (MSC)</td>
-<td>USB 메모리에 데이터 로깅 (FAT32, 32 KB cluster)</td>
-<td><code>XM_SetUsbLogSource</code>, <code>XM_StartUsbDataLog</code></td>
-</tr>
 </tbody>
 </table>
-<blockquote>
-<p>한 번에 하나의 모드만 활성됩니다. 시리얼 사용 중 USB 메모리 꽂으면 모드 전환 동작.</p>
-</blockquote>
 <h3 id="외부-uart-포트">외부 UART 포트<a class="headerlink" href="#외부-uart-포트" title="Permanent link">&para;</a></h3>
 <p>외부 직렬 장치 (예: XSENS MTi 시리즈 IMU) 연결용 1 개. 자세한 설정은 외부 IMU 사용 예제 참조.</p>
 <h3 id="swd-디버그-포트">SWD 디버그 포트<a class="headerlink" href="#swd-디버그-포트" title="Permanent link">&para;</a></h3>
@@ -2606,7 +2568,6 @@
 <li><a href="../api-reference/04-external-io/">외부 IO API</a> — GPIO/ADC 제어 함수</li>
 <li><a href="../api-reference/03-led-btn-control/">LED &amp; 버튼 API</a> — LED·버튼 함수</li>
 <li><a href="../api-reference/05-usb-connectivity/">USB 시리얼 통신 API</a> — USB-C 사용법</li>
-<li><a href="../api-reference/06-usb-data-logging/">USB 메모리 로깅 API</a> — USB 메모리 로깅</li>
 <li><a href="../kit-h10-firmware/">KIT H10 Firmware</a> — H10 본체 펌웨어 업데이트</li>
 <li><a href="../bootloader/">Bootloader</a> — XM10 펌웨어 업로드 방법</li>
 </ul>

@@ -716,8 +716,6 @@
       
         
       
-        
-      
     
     
     
@@ -919,34 +917,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-usb-data-logging/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    USB 메모리 로깅
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../07-memory-management/" class="md-nav__link">
         
   
@@ -1069,7 +1039,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_11" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -1091,14 +1061,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_11" id="__nav_6_11_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_11_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_6_11">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2375,14 +2345,14 @@
 <h1 id="xm_api_rtch--실시간-시계rtc-api"><code>xm_api_rtc.h</code> — 실시간 시계(RTC) API<a class="headerlink" href="#xm_api_rtch--실시간-시계rtc-api" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p><strong>대상 헤더</strong>: <code>XM_FW/XM_API/xm_api_rtc.h</code>
-<strong>관련 개념 문서</strong>: <a href="../../08-rtc-clock/">08. 실시간 시계</a> · <a href="../../06-usb-data-logging/">06. USB 메모리 로깅</a> (RTC 타임스탬프 연동)
-<strong>관련 예제</strong>: <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/">34_MSC_GaitAnalysis_Log</a> — RTC 로 세션 폴더명을 만들고, RTC 가 없거나 미설정이면 tick 기반 이름으로 자동 대체하는 실제 코드</p>
+<strong>관련 개념 문서</strong>: <a href="../../08-rtc-clock/">08. 실시간 시계</a>
+<strong>관련 예제</strong>: RTC 로 세션/파일 이름에 실제 시각을 넣고, RTC 가 없거나 미설정이면 tick 기반 이름으로 자동 대체하는 패턴</p>
 <p>🟢 <strong>Rev 2.0 전용 (하드웨어 종속)</strong> — RTC 칩(MCP79510)은 XM10 <strong>Rev2.0</strong> 보드에만 실장되어 있습니다. <code>xm_api_rtc.h</code> 헤더 자체는 Rev1.1 / Rev2.0 SDK 양쪽에 완전히 동일하게 포함되어 있지만, <strong>Rev1.1 보드에서는 아래 함수 3개가 모두 stub 으로 동작</strong>합니다 — 항상 <code>false</code> 를 반환하고 실제로는 아무 것도 하지 않습니다. Rev1.1 에서 경과 시간이 필요하면 <code>XM_GetTick()</code> 기반 타이머로 대체하세요.</p>
 </blockquote>
 <hr />
 <h2 id="언제-사용하나">언제 사용하나<a class="headerlink" href="#언제-사용하나" title="Permanent link">&para;</a></h2>
-<p>로그 파일이나 세션 폴더 이름에 실제 날짜/시간을 남기고 싶을 때, 또는 USB 메모리 로깅으로 저장되는 파일의 타임스탬프를 정확히 찍고 싶을 때 사용합니다. RTC 개념 자체와 흔한 실수(배터리 방전, weekday 미계산 등)는 <a href="../../08-rtc-clock/">08. 실시간 시계</a> 문서에서 먼저 확인하세요. 본 페이지는 <code>xm_api_rtc.h</code> 에 선언된 함수와 타입의 세부 명세만 다룹니다.</p>
-<p>RTC 를 설정하지 않은 채로 USB 메모리 로깅을 시작하면 파일 타임스탬프가 기본값(2025-01-01)으로 찍히므로, <code>Control_Setup()</code> 에서 한 번 <code>XM_RTC_IsRunning()</code> 으로 확인하고 필요하면 <code>XM_RTC_SetDateTime()</code> 으로 설정하는 것이 표준 패턴입니다 (자세한 내용은 <a href="../../06-usb-data-logging/">06. USB 메모리 로깅 — 주의사항</a> 참고).</p>
+<p>로그 파일이나 세션 폴더 이름에 실제 날짜/시간을 남기고 싶을 때, 또는 CDC 데이터/세션 이름에 정확한 시각을 넣고 싶을 때 사용합니다. RTC 개념 자체와 흔한 실수(배터리 방전, weekday 미계산 등)는 <a href="../../08-rtc-clock/">08. 실시간 시계</a> 문서에서 먼저 확인하세요. 본 페이지는 <code>xm_api_rtc.h</code> 에 선언된 함수와 타입의 세부 명세만 다룹니다.</p>
+<p>RTC 를 설정하지 않으면 시각 값이 기본값(2025-01-01)으로 찍히므로, <code>Control_Setup()</code> 에서 한 번 <code>XM_RTC_IsRunning()</code> 으로 확인하고 필요하면 <code>XM_RTC_SetDateTime()</code> 으로 설정하는 것이 표준 패턴입니다.</p>
 <h2 id="함수-목록">함수 목록<a class="headerlink" href="#함수-목록" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2502,7 +2472,7 @@
 <p>⚠️ <strong>호출 컨텍스트</strong>: <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준입니다. SPI 통신에는 ms 단위 비용이 있으므로, 1 kHz <code>Control_Loop()</code> 매 사이클마다 부르지 말고 로그 파일명 생성처럼 실제로 필요한 시점(초 단위 이하 빈도)에만 호출하세요.</p>
 </blockquote>
 <p><strong>예제 — 실패(Rev1.1/미설정)를 항상 대비하는 실전 패턴</strong></p>
-<p>아래는 <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/34_MSC_GaitAnalysis_Log/"><code>34_MSC_GaitAnalysis_Log</code></a> 예제에서 실제로 쓰는 방식입니다. <code>GetDateTime</code> 이 <code>false</code> 를 반환하거나 <code>year</code> 가 비정상이면(= Rev1.1 stub 또는 RTC 미설정) tick 기반 이름으로 자동 전환합니다.</p>
+<p>아래는 RTC 로 세션/파일 이름을 만들 때 쓰는 방식입니다. <code>GetDateTime</code> 이 <code>false</code> 를 반환하거나 <code>year</code> 가 비정상이면(= Rev1.1 stub 또는 RTC 미설정) tick 기반 이름으로 자동 전환합니다.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">_GenerateSessionName</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">buf_size</span><span class="p">)</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="n">XmDateTime_t</span><span class="w"> </span><span class="n">rtc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
@@ -2517,7 +2487,7 @@
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="p">}</span>
 </code></pre></div>
-<p><strong>참고</strong>: <a href="#xm_rtc_setdatetime"><code>XM_RTC_SetDateTime</code></a> · <a href="../../06-usb-data-logging/">06. USB 메모리 로깅</a></p>
+<p><strong>참고</strong>: <a href="#xm_rtc_setdatetime"><code>XM_RTC_SetDateTime</code></a></p>
 <hr />
 <h3 id="xm_rtc_isrunning"><code>XM_RTC_IsRunning</code><a class="headerlink" href="#xm_rtc_isrunning" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_RTC_IsRunning</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
