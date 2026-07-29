@@ -4,6 +4,20 @@
 
 ---
 
+## [v2.5.1] — 2026-07-29
+
+> **Rev 2.0 전용 긴급 수정 (Rev 1.1 영향 없음).** v2.4.1 · v2.5.0 의 Rev 2.0 펌웨어가 부팅 도중 멈추던 문제를 고쳤습니다 (LED 무반응 · PC 에 COM 포트 미출현). 기능 변경은 없으며, Rev 2.0 사용자는 재빌드·업로드만 하면 됩니다.
+
+### Fixed
+* **부팅 정지 수정 (Rev 2.0)** — `agr_retarget.c` 의 newlib 락 뮤텍스를 만드는 startup 생성자가 스케줄러 시작 전에 실행되면서, FreeRTOS 크리티컬 섹션이 남긴 인터럽트 마스크(BASEPRI)가 복구되지 않았습니다. 스케줄러 시작 전에는 `uxCriticalNesting` 이 초기 sentinel 값이라 `vPortExitCritical()` 이 마스크를 푸는 분기에 도달하지 못합니다. 그 결과 HAL 틱(TIM1_UP)이 차단되어 `uwTick` 이 증가하지 않고, 부팅 경로 최초의 `HAL_Delay()`(`MX_USB_OTG_FS_PCD_Init()` 내 `USB_SetCurrentMode()`)에서 무한 대기했습니다. 생성자에서 마스크를 명시적으로 복구하도록 수정했습니다.
+* **심층 방어** — `main()` 진입 시점에도 인터럽트 마스크를 한 번 초기화합니다. `SystemInit()` 의 `__enable_irq()` 는 PRIMASK 만 다루고 생성자보다 먼저 실행되어 이 경로를 덮지 못합니다.
+
+### Notes
+* Rev 1.1 에는 `agr_retarget.c` 가 없어 이 결함의 영향을 받지 않습니다. `Rev1.1.zip` 은 v2.5.0 과 동일합니다.
+* v2.4.0 이하는 해당 없습니다 (원인 파일이 v2.4.1 에서 도입).
+
+---
+
 ## [v2.5.0] — 2026-07-24
 
 > **Rev 1.1 · Rev 2.0 공통.** USB 메모리(MSC)에 데이터를 저장하던 기능을 제거했습니다. 저장 속도 한계로 데이터가 조용히 누락될 수 있어(loop count 는 멀쩡해 보여 발견 어려움), 데이터 수집을 **USB-CDC 실시간 스트리밍(PhAI Studio / PythonDecoder CDC)** 으로 일원화했습니다. 온보드 저장(SD카드)은 향후 HW 리비전에서 지원 예정.
