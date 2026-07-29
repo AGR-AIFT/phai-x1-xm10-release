@@ -43,6 +43,9 @@
 #include <stdint.h>
 #include <sys/lock.h>   /* _LOCK_T + __retarget_lock_* prototypes (retargetable locking) */
 
+#include "stm32h7xx.h"  /* CMSIS core intrinsics (__set_BASEPRI). Explicit: the dev
+                        * and SDK projects carry independent include sets, and the
+                        * SDK one does not reach CMSIS through FreeRTOS.h. */
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
@@ -139,8 +142,27 @@ static SemaphoreHandle_t s_newlib_lock = NULL;
 __attribute__((constructor))
 static void AGR_NewlibLockCreate(void)
 {
-  /* Pure memory init of the static mutex object; does not need the scheduler. */
+  /* Runs from __libc_init_array(), i.e. after SystemInit() but before main(). */
   s_newlib_lock = xSemaphoreCreateRecursiveMutexStatic(&s_newlib_lock_buf);
+
+  /* Why: the create call is NOT pure memory init — xQueueCreateMutexStatic
+   *      -> prvInitialiseMutex -> xQueueGenericSend enters and leaves a
+   *      FreeRTOS critical section. Before the scheduler starts,
+   *      uxCriticalNesting is still its 0xaaaaaaaa sentinel (port.c), so
+   *      vPortExitCritical decrements to 0xaaaaaaaa (never 0) and its
+   *      mask-restoring branch is skipped. BASEPRI therefore stays at
+   *      configMAX_SYSCALL_INTERRUPT_PRIORITY (0x50) for the rest of boot.
+   * Impact if omitted: the HAL tick (TIM1_UP, TICK_INT_PRIORITY 15 -> encoded
+   *      0xF0 >= 0x50) is masked, so uwTick never increments and the first
+   *      blocking HAL delay — inside USB_SetCurrentMode during
+   *      MX_USB_OTG_FS_PCD_Init — never returns. The scheduler, which is the
+   *      only thing that would clear BASEPRI (vPortSVCHandler), is never
+   *      reached: a hard boot hang. (v2.5.0 field failure, fixed in v2.5.1.)
+   * What: clear the stale hardware mask directly. This is NOT a critical
+   *      section — it only undoes one FreeRTOS failed to undo — so CMSIS is
+   *      used rather than the port macros. Safe here: the constructor runs
+   *      single-threaded before main, so nothing depends on the mask. */
+  __set_BASEPRI(0U);
 }
 
 static inline int AGR_NewlibLockUse(void)

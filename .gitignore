@@ -49,6 +49,8 @@ docs/release-notes/*
 !docs/release-notes/v2.4.1.en.md
 !docs/release-notes/v2.5.0.md
 !docs/release-notes/v2.5.0.en.md
+!docs/release-notes/v2.5.1.md
+!docs/release-notes/v2.5.1.en.md
 !docs/getting-started/
 docs/getting-started/*
 !docs/getting-started/00-claude-code-quickstart.md

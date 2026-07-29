@@ -288,6 +288,21 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
 
+  /* Why: anything running before main — SystemInit, the bootloader's
+   *      JumpToApp path, or a __libc_init_array constructor — can leave an
+   *      interrupt mask set. In particular, a FreeRTOS critical section taken
+   *      before the scheduler starts never restores BASEPRI, because
+   *      uxCriticalNesting still holds its 0xaaaaaaaa sentinel (port.c) so
+   *      vPortExitCritical skips its mask-restoring branch. A leftover BASEPRI
+   *      masks the HAL tick (TIM1_UP, prio 15) -> uwTick never increments ->
+   *      the first blocking HAL delay (USB_SetCurrentMode inside
+   *      MX_USB_OTG_FS_PCD_Init) hangs forever. The global-IRQ re-enable in
+   *      SystemInit clears PRIMASK only and runs before constructors, so it
+   *      cannot cover this.
+   * What: start main from a known-clean mask state. Defence in depth — the
+   *      root cause is fixed at its source in agr_retarget.c (v2.5.1). */
+  __set_BASEPRI(0U);
+
   XM_BootDiagClear();
   XM_BOOT_DIAG_MARK(0x1001u);
 
