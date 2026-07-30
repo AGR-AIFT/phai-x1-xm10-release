@@ -190,26 +190,33 @@ void SystemInit (void)
   /* ---- Full hardware cleanup (mirrors BL's JumpToApp Phases 1-7) ----
    * No HAL dependency — pure CMSIS/register access, safe from SystemInit. */
 
-  /* Phase 1: Reset USB OTG FS via RCC */
-  RCC->AHB1RSTR |= RCC_AHB1RSTR_USB1OTGHSRST;
-  RCC->AHB1RSTR &= ~RCC_AHB1RSTR_USB1OTGHSRST;
-  RCC->AHB1ENR  &= ~RCC_AHB1ENR_USB1OTGHSEN;
+  /* Phase 1: Reset USB OTG FS via RCC.
+   * The board's USB_OTG_FS is the USB2 instance (CMSIS: USB_OTG_FS == USB2_OTG_FS),
+   * so the FS core is AHB1 bit 27 (USB2OTGFSRST/EN). Beware the ST legacy-naming
+   * trap: bit 25 (USB1OTGHS*) is the unused HS core — until v2.5.1 this code
+   * reset that one, so the intended FS cleanup silently never happened. */
+  RCC->AHB1RSTR |= RCC_AHB1RSTR_USB2OTGFSRST;
+  RCC->AHB1RSTR &= ~RCC_AHB1RSTR_USB2OTGFSRST;
+  RCC->AHB1ENR  &= ~RCC_AHB1ENR_USB2OTGFSEN;
 
-  /* Phase 2: Re-enable interrupts (BL's __disable_irq) */
-  __enable_irq();
-
-  /* Phase 3: Disable SysTick */
+  /* Phase 2: Disable SysTick */
   SysTick->CTRL = 0U;
   SysTick->LOAD = 0U;
   SysTick->VAL  = 0U;
 
-  /* Phase 4: Disable all NVIC interrupts + clear pending */
+  /* Phase 3: Disable all NVIC interrupts + clear pending */
   for (uint32_t i = 0U; i < 8U; i++) {
       NVIC->ICER[i] = 0xFFFFFFFFU;
       NVIC->ICPR[i] = 0xFFFFFFFFU;
   }
 
-  /* Phase 5: Reset clocks to HSI (no HAL, no SysTick dependency).
+  /* Phase 3b: Clear pended SYSTEM exceptions (SysTick/PendSV) — ICPR above
+   * covers external (NVIC) interrupts only. A stale SysTick pend left by the
+   * BL would otherwise fire into App handlers before the App's .data/.bss are
+   * initialised, the moment the masks are released below. */
+  SCB->ICSR = SCB_ICSR_PENDSTCLR_Msk | SCB_ICSR_PENDSVCLR_Msk;
+
+  /* Phase 4: Reset clocks to HSI (no HAL, no SysTick dependency).
    * BL may have configured PLL — App's SystemClock_Config() expects HSI default. */
   RCC->CR |= RCC_CR_HSION;                          /* Ensure HSI is ON */
   while (!(RCC->CR & RCC_CR_HSIRDY)) {}             /* Wait HSI ready (~µs) */
@@ -220,6 +227,18 @@ void SystemInit (void)
   RCC->D1CFGR  = 0U;                                /* Reset domain prescalers */
   RCC->D2CFGR  = 0U;
   RCC->D3CFGR  = 0U;
+
+  /* Phase 5: Release ALL interrupt masks the BL / debug entry path may have
+   * left set — done LAST, after every interrupt source above is quiesced
+   * (mirrors BL JumpToApp ordering, which also re-enables only at the end).
+   * Until v2.5.1 this ran as "Phase 2" BEFORE SysTick/NVIC were silenced, so
+   * BL leftovers could fire into App handlers pre-.data/.bss-init.
+   * PRIMASK covers the BL's global mask; BASEPRI/FAULTMASK for completeness
+   * (BASEPRI is additionally re-cleared in the newlib-lock constructor and at
+   * main entry — the v2.5.1 pre-scheduler critical-section fix). */
+  __set_PRIMASK(0U);
+  __set_BASEPRI(0U);
+  __set_FAULTMASK(0U);
 
   /* FPU settings ------------------------------------------------------------*/
   #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
