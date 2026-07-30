@@ -1887,6 +1887,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#debugging-caveats--i-updated-and-it-still-looks-stuck" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging caveats — "I updated and it still looks stuck"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#downloads" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2275,6 +2286,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#debugging-caveats--i-updated-and-it-still-looks-stuck" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging caveats — "I updated and it still looks stuck"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#downloads" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2347,6 +2369,11 @@
 <h1 id="xm10-extension-module-sdk-v251">XM10 Extension Module SDK v2.5.1<a class="headerlink" href="#xm10-extension-module-sdk-v251" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p><strong>Release date</strong>: 2026-07-29 | <strong>Target HW</strong>: <strong>Rev 2.0 only</strong> (Rev 1.1 unaffected) | <strong>KIT H10 FW</strong>: v2.3.0+</p>
+<p>✅ <strong>Verified (2026-07-30)</strong> — shortly after release we received a report that the board "still
+hangs on v2.5.1". Re-investigation showed the cause was <strong>the debugging environment, not the
+firmware</strong> (breakpoints left over from a previous session plus an outdated ST-LINK firmware kept
+interrupts masked during the debug session). <strong>v2.5.1 firmware is confirmed working.</strong>
+If you see the same thing, check the <strong>"Debugging caveats"</strong> section below first.</p>
 </blockquote>
 <hr />
 <h2 id="at-a-glance">At a glance<a class="headerlink" href="#at-a-glance" title="Permanent link">&para;</a></h2>
@@ -2356,6 +2383,7 @@
 <li><strong>Affected versions</strong> — <strong>Rev 2.0 firmware of v2.4.1 and v2.5.0.</strong> v2.4.0 and earlier are not affected.</li>
 <li><strong>Rev 1.1 is unaffected</strong> — the code that caused this never existed on Rev 1.1. Keep using your current build.</li>
 <li><strong>What to do</strong> — Rev 2.0 users: download <strong><code>Rev2.0.zip</code></strong>, rebuild, and upload.</li>
+<li><strong>Bootloader (optional)</strong> — a <strong>newer bootloader build (2026-07-30)</strong> with a stability improvement is attached. The existing bootloader keeps working fine, so this is not required — update when convenient.</li>
 </ul>
 <hr />
 <h2 id="what-happened-in-plain-terms">What happened? (in plain terms)<a class="headerlink" href="#what-happened-in-plain-terms" title="Permanent link">&para;</a></h2>
@@ -2402,6 +2430,18 @@
 <p>If the board is already stuck and PhAI Studio cannot connect, flash it once directly over <strong>SWD (ST-Link)</strong>.</p>
 </blockquote>
 <hr />
+<h2 id="debugging-caveats--i-updated-and-it-still-looks-stuck">Debugging caveats — "I updated and it still looks stuck"<a class="headerlink" href="#debugging-caveats--i-updated-and-it-still-looks-stuck" title="Permanent link">&para;</a></h2>
+<p>If the board still appears to hang at the same place after updating to v2.5.1, the cause may be your <strong>debugging environment</strong> rather than the board or the firmware. The reproduction report we received right after release turned out to be exactly this — two things combined:</p>
+<ol>
+<li><strong>Upgrade your ST-LINK firmware</strong> — STM32CubeIDE menu <code>Help → ST-LINK Upgrade</code>.
+   An outdated ST-LINK firmware can keep interrupts masked throughout the debug session, which
+   makes perfectly good firmware look as if its 1 ms tick has stopped.</li>
+<li><strong>Remove all breakpoints from previous sessions</strong> — <code>Run → Remove All Breakpoints</code>.</li>
+<li>Still stuck? <strong>Unplug every cable, fully power-cycle the board, then connect power only —
+   no debugger.</strong> If the LEDs come up and a COM port appears, the firmware is fine.
+   (An interrupt mask left behind by a debugger is only cleared by a full power cycle.)</li>
+</ol>
+<hr />
 <h2 id="downloads">Downloads<a class="headerlink" href="#downloads" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2435,7 +2475,7 @@
 <tbody>
 <tr>
 <td><code>AGR_Bootloader.bin</code></td>
-<td>XM10 bootloader (flash once over SWD; after that, upload firmware via PhAI Studio USB)</td>
+<td>XM10 bootloader — <strong>new build, 2026-07-30</strong> (flash once over SWD; after that, upload firmware via PhAI Studio USB)</td>
 </tr>
 <tr>
 <td><code>SUIT_H10_Binary_20260716.zip</code></td>
@@ -2448,7 +2488,11 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>The bootloader, KIT H10 firmware, and content files are unchanged from previous releases.</strong> They are attached to v2.5.1 as well for convenience — if you have already installed them, <strong>there is nothing else to do.</strong> See <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.5.1/docs/bootloader/README.en.md">bootloader upload</a> and <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.5.1/docs/kit-h10-firmware/README.en.md">KIT H10 firmware</a>.</p>
+<p><strong>The bootloader has been replaced with a newer build (2026-07-30)</strong> — it adds a stability
+improvement that clears any leftover system-interrupt state just before handing over to the app.
+<strong>The previous bootloader keeps working fine, so this is not required</strong> — but if you get a chance
+to flash over SWD, updating to the latest build is recommended.
+The KIT H10 firmware and content files are unchanged from previous releases — if you have already installed them, there is nothing else to do. See <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.5.1/docs/bootloader/README.en.md">bootloader upload</a> and <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.5.1/docs/kit-h10-firmware/README.en.md">KIT H10 firmware</a>.</p>
 </blockquote>
 <hr />
 <h2 id="compatibility">Compatibility<a class="headerlink" href="#compatibility" title="Permanent link">&para;</a></h2>
@@ -2474,7 +2518,7 @@
 </tr>
 <tr>
 <td>Bootloader</td>
-<td><strong>Unchanged</strong> — no reinstall needed</td>
+<td><strong>Optional update</strong> — the existing one keeps working; updating to the latest build (stability improvement) is recommended</td>
 </tr>
 <tr>
 <td>KIT H10 firmware / content files</td>
