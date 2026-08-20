@@ -23,9 +23,8 @@ The XM10 and KIT H10 communicate with each other, so both sides must be running 
 
 | XM FW | Required KIT H10 FW |
 |:---:|:---:|
-| v2.3.0 (latest) | CM v2.3.0 / ESP32 v2.3.0 / SAM10 v2.3.0 |
-| v2.2.2 (previous) | CM v2.3.0 / ESP32 v2.3.0 / SAM10 v2.3.0 |
-| v2.0.x | CM v2.3.0 / ESP32 v2.3.0 / SAM10 v2.3.0 |
+| v2.6.0 (latest) | CM v2.4.0 / SAM10 v2.4.0 / ESP32 v2.3.0 |
+| v2.0.x – v2.5.1 | CM v2.3.0 / SAM10 v2.3.0 / ESP32 v2.3.0 |
 | v1.0.x | Factory-shipped version (no update needed) |
 
 If the versions don't match → update using the [KIT H10 Firmware Guide](../kit-h10-firmware/).

@@ -8,7 +8,7 @@
   <a href="#"><img src="https://img.shields.io/badge/Platform-STM32H7-blue.svg" alt="Platform"></a>
   <a href="#"><img src="https://img.shields.io/badge/OS-FreeRTOS-orange.svg" alt="OS"></a>
   <a href="#"><img src="https://img.shields.io/badge/Comm-CAN--FD-red.svg" alt="CAN-FD"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Examples-50-success.svg" alt="Examples"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Examples-45-success.svg" alt="Examples"></a>
   <a href="/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
 </p>
 
@@ -72,7 +72,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 단계별 상세: [docs/getting-started/](docs/getting-started/) (하드웨어 → 환경 구축 → 첫 빌드)
 
-> **H10 펌웨어 버전 확인**: XM v2.6.0 은 **KIT H10 v2.3.0** 과 짝입니다. 구버전이면 먼저 → [KIT H10 Firmware 가이드](docs/kit-h10-firmware/)
+> **H10 펌웨어 버전 확인**: XM v2.6.0 은 **KIT H10 v2.4.0** 과 짝입니다. 구버전이면 먼저 → [KIT H10 Firmware 가이드](docs/kit-h10-firmware/)
 
 ---
 
@@ -103,9 +103,9 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 | 수준 | 추천 순서 | 시간 |
 | :--- | :--- | :--- |
-| 입문 | Ex.00 → 01 → 04 → 07 → 10a → 11 | 3 시간 정도 |
-| 중급 | Ex.02 → 05b → 08 → 10b → 12 → 14 → 18 | 1 주 정도 (하루 1~2 시간) |
-| 고급 | Ex.03 → 09 → 10c → 15 → 16 → 17 → 19 → 20+ | 한 학기 (예제당 1~2 주씩 깊이) |
+| 입문 | Ex.00 → 01 → 04 → 07 → 09 → 11 | 3 시간 정도 |
+| 중급 | Ex.02 → 05b → 08 → 12 → 14 → 18 | 1 주 정도 (하루 1~2 시간) |
+| 고급 | Ex.03 → 13 → 15 → 16 → 17 → 19 → 20+ | 한 학기 (예제당 1~2 주씩 깊이) |
 | Physical AI 응용 | Ex.21 → 31 → 32 → 33 → 36 | 자기주도 |
 
 전체 인덱스 + 난이도별 정리: **[docs/tutorials/](docs/tutorials/)** · 한 학기 수업 진도표 예시도 같은 페이지 · 예제 카탈로그: **[examples/](examples/)**
