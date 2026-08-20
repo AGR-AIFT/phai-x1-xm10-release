@@ -197,7 +197,7 @@ USB CDC로 데이터를 PhAI 패킷(SOF + LEN + SEQ_ID + MODULE_ID + CRC16)으�
 
 **반환값**: `bool` — 전송 성공 시 `true`, 버퍼 풀 또는 연결 안 됨 시 `false`
 
-**⚠️ 호출 컨텍스트**: `Control_Loop()`의 2ms 주기 내에서 안전하게 호출 가능합니다 (Non-blocking).
+**⚠️ 호출 컨텍스트**: `Control_Loop()`의 1 ms 주기 내에서 안전하게 호출 가능합니다 (Non-blocking).
 
 **참고**: [`XM_SendUsbDataWithId`](#xm_sendusbdatawithid)
 

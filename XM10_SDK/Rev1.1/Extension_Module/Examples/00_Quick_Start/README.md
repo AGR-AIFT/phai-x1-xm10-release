@@ -25,7 +25,7 @@ XM10 보드 단독으로 다음을 확인합니다 (외부 HW 불필요):
 
 ## 2️⃣ 사전 지식 — 시작 전 알아둘 것
 
-- **Control_Setup / Control_Loop** — 부팅 시 1회 호출 + 매 2 ms (500 Hz) 반복 호출. ([architecture](../../docs/architecture/))
+- **Control_Setup / Control_Loop** — 부팅 시 1회 호출 + 매 1 ms (1 kHz) 반복 호출. ([architecture](../../docs/architecture/))
 - **TSM (Task State Machine)** — 상태 + 콜백 (`on_entry` / `on_loop`) 구조의 마이크로 FSM. 본 예제는 단일 상태만 사용. (참고: [Ex.03 FSM](../03_Button_LED_FSM/) 에서 멀티 상태로 확장)
 - **USB CDC** — XM10 ↔ PC 시리얼 가상 포트. 텍스트 또는 바이너리 전송.
 
@@ -42,12 +42,12 @@ void Control_Setup(void)                                     // ① 부팅 시 1
     XmStateConfig_t conf = {
         .id       = XM_STATE_USER_START,
         .on_entry = Run_Entry,                              // ③ 상태 진입 시 1회
-        .on_loop  = Run_Loop                                // ④ 매 2 ms 호출
+        .on_loop  = Run_Loop                                // ④ 매 1 ms 호출
     };
     XM_TSM_AddState(s_tsm, &conf);
 }
 
-void Control_Loop(void)                                      // ⑤ 매 2 ms System 호출
+void Control_Loop(void)                                      // ⑤ 매 1 ms System 호출
 {
     XM_TSM_Run(s_tsm);                                     // ⑥ TSM 디스패치
 }

@@ -19,7 +19,7 @@
 
 여기까지 약 2 시간입니다. 외부 부품 없이 보드 하나로 다 됩니다. Ex.04 부터 외부 입출력과 센서로 넓혀갑니다.
 
-**보드 리비전 호환성** — 45 개 예제 중 42 개는 Rev 1.1 / Rev 2.0 양쪽 모두 빌드·실행됩니다. 나머지 3 개(Ex.40 EMG Proportional Assist, Ex.41 IMU Hub Dashboard, Ex.42 EMG Hub Biofeedback)는 Rev 2.0 전용입니다. 그 외 두 가지 주의 사항이 있습니다.
+**보드 리비전 호환성** — 45 개 예제 중 42 개는 Rev 1.1 / Rev 2.0 양쪽 모두 빌드·실행됩니다. 나머지 3 개(Ex.40 EMG Proportional Assist, Ex.41 IMU Hub Dashboard, Ex.42 EMG Hub Biofeedback)는 Rev 2.0 전용이라 **Rev 1.1 SDK 에는 포함되지 않습니다**(그래서 Rev 1.1 은 42 개). 그 외 두 가지 주의 사항이 있습니다.
 
 - ⚠️ **본인 보드와 같은 Rev 의 ZIP** 을 받아야 합니다. `Rev1.1.zip` 과 `Rev2.0.zip` 은 보드별 main.h (MCU 핀 매핑) 가 다른 독립 SDK 입니다. 보드는 Rev 2.0 인데 `Rev1.1.zip` 을 풀어 빌드하면 — 빌드는 통과하지만 — 내장 버튼/LED 의 핀이 한 칸씩 어긋나서 Ex.01~03 의 버튼이 안 눌리거나 엉뚱한 `XM_BTN_N` 으로 잡힙니다. 보드 라벨을 먼저 확인하세요 ([보드 리비전 비교](../docs/hardware/README.md#보드-리비전-비교)).
 - 외부 GPIO 를 직접 다루는 예제 (Ex.04~06, Ex.05a~05d, Ex.16 외부 IMU 모드) 는 커넥터 위치·핀 라벨이 리비전마다 다릅니다. 시작 전에 본인 보드의 핀맵을 펴두세요 — [Rev 1.1 핀맵](../docs/hardware/external-gpio-rev1.1.md) / [Rev 2.0 핀맵](../docs/hardware/external-gpio-rev2.0.md).
@@ -204,7 +204,7 @@ Stage 5      사람과 AI 가 함께
 | [08](08_CDC_Sensor_Print/) | sprintf 센서 모니터링 | 초급 | `sprintf` + 논블로킹 타이머 |
 | [09](09_CDC_Stream/) | **PhAI Studio 실시간 스트리밍** | 중급 | `XM_SetUsbCustomMeta`, `XM_SendUsbDataWithId` |
 
-> **Ex.09 핵심**: Total Data(0x20) 425B 자동 스트리밍 구조 이해 + User Custom(0xF0) 추가 채널 등록 방법
+> **Ex.09 핵심**: Total Data(0x20) 365B 자동 스트리밍 구조 이해 + User Custom(0xF0) 추가 채널 등록 방법
 
 데이터 수집은 Ex.07~09 CDC 로 합니다.
 

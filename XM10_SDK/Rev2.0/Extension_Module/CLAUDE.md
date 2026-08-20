@@ -41,7 +41,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **Ethernet (RJ45)** | ✅ LWIP 미들웨어 포함 | ❌ 없음 |
 | **PSRAM** | ✅ 외부 PSRAM (memory-mapped) | ❌ |
 | **RTC** | ✅ 내장 RTC + 배터리 백업 | ❌ |
-| **USB Type-C** | ✅ C-to-C DRP 지원 (CDC/MSC 모두) | A-to-C + MSC 만 |
+| **USB Type-C** | ✅ C-to-C 직결 지원 | A-to-C 케이블 필요 |
 | **RAM_D2 여유** | 충분 | 99.21% 사용 (Rev 1.1 위험 주의) |
 | **FDCAN2 센서허브 (IMU/EMG Hub)** | ✅ Ex.41/42 지원 | ❌ 미지원 |
 
@@ -129,7 +129,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 |------|------|---------------|
 | **PhAI Studio** | 실시간 데이터 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
 | **angel Sensor Studio** | 진단/검증 GUI (Python/PySide6, 별도 배포) | FES/EMG/IMU Hub 등 — XM10 과 CAN-FD 로 연계 가능 |
-| **PythonDecoder** | USB MSC 로그 CSV 후처리 | 본 ZIP 에는 포함되지 않음 — [GitHub 레포](https://github.com/AGR-EXO/Extension_Module) 의 `PythonDecoder/` 에서 별도로 받으세요 |
+| **PythonDecoder** | USB-CDC 실시간 수신 파이썬 샘플 | 본 ZIP 에는 포함되지 않음 — [GitHub 레포](https://github.com/AGR-EXO/Extension_Module) 의 `PythonDecoder/CDC/` 에서 별도로 받으세요 |
 
 ---
 

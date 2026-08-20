@@ -30,7 +30,7 @@
 - **FSM (Finite State Machine)** — 시스템을 유한한 "상태" 의 집합으로 모델. 각 상태에서 동작은 다르고, 이벤트로만 전환.
 - **TSM 콜백 3종**:
    - `on_entry` — 상태 진입 시 **1회**만 (예: LED 패턴 설정)
-   - `on_loop` — 매 2 ms 반복 (예: 이벤트 감시 + 메인 로직)
+   - `on_loop` — 매 1 ms 반복 (예: 이벤트 감시 + 메인 로직)
    - `on_exit` — 상태 나갈 때 1회 (본 예제에선 미사용)
 - **롱 프레스** — 의도하지 않은 짧은 클릭으로 모드가 바뀌지 않게 하는 안전 장치. `XM_BTN_LONG_PRESS` 이벤트로 트리거.
 
@@ -48,7 +48,7 @@ void Control_Setup(void)                                     // ① 부팅 시 1
     XmStateConfig_t sb = {                                 // ③ STANDBY 등록
         .id       = XM_STATE_STANDBY,
         .on_entry = Standby_Entry,                          //    진입 시 1회
-        .on_loop  = Standby_Loop                            //    매 2 ms
+        .on_loop  = Standby_Loop                            //    매 1 ms
     };
     XM_TSM_AddState(s_tsm, &sb);
 

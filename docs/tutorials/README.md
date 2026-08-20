@@ -101,7 +101,7 @@ PC 와 실시간으로 메시지를 주고받고 데이터를 스트리밍합니
 | :---: | :--- | :---: | :--- |
 | [07](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) | USB 시리얼 기초 | ⭐⭐ | PC 터미널로 텍스트 메시지 |
 | [08](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) | 센서 데이터 모니터링 | ⭐⭐ | 실시간 데이터 sprintf 출력 |
-| [09](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | 고속 바이너리 스트리밍 | ⭐⭐⭐ | PhAI Studio 호환 프로토콜, 500 Hz 전송 |
+| [09](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | 고속 바이너리 스트리밍 | ⭐⭐⭐ | PhAI Studio 호환 프로토콜, 1 kHz 전송 |
 
 > 수집한 스트림을 PC 에 저장·분석하려면 PhAI Studio 녹화 또는 레포 내 `PythonDecoder/CDC` 파이썬 샘플을 사용하세요. (온보드 파일 저장은 v2.5.0 에서 제거 — 향후 HW 리비전에서 SD카드로 지원 예정)
 

@@ -14,7 +14,7 @@
  * └─────────────────────────────────────────────────────────────────┘
  *
  * [Total Data Packet (0x20)]
- * - 425B 구조체(H10 PDO, GRF, IMU Hub, External IO 등)를 1kHz 자동 전송
+ * - 365B 구조체(H10 PDO, GRF, IMU Hub, External IO 등)를 1kHz 자동 전송
  * - 사용자 코드 불필요 — PhAI Studio 연결만 하면 자동 수신됨
  *
  * [User Custom (0xF0~0xFE)]
@@ -106,7 +106,7 @@ void Control_Setup(void)
      * [1] Total Data Packet (Module ID 0x20) — 사용자 코드 불필요
      *
      * System이 H10 PDO(관절각/토크/IMU), GRF, IMU Hub, External IO 등
-     * 425B를 USB 연결 시 자동으로 1kHz 스트리밍합니다.
+     * 365B를 USB 연결 시 자동으로 1kHz 스트리밍합니다.
      * PhAI Studio에서 0x20 채널을 선택하면 즉시 모니터링 가능합니다.
      *
      * → 아무 코드도 필요 없음.

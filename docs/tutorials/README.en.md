@@ -101,7 +101,7 @@ Exchange real-time messages with a PC and stream data. Essential for debugging a
 | :---: | :--- | :---: | :--- |
 | [07](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) | USB serial basics | ⭐⭐ | Send text messages to a PC terminal |
 | [08](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) | Sensor data monitoring | ⭐⭐ | Real-time `sprintf` output of sensor data |
-| [09](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | High-speed binary streaming | ⭐⭐⭐ | PhAI Studio-compatible protocol, 500 Hz transmission |
+| [09](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | High-speed binary streaming | ⭐⭐⭐ | PhAI Studio-compatible protocol, 1 kHz transmission |
 
 > To save and analyze a captured stream on the PC, use PhAI Studio recording or the `PythonDecoder/CDC` Python samples in the repo. (On-board file storage was removed in v2.5.0 — SD card support is planned for a future HW revision.)
 

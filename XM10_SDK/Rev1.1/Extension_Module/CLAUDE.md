@@ -41,7 +41,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **Ethernet (RJ45)** | ❌ **미탑재** | ✅ LWIP 미들웨어 포함 |
 | **PSRAM** | ❌ 없음 | ✅ 외부 PSRAM |
 | **RTC** | ❌ 배터리 백업 없음 | ✅ 내장 RTC + 배터리 백업 |
-| **USB Type-C** | A-to-C + MSC 만 (C-to-C DRP **미지원**) | ✅ C-to-C DRP 지원 |
+| **USB Type-C** | A-to-C 케이블 필요 (C-to-C 직결 **미지원**) | ✅ C-to-C 직결 지원 |
 | **RAM_D2 여유** | **99.21% 사용 — 위험** | 충분 |
 | **FDCAN2 센서허브 (IMU/EMG Hub)** | ❌ 미지원 | ✅ Ex.41/42 지원 |
 
@@ -50,7 +50,12 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 - PSRAM / RTC 페리페럴 코드 → 본 SDK 에는 **없음**
 - FDCAN2 센서허브 버스 (IMU/EMG Hub, Ex.41/42) 미지원
 
-코드 작성 시 Ethernet/PSRAM/RTC 관련 함수를 호출하면 빌드 실패 또는 링크 에러. Rev 2.0 전용 예제 (PSRAM `19_Memory_*`, FDCAN2 센서허브 Ex.41/42 등) 는 본 SDK 에서 동작하지 않습니다.
+코드 작성 시 Ethernet/PSRAM/RTC 관련 함수를 호출하면 빌드 실패 또는 링크 에러가 납니다.
+
+예제 관련:
+- **Ex.40 · 41 · 42** — Rev 2.0 전용이라 본 SDK 에 아예 들어 있지 않습니다.
+- **Ex.36** — 파일은 들어 있지만 Rev 2.0 전용입니다. 빌드하면 link 실패하므로 Ex.35 까지 진행하세요 (예제 헤더에도 같은 안내가 있습니다).
+- 그 외 39 개는 Rev 1.1 에서 정상 동작합니다.
 
 ### ⚠️ Rev 1.1 특히 주의할 점
 
@@ -60,13 +65,14 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 - 빌드 후 `.map` 파일에서 RAM_D2 사용량 확인 습관화
 
 **2. USB-C 케이블 호환성**
-- USB-A to C 케이블 → ✅ CDC + MSC 모두 정상
+- USB-A to C 케이블 → ✅ 정상 인식
 - USB-C to C 케이블 → ❌ **인식 실패 가능** (DRP 토글 HW 미지원)
 - 케이블 인식 안 되면 A-to-C 로 교체 후 재시도
 
-**3. SD카드 미탑재 (보드 자체)**
-- SD카드 슬롯 없음. SD 관련 예제 (Ex.10c 등 일부) 는 동작 안 함.
-- 로깅은 USB MSC 만 가능.
+**3. 온보드 저장장치 없음**
+- SD카드 슬롯이 없습니다.
+- 데이터 수집은 **USB-CDC 실시간 스트리밍**으로 합니다 (PhAI Studio 녹화 또는
+  `PythonDecoder/CDC` 파이썬 샘플). 배우는 순서는 Ex.07 → 08 → 09.
 
 ---
 
@@ -76,7 +82,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 2. **[Ex.00 Quick Start](examples/00_Quick_Start/)** — 보드 smoke test (⭐)
 3. **[Ex.01~03 Button & LED](examples/01_Button_LED_Basic/)** — 디지털 IO 기본 (⭐~⭐⭐)
 4. **[전체 학습 로드맵](docs/tutorials/README.md)** — Rev 1.1 에서 동작하는 예제만 시도
-5. **Rev 2.0 전용 예제 (ETH/PSRAM/RTC/FDCAN2 센서허브 Ex.41/42) 는 본 SDK 에서 동작 안 함** — 보드 업그레이드 필요
+5. **Ex.36 은 Rev 2.0 전용** — 본 SDK 에서 link 실패합니다. Ex.35 까지 진행하세요
 
 ---
 
@@ -143,7 +149,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 |------|------|---------------|
 | **PhAI Studio** | 실시간 데이터 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
 | **angel Sensor Studio** | 진단/검증 GUI (Python/PySide6, 별도 배포) | FES/EMG/IMU Hub 등 — XM10 과 CAN-FD 로 연계 가능 |
-| **PythonDecoder** | USB MSC 로그 CSV 후처리 | 본 ZIP 에는 포함되지 않음 — [GitHub 레포](https://github.com/AGR-EXO/Extension_Module) 의 `PythonDecoder/` 에서 별도로 받으세요 |
+| **PythonDecoder** | USB-CDC 실시간 수신 파이썬 샘플 | 본 ZIP 에는 포함되지 않음 — [GitHub 레포](https://github.com/AGR-EXO/Extension_Module) 의 `PythonDecoder/CDC/` 에서 별도로 받으세요 |
 
 ---
 

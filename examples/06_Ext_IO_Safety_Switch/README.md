@@ -132,6 +132,6 @@ static void Error_Loop(void)
 | ERROR 에서 자동 복귀 | 사용자가 `Error_Loop` 에 자동 transition 추가 | **금지**. E-Stop 은 항상 사용자 확인 후 |
 | H10 무반응 | `XM_SetControlMode(XM_CTRL_CONTROL)` 누락 또는 H10 미연결 | Entry 호출 확인 + CAN-FD 연결 |
 | 모든 상태에서 LED 1 만 깜빡 | Active_Entry 가 LED 1 도 건드림 (코드 오타) | LED 2 = ACTIVE, LED 1 = ERROR 표시 |
-| H10 토크가 너무 빠르게 증가 | `torque += 0.01f` 가 2 ms 주기 → 1초에 5 Nm | 사용자 실험 안전을 위해 H10 분리 또는 ramp 속도 ↓ |
+| H10 토크가 너무 빠르게 증가 | `torque += 0.01f` 가 1 ms 주기 → 1초에 10 Nm | 사용자 실험 안전을 위해 H10 분리 또는 ramp 속도 ↓ |
 
 막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)

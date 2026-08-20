@@ -33,7 +33,7 @@ Hip Angles -> RH: 13.45, LH: -7.92
 
 - **`sprintf(buf, "fmt %f", val)`** — C 표준 라이브러리. 문자열에 변수 값을 포맷팅. `%f` 는 float, `%d` 는 int.
 - **`%.2f`** — 소수점 둘째 자리까지. 콘솔 가독성을 위해 자주 사용.
-- **논블로킹 타이머 (Non-blocking timer)** — `osDelay()` 같은 blocking 호출 대신 `XM_GetTick()` 으로 경과 시간 측정. 500 Hz 사용자 루프를 막지 않음.
+- **논블로킹 타이머 (Non-blocking timer)** — `osDelay()` 같은 blocking 호출 대신 `XM_GetTick()` 으로 경과 시간 측정. 1 kHz 사용자 루프를 막지 않음.
 - **`XM.status.h10.*`** — System 이 자동으로 PDO 에서 읽어 채워주는 H10 데이터 ([api-ref](../../docs/api-reference/02-h10-control-n-data.md)). 사용자 코드가 직접 접근 가능.
 - **`XM_GetTick()`** — 부팅 이후 경과 ms (32-bit, ~49.7일 wrap).
 

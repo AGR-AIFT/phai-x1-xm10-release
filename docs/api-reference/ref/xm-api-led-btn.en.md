@@ -206,7 +206,7 @@ The internal engine function that computes LED blink timing and performs button 
 
 **Returns**: None (`void`)
 
-**⚠️ Calling context**: Assume `Control_Setup()` / `Control_Loop()` context. `core_process` calls this automatically at a 2 ms (500 Hz) interval during its input-collection stage, so **you normally do not need to call it yourself.** However, if this function stops being called periodically (e.g., the User Task gets stuck in an infinite loop), Blink/Heartbeat/Oneshot effects and button events will stop updating entirely.
+**⚠️ Calling context**: Assume `Control_Setup()` / `Control_Loop()` context. `core_process` calls this automatically at a 1 ms (1 kHz) interval during its input-collection stage, so **you normally do not need to call it yourself.** However, if this function stops being called periodically (e.g., the User Task gets stuck in an infinite loop), Blink/Heartbeat/Oneshot effects and button events will stop updating entirely.
 
 **Example**
 

@@ -39,7 +39,7 @@ void Control_Setup(void)                                     // ① 부팅 시 1
     s_tsm = XM_TSM_Create(XM_STATE_USER_START);
     XmStateConfig_t conf = {
         .id      = XM_STATE_USER_START,
-        .on_loop = Run_Loop                                // ② 매 2 ms 호출
+        .on_loop = Run_Loop                                // ② 매 1 ms 호출
     };
     XM_TSM_AddState(s_tsm, &conf);
 }
@@ -58,7 +58,7 @@ static void Run_Loop(void)
 
 전체 코드: [`button_led_basic.c`](button_led_basic.c)
 
-> 🧒 한 줄 요약: 매 2 ms마다 ③ "버튼 눌렀나?" 물어보고, 결과를 ⑤/⑥ LED 에 반영. 이것이 폴링.
+> 🧒 한 줄 요약: 매 1 ms마다 ③ "버튼 눌렀나?" 물어보고, 결과를 ⑤/⑥ LED 에 반영. 이것이 폴링.
 
 ---
 

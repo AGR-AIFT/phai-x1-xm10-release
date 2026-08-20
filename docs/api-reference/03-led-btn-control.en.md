@@ -17,7 +17,7 @@ This module is time-driven. Behind the scenes, internal **Managers** run continu
 ### The Core Engine: `XM_IO_Update()`
 
   * **Role:** This is the **engine** that calculates LED blink timing, analyzes button signals, removes noise (debouncing), and generates events.
-  * **Execution:** Called automatically at a **2 ms (500 Hz) interval** by `core_process`. You do not need to call it yourself, but understanding its role is important.
+  * **Execution:** Called automatically at a **1 ms (1 kHz) interval** by `core_process`. You do not need to call it yourself, but understanding its role is important.
   * **Flow:**
     1.  User calls `XM_SetLedEffect` → settings are stored.
     2.  `XM_IO_Update` runs periodically → toggles the LED ON/OFF as time passes.
