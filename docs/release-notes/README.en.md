@@ -4,6 +4,11 @@ This page lists release attachments, compatibility matrices, and known issues fo
 
 | Version | Date | Notes |
 |---------|------|-------|
+| [v2.6.0](v2.6.0.md) | 2026-08-20 | Safety release — safe CONTROL→MONITOR transition + watchdog (8 s) & no-reboot-loop + 12 hardened examples + `forwardVelocity` 60× fix + Ext_Sync |
+| [v2.5.1](v2.5.1.md) | 2026-07-29 | Rev 2.0 boot-hang hotfix (`agr_retarget.c` constructor left the interrupt mask set) |
+| [v2.5.0](v2.5.0.md) | 2026-07-24 | Removed USB-MSC file logging — data capture consolidated on USB-CDC live streaming |
+| [v2.4.1](v2.4.1.md) | 2026-07-24 | Rev 2.0 float `printf`(`%f`) / `malloc` heap fix + thread-safe C standard library + USB log decoder as an installable executable |
+| [v2.4.0](v2.4.0.md) | 2026-07-21 | USB serial usability (terminal text examples appear automatically) + simplified USB mode API (Rev 2.0) |
 | [v2.3.1](v2.3.1.md) | 2026-07-18 | GRF-module boot stability + comm/storage hardening + ZIP build-out-of-the-box fixes + hipTorque unit (Nm) change |
 | [v2.3.0](v2.3.0.md) | 2026-07-15 | 2 sensor-hub examples (IMU/EMG Hub) + SDK firmware/example alignment + version.h 2.3.0 fix |
 | [v2.2.2](v2.2.2.md) | 2026-05-20 | 9 example code cleanups + consistent Rev 2.0-only labels in 4 locations of Ex.36 |

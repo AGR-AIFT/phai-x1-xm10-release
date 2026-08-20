@@ -4,6 +4,41 @@
 
 ---
 
+## [v2.6.0] — 2026-08-20
+
+> **Rev 1.1 · Rev 2.0 공통 안전성 릴리즈.** 전수 리뷰 결과를 반영해 "제어를 끄면 확실히 꺼지고, 펌웨어가 멈추면 스스로 되살아나는" 동작을 갖췄습니다. 삭제된 API 는 없으며 사용자 코드는 재빌드만 하면 됩니다 — 다만 **`MONITOR` 전환 동작과 `forwardVelocity` 값이 바뀌었습니다**(아래 Changed 참고). Rev 1.1 은 v2.5.0 이후 첫 업데이트입니다.
+
+### Added
+* **`XM_EmergencyDisengage()`** — 램프다운을 생략하고 즉시 토크 0 을 확정 전송합니다.
+* **`XM_GetAppliedControlMode()`** — 요청(`XM_SetControlMode`)이 아닌 **실제 적용** 모드(`CONTROL` / `MONITOR` / `TRANSITION`)를 반환합니다.
+* **`xm_api_safety.h`** — header-only 공통 안전 헬퍼. `XM_SafeTorque_Init/Reset/Step`(유한값 가드 + 클램프 + 진입 소프트스타트 + slew), `XM_SafeAssistLevel()`, `XM_SafeIsFresh()`. `xm_api.h` 가 이미 포함합니다.
+* **하드웨어 워치독 (IWDG, 약 8 초)** — `Control_Loop` 가 도는 UserTask 가 1 kHz 로 갱신합니다. 초기화 단계 실패는 그 자리에서 halt 하고, 정상 동작 중의 행(hang)만 리셋으로 회복시킵니다. 부팅 단계·리셋 원인 마커도 함께 기록합니다.
+* **Ext_Sync — 외부 sync box TTL 입력 (DIO8)** — Total Data 에 `sync_save_active` / `sync_din_level` / `sync_din_edge_count` 3 채널 추가. 부팅 시 읽은 레벨을 idle 로 래치해 **극성-불문**으로 저장 구간을 판정합니다. 기존 예약(reserved) 영역을 사용해 **패킷 크기는 365 B 그대로**이며 뒤쪽 채널 오프셋이 변하지 않습니다.
+* **진단 확장 (Rev 2.0)** — EMCY 누적 카운터, 부팅 단계별 실패 비트맵, 태스크 스택 watermark. 펌웨어 빌드에 Git 커밋 해시를 주입합니다.
+
+### Changed
+* **`XM_SetControlMode(XM_CTRL_MONITOR)` 가 즉시 차단이 아니라 3 단계 안전 전환을 거칩니다** — 토크 지수 감쇠(τ=100 ms) → 0 확정 전송(프레임 유실 대비 반복) → P/I 벡터 해제 → 출력 차단. 총 0.3~0.6 초 소요되며 그동안 사용자 토크 명령은 반영되지 않습니다. 기존에는 전송이 즉시 끊겨 **CM/MD 에 마지막 비-0 토크가 latch** 되는 ZOH silent-drop 이 있었습니다.
+* **`MONITOR` 모드가 완전 차단이 되었습니다** — 토크·벡터 어떤 제어 명령도 전송하지 않습니다 (Control/Monitor 경로 분리).
+* **예제 12 종 안전 강화** — 진입 소프트스타트/slew(Ex.14·21·27·30·33), NC 정지 스위치·출력 클램프·정지 램프·센서 stale 타임아웃(Ex.06·13·17·26·32), 모드 전환 정합·호밍 fail-closed·이중 A→Nm 변환 제거(Ex.11·12·15·35·36). 예제 번호와 학습 내용은 그대로입니다.
+* **착용 전제 예제 4 종에 벤치 파라미터 안내 주석** (Ex.15·21·30·33) — 미착용 상태는 관성이 작아 진동/발산하므로 링크 단독 물성(0.184 kg / 0.1264 m)으로 치환하는 방법을 파일 헤더에 명시했습니다.
+* **부트로더 바이너리 갱신** — BootConfig 영역 ECC 손상 시 BusFault 를 감지해 설정을 초기화하고 정상 부팅합니다. 앱 진입 시 pending 시스템 예외(SysTick/PendSV)도 정리합니다. SWD 재설치를 권장합니다.
+
+### Fixed
+* **`XM.status.h10.forwardVelocity` 60 배 과대 정정** — 분당→초당 환산 누락. 이 값을 제어에 사용했다면 **게인 재조정이 필요**하며, 과거 데이터와 혼용하면 안 됩니다.
+* **Ex.14 미분킥 제거** — PD 의 미분항을 오차가 아닌 **측정값**에 걸어(derivative-on-measurement) 목표 스텝 시 D 항이 튀던 원인을 제거했습니다. 목표가 일정한 구간에서는 기존과 수학적으로 동일합니다.
+* **무한 재부팅 방지** — 초기화 실패 시 재부팅을 반복하던 `Error_Handler` 경로를 halt 로 재설계했습니다.
+* **EMG TPDO1 길이 검증 위치 정정** — 디코드 이전 호출부에서 검증하도록 옮겼습니다.
+* **USB-CDC 안정화 (Rev 2.0)** — TX epoch/디스크립터 처리, role 전환 가드, Boot FTP task defer.
+* **USB 로거 무한 스핀 해소 (Rev 2.0)** — 게이트 없는 유한 drain 으로 분리했습니다.
+* **문서 정정** — `wearable-safety` 의 "워치독 없음" 문구를 IWDG 도입 사실 + "워치독은 비상 정지가 아니다" 로 정정, Task 생성 가이드에 8 초 CPU 독점 제약 추가, Ex.31 README 의 `rightHipTorque` 단위(전류 A → 관절 토크 Nm) 자기모순 정정.
+
+### Notes
+* 삭제된 공개 API 없음. 옛 이름 `XM_CTRL_TORQUE` 는 `XM_CTRL_CONTROL` 의 alias 로 유지됩니다.
+* 예제 개수 변동 없음 (Rev 2.0 45 개 / Rev 1.1 42 개).
+* KIT H10 펌웨어·컨텐츠 파일은 이전과 동일합니다.
+
+---
+
 ## [v2.5.1] — 2026-07-29
 
 > **Rev 2.0 전용 긴급 수정 (Rev 1.1 영향 없음).** v2.4.1 · v2.5.0 의 Rev 2.0 펌웨어가 부팅 도중 멈추던 문제를 고쳤습니다 (LED 무반응 · PC 에 COM 포트 미출현). 기능 변경은 없으며, Rev 2.0 사용자는 재빌드·업로드만 하면 됩니다.
