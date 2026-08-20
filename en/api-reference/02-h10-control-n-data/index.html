@@ -3285,7 +3285,7 @@ The XM10 firmware implements a <strong>Facade pattern</strong> so users can read
 <p><strong>Output (Command Flushing):</strong></p>
 <ul>
 <li>After the user loop finishes, the system checks whether anything in <code>XM.command</code> has changed.</li>
-<li>When in torque control mode (<code>XM_CTRL_CONTROL</code>), updated commands are dispatched to the actual hardware (CAN Bus).</li>
+<li>When in control mode (<code>XM_CTRL_CONTROL</code>), updated commands are dispatched to the actual hardware (CAN Bus).</li>
 </ul>
 </li>
 <li>
@@ -3379,38 +3379,39 @@ The actual fields received may be revised in future firmware versions.</p>
 <a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">forwardVelocity</span><span class="p">;</span><span class="w">  </span><span class="c1">// Forward walking velocity (m/s)</span>
 <a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>
 <a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">    </span><span class="c1">// --- Motor Data ---</span>
-<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">    </span><span class="c1">// [Note] leftHipTorque / rightHipTorque contain motor current (A), despite the field name.</span>
-<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">    </span><span class="c1">//        Joint torque conversion: τ_joint[Nm] ≈ Kt(0.085) × gear(18.75) × hipTorque[A] ≈ 1.594 × hipTorque</span>
-<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipTorque</span><span class="p">;</span><span class="w">      </span><span class="c1">// Left motor current (A) — unit is A, not Nm</span>
-<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipTorque</span><span class="p">;</span><span class="w">     </span><span class="c1">// Right motor current (A) — unit is A, not Nm</span>
-<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipMotorAngle</span><span class="p">;</span><span class="w">  </span><span class="c1">// Left motor encoder angle (degrees)</span>
-<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipMotorAngle</span><span class="p">;</span><span class="w"> </span><span class="c1">// Right motor encoder angle</span>
-<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>
-<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a><span class="w">    </span><span class="c1">// --- IMU Data (detailed inertial sensor information) ---</span>
-<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="w">    </span><span class="c1">// Orientation</span>
-<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuFrontalRoll</span><span class="p">;</span><span class="w">    </span><span class="c1">// Left hip IMU Frontal Roll angle (degrees)</span>
-<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuFrontalRoll</span><span class="p">;</span>
-<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuSagittalPitch</span><span class="p">;</span><span class="w">  </span><span class="c1">// Left hip IMU Sagittal Pitch angle (degrees)</span>
-<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuSagittalPitch</span><span class="p">;</span>
-<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuTransverseYaw</span><span class="p">;</span><span class="w">  </span><span class="c1">// Left hip IMU Transverse Yaw angle (degrees)</span>
-<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuTransverseYaw</span><span class="p">;</span>
-<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a>
-<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a><span class="w">    </span><span class="c1">// Global Acceleration (m/s^2)</span>
-<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalAccX</span><span class="p">;</span><span class="w"> </span><span class="c1">// Left hip IMU global acceleration</span>
-<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalAccY</span><span class="p">;</span>
-<a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalAccZ</span><span class="p">;</span>
-<a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalAccX</span><span class="p">;</span>
-<a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalAccY</span><span class="p">;</span>
-<a id="__codelineno-5-51" name="__codelineno-5-51" href="#__codelineno-5-51"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalAccZ</span><span class="p">;</span>
-<a id="__codelineno-5-52" name="__codelineno-5-52" href="#__codelineno-5-52"></a>
-<a id="__codelineno-5-53" name="__codelineno-5-53" href="#__codelineno-5-53"></a><span class="w">    </span><span class="c1">// Global Gyroscope (deg/s)</span>
-<a id="__codelineno-5-54" name="__codelineno-5-54" href="#__codelineno-5-54"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalGyrX</span><span class="p">;</span><span class="w"> </span><span class="c1">// Left hip IMU global gyroscope</span>
-<a id="__codelineno-5-55" name="__codelineno-5-55" href="#__codelineno-5-55"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalGyrY</span><span class="p">;</span>
-<a id="__codelineno-5-56" name="__codelineno-5-56" href="#__codelineno-5-56"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalGyrZ</span><span class="p">;</span>
-<a id="__codelineno-5-57" name="__codelineno-5-57" href="#__codelineno-5-57"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrX</span><span class="p">;</span>
-<a id="__codelineno-5-58" name="__codelineno-5-58" href="#__codelineno-5-58"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrY</span><span class="p">;</span>
-<a id="__codelineno-5-59" name="__codelineno-5-59" href="#__codelineno-5-59"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrZ</span><span class="p">;</span>
-<a id="__codelineno-5-60" name="__codelineno-5-60" href="#__codelineno-5-60"></a><span class="p">}</span><span class="w"> </span><span class="n">XmH10Data_t</span><span class="p">;</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">    </span><span class="c1">// leftHipTorque / rightHipTorque : estimated joint torque [Nm] — use as-is.</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">    </span><span class="c1">//   There is no torque sensor; the value is converted internally from motor</span>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">    </span><span class="c1">//   current (Kt x gear ratio ~= 1.594). Multiplying by Kt again double-converts.</span>
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipTorque</span><span class="p">;</span><span class="w">      </span><span class="c1">// Left joint torque estimate [Nm]</span>
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipTorque</span><span class="p">;</span><span class="w">     </span><span class="c1">// Right joint torque estimate [Nm]</span>
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipMotorAngle</span><span class="p">;</span><span class="w">  </span><span class="c1">// Left motor encoder angle (degrees)</span>
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipMotorAngle</span><span class="p">;</span><span class="w"> </span><span class="c1">// Right motor encoder angle</span>
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="w">    </span><span class="c1">// --- IMU Data (detailed inertial sensor information) ---</span>
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="w">    </span><span class="c1">// Orientation</span>
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuFrontalRoll</span><span class="p">;</span><span class="w">    </span><span class="c1">// Left hip IMU Frontal Roll angle (degrees)</span>
+<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuFrontalRoll</span><span class="p">;</span>
+<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuSagittalPitch</span><span class="p">;</span><span class="w">  </span><span class="c1">// Left hip IMU Sagittal Pitch angle (degrees)</span>
+<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuSagittalPitch</span><span class="p">;</span>
+<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuTransverseYaw</span><span class="p">;</span><span class="w">  </span><span class="c1">// Left hip IMU Transverse Yaw angle (degrees)</span>
+<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuTransverseYaw</span><span class="p">;</span>
+<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a>
+<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a><span class="w">    </span><span class="c1">// Global Acceleration (m/s^2)</span>
+<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalAccX</span><span class="p">;</span><span class="w"> </span><span class="c1">// Left hip IMU global acceleration</span>
+<a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalAccY</span><span class="p">;</span>
+<a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalAccZ</span><span class="p">;</span>
+<a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalAccX</span><span class="p">;</span>
+<a id="__codelineno-5-51" name="__codelineno-5-51" href="#__codelineno-5-51"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalAccY</span><span class="p">;</span>
+<a id="__codelineno-5-52" name="__codelineno-5-52" href="#__codelineno-5-52"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalAccZ</span><span class="p">;</span>
+<a id="__codelineno-5-53" name="__codelineno-5-53" href="#__codelineno-5-53"></a>
+<a id="__codelineno-5-54" name="__codelineno-5-54" href="#__codelineno-5-54"></a><span class="w">    </span><span class="c1">// Global Gyroscope (deg/s)</span>
+<a id="__codelineno-5-55" name="__codelineno-5-55" href="#__codelineno-5-55"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalGyrX</span><span class="p">;</span><span class="w"> </span><span class="c1">// Left hip IMU global gyroscope</span>
+<a id="__codelineno-5-56" name="__codelineno-5-56" href="#__codelineno-5-56"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalGyrY</span><span class="p">;</span>
+<a id="__codelineno-5-57" name="__codelineno-5-57" href="#__codelineno-5-57"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalGyrZ</span><span class="p">;</span>
+<a id="__codelineno-5-58" name="__codelineno-5-58" href="#__codelineno-5-58"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrX</span><span class="p">;</span>
+<a id="__codelineno-5-59" name="__codelineno-5-59" href="#__codelineno-5-59"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrY</span><span class="p">;</span>
+<a id="__codelineno-5-60" name="__codelineno-5-60" href="#__codelineno-5-60"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrZ</span><span class="p">;</span>
+<a id="__codelineno-5-61" name="__codelineno-5-61" href="#__codelineno-5-61"></a><span class="p">}</span><span class="w"> </span><span class="n">XmH10Data_t</span><span class="p">;</span>
 </code></pre></div>
 <p>Bold fields are currently being received. Additional fields may be added or modified in future releases.</p>
 <table>
@@ -4010,7 +4011,7 @@ To enable real-time torque control, call <code>XM_SetControlMode</code> with <co
 <p><strong>Parameters</strong>
   * <code>mode</code>: The mode to set.
       * <code>XM_CTRL_MONITOR</code> (0): <strong>Monitoring mode.</strong> No control commands are sent. (Default, safe)
-      * <code>XM_CTRL_CONTROL</code> (1): <strong>Torque control mode.</strong> Staged torque commands are sent to the motors.</p>
+      * <code>XM_CTRL_CONTROL</code> (1): <strong>Control mode.</strong> Staged torque and vector commands are sent.</p>
 <p><strong>Safety Logic</strong>
   * Whenever the mode changes, <strong>all torque commands are immediately reset to 0.0 internally</strong>. This prevents sudden jerk at the moment control begins.</p>
 <p><strong>Returning to MONITOR takes time (v2.6.0+)</strong></p>
@@ -4088,8 +4089,7 @@ By default, the built-in assist algorithm is disabled when XM10 connects to H10.
 </code></pre></div></p>
 <hr />
 <h2 id="data-outputs-control-inputs">Data Outputs (Control Inputs)<a class="headerlink" href="#data-outputs-control-inputs" title="Permanent link">&para;</a></h2>
-<p><code>P-Vector</code>, <code>I-Vector</code>, and <code>F-Vector</code> (PIF-Vectors), together with various other control commands, let you precisely design the motion of <code>KIT H10</code>.
-<strong>For a detailed explanation of pre-defined control techniques such as PIF-Vectors, refer to <code>angel Robotics-Control Algorithm</code> (coming soon).</strong></p>
+<p><code>P-Vector</code>, <code>I-Vector</code>, and <code>F-Vector</code> (PIF-Vectors), together with various other control commands, let you precisely design the motion of <code>KIT H10</code>.</p>
 <h3 id="xm_sendpvector"><code>XM_SendPVector()</code><a class="headerlink" href="#xm_sendpvector" title="Permanent link">&para;</a></h3>
 <p>Sends a <strong>position-based trajectory</strong> (<code>P-Vector</code>) that commands the joint to move to a target position with a smooth trajectory over a specified duration.
 <strong>An impedance control parameter (<code>I-Vector</code>) must be configured beforehand.</strong>
@@ -4306,7 +4306,26 @@ None.</p>
 </tbody>
 </table>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="p">(</span><span class="n">coming</span><span class="w"> </span><span class="n">soon</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">    </span><span class="cm">/* Vector commands are only sent in CONTROL mode */</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_CONTROL</span><span class="p">);</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">    </span><span class="cm">/* See the table above for the meaning and unit of each member */</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="w">    </span><span class="n">FVector_t</span><span class="w"> </span><span class="n">fvec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="w">        </span><span class="p">.</span><span class="n">modeIdx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="w">        </span><span class="p">.</span><span class="n">tauMax</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">   </span><span class="cm">/* 2.00 (scaled by 100) */</span>
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="w">        </span><span class="p">.</span><span class="n">delay</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="w">        </span><span class="p">.</span><span class="n">zero</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a>
+<a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a><span class="w">    </span><span class="n">XM_SendFVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">fvec</span><span class="p">);</span><span class="w">   </span><span class="cm">/* right hip */</span>
+<a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a><span class="p">}</span>
+<a id="__codelineno-28-15" name="__codelineno-28-15" href="#__codelineno-28-15"></a>
+<a id="__codelineno-28-16" name="__codelineno-28-16" href="#__codelineno-28-16"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-28-17" name="__codelineno-28-17" href="#__codelineno-28-17"></a><span class="w">    </span><span class="cm">/* Going back to MONITOR makes the firmware ramp torque to zero and</span>
+<a id="__codelineno-28-18" name="__codelineno-28-18" href="#__codelineno-28-18"></a><span class="cm">     * release the vectors before output stops (0.3–0.6 s) */</span>
+<a id="__codelineno-28-19" name="__codelineno-28-19" href="#__codelineno-28-19"></a><span class="w">    </span><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_MONITOR</span><span class="p">);</span>
+<a id="__codelineno-28-20" name="__codelineno-28-20" href="#__codelineno-28-20"></a><span class="p">}</span>
 </code></pre></div></p>
 <h3 id="xm_sendpvectorreset"><code>XM_SendPVectorReset()</code><a class="headerlink" href="#xm_sendpvectorreset" title="Permanent link">&para;</a></h3>
 <p>Immediately cancels the currently executing or pending <code>P-Vector</code> command. Use this to abort the current motion in an emergency or when the intended trajectory changes.</p>
@@ -4419,8 +4438,7 @@ Calling this function resets the corresponding <code>isPVectorRHDone</code> or <
 <hr />
 <h4 id="2-disturbance-observer-dob">2. Disturbance Observer (DOB)<a class="headerlink" href="#2-disturbance-observer-dob" title="Permanent link">&para;</a></h4>
 <p>An advanced built-in control routine in <code>KIT H10</code> that estimates and compensates for user-applied forces and unexpected external disturbances, producing smoother and more stable motion.
-<strong>To use DOB, the <code>KIT H10</code> actuators must have undergone System Identification for DOB, and the identification data must be stored in the motor driver. (System Identification for DOB has not been performed on the current <code>KIT H10</code>; this will change in a future revision.)</strong>
-<strong>For details on KIT H10's DOB, refer to <code>angel Robotics-Control Algorithm</code> (coming soon).</strong></p>
+<strong>To use DOB, the <code>KIT H10</code> actuators must have undergone System Identification for DOB, and the identification data must be stored in the motor driver. (System Identification for DOB has not been performed on the current <code>KIT H10</code>; this will change in a future revision.)</strong></p>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDOBRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
 </code></pre></div></p>
@@ -4432,8 +4450,7 @@ Calling this function resets the corresponding <code>isPVectorRHDone</code> or <
 </code></pre></div></p>
 <hr />
 <h4 id="3-compensation-gain">3. Compensation Gain<a class="headerlink" href="#3-compensation-gain" title="Permanent link">&para;</a></h4>
-<p>Adjusts the strength of KIT H10's built-in gravity/velocity compensation modes.
-<strong>For details on KIT H10's compensation, refer to <code>angel Robotics-Compensation</code> (coming soon).</strong></p>
+<p>Adjusts the strength of KIT H10's built-in gravity/velocity compensation modes.</p>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="c1">// General compensation gain (gravity compensation, etc.)</span>
 <a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetNormalCompGain</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">gain</span><span class="p">);</span>
@@ -4451,7 +4468,7 @@ Calling this function resets the corresponding <code>isPVectorRHDone</code> or <
 </code></pre></div></p>
 <hr />
 <h3 id="xm_senduserbodydata"><code>XM_SendUserBodyData()</code><a class="headerlink" href="#xm_senduserbodydata" title="Permanent link">&para;</a></h3>
-<p>Sends the wearer's body parameters (weight, height, segment lengths, etc.) to <code>KIT H10</code>. KIT H10 uses this information for real-time motion analysis and returns more accurate, personalized gait data and motion dynamics data to XM10. <strong>For details on KIT H10's real-time motion analysis, refer to <code>GaitAnalysis</code> (coming soon).</strong>
+<p>Sends the wearer's body parameters (weight, height, segment lengths, etc.) to <code>KIT H10</code>. KIT H10 uses this information for real-time motion analysis and returns more accurate, personalized gait data and motion dynamics data to XM10.
 <strong>You must measure and supply the body parameters manually before sending them to KIT H10.</strong></p>
 <p><strong>Body-parameter-dependent fields in <code>RxData_t</code>:</strong></p>
 <table>

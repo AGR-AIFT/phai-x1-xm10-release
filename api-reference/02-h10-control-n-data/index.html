@@ -3379,38 +3379,39 @@ XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 �
 <a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">forwardVelocity</span><span class="p">;</span><span class="w">  </span><span class="c1">// 전방 보행 속도 (m/s)</span>
 <a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>
 <a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">    </span><span class="c1">// --- Motor Data (모터 상태) ---</span>
-<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">    </span><span class="c1">// [주의] leftHipTorque / rightHipTorque 는 필드명과 달리 모터 전류(A)입니다.</span>
-<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">    </span><span class="c1">//        관절 토크 환산: τ_joint[Nm] ≈ Kt(0.085) × gear(18.75) × hipTorque[A] ≈ 1.594 × hipTorque</span>
-<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipTorque</span><span class="p">;</span><span class="w">      </span><span class="c1">// 왼쪽 모터 전류 (A) — 단위는 Nm이 아닌 A</span>
-<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipTorque</span><span class="p">;</span><span class="w">     </span><span class="c1">// 오른쪽 모터 전류 (A) — 단위는 Nm이 아닌 A</span>
-<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipMotorAngle</span><span class="p">;</span><span class="w">  </span><span class="c1">// 왼쪽 모터 엔코더 각도 (Degree)</span>
-<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipMotorAngle</span><span class="p">;</span><span class="w"> </span><span class="c1">// 오른쪽 모터 엔코더 각도</span>
-<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>
-<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a><span class="w">    </span><span class="c1">// --- IMU Data (관성 센서 상세 정보) ---</span>
-<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="w">    </span><span class="c1">// Orientation</span>
-<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuFrontalRoll</span><span class="p">;</span><span class="w">    </span><span class="c1">// 왼쪽 고관절 IMU Frontal Roll 각도 (Degree)</span>
-<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuFrontalRoll</span><span class="p">;</span>
-<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuSagittalPitch</span><span class="p">;</span><span class="w">  </span><span class="c1">// 왼쪽 고관절 IMU Sagittal Pitch 각도 (Degree)</span>
-<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuSagittalPitch</span><span class="p">;</span>
-<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuTransverseYaw</span><span class="p">;</span><span class="w">  </span><span class="c1">// 왼쪽 고관절 IMU Transverse Yaw 각도 (Degree)</span>
-<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuTransverseYaw</span><span class="p">;</span>
-<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a>
-<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a><span class="w">    </span><span class="c1">// Global Acceleration (m/s^2)</span>
-<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalAccX</span><span class="p">;</span><span class="w"> </span><span class="c1">// 왼쪽 고관절 IMU Global 가속도</span>
-<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalAccY</span><span class="p">;</span>
-<a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalAccZ</span><span class="p">;</span>
-<a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalAccX</span><span class="p">;</span>
-<a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalAccY</span><span class="p">;</span>
-<a id="__codelineno-5-51" name="__codelineno-5-51" href="#__codelineno-5-51"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalAccZ</span><span class="p">;</span>
-<a id="__codelineno-5-52" name="__codelineno-5-52" href="#__codelineno-5-52"></a>
-<a id="__codelineno-5-53" name="__codelineno-5-53" href="#__codelineno-5-53"></a><span class="w">    </span><span class="c1">// Global Gyroscope (deg/s)</span>
-<a id="__codelineno-5-54" name="__codelineno-5-54" href="#__codelineno-5-54"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalGyrX</span><span class="p">;</span><span class="w"> </span><span class="c1">// 왼쪽 고관절 IMU Global 자이로</span>
-<a id="__codelineno-5-55" name="__codelineno-5-55" href="#__codelineno-5-55"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalGyrY</span><span class="p">;</span>
-<a id="__codelineno-5-56" name="__codelineno-5-56" href="#__codelineno-5-56"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalGyrZ</span><span class="p">;</span>
-<a id="__codelineno-5-57" name="__codelineno-5-57" href="#__codelineno-5-57"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrX</span><span class="p">;</span>
-<a id="__codelineno-5-58" name="__codelineno-5-58" href="#__codelineno-5-58"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrY</span><span class="p">;</span>
-<a id="__codelineno-5-59" name="__codelineno-5-59" href="#__codelineno-5-59"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrZ</span><span class="p">;</span>
-<a id="__codelineno-5-60" name="__codelineno-5-60" href="#__codelineno-5-60"></a><span class="p">}</span><span class="w"> </span><span class="n">XmH10Data_t</span><span class="p">;</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">    </span><span class="c1">// leftHipTorque / rightHipTorque : 관절 토크 추정값 [Nm] — 그대로 쓰면 됩니다.</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">    </span><span class="c1">//   토크 센서는 없고 모터 전류에서 내부 환산한 값입니다 (Kt × 감속비 ≈ 1.594).</span>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">    </span><span class="c1">//   여기에 Kt 를 다시 곱하면 이중 변환입니다.</span>
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipTorque</span><span class="p">;</span><span class="w">      </span><span class="c1">// 왼쪽 관절 토크 추정 [Nm]</span>
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipTorque</span><span class="p">;</span><span class="w">     </span><span class="c1">// 오른쪽 관절 토크 추정 [Nm]</span>
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipMotorAngle</span><span class="p">;</span><span class="w">  </span><span class="c1">// 왼쪽 모터 엔코더 각도 (Degree)</span>
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipMotorAngle</span><span class="p">;</span><span class="w"> </span><span class="c1">// 오른쪽 모터 엔코더 각도</span>
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="w">    </span><span class="c1">// --- IMU Data (관성 센서 상세 정보) ---</span>
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="w">    </span><span class="c1">// Orientation</span>
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuFrontalRoll</span><span class="p">;</span><span class="w">    </span><span class="c1">// 왼쪽 고관절 IMU Frontal Roll 각도 (Degree)</span>
+<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuFrontalRoll</span><span class="p">;</span>
+<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuSagittalPitch</span><span class="p">;</span><span class="w">  </span><span class="c1">// 왼쪽 고관절 IMU Sagittal Pitch 각도 (Degree)</span>
+<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuSagittalPitch</span><span class="p">;</span>
+<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuTransverseYaw</span><span class="p">;</span><span class="w">  </span><span class="c1">// 왼쪽 고관절 IMU Transverse Yaw 각도 (Degree)</span>
+<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuTransverseYaw</span><span class="p">;</span>
+<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a>
+<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a><span class="w">    </span><span class="c1">// Global Acceleration (m/s^2)</span>
+<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalAccX</span><span class="p">;</span><span class="w"> </span><span class="c1">// 왼쪽 고관절 IMU Global 가속도</span>
+<a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalAccY</span><span class="p">;</span>
+<a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalAccZ</span><span class="p">;</span>
+<a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalAccX</span><span class="p">;</span>
+<a id="__codelineno-5-51" name="__codelineno-5-51" href="#__codelineno-5-51"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalAccY</span><span class="p">;</span>
+<a id="__codelineno-5-52" name="__codelineno-5-52" href="#__codelineno-5-52"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalAccZ</span><span class="p">;</span>
+<a id="__codelineno-5-53" name="__codelineno-5-53" href="#__codelineno-5-53"></a>
+<a id="__codelineno-5-54" name="__codelineno-5-54" href="#__codelineno-5-54"></a><span class="w">    </span><span class="c1">// Global Gyroscope (deg/s)</span>
+<a id="__codelineno-5-55" name="__codelineno-5-55" href="#__codelineno-5-55"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalGyrX</span><span class="p">;</span><span class="w"> </span><span class="c1">// 왼쪽 고관절 IMU Global 자이로</span>
+<a id="__codelineno-5-56" name="__codelineno-5-56" href="#__codelineno-5-56"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalGyrY</span><span class="p">;</span>
+<a id="__codelineno-5-57" name="__codelineno-5-57" href="#__codelineno-5-57"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">leftHipImuGlobalGyrZ</span><span class="p">;</span>
+<a id="__codelineno-5-58" name="__codelineno-5-58" href="#__codelineno-5-58"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrX</span><span class="p">;</span>
+<a id="__codelineno-5-59" name="__codelineno-5-59" href="#__codelineno-5-59"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrY</span><span class="p">;</span>
+<a id="__codelineno-5-60" name="__codelineno-5-60" href="#__codelineno-5-60"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrZ</span><span class="p">;</span>
+<a id="__codelineno-5-61" name="__codelineno-5-61" href="#__codelineno-5-61"></a><span class="p">}</span><span class="w"> </span><span class="n">XmH10Data_t</span><span class="p">;</span>
 </code></pre></div>
 <p>강조 표시한 데이터는 현재 받고 있는 데이터 입니다. 추후 추가되거나 수정될 수 있습니다.</p>
 <table>
@@ -3522,14 +3523,14 @@ XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 �
 <tr>
 <td style="text-align: left;"><strong><code>leftHipTorque</code></strong></td>
 <td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">A</td>
-<td style="text-align: left;">왼쪽 모터 전류 — 필드명과 달리 단위는 <strong>A</strong> (토크 환산 ×1.594 ≈ Nm)</td>
+<td style="text-align: left;">Nm</td>
+<td style="text-align: left;">왼쪽 관절 토크 추정값 — 그대로 사용 (추가 환산 금지)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>rightHipTorque</code></strong></td>
 <td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">A</td>
-<td style="text-align: left;">오른쪽 모터 전류 — 필드명과 달리 단위는 <strong>A</strong> (토크 환산 ×1.594 ≈ Nm)</td>
+<td style="text-align: left;">Nm</td>
+<td style="text-align: left;">오른쪽 관절 토크 추정값 — 그대로 사용 (추가 환산 금지)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>leftHipMotorAngle</code></strong></td>
@@ -4010,7 +4011,7 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 <p><strong>Parameters</strong>
   * <code>mode</code>: 설정할 모드
       * <code>XM_CTRL_MONITOR</code> (0): <strong>모니터링 모드.</strong> 제어 명령을 전송하지 않습니다. (기본값, 안전)
-      * <code>XM_CTRL_CONTROL</code> (1): <strong>토크 제어 모드.</strong> 설정된 토크 명령을 모터로 전송합니다.</p>
+      * <code>XM_CTRL_CONTROL</code> (1): <strong>제어 모드.</strong> 설정된 토크·벡터 명령을 전송합니다.</p>
 <p><strong>Safety Logic</strong>
   * 모드가 변경될 때, <strong>내부적으로 모든 토크 명령을 즉시 0.0으로 초기화</strong>합니다. 이는 제어 시작 순간에 급격한 움직임(Jerk)이 발생하는 것을 방지하기 위함입니다.</p>
 <p><strong>MONITOR 로 돌아갈 때는 시간이 걸립니다 (v2.6.0~)</strong></p>
@@ -4088,8 +4089,7 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 </code></pre></div></p>
 <hr />
 <h2 id="데이터-송신-data-outputs-control-inputs">데이터 송신 (Data Outputs, Control inputs)<a class="headerlink" href="#데이터-송신-data-outputs-control-inputs" title="Permanent link">&para;</a></h2>
-<p><code>P-Vector</code>, <code>I-Vector</code>, <code>F-Vector</code> (PIF-Vectors)와 다양한 제어 명령을 통해 <code>KIT H10</code>의 움직임을 정밀하게 설계할 수 있습니다.
-<strong>PIF-Vector와 같은 사전정의 된 제어 기법의 자세한 내용에 대해서는 <code>angel Robotics-Control Algorithm</code>(작성 예정)에서 확인할 수 있습니다.</strong></p>
+<p><code>P-Vector</code>, <code>I-Vector</code>, <code>F-Vector</code> (PIF-Vectors)와 다양한 제어 명령을 통해 <code>KIT H10</code>의 움직임을 정밀하게 설계할 수 있습니다.</p>
 <h3 id="xm_sendpvector"><code>XM_SendPVector()</code><a class="headerlink" href="#xm_sendpvector" title="Permanent link">&para;</a></h3>
 <p><strong>위치 기반 궤적</strong>(<code>P-Vector</code>)을 전송하여, 지정된 시간 동안 목표 위치까지 부드러운 궤적을 그리며 움직이도록 명령합니다.
 <strong>반드시, <code>I-Vector</code>에 의해 사전에 임피던스 제어 파라미터가 설정되어 있어야 합니다.</strong>
@@ -4306,7 +4306,26 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 </tbody>
 </table>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="p">(</span><span class="n">작성</span><span class="w"> </span><span class="n">예정</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">    </span><span class="cm">/* 벡터 명령은 CONTROL 모드에서만 전송됩니다 */</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_CONTROL</span><span class="p">);</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">    </span><span class="cm">/* 각 멤버의 의미와 단위는 위 표 참고 */</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="w">    </span><span class="n">FVector_t</span><span class="w"> </span><span class="n">fvec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="w">        </span><span class="p">.</span><span class="n">modeIdx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="w">        </span><span class="p">.</span><span class="n">tauMax</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">   </span><span class="cm">/* 2.00 (scaled by 100) */</span>
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="w">        </span><span class="p">.</span><span class="n">delay</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="w">        </span><span class="p">.</span><span class="n">zero</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a>
+<a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a><span class="w">    </span><span class="n">XM_SendFVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">fvec</span><span class="p">);</span><span class="w">   </span><span class="cm">/* 오른쪽 고관절 */</span>
+<a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a><span class="p">}</span>
+<a id="__codelineno-28-15" name="__codelineno-28-15" href="#__codelineno-28-15"></a>
+<a id="__codelineno-28-16" name="__codelineno-28-16" href="#__codelineno-28-16"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-28-17" name="__codelineno-28-17" href="#__codelineno-28-17"></a><span class="w">    </span><span class="cm">/* MONITOR 로 돌아가면 펌웨어가 토크를 0 까지 내리고</span>
+<a id="__codelineno-28-18" name="__codelineno-28-18" href="#__codelineno-28-18"></a><span class="cm">     * 벡터 해제까지 처리한 뒤 출력을 끕니다 (0.3~0.6초) */</span>
+<a id="__codelineno-28-19" name="__codelineno-28-19" href="#__codelineno-28-19"></a><span class="w">    </span><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_MONITOR</span><span class="p">);</span>
+<a id="__codelineno-28-20" name="__codelineno-28-20" href="#__codelineno-28-20"></a><span class="p">}</span>
 </code></pre></div></p>
 <h3 id="xm_sendpvectorreset"><code>XM_SendPVectorReset()</code><a class="headerlink" href="#xm_sendpvectorreset" title="Permanent link">&para;</a></h3>
 <p>현재 실행 중이거나 대기 중인 <code>P-Vector</code> 명령을 즉시 초기화(리셋)합니다. 비상 상황이나 사용자의 의도가 바뀌었을 때 현재 동작을 중단시키는 용도로 사용됩니다.</p>
@@ -4419,8 +4438,7 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 <hr />
 <h4 id="2-외란-관측기-disturbance-observer">2. 외란 관측기 (Disturbance Observer)<a class="headerlink" href="#2-외란-관측기-disturbance-observer" title="Permanent link">&para;</a></h4>
 <p>사용자가 가하는 힘이나 예상치 못한 외부 힘(외란)을 추정하고 보상하여, 더 부드럽고 안정적인 움직임을 만들어내는 <code>KIT H10</code>에 내장된 고급 제어 루틴입니다.
-<strong><code>DOB</code> 기능을 사용하기 위해서는 <code>KIT H10</code>의 구동기가 <code>DOB</code>기능에 대한 식별(<code>System Identification</code>)이 진행되어 모터드라이버의 <code>DOB</code> 식별 정보 기록 여부를 확인해야 합니다.(현재 <code>KIT H10</code>은 <code>DOB</code> 식별을 진행하지 않았음, 추후 변경 예정)</strong>
-<strong><code>KIT H10</code>의 DOB에 대해서는 <code>angel Robotics-Control Algorithm</code>(작성 예정)에서 확인할 수 있습니다.</strong></p>
+<strong><code>DOB</code> 기능을 사용하기 위해서는 <code>KIT H10</code>의 구동기가 <code>DOB</code>기능에 대한 식별(<code>System Identification</code>)이 진행되어 모터드라이버의 <code>DOB</code> 식별 정보 기록 여부를 확인해야 합니다.(현재 <code>KIT H10</code>은 <code>DOB</code> 식별을 진행하지 않았음, 추후 변경 예정)</strong></p>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDOBRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
 </code></pre></div></p>
@@ -4432,8 +4450,7 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 </code></pre></div></p>
 <hr />
 <h4 id="3-보상-게인-설정-compensation-gain">3. 보상 게인 설정 (Compensation Gain)<a class="headerlink" href="#3-보상-게인-설정-compensation-gain" title="Permanent link">&para;</a></h4>
-<p><code>KIT H10</code>에 내장된 기본 중력/속도 보상 모드의 강도를 조절합니다.
-<strong><code>KIT H10</code>의 보상에 대해서는 <code>angel Robotics-Compensation</code>(작성 예정)에서 확인할 수 있습니다.</strong></p>
+<p><code>KIT H10</code>에 내장된 기본 중력/속도 보상 모드의 강도를 조절합니다.</p>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="c1">// 일반 보상 게인 설정 (중력 보상 등)</span>
 <a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetNormalCompGain</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">gain</span><span class="p">);</span>
@@ -4451,7 +4468,7 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 </code></pre></div></p>
 <hr />
 <h3 id="xm_senduserbodydata"><code>XM_SendUserBodyData()</code><a class="headerlink" href="#xm_senduserbodydata" title="Permanent link">&para;</a></h3>
-<p>사용자의 신체 정보(몸무게, 키, 분절 길이 등)를 <code>KIT H10</code>로 전송합니다. <code>KIT H10</code>은 이 정보를 바탕으로 실시간 동작 분석을 수행하며 더 정확하고 개인화된 보행 데이터 및 운동 역학 데이터를 계산하여 XM10으로 보내줍니다. <strong><code>KIT H10</code>의 실시간 동작 분석의 자세한 내용은 <code>GaitAnalysis</code>(작성 예정)에서 확인할 수 있습니다.</strong>
+<p>사용자의 신체 정보(몸무게, 키, 분절 길이 등)를 <code>KIT H10</code>로 전송합니다. <code>KIT H10</code>은 이 정보를 바탕으로 실시간 동작 분석을 수행하며 더 정확하고 개인화된 보행 데이터 및 운동 역학 데이터를 계산하여 XM10으로 보내줍니다.
 <strong>사용자가 직접 신체 정보를 측정하여 <code>KIT H10</code>으로 전송해야 합니다.</strong></p>
 <p><strong><code>RxData_t</code> 구조체 중 신체 정보 기반 데이터:</strong></p>
 <table>

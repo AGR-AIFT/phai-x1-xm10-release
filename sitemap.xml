@@ -15,13 +15,6 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/find-it/"/>
     </url>
     <url>
-        <loc>https://agr-exo.github.io/Extension_Module/student-walkthrough-simulations/</loc>
-        <lastmod>2026-08-20</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/student-walkthrough-simulations/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/student-walkthrough-simulations/"/>
-    </url>
-    <url>
         <loc>https://agr-exo.github.io/Extension_Module/troubleshooting/</loc>
         <lastmod>2026-08-20</lastmod>
         <changefreq>daily</changefreq>
@@ -370,13 +363,6 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/find-it/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/find-it/"/>
-    </url>
-    <url>
-        <loc>https://agr-exo.github.io/Extension_Module/en/student-walkthrough-simulations/</loc>
-        <lastmod>2026-08-20</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://agr-exo.github.io/Extension_Module/en/student-walkthrough-simulations/"/>
-        <xhtml:link rel="alternate" hreflang="ko" href="https://agr-exo.github.io/Extension_Module/student-walkthrough-simulations/"/>
     </url>
     <url>
         <loc>https://agr-exo.github.io/Extension_Module/en/troubleshooting/</loc>

@@ -4015,7 +4015,7 @@ For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../
 <p>XM10's control-authority (output ON/OFF) mode.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="n">XM_CTRL_MONITOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// monitoring mode (default) — algorithm runs, torque command not sent</span>
-<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="n">XM_CTRL_CONTROL</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="c1">// torque control mode — computed torque command is sent periodically (real actuation)</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="n">XM_CTRL_CONTROL</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="c1">// control mode — computed torque and vector commands are sent periodically (real actuation)</span>
 <a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="p">}</span><span class="w"> </span><span class="n">XmControlMode_t</span><span class="p">;</span>
 </code></pre></div>
 <table>
@@ -4303,8 +4303,8 @@ For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../
 <tr>
 <td><code>leftHipTorque</code> / <code>rightHipTorque</code></td>
 <td><code>float</code></td>
-<td><strong>A</strong></td>
-<td>⚠️ Despite the field name, this is <strong>motor current</strong>. Joint torque conversion: <code>τ_joint[Nm] = 0.085 × 18.75 × current[A] ≈ 1.594 × current</code> (no real torque sensor — current-based estimate)</td>
+<td><strong>Nm</strong></td>
+<td><strong>Estimated</strong> joint torque. There is no torque sensor; the value is converted internally from motor current (<code>Kt 0.085 × gear 18.75 ≈ 1.594</code>). It is already converted — do not multiply by Kt again</td>
 </tr>
 <tr>
 <td><code>leftHipMotorAngle</code> / <code>rightHipMotorAngle</code></td>

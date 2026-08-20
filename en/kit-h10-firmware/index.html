@@ -1499,10 +1499,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#files-for-xm-v230" class="md-nav__link">
+  <a href="#files-attached-to-v260" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Files for XM v2.3.0
+        Files attached to v2.6.0
       
     </span>
   </a>
@@ -2421,10 +2421,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#files-for-xm-v230" class="md-nav__link">
+  <a href="#files-attached-to-v260" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Files for XM v2.3.0
+        Files attached to v2.6.0
       
     </span>
   </a>
@@ -2633,8 +2633,8 @@
 <p>📌 <strong>After reading this page</strong>: You will be able to update the KIT H10 (CM / ESP32 / SAM10) firmware and ContentsFiles — matched to your XM firmware version — using either a USB stick or an SD card.
 ⏱️ Estimated reading time: 20 min (hands-on: 30–60 min)
 🧰 Prerequisites: KIT H10 hardware architecture (<a href="../architecture/">docs/architecture/README.md</a>)
-🎯 Key point: Compatibility matrix — <strong>XM v2.3.0 ↔ H10 v2.3.0+ (latest files attached to the Release) ↔ ContentsFiles v2.3.0+ (latest files attached to the Release)</strong> (mixing versions is not allowed)</p>
-<p>⚠️ <strong>Do not mix versions</strong> — combining XM v2.3.0 with H10 v1.0.x (or vice versa) causes CAN-FD protocol mismatch and communication errors. Apply the matrix exactly as shown.</p>
+🎯 Key point: Compatibility matrix — <strong>XM v2.6.0 ↔ KIT H10 v2.4.0 ↔ ContentsFiles (attached to the Release)</strong> (mixing versions is not allowed)</p>
+<p>⚠️ <strong>Do not mix versions</strong> — combining the latest XM FW with H10 v1.0.x (or vice versa) causes CAN-FD protocol mismatch and communication errors. Apply the matrix exactly as shown.</p>
 </blockquote>
 <p>XM10 communicates with KIT H10 over CAN-FD, so you must use <strong>the KIT H10 firmware and ContentsFiles that match your XM firmware version</strong>. A version mismatch will cause communication errors or unexpected behavior.</p>
 <blockquote>
@@ -2657,7 +2657,7 @@
 <td>↓ Matrix</td>
 </tr>
 <tr>
-<td><strong>XM10 is v2.3.0 but H10 is an older version</strong></td>
+<td><strong>XM10 is up to date but H10 is an older version</strong></td>
 <td>Update CM / SAM10 / ESP32 + ContentsFiles</td>
 <td>↓ Firmware Update (USB stick)</td>
 </tr>
@@ -2691,21 +2691,21 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><strong>v2.3.0</strong></td>
-<td style="text-align: center;"><strong>v2.3.0+ (latest files attached to the Release)</strong></td>
-<td style="text-align: center;"><strong>v2.3.0+ (latest files attached to the Release)</strong></td>
+<td style="text-align: center;"><strong>v2.6.0</strong></td>
+<td style="text-align: center;"><strong>CM v2.4.0 / SAM10 v2.4.0 / ESP32 v2.3.0</strong></td>
+<td style="text-align: center;"><strong>Attached to the Release</strong></td>
 <td style="text-align: left;"><strong>Latest — recommended</strong></td>
 </tr>
 <tr>
-<td style="text-align: center;">v2.2.2</td>
-<td style="text-align: center;">CM v2.3.0 / ESP32 v2.3.0 / SAM10 v2.3.0</td>
-<td style="text-align: center;">2026.04</td>
+<td style="text-align: center;">v2.3.0 – v2.5.1</td>
+<td style="text-align: center;">CM v2.3.0 / SAM10 v2.3.0 / ESP32 v2.3.0</td>
+<td style="text-align: center;">Attached to the Release</td>
 <td style="text-align: left;">Previous</td>
 </tr>
 <tr>
-<td style="text-align: center;">v2.0.x</td>
-<td style="text-align: center;">CM v2.3.0 / ESP32 v2.3.0 / SAM10 v2.3.0</td>
-<td style="text-align: center;">2025.02</td>
+<td style="text-align: center;">v2.0.x – v2.2.2</td>
+<td style="text-align: center;">CM v2.3.0 / SAM10 v2.3.0 / ESP32 v2.3.0</td>
+<td style="text-align: center;">2025.02 – 2026.04</td>
 <td style="text-align: left;">Previous</td>
 </tr>
 <tr>
@@ -2717,16 +2717,16 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>v1.0.x users:</strong> If you continue using XM FW v1.0.x without upgrading to v2.3.0, you must keep the KIT H10 firmware at its factory-shipped version as well. Mixing XM v2.3.0 with an older H10 firmware causes a protocol mismatch and will prevent normal operation.
+<p><strong>v1.0.x users:</strong> If you continue using XM FW v1.0.x without upgrading, you must keep the KIT H10 firmware at its factory-shipped version as well. Mixing the latest XM FW with an older H10 firmware causes a protocol mismatch and will prevent normal operation.
 Note that the KIT H10 firmware paired with v1.0.x has known issues (such as motor communication errors) that have not been resolved, so upgrading both XM and KIT H10 to the latest firmware is strongly recommended.</p>
 </blockquote>
 <hr />
 <h2 id="downloads">Downloads<a class="headerlink" href="#downloads" title="Permanent link">&para;</a></h2>
 <p>All files are available on the GitHub Releases page.</p>
 <p><strong><a href="https://github.com/AGR-EXO/Extension_Module/releases">Go to Releases</a></strong></p>
-<h3 id="files-for-xm-v230">Files for XM v2.3.0<a class="headerlink" href="#files-for-xm-v230" title="Permanent link">&para;</a></h3>
+<h3 id="files-attached-to-v260">Files attached to v2.6.0<a class="headerlink" href="#files-attached-to-v260" title="Permanent link">&para;</a></h3>
 <blockquote>
-<p>The KIT H10 firmware and contents files were updated in this release (v2.3.0+). Check the exact filenames and version numbers in the latest files attached to the Release page.</p>
+<p>KIT H10 firmware moves to <strong>CM · SAM10 v2.4.0</strong> in this release (ESP32 stays at v2.3.0). The contents files are unchanged; only the filename now carries a date.</p>
 </blockquote>
 <table>
 <thead>
@@ -2738,34 +2738,14 @@ Note that the KIT H10 firmware paired with v1.0.x has known issues (such as moto
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>SUIT_CM_APP_X_X_X.bin</code></td>
-<td style="text-align: left;">Control Module (CM) firmware</td>
-<td style="text-align: center;">See Release assets</td>
+<td style="text-align: left;"><code>SUIT_H10_Binary_YYYYMMDD.zip</code></td>
+<td style="text-align: left;">CM · SAM10 · ESP32 firmware bundle</td>
+<td style="text-align: center;">Unzip to get the three <code>.bin</code> files</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>SUIT_ESP32_FW_X_X_X.bin</code></td>
-<td style="text-align: left;">ESP32 module firmware</td>
-<td style="text-align: center;">See Release assets</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>SUIT_SAM10_APP_X_X_X.bin</code></td>
-<td style="text-align: left;">Motor Driver (SAM10 / MD) firmware</td>
-<td style="text-align: center;">See Release assets</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>ContentsFiles.zip</code></td>
+<td style="text-align: left;"><code>SUIT_ContentsFiles_YYYYMMDD.zip</code></td>
 <td style="text-align: left;">SD card contents files (audio, FSM, motion map, etc.)</td>
-<td style="text-align: center;">See Release assets</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>KIT_H10_FW_Update.pdf</code></td>
-<td style="text-align: left;">Firmware update manual (detailed, with photos)</td>
-<td style="text-align: center;">1,451 KB</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>KIT_H10_ContentsFiles_Update.pdf</code></td>
-<td style="text-align: left;">Contents file update manual (detailed, with photos)</td>
-<td style="text-align: center;">1,443 KB</td>
+<td style="text-align: center;">Unzip onto the SD card</td>
 </tr>
 </tbody>
 </table>
@@ -2932,7 +2912,7 @@ Note that the KIT H10 firmware paired with v1.0.x has known issues (such as moto
 </tbody>
 </table>
 <blockquote>
-<p>For a detailed manual with photos, refer to <strong><code>KIT_H10_FW_Update.pdf</code></strong> attached to the Release.</p>
+<p>The steps above are all you need. If you get stuck, ask on <a href="https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a">Discussions Q&amp;A</a>.</p>
 </blockquote>
 <hr />
 <h2 id="contents-file-update-sd-card-method">Contents File Update (SD Card Method)<a class="headerlink" href="#contents-file-update-sd-card-method" title="Permanent link">&para;</a></h2>
@@ -3003,7 +2983,7 @@ Note that the KIT H10 firmware paired with v1.0.x has known issues (such as moto
 <tr>
 <td style="text-align: center;">6</td>
 <td style="text-align: left;"><strong>Delete</strong> the existing contents files, then copy the new files</td>
-<td style="text-align: left;">Extract <code>ContentsFiles.zip</code> and copy the contents</td>
+<td style="text-align: left;">Extract <code>SUIT_ContentsFiles_*.zip</code> and copy the contents</td>
 </tr>
 <tr>
 <td style="text-align: center;">7</td>
@@ -3019,7 +2999,7 @@ Note that the KIT H10 firmware paired with v1.0.x has known issues (such as moto
 </table>
 <blockquote>
 <p><strong>Caution:</strong> When replacing contents files, always <strong>delete all existing files first</strong> before copying the new files.</p>
-<p>For a detailed manual with photos, refer to <strong><code>KIT_H10_ContentsFiles_Update.pdf</code></strong> attached to the Release.</p>
+<p>The steps above are all you need. If you get stuck, ask on <a href="https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a">Discussions Q&amp;A</a>.</p>
 </blockquote>
 <h3 id="if-manual-steps-are-not-feasible">If Manual Steps Are Not Feasible<a class="headerlink" href="#if-manual-steps-are-not-feasible" title="Permanent link">&para;</a></h3>
 <table>
@@ -3038,14 +3018,6 @@ Note that the KIT H10 firmware paired with v1.0.x has known issues (such as moto
 <td><a href="https://github.com/AGR-EXO/Extension_Module/issues">GitHub Issues</a></td>
 <td>Bug reports and feature requests</td>
 </tr>
-<tr>
-<td><strong><code>KIT_H10_FW_Update.pdf</code></strong> on Releases</td>
-<td>Photo-guided firmware update manual</td>
-</tr>
-<tr>
-<td><strong><code>KIT_H10_ContentsFiles_Update.pdf</code></strong> on Releases</td>
-<td>Photo-guided contents file update manual</td>
-</tr>
 </tbody>
 </table>
 <hr />
@@ -3060,7 +3032,7 @@ Note that the KIT H10 firmware paired with v1.0.x has known issues (such as moto
 </blockquote>
 <p><strong>Q: Can I keep using XM FW v1.0.x?</strong></p>
 <blockquote>
-<p>Yes, but you must also keep the KIT H10 firmware at its factory-shipped version. Do not mix XM FW v1.0.x with the latest H10 FW (v2.3.0+).</p>
+<p>Yes, but you must also keep the KIT H10 firmware at its factory-shipped version. Do not mix XM FW v1.0.x with the latest H10 FW.</p>
 </blockquote>
 <p><strong>Q: What should I do if an error occurs (red LED) during the update?</strong></p>
 <blockquote>

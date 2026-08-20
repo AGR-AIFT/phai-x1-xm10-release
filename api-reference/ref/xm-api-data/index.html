@@ -4015,7 +4015,7 @@
 <p>XM10의 제어 권한(출력 ON/OFF) 모드입니다.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="n">XM_CTRL_MONITOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// 모니터링 모드 (기본값) — 알고리즘은 실행되나 토크 명령 미전송</span>
-<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="n">XM_CTRL_CONTROL</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="c1">// 토크 제어 모드 — 계산된 토크 명령을 주기적으로 전송 (실제 구동)</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="n">XM_CTRL_CONTROL</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="c1">// 제어 모드 — 계산된 토크·벡터 명령을 주기적으로 전송 (실제 구동)</span>
 <a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="p">}</span><span class="w"> </span><span class="n">XmControlMode_t</span><span class="p">;</span>
 </code></pre></div>
 <table>
@@ -4303,8 +4303,8 @@
 <tr>
 <td><code>leftHipTorque</code> / <code>rightHipTorque</code></td>
 <td><code>float</code></td>
-<td><strong>A</strong></td>
-<td>⚠️ 필드명과 달리 <strong>모터 전류</strong>입니다. 관절 토크 환산: <code>τ_joint[Nm] = 0.085 × 18.75 × 전류[A] ≈ 1.594 × 전류</code> (실제 토크 센서 없음, 전류 기반 추정)</td>
+<td><strong>Nm</strong></td>
+<td>관절 토크 <strong>추정값</strong>. 토크 센서는 없고 모터 전류에서 내부 환산한 값입니다 (<code>Kt 0.085 × 감속비 18.75 ≈ 1.594</code>). 이미 환산된 값이므로 여기에 Kt 를 다시 곱하면 안 됩니다</td>
 </tr>
 <tr>
 <td><code>leftHipMotorAngle</code> / <code>rightHipMotorAngle</code></td>
