@@ -32,7 +32,7 @@ XM10의 제어 시스템은 엄격한 **IPO (Input-Process-Output)** 모델을 �
 3.  **Output (Command Flushing):**
 
       * 사용자 루프가 끝나면, 시스템은 `XM.command`에 변경된 사항이 있는지 확인합니다.
-      * 제어 모드(`XM_CTRL_TORQUE`)인 경우, 변경된 명령을 실제 하드웨어(CAN Bus)로 전송합니다.
+      * 제어 모드(`XM_CTRL_CONTROL`)인 경우, 변경된 명령을 실제 하드웨어(CAN Bus)로 전송합니다.
 
 4.	**Streaming (CDC):**
 
@@ -55,9 +55,11 @@ XM10의 제어 시스템은 엄격한 **IPO (Input-Process-Output)** 모델을 �
 ```c
 typedef enum {
     XM_CTRL_MONITOR = 0,  // 제어 명령 전송 안 함 (Safety)
-    XM_CTRL_TORQUE  = 1   // 제어 명령 전송 함 (Active)
+    XM_CTRL_CONTROL = 1   // 제어 명령 전송 함 (Active)
 } XmControlMode_t;
 ```
+
+> **이름이 바뀌었습니다 (v2.6.0).** 토크뿐 아니라 P/I 벡터까지 포함하는 모드라 `XM_CTRL_TORQUE` → **`XM_CTRL_CONTROL`** 로 바꿨습니다. 옛 이름도 같은 값의 별칭으로 남아 있어 **기존 코드는 그대로 빌드**되지만, 새로 쓰는 코드는 `XM_CTRL_CONTROL` 을 사용하세요.
 
 ### `XmH10Mode_t`
 
@@ -429,7 +431,7 @@ CM_NmtState_t XM_GetXMNmtState(void);
 
 로봇의 제어 권한(Control Authority) 모드를 설정합니다. 안전을 위해 매우 중요한 함수입니다.
 기본값은 모니터링모드로 H10에 실시간 제어를 하지 않습니다.
-실시간 토크 제어를 위해서는 `XM_SetControlMode`에 `XM_CTRL_TORQUE`를 입력해야 합니다.
+실시간 토크 제어를 위해서는 `XM_SetControlMode`에 `XM_CTRL_CONTROL`를 입력해야 합니다.
 
 **Syntax**
 ```c
@@ -439,16 +441,28 @@ void XM_SetControlMode(XmControlMode_t mode);
 **Parameters**
   * `mode`: 설정할 모드
 	  * `XM_CTRL_MONITOR` (0): **모니터링 모드.** 제어 명령을 전송하지 않습니다. (기본값, 안전)
-	  * `XM_CTRL_TORQUE` (1): **토크 제어 모드.** 설정된 토크 명령을 모터로 전송합니다.
+	  * `XM_CTRL_CONTROL` (1): **토크 제어 모드.** 설정된 토크 명령을 모터로 전송합니다.
  
 **Safety Logic**
-  * 모드가 변경될 때(예: Monitor -\> Torque), **내부적으로 모든 토크 명령을 즉시 0.0으로 초기화**합니다. 이는 제어 시작 순간에 급격한 움직임(Jerk)이 발생하는 것을 방지하기 위함입니다.
-    
+  * 모드가 변경될 때, **내부적으로 모든 토크 명령을 즉시 0.0으로 초기화**합니다. 이는 제어 시작 순간에 급격한 움직임(Jerk)이 발생하는 것을 방지하기 위함입니다.
+
+**MONITOR 로 돌아갈 때는 시간이 걸립니다 (v2.6.0~)**
+
+`XM_CTRL_CONTROL` 진입은 즉시 적용되지만, **`XM_CTRL_MONITOR` 로 돌아가는 것은 요청**이며 다음 3 단계를 거쳐 완료됩니다.
+
+1. 마지막 토크에서 0 까지 지수 감쇠(시정수 0.1 초)하며 계속 전송
+2. 0 토크를 여러 번 확실히 전송 (프레임 하나가 유실돼도 안전하도록)
+3. P/I 벡터 해제 명령 전송 → 그 다음에 출력 차단
+
+보통 **0.3 ~ 0.6 초**가 걸리며, 이 동안 사용자가 넣는 토크·벡터 명령은 반영되지 않습니다.
+
+왜 이렇게 하냐면, H10 은 **새 명령이 오지 않으면 마지막에 받은 명령을 유지**하기 때문입니다. 예전처럼 전송을 즉시 끊으면 0 이 아닌 토크가 H10 에 남을 수 있었습니다.
+
 **Example**
 ```c
-// 알고리즘 시작 시 토크 제어 모드 활성화
+// 알고리즘 시작 시 제어 모드 활성화
 void Active_Entry(void) {
-	XM_SetControlMode(XM_CTRL_TORQUE);
+	XM_SetControlMode(XM_CTRL_CONTROL);
 }
 
 // 알고리즘 종료 시 안전하게 모니터링 모드로 복귀
@@ -456,6 +470,56 @@ void Active_Exit(void) {
 	XM_SetControlMode(XM_CTRL_MONITOR);
 }
 ```
+
+---
+
+### `XM_GetAppliedControlMode`
+
+**실제로 적용 중인** 제어 모드를 반환합니다. `XM_SetControlMode()` 는 요청이고, 위 3 단계 때문에 요청과 실제 상태가 잠깐 다를 수 있습니다.
+
+**Syntax**
+```c
+XmAppliedMode_t XM_GetAppliedControlMode(void);
+```
+
+**Return**
+  * `XM_MODE_APPLIED_CONTROL` — 제어 출력 중
+  * `XM_MODE_APPLIED_MONITOR` — 출력 차단됨
+  * `XM_MODE_APPLIED_TRANSITION` — 전환 중 (이 동안 토크·벡터 명령 반영 안 됨)
+
+**Example**
+```c
+// 정리가 끝난 뒤에만 다음 단계로 넘어가고 싶을 때
+if (XM_GetAppliedControlMode() == XM_MODE_APPLIED_MONITOR) {
+	/* 출력이 완전히 차단된 상태 */
+}
+```
+
+---
+
+### `XM_EmergencyDisengage`
+
+감쇠 단계를 건너뛰고 **즉시 0 토크를 확정 전송**합니다. 부드럽게 내릴 여유가 없을 때 사용합니다.
+
+**Syntax**
+```c
+void XM_EmergencyDisengage(void);
+```
+
+**Example**
+```c
+void Control_Loop(void) {
+	if (something_is_wrong) {
+		XM_EmergencyDisengage();   // 램프 생략, 즉시 0
+		return;
+	}
+	...
+}
+```
+
+> 정상 종료는 `XM_SetControlMode(XM_CTRL_MONITOR)` 를 쓰세요. `XM_EmergencyDisengage()` 는 이상 상황 전용입니다.
+
+> ⚠️ 두 함수 모두 **비상 정지 장치를 대신하지 않습니다.** 착용 실험에서는 [착용 안전 수칙](../safety/wearable-safety.md)대로 사람이 직접 정지시키는 경로가 1 차 안전망입니다.
 
 ---
 
@@ -1050,7 +1114,7 @@ void Active_Loop(void) {
 |------|------|------|
 | `XM.status.h10.*` 가 모두 0 | KIT H10 미연결 또는 CAN-FD HIGH/LOW 핀 거꾸로 | [01-hardware-setup.md](../getting-started/01-hardware-setup.md) Figure 1 핀맵 확인 |
 | `XM.status.h10.is_connected` 가 false | CAN-FD 케이블 헐겁거나 H10 본체 전원 OFF | KIT H10 24 V 입력 + 깊은 커넥터 삽입 |
-| `SetAssistTorque` 호출했는데 토크 0 | `XM_SetControlMode(XM_CTRL_TORQUE)` 미호출 | Active 진입 시 1회 모드 설정 필요 |
+| `SetAssistTorque` 호출했는데 토크 0 | `XM_SetControlMode(XM_CTRL_CONTROL)` 미호출 | Active 진입 시 1회 모드 설정 필요 |
 | 토크 명령은 보내지는데 H10 안 움직임 | KIT H10 FW < v2.3.0 (XM v2.0.0 이상 비호환) | [kit-h10-firmware/](../kit-h10-firmware/) 가이드로 업데이트 |
 | 무릎 각도·전진 속도 등 추정 데이터가 항상 0 | `XM_SendUserBodyData()` 미호출 (Body Data 전제조건) | [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md#part-5) Body Data 안내 참조 |
 | IPO 사이클이 어긋남 / Tick 누락 | `Control_Loop` 안에서 blocking 호출 (osDelay 등) | `XM_GetTick()` + 논블로킹 패턴 사용 ([Ex.08](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/)) |

@@ -73,22 +73,22 @@ This page does not re-explain how the global `XM` object gets filled and flushed
 void XM_SetControlMode(XmControlMode_t mode);
 ```
 
-This is the safety switch that decides whether the robot's **output (actuation) is ON or OFF**. In both `XM_CTRL_MONITOR` and `XM_CTRL_TORQUE`, your `Control_Loop()` algorithm itself still runs every tick — the only difference is whether the computed torque command is actually sent to the CM. In other words, it is not a switch that turns the algorithm off, only the output.
+This is the safety switch that decides whether the robot's **output (actuation) is ON or OFF**. In both `XM_CTRL_MONITOR` and `XM_CTRL_CONTROL`, your `Control_Loop()` algorithm itself still runs every tick — the only difference is whether the computed torque command is actually sent to the CM. In other words, it is not a switch that turns the algorithm off, only the output.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `mode` | `XmControlMode_t` | `XM_CTRL_MONITOR` (default, no output) or `XM_CTRL_TORQUE` (actual actuation) |
+| `mode` | `XmControlMode_t` | `XM_CTRL_MONITOR` (default, no output) or `XM_CTRL_CONTROL` (actual actuation) |
 
 **Return value**: none
 
 **Safety logic**: the instant the mode changes (especially MONITOR → TORQUE), **all torque commands are internally reset to 0** to prevent a jerk at the start of actuation.
 
-⚠️ **Call context**: assumed to be called from `Control_Setup()`/`Control_Loop()` (the header does not state any ISR-safety guarantee). The common pattern is `XM_CTRL_TORQUE` on algorithm Entry and `XM_CTRL_MONITOR` on Exit.
+⚠️ **Call context**: assumed to be called from `Control_Setup()`/`Control_Loop()` (the header does not state any ISR-safety guarantee). The common pattern is `XM_CTRL_CONTROL` on algorithm Entry and `XM_CTRL_MONITOR` on Exit.
 
 **Example**
 ```c
 void Active_Entry(void) {
-    XM_SetControlMode(XM_CTRL_TORQUE);   // start real actuation
+    XM_SetControlMode(XM_CTRL_CONTROL);   // start real actuation
 }
 
 void Active_Exit(void) {
@@ -118,7 +118,7 @@ Sets both hip assist torques in one call. The actual CAN transmission happens au
 > ⚠️ Argument order is **(right rh, left lh)**. If that's confusing, use [`XM_SetAssistTorqueRH()` / `XM_SetAssistTorqueLH()`](#xm_setassisttorquerh--xm_setassisttorquelh) to set one side at a time.
 > For the sign convention, unit, and the hard clamp (±10 Nm), see [Doc 02 §Real-time Control](../02-h10-control-n-data.en.md#xm_setassisttorque) — this header itself does not define the scaling/clamp values (they live in another internal module).
 
-⚠️ **Call context**: assumed to be `Control_Loop()`. Requires `XM_SetControlMode(XM_CTRL_TORQUE)` to actually be transmitted.
+⚠️ **Call context**: assumed to be `Control_Loop()`. Requires `XM_SetControlMode(XM_CTRL_CONTROL)` to actually be transmitted.
 
 **Example**
 ```c
@@ -569,14 +569,14 @@ XM10's control-authority (output ON/OFF) mode.
 ```c
 typedef enum {
     XM_CTRL_MONITOR = 0,  // monitoring mode (default) — algorithm runs, torque command not sent
-    XM_CTRL_TORQUE  = 1   // torque control mode — computed torque command is sent periodically (real actuation)
+    XM_CTRL_CONTROL  = 1   // torque control mode — computed torque command is sent periodically (real actuation)
 } XmControlMode_t;
 ```
 
 | Value | Name | Description |
 |---|---|---|
 | 0 | `XM_CTRL_MONITOR` | Default. The algorithm still runs every tick, but output (actuation) is blocked |
-| 1 | `XM_CTRL_TORQUE` | The computed torque command is actually sent to the CM |
+| 1 | `XM_CTRL_CONTROL` | The computed torque command is actually sent to the CM |
 
 **See also**: [`XM_SetControlMode()`](#xm_setcontrolmode)
 

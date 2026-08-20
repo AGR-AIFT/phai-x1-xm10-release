@@ -31,6 +31,7 @@ Add this single line at the top of any XM10 example (`.c`) file, and you get acc
 | 7 | `xm_api_memory.h` | Memory region access (Workspace/PSRAM/DTCM/non-volatile storage) | [07 Memory Regions](../07-memory-management.en.md) — 🟢 **Rev 2.0 only** |
 | 8 | `xm_api_rtc.h` | RTC date/time management | [08 Real-Time Clock](../08-rtc-clock.en.md) — ⚠️ stub on Rev1.1 |
 | 9 | `xm_api_freertos.h` | Auxiliary task creation + Mutex (student-friendly FreeRTOS wrapper) | [09 Auxiliary Tasks & Data Sharing](../09-task-creation.en.md) |
+| 10 | `xm_api_safety.h` | Safe-torque helpers (new in v2.6.0) — `XM_SafeTorque_*` combines bad-value rejection, limit clamping, entry soft-start and slew limiting in one call; plus `XM_SafeAssistLevel()` and `XM_SafeIsFresh()` for sensor freshness. Implemented inside the header, so there is no separate `.c` | [02 KIT H10 Control & Data](../02-h10-control-n-data.en.md) |
 
 **Revision differences at a glance**:
 

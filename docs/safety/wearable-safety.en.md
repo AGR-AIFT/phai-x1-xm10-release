@@ -59,7 +59,7 @@ Even when modifying the algorithm in the EMG example, **keep the following in pl
 1. **Final torque saturation** — limit clamp immediately before output.
 2. **Zero-torque during calibration** — force torque to 0 while calibration is in progress.
 3. **Zero-torque on mode exit** — in `Active_Exit`, set torque to 0 and return to `XM_SetControlMode(XM_CTRL_MONITOR)`.
-4. **`XM_SetControlMode`** — gate for entering `XM_CTRL_TORQUE` / returning to `MONITOR`.
+4. **`XM_SetControlMode`** — gate for entering `XM_CTRL_CONTROL` / returning to `MONITOR`.
 
 ---
 

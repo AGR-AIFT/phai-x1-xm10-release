@@ -288,7 +288,7 @@ if (pressed) { /* 1회만 실행 */ }
 
 #### `SetAssistTorque` 호출했는데 H10 안 움직임
 
-- `XM_SetControlMode(XM_CTRL_TORQUE)` 누락 → Active 진입 시 1회 호출
+- `XM_SetControlMode(XM_CTRL_CONTROL)` 누락 → Active 진입 시 1회 호출
 - 안전 스위치 트리거 상태 → ERROR 상태 점검
 - H10 본체 모터 활성화 안 됨 → 본체 LED / 토크 큐 확인
 

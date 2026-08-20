@@ -59,7 +59,7 @@ EMG 예제에서 알고리즘을 바꿔도 **다음은 그대로 둡니다**:
 1. **최종 토크 saturation** — 출력 직전 한계 클램프.
 2. **캘리브레이션 중 zero-torque** — 캘리브 동안 토크 0 강제.
 3. **모드 종료 시 zero-torque** — `Active_Exit` 에서 토크 0 + `XM_SetControlMode(XM_CTRL_MONITOR)` 복귀.
-4. **`XM_SetControlMode`** — `XM_CTRL_TORQUE` 진입/`MONITOR` 복귀 게이트.
+4. **`XM_SetControlMode`** — `XM_CTRL_CONTROL` 진입/`MONITOR` 복귀 게이트.
 
 ---
 

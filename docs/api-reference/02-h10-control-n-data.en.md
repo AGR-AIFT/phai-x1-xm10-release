@@ -32,7 +32,7 @@ The XM10 control system follows a strict **IPO (Input-Process-Output)** model, e
 3.  **Output (Command Flushing):**
 
       * After the user loop finishes, the system checks whether anything in `XM.command` has changed.
-      * When in torque control mode (`XM_CTRL_TORQUE`), updated commands are dispatched to the actual hardware (CAN Bus).
+      * When in torque control mode (`XM_CTRL_CONTROL`), updated commands are dispatched to the actual hardware (CAN Bus).
 
 4.	**Streaming (CDC):**
 
@@ -55,9 +55,11 @@ Defines the control mode.
 ```c
 typedef enum {
     XM_CTRL_MONITOR = 0,  // No control commands sent (Safety)
-    XM_CTRL_TORQUE  = 1   // Control commands sent (Active)
+    XM_CTRL_CONTROL = 1   // Control commands sent (Active)
 } XmControlMode_t;
 ```
+
+> **Renamed in v2.6.0.** The mode covers P/I vectors as well as torque, so `XM_CTRL_TORQUE` became **`XM_CTRL_CONTROL`**. The old name remains as an alias for the same value, so **existing code still builds** — use `XM_CTRL_CONTROL` in new code.
 
 ### `XmH10Mode_t`
 
@@ -431,7 +433,7 @@ CM_NmtState_t XM_GetXMNmtState(void);
 
 Sets the control authority mode for the robot. This is a safety-critical function.
 The default mode is monitoring mode, which does not send real-time control commands to H10.
-To enable real-time torque control, call `XM_SetControlMode` with `XM_CTRL_TORQUE`.
+To enable real-time torque control, call `XM_SetControlMode` with `XM_CTRL_CONTROL`.
 
 **Syntax**
 ```c
@@ -441,16 +443,28 @@ void XM_SetControlMode(XmControlMode_t mode);
 **Parameters**
   * `mode`: The mode to set.
 	  * `XM_CTRL_MONITOR` (0): **Monitoring mode.** No control commands are sent. (Default, safe)
-	  * `XM_CTRL_TORQUE` (1): **Torque control mode.** Staged torque commands are sent to the motors.
+	  * `XM_CTRL_CONTROL` (1): **Torque control mode.** Staged torque commands are sent to the motors.
 
 **Safety Logic**
-  * Whenever the mode changes (e.g., Monitor → Torque), **all torque commands are immediately reset to 0.0 internally**. This prevents sudden jerk at the moment control begins.
+  * Whenever the mode changes, **all torque commands are immediately reset to 0.0 internally**. This prevents sudden jerk at the moment control begins.
+
+**Returning to MONITOR takes time (v2.6.0+)**
+
+Entering `XM_CTRL_CONTROL` applies immediately, but going back to `XM_CTRL_MONITOR` is a **request** that completes in three stages:
+
+1. Torque decays exponentially to zero (time constant 0.1 s) and keeps transmitting while it does
+2. Zero torque is sent several times over, so a single dropped frame cannot leave a stale value
+3. P/I vector release commands go out → only then does output stop
+
+This normally takes **0.3–0.6 s**, and your torque and vector commands are ignored during that window.
+
+The reason: the H10 **holds the last command it received** when new ones stop arriving. Cutting transmission instantly, as before, could leave a non-zero torque applied on the H10 side.
 
 **Example**
 ```c
-// Enable torque control mode when entering the algorithm
+// Enable control mode when entering the algorithm
 void Active_Entry(void) {
-	XM_SetControlMode(XM_CTRL_TORQUE);
+	XM_SetControlMode(XM_CTRL_CONTROL);
 }
 
 // Return safely to monitoring mode when exiting the algorithm
@@ -458,6 +472,56 @@ void Active_Exit(void) {
 	XM_SetControlMode(XM_CTRL_MONITOR);
 }
 ```
+
+---
+
+### `XM_GetAppliedControlMode`
+
+Returns the control mode **actually in effect**. `XM_SetControlMode()` is a request, and because of the three stages above the request and the actual state can briefly differ.
+
+**Syntax**
+```c
+XmAppliedMode_t XM_GetAppliedControlMode(void);
+```
+
+**Return**
+  * `XM_MODE_APPLIED_CONTROL` — control output active
+  * `XM_MODE_APPLIED_MONITOR` — output blocked
+  * `XM_MODE_APPLIED_TRANSITION` — switching (torque and vector commands are ignored)
+
+**Example**
+```c
+// Move on only once the cleanup has finished
+if (XM_GetAppliedControlMode() == XM_MODE_APPLIED_MONITOR) {
+	/* output is fully blocked */
+}
+```
+
+---
+
+### `XM_EmergencyDisengage`
+
+Skips the decay stage and **confirms zero torque immediately.** Use it when there is no time to ramp down.
+
+**Syntax**
+```c
+void XM_EmergencyDisengage(void);
+```
+
+**Example**
+```c
+void Control_Loop(void) {
+	if (something_is_wrong) {
+		XM_EmergencyDisengage();   // no ramp, straight to zero
+		return;
+	}
+	...
+}
+```
+
+> For a normal exit use `XM_SetControlMode(XM_CTRL_MONITOR)`. `XM_EmergencyDisengage()` is for abnormal situations only.
+
+> ⚠️ Neither function replaces a real emergency stop. In wearer trials, the human stop paths in [Wearable Safety](../safety/wearable-safety.en.md) are the primary safety net.
 
 ---
 
@@ -1052,7 +1116,7 @@ void Active_Loop(void) {
 |------|------|------|
 | All `XM.status.h10.*` fields are 0 | KIT H10 not connected, or CAN-FD HIGH/LOW pins swapped | Check the pinmap in [01-hardware-setup.md](../getting-started/01-hardware-setup.md) Figure 1 |
 | `XM.status.h10.is_connected` is `false` | CAN-FD cable loose, or H10 body power is off | Verify KIT H10 24 V input and fully seat the connector |
-| `SetAssistTorque` is called but torque remains 0 | `XM_SetControlMode(XM_CTRL_TORQUE)` was never called | Set the mode once on entering the active state |
+| `SetAssistTorque` is called but torque remains 0 | `XM_SetControlMode(XM_CTRL_CONTROL)` was never called | Set the mode once on entering the active state |
 | Torque commands are sent but H10 does not move | KIT H10 firmware < v2.3.0 (incompatible with XM v2.0.0 and later) | Update using the [kit-h10-firmware/](../kit-h10-firmware/) guide |
 | Estimated data such as knee angle and forward velocity are always 0 | `XM_SendUserBodyData()` was never called (prerequisite for body-data-dependent fields) | See the Body Data instructions in [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md#part-5) |
 | IPO cycle misalignment / missed ticks | Blocking call inside `Control_Loop` (e.g., `osDelay`) | Use `XM_GetTick()` with a non-blocking pattern ([Ex.08](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/)) |

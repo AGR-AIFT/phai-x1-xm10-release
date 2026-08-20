@@ -131,7 +131,7 @@ bool is_assist = (XM.status.h10.h10Mode == XM_H10_MODE_ASSIST);
 ```c
 // Set control mode
 XM_SetControlMode(XM_CTRL_MONITOR);  // Monitor only (default)
-XM_SetControlMode(XM_CTRL_TORQUE);   // Enable direct torque control
+XM_SetControlMode(XM_CTRL_CONTROL);   // Enable direct torque control
 
 // Torque commands (valid only in CTRL_TORQUE mode)
 XM_SetAssistTorqueRH(float torque_nm);          // Right

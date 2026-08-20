@@ -131,7 +131,7 @@ bool is_assist = (XM.status.h10.h10Mode == XM_H10_MODE_ASSIST);
 ```c
 // 제어 모드 설정
 XM_SetControlMode(XM_CTRL_MONITOR);  // 모니터링 전용 (기본)
-XM_SetControlMode(XM_CTRL_TORQUE);   // 직접 토크 제어 활성화
+XM_SetControlMode(XM_CTRL_CONTROL);   // 직접 토크 제어 활성화
 
 // 토크 명령 (CTRL_TORQUE 모드에서만 유효)
 XM_SetAssistTorqueRH(float torque_nm);          // 우측

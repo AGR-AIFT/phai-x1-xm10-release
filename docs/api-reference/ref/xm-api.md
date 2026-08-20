@@ -31,6 +31,7 @@ XM10 예제(`.c`) 파일 맨 위에 아래 한 줄만 추가하면 로봇 제어
 | 7 | `xm_api_memory.h` | 메모리 영역 접근 (Workspace/PSRAM/DTCM/비휘발성 저장소) | [07 메모리 영역](../07-memory-management.md) — 🟢 **Rev 2.0 전용** |
 | 8 | `xm_api_rtc.h` | RTC 날짜/시간 관리 | [08 실시간 시계](../08-rtc-clock.md) — ⚠️ Rev1.1 에서는 stub |
 | 9 | `xm_api_freertos.h` | 보조 task 생성 + Mutex (FreeRTOS 학생 친화 wrapper) | [09 보조 task + 데이터 공유](../09-task-creation.md) |
+| 10 | `xm_api_safety.h` | 안전 토크 헬퍼 (v2.6.0 신규) — 이상값 차단 + 한계 클램프 + 진입 소프트스타트 + 기울기 제한을 한 번에 처리하는 `XM_SafeTorque_*`, 보조 레벨 클램프 `XM_SafeAssistLevel()`, 센서 신선도 확인 `XM_SafeIsFresh()`. 헤더 안에 구현이 들어 있어 별도 `.c` 가 없습니다 | [02 KIT H10 제어 + 데이터](../02-h10-control-n-data.md) |
 
 **Rev 차이 요약**:
 

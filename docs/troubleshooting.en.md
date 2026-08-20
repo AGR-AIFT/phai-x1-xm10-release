@@ -288,7 +288,7 @@ Alternatively, use the read-clear behavior of `XM_GetButtonEvent()` (see Ex.02).
 
 #### Called `SetAssistTorque` but KIT H10 Does Not Move
 
-- `XM_SetControlMode(XM_CTRL_TORQUE)` is missing → Call it once when entering the Active state
+- `XM_SetControlMode(XM_CTRL_CONTROL)` is missing → Call it once when entering the Active state
 - Safety switch is triggered → Check the ERROR state
 - KIT H10 motor activation did not complete → Check the chassis LED and torque queue
 

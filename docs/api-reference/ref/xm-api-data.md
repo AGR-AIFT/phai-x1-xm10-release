@@ -73,22 +73,22 @@
 void XM_SetControlMode(XmControlMode_t mode);
 ```
 
-로봇의 **출력(구동) ON/OFF**를 결정하는 안전 스위치입니다. `XM_CTRL_MONITOR`/`XM_CTRL_TORQUE` 두 모드 모두에서 사용자의 `Control_Loop()` 알고리즘 자체는 매 tick 그대로 실행됩니다 — 차이는 "계산된 토크 명령을 CM으로 실제 전송하느냐"뿐입니다. 즉 알고리즘을 끄는 스위치가 아니라 **출력만** 끄고 켜는 스위치입니다.
+로봇의 **출력(구동) ON/OFF**를 결정하는 안전 스위치입니다. `XM_CTRL_MONITOR`/`XM_CTRL_CONTROL` 두 모드 모두에서 사용자의 `Control_Loop()` 알고리즘 자체는 매 tick 그대로 실행됩니다 — 차이는 "계산된 토크 명령을 CM으로 실제 전송하느냐"뿐입니다. 즉 알고리즘을 끄는 스위치가 아니라 **출력만** 끄고 켜는 스위치입니다.
 
 | 파라미터 | 타입 | 설명 |
 |---|---|---|
-| `mode` | `XmControlMode_t` | `XM_CTRL_MONITOR`(기본값, 출력 없음) 또는 `XM_CTRL_TORQUE`(실제 구동) |
+| `mode` | `XmControlMode_t` | `XM_CTRL_MONITOR`(기본값, 출력 없음) 또는 `XM_CTRL_CONTROL`(실제 구동) |
 
 **반환값**: 없음
 
 **안전 로직**: 모드가 바뀌는 순간(특히 MONITOR → TORQUE) 급발진 방지를 위해 **모든 토크 명령이 내부적으로 0으로 초기화**됩니다.
 
-⚠️ **호출 컨텍스트**: `Control_Setup()`/`Control_Loop()` 컨텍스트 기준 (헤더에 별도 ISR 안전성 명시 없음). 알고리즘 진입(Entry) 시 `XM_CTRL_TORQUE`, 종료(Exit) 시 `XM_CTRL_MONITOR`로 되돌리는 것이 일반적인 패턴입니다.
+⚠️ **호출 컨텍스트**: `Control_Setup()`/`Control_Loop()` 컨텍스트 기준 (헤더에 별도 ISR 안전성 명시 없음). 알고리즘 진입(Entry) 시 `XM_CTRL_CONTROL`, 종료(Exit) 시 `XM_CTRL_MONITOR`로 되돌리는 것이 일반적인 패턴입니다.
 
 **예제**
 ```c
 void Active_Entry(void) {
-    XM_SetControlMode(XM_CTRL_TORQUE);   // 실제 구동 시작
+    XM_SetControlMode(XM_CTRL_CONTROL);   // 실제 구동 시작
 }
 
 void Active_Exit(void) {
@@ -118,7 +118,7 @@ void XM_SetAssistTorque(float rh, float lh);
 > ⚠️ 인자 순서는 **(오른쪽 rh, 왼쪽 lh)** 입니다. 헷갈리면 [`XM_SetAssistTorqueRH()` / `XM_SetAssistTorqueLH()`](#xm_setassisttorquerh--xm_setassisttorquelh)로 한쪽씩 지정하세요.
 > 부호·단위·하드 리미트(±10 Nm) 등 상세 규약은 [02문서 §실시간 제어](../02-h10-control-n-data.md#xm_setassisttorque)를 참고하세요 — 이 헤더 자체에는 스케일/클램프 값이 정의되어 있지 않습니다(다른 내부 모듈에서 적용).
 
-⚠️ **호출 컨텍스트**: `Control_Loop()` 기준. `XM_SetControlMode(XM_CTRL_TORQUE)`가 설정되어 있어야 실제로 전송됩니다.
+⚠️ **호출 컨텍스트**: `Control_Loop()` 기준. `XM_SetControlMode(XM_CTRL_CONTROL)`가 설정되어 있어야 실제로 전송됩니다.
 
 **예제**
 ```c
@@ -569,14 +569,14 @@ XM10의 제어 권한(출력 ON/OFF) 모드입니다.
 ```c
 typedef enum {
     XM_CTRL_MONITOR = 0,  // 모니터링 모드 (기본값) — 알고리즘은 실행되나 토크 명령 미전송
-    XM_CTRL_TORQUE  = 1   // 토크 제어 모드 — 계산된 토크 명령을 주기적으로 전송 (실제 구동)
+    XM_CTRL_CONTROL  = 1   // 토크 제어 모드 — 계산된 토크 명령을 주기적으로 전송 (실제 구동)
 } XmControlMode_t;
 ```
 
 | 값 | 이름 | 설명 |
 |---|---|---|
 | 0 | `XM_CTRL_MONITOR` | 기본값. 알고리즘은 매 tick 실행되지만 출력(구동)은 차단됩니다 |
-| 1 | `XM_CTRL_TORQUE` | 계산된 토크 명령을 실제로 CM에 전송합니다 |
+| 1 | `XM_CTRL_CONTROL` | 계산된 토크 명령을 실제로 CM에 전송합니다 |
 
 **참고**: [`XM_SetControlMode()`](#xm_setcontrolmode)
 

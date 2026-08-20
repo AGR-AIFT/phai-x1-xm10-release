@@ -153,7 +153,7 @@ Extension_Module/
 | `Control_Loop` 안에서 `while(1)` 사용 | 한 cycle 안에서 빠져나오지 못해 다른 작업이 멈춤 | `Control_Loop` 는 한 번 실행하고 return — 반복은 시스템이 알아서 |
 | `Control_Loop` 안에서 `HAL_Delay(100)` 사용 | 100 ms 동안 다른 작업 모두 정지 | `XM_GetTick()` 차이로 비차단 타이머 구성 |
 | `XM.status.h10.leftHipAngle` 이 항상 0 | KIT H10 미연결 또는 ASSIST 모드 진입 전 | `XM_IsCmConnected()` + `h10Mode == XM_H10_MODE_ASSIST` 확인 |
-| `XM_SetAssistTorque*` 호출했는데 토크 안 나옴 | 토크 제어 모드 진입 누락 | Active 진입 시 `XM_SetControlMode(XM_CTRL_TORQUE)` 1회 호출 |
+| `XM_SetAssistTorque*` 호출했는데 토크 안 나옴 | 토크 제어 모드 진입 누락 | Active 진입 시 `XM_SetControlMode(XM_CTRL_CONTROL)` 1회 호출 |
 | XM 라이브러리 폴더 (IOIF, Devices 등) 코드를 수정 | 라이브러리는 양산 코드 — 임의 수정 시 시스템 깨짐 | 항상 `Control_Task/` 안에서만 작업 |
 | Control_Loop 가 1 ms 안에 못 끝남 | 무거운 sprintf, 부동소수 누적 연산 등 | [Ex.18 Debug Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) 로 실행 시간 측정 후 분산 |
 | 두 예제를 동시에 빌드 시도 | `Control_Task/` 안에 `.c` 파일은 하나만 | 한 번에 한 예제만 복사해서 빌드 |
