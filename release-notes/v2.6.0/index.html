@@ -2628,7 +2628,7 @@
 <ul>
 <li><strong>제어를 끄면 확실히 꺼집니다</strong> — 예전에는 <code>MONITOR</code> 로 돌아가도 마지막에 보낸 토크가 H10 쪽에 그대로 남아 있을 수 있었습니다. 이제는 토크를 부드럽게 0 까지 내린 뒤, 0 을 확실히 보내고, 그 다음에 출력을 끕니다.</li>
 <li><strong>펌웨어가 멈춰도 보드가 스스로 재시작합니다</strong> — 하드웨어 워치독(약 8 초)을 넣었습니다. 무한 재부팅으로 빠지지 않도록 부팅 실패 처리도 함께 고쳤습니다.</li>
-<li><strong>예제 12 개가 더 안전해졌습니다</strong> — 시작할 때 갑자기 튀지 않도록(소프트스타트), 버튼을 눌렀을 때 턱턱 치지 않도록(미분킥 제거), 센서가 끊기면 멈추도록 손봤습니다.</li>
+<li><strong>예제 15 개가 더 안전해졌습니다</strong> — 시작할 때 갑자기 튀지 않도록(소프트스타트), 버튼을 눌렀을 때 턱턱 치지 않도록(미분킥 제거), 센서가 끊기면 멈추도록 손봤습니다.</li>
 <li><strong><code>forwardVelocity</code> 값이 바로잡혔습니다</strong> — <strong>60 배 크게 나오던 버그</strong>입니다. 이 값을 쓰셨다면 아래 <a href="#호환성-안내">호환성 안내</a>를 꼭 읽어주세요.</li>
 <li><strong>외부 장비와 시점 맞추기(Ext_Sync)</strong> — 외부 sync box 의 TTL 신호를 받아 "지금 저장 중인가"를 데이터에 같이 실어 보냅니다.</li>
 </ul>
@@ -2678,7 +2678,7 @@
 </blockquote>
 <hr />
 <h2 id="3-예제가-더-안전해졌습니다">3. 예제가 더 안전해졌습니다<a class="headerlink" href="#3-예제가-더-안전해졌습니다" title="Permanent link">&para;</a></h2>
-<p>12 개 예제를 손봤습니다. <strong>예제 번호와 배우는 내용은 그대로</strong>이고, 안전 장치만 추가·정리했습니다.</p>
+<p>15 개 예제의 안전 장치를 손봤습니다. <strong>예제 번호와 배우는 내용은 그대로</strong>입니다.</p>
 <table>
 <thead>
 <tr>
@@ -2715,6 +2715,7 @@
 </tr>
 </tbody>
 </table>
+<p>이와 별개로 <strong>Ex.03 · 08 · 31 · 37</strong> 은 설명 문구만 바로잡았습니다 (동작 변경 없음) — 옛 파일명(<code>user_app.c</code>) 잔존, 실제 코드는 <code>snprintf</code> 인데 주석만 <code>sprintf</code> 로 적힌 곳, 로그 문구, Ex.31 의 토크 단위 설명.</p>
 <h3 id="벤치로봇을-착용하지-않은-상태-안내-추가">벤치(로봇을 착용하지 않은 상태) 안내 추가<a class="headerlink" href="#벤치로봇을-착용하지-않은-상태-안내-추가" title="Permanent link">&para;</a></h3>
 <p><strong>Ex.15 · 21 · 30 · 33</strong> 은 원래 <strong>사람이 착용한 상태</strong>를 전제로 게인이 잡혀 있습니다. 착용하지 않고 다리만 매달린 상태에서 돌리면 <strong>관성이 훨씬 작아 진동하거나 발산합니다</strong> — 예제가 고장 난 게 아닙니다.</p>
 <p>그래서 각 예제 파일 맨 위에 <strong>벤치용 파라미터 안내 주석</strong>을 넣었습니다. 링크 단독 질량·무게중심 값(0.184 kg / 0.1264 m)으로 바꿔 넣으면 벤치에서도 안정적으로 관찰할 수 있습니다.</p>
@@ -2728,7 +2729,7 @@
 </ul>
 <hr />
 <h2 id="5-외부-장비와-시점-맞추기-ext_sync">5. 외부 장비와 시점 맞추기 (Ext_Sync)<a class="headerlink" href="#5-외부-장비와-시점-맞추기-ext_sync" title="Permanent link">&para;</a></h2>
-<p>외부 계측 장비(sync box)의 <strong>TTL 신호</strong>를 XM10 의 확장 입력 <strong>DIO8</strong> 로 받아, 실시간 데이터에 함께 실어 보냅니다. 이제 PhAI Studio 에서 "<strong>언제부터 언제까지가 저장 구간인지</strong>"를 XM10 데이터와 같은 타임라인 위에서 볼 수 있습니다.</p>
+<p>외부 계측 장비(sync box)의 <strong>TTL 신호</strong>를 XM10 의 외부 GPIO <strong>DIO 8</strong> 로 받아, 실시간 데이터에 함께 실어 보냅니다. 이제 PhAI Studio 에서 "<strong>언제부터 언제까지가 저장 구간인지</strong>"를 XM10 데이터와 같은 타임라인 위에서 볼 수 있습니다.</p>
 <p>Total Data 에 3 개 채널이 추가되었습니다.</p>
 <table>
 <thead>
@@ -2756,7 +2757,10 @@
 <blockquote>
 <p><strong>연결 순서만 지켜주세요.</strong> ① sync box 를 <strong>저장 중이 아닌 상태</strong>(주황 LED 꺼짐)로 두고 → ② XM10 전원을 켜고 → ③ 이후에는 sync box 의 <strong>버튼을 누르지 마세요</strong>(버튼도 전기적으로는 저장 신호와 똑같은 파형이라 구분할 수 없습니다). 저장은 태블릿 앱에서만 조작합니다.</p>
 </blockquote>
-<p>배선: sync box TTL 출력(0/3.3 V) → XM10 확장 커넥터 <strong>DIO8</strong>, GND 공통.</p>
+<p>배선: sync box TTL 출력(0/3.3 V) → XM10 외부 GPIO 헤더의 <strong>DIO 8</strong>(<code>XM_EXT_DIO_8</code>), GND 공통. 핀 위치는 <a href="../../api-reference/04-external-io/">외부 IO</a> 와 본인 보드의 핀맵 문서를 보세요.</p>
+<blockquote>
+<p><strong>DIO 8 을 이미 쓰고 계셨다면.</strong> 시스템이 부팅할 때 이 핀을 입력(풀다운)으로 잡습니다. 다만 그 시점이 <code>Control_Setup</code> <strong>이전</strong>이라, 여러분이 <code>Control_Setup</code> 에서 <code>XM_SetPinMode(XM_EXT_DIO_8, ...)</code> 로 다시 설정하면 <strong>여러분 설정이 이깁니다.</strong> 기존 코드는 그대로 동작하고, 그 대신 위 3 개 채널이 의미 없는 값이 됩니다.</p>
+</blockquote>
 <hr />
 <h2 id="6-그-밖에-rev-20-전용">6. 그 밖에 (Rev 2.0 전용)<a class="headerlink" href="#6-그-밖에-rev-20-전용" title="Permanent link">&para;</a></h2>
 <ul>
@@ -2854,12 +2858,14 @@
 </tr>
 </tbody>
 </table>
-<p><strong>부트로더가 갱신되었습니다.</strong> 두 가지를 고쳤습니다.</p>
-<ol>
-<li><strong>설정 영역이 손상돼도 스스로 복구</strong> — 부트로더가 쓰는 설정 영역이 (전원 이상 등으로) 깨지면 읽는 순간 오류가 나면서 보드가 부팅되지 않을 수 있었습니다. 이제 그 상황을 감지해 설정을 초기화하고 정상 부팅합니다.</li>
-<li><strong>앱으로 넘어갈 때 잔재 정리</strong> — 부트로더에서 사용자 펌웨어로 넘어가는 순간, 처리되지 않고 남아 있던 시스템 인터럽트를 정리합니다.</li>
-</ol>
-<p>SWD 로 한 번 다시 설치해 주세요. 설치 방법은 <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.6.0/docs/bootloader/README.md">부트로더 업로드</a> 문서를 참고하세요. <strong>KIT H10 펌웨어·컨텐츠 파일은 이전과 동일</strong>하므로 이미 설치하셨다면 추가 작업이 없습니다.</p>
+<p><strong>부트로더가 갱신되었습니다.</strong> 이번에 새로 들어간 것은 하나입니다.</p>
+<ul>
+<li><strong>설정 영역이 손상돼도 스스로 복구</strong> — 부트로더가 쓰는 설정 영역이 (전원 이상 등으로) 깨지면 읽는 순간 오류가 나면서 보드가 아예 부팅되지 않을 수 있었습니다. 이제 그 상황을 감지해 설정을 초기화하고 정상 부팅합니다.</li>
+</ul>
+<blockquote>
+<p>v2.5.1 에 첨부됐던 "앱으로 넘어갈 때 남은 시스템 인터럽트 정리" 는 이미 들어가 있는 판입니다. v2.5.1 부트로더를 설치하셨다면 그 부분은 그대로 유지된 채 위 항목만 추가됩니다.</p>
+</blockquote>
+<p><strong>v2.6.0 펌웨어는 예전 부트로더에서도 그대로 동작합니다.</strong> 이번 갱신은 "부팅이 안 되는 상황"에 대한 대비이므로 <strong>권장</strong>이지 필수가 아닙니다. 여유 있을 때 SWD 로 한 번 다시 설치해 두시면 됩니다 — <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.6.0/docs/bootloader/README.md">부트로더 업로드</a>. <strong>KIT H10 펌웨어·컨텐츠 파일은 이전과 동일</strong>하므로 이미 설치하셨다면 추가 작업이 없습니다.</p>
 <h3 id="준비물-안내">준비물 안내<a class="headerlink" href="#준비물-안내" title="Permanent link">&para;</a></h3>
 <p>빌드 마무리 단계(업로드용 <code>.bin</code> 생성)가 <strong>Python</strong> 을 사용합니다. 아직 설치하지 않았다면 <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.6.0/docs/getting-started/02-software-setup.md">개발 환경 구축</a> 안내대로 Python 3.10+ 를 설치해 주세요 (PATH 등록 필수).</p>
 <hr />
@@ -2891,6 +2897,10 @@
 <tr>
 <td>사용자 task</td>
 <td><strong>제약 추가</strong> — 8 초 이상 CPU 독점 시 워치독 리셋</td>
+</tr>
+<tr>
+<td>외부 IO <code>DIO 8</code></td>
+<td><strong>시스템이 부팅 시 입력으로 점유</strong> (Ext_Sync). <code>Control_Setup</code> 에서 다시 설정하면 사용자 설정이 우선 — 기존 코드 무영향</td>
 </tr>
 <tr>
 <td>Total Data 패킷</td>

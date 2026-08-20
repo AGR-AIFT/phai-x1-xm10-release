@@ -2628,7 +2628,7 @@
 <ul>
 <li><strong>Turning control off actually turns it off</strong> — previously, going back to <code>MONITOR</code> could leave the last torque command latched on the H10 side. The firmware now ramps torque down to zero, confirms zero, and only then stops transmitting.</li>
 <li><strong>The board restarts itself if the firmware hangs</strong> — a hardware watchdog (about 8 seconds) was added, along with fixes that keep a failed boot from turning into an endless reboot loop.</li>
-<li><strong>12 examples are safer</strong> — soft-start on entry so nothing jumps, derivative kick removed so button presses no longer jolt the leg, and a stop when a sensor goes stale.</li>
+<li><strong>15 examples are safer</strong> — soft-start on entry so nothing jumps, derivative kick removed so button presses no longer jolt the leg, and a stop when a sensor goes stale.</li>
 <li><strong><code>forwardVelocity</code> is fixed</strong> — it was reporting <strong>60× too large</strong>. If you used this value, please read <a href="#compatibility">Compatibility</a>.</li>
 <li><strong>Time-sync with external equipment (Ext_Sync)</strong> — the TTL signal from an external sync box is now carried in the live data stream, so you can see exactly which span was being recorded.</li>
 </ul>
@@ -2678,7 +2678,7 @@
 </blockquote>
 <hr />
 <h2 id="3-the-examples-are-safer">3. The examples are safer<a class="headerlink" href="#3-the-examples-are-safer" title="Permanent link">&para;</a></h2>
-<p>Twelve examples were reworked. <strong>Example numbers and what they teach are unchanged</strong> — only safety handling was added or tidied.</p>
+<p>Fifteen examples had their safety handling reworked. <strong>Example numbers and what they teach are unchanged.</strong></p>
 <table>
 <thead>
 <tr>
@@ -2715,6 +2715,7 @@
 </tr>
 </tbody>
 </table>
+<p>Separately, <strong>Ex.03 · 08 · 31 · 37</strong> only had their prose corrected (no behavior change) — a stale filename (<code>user_app.c</code>), a comment saying <code>sprintf</code> where the code already used <code>snprintf</code>, a log string, and the torque-unit explanation in Ex.31.</p>
 <h3 id="bench-operation-guidance-added">Bench-operation guidance added<a class="headerlink" href="#bench-operation-guidance-added" title="Permanent link">&para;</a></h3>
 <p><strong>Ex.15 · 21 · 30 · 33</strong> were tuned assuming <strong>a person is wearing the suit</strong>. Run them on the bench, with the leg hanging free, and the much lower inertia makes them <strong>oscillate or diverge</strong> — the example is not broken.</p>
 <p>Each of those files now carries a <strong>bench-parameter comment</strong> at the top. Substitute the link's own mass and center-of-mass values (0.184 kg / 0.1264 m) and they behave predictably on the bench.</p>
@@ -2728,7 +2729,7 @@
 </ul>
 <hr />
 <h2 id="5-time-sync-with-external-equipment-ext_sync">5. Time-sync with external equipment (Ext_Sync)<a class="headerlink" href="#5-time-sync-with-external-equipment-ext_sync" title="Permanent link">&para;</a></h2>
-<p>XM10 can now read the <strong>TTL output of an external sync box</strong> on extension input <strong>DIO8</strong> and carry it in the live data stream. In PhAI Studio you can see <strong>exactly which span was being recorded</strong>, on the same timeline as the XM10 data.</p>
+<p>XM10 can now read the <strong>TTL output of an external sync box</strong> on external GPIO <strong>DIO 8</strong> and carry it in the live data stream. In PhAI Studio you can see <strong>exactly which span was being recorded</strong>, on the same timeline as the XM10 data.</p>
 <p>Three channels were added to Total Data:</p>
 <table>
 <thead>
@@ -2756,7 +2757,10 @@
 <blockquote>
 <p><strong>Just keep the connection order.</strong> ① Leave the sync box <strong>not recording</strong> (orange LED off), ② power up XM10, ③ from then on <strong>do not press the sync box button</strong> — electrically it produces exactly the same waveform as a save signal, so nothing downstream can tell them apart. Drive recording only from the tablet app.</p>
 </blockquote>
-<p>Wiring: sync box TTL output (0/3.3 V) → XM10 extension connector <strong>DIO8</strong>, common GND.</p>
+<p>Wiring: sync box TTL output (0/3.3 V) → <strong>DIO 8</strong> (<code>XM_EXT_DIO_8</code>) on the XM10 external GPIO header, common GND. For the physical pin, see <a href="../../api-reference/04-external-io/">External IO</a> and the pinout page for your board.</p>
+<blockquote>
+<p><strong>If you were already using DIO 8.</strong> The system claims this pin as an input (pull-down) at boot. That happens <strong>before</strong> <code>Control_Setup</code>, so if you reconfigure it there with <code>XM_SetPinMode(XM_EXT_DIO_8, ...)</code>, <strong>your setting wins.</strong> Existing code keeps working; the three channels above simply become meaningless.</p>
+</blockquote>
 <hr />
 <h2 id="6-also-in-this-release-rev-20-only">6. Also in this release (Rev 2.0 only)<a class="headerlink" href="#6-also-in-this-release-rev-20-only" title="Permanent link">&para;</a></h2>
 <ul>
@@ -2854,12 +2858,14 @@
 </tr>
 </tbody>
 </table>
-<p><strong>The bootloader was updated</strong>, with two fixes:</p>
-<ol>
-<li><strong>Self-recovery from a corrupted config area</strong> — if the bootloader's configuration area was damaged (by a power fault, for example), reading it raised an error and the board would not boot. That case is now detected: the configuration is reset and boot continues.</li>
-<li><strong>Cleanup on the jump to the application</strong> — pending system interrupts left over from the bootloader are cleared before control is handed to your firmware.</li>
-</ol>
-<p>Please reinstall it once over SWD; see <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.6.0/docs/bootloader/README.md">Bootloader Upload</a>. <strong>KIT H10 firmware and content files are unchanged</strong>, so if you have already installed those, there is nothing more to do.</p>
+<p><strong>The bootloader was updated.</strong> One thing is new this time:</p>
+<ul>
+<li><strong>Self-recovery from a corrupted config area</strong> — if the bootloader's configuration area was damaged (by a power fault, for example), reading it raised an error and the board would not boot at all. That case is now detected: the configuration is reset and boot continues.</li>
+</ul>
+<blockquote>
+<p>The "clear pending system interrupts on the jump to the application" fix that shipped with the v2.5.1 attachment is already in this build. If you installed the v2.5.1 bootloader, you keep that and gain the item above.</p>
+</blockquote>
+<p><strong>v2.6.0 firmware runs fine on the older bootloader.</strong> This update guards against a <em>board-will-not-boot</em> situation, so it is <strong>recommended, not required</strong> — reinstall it over SWD when convenient; see <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.6.0/docs/bootloader/README.md">Bootloader Upload</a>. <strong>KIT H10 firmware and content files are unchanged</strong>, so if you have already installed those, there is nothing more to do.</p>
 <h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h3>
 <p>The final build step (producing the uploadable <code>.bin</code>) uses <strong>Python</strong>. If you have not installed it, follow <a href="https://github.com/AGR-EXO/Extension_Module/blob/v2.6.0/docs/getting-started/02-software-setup.md">Software Setup</a> to install Python 3.10+ (adding it to PATH is required).</p>
 <hr />
@@ -2891,6 +2897,10 @@
 <tr>
 <td>Your own tasks</td>
 <td><strong>New constraint</strong> — holding the CPU for over 8 seconds triggers a watchdog reset</td>
+</tr>
+<tr>
+<td>External IO <code>DIO 8</code></td>
+<td><strong>Claimed by the system at boot</strong> as an input (Ext_Sync). Reconfiguring it in <code>Control_Setup</code> wins — existing code is unaffected</td>
 </tr>
 <tr>
 <td>Total Data packet</td>
