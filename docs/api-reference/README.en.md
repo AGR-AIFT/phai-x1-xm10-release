@@ -108,7 +108,7 @@ void Control_Setup(void)
 float angle_r = XM.status.h10.rightHipMotorAngle;   // Right (deg)
 float angle_l = XM.status.h10.leftHipMotorAngle;    // Left (deg)
 
-// Hip motor current (field name says Torque, but unit is A — multiply by 1.594 ≈ Nm)
+// Estimated hip joint torque [Nm] — use as-is
 float cur_r = XM.status.h10.rightHipTorque;         // Right (A)
 float cur_l = XM.status.h10.leftHipTorque;          // Left (A)
 

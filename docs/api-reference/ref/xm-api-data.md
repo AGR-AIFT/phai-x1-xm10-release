@@ -569,7 +569,7 @@ XM10의 제어 권한(출력 ON/OFF) 모드입니다.
 ```c
 typedef enum {
     XM_CTRL_MONITOR = 0,  // 모니터링 모드 (기본값) — 알고리즘은 실행되나 토크 명령 미전송
-    XM_CTRL_CONTROL  = 1   // 토크 제어 모드 — 계산된 토크 명령을 주기적으로 전송 (실제 구동)
+    XM_CTRL_CONTROL  = 1   // 제어 모드 — 계산된 토크·벡터 명령을 주기적으로 전송 (실제 구동)
 } XmControlMode_t;
 ```
 
@@ -687,7 +687,7 @@ typedef struct {
 | `pelvicAngle` | `float` | deg | 골반 각도 (Tilt) |
 | `isLeftFootContact` / `isRightFootContact` | `bool` | - | 좌/우 발 착지 여부 |
 | `forwardVelocity` | `float` | m/s | 전방 보행 속도 |
-| `leftHipTorque` / `rightHipTorque` | `float` | **A** | ⚠️ 필드명과 달리 **모터 전류**입니다. 관절 토크 환산: `τ_joint[Nm] = 0.085 × 18.75 × 전류[A] ≈ 1.594 × 전류` (실제 토크 센서 없음, 전류 기반 추정) |
+| `leftHipTorque` / `rightHipTorque` | `float` | **Nm** | 관절 토크 **추정값**. 토크 센서는 없고 모터 전류에서 내부 환산한 값입니다 (`Kt 0.085 × 감속비 18.75 ≈ 1.594`). 이미 환산된 값이므로 여기에 Kt 를 다시 곱하면 안 됩니다 |
 | `leftHipMotorAngle` / `rightHipMotorAngle` | `float` | deg | 좌/우 모터 엔코더 각도 (감속기 비율 때문에 관절 각도와 다를 수 있음) |
 | `left/rightHipImuFrontalRoll` | `float` | deg | 고관절 IMU Frontal Roll |
 | `left/rightHipImuSagittalPitch` | `float` | deg | 고관절 IMU Sagittal Pitch |

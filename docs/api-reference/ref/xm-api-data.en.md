@@ -569,7 +569,7 @@ XM10's control-authority (output ON/OFF) mode.
 ```c
 typedef enum {
     XM_CTRL_MONITOR = 0,  // monitoring mode (default) — algorithm runs, torque command not sent
-    XM_CTRL_CONTROL  = 1   // torque control mode — computed torque command is sent periodically (real actuation)
+    XM_CTRL_CONTROL  = 1   // control mode — computed torque and vector commands are sent periodically (real actuation)
 } XmControlMode_t;
 ```
 
@@ -687,7 +687,7 @@ typedef struct {
 | `pelvicAngle` | `float` | deg | Pelvic tilt angle |
 | `isLeftFootContact` / `isRightFootContact` | `bool` | - | Left/right foot ground contact |
 | `forwardVelocity` | `float` | m/s | Forward gait velocity |
-| `leftHipTorque` / `rightHipTorque` | `float` | **A** | ⚠️ Despite the field name, this is **motor current**. Joint torque conversion: `τ_joint[Nm] = 0.085 × 18.75 × current[A] ≈ 1.594 × current` (no real torque sensor — current-based estimate) |
+| `leftHipTorque` / `rightHipTorque` | `float` | **Nm** | **Estimated** joint torque. There is no torque sensor; the value is converted internally from motor current (`Kt 0.085 × gear 18.75 ≈ 1.594`). It is already converted — do not multiply by Kt again |
 | `leftHipMotorAngle` / `rightHipMotorAngle` | `float` | deg | Left/right motor encoder angle (may differ from joint angle due to gear ratio) |
 | `left/rightHipImuFrontalRoll` | `float` | deg | Hip IMU Frontal Roll |
 | `left/rightHipImuSagittalPitch` | `float` | deg | Hip IMU Sagittal Pitch |

@@ -108,7 +108,7 @@ void Control_Setup(void)
 float angle_r = XM.status.h10.rightHipMotorAngle;   // 우측 (deg)
 float angle_l = XM.status.h10.leftHipMotorAngle;    // 좌측 (deg)
 
-// 고관절 모터 전류 (필드명은 Torque 지만 단위는 A — 토크 환산 ×1.594 ≈ Nm)
+// 고관절 관절 토크 추정값 [Nm] — 그대로 사용
 float cur_r = XM.status.h10.rightHipTorque;         // 우측 (A)
 float cur_l = XM.status.h10.leftHipTorque;          // 좌측 (A)
 

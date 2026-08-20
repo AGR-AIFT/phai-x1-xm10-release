@@ -32,7 +32,7 @@ The XM10 control system follows a strict **IPO (Input-Process-Output)** model, e
 3.  **Output (Command Flushing):**
 
       * After the user loop finishes, the system checks whether anything in `XM.command` has changed.
-      * When in torque control mode (`XM_CTRL_CONTROL`), updated commands are dispatched to the actual hardware (CAN Bus).
+      * When in control mode (`XM_CTRL_CONTROL`), updated commands are dispatched to the actual hardware (CAN Bus).
 
 4.	**Streaming (CDC):**
 
@@ -146,10 +146,11 @@ typedef struct {
     float forwardVelocity;  // Forward walking velocity (m/s)
 
     // --- Motor Data ---
-    // [Note] leftHipTorque / rightHipTorque contain motor current (A), despite the field name.
-    //        Joint torque conversion: τ_joint[Nm] ≈ Kt(0.085) × gear(18.75) × hipTorque[A] ≈ 1.594 × hipTorque
-    float leftHipTorque;      // Left motor current (A) — unit is A, not Nm
-    float rightHipTorque;     // Right motor current (A) — unit is A, not Nm
+    // leftHipTorque / rightHipTorque : estimated joint torque [Nm] — use as-is.
+    //   There is no torque sensor; the value is converted internally from motor
+    //   current (Kt x gear ratio ~= 1.594). Multiplying by Kt again double-converts.
+    float leftHipTorque;      // Left joint torque estimate [Nm]
+    float rightHipTorque;     // Right joint torque estimate [Nm]
     float leftHipMotorAngle;  // Left motor encoder angle (degrees)
     float rightHipMotorAngle; // Right motor encoder angle
 
@@ -443,7 +444,7 @@ void XM_SetControlMode(XmControlMode_t mode);
 **Parameters**
   * `mode`: The mode to set.
 	  * `XM_CTRL_MONITOR` (0): **Monitoring mode.** No control commands are sent. (Default, safe)
-	  * `XM_CTRL_CONTROL` (1): **Torque control mode.** Staged torque commands are sent to the motors.
+	  * `XM_CTRL_CONTROL` (1): **Control mode.** Staged torque and vector commands are sent.
 
 **Safety Logic**
   * Whenever the mode changes, **all torque commands are immediately reset to 0.0 internally**. This prevents sudden jerk at the moment control begins.
@@ -709,7 +710,26 @@ None.
 
 **Example**
 ```c
-(coming soon)
+void Active_Entry(void) {
+    /* Vector commands are only sent in CONTROL mode */
+    XM_SetControlMode(XM_CTRL_CONTROL);
+
+    /* See the table above for the meaning and unit of each member */
+    FVector_t fvec = {
+        .modeIdx = 1,
+        .tauMax  = 200,   /* 2.00 (scaled by 100) */
+        .delay   = 0,
+        .zero    = 0
+    };
+
+    XM_SendFVector(SYS_NODE_ID_RH, &fvec);   /* right hip */
+}
+
+void Active_Exit(void) {
+    /* Going back to MONITOR makes the firmware ramp torque to zero and
+     * release the vectors before output stops (0.3–0.6 s) */
+    XM_SetControlMode(XM_CTRL_MONITOR);
+}
 ```
 
 ### `XM_SendPVectorReset()`

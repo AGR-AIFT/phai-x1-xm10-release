@@ -145,10 +145,11 @@ typedef struct {
     float forwardVelocity;  // 전방 보행 속도 (m/s)
 
     // --- Motor Data (모터 상태) ---
-    // [주의] leftHipTorque / rightHipTorque 는 필드명과 달리 모터 전류(A)입니다.
-    //        관절 토크 환산: τ_joint[Nm] ≈ Kt(0.085) × gear(18.75) × hipTorque[A] ≈ 1.594 × hipTorque
-    float leftHipTorque;      // 왼쪽 모터 전류 (A) — 단위는 Nm이 아닌 A
-    float rightHipTorque;     // 오른쪽 모터 전류 (A) — 단위는 Nm이 아닌 A
+    // leftHipTorque / rightHipTorque : 관절 토크 추정값 [Nm] — 그대로 쓰면 됩니다.
+    //   토크 센서는 없고 모터 전류에서 내부 환산한 값입니다 (Kt × 감속비 ≈ 1.594).
+    //   여기에 Kt 를 다시 곱하면 이중 변환입니다.
+    float leftHipTorque;      // 왼쪽 관절 토크 추정 [Nm]
+    float rightHipTorque;     // 오른쪽 관절 토크 추정 [Nm]
     float leftHipMotorAngle;  // 왼쪽 모터 엔코더 각도 (Degree)
     float rightHipMotorAngle; // 오른쪽 모터 엔코더 각도
 
@@ -199,8 +200,8 @@ typedef struct {
 | **`isLeftFootContact`** | `bool` | - | 왼쪽 발 착지 여부 (`true`: 지면 접촉) |
 | **`isRightFootContact`** | `bool` | - | 오른쪽 발 착지 여부 |
 | **`forwardVelocity`** | `float` | m/s | 전방 속도 (추정치) |
-| **`leftHipTorque`** | `float` | A | 왼쪽 모터 전류 — 필드명과 달리 단위는 **A** (토크 환산 ×1.594 ≈ Nm) |
-| **`rightHipTorque`** | `float` | A | 오른쪽 모터 전류 — 필드명과 달리 단위는 **A** (토크 환산 ×1.594 ≈ Nm) |
+| **`leftHipTorque`** | `float` | Nm | 왼쪽 관절 토크 추정값 — 그대로 사용 (추가 환산 금지) |
+| **`rightHipTorque`** | `float` | Nm | 오른쪽 관절 토크 추정값 — 그대로 사용 (추가 환산 금지) |
 | **`leftHipMotorAngle`** | `float` | deg | 왼쪽 모터 현재 엔코더 각도 (Feedback) |
 | **`rightHipMotorAngle`** | `float` | deg | 오른쪽 모터 현재 엔코더 각도 (Feedback) |
 | `leftHipImuFrontalRoll` | `float` | deg | 왼쪽 고관절 IMU Frontal Roll 각도 |
@@ -441,7 +442,7 @@ void XM_SetControlMode(XmControlMode_t mode);
 **Parameters**
   * `mode`: 설정할 모드
 	  * `XM_CTRL_MONITOR` (0): **모니터링 모드.** 제어 명령을 전송하지 않습니다. (기본값, 안전)
-	  * `XM_CTRL_CONTROL` (1): **토크 제어 모드.** 설정된 토크 명령을 모터로 전송합니다.
+	  * `XM_CTRL_CONTROL` (1): **제어 모드.** 설정된 토크·벡터 명령을 전송합니다.
  
 **Safety Logic**
   * 모드가 변경될 때, **내부적으로 모든 토크 명령을 즉시 0.0으로 초기화**합니다. 이는 제어 시작 순간에 급격한 움직임(Jerk)이 발생하는 것을 방지하기 위함입니다.
@@ -707,7 +708,26 @@ void XM_SendFVector(SystemNodeID_t nodeId, const FVector_t* fVector);
 
 **Example**
 ```c
-(작성 예정)
+void Active_Entry(void) {
+    /* 벡터 명령은 CONTROL 모드에서만 전송됩니다 */
+    XM_SetControlMode(XM_CTRL_CONTROL);
+
+    /* 각 멤버의 의미와 단위는 위 표 참고 */
+    FVector_t fvec = {
+        .modeIdx = 1,
+        .tauMax  = 200,   /* 2.00 (scaled by 100) */
+        .delay   = 0,
+        .zero    = 0
+    };
+
+    XM_SendFVector(SYS_NODE_ID_RH, &fvec);   /* 오른쪽 고관절 */
+}
+
+void Active_Exit(void) {
+    /* MONITOR 로 돌아가면 펌웨어가 토크를 0 까지 내리고
+     * 벡터 해제까지 처리한 뒤 출력을 끕니다 (0.3~0.6초) */
+    XM_SetControlMode(XM_CTRL_MONITOR);
+}
 ```
 
 ### `XM_SendPVectorReset()`
