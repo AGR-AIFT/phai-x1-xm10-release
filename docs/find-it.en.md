@@ -82,7 +82,6 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | PhAI Studio won't detect the board (CDC) | ⚠️ Common Mistakes in Ex.07–09 + the PhAI simultaneous-access warning in the `.c` file header |
 | Board stuck in an infinite reboot loop | [troubleshooting.md](troubleshooting.md) |
 | What is Body Data? (gaitCycle, etc.) | [api-reference/README.md — Body Data Prerequisites](api-reference/README.md) |
-| Anticipated student-blocking scenarios for instructors / mentors | [docs/student-walkthrough-simulations.md](student-walkthrough-simulations.md) |
 | Known issues by version | [docs/release-notes/](release-notes/) |
 
 ## 📖 Meta

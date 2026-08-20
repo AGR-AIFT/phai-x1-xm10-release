@@ -30,7 +30,7 @@ XM10 이 **FES Hub 형제 모듈**과 CAN-FD 로 통신하여 채널 1 의 전�
 | BTN2 클릭 | ACTIVE | ES-vector mid-update (20 mA → 40 mA) |
 | BTN1 클릭 | ACTIVE | CH1 자극 정지 → STANDBY 복귀 |
 
-> 📸 `![FES Hub 연결 흐름](../assets/img/37_fes_hub_ctrl.gif)` placeholder
+> 📸 **FES Hub 연결 흐름** — 사진·영상 준비 중
 
 ---
 

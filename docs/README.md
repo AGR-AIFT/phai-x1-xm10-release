@@ -109,4 +109,3 @@ ST-Link SWD 직접 업로드 + PhAI Studio USB 업로드 두 가지 방법 + 부
 - [Release Notes](release-notes/) — 버전별 첨부 파일 + 호환성 매트릭스
 - [Changelog](https://github.com/AGR-EXO/Extension_Module/blob/Develop/CHANGELOG.md) — 버전별 변경 이력 요약
 - [XM10 SDK](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM10_SDK/) — Rev1.1 / Rev2.0 SDK 프로젝트
-- [사용자 5 명 가상 시뮬레이션](student-walkthrough-simulations.md) — 강사·멘토용 UX 검증 워크스루

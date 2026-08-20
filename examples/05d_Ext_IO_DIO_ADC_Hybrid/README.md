@@ -20,7 +20,7 @@
 
 **동작**: 외부 버튼 누름 → 측정 모드 토글. ON 상태에서 FSR 4개 합산 압력 > 6 V (4 × 1.5 V) 이면 내부 LED 1 켜짐.
 
-> 📸 `![Hybrid 회로](../assets/img/05d_hybrid.png)` placeholder
+> 📸 **Hybrid 회로** — 사진·영상 준비 중
 
 ---
 

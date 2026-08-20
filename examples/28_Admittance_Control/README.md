@@ -23,7 +23,7 @@
 
 USB CDC `ADM | τext:0.85 θref:5.2 θ:5.1 τcmd:0.06` 매 500 ms.
 
-> 📸 `![어드미턴스 vs 임피던스 블록다이어그램](../assets/img/28_admittance_block.png)` placeholder
+> 📸 **어드미턴스 vs 임피던스 블록다이어그램** — 사진·영상 준비 중
 
 ---
 

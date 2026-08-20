@@ -109,4 +109,3 @@ Common issues covering build errors, USB connection problems, communication fail
 - [Release Notes](release-notes/) — Per-version attachments and compatibility matrix
 - [Changelog](https://github.com/AGR-EXO/Extension_Module/blob/Develop/CHANGELOG.md) — Summary of changes by version
 - [XM10 SDK](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM10_SDK/) — Rev1.1 / Rev2.0 SDK projects
-- [5-User Walkthrough Simulations](student-walkthrough-simulations.md) — UX validation walkthroughs for instructors and mentors

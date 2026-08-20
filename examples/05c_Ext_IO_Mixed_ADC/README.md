@@ -13,7 +13,7 @@
 
 **조이스틱 (고정 ADC 2채널) + FSR 4개 (DIO→ADC 4채널)** 을 동시에 읽고, 조이스틱이 중립 위치 (약 1.5~1.8 V) 일 때 LED 1 이 켜집니다.
 
-> 📸 `![Mixed ADC 시스템](../assets/img/05c_mixed_adc.png)` placeholder
+> 📸 **Mixed ADC 시스템** — 사진·영상 준비 중
 
 ---
 

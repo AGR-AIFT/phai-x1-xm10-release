@@ -17,7 +17,7 @@
 - 떼는 순간: LED 1 OFF
 - 즉각 반응 (지연 거의 0)
 
-> 📸 `![BTN1 누르면 LED1 점등](../assets/img/01_btn_led_basic.gif)` placeholder
+> 📸 **BTN1 누르면 LED1 점등** — 사진·영상 준비 중
 
 ---
 

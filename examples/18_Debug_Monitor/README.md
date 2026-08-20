@@ -29,7 +29,7 @@ H10 가 연결되지 않아도 **시스템 자체 진단** 이 항상 동작합�
 
 버튼 조작: **BTN 1** 통계 리셋 / **BTN 2** Verbose 모드 토글 / **BTN 3 롱프레스** 종합 덤프.
 
-> 📸 `![Health Dashboard 콘솔 출력](../assets/img/18_health_dashboard.png)` placeholder
+> 📸 **Health Dashboard 콘솔 출력** — 사진·영상 준비 중
 
 ---
 

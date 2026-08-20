@@ -25,7 +25,7 @@ Hip Angles -> RH: 13.45, LH: -7.92
 ...
 ```
 
-> 📸 `![센서 모니터링 출력](../assets/img/08_sensor_print.png)` placeholder
+> 📸 **센서 모니터링 출력** — 사진·영상 준비 중
 
 ---
 

@@ -30,7 +30,6 @@ build/
 docs/*
 !docs/README.md
 !docs/troubleshooting.md
-!docs/student-walkthrough-simulations.md
 !docs/find-it.md
 !docs/release-notes/
 docs/release-notes/*
@@ -66,7 +65,6 @@ docs/api-reference/*
 !docs/api-reference/03-led-btn-control.md
 !docs/api-reference/04-external-io.md
 !docs/api-reference/05-usb-connectivity.md
-!docs/api-reference/06-usb-data-logging.md
 !docs/api-reference/07-memory-management.md
 !docs/api-reference/08-rtc-clock.md
 !docs/api-reference/09-task-creation.md
@@ -134,7 +132,6 @@ docs/stylesheets/*
 !docs/api-reference/03-led-btn-control.en.md
 !docs/api-reference/04-external-io.en.md
 !docs/api-reference/05-usb-connectivity.en.md
-!docs/api-reference/06-usb-data-logging.en.md
 !docs/api-reference/07-memory-management.en.md
 !docs/api-reference/08-rtc-clock.en.md
 !docs/api-reference/09-task-creation.en.md
