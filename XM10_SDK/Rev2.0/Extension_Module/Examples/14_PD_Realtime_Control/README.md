@@ -45,7 +45,7 @@ de[k]  = (e[k] − e[k−1]) / Δt               (이산 미분, Backward)
 
 ### 안전 핵심
 
-- `XM_SetControlMode(XM_CTRL_TORQUE)` 진입 시 1회 + `XM_CTRL_MONITOR` Exit 시 복귀
+- `XM_SetControlMode(XM_CTRL_CONTROL)` 진입 시 1회 + `XM_CTRL_MONITOR` Exit 시 복귀
 - `Active_Exit` 에서 토크 강제 0 reset (잔류 방지)
 - 토크 포화 = actuator saturation 모델
 
@@ -63,7 +63,7 @@ static float s_target_angle = 10.0f;
 
 static void Active_Entry(void)
 {
-    XM_SetControlMode(XM_CTRL_TORQUE);   // ② 토크 모드
+    XM_SetControlMode(XM_CTRL_CONTROL);   // ② 토크 모드
     s_prev_error = 0.0f;                  //    PD state reset
 }
 

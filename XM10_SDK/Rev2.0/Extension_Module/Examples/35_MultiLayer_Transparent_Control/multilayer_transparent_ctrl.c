@@ -339,7 +339,7 @@ static void Active_Entry(void)
 {
     g_ml_dbg.tsm_state = 2;
     g_ml_dbg.ctrl_mode_set = 1;
-    /* [v2.6] 토크 + 호밍 벡터 모두 CONTROL 모드 필요 (구 XM_CTRL_TORQUE 와 동일 값) */
+    /* [v2.6] 토크 + 호밍 벡터 모두 CONTROL 모드 필요 (구 XM_CTRL_CONTROL 와 동일 값) */
     XM_SetControlMode(XM_CTRL_CONTROL);
 
     /* === Homing 절차 시작 (Ex.12 패턴) === */

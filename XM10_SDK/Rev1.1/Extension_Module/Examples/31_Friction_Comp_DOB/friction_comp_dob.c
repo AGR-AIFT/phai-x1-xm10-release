@@ -306,7 +306,7 @@ static void Standby_Loop(void)
 static void Active_Entry(void)
 {
     // 토크 직접 제어 모드로 전환
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
 
     // DOB 상태 초기화 (안전 — 초기 큰 외란 추정치 방지)
     s_d_hat_r = 0.0f;

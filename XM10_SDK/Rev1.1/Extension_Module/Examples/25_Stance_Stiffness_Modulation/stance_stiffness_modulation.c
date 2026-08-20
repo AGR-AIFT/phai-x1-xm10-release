@@ -215,7 +215,7 @@ static void Standby_Loop(void)
 
 static void Active_Entry(void)
 {
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
 
     /* 블렌딩 게인 초기화 (0에서 부드럽게 시작) */
     s_k_blend_r     = 0.0f;

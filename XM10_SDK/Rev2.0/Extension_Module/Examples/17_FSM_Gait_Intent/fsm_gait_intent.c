@@ -351,7 +351,7 @@ static void Active_Entry(void)
     s_debug_timer = XM_GetTick();
 
     /* 토크 제어 모드 활성화 */
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
 
     /* LED: Stance/Swing 구분 표시 초기화 */
     XM_SetLedState(XM_LED_1, XM_ON);   /* LED 1: Stance 표시 */

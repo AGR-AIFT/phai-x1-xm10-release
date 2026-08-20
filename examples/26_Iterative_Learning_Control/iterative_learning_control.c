@@ -268,7 +268,7 @@ static void Standby_Loop(void)
 
 static void Active_Entry(void)
 {
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
     s_torque_cmd  = 0.0f;
     s_cycle_count = 0U;
     s_prev_gait_cycle = _EstimateGaitCycle();

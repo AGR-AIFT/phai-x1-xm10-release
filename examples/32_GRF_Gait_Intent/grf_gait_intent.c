@@ -318,7 +318,7 @@ static void Standby_Loop(void)
 static void Active_Entry(void)
 {
     // 토크 직접 제어 모드로 전환
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
 
     // 보행 추정기 초기화 (좌/우 독립)
     _ResetGaitEstimator(&s_gait_r);

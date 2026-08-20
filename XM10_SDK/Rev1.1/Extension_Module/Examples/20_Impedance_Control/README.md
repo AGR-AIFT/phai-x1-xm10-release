@@ -137,7 +137,7 @@ static void _HandleButtons(void)
 
 | 증상 | 원인 | 해결 |
 |------|------|------|
-| 토크가 항상 0 | `XM_SetControlMode(XM_CTRL_TORQUE)` 미호출 | Active_Entry 에 추가 |
+| 토크가 항상 0 | `XM_SetControlMode(XM_CTRL_CONTROL)` 미호출 | Active_Entry 에 추가 |
 | 진동 (oscillation) | B 가 너무 작음 (Light) | B Medium 이상으로 |
 | 다리가 평형점으로 너무 빠르게 끌림 | K 가 Stiff | K Soft 또는 Medium |
 | `theta_dot` 노이즈 | 후향 차분 + 1 kHz 노이즈 | LPF (factor 0.1~0.2) 추가 또는 B ↓ |

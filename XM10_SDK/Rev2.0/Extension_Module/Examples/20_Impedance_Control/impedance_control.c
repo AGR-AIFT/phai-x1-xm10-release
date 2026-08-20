@@ -287,14 +287,14 @@ static void Standby_Loop(void)
 /**
  * @brief ACTIVE 진입 — 토크 제어 모드 설정 및 임피던스 파라미터 초기화
  * @details
- * XM_CTRL_TORQUE 모드를 활성화하여 임피던스 제어 법칙에 따라
+ * XM_CTRL_CONTROL 모드를 활성화하여 임피던스 제어 법칙에 따라
  * 직접 토크 명령을 인가할 수 있도록 합니다.
  * 초기 강성/감쇠는 가장 부드러운 프리셋(Soft/Light)으로 시작합니다.
  */
 static void Active_Entry(void)
 {
     // 토크 직접 제어 모드로 전환
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
 
     // 임피던스 파라미터 초기화 (가장 부드러운 설정으로 시작)
     s_stiffness_idx = 0;

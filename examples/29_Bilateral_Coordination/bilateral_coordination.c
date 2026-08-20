@@ -209,7 +209,7 @@ static void Standby_Loop(void)
 
 static void Active_Entry(void)
 {
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
 
     s_prev_angle_r    = XM.status.h10.rightHipMotorAngle;
     s_prev_angle_l    = XM.status.h10.leftHipMotorAngle;

@@ -335,7 +335,7 @@ static void Standby_Loop(void)
 static void Active_Entry(void)
 {
     // 토크 직접 제어 모드로 전환
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
 
     // 교시 상태 초기화
     s_teach_state = TEACH_STATE_IDLE;

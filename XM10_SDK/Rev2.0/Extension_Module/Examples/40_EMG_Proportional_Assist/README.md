@@ -128,7 +128,7 @@ static void Active_Loop(void) {
 1. **`_EnvelopeToTorque()` 최종 포화(clamp)** — 출력 상한 보장.
 2. **캘리브레이션 중 zero-torque** — 캘리브 동안 토크 0.
 3. **모드 종료 시 zero-torque** — `Active_Exit`에서 토크 0 + `XM_SetControlMode(XM_CTRL_MONITOR)` 복귀.
-4. **`XM_SetControlMode` 게이트** — `XM_CTRL_TORQUE` 진입 / `MONITOR` 복귀.
+4. **`XM_SetControlMode` 게이트** — `XM_CTRL_CONTROL` 진입 / `MONITOR` 복귀.
 
 추가로 [착용 안전 1-페이지](../../docs/safety/wearable-safety.md)의 비상정지 경로(슈트 STANDBY)·정지 담당 대기를 반드시 숙지하세요.
 
@@ -139,7 +139,7 @@ static void Active_Loop(void) {
 | 증상 | 원인 | 해결 |
 |---|---|---|
 | 토크가 항상 0 | `control_ON = 0` (기본값) | 벤치 검증 후 `control_ON = 1` |
-| 토크가 항상 0 (control_ON=1인데도) | `XM_SetControlMode(XM_CTRL_TORQUE)` 미진입 / 슈트 ASSIST 아님 | ACTIVE 상태·슈트 ASSIST 확인 |
+| 토크가 항상 0 (control_ON=1인데도) | `XM_SetControlMode(XM_CTRL_CONTROL)` 미진입 / 슈트 ASSIST 아님 | ACTIVE 상태·슈트 ASSIST 확인 |
 | 버튼이 안 먹음 | `XM_IO_Update()` 미호출 | `Control_Loop` 끝에서 매번 호출(이 예제엔 포함됨) |
 | 이완해도 토크가 남음 | deadband 부족 / bias 캘리브 안 함 | BTN1 이완 캘리브 + `EMG_ENVELOPE_DEADBAND_V` 상향 |
 | 좌우 반대로 보조 | `torque_input_pair`/센서 좌우 뒤바뀜 | 거치 상태에서 한쪽씩 확인 후 매핑 정정 |

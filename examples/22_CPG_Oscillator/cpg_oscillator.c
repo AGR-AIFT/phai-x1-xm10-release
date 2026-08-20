@@ -334,7 +334,7 @@ static void Standby_Loop(void)
 static void Active_Entry(void)
 {
     /* 토크 직접 제어 모드 활성화 */
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
 
     /* AFO 상태 초기화 */
     s_phase       = 0.0f;

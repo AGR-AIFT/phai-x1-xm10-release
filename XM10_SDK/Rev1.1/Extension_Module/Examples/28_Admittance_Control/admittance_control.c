@@ -232,7 +232,7 @@ static void Standby_Loop(void)
 
 static void Active_Entry(void)
 {
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
 
     /* 현재 각도를 평형점으로 설정 */
     s_theta_eq_r = XM.status.h10.rightHipMotorAngle;

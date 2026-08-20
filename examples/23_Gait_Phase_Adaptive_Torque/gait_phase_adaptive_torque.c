@@ -257,7 +257,7 @@ static void Standby_Loop(void)
 
 static void Active_Entry(void)
 {
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
     s_torque_rh = 0.0f;
     s_torque_lh = 0.0f;
     s_usb_debug_timer = XM_GetTick();

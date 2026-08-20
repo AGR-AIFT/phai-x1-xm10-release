@@ -321,7 +321,7 @@ static void Active_Entry(void)
 
     // USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신
 
-    /* [v2.6] 토크 + P/I 벡터 모두 CONTROL 모드 필요 (구 XM_CTRL_TORQUE 와 동일 값) */
+    /* [v2.6] 토크 + P/I 벡터 모두 CONTROL 모드 필요 (구 XM_CTRL_CONTROL 와 동일 값) */
     XM_SetControlMode(XM_CTRL_CONTROL);
 }
 

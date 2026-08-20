@@ -233,7 +233,7 @@ static void Standby_Loop(void)
 /**
  * @brief ACTIVE 진입 — 토크 제어 모드 설정 및 변수 초기화
  * @details
- * XM_CTRL_TORQUE 모드를 활성화하여 XM_SetAssistTorque API를 통해
+ * XM_CTRL_CONTROL 모드를 활성화하여 XM_SetAssistTorque API를 통해
  * 직접 토크 명령을 인가할 수 있도록 합니다.
  */
 static void Active_Entry(void)

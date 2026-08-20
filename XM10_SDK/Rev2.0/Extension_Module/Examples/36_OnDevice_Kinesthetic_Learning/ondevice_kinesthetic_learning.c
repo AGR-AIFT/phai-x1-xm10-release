@@ -327,7 +327,7 @@ static void Standby_Loop(void)
 
 static void Active_Entry(void)
 {
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
     s_phase = PHASE_IDLE;
     s_teach_count = 0;
     s_nn_trained = false;

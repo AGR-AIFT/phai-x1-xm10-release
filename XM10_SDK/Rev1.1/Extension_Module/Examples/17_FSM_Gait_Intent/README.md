@@ -202,7 +202,7 @@ static void Active_Loop(void)
 | `thighAngle`, `kneeAngle` 가 항상 0 | `XM_SendUserBodyData` 미호출 (Body Data 미설정) | Setup 에서 호출 필수 |
 | FSM 단계가 변하지 않음 | `isFootContact` 신호 부정확 (Body Data 미설정 또는 IMU 인접 잡음) | Body Data 우선 점검 |
 | 양 다리가 동일 단계만 유지 | 좌·우 독립 변수 분리 안 됨 (오타) | `s_gait_rh` 와 `s_gait_lh` 분리 |
-| 토크 출력이 0 만 | `XM_SetControlMode(XM_CTRL_TORQUE)` 누락 | Active_Entry 에서 호출 |
+| 토크 출력이 0 만 | `XM_SetControlMode(XM_CTRL_CONTROL)` 누락 | Active_Entry 에서 호출 |
 | LPF 가 너무 느려 transition 놓침 | factor 0.01 = 100 ms 시상수 | 0.05~0.1 로 ↑ |
 | `H10 AssistLevel=0` 이라 모든 토크 0 | 정상 동작 (사용자가 보조 끔) | 슈트 다이얼 1~9 조정 |
 | FSM 가 자주 한 단계 건너뜀 | 보행이 매우 빠르거나 임계치 가까이 노이즈 | 임계치 hysteresis 추가 |

@@ -31,7 +31,7 @@ H10 슈트가 ASSIST 모드일 때 사용자가 다리를 움직이려는 의도
 - **Active Assist vs Passive** — Passive 는 정해진 궤적 반복, Active Assist 는 사용자 의도에 반응. Passive = "끌어가기", Active = "도와주기".
 - **의도 감지 (Intent Detection)** — 짧은 시간 (2초) 동안의 각도 변화 적분이 임계치 (5°) 초과 시 그 방향이 사용자 의도.
 - **`XM_SetAssistTorque(R_Nm, L_Nm)`** (인자 순서 = **오른쪽 RH, 왼쪽 LH**) 또는 한쪽씩 **`XM_SetAssistTorqueRH/LH()`** — 실시간 보조 토크 명령 (Nm). **양수 = Flexion(굴곡) 보조, 음수 = Extension(신전) 보조.** ([api-ref](../../docs/api-reference/02-h10-control-n-data.md))
-- **`XM_SetControlMode(XM_CTRL_TORQUE)`** — 토크 명령 모드 진입. 미설정 시 명령 무시.
+- **`XM_SetControlMode(XM_CTRL_CONTROL)`** — 토크 명령 모드 진입. 미설정 시 명령 무시.
 - **Sub-FSM 독립** — 좌·우가 비동기로 다른 단계에 있을 수 있음. 한쪽 추적 중, 다른 쪽 보조 중도 OK.
 - **Smoothing factor** `0.005` — 매 cycle 토크 5/1000 비율로 목표값 추종 → 1초에 약 80% 도달.
 
@@ -56,7 +56,7 @@ typedef enum {
 /* ② 양 다리 독립 처리 */
 static void Active_Loop(void)
 {
-    XM_SetControlMode(XM_CTRL_TORQUE);                              // 토크 모드
+    XM_SetControlMode(XM_CTRL_CONTROL);                              // 토크 모드
 
     UpdateAssistFor(SYS_NODE_ID_RH, &s_rh_state, &s_rh_torque);     // ③ 독립 sub-FSM
     UpdateAssistFor(SYS_NODE_ID_LH, &s_lh_state, &s_lh_torque);
@@ -138,7 +138,7 @@ s_lh_torque_smooth += (s_lh_torque_target - s_lh_torque_smooth) * TORQUE_SMOOTHI
 | 증상 | 원인 | 해결 |
 |------|------|------|
 | 사용자 의도 인식 안 됨 | `MOVEMENT_START_THRESHOLD_DEG10` 너무 큼 (5 = 0.5°) | 사용자 다리 RoM 측정 후 조정 |
-| 보조 토크가 항상 0 | `XM_SetControlMode(XM_CTRL_TORQUE)` 누락 | Loop 첫 줄에서 매번 호출 |
+| 보조 토크가 항상 0 | `XM_SetControlMode(XM_CTRL_CONTROL)` 누락 | Loop 첫 줄에서 매번 호출 |
 | 토크가 갑자기 강하게 들어옴 | Smoothing factor 너무 큼 (즉시 도달) | `0.005` 정도 권장 |
 | 양 다리 sub-FSM 가 동일 동작만 | Per-leg state 가 static 이지만 같은 변수 공유 | `s_rh_state`, `s_lh_state` 분리 확인 |
 | 의도 추적 중에 보조 시작 | 임계치 너무 작거나 추적 시간 너무 짧음 | 추적 시간 2초 + 임계치 5° 조합으로 천천히 안정 |
