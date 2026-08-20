@@ -34,6 +34,8 @@
 
 /* 속도 데드존 (Threshold) */
 // 이 속도(deg/s) 이상으로 움직일 때만 저항을 겁니다. (노이즈 방지)
+// @note [미배선] 속도 데드존은 H10(MD) 측 저항 알고리즘 내부에서 처리되며,
+//       본 예제 코드에는 적용 지점이 없습니다 — 참고용 상수입니다.
 #define VELOCITY_THRESHOLD      (5.0f)  
 
 /* 안전을 위한 최대 토크 제한 (Nm) */
@@ -164,14 +166,18 @@ static void Active_Loop(void)
         return;
     }
 
-    // 2. [Input] 현재 H10 슈트의 보조 레벨 읽어오기 (1~9단계)
+    // 2. [Input] 현재 H10 슈트의 보조 레벨 읽어오기 (0~10단계)
     // (core_process가 수신하여 XM.status에 넣어둠)
-    uint8_t current_level = XM.status.h10.h10AssistLevel;
+    // 범위 밖 수신값 방어 — 0~10 으로 클램프
+    uint8_t current_level = XM_SafeAssistLevel(XM.status.h10.h10AssistLevel);
 
     // 3. [Logic] 레벨이 변경되었을 때만 게인값 전송 (Event-driven Update)
     if (current_level != s_prev_assist_level) {
         // 게인 계산: Level * 0.1 * -6.0
         float gain = (float)current_level * 0.1f * RESISTIVE_GAIN;
+
+        // 안전 클램프 — 게인 산식/상수 변경 시에도 |gain| ≤ MAX_RESISTIVE_TORQUE 보장
+        gain = fmaxf(-MAX_RESISTIVE_TORQUE, fminf(MAX_RESISTIVE_TORQUE, gain));
         
         // [Output] API를 통해 H10으로 게인 설정 명령 전송
         // (변경된 경우에만 core_process가 Flush 수행)

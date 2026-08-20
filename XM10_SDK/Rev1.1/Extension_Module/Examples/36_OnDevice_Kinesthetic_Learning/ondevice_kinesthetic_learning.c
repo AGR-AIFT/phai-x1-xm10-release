@@ -77,9 +77,11 @@
 #define MGL_ADAPT_RATE          0.001f  /* 적응 추정 학습률 */
 
 /* --- 구동기 사양 (Ex.35 기반) --- */
+/* @note XM.status.h10.hipTorque 는 이미 Nm (cm_drv 가 Kt×감속비 환산 완료).
+ *       예제 코드에서 아래 상수로 재환산하지 마세요 (이중 변환 금지).
+ *       GEAR_RATIO 는 반사 관성 계산에, Kt 는 사양 참고용으로만 유지. */
 #define GEAR_RATIO              18.75f
 #define KT_MOTOR_NM_PER_A      0.085f
-#define KT_JOINT_NM_PER_A      (KT_MOTOR_NM_PER_A * GEAR_RATIO)
 
 /* --- DOB Q-filter (Ex.35 기반) --- */
 #define DOB_CUTOFF_HZ           5.0f
@@ -176,7 +178,7 @@ static LearnPhase_t  s_phase = PHASE_IDLE;
 
 /* 교시 버퍼 */
 static TeachPoint_t  s_teach_buf[MAX_TEACH_POINTS];
-static uint32_t      s_teach_count = 0;
+static volatile uint32_t s_teach_count = 0;  /* 메인 루프 <-> 백그라운드 학습 태스크 공유 */
 static uint32_t      s_rec_downcnt = 0;
 
 /* 교시 범위 (NN 출력 클램핑용) */
@@ -723,8 +725,11 @@ static void _ApplyTransparent(void)
     if (s_phase == PHASE_TEACH) {
         float sin_r = sinf(ang_r_rad);
         float sin_l = sinf(ang_l_rad);
-        float tau_r = KT_JOINT_NM_PER_A * XM.status.h10.rightHipTorque;
-        float tau_l = KT_JOINT_NM_PER_A * XM.status.h10.leftHipTorque;
+        /* [정정] hipTorque 는 이미 관절 토크 [Nm] — cm_drv 가 전류(A)에서
+         * Kt×감속비(≈1.594) 환산을 완료. 다시 Kt 를 곱하면 잔차가 ~1.594배
+         * 부풀려져 적응 루프(s_mgl_eff)가 양의 되먹임으로 발산합니다. */
+        float tau_r = XM.status.h10.rightHipTorque;
+        float tau_l = XM.status.h10.leftHipTorque;
         float res_r = tau_r - s_mgl_eff * sin_r;
         float res_l = tau_l - s_mgl_eff * sin_l;
         float adapt = MGL_ADAPT_RATE * (res_r * sin_r + res_l * sin_l) * 0.5f;
@@ -744,6 +749,14 @@ static void _ApplyTransparent(void)
  *-----------------------------------------------------------
  */
 
+/* --- NV 저장 백그라운드 태스크 상태 ---
+ * XM_UserNV_Erase(128KB 섹터, 약 1~2초 블로킹)를 1kHz Control_Loop 에서 직접
+ * 호출하면 제어가 그 시간만큼 정지하므로(xm_api_memory.h 경고), 저장은
+ * NN 학습과 동일한 OneShot 백그라운드 태스크 패턴으로 수행합니다. */
+static XmTaskHandle_t s_nvsave_handle = NULL;
+static volatile bool  s_nvsave_done   = false;
+static volatile bool  s_nvsave_ok     = false;
+
 static bool _NV_Save(void)
 {
     uint32_t magic = NV_MAGIC;
@@ -751,8 +764,16 @@ static bool _NV_Save(void)
     if (XM_UserNV_Write(NV_OFFSET_MAGIC, &magic, sizeof(magic)) != 0) return false;
     if (XM_UserNV_Write(NV_OFFSET_NN, &s_nn, sizeof(TinyNN_t)) != 0) return false;
     if (XM_UserNV_Write(NV_OFFSET_MGL, &s_mgl_eff, sizeof(float)) != 0) return false;
-    if (XM_UserNV_Write(NV_OFFSET_COUNT, &s_teach_count, sizeof(uint32_t)) != 0) return false;
+    if (XM_UserNV_Write(NV_OFFSET_COUNT, (const void*)&s_teach_count, sizeof(uint32_t)) != 0) return false;
     return true;
+}
+
+/** @brief 백그라운드 태스크에서 실행되는 NV 저장 함수 */
+static void _BgNvSaveFunc(void* arg)
+{
+    (void)arg;
+    s_nvsave_ok   = _NV_Save();
+    s_nvsave_done = true;
 }
 
 static bool _NV_Load(void)
@@ -762,7 +783,7 @@ static bool _NV_Load(void)
     if (magic != NV_MAGIC) return false;
     if (XM_UserNV_Read(NV_OFFSET_NN, &s_nn, sizeof(TinyNN_t)) != 0) return false;
     if (XM_UserNV_Read(NV_OFFSET_MGL, &s_mgl_eff, sizeof(float)) != 0) return false;
-    if (XM_UserNV_Read(NV_OFFSET_COUNT, &s_teach_count, sizeof(uint32_t)) != 0) return false;
+    if (XM_UserNV_Read(NV_OFFSET_COUNT, (void*)&s_teach_count, sizeof(uint32_t)) != 0) return false;
     return true;
 }
 
@@ -777,6 +798,21 @@ static void _HandleButtons(void)
     XmBtnEvent_t btn1 = XM_GetButtonEvent(XM_BTN_1);
     XmBtnEvent_t btn2 = XM_GetButtonEvent(XM_BTN_2);
     XmBtnEvent_t btn3 = XM_GetButtonEvent(XM_BTN_3);
+
+    /* NV 저장 진행 중 — 완료 회수만 수행하고 모든 버튼 입력을 잠급니다.
+     * 저장 태스크가 s_nn/s_mgl_eff/s_teach_count 를 읽어 Flash 에 쓰는 동안
+     * BTN1(phase 전환/_NN_Init)·BTN3(전체 리셋) 어느 경로로든 이 변수들을
+     * 바꾸면 찢어진(torn) 데이터가 기록됩니다 — BTN3 만 가드해서는 부족. */
+    if (s_nvsave_handle != NULL) {
+        if (s_nvsave_done) {
+            XM_Task_Delete(s_nvsave_handle);   /* 완료 — heap 회수 */
+            s_nvsave_handle = NULL;
+            if (s_nvsave_ok) {
+                XM_SetLedEffect(XM_LED_2, XM_LED_ONESHOT, 500);
+            }
+        }
+        return;
+    }
 
     if (btn1 == XM_BTN_CLICK) {
         switch (s_phase) {
@@ -822,12 +858,16 @@ static void _HandleButtons(void)
         }
     }
 
-    /* BTN1 Long Press: REPLAY 중 NN 가중치를 Flash에 저장 */
+    /* BTN1 Long Press: REPLAY 중 NN 가중치를 Flash에 저장 (백그라운드)
+     * — Flash 섹터 erase(1~2초)를 Control_Loop 에서 직접 돌리지 않습니다. */
     if (btn1 == XM_BTN_LONG_PRESS && s_phase == PHASE_REPLAY && s_nn_trained) {
-        if (_NV_Save()) {
-            XM_SetLedEffect(XM_LED_2, XM_LED_ONESHOT, 500);
-        }
+        /* 최상단 공통 가드가 저장 중 재진입을 이미 차단 — 여기 도달 시 handle 은 항상 NULL */
+        s_nvsave_done   = false;
+        s_nvsave_ok     = false;
+        s_nvsave_handle = XM_Task_CreateOneShot("NV_Save", _BgNvSaveFunc, NULL,
+                                                 XM_PRIO_BACKGROUND);
     }
+
 
     /* BTN2: IDLE에서 이전 학습으로 즉시 REPLAY */
     if (btn2 == XM_BTN_CLICK) {
@@ -849,8 +889,15 @@ static void _HandleButtons(void)
         }
     }
 
-    /* BTN3: 전체 리셋 */
+    /* BTN3: 전체 리셋 (NV 저장 중 잠금은 함수 최상단 공통 가드가 처리) */
     if (btn3 == XM_BTN_CLICK) {
+        /* LEARN 중 리셋이면 백그라운드 학습 태스크를 먼저 정지 —
+         * 태스크가 살아있는 채 s_teach_count=0 이 되면 _NN_TrainEpoch 의
+         * `_Rand() % s_teach_count` 가 0-나눗셈(modulo-zero)에 노출됩니다. */
+        if (s_train_handle != NULL) {
+            XM_Task_Delete(s_train_handle);   /* 강제 종료 + heap 회수 */
+            s_train_handle = NULL;
+        }
         s_phase = PHASE_IDLE;
         s_teach_count = 0;
         s_nn_trained = false;

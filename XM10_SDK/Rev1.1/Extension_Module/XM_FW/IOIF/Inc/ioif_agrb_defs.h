@@ -161,6 +161,12 @@
     #ifndef IOIF_USB_CDC_SECTION
         #define IOIF_USB_CDC_SECTION ".RAM_D3_data"
     #endif
+
+    /* DMA 버퍼 정렬: D-Cache 라인(32B) 경계 — 인접 변수 cache line 오염 방지.
+     * 소비 모듈(예: XM stm32h7xx_compatible.h)이 선정의한 경우 그 정의를 따름. */
+    #ifndef IOIF_DMA_ALIGNED
+        #define IOIF_DMA_ALIGNED     __attribute__((aligned(32)))
+    #endif
 #else
     /*
      * STM32G4/F4: 단일 SRAM → Section 속성 불필요.
@@ -172,6 +178,9 @@
     #define IOIF_MDMA_SECTION
     #define IOIF_FS_SECTION
     #define IOIF_USB_CDC_SECTION
+    #ifndef IOIF_DMA_ALIGNED
+        #define IOIF_DMA_ALIGNED     /* D-Cache 없음 -> 정렬 불필요 */
+    #endif
 #endif
 
 /**

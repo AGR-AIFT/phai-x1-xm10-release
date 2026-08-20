@@ -100,10 +100,10 @@ uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 
 /* USER CODE BEGIN PRIVATE_VARIABLES */
 /* 버퍼를 Non-Cacheable 영역으로 이동 */
-__attribute__((section(D3_NON_CACHE_SECTION), aligned(32)))
+__attribute__((section(D3_NON_CACHE_SECTION))) IOIF_DMA_ALIGNED
 static uint8_t _UserRxRingBufferFS[APP_RX_DATA_SIZE];
 
-__attribute__((section(D3_NON_CACHE_SECTION), aligned(32)))
+__attribute__((section(D3_NON_CACHE_SECTION))) IOIF_DMA_ALIGNED
 static uint8_t _UserTxRingBufferFS[APP_TX_DATA_SIZE];
 
 #if ((APP_RX_DATA_SIZE-1) & APP_RX_DATA_SIZE) != 0
@@ -119,7 +119,7 @@ static void (* volatile s_rx_cplt_cb)(uint8_t*, uint32_t) = NULL;
 static void (* volatile s_dtr_change_cb)(uint8_t) = NULL;
 
 /* [FTP] Deferred TX: CDC_Receive_FS(ISR)에서 TX BUSY 시 저장, TxComplete에서 우선 전송 */
-__attribute__((section(D3_NON_CACHE_SECTION), aligned(32)))
+__attribute__((section(D3_NON_CACHE_SECTION))) IOIF_DMA_ALIGNED
 static uint8_t s_ftp_deferred_buf[64];
 static volatile uint32_t s_ftp_deferred_len = 0;
 
@@ -137,7 +137,6 @@ static volatile uint32_t s_ftp_deferred_len = 0;
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
-//void CDC_Assign_Tx_Complete_Callback(void (*callback)(void*));
 /* USER CODE END EXPORTED_VARIABLES */
 
 /**
@@ -437,24 +436,6 @@ void CDC_Register_DTR_Callback(void (*dtr_cb)(uint8_t))
     s_dtr_change_cb = dtr_cb;
 }
 
-// //Need Optimization
-// uint32_t CDC_Receive_Rx_Data(uint8_t* pbuf, uint32_t len)
-// {
-//   if (len == 0 || pbuf == NULL ) return;
-
-//   uint32_t available = ((_UserRxRingBufferFS_Head - _UserRxRingBufferFS_Tail) > 0) ?
-//                        (_UserRxRingBufferFS_Head - _UserRxRingBufferFS_Tail) :
-//                        (APP_RX_DATA_SIZE - (_UserRxRingBufferFS_Tail - _UserRxRingBufferFS_Head));
-
-//   if (len > available) len = available;
-
-//   for (uint32_t i = 0; i < len; i++) {
-//       pbuf[i] = _UserRxRingBufferFS[_UserRxRingBufferFS_Tail];
-//       _UserRxRingBufferFS_Tail = (_UserRxRingBufferFS_Tail + 1) & (APP_RX_DATA_SIZE - 1);
-//   }
-
-//   return len;
-// }
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
 
 /**

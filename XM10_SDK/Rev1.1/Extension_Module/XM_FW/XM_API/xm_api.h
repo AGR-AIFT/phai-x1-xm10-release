@@ -33,6 +33,7 @@
 #include "xm_api_user_custom.h" // Total Data 0x20 내 사용자 커스텀 슬롯
 #include "xm_api_freertos.h"    // 백그라운드 태스크 (FreeRTOS 래퍼)
 #include "xm_api_rtc.h"         // RTC 날짜/시간 관리 (Rev1.1 stub)
+#include "xm_api_safety.h"      // 공통 안전 헬퍼 (소프트스타트/slew/클램프)
 
 /**
  *-----------------------------------------------------------

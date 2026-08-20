@@ -119,6 +119,9 @@ static uint8_t _EstimateGaitCycle(void)
 #define ILC_SAMPLES         100U    /* 보행 주기당 샘플 수 (gaitCycle 0~100%) */
 #define REF_AMPLITUDE_DEG   10.0f   /* 참조 궤도 진폭 (deg) */
 #define MAX_TORQUE_NM       3.0f    /* 포화 한계 (Nm, 학습 중 보수적 설정) */
+
+/* 정지 시 토크 램프다운 속도 — 풀스케일(3Nm)을 500ms 에 0 으로 수렴 */
+#define ILC_STOP_RAMP_NM_PER_TICK   (MAX_TORQUE_NM / 500.0f)
 #define CONTROL_DT          0.001f
 #define USB_DEBUG_PERIOD_MS 500U
 
@@ -297,6 +300,32 @@ static void Active_Loop(void)
     }
 
     _HandleButtonInput();
+
+    /* [정지 도메인 분리] gait_cycle=0 은 '진짜 0% 위상'과 '정지'가 겹치는
+     * 오버로드 값 — 정지 시에는 학습된 τ[0](최대 ±3Nm)를 그대로 내지 않고
+     * 토크를 0 으로 램프다운한 뒤 학습/오차 갱신도 중단합니다. */
+    if (XM.status.h10.forwardVelocity < GAIT_EST_VELOCITY_THRESHOLD) {
+        /* 추정기도 매 tick 호출해 내부 static 상태(s_has_first_hs/last_hs_tick)의
+         * 정지-리셋이 실행되게 유지 — 건너뛰면 정지 직전 상태로 고착(stale)되어
+         * 재보행 첫 tick 에 gait_cycle 이 100 으로 튀며 τ[99]가 스텝 인가됨. */
+        (void)_EstimateGaitCycle();
+
+        if (s_torque_cmd > 0.0f) {
+            s_torque_cmd -= ILC_STOP_RAMP_NM_PER_TICK;
+            if (s_torque_cmd < 0.0f) { s_torque_cmd = 0.0f; }
+        } else if (s_torque_cmd < 0.0f) {
+            s_torque_cmd += ILC_STOP_RAMP_NM_PER_TICK;
+            if (s_torque_cmd > 0.0f) { s_torque_cmd = 0.0f; }
+        }
+        XM_SetAssistTorqueRH(s_torque_cmd);
+        XM_SetAssistTorqueLH(s_torque_cmd);
+        s_prev_gait_cycle = 0U;   /* 재보행 시 80→20 경계 오탐 방지 */
+
+        /* 정지(램프다운) 구간에도 텔레메트리 유지 — 위상/참조는 0 으로 표시 */
+        _UpdateUsbDebug(0.0f, 0.0f, XM.status.h10.rightHipMotorAngle);
+        _UpdateStreamData(0.0f, 0.0f, XM.status.h10.rightHipMotorAngle);
+        return;
+    }
 
     uint8_t gait_cycle = _EstimateGaitCycle();
 

@@ -129,6 +129,16 @@ uint32_t CdcStream_GetTxDropCount(void);
 void CdcStream_ResetTxDropCount(void);
 
 /**
+ * @brief [P1 2026-08-19] RX StreamBuffer full 로 유실된 누적 바이트 수 (기대값 0)
+ */
+uint32_t CdcStream_GetRxDropCount(void);
+
+/**
+ * @brief RX 드롭 카운터 리셋 (세션 시작 시)
+ */
+void CdcStream_ResetRxDropCount(void);
+
+/**
  * @brief [IOIF->System] Tx 완료 콜백. (ISR 컨텍스트에서 호출됨)
  */
 void CdcStream_OnTxComplete(void);

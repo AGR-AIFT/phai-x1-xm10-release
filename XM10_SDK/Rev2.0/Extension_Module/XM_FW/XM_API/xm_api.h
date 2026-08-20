@@ -34,6 +34,7 @@
 #include "xm_api_memory.h"      // 메모리 영역 접근 (Workspace/PSRAM/DTCM/NV)
 #include "xm_api_rtc.h"         // RTC 날짜/시간 관리
 #include "xm_api_freertos.h"    // 백그라운드 태스크 (FreeRTOS 래퍼)
+#include "xm_api_safety.h"      // 공통 안전 헬퍼 (소프트스타트/slew/클램프)
 
 /**
  *-----------------------------------------------------------

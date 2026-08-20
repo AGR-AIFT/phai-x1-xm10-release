@@ -97,10 +97,10 @@ DOB 기반 투명 모드: τ_out = τ_grav + τ_fric + d_hat  (이 예제)
 공칭 모델: τ_model = τ_grav + τ_fric
                = M·g·L_eff·sin(θ)  +  B_f·sign(θ̇) + B_v·θ̇
 
-실측 토크: τ_meas = Kt · i_meas  (Kt = 0.8 Nm/A)
-  ※ XM.status.h10.rightHipTorque 필드는 모터 전류(A)를 제공합니다.
-     필드명에 "Torque"가 붙어있으나 실제 단위는 Ampere(A)입니다.
-     (내부 변환: raw_int16 / 60 → 범위 −30~+30 A)
+실측 토크: τ_meas = XM.status.h10.rightHipTorque  (이미 Nm — 그대로 사용)
+  ※ 이 필드는 드라이버(cm_drv.c)가 모터 전류(A)에 Kt×기어비(0.085×18.75 ≈ 1.594 Nm/A)를
+     곱해 이미 관절 토크(Nm)로 변환해 둔 값입니다. 예제 코드에서 다시 Kt 를 곱하면
+     이중 변환(약 1.594배 과대)이 됩니다.
 
 잔류 외란: residual = τ_meas - τ_model  (모델 미설명 성분)
 
@@ -138,18 +138,19 @@ Q-filter:  d_hat[k] = α_q·d_hat[k-1] + (1-α_q)·residual
 
 ### ① rightHipTorque 단위 주의 (Critical)
 
-`XM.status.h10.rightHipTorque`는 이름과 달리 **모터 전류(A)**입니다.
+`XM.status.h10.rightHipTorque`는 이름 그대로 **관절 토크(Nm)**입니다 — 추가 변환 금지.
 
 ```c
-// cm_drv.c 내부 변환
-dst_buf->rightHipTorque = raw_int16 / 60.0f;  // 단위: A (−30~+30 A)
+// cm_drv.c 내부 변환 (드라이버가 이미 수행)
+//   scaled_current_A × CURRENT_TO_TORQUE_NM(= Kt 0.085 × 기어비 18.75 ≈ 1.594)
+dst_buf->rightHipTorque = scaled_current_A * CURRENT_TO_TORQUE_NM;  // 단위: Nm
 
-// Ex.31 코드가 올바르게 사용하는 방법
-float current_r_a = XM.status.h10.rightHipTorque;   // A
-float tau_meas_r  = KT_NM_PER_A * current_r_a;      // 0.8 Nm/A × A = Nm ✓
+// Ex.31 코드가 올바르게 사용하는 방법 (friction_comp_dob.c 실제 코드와 동일)
+float tau_meas_r = XM.status.h10.rightHipTorque;    // 이미 Nm — 그대로 사용 ✓
 ```
 
-**주의**: `XM.status.h10.rightHipTorque`에 직접 Nm 단위로 사용하면 Kt 배 오차가 발생합니다.
+**주의**: 이 값에 Kt 를 **다시 곱하면 이중 변환**(약 1.594배 과대)이 됩니다.
+(참고: USB 원시 텔레메트리(raw total data) 경로만 변환 전 전류값을 유지합니다 — 의도된 설계)
 
 ### ② 통신 지연에 의한 DOB 대역폭 한계
 
@@ -223,7 +224,7 @@ f_c > 159 Hz → α_q < 0 → IIR 발산 ❌
 
 ## 실행 방법
 
-1. `friction_comp_dob.c`를 `control_task.c`로 복사 후 빌드하여 XM10에 플래시합니다.
+1. `friction_comp_dob.c`의 내용을 `XM_Apps/Control_Task/control_task.c`에 반영(복사) 후 빌드하여 XM10에 플래시합니다.
 2. H10 전원 ON → ASSIST MODE 전환.
 3. LED1 빠른 깜빡임(200ms) → ACTIVE 진입 확인.
 4. PhAI Studio에서 Module ID `0xF1` 채널을 열어 4개 채널을 실시간 모니터링합니다.
@@ -273,5 +274,6 @@ f_c > 159 Hz → α_q < 0 → IIR 발산 ❌
 > **이전 예제 권장**: 이 예제는 Ex.21(중력+마찰 보상)이 선행되어야 합니다.
 > 공칭 모델 파라미터(`MGL_EFF`, `B_COULOMB_NM`, `B_VISCOUS_NMS`)를 실제 시스템에 맞게 튜닝하세요.
 
-> **rightHipTorque 단위**: 이 필드는 필드명과 달리 **모터 전류(A)**를 제공합니다.
-> 토크 추정: `τ = Kt × rightHipTorque`. 직접 Nm으로 사용하면 안 됩니다.
+> **rightHipTorque 단위**: 이 필드는 **관절 토크 추정값 [Nm]** 입니다 — FW(cm_drv)가
+> 모터 전류(A)에 Kt×감속비(≈1.594)를 이미 곱해 제공합니다. 여기에 Kt 를 다시 곱하면
+> 1.594배 이중 변환 버그가 됩니다. Nm 으로 바로 사용하세요 (본문 상단 설명과 동일).

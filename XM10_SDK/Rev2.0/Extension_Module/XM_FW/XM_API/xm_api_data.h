@@ -44,16 +44,35 @@
  */
 
 /**
- * @brief XM10 제어 권한 모드 (= 토크 출력 ON/OFF)
+ * @brief XM10 제어 권한 모드 (= 로봇 구동 출력 ON/OFF)
  * @details 두 모드 모두 사용자 알고리즘(Control_Loop)은 매 tick 그대로 실행됩니다.
- *          차이는 "계산된 토크 명령을 CM으로 전송하느냐"뿐입니다. 즉 알고리즘을
- *          끄는 스위치가 아니라, 출력(구동)을 켜고 끄는 안전 스위치입니다.
+ *          차이는 "계산된 제어 명령(토크 + P/I/F 벡터)을 CM으로 전송하느냐"입니다.
+ *          즉 알고리즘을 끄는 스위치가 아니라, 출력(구동)을 켜고 끄는 안전 스위치입니다.
+ * @note   [v2.6 변경] MONITOR 는 이제 토크뿐 아니라 P/I/F 벡터 전송도 차단하는
+ *         "순수 관찰" 모드입니다. 벡터를 사용하는 코드(호밍 등)도 CONTROL 모드가
+ *         필요합니다. CONTROL → MONITOR 전환 시 FW 가 자동으로 토크를 지수적으로
+ *         0 까지 감쇠시킨 뒤(약 0.3~0.5초) 벡터를 해제하고 전송을 중단합니다.
  * @warning 알고리즘 시작 시 반드시 모드를 설정해야 합니다.
  */
 typedef enum {
-    XM_CTRL_MONITOR = 0,  /**< [기본] 모니터링 모드. 알고리즘은 실행되지만 토크 명령은 전송하지 않습니다 (출력 차단 — 안전하게 개발/관찰). */
-    XM_CTRL_TORQUE  = 1   /**< [주의] 토크 제어 모드. 계산된 토크 명령을 주기적으로 전송합니다 (실제 구동). */
+    XM_CTRL_MONITOR = 0,  /**< [기본] 모니터링 모드. 알고리즘은 실행되지만 어떤 제어 명령(토크·벡터)도 전송하지 않습니다 (출력 차단 — 안전하게 개발/관찰). */
+    XM_CTRL_CONTROL = 1   /**< [주의] 제어 모드. 계산된 토크 명령을 주기적으로 전송하고 P/I/F 벡터 전송을 허용합니다 (실제 구동). */
 } XmControlMode_t;
+
+/** @brief [호환] 구 명칭(v2.5.x 이전) — 기존 코드 무수정 빌드 유지용 alias. 신규 코드는 XM_CTRL_CONTROL 사용. */
+#define XM_CTRL_TORQUE  XM_CTRL_CONTROL
+
+/**
+ * @brief 실제 적용된(applied) 제어 모드 — XM_GetAppliedControlMode() 반환값
+ * @details XM_SetControlMode() 는 "요청"이고, CONTROL → MONITOR 전환은 안전을 위해
+ *          FW 가 램프다운(토크 지수 감쇠 → 0 확정 전송 → 벡터 해제)을 완료한 뒤에야
+ *          MONITOR 가 됩니다. 그 정리 구간이 TRANSITION 입니다.
+ */
+typedef enum {
+    XM_MODE_APPLIED_MONITOR    = 0,  /**< 출력 완전 차단 상태 (전환 정리 완료) */
+    XM_MODE_APPLIED_CONTROL    = 1,  /**< 제어 출력 활성 (토크·벡터 전송 허용) */
+    XM_MODE_APPLIED_TRANSITION = 2,  /**< CONTROL→MONITOR 정리 진행 중 (FW 가 램프다운/벡터 해제 전송 중 — 사용자 전송은 차단) */
+} XmAppliedMode_t;
 
 /**
  * @brief H10 로봇 동작 모드
@@ -132,6 +151,10 @@ typedef struct {
 
     // --- IMU Data (관성 센서 상세 정보) ---
     // Orientation
+    // @note [미배선 — 항상 0.0] 아래 Roll/Pitch/Yaw 6개 필드는 현재 실데이터가
+    //       채워지지 않습니다: Roll/Pitch 4개는 CM PDO 요청이 비활성(cm_drv.c 의
+    //       pdo_list 주석처리), Yaw 2개는 디코드 자체가 미구현입니다.
+    //       실데이터가 필요하면 cm_drv.c 의 PDO 요청/디코드 배선을 먼저 활성화하세요.
     float leftHipImuFrontalRoll;    // 왼쪽 고관절 IMU Frontal Roll 각도 (Degree)
     float rightHipImuFrontalRoll;
     float leftHipImuSagittalPitch;  // 왼쪽 고관절 IMU Sagittal Pitch 각도 (Degree)
@@ -369,7 +392,7 @@ typedef struct {
  * @note  End User는 직접 구조체를 수정하지 말고, XM_SetAssistTorque() 함수를 사용하세요.
  */
 typedef struct {
-    XmControlMode_t control_mode; // 현재 제어 모드
+    XmControlMode_t control_mode; // 요청(requested) 제어 모드 — 실제 적용 상태는 XM_GetAppliedControlMode() 참조
 
     float assist_torque_rh;
     float assist_torque_lh;
@@ -412,13 +435,38 @@ extern XmRobot_t XM;
  */
 
 /**
- * @brief  제어 모드를 설정합니다. (안전장치 포함)
+ * @brief  제어 모드를 요청합니다. (안전장치 포함)
  * @details 모드를 변경할 때, 급발진 방지를 위해 모든 토크 명령을 0으로 초기화합니다.
- * @param  mode 설정할 모드
- * - XM_CTRL_MONITOR: 명령 전송 중단 (기본값)
- * - XM_CTRL_TORQUE : 토크 제어 시작 (주의!)
+ * - MONITOR → CONTROL: 즉시 적용됩니다 (첫 전송 토크는 항상 0).
+ * - CONTROL → MONITOR: FW 가 안전 전환 시퀀스를 자동 수행한 뒤 MONITOR 가 됩니다:
+ *   ① 토크를 지수적으로 0 까지 감쇠(τ=100ms, 약 0.3~0.5초) ② 명시적 0 토크 확정 전송
+ *   ③ P-Vector Reset + I-Vector 해제 전송 ④ 전송 중단(MONITOR 확정).
+ *   전환 중에는 사용자 토크/벡터 명령이 반영되지 않습니다 (XM_GetAppliedControlMode()
+ *   == XM_MODE_APPLIED_TRANSITION). 즉시 정지가 필요하면 XM_EmergencyDisengage() 사용.
+ * @param  mode 요청할 모드
+ * - XM_CTRL_MONITOR: 모든 제어 출력 차단 (기본값)
+ * - XM_CTRL_CONTROL: 토크·벡터 제어 시작 (주의!)
+ * @note   Control_Setup()/Control_Loop() 컨텍스트에서만 호출하세요.
  */
 void XM_SetControlMode(XmControlMode_t mode);
+
+/**
+ * @brief  실제 적용된(applied) 제어 모드를 반환합니다.
+ * @details CONTROL → MONITOR 전환 정리 중에는 XM_MODE_APPLIED_TRANSITION 이 반환되며,
+ *          이때 벡터/토크 API 호출은 무시됩니다(진단 카운터만 증가). 정리 완료 후
+ *          XM_MODE_APPLIED_MONITOR 가 됩니다.
+ */
+XmAppliedMode_t XM_GetAppliedControlMode(void);
+
+/**
+ * @brief  [비상 정지] 램프다운을 생략하고 즉시 0 토크 + 벡터 해제로 전환합니다.
+ * @details 안전 스위치 개방, 센서 이상 등 즉시 출력을 끊어야 하는 상황용입니다.
+ *          이번 tick 부터 0 토크를 확정 전송하고 P-Vector Reset / I-Vector 해제 후
+ *          MONITOR 로 전환합니다 (정상 종료는 XM_SetControlMode(XM_CTRL_MONITOR) 사용
+ *          — 지수 램프다운으로 부드럽게 정지).
+ * @note   Control_Loop() 컨텍스트에서만 호출하세요.
+ */
+void XM_EmergencyDisengage(void);
 
 /**
  * @brief  양쪽 다리의 보조 토크를 설정합니다.
@@ -472,8 +520,14 @@ CM_NmtState_t XM_GetXMNmtState(void);
  */
 void XM_SendUserBodyData(const uint32_t bodyData[8]);
 
+/* --- P/I/F 벡터 전송 API ---
+ * [v2.6] 아래 벡터 API 는 모두 제어 출력이므로 XM_CTRL_CONTROL 모드에서만 동작합니다.
+ * MONITOR 모드 또는 전환(TRANSITION) 중 호출하면 전송 없이 무시되고 진단 카운터
+ * (g_xm_api_vector_blocked_count)만 증가합니다. */
+
 /**
  * @brief 지정된 관절에 위치 기반 궤적(P-Vector)을 전송합니다.
+ * @note  XM_CTRL_CONTROL 모드에서만 전송됩니다 (§벡터 전송 API 공통 규칙).
  * @param[in] nodeId    명령을 전달할 관절의 Node ID (예: SYS_NODE_ID_RH).
  * @param[in] pVector   전송할 P-Vector 데이터를 담은 구조체 포인터.
  */

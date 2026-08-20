@@ -36,14 +36,14 @@
  * @details
  * - FDCAN NVIC = 5 (configMAX_SYSCALL 경계) → ISR에서 xSemaphoreGiveFromISR 합법
  *   (전제: .ioc NVIC.FDCAN1/2_IT0/1 preemption = 5. 4이면 FromISR @ NVIC4 = configASSERT HardFault)
- * - ISR(sem give만) → RxTask(55, > UserTask 54): 빠른 PDO를 Mutex+Snapshot으로 DataLake 기록
- *                   → NonRealtimeTask(51, < UserTask 54): 느린 SDO/NMT 처리
+ * - ISR(sem give만) → RxTask(55, > UserTask 53): 빠른 PDO를 Mutex+Snapshot으로 DataLake 기록
+ *                   → NonRealtimeTask(51, < UserTask 53): 느린 SDO/NMT 처리
  * - Device Layer = Mutex + Snapshot (Reader timeout=0 / Writer timeout=1)
  */
 
 /* ===== IOIF Task Priority Override ===== */
 /**
- * @brief UART/FDCAN RxTask 우선순위를 UserTask(54)보다 높게 설정
+ * @brief UART/FDCAN RxTask 우선순위를 UserTask(53)보다 높게 설정
  * @details 데이터 도착 즉시 선점 처리하여 stale data(duplicate) 방지 (B001 실증).
  *          RxTask 실행 시간 ~10-50µs/선점 → UserTask 지터 무시 가능.
  *          [2026-07-14] 우선순위 재배치 55(FDCAN) > 54(UART) > 53(UserTask):
@@ -75,6 +75,7 @@
 #define AGRB_IOIF_GPIO_ENABLE               /**< GPIO - LED, Button, Power Control */
 #define AGRB_IOIF_TIM_ENABLE                /**< Timer - 시스템 타이머 */
 #define AGRB_IOIF_DWT_ENABLE                /**< DWT - 고정밀 성능 측정 */
+#define AGRB_IOIF_IWDG_ENABLE               /**< IWDG - 무한리셋/행 방지 워치독 (직접 레지스터, HAL 미사용 — Phase2 D2) */
 #define AGRB_IOIF_USB_ENABLE                /**< USB - CDC 디버그, MSC 데이터 로깅 */
 #define AGRB_IOIF_USB_MODE_DRP              /**< Host MSC (USB 스틱) ↔ Device CDC 런타임 스위칭 */
 #define AGRB_IOIF_ADC_ENABLE                /**< ADC - 아날로그 센서 입력 */

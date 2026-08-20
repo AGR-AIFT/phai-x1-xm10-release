@@ -11,9 +11,15 @@
  * PD(Proportional-Derivative) 제어기는 가장 기본적인 피드백 제어 기법입니다.
  *   tau = Kp * e(t) + Kd * de(t)/dt
  *   - e(t) = theta_ref - theta(t)   : 위치 오차 (비례항의 입력)
- *   - de(t)/dt ≈ (e[k] - e[k-1])/dt : 이산 미분 근사 (후향 차분법)
  *   - Kp: 비례 게인 — 오차에 비례하는 복원력 (스프링 상수와 유사)
  *   - Kd: 미분 게인 — 오차 변화율에 비례하는 감쇠력 (댐퍼와 유사)
+ *
+ * [미분킥 방지 — derivative-on-measurement]
+ * 미분항은 오차 대신 측정값에 겁니다: de/dt 대신 -d(theta)/dt.
+ * 목표각이 상수인 동안 두 식은 수학적으로 동일하지만, BTN 으로 목표각이
+ * 5도 스텝 변경되는 순간 오차 미분은 (5도/1ms) 스파이크가 되어 토크가
+ * 1 tick 동안 포화(미분킥)됩니다. 측정값 미분은 목표 변화에 반응하지
+ * 않으므로 이 킥이 원천 제거됩니다 (산업 PID 의 표준 기법).
  *
  * [포화(Saturation)]
  * 실제 모터는 출력 토크 한계가 존재하므로, 계산된 토크를
@@ -41,7 +47,7 @@
  */
 
 // --- PD 제어기 튜닝 파라미터 ---
-#define KP_GAIN             0.5f    // 비례 게인 (Nm/deg) — 오차 1도당 0.5 Nm 복원력
+#define KP_GAIN             0.15f    // 비례 게인 (Nm/deg) — 오차 1도당 0.15 Nm 복원력 (BTN 5도 스텝당 0.75 Nm)
 #define KD_GAIN             0.02f   // 미분 게인 (Nm·s/deg) — 오차 변화율 감쇠
 #define TARGET_ANGLE_DEG    10.0f   // 초기 목표 각도 (deg)
 #define MAX_TORQUE_NM       5.0f    // 토크 포화 한계 (Nm) — 모터 보호
@@ -93,8 +99,11 @@ static XmTsmHandle_t s_tsm;
 
 // --- PD 제어기 상태 변수 ---
 static float s_target_angle = TARGET_ANGLE_DEG;   // 현재 목표 각도 (deg)
-static float s_prev_error   = 0.0f;               // 이전 루프의 오차 (이산 미분용)
+static float s_prev_angle   = 0.0f;               // 이전 루프의 측정 각도 (측정값 미분용)
 static float s_torque_cmd   = 0.0f;               // 최종 토크 명령 (Nm)
+
+// --- 안전 토크 컨텍스트 (좌/우 동일 명령이므로 1개 — 진입 소프트스타트+클램프) ---
+static XmSafeTorque_t s_safe_torque;
 
 // --- 목표 각도 부호 (양/음 방향) ---
 static float s_target_sign  = 1.0f;               // +1.0 또는 -1.0
@@ -120,7 +129,6 @@ static void Active_Loop(void);
 static void Active_Exit(void);
 
 // --- 유틸리티 함수 ---
-static float _ClampFloat(float value, float min_val, float max_val);
 static void _HandleButtonInput(void);
 static void _UpdateUsbDebug(float current_angle, float error);
 static void _UpdateStreamData(float current_angle, float error);
@@ -168,6 +176,9 @@ void Control_Setup(void)
         "{\"name\":\"Current Angle\",\"unit\":\"deg\"},"
         "{\"name\":\"Error\",\"unit\":\"deg\"},"
         "{\"name\":\"Torque\",\"unit\":\"Nm\"}]");
+
+    // 안전 토크 헬퍼: |토크| ≤ MAX_TORQUE_NM, slew 무제한(추종 제어), 진입 램프 500ms
+    XM_SafeTorque_Init(&s_safe_torque, MAX_TORQUE_NM, 0U, XM_SAFETY_DEFAULT_RAMP_MS);
 
     // 초기 제어 모드: 모니터링 (토크 미인가)
     XM_SetControlMode(XM_CTRL_MONITOR);
@@ -227,17 +238,22 @@ static void Standby_Loop(void)
  */
 static void Active_Entry(void)
 {
-    // 토크 직접 제어 모드로 전환
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    // 제어 출력 모드로 전환
+    XM_SetControlMode(XM_CTRL_CONTROL);
 
-    // PD 제어기 상태 초기화
-    s_prev_error = 0.0f;
-    s_torque_cmd = 0.0f;
-
-    // 목표 각도 초기화
+    // 목표 각도 초기화 (prev_error seed 이전에 목표부터 확정)
     s_target_sign = 1.0f;
     s_target_magnitude = TARGET_ANGLE_DEG;
     s_target_angle = s_target_sign * s_target_magnitude;
+
+    // PD 제어기 상태 초기화
+    // [미분킥 방지] prev_angle 을 0 이 아니라 '현재 측정 각도'로 seed —
+    // 0 으로 두면 첫 tick 미분항이 (각도-0)/dt 로 폭주해 토크가 즉시 포화됩니다.
+    s_prev_angle = XM.status.h10.rightHipMotorAngle;
+    s_torque_cmd = 0.0f;
+
+    // 소프트스타트 재시작 (재진입마다 0→1 게인 램프 500ms)
+    XM_SafeTorque_Reset(&s_safe_torque);
 
     // USB 디버그 타이머 초기화
     s_usb_debug_timer = XM_GetTick();
@@ -288,23 +304,26 @@ static void Active_Loop(void)
     // 위치 오차 계산: e[k] = theta_ref - theta[k]
     float error = s_target_angle - current_angle;
 
-    // 이산 미분 근사 (후향 차분): de[k] = (e[k] - e[k-1]) / dt
-    float derivative = (error - s_prev_error) / CONTROL_DT;
+    // 이산 미분 — 측정값 기반 (derivative-on-measurement, 후향 차분).
+    // 목표각이 상수인 동안 (e[k]-e[k-1])/dt 와 수학적으로 동일하지만, BTN 목표
+    // 스텝 변경 순간의 1 tick 포화 스파이크(미분킥)가 원천 제거됩니다 (헤더 참조).
+    float derivative = -(current_angle - s_prev_angle) / CONTROL_DT;
 
     // PD 제어 법칙: tau = Kp * e + Kd * de/dt
     float torque_raw = (KP_GAIN * error) + (KD_GAIN * derivative);
 
-    // --- 3. 토크 포화 (Actuator Saturation) ---
-    // 모터 보호를 위해 출력 토크를 안전 범위로 제한
-    s_torque_cmd = _ClampFloat(torque_raw, -MAX_TORQUE_NM, MAX_TORQUE_NM);
+    // --- 3. 토크 안전 처리 (클램프 + 진입 소프트스타트) ---
+    // 모터 보호를 위해 출력 토크를 안전 범위로 제한하고, ACTIVE (재)진입 후
+    // 500ms 동안 0→1 게인 램프를 적용해 계단형 토크 인가를 방지합니다.
+    s_torque_cmd = XM_SafeTorque_Step(&s_safe_torque, torque_raw);
 
     // --- 4. 토크 명령 전송 ---
     // 좌/우 동일 토크 인가 (대칭 제어)
     XM_SetAssistTorqueRH(s_torque_cmd);
     XM_SetAssistTorqueLH(s_torque_cmd);
 
-    // --- 5. 이전 오차 저장 (다음 루프의 미분 계산용) ---
-    s_prev_error = error;
+    // --- 5. 이전 측정 각도 저장 (다음 루프의 미분 계산용) ---
+    s_prev_angle = current_angle;
 
     // --- 6. USB 디버그 및 스트리밍 갱신 ---
     _UpdateUsbDebug(current_angle, error);
@@ -327,7 +346,7 @@ static void Active_Exit(void)
     XM_SetControlMode(XM_CTRL_MONITOR);
 
     // PD 제어기 상태 초기화
-    s_prev_error = 0.0f;
+    s_prev_angle = 0.0f;
     s_torque_cmd = 0.0f;
 
     // LED: STANDBY 표시 (심장박동)
@@ -338,24 +357,6 @@ static void Active_Exit(void)
 }
 
 // ==================== 유틸리티 함수 ====================
-
-/**
- * @brief float 값을 [min, max] 범위로 클램핑합니다.
- * @param value     입력 값
- * @param min_val   하한
- * @param max_val   상한
- * @return 클램핑된 값
- */
-static float _ClampFloat(float value, float min_val, float max_val)
-{
-    if (value < min_val) {
-        return min_val;
-    }
-    if (value > max_val) {
-        return max_val;
-    }
-    return value;
-}
 
 /**
  * @brief 버튼 입력 처리

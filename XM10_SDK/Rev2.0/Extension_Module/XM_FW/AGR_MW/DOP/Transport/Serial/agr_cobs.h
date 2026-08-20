@@ -47,11 +47,18 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+/* 설정 SSOT — agr_dop_types.h / agr_dop_canfd.h / agr_dop_serial.h / agr_dop_udp.h 와 동일 패턴.
+ * 본 include 가 없으면 이 헤더만 include 하는 TU(agr_cobs.c)가 자체 기본값으로 굳어져,
+ * 제품 override(agr_mw_conf.h)를 보는 caller TU 와 프레임 크기가 갈린다(TU 간 설정 표류). */
+#include "agr_dop_config.h"
+
 /* ===== Configuration ===== */
 
-/** @brief 최대 디코딩 프레임 크기 (COBS 디코딩 후 원본 데이터) */
+/** @brief 최대 디코딩 프레임 크기 (COBS 디코딩 후 원본 데이터)
+ *  @note  값의 SSOT = agr_dop_config.h (제품별 override = 각 모듈 agr_mw_conf.h).
+ *         여기서 재정의 금지 — TU 간 불일치의 원인이 된다. */
 #ifndef AGR_COBS_MAX_FRAME_SIZE
-#define AGR_COBS_MAX_FRAME_SIZE     128
+#error "AGR_COBS_MAX_FRAME_SIZE must be provided by agr_dop_config.h (do not re-default here)"
 #endif
 
 /** @brief COBS 프레임 구분자 */

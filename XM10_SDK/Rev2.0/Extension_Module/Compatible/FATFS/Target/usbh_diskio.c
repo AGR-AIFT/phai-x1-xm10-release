@@ -95,7 +95,7 @@ static inline void _usbh_diag_update_burst(uint32_t write_start_cyc, uint32_t wr
  * + 32-byte aligned) is functionally correct. Consider Non-Cacheable placement
  * if MPU configuration is revisited.
  */
-__attribute__((aligned(32)))
+IOIF_DMA_ALIGNED
 static DWORD scratch[_MAX_SS / 4];
 extern USBH_HandleTypeDef  hUSB_Host;
 

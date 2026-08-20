@@ -213,6 +213,13 @@ bool XM_SendUsbDebugMessage(const char* message);
 
 /**
  * @brief PC로부터 데이터를 수신합니다. (Non-Blocking)
+ * @warning [2nd-consumer 경합] System 내부의 CdcDopRouter_Process()(매 1ms tick,
+ *          호스트 프로파일과 무관하게 실행)가 동일한 CDC RX StreamBuffer 를
+ *          drain-to-empty 로 소비합니다. Control_Loop() 안에서 이 함수를 호출해
+ *          그 tick 에 버퍼를 다 비우지 않으면, 남은 바이트는 같은 tick 뒤쪽에서
+ *          라우터가 가져가 DOP 프레임으로 해석을 시도하고 두 번 다시 수신할 수
+ *          없습니다. raw RX 수신이 필요한 애플리케이션은 이 제약을 전제로
+ *          설계하세요 (라우터 profile 게이트는 후속 검토 항목).
  */
 uint32_t XM_GetUsbData(void* buffer, uint32_t max_len);
 

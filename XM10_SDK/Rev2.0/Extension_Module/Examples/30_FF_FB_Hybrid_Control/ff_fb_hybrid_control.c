@@ -62,6 +62,13 @@
  */
 
 /* --- 신체/로봇 파라미터 (피드포워드 모델) --- */
+/* [⚠️ 착용 전제] τ_ff = M·g·L_eff·cos(θ) 는 착용자(70kg)를 받치는 크기라
+ * 무부하 거치대(벤치)에서는 진입 직후(소프트스타트 램프 500ms 이후)부터
+ * MAX_TORQUE_NM 로 포화된 토크가 한 방향으로 지속 인가되어 가벼운 링크가
+ * 격렬하게 움직입니다 — 결함이 아니라 모델 전제 밖 사용입니다.
+ * 벤치에서 제어 특성을 실험하려면 링크 실측 스케일로 낮추세요 (Ex.35 물성):
+ *   M_BODY_KG 0.184f (링크 질량 kg) / L_EFF_M 0.1264f (링크 CoM 거리 m)
+ *   + PD 게인 재튜닝 권장. */
 #define M_BODY_KG           70.0f   /* 체중 (kg) — 실측 또는 추정값으로 교체 */
 #define L_EFF_M             0.25f   /* 유효 레버 길이 (m, 고관절→CoM 거리) */
 #define G_ACC               9.81f   /* 중력 가속도 (m/s²) */
@@ -122,6 +129,9 @@ typedef struct {
  */
 
 static XmTsmHandle_t    s_tsm;
+
+/* 안전 토크 컨텍스트 (좌/우 동일 명령이므로 1개 — 진입 소프트스타트 + 클램프) */
+static XmSafeTorque_t   s_safe_torque;
 static float            s_kp            = KP_FB_DEFAULT;
 static float            s_a_ref         = A_REF_DEFAULT;
 static uint8_t          s_kp_idx        = 2U;   /* 기본 0.4 */
@@ -152,7 +162,6 @@ static float _ComputeFeedforward(float theta_deg, float theta_dot_deg);
 static void  _HandleButtonInput(void);
 static void  _UpdateUsbDebug(float theta_d, float theta);
 static void  _UpdateStreamData(float theta_d, float theta);
-static float _ClampFloat(float val, float min_val, float max_val);
 
 /**
  *-----------------------------------------------------------
@@ -186,6 +195,10 @@ void Control_Setup(void)
         "{\"name\":\"Actual Angle\",\"unit\":\"deg\"},"
         "{\"name\":\"FF Torque\",\"unit\":\"Nm\"},"
         "{\"name\":\"FB Torque\",\"unit\":\"Nm\"}]");
+    /* 안전 토크 헬퍼: |토크| ≤ MAX_TORQUE_NM, slew 무제한, 진입 램프 500ms
+     * — 진입 순간 FF(직립 시 최대 171.7Nm 계산 → 즉시 ±5Nm 포화) 계단 인가 방지 */
+    XM_SafeTorque_Init(&s_safe_torque, MAX_TORQUE_NM, 0U, XM_SAFETY_DEFAULT_RAMP_MS);
+
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
@@ -222,7 +235,10 @@ static void Standby_Loop(void)
 
 static void Active_Entry(void)
 {
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
+
+    /* 소프트스타트 재시작 (재진입마다 0→1 게인 램프 500ms) */
+    XM_SafeTorque_Reset(&s_safe_torque);
 
     s_prev_angle      = XM.status.h10.rightHipMotorAngle;
     s_tau_ff          = 0.0f;
@@ -283,9 +299,9 @@ static void Active_Loop(void)
     float d_err  = theta_dot_d - theta_dot;
     s_tau_fb = s_kp * error + KD_FB * d_err;
 
-    /* Step 4: 혼합 및 포화 */
+    /* Step 4: 혼합 및 안전 처리 (클램프 + 진입 소프트스타트 램프) */
     float torque_raw = s_tau_ff + s_tau_fb;
-    s_torque_cmd = _ClampFloat(torque_raw, -MAX_TORQUE_NM, MAX_TORQUE_NM);
+    s_torque_cmd = XM_SafeTorque_Step(&s_safe_torque, torque_raw);
     XM_SetAssistTorqueRH(s_torque_cmd);
     XM_SetAssistTorqueLH(s_torque_cmd);
 
@@ -389,9 +405,3 @@ static void _UpdateStreamData(float theta_d, float theta)
     XM_SendUsbDataWithId(&s_stream_data, sizeof(s_stream_data), 0xF0);
 }
 
-static float _ClampFloat(float val, float min_val, float max_val)
-{
-    if (val < min_val) { return min_val; }
-    if (val > max_val) { return max_val; }
-    return val;
-}

@@ -75,6 +75,7 @@
 #define AGRB_IOIF_GPIO_ENABLE               /**< GPIO - LED, Button, Power Control */
 #define AGRB_IOIF_TIM_ENABLE                /**< Timer - 시스템 타이머 */
 #define AGRB_IOIF_DWT_ENABLE                /**< DWT - 고정밀 성능 측정 */
+#define AGRB_IOIF_IWDG_ENABLE               /**< IWDG - 무한리셋/행 방지 워치독 (직접 레지스터, HAL 미사용 — Phase2 D2) */
 #define AGRB_IOIF_USB_ENABLE                /**< USB - CDC 디버그, MSC 데이터 로깅 */
 #define AGRB_IOIF_USB_MODE_DRP              /**< Host MSC (USB 스틱) ↔ Device CDC 정적 전환 (Rev1.1: 앱이 명시 init) */
 #define AGRB_IOIF_ADC_ENABLE                /**< ADC - 아날로그 센서 입력 */

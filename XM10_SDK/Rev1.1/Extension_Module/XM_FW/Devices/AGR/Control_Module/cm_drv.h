@@ -550,6 +550,25 @@ void CM_UpdatePVectorCompletedLH(uint8_t isCompleted);
  */
 void CM_UpdateNeutralPosSet(void);
 
+// --- 제어 TX end단 게이트 (v2.6 Control/Monitor 분리) ---
+/* 제어 전송 API 공통 반환 코드 — CM_Send{P,I,F}Vector* / CM_StageAuxTorque / CM_FlushControlPDOs */
+#define CM_CTRL_TX_OK           (0)    /**< 전송(enqueue) 성공 */
+#define CM_CTRL_TX_ERR_PARAM    (-1)   /**< 인자 오류 / 미지원 노드 / 미초기화 */
+#define CM_CTRL_TX_BLOCKED      (-2)   /**< 게이트 차단 (MONITOR 상태 — g_cm_ctrl_tx_blocked_count 증가) */
+#define CM_CTRL_TX_ERR_SEND     (-3)   /**< 하위 전송 실패 (FDCAN FIFO full 등) */
+
+/**
+ * @brief [System 전용] 제어(액추에이션) 전송 end단 게이트를 설정합니다.
+ * @details core_process 의 모드 FSM 이 매 tick 갱신합니다 — 사용자 호출 금지.
+ *          false 이면 P/I/F 벡터·AuxTorque PDO 전송 함수가 모두 차단됩니다
+ *          (비-액추에이션 SDO — UserBodyData/Limit 설정 등 — 는 게이트 무관).
+ * @note   UserTask 단일 컨텍스트에서만 호출됩니다 (동시성 없음).
+ */
+void CM_SetCtrlTxEnabled(bool enabled);
+
+/** @brief 제어 TX 게이트 현재 상태를 반환합니다. */
+bool CM_GetCtrlTxEnabled(void);
+
 // --- 주 기능 API (주로 Apps 계층에서 사용) ---
 /**
  * @brief 사용자 신체 정보 SDO를 전송합니다.
@@ -561,14 +580,16 @@ void CM_SendUserBodyData(const uint32_t bodyData[8]);
  * @brief 지정된 관절(Node)에 P-Vector 궤적 SDO를 전송합니다.
  * @param[in] nodeId    명령을 전달할 관절의 Node ID (예: SYS_NODE_ID_RH).
  * @param[in] pVector   전송할 P-Vector 데이터를 담은 구조체 포인터.
+ * @return CM_CTRL_TX_OK / CM_CTRL_TX_ERR_PARAM / CM_CTRL_TX_BLOCKED / CM_CTRL_TX_ERR_SEND
  */
-void CM_SendPVector(SystemNodeID_t nodeId, const CM_PVector_t* pVector);
+int CM_SendPVector(SystemNodeID_t nodeId, const CM_PVector_t* pVector);
 
 /**
  * @brief 지정된 관절(Node)에 P-Vector Reset SDO를 전송합니다.
  * @param[in] nodeId    명령을 전달할 관절의 Node ID (SYS_NODE_ID_RH 또는 SYS_NODE_ID_LH).
+ * @return CM_CTRL_TX_OK / CM_CTRL_TX_ERR_PARAM / CM_CTRL_TX_BLOCKED / CM_CTRL_TX_ERR_SEND
  */
-void CM_SendPVectorReset(SystemNodeID_t nodeId);
+int CM_SendPVectorReset(SystemNodeID_t nodeId);
 
 /**
  * @brief (내부용) P-Vector 완료 상태 플래그를 false로 리셋합니다.
@@ -582,23 +603,26 @@ void CM_ClearPVectorCompletedFlag(SystemNodeID_t nodeId);
  * @brief 지정된 관절(Node)에 I-Vector 궤적 SDO를 전송합니다.
  * @param[in] nodeId    명령을 전달할 관절의 Node ID.
  * @param[in] iVector   전송할 I-Vector 데이터를 담은 구조체 포인터.
+ * @return CM_CTRL_TX_OK / CM_CTRL_TX_ERR_PARAM / CM_CTRL_TX_BLOCKED / CM_CTRL_TX_ERR_SEND
  */
-void CM_SendIVector(SystemNodeID_t nodeId, const CM_IVector_t* iVector);
+int CM_SendIVector(SystemNodeID_t nodeId, const CM_IVector_t* iVector);
 
 /**
  * @brief 지정된 관절(Node)에 I-Vector 궤적 SDO를 전송합니다.
  * @param[in] nodeId    명령을 전달할 관절의 Node ID.
  * @param[in] kpMax     전송할 I-Vector kp Max 값.
  * @param[in] kdMax     전송할 I-Vector kd Max 값.
+ * @return CM_CTRL_TX_OK / CM_CTRL_TX_ERR_PARAM / CM_CTRL_TX_BLOCKED / CM_CTRL_TX_ERR_SEND
  */
-void CM_SendIVectorKpKdmax(SystemNodeID_t nodeId, const float kpMax, const float kdMax);
+int CM_SendIVectorKpKdmax(SystemNodeID_t nodeId, const float kpMax, const float kdMax);
 
 /**
  * @brief 지정된 관절(Node)에 F-Vector 궤적 SDO를 전송합니다.
  * @param[in] nodeId    명령을 전달할 관절의 Node ID.
  * @param[in] fVector   전송할 F-Vector 데이터를 담은 구조체 포인터.
+ * @return CM_CTRL_TX_OK / CM_CTRL_TX_ERR_PARAM / CM_CTRL_TX_BLOCKED / CM_CTRL_TX_ERR_SEND
  */
-void CM_SendFVector(SystemNodeID_t nodeId, const CM_FVector_t* fVector);
+int CM_SendFVector(SystemNodeID_t nodeId, const CM_FVector_t* fVector);
 
 /**
  * @brief 지정된 관절(Node)의 각도 제한 루틴을 SDO로 활성화/비활성화합니다.
@@ -658,20 +682,26 @@ void CM_SendResistiveCompGain(SystemNodeID_t nodeId, float gain);
 void CM_SendSetH10AssistExistingMode(bool H10AssistModeEnable);
 
 // --- PDO 관련 API ---
+/** @brief AuxTorque 클램프 한계 (Nm) — CM 측 파싱(±10A 클램프)과 짝을 이루는 XM 측 한계. */
+#define CM_AUX_TORQUE_LIMIT_NM  (10.0f)
+
 /**
  * @brief 지정된 관절(Node)의 보조 토크를 PDO 전송 대기열에 추가합니다.
  * @details 이 함수는 즉시 전송하지 않고, 전송할 데이터를 '스테이징'만 합니다.
  * 실제 전송은 CM_FlushControlPDOs() 호출 시 이루어집니다.
+ * NaN/Inf 는 0 으로 치환되며(진단 카운터), ±CM_AUX_TORQUE_LIMIT_NM 으로 클램프됩니다.
  * @param[in] nodeId    토크를 인가할 관절의 Node ID.
  * @param[in] torque    보조 토크 값 (단위: Nm).
+ * @return CM_CTRL_TX_OK / CM_CTRL_TX_ERR_PARAM / CM_CTRL_TX_BLOCKED
  */
-void CM_StageAuxTorque(SystemNodeID_t nodeId, float torque);
+int CM_StageAuxTorque(SystemNodeID_t nodeId, float torque);
 
 /**
  * @brief 대기열에 있는 모든 제어 관련 PDO를 하나의 CAN 메시지로 묶어 보냅니다.
  * @details 제어 루프의 마지막에 주기적으로 호출되어야 합니다.
+ * @return CM_CTRL_TX_OK / CM_CTRL_TX_ERR_PARAM / CM_CTRL_TX_BLOCKED / CM_CTRL_TX_ERR_SEND
  */
-void CM_FlushControlPDOs(void);
+int CM_FlushControlPDOs(void);
 
 /* ====================================================================
  *  [Phase 1] PDO Loop Counter 진단 API

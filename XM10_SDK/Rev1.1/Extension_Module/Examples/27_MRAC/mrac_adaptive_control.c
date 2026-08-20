@@ -119,6 +119,11 @@ typedef struct {
 
 static XmTsmHandle_t s_tsm;
 
+/* 안전 토크 컨텍스트 (좌/우 동일 명령이므로 1개) — 상시 slew 제한:
+ * 진입 순간 θ̂₂_init·r = 5Nm 계단 인가를 막고(Reset 후 0 에서 램프),
+ * 적응 파라미터 급변/발산 시에도 토크 변화율을 500ms 풀스케일로 제한 */
+static XmSafeTorque_t s_safe_torque;
+
 /* 참조 모델 상태 */
 static float s_x_ref   = 0.0f;     /* 참조 모델 출력 x_m (deg) */
 
@@ -190,6 +195,13 @@ void Control_Setup(void)
         "{\"name\":\"Actual Angle\",\"unit\":\"deg\"},"
         "{\"name\":\"MRAC Error\",\"unit\":\"deg\"},"
         "{\"name\":\"Torque\",\"unit\":\"Nm\"}]");
+
+    /* 안전 토크 헬퍼: |토크| ≤ MAX_TORQUE_NM, slew = 500ms 풀스케일(상시), 진입 램프 없음
+     * — slew 가 Reset 후 0 에서 시작하므로 진입 램프 역할을 겸함.
+     * @note 상시 slew 는 적응(MIT rule) 급변이 출력에 반영되는 속도도 함께 제한
+     *       합니다(풀스케일 기준 최대 500ms 지연) — 안전 우선의 의도된 특성. */
+    XM_SafeTorque_Init(&s_safe_torque, MAX_TORQUE_NM, XM_SAFETY_DEFAULT_RAMP_MS, 0U);
+
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
 
@@ -226,7 +238,10 @@ static void Standby_Loop(void)
 
 static void Active_Entry(void)
 {
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    XM_SetControlMode(XM_CTRL_CONTROL);
+
+    /* slew 기준점 리셋 — 진입 첫 tick 토크가 0 에서 램프되도록 */
+    XM_SafeTorque_Reset(&s_safe_torque);
 
     /* 참조 모델을 현재 각도로 초기화 (부드러운 시작) */
     s_x_ref      = XM.status.h10.rightHipMotorAngle;
@@ -284,8 +299,9 @@ static void Active_Loop(void)
     s_theta1 = _ClampFloat(s_theta1, THETA1_MIN, THETA1_MAX);
     s_theta2 = _ClampFloat(s_theta2, THETA2_MIN, THETA2_MAX);
 
-    /* Step 6: 토크 포화 후 전송 (좌우 동일 적용) */
-    s_torque_cmd = _ClampFloat(torque_raw, -MAX_TORQUE_NM, MAX_TORQUE_NM);
+    /* Step 6: 토크 안전 처리 후 전송 (좌우 동일 적용)
+     * 클램프 + 상시 slew 제한(0→풀스케일 500ms) — 진입 계단/파라미터 급변 방어 */
+    s_torque_cmd = XM_SafeTorque_Step(&s_safe_torque, torque_raw);
     XM_SetAssistTorqueRH(s_torque_cmd);
     XM_SetAssistTorqueLH(s_torque_cmd);
 

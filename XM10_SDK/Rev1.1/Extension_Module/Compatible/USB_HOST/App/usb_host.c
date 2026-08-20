@@ -39,9 +39,9 @@
 /* USER CODE END PFP */
 
 /* USB Host core handle declaration */
-__attribute__((section(D2_NON_CACHE_SECTION), aligned(32)))
+__attribute__((section(D2_NON_CACHE_SECTION))) IOIF_DMA_ALIGNED
 USBH_HandleTypeDef hUsbHostFS = {0};
-__attribute__((section(D2_NON_CACHE_SECTION), aligned(32)))
+__attribute__((section(D2_NON_CACHE_SECTION))) IOIF_DMA_ALIGNED
 ApplicationTypeDef Appli_state = APPLICATION_IDLE;
 
 /*

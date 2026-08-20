@@ -50,7 +50,8 @@ void Boot_FTP_Init(Boot_FTP_TxFunc_t tx_func);
 /**
  * @brief Scan raw USB CDC Rx data for FTP commands (QUERY_INFO + ENTER_BOOTLOADER).
  *
- * Call this from CDC_Receive_FS() BEFORE normal PhAI protocol processing.
+ * [2026-08-19 P1] Call this from CdcDopRouter_Process() (UserTask 1kHz, task
+ * context) — CDC RX ISR 에서 defer 됨. 인자는 0x00 종단 완결 세그먼트 단위.
  *
  * Handles two FTP commands:
  *   - QUERY_INFO (0x01): Sends device info response (BL ver, App ver, hw_rev, etc.)

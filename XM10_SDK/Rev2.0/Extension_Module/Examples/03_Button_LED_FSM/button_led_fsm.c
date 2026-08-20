@@ -110,7 +110,7 @@ static void Standby_Loop(void)
     // 버튼 1을 1초 이상 꾹 누르면 모드 변경
     if (XM_GetButtonEvent(XM_BTN_1) == XM_BTN_LONG_PRESS) {
         XM_TSM_TransitionTo(s_tsm, XM_STATE_ACTIVE);
-        XM_SendUsbDebugMessage("[Mode] STANDBY\r\n");
+        XM_SendUsbDebugMessage("[Mode] STANDBY -> ACTIVE\r\n");
     }
 }
 

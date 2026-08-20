@@ -142,6 +142,9 @@ int32_t XM_UserNV_Write(uint32_t offset, const void *data, uint32_t size);
  *
  * @note 128KB 전체 섹터가 지워집니다. 약 1~2초 소요.
  *       실시간 제어 루프에서 호출하지 마세요.
+ * @warning [v2.6] 시스템 워치독(IWDG, 8s) 동작 중입니다 — 본 함수는 erase 전후로
+ *          워치독을 자동 리로드하지만, 이 함수 호출 직전/직후에 다른 장시간
+ *          블로킹 작업을 연달아 수행하면 리셋될 수 있습니다.
  */
 int32_t XM_UserNV_Erase(void);
 

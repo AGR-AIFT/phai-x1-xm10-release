@@ -55,6 +55,11 @@ typedef enum {
     SYS_NODE_ID_LA    = 0xB, // Left Ankle  (11) (Sagittal)
 
     /* DOP V2 (CANopen) - Sensor Modules */
+    // @deprecated (2026-08-19) SSOT 불일치 — 실제 통신에는 System/Config/xm_node_id.h 의
+    //   AGR_NODE_ID_IMU_HUB_A(0x0D) / AGR_NODE_ID_EMG_HUB(0x0F) 를 사용할 것.
+    //   아래 두 값(0x08/0x09)은 이 enum 안에서 SYS_NODE_ID_RK/LK(관절 노드)와 숫자가
+    //   겹치는 미사용(참조 0건) 정의 — 신규 코드에서 절대 사용 금지 (오사용 시
+    //   실제로는 MD Knee 노드로 잘못 송신됨). 값 충돌이라 제거는 별도 승인 사안.
     SYS_NODE_ID_IMU_HUB = 0x08,  // IMU Hub Module
     SYS_NODE_ID_EMG_HUB = 0x09,  // EMG Hub Module (향후)
     

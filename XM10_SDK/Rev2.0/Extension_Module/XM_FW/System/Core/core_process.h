@@ -23,6 +23,8 @@
 #ifndef SYSTEM_CORE_CORE_PROCESS_H_
 #define SYSTEM_CORE_CORE_PROCESS_H_
 
+#include "xm_api_data.h"   /* XmControlMode_t / XmAppliedMode_t — 모드 FSM 인터페이스 타입 */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -56,7 +58,7 @@ extern "C" {
 
 /**
  * @brief  User Task의 진입점 (RTOS Task Function)
- * @details 
+ * @details
  * 1. Control_Setup()을 1회 호출하여 사용자 초기화를 수행합니다.
  * 2. 무한 루프에 진입하여 다음 과정을 1ms(1kHz)마다 반복합니다.
  * - [Input]  모든 센서/모듈 데이터 최신화 (_FetchAllInputs)
@@ -65,6 +67,15 @@ extern "C" {
  * * @param argument RTOS 태스크 생성 시 전달되는 인자 (사용 안 함)
  */
 void StartUserTask(void *argument);
+
+/**
+ * @brief [내부 — XM_SetControlMode() 전용] 제어 모드 요청을 모드 FSM 에 통지합니다.
+ * @details CONTROL 진입 요청은 같은 tick 안에서 동기 적용(게이트 개방)하고,
+ *          MONITOR 진입 요청은 _FlushAllOutputs() 의 램프다운 시퀀스가 비동기 처리합니다.
+ *          사용자 코드는 이 함수를 직접 호출하지 말고 XM_SetControlMode() 를 사용하세요.
+ * @note   UserTask(Control_Setup/Control_Loop) 컨텍스트 전용.
+ */
+void CoreProcess_OnControlModeRequest(XmControlMode_t mode);
 
 #ifdef __cplusplus
 }

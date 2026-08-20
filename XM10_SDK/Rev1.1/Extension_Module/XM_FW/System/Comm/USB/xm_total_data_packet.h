@@ -1,5 +1,5 @@
-/* AUTO-GENERATED from xm_total_data.yaml v2.6 — DO NOT EDIT MANUALLY */
-/* Generated: 2026-05-13 00:13:23 */
+/* AUTO-GENERATED from xm_total_data.yaml v2.8 — DO NOT EDIT MANUALLY */
+/* Generated: 2026-08-20 18:09:26 */
 
 #ifndef XM_TOTAL_DATA_PACKET_H
 #define XM_TOTAL_DATA_PACKET_H
@@ -107,7 +107,7 @@ typedef struct {
     uint16_t   adc_active_mask;          /* offset: 283, unit: flags */
     uint16_t   adc_channel[12];          /* offset: 285, unit: raw */
 
-    /* === EMG_Hub (16B) === */
+    /* === EMG_Hub (12B) === */
     uint8_t    emg_status_flags;         /* offset: 309, unit: flags */
     uint16_t   emg_raw_adc;              /* offset: 310, unit: raw */
     int16_t    emg_voltage_uv_x10;       /* offset: 312, scale: 10, unit: uV */
@@ -115,7 +115,12 @@ typedef struct {
     int16_t    emg_envelope_uv_x10;      /* offset: 316, scale: 10, unit: uV */
     uint8_t    emg_mvc_percent;          /* offset: 318, unit: % */
     uint8_t    emg_is_active;            /* offset: 319, unit: bool */
-    uint8_t    rsv_emg[5];               /* offset: 320, unit: reserved */
+    uint8_t    rsv_emg;                  /* offset: 320, unit: reserved */
+
+    /* === Ext_Sync (4B) === */
+    uint8_t    sync_save_active;         /* offset: 321, unit: bool */
+    uint8_t    sync_din_level;           /* offset: 322, unit: bool */
+    uint16_t   sync_din_edge_count;      /* offset: 323, unit: count */
 
     /* === FDCAN1_Diag (6B) === */
     uint8_t    fdcan1_tec;               /* offset: 325, unit: count */
@@ -147,6 +152,6 @@ _Static_assert(sizeof(XM_TotalDataPacket_t) == 365,
 
 #define XM_TOTAL_DATA_PAYLOAD_SIZE  sizeof(XM_TotalDataPacket_t)
 #define XM_TOTAL_DATA_MODULE_ID     0x20
-#define XM_TOTAL_DATA_NUM_CHANNELS  198   /* excluding reserved */
+#define XM_TOTAL_DATA_NUM_CHANNELS  197   /* excluding reserved */
 
 #endif /* XM_TOTAL_DATA_PACKET_H */

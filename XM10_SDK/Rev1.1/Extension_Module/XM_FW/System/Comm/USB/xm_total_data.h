@@ -42,4 +42,13 @@ void XM_TotalData_Snapshot(void);
  */
 const XM_TotalDataPacket_t* XM_TotalData_GetLatest(uint32_t* size);
 
+/**
+ * @brief 외부 동기화 TTL 입력 핀 초기화 (System 소유 — Ext_Sync 섹션).
+ * @details core_process 가 Control_Setup() 직전에 1회 호출합니다.
+ *          사용자 앱이 Control_Setup 에서 같은 핀을 재설정하면 사용자 설정이
+ *          이기므로 DIO8 을 쓰는 SDK 예제와 충돌하지 않습니다 (이 경우
+ *          Ext_Sync 필드는 무의미한 값이 되지만 시스템 동작 영향 없음).
+ */
+void XM_TotalData_SyncDinInit(void);
+
 #endif /* SYSTEM_COMM_USB_XM_TOTAL_DATA_H_ */

@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    cdc_sensor_print.c
  * @author  HyundoKim
- * @brief   [중급] sprintf를 활용한 센서 데이터 모니터링
+ * @brief   [중급] snprintf를 활용한 센서 데이터 모니터링
  * @note    텍스트 기반 디버깅 예제입니다. Control_Setup 에서 호스트 프로파일을
  *          TERMINAL 로 지정하여 1kHz Total Data auto-pump 를 끄고, 일반 시리얼
  *          터미널/콘솔(Tera Term · VS Code Serial Monitor · PuTTY 등)에 깨끗한
@@ -22,7 +22,7 @@
  */
 
 #include "xm_api.h"
-#include <stdio.h> /* sprintf 사용 */
+#include <stdio.h> /* snprintf 사용 (버퍼 오버런 방지) */
 
 /**
  *-----------------------------------------------------------

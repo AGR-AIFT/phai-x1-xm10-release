@@ -62,9 +62,11 @@
  * SAM10: 감속비 18.75:1, Kt=0.085 Nm/A
  * 관절 토크 = Kt × 감속비 × 전류 ≈ 1.594 × i [Nm]
  * 역구동성 < 0.3 Nm, 최대 18.3 Nm, 정격 10 Nm, 85 RPM */
+/* @note XM.status.h10.hipTorque 는 이미 Nm (cm_drv 가 Kt×감속비 환산 완료).
+ *       예제 코드에서 아래 상수로 재환산하지 마세요 (이중 변환 금지).
+ *       아래 값은 사양 참고용입니다. */
 #define GEAR_RATIO              18.75f
 #define KT_MOTOR_NM_PER_A      0.085f
-#define KT_JOINT_NM_PER_A      (KT_MOTOR_NM_PER_A * GEAR_RATIO)  /* ≈ 1.594 Nm/A */
 
 /* --- 공통 제어 상수 --- */
 #define PI_VALUE                3.14159265f
@@ -110,6 +112,11 @@
 #define MAX_TORQUE_NM           8.0f        /* 정격 10Nm 대비 보수적 (무부하 급동작 방지) */
 
 /* --- 고관절 ROM (기구학 안전) --- */
+/* @todo [미배선] ROM 경계 감쇠는 아직 구현되지 않았습니다 — 아래 상수 3종은
+ *       현재 어떤 로직에서도 사용되지 않는 사양 참고값입니다. 구현 경로 후보:
+ *       ① XM_SetDegreeLimitRoutine()/XM_SetDegreeLimit() 로 MD 측 ROM 제한 활성화
+ *       ② 경계 여유(ROM_MARGIN_DEG) 진입 시 경계 방향 토크만 선형 감쇠하는 로컬 로직
+ *       (SAM10 측 하드 리밋 유무 확인 후 감쇠 강도 결정 — HW 검증 필요) */
 #define ROM_FLEXION_DEG         120.0f      /* 최대 굴곡 (deg) */
 #define ROM_EXTENSION_DEG       (-25.0f)    /* 최대 신전 (deg, 음수) */
 #define ROM_MARGIN_DEG          10.0f       /* ROM 경계 감쇠 시작 여유 (deg) */
@@ -125,6 +132,7 @@
 #define HOMING_ACCEL_S0         4       /* 초기 가속도 */
 #define HOMING_ACCEL_SD         4       /* 감속도 */
 #define HOMING_DELAY_MS         50      /* 안정화 지연 (ms) */
+#define HOMING_WAIT_MARGIN_MS   2000U   /* 호밍 Done 대기 margin — duration + margin 초과 시 fail-closed */
 
 /**
  *-----------------------------------------------------------
@@ -213,6 +221,7 @@ static float s_tau_total_l = 0.0f;
 /* --- Homing --- */
 static HomingState_t s_homing_state = HOMING_COMPLETE;
 static uint32_t      s_homing_timer = 0;
+static uint32_t      s_homing_deadline = 0;  /* 호밍 Done 대기 데드라인 (duration + margin) */
 static bool          s_homing_done  = false;
 
 
@@ -330,7 +339,8 @@ static void Active_Entry(void)
 {
     g_ml_dbg.tsm_state = 2;
     g_ml_dbg.ctrl_mode_set = 1;
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    /* [v2.6] 토크 + 호밍 벡터 모두 CONTROL 모드 필요 (구 XM_CTRL_TORQUE 와 동일 값) */
+    XM_SetControlMode(XM_CTRL_CONTROL);
 
     /* === Homing 절차 시작 (Ex.12 패턴) === */
     s_homing_state = HOMING_ENTRY;
@@ -425,6 +435,14 @@ static void _RunHoming(void)
 {
     switch (s_homing_state) {
     case HOMING_ENTRY:
+        /* [가드] 직전 fail-closed 타임아웃이 요청한 MONITOR 전환 정리
+         * (TRANSITION, ~10 tick)가 끝나 FW 게이트가 CONTROL 로 열릴 때까지
+         * ENTRY 에서 대기 — 가드 없이 진행하면 벡터가 무음 차단된 채 상태만
+         * 전진해 '전송된 적 없는 P-Vector Done' 을 기다리는 空사이클이 생김.
+         * (CONTROL 요청은 Active_Entry 가 이미 latch — FW 가 MONITOR 도달 시 자동 승격) */
+        if (XM_GetAppliedControlMode() != XM_MODE_APPLIED_CONTROL) {
+            break;
+        }
         /* SAM10 임피던스 Kp/Kd 최대값 설정 */
         XM_SendIVectorKpKdMax(SYS_NODE_ID_RH, 6, 1);
         XM_SendIVectorKpKdMax(SYS_NODE_ID_LH, 6, 1);
@@ -457,6 +475,8 @@ static void _RunHoming(void)
         XM_SendPVector(SYS_NODE_ID_LH, &pv_l);
         XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
         XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
+        /* Done 대기 데드라인: 계산된 이동 시간 + margin (duration+margin 패턴) */
+        s_homing_deadline = XM_GetTick() + (uint32_t)homing_dur + HOMING_WAIT_MARGIN_MS;
         s_homing_state = HOMING_WAIT_DONE;
         break;
     }
@@ -467,6 +487,19 @@ static void _RunHoming(void)
             XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
             s_homing_timer = XM_GetTick();
             s_homing_state = HOMING_FINALIZE_DELAY;
+        }
+        /* [fail-closed] Done 미수신 (MD 무응답 등) — stiff impedance(Kp80) 상태로
+         * 영구 대기하지 않고, P-Vector 취소 + 임피던스 해제 후 STANDBY 복귀. */
+        else if ((int32_t)(XM_GetTick() - s_homing_deadline) >= 0) {
+            XM_SendPVectorReset(SYS_NODE_ID_RH);
+            XM_SendPVectorReset(SYS_NODE_ID_LH);
+            IVector_t release = { .epsilon = 0, .kp = 0, .kd = 0, .lambda = 0, .duration = 50 };
+            XM_SendIVector(SYS_NODE_ID_RH, &release);
+            XM_SendIVector(SYS_NODE_ID_LH, &release);
+            XM_SetControlMode(XM_CTRL_MONITOR);
+            s_homing_state = HOMING_ENTRY;
+            XM_SendUsbDebugMessage("[ML] 호밍 Done 타임아웃 — 정지 후 STANDBY 복귀\r\n");
+            XM_TSM_TransitionTo(s_tsm, XM_STATE_STANDBY);
         }
         break;
 
@@ -506,8 +539,11 @@ static void _RunControl(void)
     float ang_r_rad = DEG_TO_RAD(ang_r_deg);
     float ang_l_rad = DEG_TO_RAD(ang_l_deg);
 
-    float cur_r_a = XM.status.h10.rightHipTorque;  /* 실제 전류 (A) */
-    float cur_l_a = XM.status.h10.leftHipTorque;
+    /* [정정] hipTorque 는 이미 관절 토크 추정값 [Nm] — cm_drv 가 전류(A)에서
+     * Kt×감속비(≈1.594) 환산을 완료해 줍니다. 여기서 다시 Kt 를 곱하면
+     * 이중 변환(×1.594)으로 DOB 잔차가 왜곡되므로 재환산 금지. */
+    float tau_meas_r_nm = XM.status.h10.rightHipTorque;
+    float tau_meas_l_nm = XM.status.h10.leftHipTorque;
 
     g_ml_dbg.ctrl_step = 2;
     /* === 2. Alpha-Beta Tracker — 모델프리 속도 추정 ===
@@ -547,11 +583,8 @@ static void _RunControl(void)
         /* DOB 공칭모델 = 중력만 (마찰은 SAM10이 이미 보상) */
         float tau_model_r = tau_grav_r;
         float tau_model_l = tau_grav_l;
-        float tau_meas_r  = KT_JOINT_NM_PER_A * cur_r_a;
-        float tau_meas_l  = KT_JOINT_NM_PER_A * cur_l_a;
-
-        s_d_hat_r = _UpdateDob(s_d_hat_r, tau_meas_r, tau_model_r);
-        s_d_hat_l = _UpdateDob(s_d_hat_l, tau_meas_l, tau_model_l);
+        s_d_hat_r = _UpdateDob(s_d_hat_r, tau_meas_r_nm, tau_model_r);
+        s_d_hat_l = _UpdateDob(s_d_hat_l, tau_meas_l_nm, tau_model_l);
 
         tau_dob_r = s_d_hat_r;
         tau_dob_l = s_d_hat_l;

@@ -399,7 +399,8 @@ static void Active_Loop(void)
     _ApplyPhaseAssist(&s_gait_lh);
 
     /* 토크 출력 (어시스트 레벨 반영) */
-    float level_scale = (float)XM.status.h10.h10AssistLevel / 10.0f;  // AssistLevel 0~10 정규화 (Ex.12 와 동일)
+    // AssistLevel 0~10 클램프 후 정규화 (Ex.12 와 동일) — 범위 밖 수신값 방어
+    float level_scale = (float)XM_SafeAssistLevel(XM.status.h10.h10AssistLevel) / 10.0f;
     XM_SetAssistTorqueRH(s_gait_rh.current_torque_nm * level_scale);
     XM_SetAssistTorqueLH(s_gait_lh.current_torque_nm * level_scale);
 

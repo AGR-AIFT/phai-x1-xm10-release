@@ -130,6 +130,16 @@ AGRBStatusDef IOIF_FDCAN_SetRestrictedMode(IOIF_FDCANx_t id, bool restricted);
 AGRBStatusDef IOIF_FDCAN_Transmit(IOIF_FDCANx_t id, uint32_t can_id, const uint8_t* txData, uint8_t len);
 
 /**
+ * @brief RT(1kHz) 경로용 논블로킹 송신 — Transmit 과 동일하되 Tx Mutex try-lock(0).
+ * @return AGRBStatus_OK: 성공, AGRBStatus_BUSY: Tx Mutex 경합(대기 0, 미송신),
+ *         AGRBStatus_ERROR: HW FIFO 전송 실패
+ * @note RTOS: 블로킹 0 보장 — 1ms 주기 task 의 5ms TX_LOCK 대기 제거 (2026-07-23).
+ *       경합/실패 시 호출자가 드롭 계측 후 다음 주기 최신값으로 대체(latest-wins).
+ * @note BareMetal: Transmit 과 동일 동작 (try-lock 이 항상 성공).
+ */
+AGRBStatusDef IOIF_FDCAN_TransmitTry(IOIF_FDCANx_t id, uint32_t can_id, const uint8_t* txData, uint8_t len);
+
+/**
  * @brief Classic-CAN(비-FD, BRS off) 프레임 전송 — IOIF_FDCAN_Transmit 과 동일 Tx Mutex.
  * @param len 전송할 데이터 길이 (바이트, Classic CAN 최대 8).
  * @return AGRBStatus_OK: 성공, AGRBStatus_TIMEOUT: Mutex 실패, AGRBStatus_PARAM_ERROR: len>8
@@ -248,6 +258,20 @@ AGRBStatusDef IOIF_FDCAN_QueueMessage(IOIF_FDCANx_t id, uint32_t can_id, const u
 uint32_t IOIF_FDCAN_ProcessQueue(IOIF_FDCANx_t id, uint8_t reserved_slots);
 
 /**
+ * @brief ServicePeriodic 결과 — 호출자가 no-pending 과 pending-잔존(busy)을 구분해
+ *        bus-off flush 완료 전 신규 송신을 억제할 수 있게 한다 (2026-07-22 Codex
+ *        재리뷰 P2-1: bool 반환은 세 상태를 뭉개 stale 프레임 '뒤에' 새 프레임이
+ *        큐잉되는 순서 역전을 호출자가 감지할 수 없었다).
+ */
+typedef enum {
+    IOIF_FDCAN_SVC_NO_PENDING = 0,   /**< flush 할 것 없음 (정상 상태 / invalid id 포함) */
+    IOIF_FDCAN_SVC_FLUSHED,          /**< 이번 호출에서 bus-off flush 수행 완료 */
+    IOIF_FDCAN_SVC_PENDING_BUSY,     /**< flush 필요하나 TX lock 경합으로 미수행 —
+                                          호출자는 이 채널의 신규 송신을 억제하고
+                                          다음 주기에 재시도할 것 */
+} IOIF_FDCAN_SvcResult_t;
+
+/**
  * @brief [필수 주기 서비스] Bus-Off 복구 flush 전용 경량 서비스 (SW queue drain 없음)
  * @details direct-transmit 모듈(XM10/CM-WH 등 IOIF_FDCAN_Transmit 직접 호출·SW Tx
  *          Queue 미사용)이 IOIF_FDCAN_ProcessQueue 를 주기 호출하지 않아도, bus-off
@@ -256,15 +280,18 @@ uint32_t IOIF_FDCAN_ProcessQueue(IOIF_FDCANx_t id, uint8_t reserved_slots);
  *          서비스. **모든 FDCAN 사용 모듈은 ProcessQueue 또는 본 함수 중 하나를 반드시
  *          주기 호출**해야 bus-off 보호를 받는다.
  * @param id IOIF_FDCANx_t 핸들
- * @return true = 이번 호출에서 bus-off flush 수행, false = no-op(정상 상태)
+ * @return IOIF_FDCAN_SvcResult_t — PENDING_BUSY 면 stale 프레임이 남아 있으므로
+ *         호출자는 이번 주기 해당 채널의 신규 송신을 억제해야 순서 역전이 없다.
  * @note ProcessQueue 를 이미 주기 호출하는 모듈(IMU/EMG 등)은 그 안에서 동일 처리가
  *       일어나므로 본 함수를 추가로 부를 필요 없음. 설령 둘 다 불러도 mutex 안
  *       test-and-clear 라 flush 는 1회만 수행됨(idempotent, double-flush 없음).
- * @note Thread-Safe: 내부 TX_LOCK 으로 flush 원자성 보장. Task context 에서 주기 호출.
+ * @note Thread-Safe: flush 는 TX try-lock(0) 하에 수행 — RT(1kHz) 주기 컨텍스트에서
+ *       블로킹 0 보장 (구 TX_LOCK 5ms 대기 제거, 경합 시 PENDING_BUSY 반환 후
+ *       다음 주기 재시도). Task context 에서 주기 호출.
  * @note 평상시(flush 불필요) 경로는 lockless(volatile flag pre-check) — 1kHz 주기
- *       호출에도 뮤텍스 오버헤드가 없다. 실제 flush 발생 시에만 TX_LOCK 획득.
+ *       호출에도 뮤텍스 오버헤드가 없다. 실제 flush 발생 시에만 lock 시도.
  */
-bool IOIF_FDCAN_ServicePeriodic(IOIF_FDCANx_t id);
+IOIF_FDCAN_SvcResult_t IOIF_FDCAN_ServicePeriodic(IOIF_FDCANx_t id);
 
 /**
  * @brief 모든 Pending Tx 요청 취소 (Thread-Safe)

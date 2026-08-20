@@ -1,5 +1,5 @@
-/* AUTO-GENERATED from xm_total_data.yaml v2.6 — DO NOT EDIT MANUALLY */
-/* Generated: 2026-05-12 22:54:08 */
+/* AUTO-GENERATED from xm_total_data.yaml v2.8 — DO NOT EDIT MANUALLY */
+/* Generated: 2026-08-20 18:09:26 */
 
 export interface ChannelDef {
   offset: number;
@@ -114,7 +114,10 @@ export const TOTAL_DATA_MAP: ChannelDef[] = [
   { offset: 316, type: 'int16'   , scale:       10, scaleFormula: 'divide', unit: 'uV', name: 'emg_envelope_uv_x10', group: 'EMG_Hub' },
   { offset: 318, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: '%', name: 'emg_mvc_percent', group: 'EMG_Hub' },
   { offset: 319, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'bool', name: 'emg_is_active', group: 'EMG_Hub' },
-  { offset: 320, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'reserved', name: 'rsv_emg', group: 'EMG_Hub', count: 5 },
+  { offset: 320, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'reserved', name: 'rsv_emg', group: 'EMG_Hub' },
+  { offset: 321, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'bool', name: 'sync_save_active', group: 'Ext_Sync' },
+  { offset: 322, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'bool', name: 'sync_din_level', group: 'Ext_Sync' },
+  { offset: 323, type: 'uint16'  , scale:        1, scaleFormula: 'none', unit: 'count', name: 'sync_din_edge_count', group: 'Ext_Sync' },
   { offset: 325, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan1_tec', group: 'FDCAN1_Diag' },
   { offset: 326, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'count', name: 'fdcan1_rec', group: 'FDCAN1_Diag' },
   { offset: 327, type: 'uint8'   , scale:        1, scaleFormula: 'none', unit: 'enum', name: 'fdcan1_lec', group: 'FDCAN1_Diag' },
@@ -134,7 +137,7 @@ export const TOTAL_DATA_MAP: ChannelDef[] = [
 ];
 
 export const TOTAL_PACKET_SIZE = 365;
-export const DATA_MAP_VERSION = '2.6';
+export const DATA_MAP_VERSION = '2.8';
 export const MODULE_ID_TOTAL = 0x20;
 export const MODULE_ID_USER_META = 0xEF;
 export const MODULE_ID_USER_CUSTOM_START = 0xF0;

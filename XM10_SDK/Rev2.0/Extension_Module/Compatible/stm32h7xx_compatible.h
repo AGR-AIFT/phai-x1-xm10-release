@@ -12,6 +12,15 @@
 #define D2_NON_CACHE_SECTION ".RAM_D2_data"
 #define D3_NON_CACHE_SECTION ".RAM_D3_data"
 
+/* DMA 버퍼용 D-Cache 라인(32B) 경계 정렬 — SCB_Clean/InvalidateDCache_by_Addr 가
+ * 캐시 라인 단위로 동작하므로, 인접 변수의 라인 공유(오염) 방지를 위해 DMA 버퍼는
+ * 이 매크로로 정렬한다. (섹션 속성과 결합 시: __attribute__((section(X))) IOIF_DMA_ALIGNED)
+ * XM10 = H7 고정이라 단일 정의. IOIF 서브모듈 내부 정의(ioif_agrb_defs.h 예정)와의
+ * 일원화는 별도 IOIF 세션 사안 — 이름을 맞춰 충돌 없이 수렴 가능하도록 ifndef 가드. */
+#ifndef IOIF_DMA_ALIGNED
+#define IOIF_DMA_ALIGNED __attribute__((aligned(32)))
+#endif
+
 
 //Interrupt Handler 
 void OTG_FS_EP1_OUT_IRQHandler(void);

@@ -23,9 +23,9 @@
  * 4. PDO/Heartbeat = 실시간 (직접), SDO/NMT = 비실시간 (Queue)
  * 5. Lock-Free: Device Layer API는 내부에서 Mutex 보호
  * 
- * [Task Priority]
- * - IOIF FDCAN RxTask: osPriorityRealtime4 (52) - IOIF 내부
- * - Main Control Task: osPriorityRealtime6 (54) - KING
+ * [Task Priority] (SSOT = module.h 우선순위 표 / ioif_conf.h 오버라이드)
+ * - IOIF FDCAN RxTask: osPriorityRealtime7 (55) - IOIF 내부
+ * - Main Control Task: osPriorityRealtime5 (53) - KING
  * - NonRealtime_Task: osPriorityRealtime3 (51)
  * 
  ******************************************************************************

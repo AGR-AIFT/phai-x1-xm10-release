@@ -39,15 +39,6 @@
 
 /**
  *===========================================================================
- * PRODUCT IDENTIFICATION
- *===========================================================================
- */
-
-#define XM10_FIRMWARE_VERSION        "3.0.0"
-#define XM10_HARDWARE_REVISION       "Rev2.0"
-
-/**
- *===========================================================================
  * EXECUTION ENVIRONMENT (CRITICAL)
  *===========================================================================
  */
@@ -79,11 +70,9 @@
  *  54    UART RxTask          ioif_conf.h     event   센서 패킷 파싱 (DMA→파서) [2026-07-14: 55→54]
  *  53    UserTask             main.c (IOC)    1ms     IPO Control Loop [2026-07-14: 54→53]
  *  51    SDO Processor        module.h        event   PnP/설정 (비실시간)
- *  32    PSRAM Offload        module.h        20ms    [DEPRECATED 2026-04-18 C안 — 미사용]
  *  25    PnP Manager          module.h        100ms   연결 관리
  *  24    USB Control          module.h        10ms    USB 모드 전환
  *  24    DataLoggerTask       module.h        100ms   USB MSC f_write
- *  17    Button Control       module.h        event   버튼 입력
  *   8    DefaultTask          main.c (IOC)    —       FreeRTOS idle (suspended)
  *
  *  [설계 원칙]
@@ -119,23 +108,7 @@
 #define TASK_STACK_USB_CONTROL      (2048)
 #define TASK_PERIOD_MS_USB_CONTROL  10
 
-/* ----- PSRAM Offload (Above Normal) — [DEPRECATED 2026-04-18 C안] ----- */
-/**
- * @brief [DEPRECATED 2026-04-18 C안] PSRAM Cold Buffer Offload Task
- * @details 현재 미사용. Rev1.1 방식 (Hot-only D2 128KB) 으로 회귀.
- *          이전 설계 (참고): Hot Buffer(D2) → Cold Buffer(PSRAM) 전송 담당.
- *          20ms vTaskDelayUntil 주기, while loop drain (Hot이 빌 때까지 16KB chunks).
- *          Priority: DataLogger(24) = Normal(24) < Offload(32) < Realtime(50+)
- *          매크로 자체는 잠정 유지 (참조 없음 확인 시 제거 가능).
- */
-#define TASK_PRIO_PSRAM_OFFLOAD     osPriorityAboveNormal   /**< [DEPRECATED] PSRAM Cold Buffer Offload (32) */
-#define TASK_STACK_PSRAM_OFFLOAD    (2048)
-#define TASK_PERIOD_MS_OFFLOAD      20
-
 /* ----- Low Priority I/O ----- */
-#define TASK_PRIO_BTN_CONTROL       osPriorityBelowNormal7  /**< (17) 버튼 입력 */
-#define TASK_STACK_BTN_CONTROL      (512)
-
 #define TASK_PRIO_USB_SAVE          osPriorityNormal        /**< (24) USB 데이터 저장 — Priority inversion 완화 */
 /* [Phase 2 Fix] 16KB → 8KB: s_read_buf/s_offload_buf가 static으로 이동하고,
  * cmdBuffer도 static local로 변경하여 스택 부담 최소화.
@@ -151,9 +124,6 @@
  *===========================================================================
  */
 
-/* --- Connected Devices --- */
-#define XM_MAX_SENSOR_MODULES       7           /**< 최대 센서 모듈 개수 (IMU Hub, EMG Hub, FES Hub, GRF Hub) */
-
 /* --- Sensor Device Instances (Device Layer Multi-Instance 설정) ---
  * module.h에서 정의하면 Device 헤더의 #ifndef 기본값을 오버라이드합니다.
  * XM: XSENS 1개, MarvelDex GRF 2개(L/R)
@@ -162,27 +132,15 @@
 #define MARVELDEX_MAX_INSTANCES     2           /**< XM은 GRF 2개 사용 (L/R) */
 
 /* --- GRF source selection (UART7/8 are shared by one GRF source) ---
- * 0 = MarvelDex FSR receiver. Default until SM-GRF hardware/FW is stable.
- * 1 = SM-GRF fixed binary frame receiver. UART7=L, UART8=R.
+ * 0 = MarvelDex FSR receiver (legacy — 유지보수용으로만 잔존).
+ * 1 = SM-GRF fixed binary frame receiver. UART7=L, UART8=R. ★현재 기본값★
  * Only one source may bind to UART7/8 at build time.
+ * (빌드 시스템 어디에서도 override 하지 않음 — 아래 #define 이 실제 동작 기준)
  */
 #ifndef XM_GRF_FIXED_FRAME_MODULE
 #define XM_GRF_FIXED_FRAME_MODULE   1
 #endif
 #define XM_GRF_FSR_CH_TOTAL         24          /**< SM-GRF: ADC1 15ch + ADC3 9ch */
-
-/**
- *===========================================================================
- * TIMING CONFIGURATION (실제 사용)
- *===========================================================================
- */
-
-/* --- Main Loop --- */
-#define XM_MAIN_LOOP_FREQ_HZ        1000        /**< Main Control Loop 주파수 (1kHz = 1ms) */
-
-/* --- Communication Timeout --- */
-#define XM_FDCAN_RX_TIMEOUT_MS      100         /**< FDCAN 수신 타임아웃 */
-#define XM_HEARTBEAT_INTERVAL_MS    1000        /**< Heartbeat 전송 주기 */
 
 /**
  *===========================================================================

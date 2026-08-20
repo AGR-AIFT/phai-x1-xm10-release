@@ -39,6 +39,10 @@
  * - CAN-FD: IMU Hub, EMG Hub, FES Hub (PnP Master)
  */
 #define AGR_DOP_TRANSPORT_CANFD     1
+/* SERIAL: Rev1.1 non-usage — Rev1.1 has no serial DOP consumer
+ * (cdc_dop_router / production-inspection GUI), so AGR_MW
+ * DOP/Transport/Serial sources are excluded from the build
+ * (.cproject XM_FW exclusion + CMakeLists). Rev2.0 uses SERIAL=1. */
 
 /* -----------------------------------------------------------------------
  * API Contract — DO NOT MODIFY

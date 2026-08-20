@@ -132,12 +132,22 @@ extern volatile uint8_t  g_stim_psram_alloc_failed;
 extern volatile uint32_t g_stim_err_count[XM_STIM_COUNT_];
 
 /**
+ * @brief FDCAN Ch2 stimulus enable 거부 사유 코드 (OD 0x7E10:09, wire = uint8 1B)
+ * @note  값/의미는 생산 GUI 와의 계약 — 재번호 금지. 저장소는 uint8_t 유지
+ *        (xm_production_ctrl_test.c 의 FaultReason enum 패턴과 동일).
+ */
+typedef enum {
+    XM_STIM_FDCAN2_REJECT_NONE                 = 0,  /**< 거부 없음 (정상 진입 또는 시도 없음) */
+    XM_STIM_FDCAN2_REJECT_SM_CONNECTED         = 1,  /**< SM(IMU/EMG/FES Hub) 연결 중 — 평시 PDO 보호 */
+    XM_STIM_FDCAN2_REJECT_TEC_ACCUMULATED      = 2,  /**< @deprecated 2026-05-14 TEC pre-check 제거로
+                                                      *   현재 unreachable — wire 호환 위해 값만 보존 */
+    XM_STIM_FDCAN2_REJECT_RESTRICTED_MODE_FAIL = 3,  /**< Restricted Mode 진입 실패 (HAL Stop/Start) */
+} XM_StimFdcan2RejectReason_e;
+
+/**
  * @brief FDCAN Ch2 stimulus enable 거부 사유 — 마지막 SetEnabled(FDCAN2, true) 결과.
- *   0 = 거부 없음 (정상 진입 또는 시도 없음)
- *   1 = SM 연결 중 (Imu/Emg/FesHub IsConnected)
- *   2 = TEC 누적 (≥ XM_STIM_FDCAN_TEC_AUTODISABLE)
- *   3 = Restricted Mode 진입 실패 (HAL_FDCAN_Stop/Start 실패)
- * OD 0x7E40:02 로 노출 — Extension_Module_GUI_ForProduction polling 으로 "starting → OFF" 시 즉시 원인 확인.
+ *   값 의미 = XM_StimFdcan2RejectReason_e (2 는 unreachable — 2026-05-14 제거).
+ * OD 0x7E10:09 로 노출 — Extension_Module_GUI_ForProduction polling 으로 "starting → OFF" 시 즉시 원인 확인.
  */
 extern volatile uint8_t  g_stim_fdcan2_reject_reason;
 
@@ -181,18 +191,6 @@ extern volatile uint8_t g_xm_status_connected[XM_STIM_COUNT_];
  *   8 = RMII    : BMSR register 값 (bit2 = link up)
  */
 extern volatile uint32_t g_stim_last_data[XM_STIM_COUNT_];
-
-/**
- * @brief FDCAN Ch2 stimulus enable 거부 사유 (OD 0x7E10:09 노출, 2026-05-14).
- *
- *  0 = 거부 없음 (정상 진입 또는 시도 없음)
- *  1 = SM(IMU/EMG/FES Hub) 연결 중 — 평시 PDO 통신 보호 위해 거부
- *  2 = TEC 이미 임계 (>= XM_STIM_FDCAN_TEC_AUTODISABLE) 누적 — 보드 재부팅 필요
- *  3 = Restricted Operation Mode 진입 실패 (HAL_FDCAN_Stop/Start 실패)
- *
- * Extension_Module_GUI_ForProduction 가 "FDCAN Ch2 ON 후 즉시 OFF" 시 이 값을 polling 해 원인 표시.
- */
-extern volatile uint8_t g_stim_fdcan2_reject_reason;
 
 #ifdef __cplusplus
 }

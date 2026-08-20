@@ -37,6 +37,9 @@
  */
 void CdcDopRouter_Init(void);
 
+/** @brief 라우터 초기화 성공 여부 — startup 결과 비트맵(System_GetStartupResultBitmap)용 */
+bool CdcDopRouter_IsReady(void);
+
 /**
  * @brief CDC RX 버퍼를 비우면서 DOP 프레임 파서에 공급한다.
  *        1ms 주기로 XM_USB_ProcessPeriodic() 에서 호출.
@@ -50,5 +53,13 @@ uint32_t CdcDopRouter_Process(void);
  *        true 동안 PhAI 스트리밍은 자동 보류된다.
  */
 bool CdcDopRouter_IsDopHostActive(void);
+
+/**
+ * @brief [P1 2026-08-19] 링크 리셋(DTR 토글 등) 통지 — Boot FTP carry 무효화.
+ * @details 연결이 FTP 프레임 중간에 끊기면 carry 잔여가 새 연결의 첫 명령과
+ *          잘못 결합될 수 있어, DTR 이벤트 시 carry 를 지연 리셋한다.
+ * @note ISR-safe (atomic flag set 만 수행 — 소비는 CdcDopRouter_Process).
+ */
+void CdcDopRouter_NotifyLinkReset(void);
 
 #endif /* SYSTEM_COMM_USB_CDC_DOP_ROUTER_H_ */

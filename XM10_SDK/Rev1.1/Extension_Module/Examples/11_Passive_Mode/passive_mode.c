@@ -263,8 +263,11 @@ void Control_Setup(void)
 
     /* Module ID 설정 (COMBINED = PhAI Studio 기본 10ch 모드) */
 
-    // 기본적으로 XM_CTRL_MONITOR 모드이므로 굳이 Set하지 않아도 됨
-    XM_SetControlMode(XM_CTRL_MONITOR);
+    /* [v2.6 Control/Monitor 분리] P-Vector/I-Vector 전송도 로봇을 움직이는 '제어 출력'
+     * 이므로 CONTROL 모드가 필요합니다 (MONITOR 에서는 벡터 전송이 차단됩니다).
+     * 본 예제는 토크를 직접 쓰지 않고 P-Vector 위치 제어만 사용하므로, CONTROL 이어도
+     * 보조 토크 PDO 는 항상 0 으로 전송됩니다 (안전). */
+    XM_SetControlMode(XM_CTRL_CONTROL);
 }
 
 /*
@@ -309,6 +312,15 @@ static void Standby_Loop(void)
     // CM이 보조 모드를 요청하면 ACTIVE 상태로 전환
     if (XM.status.h10.h10Mode == XM_H10_MODE_ASSIST) {
         InitHoming();
+    }
+    // [stale 방지] 호밍 도중 h10Mode 가 ASSIST 에서 벗어나면 호밍 FSM 이
+    // 중단 지점에 동결됨 — 재진입 시 옛 타이머/상태로 재개되지 않도록
+    // ENTRY 로 명시 리셋하고 잔여 Done 플래그를 정리합니다.
+    else if (s_homingState != HOMING_ENTRY) {
+        s_homingState  = HOMING_ENTRY;
+        s_homingResult = HOMING_RESULT_NONE;
+        XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
+        XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
     }
 }
 
@@ -465,7 +477,21 @@ static void InitHoming(void)
             break;
         
         case HOMING_FINALIZE_CLEANUP:
-            // Homing 완료, Task State를 STANDBY로 전환
+            // [fail-closed] 호밍 타임아웃 시에는 ACTIVE(풀 ROM 왕복 모션)로
+            // 진입하지 않습니다 — 잔여 벡터를 정리하고 STANDBY 에 머뭅니다.
+            // (h10Mode 가 ASSIST 로 유지되면 Standby_Loop 가 호밍을 처음부터
+            //  재시도하고, 에러 LED 는 빠른 깜빡임으로 유지됩니다.)
+            if (s_homingResult == HOMING_RESULT_TIMEOUT) {
+                XM_SendPVectorReset(SYS_NODE_ID_RH);
+                XM_SendPVectorReset(SYS_NODE_ID_LH);
+                IVector_t releaseImpedance = { .epsilon = 0, .kp = 0, .kd = 0, .lambda = 0, .duration = 50 };
+                XM_SendIVector(SYS_NODE_ID_RH, &releaseImpedance);
+                XM_SendIVector(SYS_NODE_ID_LH, &releaseImpedance);
+                s_homingState = HOMING_ENTRY;
+                break;
+            }
+
+            // Homing 완료, Task State를 ACTIVE로 전환
             XM_TSM_TransitionTo(s_userHandle, XM_STATE_ACTIVE);
             
             // 다음 Homing을 위해 상태 초기화

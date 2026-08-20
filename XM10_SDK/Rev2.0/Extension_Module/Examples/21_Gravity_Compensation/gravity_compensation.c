@@ -62,6 +62,11 @@
 #define G_ACC                   9.81f       // 중력 가속도 (m/s²)
 
 // --- 신체/로봇 모델 파라미터 ---
+// [⚠️ 착용 전제] 중력보상 토크는 착용자 체중(50~90kg 프리셋) 기준 크기라
+// 무부하 거치대(벤치)에서는 다리가 중립을 벗어나는 순간 밀어내는 방향으로
+// 클램프급 토크가 걸려 링크가 가동한계까지 밀려납니다 — 결함이 아니라 모델
+// 전제 밖 사용입니다. 벤치 실험 시 프리셋 대신 링크 실측 스케일(질량
+// 0.184kg, CoM 0.1264m — Ex.35 물성)로 낮춰서 사용하세요.
 #define M_BODY_DEFAULT_KG       70.0f       // 기본 체중 (kg) — BTN2로 프리셋 순환
 #define L_EFF_M                 0.25f       // 유효 다리 길이: 고관절~대퇴부 CoM (m)
 #define NUM_MASS_PRESETS        5           // 체중 프리셋 수 (50, 60, 70, 80, 90 kg)
@@ -123,6 +128,10 @@ typedef struct {
 
 // --- Task State Machine ---
 static XmTsmHandle_t s_tsm;
+
+// --- 안전 토크 컨텍스트 (좌/우 독립 — 진입 소프트스타트 + 클램프) ---
+static XmSafeTorque_t s_safe_r;
+static XmSafeTorque_t s_safe_l;
 
 // --- 신체 모델 파라미터 ---
 static const float s_mass_presets[NUM_MASS_PRESETS] = { 50.0f, 60.0f, 70.0f, 80.0f, 90.0f };
@@ -221,6 +230,10 @@ void Control_Setup(void)
         "{\"name\":\"Total Torque\",\"unit\":\"Nm\"},"
         "{\"name\":\"Alpha\",\"unit\":\"-\"}]");
 
+    // 안전 토크 헬퍼: |토크| ≤ MAX_TORQUE_NM, slew 무제한, 진입 램프 500ms
+    XM_SafeTorque_Init(&s_safe_r, MAX_TORQUE_NM, 0U, XM_SAFETY_DEFAULT_RAMP_MS);
+    XM_SafeTorque_Init(&s_safe_l, MAX_TORQUE_NM, 0U, XM_SAFETY_DEFAULT_RAMP_MS);
+
     // 초기 제어 모드: 모니터링 (토크 미인가)
     XM_SetControlMode(XM_CTRL_MONITOR);
 }
@@ -277,8 +290,13 @@ static void Standby_Loop(void)
  */
 static void Active_Entry(void)
 {
-    // 토크 직접 제어 모드로 전환
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    // 제어 출력 모드로 전환
+    XM_SetControlMode(XM_CTRL_CONTROL);
+
+    // 소프트스타트 재시작 — 진입 순간 alpha=0.5 의 전체 중력토크가
+    // 계단(step)으로 인가되는 것을 막는 0→1 게인 램프 (500ms)
+    XM_SafeTorque_Reset(&s_safe_r);
+    XM_SafeTorque_Reset(&s_safe_l);
 
     // 보상 비율 초기화 (50% — 안전 시작)
     s_alpha_step_idx = 5;
@@ -443,9 +461,9 @@ static void _RunGravityCompensation(void)
     float tau_raw_r = s_alpha * (tau_grav_r + tau_fric_r);
     float tau_raw_l = s_alpha * (tau_grav_l + tau_fric_l);
 
-    // --- 토크 포화 (Actuator Saturation) ---
-    float tau_out_r = _ClampFloat(tau_raw_r, -MAX_TORQUE_NM, MAX_TORQUE_NM);
-    float tau_out_l = _ClampFloat(tau_raw_l, -MAX_TORQUE_NM, MAX_TORQUE_NM);
+    // --- 토크 안전 처리 (클램프 + 진입 소프트스타트 램프) ---
+    float tau_out_r = XM_SafeTorque_Step(&s_safe_r, tau_raw_r);
+    float tau_out_l = XM_SafeTorque_Step(&s_safe_l, tau_raw_l);
 
     // --- 6. 좌/우 독립 토크 인가 ---
     XM_SetAssistTorqueRH(tau_out_r);

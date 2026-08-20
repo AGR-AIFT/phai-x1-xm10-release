@@ -172,6 +172,11 @@ IOIF_SPIx_t System_GetSpi5LedDrvId(void);
  */
 IOIF_GPIOx_t System_GetPowerLedGpioId(void);
 
+/** @brief Startup 결과 비트맵 — bit=1 이면 해당 서브시스템 init 실패, 0 = 전부 정상 */
+uint32_t System_GetStartupResultBitmap(void);
+/** @brief 하나라도 init 실패가 기록되면 true (degraded 동작 중) */
+bool System_HasStartupDegraded(void);
+
 /**
  * @brief HWREV[2:0] strap 값을 읽어 반환합니다.
  * @return bit2=HWREV_2, bit1=HWREV_1, bit0=HWREV_0. 미초기화 시 0.

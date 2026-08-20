@@ -95,6 +95,11 @@
 
 // --- 투명 모드 파라미터 (교시 중, Ex.21과 동일) ---
 #define G_ACC                   9.81f       // 중력 가속도 (m/s²)
+// [⚠️ 착용 전제] MGL_EFF 는 착용자(70kg) 기준 중력보상 크기입니다. 무부하
+// 거치대(벤치)에서 TEACH 하면 다리를 잡은 손에 sin(θ)×17.16Nm 급 힘이 걸리고
+// 놓으면 링크가 한쪽으로 밀려납니다. 벤치에서 교시→재생 전체 사이클을
+// 안전하게 실험하려면 MGL_EFF 0.23f (링크 실측: 0.184kg×9.81×0.1264m,
+// Ex.35 물성) 로 낮춰서 빌드하세요 — 재생 PD 는 그대로 유효합니다.
 #define MGL_EFF                 17.16f      // M·g·L_eff (70kg × 9.81 × 0.25m)
 #define B_COULOMB_NM            0.3f        // 쿨롱 마찰 계수 (Nm)
 #define B_VISCOUS_NMS           0.01f       // 점성 마찰 계수 (Nm·s/rad)
@@ -177,6 +182,10 @@ static TeachState_t s_teach_state   = TEACH_STATE_IDLE;
 static float s_prev_error_r         = 0.0f;
 static float s_prev_error_l         = 0.0f;
 
+// --- 재생 안전 토크 컨텍스트 (좌/우 독립 — 재생 진입 소프트스타트 + 클램프) ---
+static XmSafeTorque_t s_replay_safe_r;
+static XmSafeTorque_t s_replay_safe_l;
+
 // --- 재생 주기 타이머 (10ms마다 인덱스 전진) ---
 static uint32_t s_replay_tick_last  = 0;    // 마지막 인덱스 전진 시각
 
@@ -255,6 +264,11 @@ void Control_Setup(void)
         .on_exit  = Active_Exit
     };
     XM_TSM_AddState(s_tsm, &act_conf);
+
+    // 재생 안전 토크 헬퍼: |토크| ≤ REPLAY_TORQUE_MAX, slew 무제한(궤적 추종),
+    // 재생 진입 램프 500ms (좌/우 컨텍스트 독립)
+    XM_SafeTorque_Init(&s_replay_safe_r, REPLAY_TORQUE_MAX, 0U, XM_SAFETY_DEFAULT_RAMP_MS);
+    XM_SafeTorque_Init(&s_replay_safe_l, REPLAY_TORQUE_MAX, 0U, XM_SAFETY_DEFAULT_RAMP_MS);
 
     // USB 스트리밍 설정 (User Custom 모드 0xF3)
     XM_SetUsbCustomMeta(0xF3,
@@ -617,9 +631,9 @@ static void _RunReplayMode(void)
     s_prev_error_r = error_r;
     s_prev_error_l = error_l;
 
-    // 토크 포화
-    float tau_out_r = _ClampFloat(tau_r, -REPLAY_TORQUE_MAX, REPLAY_TORQUE_MAX);
-    float tau_out_l = _ClampFloat(tau_l, -REPLAY_TORQUE_MAX, REPLAY_TORQUE_MAX);
+    // 토크 안전 처리 (클램프 + 재생 진입 소프트스타트 램프)
+    float tau_out_r = XM_SafeTorque_Step(&s_replay_safe_r, tau_r);
+    float tau_out_l = XM_SafeTorque_Step(&s_replay_safe_l, tau_l);
 
     XM_SetAssistTorqueRH(tau_out_r);
     XM_SetAssistTorqueLH(tau_out_l);
@@ -738,8 +752,14 @@ static void _HandleButtonInput(void)
             // RECORDED → REPLAY: 재생 시작
             s_teach_state     = TEACH_STATE_REPLAY;
             s_replay_idx      = 0;
-            s_prev_error_r    = 0.0f;
-            s_prev_error_l    = 0.0f;
+            // [미분킥 방지] RECORDED 동안 토크가 해제되어 관절이 첫 기록점과
+            // 다른 각도로 이동해 있을 수 있음 — prev_error 를 0 이 아니라
+            // '첫 목표 - 현재 각도'로 seed 해 첫 tick 미분항 폭주를 차단.
+            s_prev_error_r    = s_teach_buf[0].theta_rh - XM.status.h10.rightHipMotorAngle;
+            s_prev_error_l    = s_teach_buf[0].theta_lh - XM.status.h10.leftHipMotorAngle;
+            // 소프트스타트 재시작 (재생 진입마다 0→1 게인 램프 500ms)
+            XM_SafeTorque_Reset(&s_replay_safe_r);
+            XM_SafeTorque_Reset(&s_replay_safe_l);
             s_replay_tick_last = XM_GetTick();
 
             char buf[80];

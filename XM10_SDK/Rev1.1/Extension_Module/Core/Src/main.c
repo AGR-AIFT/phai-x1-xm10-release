@@ -124,6 +124,147 @@ void StartStartupTask(void *argument);
 // static AGRBStatusDef _debug_uart7_status;
 // static AGRBStatusDef _debug_uart8_status;
 // TaskUSBControlTask_Init_t usbControlInitStruct;
+
+/**
+ * @brief Safe __io_putchar stub (prevents HardFault from printf/LWIP_ASSERT)
+ * @details syscalls.c의 _write()가 __io_putchar(weak)를 호출하는데,
+ *          strong 정의가 없으면 주소 0으로 점프 → UsageFault → HardFault.
+ *          향후 SWO/UART retarget 구현 시 이 함수를 교체하면 됨.
+ */
+int __io_putchar(int ch)
+{
+    (void)ch;
+    return ch;
+}
+
+/* [Phase2 D2 2026-08-19] magic 도입 — 워밍리셋(IWDG/SFT) 간 error_* 기록 보존.
+ * g_reset_cause_log(아래) 와 동일한 magic-guard 패턴. */
+#define XM_BOOT_DIAG_MAGIC  (0x584D4247u)   /* 'XMBG' */
+
+/* Error_Handler bounded-retry 상한 — BL 자동 롤백(max_boot_attempts=3)이 관측할
+ * 리셋 기회를 보장하는 값(>3) + 무한리셋 루프 차단. 초과 시 LED+halt. */
+#define XM_ERR_RESET_RETRY_MAX  (5u)
+
+typedef struct {
+    uint32_t magic;         /* XM_BOOT_DIAG_MAGIC — SRAM 생존(워밍리셋) 판별 */
+    uint32_t stage;
+    uint32_t line;
+    uint32_t reset_flags;
+    uint32_t error_stage;   /* Error_Handler 호출 시점의 마지막 boot stage (직전 부팅 포함 보존) */
+    uint32_t error_count;   /* magic 유효 이래 누적 Error_Handler 호출 횟수 (역사적 — 자동 클리어 없음) */
+    uint32_t error_lr;      /* Error_Handler 를 호출한 콜사이트 반환주소 (구 reserved[0]) */
+    uint32_t consec_fail;   /* 연속 부팅 실패 횟수 — 부팅 성공(osKernelStart 직전) 시 0 리셋.
+                             * Error_Handler 의 bounded-retry(리셋 vs halt) 판정에 사용 */
+    uint32_t reserved[1];
+} XmBootDiag_t;
+
+__attribute__((section(".noinit"), used))
+volatile XmBootDiag_t g_xm_boot_diag;
+
+static void XM_BootDiagClear(void)
+{
+    if (g_xm_boot_diag.magic != XM_BOOT_DIAG_MAGIC) {
+        /* POR/깊은 BOR 로 SRAM wipe — 보존할 이전 기록 없음, 전체 초기화 */
+        g_xm_boot_diag.magic       = XM_BOOT_DIAG_MAGIC;
+        g_xm_boot_diag.error_stage = 0u;
+        g_xm_boot_diag.error_count = 0u;
+        g_xm_boot_diag.error_lr    = 0u;
+        g_xm_boot_diag.consec_fail = 0u;
+    }
+    /* 워밍리셋(magic 유효) — error 계열과 consec_fail 은 직전 부팅의 Error_Handler
+     * 기록이므로 보존하고 이번 부팅의 작업 필드만 리셋 (사후 판독/재시도 판정) */
+    g_xm_boot_diag.stage = 0u;
+    g_xm_boot_diag.line = 0u;
+    g_xm_boot_diag.reset_flags = 0u;
+    g_xm_boot_diag.reserved[0] = 0u;
+}
+
+/* [stage 맵 — Phase2 세분화 (0x21xx = MX init 진입, 하위바이트 = main() 호출 순번)]
+ *  0x2101 GPIO / 0x2104 I2C1 / 0x2105 UART8 / 0x2107 FDCAN1 / 0x2108 ADC1
+ *  0x2109 ADC2 / 0x210A FDCAN2 / 0x210B TIM2 / 0x210C QUADSPI / 0x210D USB_OTG_FS
+ *  0x210E SPI2 / 0x210F SPI5 / 0x2110 UART7 / 0x2111 USART2 / 0x2112 CRC / 0x2113 TIM7
+ *  (DMA/MDMA/FATFS 는 USER CODE 블록 부재 또는 별도 파일 — Error_Handler 호출 0건이라 제외)
+ *  판독: error_stage 가 0x21xx 면 "해당 init 진입까지 성공, 그 안(또는 직후)에서 실패". */
+#define XM_BOOT_DIAG_MARK(stage_id)        \
+    do {                                   \
+        g_xm_boot_diag.stage = (stage_id); \
+        g_xm_boot_diag.line = __LINE__;    \
+    } while (0)
+
+/* ─────────────────────────────────────────────────────────────
+ * [2026-07-18 진단] 리셋 원인 누적기 — GRF-plug 무한리셋의 정체(BOR vs HardFault) 규명.
+ *
+ * 사용법: GRF 꽂고 무한리셋 몇 초 돌린 뒤 → GRF 뽑아 루프를 깨고 clean 부팅 →
+ *   halt/CubeProgrammer 로 g_reset_cause_log 한 번 읽어 판독.
+ *   g_last_rcc_rsr(단일 스냅샷)은 clean 부팅이 덮어써 루프 이력이 날아가는데,
+ *   본 누적기는 매 부팅 RSR 을 카운트/링에 쌓아 이력을 보존한다.
+ *
+ * 판독:
+ *   - bor_count 우세      → BOR(전원 droop) = 전기적 확정
+ *   - sftrst_count 우세    → NVIC_SystemReset(HardFault) = 소프트웨어 fault (코드 재수색)
+ *   - ring[] 원시 RSR      → 실제 비트패턴 ground truth (BORRSTF 0x200000 / SFTRSTF 0x1000000)
+ *   - total_boots 큼       → SRAM 유지 = 얕은 BOR 또는 warm reset
+ *   - total_boots 안 큼 + 매번 재초기화 → 깊은 BOR/POR 로 SRAM wipe (그 자체가 전기적 신호)
+ *
+ * BOR·SRAM: 얕은 droop-BOR(임계~2.4V)은 SRAM 유지전압(~1.5V)보다 높아 .noinit 생존 →
+ *   카운트 누적. 깊은 BOR/POR 은 SRAM 소거로 magic 무효화 → 재초기화(그 자체가 신호).
+ * ⚠️ 반드시 SCB_EnableDCache() 이전에 Record 호출(현 main() 배치상 :253 보다 앞) →
+ *   SRAM 직접 write 라 cache maintenance 불필요.
+ * ───────────────────────────────────────────────────────────── */
+#define RESET_CAUSE_LOG_MAGIC   0x52435F31u   /* 'RC_1' */
+#define RESET_CAUSE_RING_SLOTS  32u
+
+typedef struct {
+    uint32_t magic;
+    uint32_t total_boots;    /* magic 유효 이래 부팅 횟수 */
+    uint32_t wipe_events;    /* magic 무효 관측(=SRAM wipe=깊은 BOR/POR/최초부팅) */
+    uint32_t bor_count;      /* BORRSTF */
+    uint32_t sftrst_count;   /* SFTRSTF (NVIC_SystemReset = HardFault / FW update) */
+    uint32_t pin_count;      /* PINRSTF (핀/디버거) */
+    uint32_t por_count;      /* PORRSTF (전원 투입) */
+    uint32_t iwdg_count;     /* IWDG1RSTF */
+    uint32_t wwdg_count;     /* WWDG1RSTF */
+    uint32_t other_count;    /* 위 어디에도 안 잡힘 */
+    uint32_t last_rsr;       /* 마지막 원시 RSR */
+    uint32_t ring_idx;       /* 다음 기록 슬롯(모듈러 전 누계) */
+    uint32_t ring[RESET_CAUSE_RING_SLOTS];  /* 최근 N개 원시 RSR (시간순) */
+} ResetCauseLog_t;
+
+__attribute__((section(".noinit"), used))
+volatile ResetCauseLog_t g_reset_cause_log;
+
+/* 부팅 초기(단일 컨텍스트, RTOS/ISR 이전, D-Cache enable 이전) 1회 호출. */
+static void ResetCause_Record(uint32_t rsr)
+{
+    if (g_reset_cause_log.magic != RESET_CAUSE_LOG_MAGIC) {
+        for (uint32_t i = 0; i < RESET_CAUSE_RING_SLOTS; ++i) {
+            g_reset_cause_log.ring[i] = 0u;
+        }
+        g_reset_cause_log.magic        = RESET_CAUSE_LOG_MAGIC;
+        g_reset_cause_log.total_boots  = 0u;
+        g_reset_cause_log.bor_count    = 0u;
+        g_reset_cause_log.sftrst_count = 0u;
+        g_reset_cause_log.pin_count    = 0u;
+        g_reset_cause_log.por_count    = 0u;
+        g_reset_cause_log.iwdg_count   = 0u;
+        g_reset_cause_log.wwdg_count   = 0u;
+        g_reset_cause_log.other_count  = 0u;
+        g_reset_cause_log.ring_idx     = 0u;
+        g_reset_cause_log.wipe_events  = 1u;  /* wipe 후 첫 부팅(최초 POR 포함) */
+    }
+    g_reset_cause_log.total_boots++;
+    g_reset_cause_log.last_rsr = rsr;
+    if      (rsr & RCC_RSR_BORRSTF)   { g_reset_cause_log.bor_count++;   }
+    else if (rsr & RCC_RSR_SFTRSTF)   { g_reset_cause_log.sftrst_count++; }
+    else if (rsr & RCC_RSR_IWDG1RSTF) { g_reset_cause_log.iwdg_count++;  }
+    else if (rsr & RCC_RSR_WWDG1RSTF) { g_reset_cause_log.wwdg_count++;  }
+    else if (rsr & RCC_RSR_PINRSTF)   { g_reset_cause_log.pin_count++;   }
+    else if (rsr & RCC_RSR_PORRSTF)   { g_reset_cause_log.por_count++;   }
+    else                              { g_reset_cause_log.other_count++; }
+    g_reset_cause_log.ring[g_reset_cause_log.ring_idx % RESET_CAUSE_RING_SLOTS] = rsr;
+    g_reset_cause_log.ring_idx++;
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -142,6 +283,24 @@ int main(void)
    * Impact: All interrupt vectors correctly point to App handlers.
    */
   SCB->VTOR = 0x08040400U;
+
+  /* [Phase2 D2] 부팅 진단 초기화 — .noinit 매직 검증/재초기화.
+   * Error_Handler 의 bounded-retry 가 consec_fail 을 신뢰하려면 반드시 선행한다
+   * (POR 직후 .noinit 은 garbage — 매직 불일치 시 여기서 0 으로 확정). */
+  XM_BootDiagClear();
+  XM_BOOT_DIAG_MARK(0x1001u);
+
+  /* [진단] 리셋 원인 이력 누적 — RSR 은 매 리셋 HW 가 세팅하므로 .noinit 생존
+   * 여부와 무관하게 신뢰 가능하다. D-Cache enable 이전·단일 컨텍스트에서 1회.
+   * 판독: bor_count 우세=전원(BOR) / sftrst_count 우세=SW fault (rule 37 §1-1). */
+  {
+      uint32_t rsr = RCC->RSR;
+      g_xm_boot_diag.reset_flags = rsr;
+      ResetCause_Record(rsr);
+      __HAL_RCC_CLEAR_RESET_FLAGS();
+  }
+  XM_BOOT_DIAG_MARK(0x1003u);
+
 
   /* USER CODE END 1 */
 
@@ -258,6 +417,10 @@ int main(void)
   /* USER CODE END RTOS_EVENTS */
 
   /* Start scheduler */
+  XM_BOOT_DIAG_MARK(0x4FFFu);
+  /* [Phase2] 부팅 성공 — Error_Handler bounded-retry 의 연속 실패 카운터 리셋.
+   * (여기 도달 = 모든 pre-scheduler init 통과. 역사적 error_count/error_lr 은 보존) */
+  g_xm_boot_diag.consec_fail = 0u;
   osKernelStart();
 
   /* We should never get here as control is now taken by the scheduler */
@@ -367,7 +530,7 @@ static void MX_ADC1_Init(void)
 {
 
   /* USER CODE BEGIN ADC1_Init 0 */
-
+  XM_BOOT_DIAG_MARK(0x2108u);  /* [Phase2] init 진입 마커 — 실패 지점 식별 */
   /* USER CODE END ADC1_Init 0 */
 
   ADC_MultiModeTypeDef multimode = {0};
@@ -464,7 +627,7 @@ static void MX_ADC2_Init(void)
 {
 
   /* USER CODE BEGIN ADC2_Init 0 */
-
+  XM_BOOT_DIAG_MARK(0x2109u);  /* [Phase2] init 진입 마커 — 실패 지점 식별 */
   /* USER CODE END ADC2_Init 0 */
 
   ADC_ChannelConfTypeDef sConfig = {0};
@@ -533,7 +696,7 @@ static void MX_CRC_Init(void)
 {
 
   /* USER CODE BEGIN CRC_Init 0 */
-
+  XM_BOOT_DIAG_MARK(0x2112u);  /* [Phase2] init 진입 마커 — 실패 지점 식별 */
   /* USER CODE END CRC_Init 0 */
 
   /* USER CODE BEGIN CRC_Init 1 */
@@ -564,7 +727,7 @@ static void MX_FDCAN1_Init(void)
 {
 
   /* USER CODE BEGIN FDCAN1_Init 0 */
-
+  XM_BOOT_DIAG_MARK(0x2107u);  /* [Phase2] init 진입 마커 — 실패 지점 식별 */
   /* USER CODE END FDCAN1_Init 0 */
 
   /* USER CODE BEGIN FDCAN1_Init 1 */
@@ -617,7 +780,7 @@ static void MX_FDCAN2_Init(void)
 {
 
   /* USER CODE BEGIN FDCAN2_Init 0 */
-
+  XM_BOOT_DIAG_MARK(0x210Au);  /* [Phase2] init 진입 마커 — 실패 지점 식별 */
   /* USER CODE END FDCAN2_Init 0 */
 
   /* USER CODE BEGIN FDCAN2_Init 1 */
@@ -670,7 +833,7 @@ static void MX_I2C1_Init(void)
 {
 
   /* USER CODE BEGIN I2C1_Init 0 */
-
+  XM_BOOT_DIAG_MARK(0x2104u);  /* [Phase2] init 진입 마커 — 실패 지점 식별 */
   /* USER CODE END I2C1_Init 0 */
 
   /* USER CODE BEGIN I2C1_Init 1 */
@@ -718,7 +881,7 @@ static void MX_TIM2_Init(void)
 {
 
   /* USER CODE BEGIN TIM2_Init 0 */
-
+  XM_BOOT_DIAG_MARK(0x210Bu);  /* [Phase2] init 진입 마커 — 실패 지점 식별 */
   /* USER CODE END TIM2_Init 0 */
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
@@ -763,7 +926,7 @@ static void MX_TIM7_Init(void)
 {
 
   /* USER CODE BEGIN TIM7_Init 0 */
-
+  XM_BOOT_DIAG_MARK(0x2113u);  /* [Phase2] init 진입 마커 — 실패 지점 식별 */
   /* USER CODE END TIM7_Init 0 */
 
   TIM_MasterConfigTypeDef sMasterConfig = {0};
@@ -801,7 +964,7 @@ static void MX_UART7_Init(void)
 {
 
   /* USER CODE BEGIN UART7_Init 0 */
-
+  XM_BOOT_DIAG_MARK(0x2110u);  /* [Phase2] init 진입 마커 — 실패 지점 식별 */
   /* USER CODE END UART7_Init 0 */
 
   /* USER CODE BEGIN UART7_Init 1 */
@@ -849,7 +1012,7 @@ static void MX_UART8_Init(void)
 {
 
   /* USER CODE BEGIN UART8_Init 0 */
-
+  XM_BOOT_DIAG_MARK(0x2105u);  /* [Phase2] init 진입 마커 — 실패 지점 식별 */
   /* USER CODE END UART8_Init 0 */
 
   /* USER CODE BEGIN UART8_Init 1 */
@@ -897,7 +1060,7 @@ static void MX_USB_OTG_FS_PCD_Init(void)
 {
 
   /* USER CODE BEGIN USB_OTG_FS_PCD_Init 0 */
-
+  XM_BOOT_DIAG_MARK(0x210Du);  /* [Phase2] init 진입 마커 — 실패 지점 식별 */
   /* USER CODE END USB_OTG_FS_PCD_Init 0 */
 
   /* USER CODE BEGIN USB_OTG_FS_PCD_Init 1 */
@@ -989,6 +1152,7 @@ static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   /* USER CODE BEGIN MX_GPIO_Init_1 */
+  XM_BOOT_DIAG_MARK(0x2101u);  /* [Phase2] init 진입 마커 — 실패 지점 식별 */
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
@@ -1257,12 +1421,57 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* [?��?��] 
-   * ?�� 명령?���??? 추�??���??? 코드�??? ?�� 줄에 ?��?��?��?�� 즉시
-   * ?��버거�??? ?��?��?���??? 멈춥?��?��. (Breakpoint?? ?��?��)
-   */
-  __BKPT(0); // <--- ?�� 줄을 추�??��?��?��.
-  /* User can add his own implementation to report the HAL error return state */
+  /* [Phase2 D2 2026-08-19] 안전 정지 재설계 — 구 코드는 무가드 BKPT 가 디버거 미부착
+   * 보드에서 HardFault 로 승격 → hardfault_dump → NVIC_SystemReset → 무한리셋(P0).
+   * 정책(Init-halt/Runtime-reset 분리):
+   *  - init 실패(호출부 대다수, IWDG 시작 전) → 진단 기록+LED 후 진정한 halt
+   *  - 런타임 실패(IWDG 시작 후) → 동일 halt 진입이 refresh 를 끊어 타임아웃 후
+   *    IWDG 리셋 (RSR iwdg_count 분류 + magic 보존된 error_* 로 사후 판독) */
+
+  /* 1. 진단 기록 — 추가 fault 가능 코드(GPIO/BKPT)보다 먼저.
+   * .noinit 은 RAM_D1(cacheable) — 리셋 생존을 위해 D-Cache clean 필수. */
+  g_xm_boot_diag.error_stage = g_xm_boot_diag.stage;   /* 마지막 성공 boot 마커 */
+  g_xm_boot_diag.error_count++;
+  g_xm_boot_diag.consec_fail++;
+  g_xm_boot_diag.error_lr = (uint32_t)__builtin_return_address(0);
+  SCB_CleanDCache_by_Addr((uint32_t *)&g_xm_boot_diag, sizeof(g_xm_boot_diag));
+  __DSB();
+
+  /* 2. 에러 LED (적색 단색) — LedManager/IOIF 는 스케줄러+StartupTask 전제라 사용
+   * 불가(인스턴스 풀 미등록 시 조용히 no-op). SystemClock_Config 실패처럼
+   * MX_GPIO_Init 이전 호출도 있으므로 GPIOC clock 을 방어적으로 재보증. */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  {
+    GPIO_InitTypeDef led_init = {0};
+    led_init.Pin   = CM_LED_R_Pin | CM_LED_G_Pin | CM_LED_B_Pin;
+    led_init.Mode  = GPIO_MODE_OUTPUT_PP;
+    led_init.Pull  = GPIO_NOPULL;
+    led_init.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOC, &led_init);
+  }
+  HAL_GPIO_WritePin(GPIOC, CM_LED_G_Pin | CM_LED_B_Pin, GPIO_PIN_RESET); /* 색 순도 확보 */
+  HAL_GPIO_WritePin(GPIOC, CM_LED_R_Pin, GPIO_PIN_SET);                  /* solid red = init-fail halt */
+
+  /* 3. BKPT 는 디버거 부착 시에만 — 미부착 시 HardFault 승격 경로 원천 차단.
+   * (IWDG 는 DBGMCU freeze 로 디버거 halt 중 정지 — 디버깅 세션 보호) */
+  if ((CoreDebug->DHCSR & CoreDebug_DHCSR_C_DEBUGEN_Msk) != 0U)
+  {
+    __BKPT(0);
+  }
+
+  /* 4. Bounded-retry [적대검증 결함A 수정] — 무조건 halt 는 부트로더의
+   * 3-strike 자동 롤백(main() 상단 주석 'BL rollback after max_boot_attempts')
+   * 이 재부팅을 관측할 기회를 없애 결정적 init 버그를 영구 벽돌로 만든다.
+   * 연속 실패 XM_ERR_RESET_RETRY_MAX 회까지는 리셋(BL 롤백 기회 + RSR 누적),
+   * 초과 시에만 halt(무한리셋 루프 차단). consec_fail 은 부팅 성공 시 0 리셋. */
+  if (g_xm_boot_diag.consec_fail <= XM_ERR_RESET_RETRY_MAX)
+  {
+    NVIC_SystemReset();   /* 진단은 위에서 D-Cache clean 완료 — 리셋 생존 */
+  }
+
+  /* 5. Halt — 전역 IRQ 마스크로 스케줄러/후속 ISR 를 정지시켜 시스템 전체를
+   * 결정적으로 멈춘다(런타임 실패 시 다른 태스크가 IWDG 를 계속 refresh 해
+   * 반쪽 동작하는 상태 방지). IWDG 는 LSI 독립 카운터라 마스크와 무관하게 진행. */
   __disable_irq();
   while (1)
   {

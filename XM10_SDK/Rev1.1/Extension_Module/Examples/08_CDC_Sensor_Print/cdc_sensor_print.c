@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    cdc_sensor_print.c
  * @author  HyundoKim
- * @brief   [중급] sprintf를 활용한 센서 데이터 모니터링
+ * @brief   [중급] snprintf를 활용한 센서 데이터 모니터링
  * @note    텍스트 기반 디버깅 예제입니다. 터미널/콘솔 확인용으로 적합합니다.
  *          PhAI Studio 실시간 그래프 모니터링은 09_CDC_Stream 예제를 참조하세요.
  *          Total Data Packet(0x20)은 System이 자동 전송하므로 별도 코드 불필요.
@@ -21,7 +21,7 @@
  */
 
 #include "xm_api.h"
-#include <stdio.h> /* sprintf 사용 */
+#include <stdio.h> /* snprintf 사용 (버퍼 오버런 방지) */
 
 /**
  *-----------------------------------------------------------
