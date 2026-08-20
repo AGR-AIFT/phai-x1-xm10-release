@@ -4,7 +4,7 @@ This page lists release attachments, compatibility matrices, and known issues fo
 
 | Version | Date | Notes |
 |---------|------|-------|
-| [v2.6.0](v2.6.0.md) | 2026-08-20 | Safety release — safe CONTROL→MONITOR transition + watchdog (8 s) & no-reboot-loop + 12 hardened examples + `forwardVelocity` 60× fix + Ext_Sync |
+| [v2.6.0](v2.6.0.md) | 2026-08-20 | Safety release — safe CONTROL→MONITOR transition + watchdog (8 s) & no-reboot-loop + 15 hardened examples + `forwardVelocity` 60× fix + Ext_Sync |
 | [v2.5.1](v2.5.1.md) | 2026-07-29 | Rev 2.0 boot-hang hotfix (`agr_retarget.c` constructor left the interrupt mask set) |
 | [v2.5.0](v2.5.0.md) | 2026-07-24 | Removed USB-MSC file logging — data capture consolidated on USB-CDC live streaming |
 | [v2.4.1](v2.4.1.md) | 2026-07-24 | Rev 2.0 float `printf`(`%f`) / `malloc` heap fix + thread-safe C standard library + USB log decoder as an installable executable |

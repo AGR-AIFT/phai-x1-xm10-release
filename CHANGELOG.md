@@ -13,15 +13,15 @@
 * **`XM_GetAppliedControlMode()`** — 요청(`XM_SetControlMode`)이 아닌 **실제 적용** 모드(`CONTROL` / `MONITOR` / `TRANSITION`)를 반환합니다.
 * **`xm_api_safety.h`** — header-only 공통 안전 헬퍼. `XM_SafeTorque_Init/Reset/Step`(유한값 가드 + 클램프 + 진입 소프트스타트 + slew), `XM_SafeAssistLevel()`, `XM_SafeIsFresh()`. `xm_api.h` 가 이미 포함합니다.
 * **하드웨어 워치독 (IWDG, 약 8 초)** — `Control_Loop` 가 도는 UserTask 가 1 kHz 로 갱신합니다. 초기화 단계 실패는 그 자리에서 halt 하고, 정상 동작 중의 행(hang)만 리셋으로 회복시킵니다. 부팅 단계·리셋 원인 마커도 함께 기록합니다.
-* **Ext_Sync — 외부 sync box TTL 입력 (DIO8)** — Total Data 에 `sync_save_active` / `sync_din_level` / `sync_din_edge_count` 3 채널 추가. 부팅 시 읽은 레벨을 idle 로 래치해 **극성-불문**으로 저장 구간을 판정합니다. 기존 예약(reserved) 영역을 사용해 **패킷 크기는 365 B 그대로**이며 뒤쪽 채널 오프셋이 변하지 않습니다.
+* **Ext_Sync — 외부 sync box TTL 입력 (DIO 8)** — Total Data 에 `sync_save_active` / `sync_din_level` / `sync_din_edge_count` 3 채널 추가. 부팅 시 읽은 레벨을 idle 로 래치해 **극성-불문**으로 저장 구간을 판정합니다. 기존 예약(reserved) 영역을 사용해 **패킷 크기는 365 B 그대로**이며 뒤쪽 채널 오프셋이 변하지 않습니다. 핀 점유는 `Control_Setup` 이전에 수행되므로 사용자가 `DIO 8` 을 재설정하면 사용자 설정이 우선합니다(기존 코드 무영향, 대신 Ext_Sync 필드는 무의미값).
 * **진단 확장 (Rev 2.0)** — EMCY 누적 카운터, 부팅 단계별 실패 비트맵, 태스크 스택 watermark. 펌웨어 빌드에 Git 커밋 해시를 주입합니다.
 
 ### Changed
 * **`XM_SetControlMode(XM_CTRL_MONITOR)` 가 즉시 차단이 아니라 3 단계 안전 전환을 거칩니다** — 토크 지수 감쇠(τ=100 ms) → 0 확정 전송(프레임 유실 대비 반복) → P/I 벡터 해제 → 출력 차단. 총 0.3~0.6 초 소요되며 그동안 사용자 토크 명령은 반영되지 않습니다. 기존에는 전송이 즉시 끊겨 **CM/MD 에 마지막 비-0 토크가 latch** 되는 ZOH silent-drop 이 있었습니다.
 * **`MONITOR` 모드가 완전 차단이 되었습니다** — 토크·벡터 어떤 제어 명령도 전송하지 않습니다 (Control/Monitor 경로 분리).
-* **예제 12 종 안전 강화** — 진입 소프트스타트/slew(Ex.14·21·27·30·33), NC 정지 스위치·출력 클램프·정지 램프·센서 stale 타임아웃(Ex.06·13·17·26·32), 모드 전환 정합·호밍 fail-closed·이중 A→Nm 변환 제거(Ex.11·12·15·35·36). 예제 번호와 학습 내용은 그대로입니다.
+* **예제 15 종 안전 강화** — 진입 소프트스타트/slew(Ex.14·21·27·30·33), NC 정지 스위치·출력 클램프·정지 램프·센서 stale 타임아웃(Ex.06·13·17·26·32), 모드 전환 정합·호밍 fail-closed·이중 A→Nm 변환 제거(Ex.11·12·15·35·36). 예제 번호와 학습 내용은 그대로입니다. 별도로 Ex.03·08·31·37 은 설명 문구만 정정(동작 불변).
 * **착용 전제 예제 4 종에 벤치 파라미터 안내 주석** (Ex.15·21·30·33) — 미착용 상태는 관성이 작아 진동/발산하므로 링크 단독 물성(0.184 kg / 0.1264 m)으로 치환하는 방법을 파일 헤더에 명시했습니다.
-* **부트로더 바이너리 갱신** — BootConfig 영역 ECC 손상 시 BusFault 를 감지해 설정을 초기화하고 정상 부팅합니다. 앱 진입 시 pending 시스템 예외(SysTick/PendSV)도 정리합니다. SWD 재설치를 권장합니다.
+* **부트로더 바이너리 갱신** — BootConfig 영역 ECC 손상 시 BusFault 를 감지해 설정을 초기화하고 정상 부팅합니다(신규). 앱 진입 시 pending 시스템 예외(SysTick/PendSV) 정리는 v2.5.1 첨부본에 이미 포함된 항목입니다. **v2.6.0 펌웨어는 구 부트로더에서도 동작하므로 재설치는 권장이지 필수가 아닙니다.**
 
 ### Fixed
 * **`XM.status.h10.forwardVelocity` 60 배 과대 정정** — 분당→초당 환산 누락. 이 값을 제어에 사용했다면 **게인 재조정이 필요**하며, 과거 데이터와 혼용하면 안 됩니다.
