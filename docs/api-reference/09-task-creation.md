@@ -117,7 +117,9 @@ XM10 SDK 가 부팅 시 자동으로 생성하는 task 목록. **사용자가 �
 - 잘못된 핸들 사용 → API 가 `false`/`NULL` 반환 (Use-After-Delete 방어)
 - self-Delete 시도 → no-op (거부)
 
-> ⚠️ **워치독 (v2.6.0~)**: 시스템 워치독(IWDG, 약 8 초)을 `Control_Loop` 가 도는 UserTask 가 매 주기 갱신합니다. 따라서 **사용자 task 가 UserTask 보다 높은 우선순위로 8 초 이상 CPU 를 붙들면 보드가 리셋**됩니다. 사용자 task 는 반드시 `XM_Task_Sleep()` 등으로 주기적으로 CPU 를 양보하고, 긴 블로킹 작업(대용량 Flash erase 등)은 나눠서 수행하세요.
+> ⚠️ **워치독 (v2.6.0~)**: 시스템 워치독(IWDG, 약 8 초)은 `Control_Loop` 가 도는 1 kHz 주기에서 갱신됩니다. 따라서 **`Control_Setup` 이나 `Control_Loop` 안에서 8 초 넘게 머물면 보드가 리셋**됩니다. 오래 걸리는 작업은 나눠서 수행하세요.
+>
+> 여기서 만드는 사용자 task 는 `XM_PRIO_*` 가 모두 `Control_Loop` 보다 낮으므로 (최고값 `XM_PRIO_NEAR_REALTIME` = 48 < UserTask 54) **워치독 갱신을 막을 수 없습니다.** 무거운 계산은 오히려 이쪽으로 옮기는 것이 안전합니다 (Ex.36 의 NN 학습이 `XM_PRIO_BACKGROUND` 로 도는 이유).
 
 ---
 

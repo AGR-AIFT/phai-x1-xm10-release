@@ -13,7 +13,7 @@
 * **`XM_GetAppliedControlMode()`** — 요청(`XM_SetControlMode`)이 아닌 **실제 적용** 모드(`CONTROL` / `MONITOR` / `TRANSITION`)를 반환합니다.
 * **`xm_api_safety.h`** — header-only 공통 안전 헬퍼. `XM_SafeTorque_Init/Reset/Step`(유한값 가드 + 클램프 + 진입 소프트스타트 + slew), `XM_SafeAssistLevel()`, `XM_SafeIsFresh()`. `xm_api.h` 가 이미 포함합니다.
 * **하드웨어 워치독 (IWDG, 약 8 초)** — `Control_Loop` 가 도는 UserTask 가 1 kHz 로 갱신합니다. 초기화 단계 실패는 그 자리에서 halt 하고, 정상 동작 중의 행(hang)만 리셋으로 회복시킵니다. 부팅 단계·리셋 원인 마커도 함께 기록합니다.
-* **Ext_Sync — 외부 sync box TTL 입력 (DIO 8)** — Total Data 에 `sync_save_active` / `sync_din_level` / `sync_din_edge_count` 3 채널 추가. 부팅 시 읽은 레벨을 idle 로 래치해 **극성-불문**으로 저장 구간을 판정합니다. 기존 예약(reserved) 영역을 사용해 **패킷 크기는 365 B 그대로**이며 뒤쪽 채널 오프셋이 변하지 않습니다. 핀 점유는 `Control_Setup` 이전에 수행되므로 사용자가 `DIO 8` 을 재설정하면 사용자 설정이 우선합니다(기존 코드 무영향, 대신 Ext_Sync 필드는 무의미값).
+* **Ext_Sync — 외부 동기화 TTL 입력** — Total Data 에 `sync_save_active` / `sync_din_level` / `sync_din_edge_count` 3 채널 추가. 기존 예약(reserved) 영역을 사용해 **패킷 크기 365 B 와 뒤쪽 채널 오프셋이 그대로**이므로 기존 수신 프로그램은 무수정으로 동작합니다.
 * **진단 확장 (Rev 2.0)** — EMCY 누적 카운터, 부팅 단계별 실패 비트맵, 태스크 스택 watermark. 펌웨어 빌드에 Git 커밋 해시를 주입합니다.
 
 ### Changed
@@ -24,7 +24,7 @@
 * **부트로더 바이너리 갱신** — BootConfig 영역 ECC 손상 시 BusFault 를 감지해 설정을 초기화하고 정상 부팅합니다(신규). 앱 진입 시 pending 시스템 예외(SysTick/PendSV) 정리는 v2.5.1 첨부본에 이미 포함된 항목입니다. **v2.6.0 펌웨어는 구 부트로더에서도 동작하므로 재설치는 권장이지 필수가 아닙니다.**
 
 ### Fixed
-* **`XM.status.h10.forwardVelocity` 60 배 과대 정정** — 분당→초당 환산 누락. 이 값을 제어에 사용했다면 **게인 재조정이 필요**하며, 과거 데이터와 혼용하면 안 됩니다.
+* **`XM.status.h10.forwardVelocity` 60 배 과대 정정** — 분당→초당 환산 누락. 실보행 ~1 m/s 에서 1.0 부근 수신 확인. 이 값을 제어에 사용했다면 **게인 재조정이 필요**하며, 과거 데이터와 혼용하면 안 됩니다. 부수 효과로 **Ex.22 · 23 · 24 · 26 의 정지 판정(`forwardVelocity < 0.1`)이 이제 성립**합니다 — 종전에는 60 배 확대값이라 사실상 항상 "보행 중" 으로 처리됐습니다.
 * **Ex.14 미분킥 제거** — PD 의 미분항을 오차가 아닌 **측정값**에 걸어(derivative-on-measurement) 목표 스텝 시 D 항이 튀던 원인을 제거했습니다. 목표가 일정한 구간에서는 기존과 수학적으로 동일합니다.
 * **무한 재부팅 방지** — 초기화 실패 시 재부팅을 반복하던 `Error_Handler` 경로를 halt 로 재설계했습니다.
 * **EMG TPDO1 길이 검증 위치 정정** — 디코드 이전 호출부에서 검증하도록 옮겼습니다.
@@ -35,7 +35,7 @@
 ### Notes
 * 삭제된 공개 API 없음. 옛 이름 `XM_CTRL_TORQUE` 는 `XM_CTRL_CONTROL` 의 alias 로 유지됩니다.
 * 예제 개수 변동 없음 (Rev 2.0 45 개 / Rev 1.1 42 개).
-* KIT H10 펌웨어·컨텐츠 파일은 이전과 동일합니다.
+* **KIT H10 펌웨어 v2.4.0 동봉** (`SUIT_H10_Binary_20260820.zip`) — CM · MD 가 2.3.0 → 2.4.0, ESP32 는 2.3.0 그대로. 컨텐츠 파일(`SUIT_ContentsFiles_20260820.zip`)은 내용 동일, 파일명만 날짜 표기로 변경.
 
 ---
 
