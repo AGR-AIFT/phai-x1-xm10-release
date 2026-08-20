@@ -2021,6 +2021,8 @@
       
         
       
+        
+      
     
     
     
@@ -2073,6 +2075,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2970,7 +3000,7 @@
 <hr />
 <h2 id="타입매크로">타입/매크로<a class="headerlink" href="#타입매크로" title="Permanent link">&para;</a></h2>
 <h3 id="xm_ramfunc"><code>XM_RAMFUNC</code><a class="headerlink" href="#xm_ramfunc" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="cp">#define XM_RAMFUNC  __attribute__((section(&quot;.itcm_text&quot;)))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="cp">#define XM_RAMFUNC  __attribute__((section(".itcm_text")))</span>
 </code></pre></div>
 <p>함수를 ITCMRAM에 배치하여 Zero-Wait-State로 실행되게 하는 함수 어트리뷰트 매크로입니다. Flash에서 직접 실행할 때 발생하는 분기 예측 실패 지연이 없어, ISR이나 제어 루프처럼 실행 시간이 결정론적이어야 하는 함수에 적합합니다. Startup 코드가 Flash → ITCM 복사를 자동으로 처리하므로 사용자가 별도로 복사할 필요는 없습니다.</p>
 <table>
@@ -3000,7 +3030,7 @@
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="xm_dtcm_var"><code>XM_DTCM_VAR</code><a class="headerlink" href="#xm_dtcm_var" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cp">#define XM_DTCM_VAR  __attribute__((section(&quot;.dtcm_data&quot;)))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cp">#define XM_DTCM_VAR  __attribute__((section(".dtcm_data")))</span>
 </code></pre></div>
 <p>변수를 DTCMRAM에 배치하여 Zero-Wait-State로 접근되게 하는 변수 어트리뷰트 매크로입니다. D-Cache를 경유하지 않으므로 접근 지연이 결정론적이며, 제어 알고리즘의 상태 변수·Lookup Table처럼 개별 변수 단위로 빠르게 접근해야 할 때 적합합니다.</p>
 <table>

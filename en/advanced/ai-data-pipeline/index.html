@@ -1919,6 +1919,8 @@
       
         
       
+        
+      
     
     
     
@@ -1971,6 +1973,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2500,7 +2530,7 @@
 <p>Use the <code>examples/09_CDC_Stream/</code> pattern. Stream the data you want to train on over a custom channel in real time.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="c1">// Channel metadata (JSON): args are module_id, json_str</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;[{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">hip_L</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">unit</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">deg</span><span class="se">\&quot;</span><span class="s">},{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">hip_R</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">unit</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">deg</span><span class="se">\&quot;</span><span class="s">}]&quot;</span><span class="p">);</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="s">"[{</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">hip_L</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">deg</span><span class="se">\"</span><span class="s">},{</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">hip_R</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">deg</span><span class="se">\"</span><span class="s">}]"</span><span class="p">);</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">}</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -2526,7 +2556,7 @@
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">XM10Dataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csv_path</span><span class="p">):</span>
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_path</span><span class="p">)</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="s2">&quot;number&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>  <span class="c1"># shape (N, features)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="s2">"number"</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float32"</span><span class="p">)</span>  <span class="c1"># shape (N, features)</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">100</span>  <span class="c1"># 100-step window</span>
@@ -2536,7 +2566,7 @@
 <a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># predict the first channel of the next step</span>
 <a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 <a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>
-<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">XM10Dataset</span><span class="p">(</span><span class="s2">&quot;cdc_phai_20260224_120000.csv&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">XM10Dataset</span><span class="p">(</span><span class="s2">"cdc_phai_20260224_120000.csv"</span><span class="p">)</span>
 <a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="n">loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <blockquote>
@@ -2546,9 +2576,9 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;cdc_phai_20260224_120000.csv&quot;</span><span class="p">)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;imu_ax&quot;</span><span class="p">,</span> <span class="s2">&quot;imu_ay&quot;</span><span class="p">,</span> <span class="s2">&quot;imu_az&quot;</span><span class="p">,</span> <span class="s2">&quot;knee_angle&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;gait_phase&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"cdc_phai_20260224_120000.csv"</span><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">"imu_ax"</span><span class="p">,</span> <span class="s2">"imu_ay"</span><span class="p">,</span> <span class="s2">"imu_az"</span><span class="p">,</span> <span class="s2">"knee_angle"</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"gait_phase"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>

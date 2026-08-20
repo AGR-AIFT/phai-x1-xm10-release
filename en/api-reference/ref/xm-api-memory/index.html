@@ -2021,6 +2021,8 @@
       
         
       
+        
+      
     
     
     
@@ -2073,6 +2075,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2970,7 +3000,7 @@
 <hr />
 <h2 id="typesmacros">Types/Macros<a class="headerlink" href="#typesmacros" title="Permanent link">&para;</a></h2>
 <h3 id="xm_ramfunc"><code>XM_RAMFUNC</code><a class="headerlink" href="#xm_ramfunc" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="cp">#define XM_RAMFUNC  __attribute__((section(&quot;.itcm_text&quot;)))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="cp">#define XM_RAMFUNC  __attribute__((section(".itcm_text")))</span>
 </code></pre></div>
 <p>A function attribute macro that places a function in ITCMRAM so it executes with zero wait states. Because it avoids the branch-prediction-miss latency of executing directly from Flash, it's suited to functions whose execution time must be deterministic, such as ISRs and control loops. Startup code automatically handles the Flash → ITCM copy, so no manual copying is required.</p>
 <table>
@@ -3000,7 +3030,7 @@
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="xm_dtcm_var"><code>XM_DTCM_VAR</code><a class="headerlink" href="#xm_dtcm_var" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cp">#define XM_DTCM_VAR  __attribute__((section(&quot;.dtcm_data&quot;)))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cp">#define XM_DTCM_VAR  __attribute__((section(".dtcm_data")))</span>
 </code></pre></div>
 <p>A variable attribute macro that places a variable in DTCMRAM for zero-wait-state access. Because it bypasses D-Cache, access latency is deterministic, making it suitable for individual variables that need fast, per-variable access — control-algorithm state variables, lookup tables.</p>
 <table>

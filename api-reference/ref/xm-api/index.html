@@ -1854,6 +1854,8 @@
       
         
       
+        
+      
     
     
     
@@ -1906,6 +1908,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2333,7 +2363,7 @@
 <hr />
 <h2 id="언제-사용하나">언제 사용하나<a class="headerlink" href="#언제-사용하나" title="Permanent link">&para;</a></h2>
 <p>XM10 예제(<code>.c</code>) 파일 맨 위에 아래 한 줄만 추가하면 로봇 제어, 센서 읽기, LED/버튼, 확장 IO, USB 통신·로깅, 메모리, RTC, 보조 task 까지 SDK 의 모든 사용자 API 를 한 번에 쓸 수 있습니다.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;xm_api.h&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api.h"</span>
 </code></pre></div>
 <p><code>xm_api.h</code> 자신은 실제 기능을 구현하지 않는 <strong>파사드(facade) 헤더</strong>입니다. 하위 API 헤더들을 한 번에 포함시켜 주는 역할과, 시스템 전역에서 자주 쓰는 타이머 유틸리티 함수 <code>XM_GetTick()</code> 하나만 직접 선언합니다. 각 도메인의 실제 사용법(함수 목록, 예제, 주의사항)은 아래 표에서 연결된 개념 문서를 참고하세요 — 이 문서는 각 도메인을 다시 설명하지 않습니다.</p>
 <h2 id="이-헤더가-통합하는-api">이 헤더가 통합하는 API<a class="headerlink" href="#이-헤더가-통합하는-api" title="Permanent link">&para;</a></h2>

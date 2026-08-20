@@ -1992,6 +1992,8 @@
       
         
       
+        
+      
     
     
     
@@ -2044,6 +2046,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2923,8 +2953,8 @@
 <p><strong>Example</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">        </span><span class="s">&quot;[{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">Target</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">unit</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">deg</span><span class="se">\&quot;</span><span class="s">},&quot;</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">        </span><span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">Current</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">unit</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">deg</span><span class="se">\&quot;</span><span class="s">}]&quot;</span><span class="p">);</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">        </span><span class="s">"[{</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">Target</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">deg</span><span class="se">\"</span><span class="s">},"</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">        </span><span class="s">"{</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">Current</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">deg</span><span class="se">\"</span><span class="s">}]"</span><span class="p">);</span>
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="p">}</span>
 </code></pre></div>
 <p><strong>See also</strong>: <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a></p>
@@ -2993,7 +3023,7 @@
 <p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. Non-blocking.</p>
 <p><strong>Example</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Current State: %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">current_state</span><span class="p">);</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="s">"Current State: %d</span><span class="se">\r\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">current_state</span><span class="p">);</span>
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
 </code></pre></div>
 <p><strong>See also</strong>: <a href="../../05-usb-connectivity/">05. USB Serial</a></p>

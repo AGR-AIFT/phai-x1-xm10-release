@@ -2025,6 +2025,8 @@
       
         
       
+        
+      
     
     
     
@@ -2077,6 +2079,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2744,7 +2774,7 @@ XM10은 USB 포트를 통해 PC와 가상 시리얼 포트(CDC)로 연결하여 
 </li>
 <li><strong>Example</strong>
     <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Current State: %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">current_state</span><span class="p">);</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="s">"Current State: %d</span><span class="se">\r\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">current_state</span><span class="p">);</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
 </code></pre></div></li>
 </ul>
@@ -2824,7 +2854,7 @@ XM10은 USB 포트를 통해 PC와 가상 시리얼 포트(CDC)로 연결하여 
 </li>
 <li>
 <p><strong>Example</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">ch</span><span class="se">\&quot;</span><span class="s">:[</span><span class="se">\&quot;</span><span class="s">angle</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">torque</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">velocity</span><span class="se">\&quot;</span><span class="s">]}&quot;</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="s">"{</span><span class="se">\"</span><span class="s">ch</span><span class="se">\"</span><span class="s">:[</span><span class="se">\"</span><span class="s">angle</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">torque</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">velocity</span><span class="se">\"</span><span class="s">]}"</span><span class="p">);</span>
 </code></pre></div></p>
 </li>
 </ul>

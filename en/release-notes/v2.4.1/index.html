@@ -1722,6 +1722,8 @@
       
         
       
+        
+      
     
     
     
@@ -1774,6 +1776,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2461,7 +2491,7 @@
 <p>On Rev 2.0 the boot process moves the stack to the top of DTCMRAM, while the C library heap lives in a different region (RAM_D1). The heap's upper bound, however, was pinned to the top of the stack rather than to RAM_D1 where the heap actually resides. As a result the internal heap-growth function <code>_sbrk()</code> <strong>failed on its very first call</strong>, and <code>malloc()</code> — along with the float <code>printf</code> (<code>%f</code>, <code>%e</code>, <code>%g</code>) that relies on it — produced no output.</p>
 <p>This release corrects the heap ceiling to the <strong>actual top of RAM_D1</strong>, so the following now works:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.14f</span><span class="p">;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;cur=%.2f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w">   </span><span class="c1">// now prints &quot;cur=3.14&quot; (previously empty/garbled)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">printf</span><span class="p">(</span><span class="s">"cur=%.2f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w">   </span><span class="c1">// now prints "cur=3.14" (previously empty/garbled)</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">64</span><span class="p">);</span><span class="w">        </span><span class="c1">// now returns a valid pointer</span>
 </code></pre></div>

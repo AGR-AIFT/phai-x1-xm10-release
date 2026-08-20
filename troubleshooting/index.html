@@ -2190,6 +2190,8 @@
       
         
       
+        
+      
     
     
     
@@ -2242,6 +2244,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -3011,7 +3041,7 @@
 <p><strong>방법 1: 짧은 경로에 SDK 압축 해제 (권장)</strong></p>
 <p>본 SDK 는 GitHub Releases 의 ZIP 으로 받습니다. 압축 해제 위치를 드라이브 루트에 가깝게 잡으면 경로 길이 문제를 피할 수 있습니다.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c"># Releases 페이지에서 본인 Rev ZIP 다운로드 후</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">Expand-Archive</span> <span class="n">-Path</span> <span class="s2">&quot;$HOME\Downloads\Rev2.0.zip&quot;</span> <span class="n">-DestinationPath</span> <span class="n">C</span><span class="p">:\</span><span class="n">XM_SDK</span><span class="p">\</span> <span class="n">-Force</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">Expand-Archive</span> <span class="n">-Path</span> <span class="s2">"$HOME\Downloads\Rev2.0.zip"</span> <span class="n">-DestinationPath</span> <span class="n">C</span><span class="p">:\</span><span class="n">XM_SDK</span><span class="p">\</span> <span class="n">-Force</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3042,7 +3072,7 @@
 <p><strong>방법 2: Windows Long Path 지원 활성화 (근본 해결)</strong></p>
 <p>Windows 10 (1607+) / Windows 11에서 260자 제한을 해제할 수 있습니다.</p>
 <p>PowerShell (관리자 권한):
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">New-ItemProperty</span> <span class="n">-Path</span> <span class="s2">&quot;HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem&quot;</span> <span class="n">-Name</span> <span class="s2">&quot;LongPathsEnabled&quot;</span> <span class="n">-Value</span> <span class="n">1</span> <span class="n">-PropertyType</span> <span class="n">DWORD</span> <span class="n">-Force</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">New-ItemProperty</span> <span class="n">-Path</span> <span class="s2">"HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem"</span> <span class="n">-Name</span> <span class="s2">"LongPathsEnabled"</span> <span class="n">-Value</span> <span class="n">1</span> <span class="n">-PropertyType</span> <span class="n">DWORD</span> <span class="n">-Force</span>
 </code></pre></div></p>
 <p>또는 그룹 정책:
 <code>컴퓨터 구성 &gt; 관리 템플릿 &gt; 시스템 &gt; 파일 시스템 &gt; Win32 긴 경로 사용</code> → <strong>사용</strong></p>
@@ -3119,9 +3149,9 @@
 <hr />
 <h2 id="ex36-ondevice-kinesthetic-learning--rev-11-빌드-실패">Ex.36 (OnDevice Kinesthetic Learning) — Rev 1.1 빌드 실패<a class="headerlink" href="#ex36-ondevice-kinesthetic-learning--rev-11-빌드-실패" title="Permanent link">&para;</a></h2>
 <p><strong>증상:</strong> Rev 1.1 SDK 에서 Ex.36 을 빌드하면 link 단계에서 다음 에러가 출력됨.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>control_task.c:(.text.Active_Entry+0x2a): undefined reference to `XM_UserNV_Read&#39;
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>control_task.c:(.text.Active_Loop+0x284): undefined reference to `XM_UserNV_Erase&#39;
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>control_task.c:(.text.Active_Loop+0x292): undefined reference to `XM_UserNV_Write&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>control_task.c:(.text.Active_Entry+0x2a): undefined reference to `XM_UserNV_Read'
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>control_task.c:(.text.Active_Loop+0x284): undefined reference to `XM_UserNV_Erase'
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>control_task.c:(.text.Active_Loop+0x292): undefined reference to `XM_UserNV_Write'
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>collect2.exe: error: ld returned 1 exit status
 </code></pre></div>
 <p><strong>원인:</strong> Ex.36 은 학습된 NN 가중치를 전원 OFF/ON 사이에 보존하기 위해 Internal Flash UserNV API (<code>XM_UserNV_Read/Write/Erase</code>) 를 사용합니다. 이 API 는 <strong>Rev 2.0 SDK 의 <code>libXM_Lib.a</code> 에만 포함</strong>되어 있고 Rev 1.1 lib 에는 아직 이식되지 않았습니다.</p>
@@ -3240,7 +3270,7 @@
 <h4 id="windows-사용자명에-한글-포함">Windows 사용자명에 한글 포함<a class="headerlink" href="#windows-사용자명에-한글-포함" title="Permanent link">&para;</a></h4>
 <p><strong>증상:</strong> <code>C:\Users\홍길동\...</code> 경로에서 빌드 시 한글 인코딩 또는 MAX_PATH 문제</p>
 <p><strong>해결:</strong> 사용자 폴더 대신 <strong>드라이브 루트</strong> 에 SDK 압축 해제:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">Expand-Archive</span> <span class="n">-Path</span> <span class="s2">&quot;$HOME\Downloads\Rev2.0.zip&quot;</span> <span class="n">-DestinationPath</span> <span class="n">C</span><span class="p">:\</span><span class="n">dev</span><span class="p">\</span> <span class="n">-Force</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">Expand-Archive</span> <span class="n">-Path</span> <span class="s2">"$HOME\Downloads\Rev2.0.zip"</span> <span class="n">-DestinationPath</span> <span class="n">C</span><span class="p">:\</span><span class="n">dev</span><span class="p">\</span> <span class="n">-Force</span>
 </code></pre></div></p>
 <h4 id="클라우드-동기화-폴더-onedrive-icloud-에-압축-해제">클라우드 동기화 폴더 (OneDrive, iCloud) 에 압축 해제<a class="headerlink" href="#클라우드-동기화-폴더-onedrive-icloud-에-압축-해제" title="Permanent link">&para;</a></h4>
 <p><strong>증상:</strong> 빌드 중 파일 잠금 충돌, 동기화 충돌 파일 생성</p>

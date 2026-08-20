@@ -1854,6 +1854,8 @@
       
         
       
+        
+      
     
     
     
@@ -1906,6 +1908,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2333,7 +2363,7 @@
 <hr />
 <h2 id="when-to-use-this">When to use this<a class="headerlink" href="#when-to-use-this" title="Permanent link">&para;</a></h2>
 <p>Add this single line at the top of any XM10 example (<code>.c</code>) file, and you get access to every user-facing SDK API at once: robot control, sensor reads, LED/button, extension IO, USB communication/logging, memory, RTC, and auxiliary tasks.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;xm_api.h&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api.h"</span>
 </code></pre></div>
 <p><code>xm_api.h</code> itself implements no functionality — it is a <strong>facade header</strong>. It only aggregates the sub-API headers via <code>#include</code>, and directly declares one system-wide timer utility function, <code>XM_GetTick()</code>. For the actual usage of each domain (function lists, examples, caveats), follow the concept docs linked in the table below — this page does not re-explain any of those domains.</p>
 <h2 id="what-this-header-aggregates">What this header aggregates<a class="headerlink" href="#what-this-header-aggregates" title="Permanent link">&para;</a></h2>

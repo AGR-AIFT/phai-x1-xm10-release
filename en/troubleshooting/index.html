@@ -2190,6 +2190,8 @@
       
         
       
+        
+      
     
     
     
@@ -2242,6 +2244,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -3011,7 +3041,7 @@
 <p><strong>Option 1: Extract the SDK to a short path (recommended)</strong></p>
 <p>The SDK is distributed as a ZIP from GitHub Releases. Extracting it close to the drive root avoids path length issues.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c"># After downloading your Rev ZIP from the Releases page:</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">Expand-Archive</span> <span class="n">-Path</span> <span class="s2">&quot;$HOME\Downloads\Rev2.0.zip&quot;</span> <span class="n">-DestinationPath</span> <span class="n">C</span><span class="p">:\</span><span class="n">XM_SDK</span><span class="p">\</span> <span class="n">-Force</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">Expand-Archive</span> <span class="n">-Path</span> <span class="s2">"$HOME\Downloads\Rev2.0.zip"</span> <span class="n">-DestinationPath</span> <span class="n">C</span><span class="p">:\</span><span class="n">XM_SDK</span><span class="p">\</span> <span class="n">-Force</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3042,7 +3072,7 @@
 <p><strong>Option 2: Enable Windows Long Path support (permanent fix)</strong></p>
 <p>On Windows 10 (1607+) / Windows 11 you can lift the 260-character limit entirely.</p>
 <p>PowerShell (run as Administrator):
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">New-ItemProperty</span> <span class="n">-Path</span> <span class="s2">&quot;HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem&quot;</span> <span class="n">-Name</span> <span class="s2">&quot;LongPathsEnabled&quot;</span> <span class="n">-Value</span> <span class="n">1</span> <span class="n">-PropertyType</span> <span class="n">DWORD</span> <span class="n">-Force</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">New-ItemProperty</span> <span class="n">-Path</span> <span class="s2">"HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem"</span> <span class="n">-Name</span> <span class="s2">"LongPathsEnabled"</span> <span class="n">-Value</span> <span class="n">1</span> <span class="n">-PropertyType</span> <span class="n">DWORD</span> <span class="n">-Force</span>
 </code></pre></div></p>
 <p>Or via Group Policy:
 <code>Computer Configuration &gt; Administrative Templates &gt; System &gt; Filesystem &gt; Enable Win32 long paths</code> → <strong>Enabled</strong></p>
@@ -3119,9 +3149,9 @@
 <hr />
 <h2 id="ex36-ondevice-kinesthetic-learning--rev-11-build-failure">Ex.36 (OnDevice Kinesthetic Learning) — Rev 1.1 Build Failure<a class="headerlink" href="#ex36-ondevice-kinesthetic-learning--rev-11-build-failure" title="Permanent link">&para;</a></h2>
 <p><strong>Symptom:</strong> Building Ex.36 with the Rev 1.1 SDK produces the following linker errors:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>control_task.c:(.text.Active_Entry+0x2a): undefined reference to `XM_UserNV_Read&#39;
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>control_task.c:(.text.Active_Loop+0x284): undefined reference to `XM_UserNV_Erase&#39;
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>control_task.c:(.text.Active_Loop+0x292): undefined reference to `XM_UserNV_Write&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>control_task.c:(.text.Active_Entry+0x2a): undefined reference to `XM_UserNV_Read'
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>control_task.c:(.text.Active_Loop+0x284): undefined reference to `XM_UserNV_Erase'
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>control_task.c:(.text.Active_Loop+0x292): undefined reference to `XM_UserNV_Write'
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>collect2.exe: error: ld returned 1 exit status
 </code></pre></div>
 <p><strong>Cause:</strong> Ex.36 uses the Internal Flash UserNV API (<code>XM_UserNV_Read/Write/Erase</code>) to persist trained NN weights across power cycles. This API is <strong>only included in the Rev 2.0 SDK's <code>libXM_Lib.a</code></strong> and has not yet been backported to the Rev 1.1 library.</p>
@@ -3240,7 +3270,7 @@
 <h4 id="windows-username-contains-non-ascii-characters">Windows Username Contains Non-ASCII Characters<a class="headerlink" href="#windows-username-contains-non-ascii-characters" title="Permanent link">&para;</a></h4>
 <p><strong>Symptom:</strong> Building from a path like <code>C:\Users\홍길동\...</code> causes encoding or MAX_PATH errors.</p>
 <p><strong>Resolution:</strong> Extract the SDK to a <strong>drive root directory</strong> instead of your user folder:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">Expand-Archive</span> <span class="n">-Path</span> <span class="s2">&quot;$HOME\Downloads\Rev2.0.zip&quot;</span> <span class="n">-DestinationPath</span> <span class="n">C</span><span class="p">:\</span><span class="n">dev</span><span class="p">\</span> <span class="n">-Force</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">Expand-Archive</span> <span class="n">-Path</span> <span class="s2">"$HOME\Downloads\Rev2.0.zip"</span> <span class="n">-DestinationPath</span> <span class="n">C</span><span class="p">:\</span><span class="n">dev</span><span class="p">\</span> <span class="n">-Force</span>
 </code></pre></div></p>
 <h4 id="sdk-extracted-inside-a-cloud-sync-folder-onedrive-icloud">SDK Extracted Inside a Cloud Sync Folder (OneDrive, iCloud)<a class="headerlink" href="#sdk-extracted-inside-a-cloud-sync-folder-onedrive-icloud" title="Permanent link">&para;</a></h4>
 <p><strong>Symptom:</strong> Build fails due to file locking conflicts; conflict copies are created by the sync client.</p>

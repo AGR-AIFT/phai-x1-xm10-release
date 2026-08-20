@@ -1943,6 +1943,8 @@
       
         
       
+        
+      
     
     
     
@@ -1995,6 +1997,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2516,8 +2546,8 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="cm">/* (optional) register PhAI Studio channel labels — default labels (f0, i16_0, ...) are used if omitted */</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xE0</span><span class="p">,</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">        </span><span class="s">&quot;[{</span><span class="se">\&quot;</span><span class="s">slot</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">f0</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">EMG_envelope</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">unit</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">uV</span><span class="se">\&quot;</span><span class="s">},&quot;</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">         </span><span class="s">&quot; {</span><span class="se">\&quot;</span><span class="s">slot</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">i16_0</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">PF3_raw</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">unit</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">LSB</span><span class="se">\&quot;</span><span class="s">}]&quot;</span><span class="p">);</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">        </span><span class="s">"[{</span><span class="se">\"</span><span class="s">slot</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">f0</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">EMG_envelope</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">uV</span><span class="se">\"</span><span class="s">},"</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">         </span><span class="s">" {</span><span class="se">\"</span><span class="s">slot</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">i16_0</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">PF3_raw</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">LSB</span><span class="se">\"</span><span class="s">}]"</span><span class="p">);</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -2759,7 +2789,7 @@
 The header only states that <code>out</code> must not be NULL — it does not document whether an internal guard exists if NULL is passed anyway. Always pass a valid buffer.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">XM_UserCustomBlock_t</span><span class="w"> </span><span class="n">snapshot</span><span class="p">;</span>
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">XM_UserCustom_GetBlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">snapshot</span><span class="p">);</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="s">&quot;f0=%.2f, flags=0x%04X</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">snapshot</span><span class="p">.</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">snapshot</span><span class="p">.</span><span class="n">flags</span><span class="p">);</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="s">"f0=%.2f, flags=0x%04X</span><span class="se">\r\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">snapshot</span><span class="p">.</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">snapshot</span><span class="p">.</span><span class="n">flags</span><span class="p">);</span>
 </code></pre></div>
 <p><strong>See also</strong>: <a href="#xm_usercustomblock_t"><code>XM_UserCustomBlock_t</code></a> (field layout)</p>
 <hr />

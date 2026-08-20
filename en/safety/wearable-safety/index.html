@@ -1844,6 +1844,8 @@
       
         
       
+        
+      
     
     
     
@@ -1896,6 +1898,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2374,7 +2404,9 @@
 <li><strong>Cut power</strong> — Last resort.</li>
 </ul>
 <blockquote>
-<p>⚠️ The XM10 firmware has no hardware watchdog. Therefore, <strong>in an emergency a person must use one of the above paths to stop the suit manually</strong> — this is the primary safety net. A dedicated <strong>safety assistant</strong> who can reach the stop control must always be present alongside the wearer.</p>
+<p>⚠️ <strong>A watchdog is not an emergency stop.</strong> As of v2.6.0 the XM10 firmware does include a hardware watchdog (IWDG, about 8 seconds), but it exists to <strong>recover the board when the firmware hangs</strong> — not to protect a person. Eight seconds is a very long time while someone is wearing the suit, and if your code keeps running while commanding the <strong>wrong torque</strong>, the watchdog never fires at all (the firmware looks perfectly healthy to it).</p>
+<p>So <strong>a person using one of the paths above is still the primary safety net.</strong> A dedicated <strong>safety assistant</strong> who can reach the stop control must always be present alongside the wearer.</p>
+<p>For reference: when a watchdog reset does occur the board reboots and comes back up in <strong>MONITOR mode (torque output blocked)</strong>. What happens after that is decided by your <code>Control_Setup</code> / <code>Control_Loop</code> code.</p>
 </blockquote>
 <hr />
 <h2 id="4-four-code-sections-that-must-not-be-removed">4. Four Code Sections That Must Not Be Removed<a class="headerlink" href="#4-four-code-sections-that-must-not-be-removed" title="Permanent link">&para;</a></h2>

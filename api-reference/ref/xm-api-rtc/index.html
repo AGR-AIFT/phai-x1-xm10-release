@@ -1893,6 +1893,8 @@
       
         
       
+        
+      
     
     
     
@@ -1945,6 +1947,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2538,12 +2568,12 @@
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="n">XmDateTime_t</span><span class="w"> </span><span class="n">rtc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="n">XM_RTC_GetDateTime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rtc</span><span class="p">);</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rtc</span><span class="p">.</span><span class="n">year</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2020</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">rtc</span><span class="p">.</span><span class="n">year</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">2099</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">buf_size</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%02u%02u%02u_%02u%02u%02u&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">buf_size</span><span class="p">,</span><span class="w"> </span><span class="s">"%02u%02u%02u_%02u%02u%02u"</span><span class="p">,</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">                 </span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)(</span><span class="n">rtc</span><span class="p">.</span><span class="n">year</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">100</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">rtc</span><span class="p">.</span><span class="n">month</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">rtc</span><span class="p">.</span><span class="n">day</span><span class="p">,</span>
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">                 </span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">rtc</span><span class="p">.</span><span class="n">hour</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">rtc</span><span class="p">.</span><span class="n">minute</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">rtc</span><span class="p">.</span><span class="n">second</span><span class="p">);</span>
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">        </span><span class="cm">/* RTC 미설정/Rev1.1 stub — 부팅 tick 기반 fallback */</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">buf_size</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;XM_%08lu&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">osKernelGetTickCount</span><span class="p">());</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">buf_size</span><span class="p">,</span><span class="w"> </span><span class="s">"XM_%08lu"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">osKernelGetTickCount</span><span class="p">());</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="p">}</span>
 </code></pre></div>

@@ -1844,6 +1844,8 @@
       
         
       
+        
+      
     
     
     
@@ -1896,6 +1898,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2374,7 +2404,9 @@
 <li><strong>전원 차단</strong> — 최후 수단.</li>
 </ul>
 <blockquote>
-<p>⚠️ XM10 펌웨어에는 하드웨어 워치독이 없습니다. 따라서 <strong>이상 시 사람이 위 경로로 직접 정지</strong>시키는 것이 1차 안전망입니다. 착용자와 별도로 <strong>정지 담당(보조자)</strong> 이 항상 손이 닿는 곳에 대기하세요.</p>
+<p>⚠️ <strong>워치독은 비상 정지가 아닙니다.</strong> v2.6.0 부터 XM10 펌웨어에 하드웨어 워치독(IWDG, 약 8 초)이 들어갔지만, 이것은 <strong>펌웨어가 멈췄을 때 보드를 되살리는 장치</strong>이지 사람을 지키는 장치가 아닙니다. 8 초는 착용 상황에서 매우 긴 시간이고, 코드가 멈추지 않은 채 <strong>잘못된 토크를 계속 내보내는 경우에는 워치독이 아예 동작하지 않습니다</strong>(정상 실행 중으로 보이기 때문).</p>
+<p>따라서 <strong>이상 시 사람이 위 경로로 직접 정지</strong>시키는 것이 여전히 1차 안전망입니다. 착용자와 별도로 <strong>정지 담당(보조자)</strong> 이 항상 손이 닿는 곳에 대기하세요.</p>
+<p>참고로 워치독 리셋이 일어나면 보드는 재부팅되고, 재부팅 직후에는 <strong>MONITOR 모드(토크 출력 차단)</strong> 로 시작합니다. 이후 동작은 여러분의 <code>Control_Setup</code> / <code>Control_Loop</code> 코드가 결정합니다.</p>
 </blockquote>
 <hr />
 <h2 id="4-제거하면-안-되는-코드-4종">4. 제거하면 안 되는 코드 4종<a class="headerlink" href="#4-제거하면-안-되는-코드-4종" title="Permanent link">&para;</a></h2>

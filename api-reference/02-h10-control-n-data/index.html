@@ -2279,6 +2279,8 @@
       
         
       
+        
+      
     
     
     
@@ -2331,6 +2333,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -3851,7 +3881,7 @@ Rev 1.1 에서는 결합 시 <code>XM_EXT_ADC_1</code>/<code>XM_EXT_ADC_3</code>
 - <code>true</code>: 연결이 정상적으로 활성화된 상태입니다.
 - <code>false</code>: 연결이 끊겼거나 아직 준비되지 않은 상태입니다.</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;xm_api.h&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api.h"</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Off_loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="c1">// CM과 연결이 확인되면 Standby 상태로 전환합니다.</span>
@@ -3959,7 +3989,7 @@ NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 �
 - <code>true</code>: H10의 기존 보조 알고리즘 활성화
 - <code>false</code>: H10의 기존 보조 알고리즘 비활성화</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;xm_api.h&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api.h"</span>
 <a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
 <a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Off_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="n">XM_SetH10AssistExistingMode</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>

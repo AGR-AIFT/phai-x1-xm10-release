@@ -2279,6 +2279,8 @@
       
         
       
+        
+      
     
     
     
@@ -2331,6 +2333,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -3851,7 +3881,7 @@ The connection between CM and XM10 is managed by an internal <code>Plug and Play
 - <code>true</code>: The link is active and operational.
 - <code>false</code>: The link is not yet established or has been lost.</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;xm_api.h&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api.h"</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Off_loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="c1">// Transition to Standby once the CM link is confirmed.</span>
@@ -3959,7 +3989,7 @@ By default, the built-in assist algorithm is disabled when XM10 connects to H10.
 - <code>true</code>: H10's built-in assist algorithm is enabled.
 - <code>false</code>: H10's built-in assist algorithm is disabled.</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;xm_api.h&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api.h"</span>
 <a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
 <a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Off_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="n">XM_SetH10AssistExistingMode</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
@@ -4291,7 +4321,7 @@ Calling this function resets the corresponding <code>isPVectorRHDone</code> or <
 <a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="n">XM_SetDegreeLimitRoutine</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
 <a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="n">XM_SetDegreeLimit</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="mf">30.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-30.0f</span><span class="p">);</span>
 <a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>
-<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="c1">// Limit the left leg&#39;s maximum speed to 100 deg/s.</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="c1">// Limit the left leg's maximum speed to 100 deg/s.</span>
 <a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="n">XM_SetVelocityLimitRoutine</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
 <a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="n">XM_SetVelocityLimit</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-100.0f</span><span class="p">);</span>
 </code></pre></div></p>
