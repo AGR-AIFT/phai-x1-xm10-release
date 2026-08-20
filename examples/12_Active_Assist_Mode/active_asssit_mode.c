@@ -30,9 +30,11 @@
 
 // --- Mode Change 설정 값 ---
 #define MODE_TRANSITION_DELAY_MS    500 // 모드 전환 지연 시간 (ms)
+#define STOP_WAIT_MARGIN_MS         1000U // 정지 P-Vector Done 대기 margin (STOP_DURATION_MS + margin)
 
 // --- Homing 설정 값 ---
 #define HOMING_TRANSITION_DELAY_MS  50    // 각 단계 사이의 지연 시간 (50ms)
+#define HOMING_WAIT_MARGIN_MS       2000U // 호밍 Done 대기 margin — 계산된 duration + margin 초과 시 fail-closed
 #define HOMING_MIN_DURATION_MS      50    // P-Vector 최소 duration (L=0 방어)
 #define HOMING_SPEED_RH             150   // 초당 이동 속도 (deg/s)
 #define HOMING_ACCEL_S0_RH          2     // 초기 가속도(deg/s^2)
@@ -176,6 +178,7 @@ static XmH10Mode_t s_previoush10Mode = XM_H10_MODE_STANDBY;
 
 // --- Active Assist Mode State Management ---
 static HomingState_t        s_homingState = HOMING_ENTRY;
+static uint32_t             s_homingDeadline = 0; // 호밍 Done 대기 데드라인 (duration + margin)
 static ActiveAssistState_t  s_aaGlobalState = AA_STATE_HOMING; // AA모드의 전체 상위 상태
 static ActiveAssistFsm_t    s_aaFsm_RH;  // 오른쪽 다리(RH)를 위한 상태 머신 객체
 static ActiveAssistFsm_t    s_aaFsm_LH;  // 왼쪽 다리(LH)를 위한 상태 머신 객체
@@ -318,7 +321,8 @@ static void Active_Entry(void)
 
     // USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신
 
-    XM_SetControlMode(XM_CTRL_TORQUE);
+    /* [v2.6] 토크 + P/I 벡터 모두 CONTROL 모드 필요 (구 XM_CTRL_TORQUE 와 동일 값) */
+    XM_SetControlMode(XM_CTRL_CONTROL);
 }
 
 /**
@@ -391,11 +395,16 @@ static void ManageModeTransition(void)
                         XM_SendPVectorReset(SYS_NODE_ID_RH);   // FIFO 비우기
                         XM_SendPVectorReset(SYS_NODE_ID_LH);
                         StopMotorAndHold();                     // 즉시 부드러운 정지
+                        s_modeTransitionTimer = XM_GetTick();   // 정지 Done 대기 타임아웃 기준
                         s_modeTransitionState = MODE_TRANSITION_STOP_COMPLETED;
                     }
                     // [CASE 2] Homing 중이 아닐 때, Active-Assist Mode -> Standby Mode로의 전환
                     else if (s_previoush10Mode == XM_H10_MODE_ASSIST && currenth10Mode == XM_H10_MODE_STANDBY) {
-                        // 별도의 정지 절차 없이, 바로 안정화 지연 단계로 넘어갑니다.
+                        // [v2.6] 토크를 1틱에 0 으로 끊지 않고 FW 내장 램프다운을 사용:
+                        // MONITOR 요청 시 FW 가 지수 감쇠(τ=100ms) → 0 확정 → 벡터 해제를
+                        // 자동 수행합니다. DELAYING 단계가 램프다운 완료까지 함께 대기합니다.
+                        // (재진입 시 Active_Entry 가 CONTROL 을 다시 설정)
+                        XM_SetControlMode(XM_CTRL_MONITOR);
                         s_modeTransitionTimer = XM_GetTick();
                         s_modeTransitionState = MODE_TRANSITION_DELAYING;
                     }
@@ -409,8 +418,19 @@ static void ManageModeTransition(void)
                 if (XM.status.h10.isPVectorRHDone && XM.status.h10.isPVectorLHDone) {
                     XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
                     XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
-                    
-                    // 2. 정지가 완료되면, 안정화 지연 단계로 넘어갑니다.
+
+                    // 2. 정지가 완료되면, FW 램프다운을 요청하고 안정화 지연 단계로 넘어갑니다.
+                    XM_SetControlMode(XM_CTRL_MONITOR);
+                    s_modeTransitionTimer = XM_GetTick();
+                    s_modeTransitionState = MODE_TRANSITION_DELAYING;
+                }
+                // [타임아웃] Done 미수신 (MD 무응답/프레임 유실) — 정지 명령은 이미
+                // 전송됐으므로 플래그를 강제 정리하고 진행합니다 (영구 대기 방지).
+                else if (XM_GetTick() - s_modeTransitionTimer >= (uint32_t)STOP_DURATION_MS + STOP_WAIT_MARGIN_MS) {
+                    XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
+                    XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
+                    XM_SendUsbDebugMessage("[AA] 정지 Done 타임아웃 — 강제 진행\r\n");
+                    XM_SetControlMode(XM_CTRL_MONITOR);
                     s_modeTransitionTimer = XM_GetTick();
                     s_modeTransitionState = MODE_TRANSITION_DELAYING;
                 }
@@ -419,8 +439,10 @@ static void ManageModeTransition(void)
             
         case MODE_TRANSITION_DELAYING: 
             {
-                // 모드 변경 전/후의 안정화를 위해 일정 시간 대기합니다.
-                if (XM_GetTick() - s_modeTransitionTimer >= MODE_TRANSITION_DELAY_MS) {
+                // 모드 변경 전/후의 안정화를 위해 일정 시간 대기하고,
+                // FW 램프다운(CONTROL→MONITOR 전환 시퀀스) 완료까지 함께 기다립니다.
+                if ((XM_GetTick() - s_modeTransitionTimer >= MODE_TRANSITION_DELAY_MS)
+                    && (XM_GetAppliedControlMode() == XM_MODE_APPLIED_MONITOR)) {
 
                     // 초기화(Enter) 함수를 호출합니다.
                     EnterStandbyMode();
@@ -490,9 +512,10 @@ static void EnterStandbyMode(void)
     InitializeFsm(&s_aaFsm_LH);
     
     if (s_aaGlobalState == AA_STATE_HOMING) {
-        IVector_t zeroImpedance = {.epsilon = 0, .kp = 0, .kd = 0, .lambda = 0, .duration = 50};
-        XM_SendIVector(SYS_NODE_ID_RH, &zeroImpedance);
-        XM_SendIVector(SYS_NODE_ID_LH, &zeroImpedance);
+        /* [v2.6] zero-impedance I-Vector 는 여기서 보내지 않습니다 — 이 함수는
+         * FW 램프다운 완료(applied==MONITOR) 후에만 호출되어 벡터가 게이트에
+         * 차단되며, FW 의 VECTOR_RELEASE 단계가 동일한 임피던스 해제(kp=0,kd=0)를
+         * 이미 전송한 뒤입니다. 로컬 Done 플래그 정리만 수행합니다. */
         XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
         XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
     }
@@ -537,6 +560,15 @@ static void UpdateActiveAssistMode(void)
             switch (s_homingState) {
                 // --- Homing ---
                 case HOMING_ENTRY: {
+                    /* [가드] 직전 비상정지/타임아웃이 요청한 MONITOR 전환 정리
+                     * (TRANSITION: ZERO_HOLD→VECTOR_RELEASE, ~10 tick)가 끝나
+                     * FW 게이트가 CONTROL 로 다시 열린 뒤에만 호밍 벡터를 전송.
+                     * 가드 없이 전송하면 벡터가 무음 차단되고 상태만 전진해
+                     * '전송된 적 없는 P-Vector 의 Done' 을 기다리는 재시도
+                     * livelock 이 됨 (CONTROL 요청은 Active_Entry 가 이미 latch). */
+                    if (XM_GetAppliedControlMode() != XM_MODE_APPLIED_CONTROL) {
+                        break;
+                    }
                     XM_SendPVectorReset(SYS_NODE_ID_RH);
                     XM_SendPVectorReset(SYS_NODE_ID_LH);
                     XM_SendIVectorKpKdMax(SYS_NODE_ID_RH, 6, 6);
@@ -573,6 +605,8 @@ static void UpdateActiveAssistMode(void)
                     PVector_t pVecLH = { .yd = targetAngle, .L = homingDuration, .s0 = HOMING_ACCEL_S0_RH, .sd = HOMING_ACCEL_SD_RH };
                     XM_SendPVector(SYS_NODE_ID_RH, &pVecRH);
                     XM_SendPVector(SYS_NODE_ID_LH, &pVecLH);
+                    // Done 대기 데드라인: 계산된 이동 시간 + margin (duration+margin 패턴)
+                    s_homingDeadline = XM_GetTick() + (uint32_t)homingDuration + HOMING_WAIT_MARGIN_MS;
                     s_homingState = HOMING_WAIT_FOR_DONE;
                     break;
                 }
@@ -583,6 +617,15 @@ static void UpdateActiveAssistMode(void)
                         XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
                         homingTimer = XM_GetTick(); // ✅ FINALIZE_DELAY 진입 시 타이머 시작
                         s_homingState = HOMING_FINALIZE_DELAY;
+                    }
+                    // [fail-closed] Done 미수신 (MD 무응답 등) — 보조 단계로 진입하지 않고
+                    // 즉시 출력을 끊은 뒤 STANDBY 로 복귀합니다. h10Mode 가 ASSIST 로
+                    // 유지되면 STANDBY→ACTIVE 재진입으로 호밍을 처음부터 재시도합니다.
+                    else if ((int32_t)(XM_GetTick() - s_homingDeadline) >= 0) {
+                        XM_EmergencyDisengage();
+                        s_homingState = HOMING_ENTRY;
+                        XM_SendUsbDebugMessage("[AA] 호밍 Done 타임아웃 — 정지 후 STANDBY 복귀\r\n");
+                        XM_TSM_TransitionTo(s_userHandle, XM_STATE_STANDBY);
                     }
                     break;
                 }
@@ -635,10 +678,12 @@ static void UpdateSingleLegAssistLogic(ActiveAssistFsm_t* fsm, float currentThig
     // LPF를 이용한 토크 스무딩
     fsm->currentTorque_Nm = (fsm->targetTorque_Nm * TORQUE_SMOOTHING_FACTOR) +
                             (fsm->currentTorque_Nm * (1.0f - TORQUE_SMOOTHING_FACTOR));
+    // AssistLevel 0~10 클램프 후 배율 적용 — 범위 밖 수신값 방어
+    float level_scale = (float)XM_SafeAssistLevel(XM.status.h10.h10AssistLevel) / 10.0f;
     if (nodeId == SYS_NODE_ID_RH) {
-    	XM_SetAssistTorqueRH(((float)XM.status.h10.h10AssistLevel / 10.0f) * fsm->currentTorque_Nm);
+    	XM_SetAssistTorqueRH(level_scale * fsm->currentTorque_Nm);
     } else if (nodeId == SYS_NODE_ID_LH) {
-    	XM_SetAssistTorqueLH(((float)XM.status.h10.h10AssistLevel / 10.0f) * fsm->currentTorque_Nm);
+    	XM_SetAssistTorqueLH(level_scale * fsm->currentTorque_Nm);
     }
 
     switch (fsm->state) {

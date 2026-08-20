@@ -85,6 +85,14 @@
 #define GAIT_PERIOD_MIN_S       0.4f        // 최소 주기 (≈ 빠른 달리기)
 #define GAIT_PERIOD_MAX_S       3.0f        // 최대 주기 (≈ 느린 보행)
 
+// Heel Strike stale 타임아웃 — 마지막 HS 후 최대 주기의 2배(6초)가 지나면
+// 보행 중단/허브 신호 stale 로 판정하고 추정기를 리셋 (위상 free-run 방지)
+#define HS_STALE_TIMEOUT_MS     ((uint32_t)(GAIT_PERIOD_MAX_S * 1000.0f) * 2U)
+
+// 로컬 토크 최종 클램프 (Nm) — _ComputeAssistTorque docstring 의 '포화는
+// 호출부에서 처리' 계약 이행 (현 진폭 프리셋 최대 3.0Nm 대비 최후방어선)
+#define MAX_TORQUE_NM           5.0f
+
 // --- 보조 토크 파라미터 ---
 #define NUM_TORQUE_PRESETS      4           // 토크 프리셋 수
 #define TORQUE_AMP_INIT_NM      1.0f        // 초기 토크 진폭 (Nm) — 두 번째 프리셋
@@ -194,6 +202,7 @@ static void  _RunGaitIntentControl(void);
 static void  _UpdateGaitEstimator(GaitEstimator_t *est, bool is_contact, uint32_t tick);
 static float _ComputeAssistTorque(float phase, AssistMode_t mode, float amplitude);
 static void  _ResetGaitEstimator(GaitEstimator_t *est);
+static bool  _GaitEstimatorStaleReset(GaitEstimator_t *est, bool is_contact, uint32_t tick);
 
 // --- 유틸리티 ---
 static float _ClampFloat(float value, float min_val, float max_val);
@@ -399,6 +408,25 @@ static void _ResetGaitEstimator(GaitEstimator_t *est)
 }
 
 /**
+ * @brief Heel Strike stale 타임아웃 검사 — 위상 free-run 방지
+ * @details 보행 정지/허브 분리로 HS 가 끊겨도 위상 증분이 계속되면 보조 토크
+ *          파형이 영구 반복됨 → 마지막 HS 후 HS_STALE_TIMEOUT_MS 초과 시
+ *          추정기를 리셋해 '첫 HS 이전 토크 0' 방어를 재적용합니다.
+ *          리셋 후 prev_contact 를 현재 접촉값으로 보존해, 신호가 true 로
+ *          얼어붙은 경우 가짜 rising edge(토크 주기적 재개)를 차단합니다.
+ * @return true = stale 리셋 수행됨 (호출부는 위상 갱신을 건너뛸 것)
+ */
+static bool _GaitEstimatorStaleReset(GaitEstimator_t *est, bool is_contact, uint32_t tick)
+{
+    if (est->has_first_hs && ((uint32_t)(tick - est->last_hs_tick) > HS_STALE_TIMEOUT_MS)) {
+        _ResetGaitEstimator(est);
+        est->prev_contact = is_contact;
+        return true;
+    }
+    return false;
+}
+
+/**
  * @brief 보행 위상 추정기 업데이트 (매 1ms 호출)
  * @details
  * [이벤트 감지]
@@ -453,6 +481,11 @@ static void _UpdateGaitEstimator(GaitEstimator_t *est, bool is_contact, uint32_t
     // 현재는 이벤트 발생 기록 (USB 디버그에서 확인 가능)
     // 고급 구현: 유각기 보조 전략 전환 트리거로 활용 가능
     // (Toe Off 시점의 phase ≈ 0.4~0.6 — 보행 패턴에 따라 다름)
+
+    // Heel Strike stale 타임아웃 — 위상 free-run 방지 (상세는 헬퍼 주석)
+    if (_GaitEstimatorStaleReset(est, is_contact, tick)) {
+        return;
+    }
 
     // --- 위상 선형 증분: phase += dt / T_estimated ---
     est->phase += CONTROL_DT / est->period_s;
@@ -551,7 +584,9 @@ static void _RunGaitIntentControl(void)
         tau_l = 0.0f;
     }
 
-    // --- 4. 좌/우 독립 토크 인가 ---
+    // --- 4. 최종 클램프 후 좌/우 독립 토크 인가 ---
+    tau_r = _ClampFloat(tau_r, -MAX_TORQUE_NM, MAX_TORQUE_NM);
+    tau_l = _ClampFloat(tau_l, -MAX_TORQUE_NM, MAX_TORQUE_NM);
     XM_SetAssistTorqueRH(tau_r);
     XM_SetAssistTorqueLH(tau_l);
 

@@ -8,8 +8,8 @@
  *
  * @details
  * XM10에서 FES Hub를 ES-vector SDO 명령으로 제어하는 예제.
- * user_app.c에서 이 파일의 함수를 호출하거나,
- * 이 파일 내용을 user_app.c에 복사하여 사용.
+ * XM_Apps/Control_Task/control_task.c에서 이 파일의 함수를 호출하거나,
+ * 이 파일 내용을 control_task.c에 복사하여 사용.
  *
  * ============================================================
  *  시나리오 (TSM 3-State)
@@ -58,13 +58,13 @@
  *  사용 방법
  * ============================================================
  *
- *  방법 1: user_app.c에 복사
- *    - 이 파일의 내용을 user_app.c에 통째로 복사
+ *  방법 1: control_task.c에 복사
+ *    - 이 파일의 내용을 XM_Apps/Control_Task/control_task.c에 통째로 복사
  *    - Control_Setup/Control_Loop가 그대로 동작
  *
- *  방법 2: user_app.c에서 호출
- *    - user_app.c의 Control_Setup()에서 Ex_FES_Setup() 호출
- *    - user_app.c의 Control_Loop()에서 Ex_FES_Loop() 호출
+ *  방법 2: control_task.c에서 호출
+ *    - control_task.c의 Control_Setup()에서 Ex_FES_Setup() 호출
+ *    - control_task.c의 Control_Loop()에서 Ex_FES_Loop() 호출
  *    - CMakeLists.txt에 이 파일 추가 필요
  *
  * ============================================================

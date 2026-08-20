@@ -56,6 +56,14 @@
  */
 
 // --- 역진자 물리 모델 파라미터 ---
+// [⚠️ 착용 전제] 본 예제는 착용자 몸통(체중 M_BODY_KG)의 역진자 안정화가
+// 목적입니다. 무부하 거치대(벤치)에서 그대로 구동하면 70kg 기준 중력항이
+// 즉시 토크 포화되고, 다리에 장착된 IMU 가 자기 출력의 결과(다리 움직임)를
+// 몸통 운동으로 되먹임하여 클램프 사이를 오가는 빠른 왕복 진동이 발생합니다
+// — 결함이 아니라 모델 전제 밖 사용입니다.
+// 벤치에서 제어 특성을 실험하려면 링크 실측 스케일로 낮추세요 (Ex.35 물성):
+//   M_BODY_KG 0.184f (링크 질량 kg) / L_LEG_M 0.1264f (링크 CoM 거리 m)
+//   + IP_KP/KD 게인도 상응 축소 권장.
 #define M_BODY_KG           70.0f   // 체중 (kg) — 피험자에 맞게 조절
 #define L_LEG_M             0.9f    // 유효 다리 길이 (m) — 고관절~발목
 #define G_ACC               9.81f   // 중력 가속도 (m/s²)
@@ -86,6 +94,7 @@
 #define HOMING_ACCEL_S0         4       // 초기 가속도 (deg/s²)
 #define HOMING_ACCEL_SD         4       // 말기 가속도 (deg/s²)
 #define HOMING_TRANSITION_MS    50      // Homing 완료 후 안정화 지연 (ms)
+#define HOMING_WAIT_MARGIN_MS   2000U   // 호밍 Done 대기 margin — duration + margin 초과 시 fail-closed
 
 /**
  *-----------------------------------------------------------
@@ -148,6 +157,7 @@ static ActivePhase_t s_active_phase = ACTIVE_PHASE_HOMING;
 // --- Homing 상태 ---
 static HomingState_t s_homing_state = HOMING_ENTRY;
 static uint32_t s_homing_timer = 0;
+static uint32_t s_homing_deadline = 0;  // 호밍 Done 대기 데드라인 (duration + margin)
 
 // --- 역진자 제어 변수 ---
 static float s_theta_ref    = 0.0f;    // 기준 골반 각도 (rad) — BTN2로 리셋 가능
@@ -419,6 +429,18 @@ static void _RunHomingSequence(void)
 {
     switch (s_homing_state) {
         case HOMING_ENTRY:
+            /* [v2.6] 벡터 전송(호밍)도 제어 출력 — CONTROL 모드를 먼저 켜야 전송됩니다.
+             * (MONITOR 에서는 벡터 API 가 차단됨. 토크 명령은 이 시점 0 으로 초기화됨) */
+            XM_SetControlMode(XM_CTRL_CONTROL);
+
+            /* [가드] 직전 fail-closed 타임아웃이 요청한 MONITOR 전환 정리
+             * (TRANSITION, ~10 tick)가 끝나 FW 게이트가 CONTROL 로 열릴 때까지
+             * ENTRY 에서 대기 — 가드 없이 진행하면 벡터가 무음 차단된 채 상태만
+             * 전진해 '전송된 적 없는 P-Vector Done' 을 기다리는 空사이클이 생김. */
+            if (XM_GetAppliedControlMode() != XM_MODE_APPLIED_CONTROL) {
+                break;
+            }
+
             // 임피던스 최대값 설정 (안전한 위치 제어를 위해)
             XM_SendIVectorKpKdMax(SYS_NODE_ID_RH, 6, 1);
             XM_SendIVectorKpKdMax(SYS_NODE_ID_LH, 6, 1);
@@ -452,6 +474,8 @@ static void _RunHomingSequence(void)
             XM_SendPVector(SYS_NODE_ID_RH, &pvec_rh);
             XM_SendPVector(SYS_NODE_ID_LH, &pvec_lh);
 
+            // Done 대기 데드라인: 계산된 이동 시간 + margin (duration+margin 패턴)
+            s_homing_deadline = XM_GetTick() + (uint32_t)homing_dur + HOMING_WAIT_MARGIN_MS;
             s_homing_state = HOMING_WAIT_FOR_DONE;
             break;
         }
@@ -464,6 +488,14 @@ static void _RunHomingSequence(void)
                 s_homing_timer = XM_GetTick();
                 s_homing_state = HOMING_FINALIZE_DELAY;
             }
+            // [fail-closed] Done 미수신 (MD 무응답 등) — stiff impedance(Kp80) 상태로
+            // 영구 대기하지 않고, 출력/임피던스를 해제한 뒤 STANDBY 로 복귀합니다.
+            else if ((int32_t)(XM_GetTick() - s_homing_deadline) >= 0) {
+                _SafetyShutdown();
+                s_homing_state = HOMING_ENTRY;
+                XM_SendUsbDebugMessage("[IP] 호밍 Done 타임아웃 - 정지 후 STANDBY 복귀\r\n");
+                XM_TSM_TransitionTo(s_tsm, XM_STATE_STANDBY);
+            }
             break;
 
         case HOMING_FINALIZE_DELAY:
@@ -474,8 +506,8 @@ static void _RunHomingSequence(void)
             break;
 
         case HOMING_FINALIZE_CLEANUP:
-            // Homing 완료 — 토크 직접 제어 모드로 전환
-            XM_SetControlMode(XM_CTRL_TORQUE);
+            // Homing 완료 — 토크 직접 제어 시작 (CONTROL 모드는 HOMING_ENTRY 에서 이미 켜짐)
+            XM_SetControlMode(XM_CTRL_CONTROL);
 
             // 현재 골반 각도를 기준점으로 설정
             s_theta_ref = DEG_TO_RAD(XM.status.h10.pelvicAngle);
