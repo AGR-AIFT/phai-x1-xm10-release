@@ -38,7 +38,6 @@
 | `07_cdc_terminal.png` | Ex.07 USB Print | PuTTY/PhAI Studio 콘솔 캡처 |
 | `08_sensor_print.png` | Ex.08 Sensor Print | 센서 모니터링 출력 |
 | `09_phai_stream.png` | Ex.09 PhAI Stream | PhAI Studio 4 채널 실시간 그래프 |
-| `10a_usb_log.png` | Ex.10a USB 메모리 로깅 | USB 메모리 자동 마운트 + 파일 생성 |
 
 ### Tier 3 — 외골격 제어 (수업 3 주차~)
 

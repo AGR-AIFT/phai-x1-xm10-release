@@ -153,7 +153,7 @@ The underlying protocol details are handled by the library. You only need to cal
 | `while(1)` used inside `Control_Loop` | The loop never returns, starving all other tasks | `Control_Loop` must run once and return — the system handles the repetition |
 | `HAL_Delay(100)` used inside `Control_Loop` | Blocks all other tasks for 100 ms | Use the difference of `XM_GetTick()` to build a non-blocking timer |
 | `XM.status.h10.leftHipAngle` is always 0 | KIT H10 not connected, or assist mode not yet entered | Check `XM_IsCmConnected()` and confirm `h10Mode == XM_H10_MODE_ASSIST` |
-| Called `XM_SetAssistTorque*` but no torque output | Torque control mode was never set | Call `XM_SetControlMode(XM_CTRL_CONTROL)` once when entering Active |
+| Called `XM_SetAssistTorque*` but no torque output | Control mode was never set | Call `XM_SetControlMode(XM_CTRL_CONTROL)` once when entering Active |
 | Modified files in the XM library folders (IOIF, Devices, etc.) | Library code is production firmware — arbitrary changes break the system | Always work inside `Control_Task/` only |
 | `Control_Loop` does not finish within 1 ms | Heavy `sprintf` calls, accumulated floating-point operations, etc. | Measure execution time with [Ex.18 Debug Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) and spread the work across cycles |
 | Attempting to build two examples at the same time | Only one `.c` file is allowed in `Control_Task/` | Copy one example at a time and build |

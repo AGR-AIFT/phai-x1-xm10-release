@@ -46,7 +46,8 @@ description: |
 - 플래시 에러 (`No ST-Link detected`, `Target no device found`)
 - 한글 경로 / MAX_PATH
 - USB-CDC 충돌 (PhAI Studio 동시점유)
-- MSC mount 실패
+- 보드 리비전 / SDK ZIP 불일치 (버튼이 한 칸 밀림)
+- CAN-FD 통신 (KIT H10 · 센서 허브 연동)
 
 ### 4. 3차 참조 — API 레퍼런스
 
@@ -70,7 +71,7 @@ description: |
 | 증상 | 1차 의심 | 빠른 해결 |
 |------|----------|-----------|
 | Ex.07/08/09 — "PhAI Studio 안 잡힘" | USB-CDC 동시점유 | 시리얼 터미널 종료, PhAI 단독 실행 (`@warning` 참조) |
-| Ex.10* — "MSC 마운트 실패" | FAT32 + 32KB cluster 미준수 | USB 메모리 포맷 재시도 (FAT32, AU=32KB) |
+| Ex.36 — "Rev 1.1 에서 링크 실패" | Rev 2.0 전용 예제 | Rev 2.0 보드에서 실행 (파일 헤더에 명시) |
 | Ex.14~17 — "제어 발산" | PD gain 너무 큼 | gain 절반으로 줄이고 재실험 |
 | `undefined reference to '__weak_xxx'` | XM_Lib --whole-archive 미적용 | SDK 폴더 손상 의심, Phase 2 재실행 |
 | "LED 안 켜짐" | 플래시 실패 또는 hang | Phase 4/5 재진행 |
