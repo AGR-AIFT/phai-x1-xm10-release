@@ -2746,7 +2746,8 @@
 - 잘못된 핸들 사용 → API 가 <code>false</code>/<code>NULL</code> 반환 (Use-After-Delete 방어)
 - self-Delete 시도 → no-op (거부)</p>
 <blockquote>
-<p>⚠️ <strong>워치독 (v2.6.0~)</strong>: 시스템 워치독(IWDG, 약 8 초)을 <code>Control_Loop</code> 가 도는 UserTask 가 매 주기 갱신합니다. 따라서 <strong>사용자 task 가 UserTask 보다 높은 우선순위로 8 초 이상 CPU 를 붙들면 보드가 리셋</strong>됩니다. 사용자 task 는 반드시 <code>XM_Task_Sleep()</code> 등으로 주기적으로 CPU 를 양보하고, 긴 블로킹 작업(대용량 Flash erase 등)은 나눠서 수행하세요.</p>
+<p>⚠️ <strong>워치독 (v2.6.0~)</strong>: 시스템 워치독(IWDG, 약 8 초)은 <code>Control_Loop</code> 가 도는 1 kHz 주기에서 갱신됩니다. 따라서 <strong><code>Control_Setup</code> 이나 <code>Control_Loop</code> 안에서 8 초 넘게 머물면 보드가 리셋</strong>됩니다. 오래 걸리는 작업은 나눠서 수행하세요.</p>
+<p>여기서 만드는 사용자 task 는 <code>XM_PRIO_*</code> 가 모두 <code>Control_Loop</code> 보다 낮으므로 (최고값 <code>XM_PRIO_NEAR_REALTIME</code> = 48 &lt; UserTask 54) <strong>워치독 갱신을 막을 수 없습니다.</strong> 무거운 계산은 오히려 이쪽으로 옮기는 것이 안전합니다 (Ex.36 의 NN 학습이 <code>XM_PRIO_BACKGROUND</code> 로 도는 이유).</p>
 </blockquote>
 <hr />
 <h2 id="5-권장-사용-패턴">5. 권장 사용 패턴<a class="headerlink" href="#5-권장-사용-패턴" title="Permanent link">&para;</a></h2>

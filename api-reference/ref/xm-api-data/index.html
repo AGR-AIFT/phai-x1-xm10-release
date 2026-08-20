@@ -3340,7 +3340,7 @@
 <h3 id="xm_setcontrolmode"><code>XM_SetControlMode()</code><a class="headerlink" href="#xm_setcontrolmode" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetControlMode</span><span class="p">(</span><span class="n">XmControlMode_t</span><span class="w"> </span><span class="n">mode</span><span class="p">);</span>
 </code></pre></div>
-<p>로봇의 <strong>출력(구동) ON/OFF</strong>를 결정하는 안전 스위치입니다. <code>XM_CTRL_MONITOR</code>/<code>XM_CTRL_TORQUE</code> 두 모드 모두에서 사용자의 <code>Control_Loop()</code> 알고리즘 자체는 매 tick 그대로 실행됩니다 — 차이는 "계산된 토크 명령을 CM으로 실제 전송하느냐"뿐입니다. 즉 알고리즘을 끄는 스위치가 아니라 <strong>출력만</strong> 끄고 켜는 스위치입니다.</p>
+<p>로봇의 <strong>출력(구동) ON/OFF</strong>를 결정하는 안전 스위치입니다. <code>XM_CTRL_MONITOR</code>/<code>XM_CTRL_CONTROL</code> 두 모드 모두에서 사용자의 <code>Control_Loop()</code> 알고리즘 자체는 매 tick 그대로 실행됩니다 — 차이는 "계산된 토크 명령을 CM으로 실제 전송하느냐"뿐입니다. 즉 알고리즘을 끄는 스위치가 아니라 <strong>출력만</strong> 끄고 켜는 스위치입니다.</p>
 <table>
 <thead>
 <tr>
@@ -3353,16 +3353,16 @@
 <tr>
 <td><code>mode</code></td>
 <td><code>XmControlMode_t</code></td>
-<td><code>XM_CTRL_MONITOR</code>(기본값, 출력 없음) 또는 <code>XM_CTRL_TORQUE</code>(실제 구동)</td>
+<td><code>XM_CTRL_MONITOR</code>(기본값, 출력 없음) 또는 <code>XM_CTRL_CONTROL</code>(실제 구동)</td>
 </tr>
 </tbody>
 </table>
 <p><strong>반환값</strong>: 없음</p>
 <p><strong>안전 로직</strong>: 모드가 바뀌는 순간(특히 MONITOR → TORQUE) 급발진 방지를 위해 <strong>모든 토크 명령이 내부적으로 0으로 초기화</strong>됩니다.</p>
-<p>⚠️ <strong>호출 컨텍스트</strong>: <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준 (헤더에 별도 ISR 안전성 명시 없음). 알고리즘 진입(Entry) 시 <code>XM_CTRL_TORQUE</code>, 종료(Exit) 시 <code>XM_CTRL_MONITOR</code>로 되돌리는 것이 일반적인 패턴입니다.</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준 (헤더에 별도 ISR 안전성 명시 없음). 알고리즘 진입(Entry) 시 <code>XM_CTRL_CONTROL</code>, 종료(Exit) 시 <code>XM_CTRL_MONITOR</code>로 되돌리는 것이 일반적인 패턴입니다.</p>
 <p><strong>예제</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_TORQUE</span><span class="p">);</span><span class="w">   </span><span class="c1">// 실제 구동 시작</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_CONTROL</span><span class="p">);</span><span class="w">   </span><span class="c1">// 실제 구동 시작</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">}</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -3401,7 +3401,7 @@
 <p>⚠️ 인자 순서는 <strong>(오른쪽 rh, 왼쪽 lh)</strong> 입니다. 헷갈리면 <a href="#xm_setassisttorquerh--xm_setassisttorquelh"><code>XM_SetAssistTorqueRH()</code> / <code>XM_SetAssistTorqueLH()</code></a>로 한쪽씩 지정하세요.
 부호·단위·하드 리미트(±10 Nm) 등 상세 규약은 <a href="../../02-h10-control-n-data/#xm_setassisttorque">02문서 §실시간 제어</a>를 참고하세요 — 이 헤더 자체에는 스케일/클램프 값이 정의되어 있지 않습니다(다른 내부 모듈에서 적용).</p>
 </blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: <code>Control_Loop()</code> 기준. <code>XM_SetControlMode(XM_CTRL_TORQUE)</code>가 설정되어 있어야 실제로 전송됩니다.</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: <code>Control_Loop()</code> 기준. <code>XM_SetControlMode(XM_CTRL_CONTROL)</code>가 설정되어 있어야 실제로 전송됩니다.</p>
 <p><strong>예제</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">cmd_R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">rightHipAngle</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">;</span><span class="w">   </span><span class="c1">// 간단한 P 제어</span>
@@ -4015,7 +4015,7 @@
 <p>XM10의 제어 권한(출력 ON/OFF) 모드입니다.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="n">XM_CTRL_MONITOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// 모니터링 모드 (기본값) — 알고리즘은 실행되나 토크 명령 미전송</span>
-<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="n">XM_CTRL_TORQUE</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="c1">// 토크 제어 모드 — 계산된 토크 명령을 주기적으로 전송 (실제 구동)</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="n">XM_CTRL_CONTROL</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="c1">// 토크 제어 모드 — 계산된 토크 명령을 주기적으로 전송 (실제 구동)</span>
 <a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="p">}</span><span class="w"> </span><span class="n">XmControlMode_t</span><span class="p">;</span>
 </code></pre></div>
 <table>
@@ -4034,7 +4034,7 @@
 </tr>
 <tr>
 <td>1</td>
-<td><code>XM_CTRL_TORQUE</code></td>
+<td><code>XM_CTRL_CONTROL</code></td>
 <td>계산된 토크 명령을 실제로 CM에 전송합니다</td>
 </tr>
 </tbody>

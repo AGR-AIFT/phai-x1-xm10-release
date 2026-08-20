@@ -1087,6 +1087,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#xm_getappliedcontrolmode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetAppliedControlMode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_emergencydisengage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_EmergencyDisengage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#xm_seth10assistexistingmode" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2899,6 +2921,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#xm_getappliedcontrolmode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_GetAppliedControlMode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_emergencydisengage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_EmergencyDisengage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#xm_seth10assistexistingmode" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3241,7 +3285,7 @@ The XM10 firmware implements a <strong>Facade pattern</strong> so users can read
 <p><strong>Output (Command Flushing):</strong></p>
 <ul>
 <li>After the user loop finishes, the system checks whether anything in <code>XM.command</code> has changed.</li>
-<li>When in torque control mode (<code>XM_CTRL_TORQUE</code>), updated commands are dispatched to the actual hardware (CAN Bus).</li>
+<li>When in torque control mode (<code>XM_CTRL_CONTROL</code>), updated commands are dispatched to the actual hardware (CAN Bus).</li>
 </ul>
 </li>
 <li>
@@ -3263,9 +3307,12 @@ The XM10 firmware implements a <strong>Facade pattern</strong> so users can read
 <p>Defines the control mode.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="n">XM_CTRL_MONITOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// No control commands sent (Safety)</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">XM_CTRL_TORQUE</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="c1">// Control commands sent (Active)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">XM_CTRL_CONTROL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="c1">// Control commands sent (Active)</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">}</span><span class="w"> </span><span class="n">XmControlMode_t</span><span class="p">;</span>
 </code></pre></div>
+<blockquote>
+<p><strong>Renamed in v2.6.0.</strong> The mode covers P/I vectors as well as torque, so <code>XM_CTRL_TORQUE</code> became <strong><code>XM_CTRL_CONTROL</code></strong>. The old name remains as an alias for the same value, so <strong>existing code still builds</strong> — use <code>XM_CTRL_CONTROL</code> in new code.</p>
+</blockquote>
 <h3 id="xmh10mode_t"><code>XmH10Mode_t</code><a class="headerlink" href="#xmh10mode_t" title="Permanent link">&para;</a></h3>
 <p>The current operating state of the H10 suit.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
@@ -3956,20 +4003,29 @@ Use this function directly when you need finer-grained branching based on NMT st
 <h3 id="xm_setcontrolmode"><code>XM_SetControlMode</code><a class="headerlink" href="#xm_setcontrolmode" title="Permanent link">&para;</a></h3>
 <p>Sets the control authority mode for the robot. This is a safety-critical function.
 The default mode is monitoring mode, which does not send real-time control commands to H10.
-To enable real-time torque control, call <code>XM_SetControlMode</code> with <code>XM_CTRL_TORQUE</code>.</p>
+To enable real-time torque control, call <code>XM_SetControlMode</code> with <code>XM_CTRL_CONTROL</code>.</p>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetControlMode</span><span class="p">(</span><span class="n">XmControlMode_t</span><span class="w"> </span><span class="n">mode</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
   * <code>mode</code>: The mode to set.
       * <code>XM_CTRL_MONITOR</code> (0): <strong>Monitoring mode.</strong> No control commands are sent. (Default, safe)
-      * <code>XM_CTRL_TORQUE</code> (1): <strong>Torque control mode.</strong> Staged torque commands are sent to the motors.</p>
+      * <code>XM_CTRL_CONTROL</code> (1): <strong>Torque control mode.</strong> Staged torque commands are sent to the motors.</p>
 <p><strong>Safety Logic</strong>
-  * Whenever the mode changes (e.g., Monitor → Torque), <strong>all torque commands are immediately reset to 0.0 internally</strong>. This prevents sudden jerk at the moment control begins.</p>
+  * Whenever the mode changes, <strong>all torque commands are immediately reset to 0.0 internally</strong>. This prevents sudden jerk at the moment control begins.</p>
+<p><strong>Returning to MONITOR takes time (v2.6.0+)</strong></p>
+<p>Entering <code>XM_CTRL_CONTROL</code> applies immediately, but going back to <code>XM_CTRL_MONITOR</code> is a <strong>request</strong> that completes in three stages:</p>
+<ol>
+<li>Torque decays exponentially to zero (time constant 0.1 s) and keeps transmitting while it does</li>
+<li>Zero torque is sent several times over, so a single dropped frame cannot leave a stale value</li>
+<li>P/I vector release commands go out → only then does output stop</li>
+</ol>
+<p>This normally takes <strong>0.3–0.6 s</strong>, and your torque and vector commands are ignored during that window.</p>
+<p>The reason: the H10 <strong>holds the last command it received</strong> when new ones stop arriving. Cutting transmission instantly, as before, could leave a non-zero torque applied on the H10 side.</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1">// Enable torque control mode when entering the algorithm</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1">// Enable control mode when entering the algorithm</span>
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_TORQUE</span><span class="p">);</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_CONTROL</span><span class="p">);</span>
 <a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="p">}</span>
 <a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
 <a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1">// Return safely to monitoring mode when exiting the algorithm</span>
@@ -3978,22 +4034,57 @@ To enable real-time torque control, call <code>XM_SetControlMode</code> with <co
 <a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="p">}</span>
 </code></pre></div></p>
 <hr />
+<h3 id="xm_getappliedcontrolmode"><code>XM_GetAppliedControlMode</code><a class="headerlink" href="#xm_getappliedcontrolmode" title="Permanent link">&para;</a></h3>
+<p>Returns the control mode <strong>actually in effect</strong>. <code>XM_SetControlMode()</code> is a request, and because of the three stages above the request and the actual state can briefly differ.</p>
+<p><strong>Syntax</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">XmAppliedMode_t</span><span class="w"> </span><span class="nf">XM_GetAppliedControlMode</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div></p>
+<p><strong>Return</strong>
+  * <code>XM_MODE_APPLIED_CONTROL</code> — control output active
+  * <code>XM_MODE_APPLIED_MONITOR</code> — output blocked
+  * <code>XM_MODE_APPLIED_TRANSITION</code> — switching (torque and vector commands are ignored)</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1">// Move on only once the cleanup has finished</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_GetAppliedControlMode</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_MODE_APPLIED_MONITOR</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="cm">/* output is fully blocked */</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="p">}</span>
+</code></pre></div></p>
+<hr />
+<h3 id="xm_emergencydisengage"><code>XM_EmergencyDisengage</code><a class="headerlink" href="#xm_emergencydisengage" title="Permanent link">&para;</a></h3>
+<p>Skips the decay stage and <strong>confirms zero torque immediately.</strong> Use it when there is no time to ramp down.</p>
+<p><strong>Syntax</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_EmergencyDisengage</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div></p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">something_is_wrong</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">        </span><span class="n">XM_EmergencyDisengage</span><span class="p">();</span><span class="w">   </span><span class="c1">// no ramp, straight to zero</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">        </span><span class="k">return</span><span class="p">;</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">    </span><span class="p">...</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="p">}</span>
+</code></pre></div></p>
+<blockquote>
+<p>For a normal exit use <code>XM_SetControlMode(XM_CTRL_MONITOR)</code>. <code>XM_EmergencyDisengage()</code> is for abnormal situations only.</p>
+<p>⚠️ Neither function replaces a real emergency stop. In wearer trials, the human stop paths in <a href="../../safety/wearable-safety/">Wearable Safety</a> are the primary safety net.</p>
+</blockquote>
+<hr />
 <p>To use H10's built-in assist mode as-is, call <code>XM_SetH10AssistExistingMode</code> with <code>true</code>.</p>
 <h3 id="xm_seth10assistexistingmode"><code>XM_SetH10AssistExistingMode()</code><a class="headerlink" href="#xm_seth10assistexistingmode" title="Permanent link">&para;</a></h3>
 <p>Pass <code>true</code> (1) to enable H10's built-in assist algorithm; pass <code>false</code> (0) to disable it.
 By default, the built-in assist algorithm is disabled when XM10 connects to H10.</p>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetH10AssistExistingMode</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetH10AssistExistingMode</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Returns</strong>
 - <code>true</code>: H10's built-in assist algorithm is enabled.
 - <code>false</code>: H10's built-in assist algorithm is disabled.</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api.h"</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Off_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="n">XM_SetH10AssistExistingMode</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
-<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api.h"</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Off_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">    </span><span class="n">XM_SetH10AssistExistingMode</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="p">}</span>
 </code></pre></div></p>
 <hr />
 <h2 id="data-outputs-control-inputs">Data Outputs (Control Inputs)<a class="headerlink" href="#data-outputs-control-inputs" title="Permanent link">&para;</a></h2>
@@ -4009,7 +4100,7 @@ By default, the built-in assist algorithm is disabled when XM10 connects to H10.
 <figcaption>▲ Figure 1. Example of position trajectory generation using P-Vector</figcaption>
 </figure>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendPVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">PVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">pVector</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendPVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">PVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">pVector</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
 - <code>nodeId</code>: The joint to command (<code>SYS_NODE_ID_RH</code> or <code>SYS_NODE_ID_LH</code>).
@@ -4054,41 +4145,41 @@ None.</p>
 </tbody>
 </table>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdatePassiveMode</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="p">{</span>
-<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">    </span><span class="c1">// Read the current angle from the XM.status.h10 snapshot.</span>
-<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">    </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">currentAngleRH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int16_t</span><span class="p">)</span><span class="n">round</span><span class="p">(</span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">rightHipMotorAngle</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">10.0f</span><span class="p">);</span>
-<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">    </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">currentAngleLH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int16_t</span><span class="p">)</span><span class="n">round</span><span class="p">(</span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">leftHipMotorAngle</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">10.0f</span><span class="p">);</span>
-<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>
-<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">s_passiveState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">PASSIVE_STATE_SET_IMPEDANCE</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="w">            </span><span class="c1">// Set impedance (stiffness) for position control</span>
-<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="w">            </span><span class="n">IVector_t</span><span class="w"> </span><span class="n">stiffImpedance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">epsilon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">};</span>
-<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="w">            </span><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stiffImpedance</span><span class="p">);</span>
-<a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="w">            </span><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stiffImpedance</span><span class="p">);</span>
-<a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a><span class="w">            </span><span class="n">s_passiveState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PASSIVE_STATE_START_MOTION</span><span class="p">;</span>
-<a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a><span class="w">            </span><span class="k">break</span><span class="p">;</span>
-<a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">PASSIVE_STATE_START_MOTION</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a><span class="w">            </span><span class="c1">// Send P-Vector to move to the first target angle</span>
-<a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a><span class="w">            </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">targetAngle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JOINT_ANGLE_MAX_ANGLE_INT16</span><span class="p">;</span>
-<a id="__codelineno-20-19" name="__codelineno-20-19" href="#__codelineno-20-19"></a>
-<a id="__codelineno-20-20" name="__codelineno-20-20" href="#__codelineno-20-20"></a><span class="w">            </span><span class="c1">// Calculate the required duration to reach the target angle</span>
-<a id="__codelineno-20-21" name="__codelineno-20-21" href="#__codelineno-20-21"></a><span class="w">            </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">angleToMoveRH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">targetAngle</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">currentAngleRH</span><span class="p">);</span>
-<a id="__codelineno-20-22" name="__codelineno-20-22" href="#__codelineno-20-22"></a><span class="w">            </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">angleToMoveLH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">targetAngle</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">currentAngleLH</span><span class="p">);</span>
-<a id="__codelineno-20-23" name="__codelineno-20-23" href="#__codelineno-20-23"></a><span class="w">            </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">durationRH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint16_t</span><span class="p">)(((</span><span class="kt">float</span><span class="p">)</span><span class="n">angleToMoveRH</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">PM_SPEED_RH</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1000.0f</span><span class="p">);</span>
-<a id="__codelineno-20-24" name="__codelineno-20-24" href="#__codelineno-20-24"></a><span class="w">            </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">durationLH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint16_t</span><span class="p">)(((</span><span class="kt">float</span><span class="p">)</span><span class="n">angleToMoveLH</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">PM_SPEED_LH</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1000.0f</span><span class="p">);</span>
-<a id="__codelineno-20-25" name="__codelineno-20-25" href="#__codelineno-20-25"></a>
-<a id="__codelineno-20-26" name="__codelineno-20-26" href="#__codelineno-20-26"></a><span class="w">            </span><span class="n">PVector_t</span><span class="w"> </span><span class="n">pVecRH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">yd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">targetAngle</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">durationRH</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">s0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PM_ACCEL_S0_RH</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">sd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PM_ACCEL_SD_RH</span><span class="w"> </span><span class="p">};</span>
-<a id="__codelineno-20-27" name="__codelineno-20-27" href="#__codelineno-20-27"></a><span class="w">            </span><span class="n">PVector_t</span><span class="w"> </span><span class="n">pVecLH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">yd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">targetAngle</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">durationLH</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">s0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PM_ACCEL_S0_LH</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">sd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PM_ACCEL_SD_LH</span><span class="w"> </span><span class="p">};</span>
-<a id="__codelineno-20-28" name="__codelineno-20-28" href="#__codelineno-20-28"></a><span class="w">            </span><span class="n">XM_SendPVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pVecRH</span><span class="p">);</span>
-<a id="__codelineno-20-29" name="__codelineno-20-29" href="#__codelineno-20-29"></a><span class="w">            </span><span class="n">XM_SendPVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pVecLH</span><span class="p">);</span>
-<a id="__codelineno-20-30" name="__codelineno-20-30" href="#__codelineno-20-30"></a>
-<a id="__codelineno-20-31" name="__codelineno-20-31" href="#__codelineno-20-31"></a><span class="w">            </span><span class="n">s_passiveState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PASSIVE_STATE_MOVING_TO_MIN</span><span class="p">;</span>
-<a id="__codelineno-20-32" name="__codelineno-20-32" href="#__codelineno-20-32"></a><span class="w">            </span><span class="k">break</span><span class="p">;</span>
-<a id="__codelineno-20-33" name="__codelineno-20-33" href="#__codelineno-20-33"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-20-34" name="__codelineno-20-34" href="#__codelineno-20-34"></a><span class="w">        </span><span class="c1">// Handle subsequent states</span>
-<a id="__codelineno-20-35" name="__codelineno-20-35" href="#__codelineno-20-35"></a><span class="w">        </span><span class="p">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">UpdatePassiveMode</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="p">{</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="c1">// Read the current angle from the XM.status.h10 snapshot.</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">currentAngleRH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int16_t</span><span class="p">)</span><span class="n">round</span><span class="p">(</span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">rightHipMotorAngle</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">10.0f</span><span class="p">);</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">currentAngleLH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int16_t</span><span class="p">)</span><span class="n">round</span><span class="p">(</span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">leftHipMotorAngle</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">10.0f</span><span class="p">);</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">s_passiveState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">PASSIVE_STATE_SET_IMPEDANCE</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">            </span><span class="c1">// Set impedance (stiffness) for position control</span>
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="w">            </span><span class="n">IVector_t</span><span class="w"> </span><span class="n">stiffImpedance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">epsilon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">            </span><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stiffImpedance</span><span class="p">);</span>
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="w">            </span><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stiffImpedance</span><span class="p">);</span>
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="w">            </span><span class="n">s_passiveState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PASSIVE_STATE_START_MOTION</span><span class="p">;</span>
+<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">PASSIVE_STATE_START_MOTION</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a><span class="w">            </span><span class="c1">// Send P-Vector to move to the first target angle</span>
+<a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a><span class="w">            </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">targetAngle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JOINT_ANGLE_MAX_ANGLE_INT16</span><span class="p">;</span>
+<a id="__codelineno-24-19" name="__codelineno-24-19" href="#__codelineno-24-19"></a>
+<a id="__codelineno-24-20" name="__codelineno-24-20" href="#__codelineno-24-20"></a><span class="w">            </span><span class="c1">// Calculate the required duration to reach the target angle</span>
+<a id="__codelineno-24-21" name="__codelineno-24-21" href="#__codelineno-24-21"></a><span class="w">            </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">angleToMoveRH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">targetAngle</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">currentAngleRH</span><span class="p">);</span>
+<a id="__codelineno-24-22" name="__codelineno-24-22" href="#__codelineno-24-22"></a><span class="w">            </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">angleToMoveLH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">targetAngle</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">currentAngleLH</span><span class="p">);</span>
+<a id="__codelineno-24-23" name="__codelineno-24-23" href="#__codelineno-24-23"></a><span class="w">            </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">durationRH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint16_t</span><span class="p">)(((</span><span class="kt">float</span><span class="p">)</span><span class="n">angleToMoveRH</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">PM_SPEED_RH</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1000.0f</span><span class="p">);</span>
+<a id="__codelineno-24-24" name="__codelineno-24-24" href="#__codelineno-24-24"></a><span class="w">            </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">durationLH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint16_t</span><span class="p">)(((</span><span class="kt">float</span><span class="p">)</span><span class="n">angleToMoveLH</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">PM_SPEED_LH</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1000.0f</span><span class="p">);</span>
+<a id="__codelineno-24-25" name="__codelineno-24-25" href="#__codelineno-24-25"></a>
+<a id="__codelineno-24-26" name="__codelineno-24-26" href="#__codelineno-24-26"></a><span class="w">            </span><span class="n">PVector_t</span><span class="w"> </span><span class="n">pVecRH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">yd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">targetAngle</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">durationRH</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">s0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PM_ACCEL_S0_RH</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">sd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PM_ACCEL_SD_RH</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-24-27" name="__codelineno-24-27" href="#__codelineno-24-27"></a><span class="w">            </span><span class="n">PVector_t</span><span class="w"> </span><span class="n">pVecLH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">yd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">targetAngle</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">durationLH</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">s0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PM_ACCEL_S0_LH</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">sd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PM_ACCEL_SD_LH</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-24-28" name="__codelineno-24-28" href="#__codelineno-24-28"></a><span class="w">            </span><span class="n">XM_SendPVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pVecRH</span><span class="p">);</span>
+<a id="__codelineno-24-29" name="__codelineno-24-29" href="#__codelineno-24-29"></a><span class="w">            </span><span class="n">XM_SendPVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pVecLH</span><span class="p">);</span>
+<a id="__codelineno-24-30" name="__codelineno-24-30" href="#__codelineno-24-30"></a>
+<a id="__codelineno-24-31" name="__codelineno-24-31" href="#__codelineno-24-31"></a><span class="w">            </span><span class="n">s_passiveState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PASSIVE_STATE_MOVING_TO_MIN</span><span class="p">;</span>
+<a id="__codelineno-24-32" name="__codelineno-24-32" href="#__codelineno-24-32"></a><span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<a id="__codelineno-24-33" name="__codelineno-24-33" href="#__codelineno-24-33"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-24-34" name="__codelineno-24-34" href="#__codelineno-24-34"></a><span class="w">        </span><span class="c1">// Handle subsequent states</span>
+<a id="__codelineno-24-35" name="__codelineno-24-35" href="#__codelineno-24-35"></a><span class="w">        </span><span class="p">...</span>
 </code></pre></div></p>
 <h3 id="xm_sendivector"><code>XM_SendIVector()</code><a class="headerlink" href="#xm_sendivector" title="Permanent link">&para;</a></h3>
 <p>Sends <strong>impedance control parameters</strong> (<code>I-Vector</code>) to configure the robot joint to behave like a virtual spring or damper.
@@ -4100,7 +4191,7 @@ You must carefully tune the maximum values of <code>kp</code> and <code>kd</code
 <figcaption>▲ Figure 2. Simulation example of position-based control using I-Vector (red) and P-Vector (blue)</figcaption>
 </figure>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendIVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">IVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">iVector</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendIVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">IVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">iVector</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
 - <code>nodeId</code>: The joint to command.
@@ -4151,15 +4242,15 @@ None.</p>
 </tbody>
 </table>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">EnterStandbyMode</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="p">{</span>
-<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="c1">// Release impedance parameters</span>
-<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">    </span><span class="n">IVector_t</span><span class="w"> </span><span class="n">stiffImpedance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">epsilon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">};</span>
-<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">    </span><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stiffImpedance</span><span class="p">);</span>
-<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">    </span><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stiffImpedance</span><span class="p">);</span>
-<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="w">    </span><span class="n">XM_ClearPVectorDoneFlag</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">);</span>
-<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="w">    </span><span class="n">XM_ClearPVectorDoneFlag</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">);</span>
-<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">EnterStandbyMode</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="p">{</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">    </span><span class="c1">// Release impedance parameters</span>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">    </span><span class="n">IVector_t</span><span class="w"> </span><span class="n">stiffImpedance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">epsilon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">    </span><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stiffImpedance</span><span class="p">);</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">    </span><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stiffImpedance</span><span class="p">);</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">    </span><span class="n">XM_ClearPVectorDoneFlag</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">);</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="w">    </span><span class="n">XM_ClearPVectorDoneFlag</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">);</span>
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="p">}</span>
 </code></pre></div></p>
 <h3 id="xm_sendfvector"><code>XM_SendFVector()</code><a class="headerlink" href="#xm_sendfvector" title="Permanent link">&para;</a></h3>
 <p>Sends a <strong>force-based trajectory</strong> (<code>F-Vector</code>) that commands the motor driver to generate a <strong>predefined torque trajectory over a specified duration</strong>.</p>
@@ -4170,7 +4261,7 @@ None.</p>
 <figcaption>▲ Figure 3. Example of force trajectory generation using F-Vector</figcaption>
 </figure>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendFVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">FVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">fVector</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendFVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">FVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">fVector</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
 - <code>nodeId</code>: The joint to command.
@@ -4215,82 +4306,82 @@ None.</p>
 </tbody>
 </table>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">(</span><span class="n">coming</span><span class="w"> </span><span class="n">soon</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="p">(</span><span class="n">coming</span><span class="w"> </span><span class="n">soon</span><span class="p">)</span>
 </code></pre></div></p>
 <h3 id="xm_sendpvectorreset"><code>XM_SendPVectorReset()</code><a class="headerlink" href="#xm_sendpvectorreset" title="Permanent link">&para;</a></h3>
 <p>Immediately cancels the currently executing or pending <code>P-Vector</code> command. Use this to abort the current motion in an emergency or when the intended trajectory changes.</p>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendPVectorReset</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendPVectorReset</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
 - <code>nodeId</code>: The joint whose P-Vector should be reset (<code>SYS_NODE_ID_RH</code> or <code>SYS_NODE_ID_LH</code>).</p>
 <p><strong>Returns</strong>
 None.</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ManageModeTransition</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="p">{</span>
-<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">    </span><span class="c1">// Get the current mode</span>
-<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">    </span><span class="n">XmH10Mode_t</span><span class="w"> </span><span class="n">currentSuitMode</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">h10Mode</span><span class="p">;</span>
-<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>
-<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">s_modeTransitionState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">MODE_TRANSITION_IDLE</span><span class="p">:</span>
-<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="w">            </span><span class="c1">// Check whether a mode change has been detected.</span>
-<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">currentSuitMode</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">s_previousSuitMode</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>
-<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a><span class="w">                </span><span class="c1">// Transition from Passive Mode to Standby Mode:</span>
-<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="w">                </span><span class="c1">// Begin the safe-stop sequence for Passive Mode, which was using P-Vectors.</span>
-<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a><span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_previousSuitMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_H10_MODE_ASSIST</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">currentSuitMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_H10_MODE_STANDBY</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-26-14" name="__codelineno-26-14" href="#__codelineno-26-14"></a><span class="w">                    </span><span class="n">XM_SendPVectorReset</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">);</span><span class="w">   </span><span class="c1">// Cancel P-Vector trajectory generation</span>
-<a id="__codelineno-26-15" name="__codelineno-26-15" href="#__codelineno-26-15"></a><span class="w">                    </span><span class="n">XM_SendPVectorReset</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">);</span>
-<a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a><span class="w">                    </span><span class="n">s_modeTransitionTimer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_GetTick</span><span class="p">();</span><span class="w">  </span><span class="c1">// Start the reset delay timer</span>
-<a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a><span class="w">                    </span><span class="n">s_modeTransitionState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MODE_TRANSITION_STOP_PENDING</span><span class="p">;</span><span class="w"> </span><span class="c1">// Advance to next state</span>
-<a id="__codelineno-26-18" name="__codelineno-26-18" href="#__codelineno-26-18"></a><span class="w">                </span><span class="p">}</span>
-<a id="__codelineno-26-19" name="__codelineno-26-19" href="#__codelineno-26-19"></a><span class="w">            </span><span class="p">}</span>
-<a id="__codelineno-26-20" name="__codelineno-26-20" href="#__codelineno-26-20"></a><span class="w">            </span><span class="k">break</span><span class="p">;</span>
-<a id="__codelineno-26-21" name="__codelineno-26-21" href="#__codelineno-26-21"></a><span class="w">        </span><span class="c1">// Handle subsequent states</span>
-<a id="__codelineno-26-22" name="__codelineno-26-22" href="#__codelineno-26-22"></a><span class="w">        </span><span class="p">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ManageModeTransition</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="p">{</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="w">    </span><span class="c1">// Get the current mode</span>
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="w">    </span><span class="n">XmH10Mode_t</span><span class="w"> </span><span class="n">currentSuitMode</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">h10Mode</span><span class="p">;</span>
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">s_modeTransitionState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">MODE_TRANSITION_IDLE</span><span class="p">:</span>
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="w">            </span><span class="c1">// Check whether a mode change has been detected.</span>
+<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">currentSuitMode</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">s_previousSuitMode</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a>
+<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="w">                </span><span class="c1">// Transition from Passive Mode to Standby Mode:</span>
+<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a><span class="w">                </span><span class="c1">// Begin the safe-stop sequence for Passive Mode, which was using P-Vectors.</span>
+<a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a><span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_previousSuitMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_H10_MODE_ASSIST</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">currentSuitMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_H10_MODE_STANDBY</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a><span class="w">                    </span><span class="n">XM_SendPVectorReset</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">);</span><span class="w">   </span><span class="c1">// Cancel P-Vector trajectory generation</span>
+<a id="__codelineno-30-15" name="__codelineno-30-15" href="#__codelineno-30-15"></a><span class="w">                    </span><span class="n">XM_SendPVectorReset</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">);</span>
+<a id="__codelineno-30-16" name="__codelineno-30-16" href="#__codelineno-30-16"></a><span class="w">                    </span><span class="n">s_modeTransitionTimer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_GetTick</span><span class="p">();</span><span class="w">  </span><span class="c1">// Start the reset delay timer</span>
+<a id="__codelineno-30-17" name="__codelineno-30-17" href="#__codelineno-30-17"></a><span class="w">                    </span><span class="n">s_modeTransitionState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MODE_TRANSITION_STOP_PENDING</span><span class="p">;</span><span class="w"> </span><span class="c1">// Advance to next state</span>
+<a id="__codelineno-30-18" name="__codelineno-30-18" href="#__codelineno-30-18"></a><span class="w">                </span><span class="p">}</span>
+<a id="__codelineno-30-19" name="__codelineno-30-19" href="#__codelineno-30-19"></a><span class="w">            </span><span class="p">}</span>
+<a id="__codelineno-30-20" name="__codelineno-30-20" href="#__codelineno-30-20"></a><span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<a id="__codelineno-30-21" name="__codelineno-30-21" href="#__codelineno-30-21"></a><span class="w">        </span><span class="c1">// Handle subsequent states</span>
+<a id="__codelineno-30-22" name="__codelineno-30-22" href="#__codelineno-30-22"></a><span class="w">        </span><span class="p">...</span>
 </code></pre></div></p>
 <h3 id="xm_clearpvectordoneflag"><code>XM_ClearPVectorDoneFlag()</code><a class="headerlink" href="#xm_clearpvectordoneflag" title="Permanent link">&para;</a></h3>
 <p>After you detect that <code>isPVectorRHDone</code> or <code>isPVectorLHDone</code> has become <code>true</code> via <code>XM.status.h10</code>, you must call this function manually to acknowledge the event to XM10. Without this call, the flag remains <code>true</code> and the same completion event will be processed repeatedly.
 Calling this function resets the corresponding <code>isPVectorRHDone</code> or <code>isPVectorLHDone</code> flag (via <code>XM.status.h10</code>) to <code>false</code>.</p>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_ClearPVectorDoneFlag</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_ClearPVectorDoneFlag</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
 - <code>nodeId</code>: The joint whose completion flag should be cleared (<code>SYS_NODE_ID_RH</code> or <code>SYS_NODE_ID_LH</code>).</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">EnterStandbyMode</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="p">{</span>
-<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="c1">// Release impedance parameters</span>
-<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">    </span><span class="n">IVector_t</span><span class="w"> </span><span class="n">stiffImpedance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">epsilon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">};</span>
-<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">    </span><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stiffImpedance</span><span class="p">);</span>
-<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="w">    </span><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stiffImpedance</span><span class="p">);</span>
-<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="w">    </span><span class="n">XM_ClearPVectorDoneFlag</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">);</span>
-<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="w">    </span><span class="n">XM_ClearPVectorDoneFlag</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">);</span>
-<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">EnterStandbyMode</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="p">{</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="c1">// Release impedance parameters</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">    </span><span class="n">IVector_t</span><span class="w"> </span><span class="n">stiffImpedance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">epsilon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">kd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="w">    </span><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stiffImpedance</span><span class="p">);</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="w">    </span><span class="n">XM_SendIVector</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stiffImpedance</span><span class="p">);</span>
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="w">    </span><span class="n">XM_ClearPVectorDoneFlag</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">);</span>
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="w">    </span><span class="n">XM_ClearPVectorDoneFlag</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">);</span>
+<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a><span class="p">}</span>
 </code></pre></div></p>
 <h3 id="xm_sendivectorkpkdmax"><code>XM_SendIVectorKpKdMax()</code><a class="headerlink" href="#xm_sendivectorkpkdmax" title="Permanent link">&para;</a></h3>
 <p>Sets the <strong>maximum Kp (stiffness) and Kd (damping) values</strong> used in the impedance control for a given joint. These maximums serve as the 100% reference when <code>kp</code> and <code>kd</code> are specified as percentages in <code>XM_SendIVector</code>.</p>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendIVectorKpKdMax</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">kpMax</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">kdMax</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendIVectorKpKdMax</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">kpMax</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">kdMax</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
 - <code>nodeId</code>: The joint to configure (<code>SYS_NODE_ID_RH</code> or <code>SYS_NODE_ID_LH</code>).
 - <code>kpMax</code>: The maximum Kp (virtual spring stiffness) applied when <code>XM_SendIVector</code>'s <code>kp</code> parameter is 100%.
 - <code>kdMax</code>: The maximum Kd (virtual damper stiffness) applied when <code>XM_SendIVector</code>'s <code>kd</code> parameter is 100%.</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">InitHoming</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="p">{</span>
-<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">homingTimer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="w">    </span><span class="c1">// --- Homing state machine ---</span>
-<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">s_homingState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">HOMING_ENTRY</span><span class="p">:</span>
-<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="w">            </span><span class="n">XM_SendIVectorKpKdMax</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
-<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="w">            </span><span class="n">XM_SendIVectorKpKdMax</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
-<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="w">            </span><span class="n">s_homingState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HOMING_SET_IMPEDANCE</span><span class="p">;</span>
-<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="w">            </span><span class="k">break</span><span class="p">;</span>
-<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="w">        </span><span class="c1">// Handle subsequent states</span>
-<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a><span class="w">        </span><span class="p">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">InitHoming</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="p">{</span>
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">homingTimer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="w">    </span><span class="c1">// --- Homing state machine ---</span>
+<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">s_homingState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">HOMING_ENTRY</span><span class="p">:</span>
+<a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a><span class="w">            </span><span class="n">XM_SendIVectorKpKdMax</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a><span class="w">            </span><span class="n">XM_SendIVectorKpKdMax</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a><span class="w">            </span><span class="n">s_homingState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HOMING_SET_IMPEDANCE</span><span class="p">;</span>
+<a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<a id="__codelineno-34-11" name="__codelineno-34-11" href="#__codelineno-34-11"></a><span class="w">        </span><span class="c1">// Handle subsequent states</span>
+<a id="__codelineno-34-12" name="__codelineno-34-12" href="#__codelineno-34-12"></a><span class="w">        </span><span class="p">...</span>
 </code></pre></div></p>
 <hr />
 <h3 id="set-routines-and-parameters"><code>Set...</code> Routines and Parameters<a class="headerlink" href="#set-routines-and-parameters" title="Permanent link">&para;</a></h3>
@@ -4298,17 +4389,17 @@ Calling this function resets the corresponding <code>isPVectorRHDone</code> or <
 <h4 id="1-angle-and-velocity-limits">1. Angle and Velocity Limits<a class="headerlink" href="#1-angle-and-velocity-limits" title="Permanent link">&para;</a></h4>
 <p>Constrains robot motion to a physically safe range.</p>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="c1">// Enable / disable the angle limit routine</span>
-<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDegreeLimitRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
-<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>
-<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="c1">// Set the angle limit range</span>
-<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDegreeLimit</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">upperLimit</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lowerLimit</span><span class="p">);</span>
-<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>
-<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="c1">// Enable / disable the velocity limit routine</span>
-<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetVelocityLimitRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
-<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a>
-<a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a><span class="c1">// Set the velocity limit range</span>
-<a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetVelocityLimit</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">upperLimit</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lowerLimit</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="c1">// Enable / disable the angle limit routine</span>
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDegreeLimitRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a>
+<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="c1">// Set the angle limit range</span>
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDegreeLimit</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">upperLimit</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lowerLimit</span><span class="p">);</span>
+<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a>
+<a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a><span class="c1">// Enable / disable the velocity limit routine</span>
+<a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetVelocityLimitRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
+<a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a>
+<a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a><span class="c1">// Set the velocity limit range</span>
+<a id="__codelineno-35-11" name="__codelineno-35-11" href="#__codelineno-35-11"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetVelocityLimit</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">upperLimit</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lowerLimit</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
 - <code>nodeId</code>: The joint to control (<code>SYS_NODE_ID_RH</code> or <code>SYS_NODE_ID_LH</code>).
@@ -4316,14 +4407,14 @@ Calling this function resets the corresponding <code>isPVectorRHDone</code> or <
 - <code>upperLimit</code>: Upper bound of the range (unit: degrees or deg/s).
 - <code>lowerLimit</code>: Lower bound of the range (unit: degrees or deg/s).</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="c1">// Enable the angle limit for the right leg</span>
-<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="c1">// and set the range of motion to -30 to 30 degrees.</span>
-<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="n">XM_SetDegreeLimitRoutine</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="n">XM_SetDegreeLimit</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="mf">30.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-30.0f</span><span class="p">);</span>
-<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>
-<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="c1">// Limit the left leg's maximum speed to 100 deg/s.</span>
-<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="n">XM_SetVelocityLimitRoutine</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="n">XM_SetVelocityLimit</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-100.0f</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="c1">// Enable the angle limit for the right leg</span>
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="c1">// and set the range of motion to -30 to 30 degrees.</span>
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="n">XM_SetDegreeLimitRoutine</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a><span class="n">XM_SetDegreeLimit</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="mf">30.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-30.0f</span><span class="p">);</span>
+<a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a>
+<a id="__codelineno-36-6" name="__codelineno-36-6" href="#__codelineno-36-6"></a><span class="c1">// Limit the left leg's maximum speed to 100 deg/s.</span>
+<a id="__codelineno-36-7" name="__codelineno-36-7" href="#__codelineno-36-7"></a><span class="n">XM_SetVelocityLimitRoutine</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<a id="__codelineno-36-8" name="__codelineno-36-8" href="#__codelineno-36-8"></a><span class="n">XM_SetVelocityLimit</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-100.0f</span><span class="p">);</span>
 </code></pre></div></p>
 <hr />
 <h4 id="2-disturbance-observer-dob">2. Disturbance Observer (DOB)<a class="headerlink" href="#2-disturbance-observer-dob" title="Permanent link">&para;</a></h4>
@@ -4331,32 +4422,32 @@ Calling this function resets the corresponding <code>isPVectorRHDone</code> or <
 <strong>To use DOB, the <code>KIT H10</code> actuators must have undergone System Identification for DOB, and the identification data must be stored in the motor driver. (System Identification for DOB has not been performed on the current <code>KIT H10</code>; this will change in a future revision.)</strong>
 <strong>For details on KIT H10's DOB, refer to <code>angel Robotics-Control Algorithm</code> (coming soon).</strong></p>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDOBRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDOBRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
 - <code>nodeId</code>: The joint to control (<code>SYS_NODE_ID_RH</code> or <code>SYS_NODE_ID_LH</code>).
 - <code>isSet</code>: Pass <code>true</code> to enable the DOB routine; pass <code>false</code> to disable it.</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="n">XM_SetDOBRoutine</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="n">XM_SetDOBRoutine</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
 </code></pre></div></p>
 <hr />
 <h4 id="3-compensation-gain">3. Compensation Gain<a class="headerlink" href="#3-compensation-gain" title="Permanent link">&para;</a></h4>
 <p>Adjusts the strength of KIT H10's built-in gravity/velocity compensation modes.
 <strong>For details on KIT H10's compensation, refer to <code>angel Robotics-Compensation</code> (coming soon).</strong></p>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="c1">// General compensation gain (gravity compensation, etc.)</span>
-<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetNormalCompGain</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">gain</span><span class="p">);</span>
-<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a>
-<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="c1">// Resistive compensation gain (resistance training mode)</span>
-<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetResistiveCompGain</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">gain</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="c1">// General compensation gain (gravity compensation, etc.)</span>
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetNormalCompGain</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">gain</span><span class="p">);</span>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a>
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="c1">// Resistive compensation gain (resistance training mode)</span>
+<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetResistiveCompGain</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">gain</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
 - <code>nodeId</code>: The joint to control (<code>SYS_NODE_ID_RH</code> or <code>SYS_NODE_ID_LH</code>).
 - <code>gain</code>: The gain value to set. The range and effect depend on the compensation mode.</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="c1">// Apply strong resistance to the right leg in resistance training mode.</span>
-<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="kt">float</span><span class="w"> </span><span class="n">strongResistance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.8f</span><span class="p">;</span>
-<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="n">XM_SetResistiveCompGain</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="n">strongResistance</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="c1">// Apply strong resistance to the right leg in resistance training mode.</span>
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="kt">float</span><span class="w"> </span><span class="n">strongResistance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.8f</span><span class="p">;</span>
+<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="n">XM_SetResistiveCompGain</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">,</span><span class="w"> </span><span class="n">strongResistance</span><span class="p">);</span>
 </code></pre></div></p>
 <hr />
 <h3 id="xm_senduserbodydata"><code>XM_SendUserBodyData()</code><a class="headerlink" href="#xm_senduserbodydata" title="Permanent link">&para;</a></h3>
@@ -4412,7 +4503,7 @@ Calling this function resets the corresponding <code>isPVectorRHDone</code> or <
 </tbody>
 </table>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendUserBodyData</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">bodyData</span><span class="p">[</span><span class="mi">8</span><span class="p">]);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendUserBodyData</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">bodyData</span><span class="p">[</span><span class="mi">8</span><span class="p">]);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong></p>
 <p><code>bodyData</code> — array of 8 <code>uint32_t</code> body parameters:</p>
@@ -4477,16 +4568,16 @@ Calling this function resets the corresponding <code>isPVectorRHDone</code> or <
 </tbody>
 </table>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="c1">// Fill in body parameters and send them to the CM.</span>
-<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">73000</span><span class="p">;</span><span class="w"> </span><span class="c1">// 73 kg</span>
-<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1800</span><span class="p">;</span><span class="w">  </span><span class="c1">// 180 cm</span>
-<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span><span class="w">   </span><span class="c1">// 0.5 m</span>
-<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">495</span><span class="p">;</span><span class="w">   </span><span class="c1">// 0.495 m</span>
-<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">440</span><span class="p">;</span><span class="w">   </span><span class="c1">// 0.440 m</span>
-<a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">435</span><span class="p">;</span><span class="w">   </span><span class="c1">// 0.435 m</span>
-<a id="__codelineno-38-8" name="__codelineno-38-8" href="#__codelineno-38-8"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span><span class="p">;</span><span class="w">    </span><span class="c1">// 0.06 m</span>
-<a id="__codelineno-38-9" name="__codelineno-38-9" href="#__codelineno-38-9"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">59</span><span class="p">;</span><span class="w">    </span><span class="c1">// 0.059 m</span>
-<a id="__codelineno-38-10" name="__codelineno-38-10" href="#__codelineno-38-10"></a><span class="n">XM_SendUserBodyData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bodyData</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="c1">// Fill in body parameters and send them to the CM.</span>
+<a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">73000</span><span class="p">;</span><span class="w"> </span><span class="c1">// 73 kg</span>
+<a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1800</span><span class="p">;</span><span class="w">  </span><span class="c1">// 180 cm</span>
+<a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span><span class="w">   </span><span class="c1">// 0.5 m</span>
+<a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">495</span><span class="p">;</span><span class="w">   </span><span class="c1">// 0.495 m</span>
+<a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">440</span><span class="p">;</span><span class="w">   </span><span class="c1">// 0.440 m</span>
+<a id="__codelineno-42-7" name="__codelineno-42-7" href="#__codelineno-42-7"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">435</span><span class="p">;</span><span class="w">   </span><span class="c1">// 0.435 m</span>
+<a id="__codelineno-42-8" name="__codelineno-42-8" href="#__codelineno-42-8"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span><span class="p">;</span><span class="w">    </span><span class="c1">// 0.06 m</span>
+<a id="__codelineno-42-9" name="__codelineno-42-9" href="#__codelineno-42-9"></a><span class="n">bodyData</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">59</span><span class="p">;</span><span class="w">    </span><span class="c1">// 0.059 m</span>
+<a id="__codelineno-42-10" name="__codelineno-42-10" href="#__codelineno-42-10"></a><span class="n">XM_SendUserBodyData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bodyData</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
 </code></pre></div></p>
 <hr />
 <h2 id="real-time-control">Real-Time Control<a class="headerlink" href="#real-time-control" title="Permanent link">&para;</a></h2>
@@ -4497,7 +4588,7 @@ Reading data is done by accessing the struct fields directly, but <strong>all co
 The actual transmission (<code>Output</code>) is handled internally by the <code>Core Process</code> following the IPO model.
 Users only need to compute the desired torque and set it through this function.</p>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorque</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">rh</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lh</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorque</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">rh</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lh</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
   * <code>rh</code>: Right hip joint assist torque (<strong>Unit: Nm</strong>)
@@ -4515,78 +4606,78 @@ Users only need to compute the desired torque and set it through this function.<
   * Stores the values in the <code>XM.command</code> struct and sets the <code>torque_updated</code> dirty flag.
   * The actual transmission occurs at the end of the current control cycle (<code>_FlushAllOutputs</code>).</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="w">    </span><span class="c1">// P-control: generate torque proportional to the current angle</span>
-<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">cmd_R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">rightHipAngle</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">;</span>
-<a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">cmd_L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">leftHipAngle</span><span class="w">  </span><span class="o">*</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">;</span>
-<a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a>
-<a id="__codelineno-40-6" name="__codelineno-40-6" href="#__codelineno-40-6"></a><span class="w">    </span><span class="c1">// Set torque commands for both legs</span>
-<a id="__codelineno-40-7" name="__codelineno-40-7" href="#__codelineno-40-7"></a><span class="w">    </span><span class="n">XM_SetAssistTorque</span><span class="p">(</span><span class="n">cmd_R</span><span class="p">,</span><span class="w"> </span><span class="n">cmd_L</span><span class="p">);</span>
-<a id="__codelineno-40-8" name="__codelineno-40-8" href="#__codelineno-40-8"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="w">    </span><span class="c1">// P-control: generate torque proportional to the current angle</span>
+<a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">cmd_R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">rightHipAngle</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">;</span>
+<a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">cmd_L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">leftHipAngle</span><span class="w">  </span><span class="o">*</span><span class="w"> </span><span class="mf">0.5f</span><span class="p">;</span>
+<a id="__codelineno-44-5" name="__codelineno-44-5" href="#__codelineno-44-5"></a>
+<a id="__codelineno-44-6" name="__codelineno-44-6" href="#__codelineno-44-6"></a><span class="w">    </span><span class="c1">// Set torque commands for both legs</span>
+<a id="__codelineno-44-7" name="__codelineno-44-7" href="#__codelineno-44-7"></a><span class="w">    </span><span class="n">XM_SetAssistTorque</span><span class="p">(</span><span class="n">cmd_R</span><span class="p">,</span><span class="w"> </span><span class="n">cmd_L</span><span class="p">);</span>
+<a id="__codelineno-44-8" name="__codelineno-44-8" href="#__codelineno-44-8"></a><span class="p">}</span>
 </code></pre></div></p>
 <hr />
 <h3 id="xm_setassisttorquerh--xm_setassisttorquelh"><code>XM_SetAssistTorqueRH</code> / <code>XM_SetAssistTorqueLH</code><a class="headerlink" href="#xm_setassisttorquerh--xm_setassisttorquelh" title="Permanent link">&para;</a></h3>
 <p>Sets the torque for a single leg independently. The opposite leg's torque value remains unchanged.</p>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorqueRH</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">rh</span><span class="p">);</span>
-<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorqueLH</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">lh</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorqueRH</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">rh</span><span class="p">);</span>
+<a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorqueLH</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">lh</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Parameters</strong>
   * <code>rh</code> / <code>lh</code>: Assist torque for the respective joint (<strong>Unit: Nm</strong>)</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="c1">// Set the right leg to 5.0 Nm (left leg retains its previous value)</span>
-<a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="n">XM_SetAssistTorqueRH</span><span class="p">(</span><span class="mf">5.0f</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="c1">// Set the right leg to 5.0 Nm (left leg retains its previous value)</span>
+<a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="n">XM_SetAssistTorqueRH</span><span class="p">(</span><span class="mf">5.0f</span><span class="p">);</span>
 </code></pre></div></p>
 <hr />
 <h2 id="utilities">Utilities<a class="headerlink" href="#utilities" title="Permanent link">&para;</a></h2>
 <h3 id="xm_gettick"><code>XM_GetTick()</code><a class="headerlink" href="#xm_gettick" title="Permanent link">&para;</a></h3>
 <p>Returns the elapsed time since system boot in milliseconds (ms). This is essential for time-based control: measuring the duration of an action, running logic for a fixed period, and so on.</p>
 <p><strong>Syntax</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetTick</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetTick</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div></p>
 <p><strong>Returns</strong>
 - <code>uint32_t</code>: Elapsed time since boot (ms). This value rolls over to 0 approximately every 49.7 days.</p>
 <p><strong>Example</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ManageModeTransition</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="p">{</span>
-<a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a><span class="w">    </span><span class="n">XmH10Mode_t</span><span class="w"> </span><span class="n">currentSuitMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">h10Mode</span><span class="p">;</span>
-<a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a>
-<a id="__codelineno-44-5" name="__codelineno-44-5" href="#__codelineno-44-5"></a><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">s_modeTransitionState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-44-6" name="__codelineno-44-6" href="#__codelineno-44-6"></a><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">MODE_TRANSITION_IDLE</span><span class="p">:</span>
-<a id="__codelineno-44-7" name="__codelineno-44-7" href="#__codelineno-44-7"></a><span class="w">            </span><span class="c1">// Check whether a mode change has been detected.</span>
-<a id="__codelineno-44-8" name="__codelineno-44-8" href="#__codelineno-44-8"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">currentSuitMode</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">s_previousSuitMode</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-44-9" name="__codelineno-44-9" href="#__codelineno-44-9"></a>
-<a id="__codelineno-44-10" name="__codelineno-44-10" href="#__codelineno-44-10"></a><span class="w">                </span><span class="c1">// Transition from Active-Assist Mode to Standby Mode:</span>
-<a id="__codelineno-44-11" name="__codelineno-44-11" href="#__codelineno-44-11"></a><span class="w">                </span><span class="c1">// [CASE 1] Begin the safe-stop sequence for AA Mode, which was using P-Vectors during homing.</span>
-<a id="__codelineno-44-12" name="__codelineno-44-12" href="#__codelineno-44-12"></a><span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_previousSuitMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_H10_MODE_ASSIST</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">currentSuitMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_H10_MODE_STANDBY</span><span class="w"> </span>
-<a id="__codelineno-44-13" name="__codelineno-44-13" href="#__codelineno-44-13"></a><span class="w">                    </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s_aaGlobalState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">AA_STATE_HOMING</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-44-14" name="__codelineno-44-14" href="#__codelineno-44-14"></a><span class="w">                    </span><span class="n">XM_SendPVectorReset</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">);</span><span class="w">   </span><span class="c1">// Cancel P-Vector trajectory generation</span>
-<a id="__codelineno-44-15" name="__codelineno-44-15" href="#__codelineno-44-15"></a><span class="w">                    </span><span class="n">XM_SendPVectorReset</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">);</span>
-<a id="__codelineno-44-16" name="__codelineno-44-16" href="#__codelineno-44-16"></a><span class="w">                    </span><span class="n">s_modeTransitionTimer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_GetTick</span><span class="p">();</span><span class="w">  </span><span class="c1">// Start the reset delay timer</span>
-<a id="__codelineno-44-17" name="__codelineno-44-17" href="#__codelineno-44-17"></a><span class="w">                    </span><span class="n">s_modeTransitionState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MODE_TRANSITION_STOP_PENDING</span><span class="p">;</span><span class="w"> </span><span class="c1">// Advance to next state</span>
-<a id="__codelineno-44-18" name="__codelineno-44-18" href="#__codelineno-44-18"></a><span class="w">                </span><span class="p">}</span>
-<a id="__codelineno-44-19" name="__codelineno-44-19" href="#__codelineno-44-19"></a><span class="w">        </span><span class="c1">// Handle subsequent states</span>
-<a id="__codelineno-44-20" name="__codelineno-44-20" href="#__codelineno-44-20"></a><span class="w">        </span><span class="p">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ManageModeTransition</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a><span class="p">{</span>
+<a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a><span class="w">    </span><span class="n">XmH10Mode_t</span><span class="w"> </span><span class="n">currentSuitMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">h10Mode</span><span class="p">;</span>
+<a id="__codelineno-48-4" name="__codelineno-48-4" href="#__codelineno-48-4"></a>
+<a id="__codelineno-48-5" name="__codelineno-48-5" href="#__codelineno-48-5"></a><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">s_modeTransitionState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-48-6" name="__codelineno-48-6" href="#__codelineno-48-6"></a><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">MODE_TRANSITION_IDLE</span><span class="p">:</span>
+<a id="__codelineno-48-7" name="__codelineno-48-7" href="#__codelineno-48-7"></a><span class="w">            </span><span class="c1">// Check whether a mode change has been detected.</span>
+<a id="__codelineno-48-8" name="__codelineno-48-8" href="#__codelineno-48-8"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">currentSuitMode</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">s_previousSuitMode</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-48-9" name="__codelineno-48-9" href="#__codelineno-48-9"></a>
+<a id="__codelineno-48-10" name="__codelineno-48-10" href="#__codelineno-48-10"></a><span class="w">                </span><span class="c1">// Transition from Active-Assist Mode to Standby Mode:</span>
+<a id="__codelineno-48-11" name="__codelineno-48-11" href="#__codelineno-48-11"></a><span class="w">                </span><span class="c1">// [CASE 1] Begin the safe-stop sequence for AA Mode, which was using P-Vectors during homing.</span>
+<a id="__codelineno-48-12" name="__codelineno-48-12" href="#__codelineno-48-12"></a><span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_previousSuitMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_H10_MODE_ASSIST</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">currentSuitMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_H10_MODE_STANDBY</span><span class="w"> </span>
+<a id="__codelineno-48-13" name="__codelineno-48-13" href="#__codelineno-48-13"></a><span class="w">                    </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s_aaGlobalState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">AA_STATE_HOMING</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-48-14" name="__codelineno-48-14" href="#__codelineno-48-14"></a><span class="w">                    </span><span class="n">XM_SendPVectorReset</span><span class="p">(</span><span class="n">SYS_NODE_ID_RH</span><span class="p">);</span><span class="w">   </span><span class="c1">// Cancel P-Vector trajectory generation</span>
+<a id="__codelineno-48-15" name="__codelineno-48-15" href="#__codelineno-48-15"></a><span class="w">                    </span><span class="n">XM_SendPVectorReset</span><span class="p">(</span><span class="n">SYS_NODE_ID_LH</span><span class="p">);</span>
+<a id="__codelineno-48-16" name="__codelineno-48-16" href="#__codelineno-48-16"></a><span class="w">                    </span><span class="n">s_modeTransitionTimer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_GetTick</span><span class="p">();</span><span class="w">  </span><span class="c1">// Start the reset delay timer</span>
+<a id="__codelineno-48-17" name="__codelineno-48-17" href="#__codelineno-48-17"></a><span class="w">                    </span><span class="n">s_modeTransitionState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MODE_TRANSITION_STOP_PENDING</span><span class="p">;</span><span class="w"> </span><span class="c1">// Advance to next state</span>
+<a id="__codelineno-48-18" name="__codelineno-48-18" href="#__codelineno-48-18"></a><span class="w">                </span><span class="p">}</span>
+<a id="__codelineno-48-19" name="__codelineno-48-19" href="#__codelineno-48-19"></a><span class="w">        </span><span class="c1">// Handle subsequent states</span>
+<a id="__codelineno-48-20" name="__codelineno-48-20" href="#__codelineno-48-20"></a><span class="w">        </span><span class="p">...</span>
 </code></pre></div></p>
 <hr />
 <h2 id="utility-api">Utility API<a class="headerlink" href="#utility-api" title="Permanent link">&para;</a></h2>
 <h3 id="xm_captureloopcountbase"><code>XM_CaptureLoopCountBase()</code><a class="headerlink" href="#xm_captureloopcountbase" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_CaptureLoopCountBase</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_CaptureLoopCountBase</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Captures a baseline for the H10 Assist Loop Counter. Stores the value of <code>h10AssistModeLoopCnt</code> at the time of the call as the reference point (0). Call this at the start of data capture (streaming) so that the count always begins from 0.</p>
 <h3 id="xm_getrelativeloopcount"><code>XM_GetRelativeLoopCount()</code><a class="headerlink" href="#xm_getrelativeloopcount" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetRelativeLoopCount</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetRelativeLoopCount</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Returns the loop count relative to the captured baseline. If <code>XM_CaptureLoopCountBase()</code> has not been called, returns the absolute value.</p>
 <p><strong>Usage example:</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a><span class="w">    </span><span class="n">XM_CaptureLoopCountBase</span><span class="p">();</span><span class="w">  </span><span class="c1">// Capture baseline</span>
-<a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="p">}</span>
-<a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a>
-<a id="__codelineno-47-5" name="__codelineno-47-5" href="#__codelineno-47-5"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-47-6" name="__codelineno-47-6" href="#__codelineno-47-6"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">elapsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_GetRelativeLoopCount</span><span class="p">();</span><span class="w">  </span><span class="c1">// Relative count starting from 0</span>
-<a id="__codelineno-47-7" name="__codelineno-47-7" href="#__codelineno-47-7"></a><span class="w">    </span><span class="n">myData</span><span class="p">.</span><span class="n">loopCnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">elapsed</span><span class="p">;</span>
-<a id="__codelineno-47-8" name="__codelineno-47-8" href="#__codelineno-47-8"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a><span class="w">    </span><span class="n">XM_CaptureLoopCountBase</span><span class="p">();</span><span class="w">  </span><span class="c1">// Capture baseline</span>
+<a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a><span class="p">}</span>
+<a id="__codelineno-51-4" name="__codelineno-51-4" href="#__codelineno-51-4"></a>
+<a id="__codelineno-51-5" name="__codelineno-51-5" href="#__codelineno-51-5"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-51-6" name="__codelineno-51-6" href="#__codelineno-51-6"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">elapsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_GetRelativeLoopCount</span><span class="p">();</span><span class="w">  </span><span class="c1">// Relative count starting from 0</span>
+<a id="__codelineno-51-7" name="__codelineno-51-7" href="#__codelineno-51-7"></a><span class="w">    </span><span class="n">myData</span><span class="p">.</span><span class="n">loopCnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">elapsed</span><span class="p">;</span>
+<a id="__codelineno-51-8" name="__codelineno-51-8" href="#__codelineno-51-8"></a><span class="p">}</span>
 </code></pre></div></p>
 <hr />
 <h2 id="related-examples">Related Examples<a class="headerlink" href="#related-examples" title="Permanent link">&para;</a></h2>
@@ -4659,7 +4750,7 @@ Users only need to compute the desired torque and set it through this function.<
 </tr>
 <tr>
 <td><code>SetAssistTorque</code> is called but torque remains 0</td>
-<td><code>XM_SetControlMode(XM_CTRL_TORQUE)</code> was never called</td>
+<td><code>XM_SetControlMode(XM_CTRL_CONTROL)</code> was never called</td>
 <td>Set the mode once on entering the active state</td>
 </tr>
 <tr>

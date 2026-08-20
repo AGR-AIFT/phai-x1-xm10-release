@@ -2746,7 +2746,8 @@ most algorithms, and it has minimal impact on Control_Loop (1 kHz) jitter.</p>
 - Using an invalid handle → API returns <code>false</code>/<code>NULL</code> (Use-After-Delete defense)
 - Attempting self-Delete → no-op (rejected)</p>
 <blockquote>
-<p>⚠️ <strong>Watchdog (v2.6.0+)</strong>: the system watchdog (IWDG, about 8 seconds) is refreshed every cycle by the UserTask that runs <code>Control_Loop</code>. So if one of <strong>your tasks runs at a higher priority and holds the CPU for more than 8 seconds, the board resets.</strong> Always yield periodically from a user task (<code>XM_Task_Sleep()</code> and friends), and split long blocking work such as a large Flash erase into smaller steps.</p>
+<p>⚠️ <strong>Watchdog (v2.6.0+)</strong>: the system watchdog (IWDG, about 8 seconds) is refreshed on the 1 kHz cycle that runs <code>Control_Loop</code>. So if <strong><code>Control_Setup</code> or <code>Control_Loop</code> takes more than 8 seconds, the board resets.</strong> Split long work into steps.</p>
+<p>The user tasks created here cannot block that refresh: every <code>XM_PRIO_*</code> level sits below <code>Control_Loop</code> (the highest, <code>XM_PRIO_NEAR_REALTIME</code> = 48, is still under UserTask's 54). Heavy computation is in fact safer here — that is why the NN training in Ex.36 runs at <code>XM_PRIO_BACKGROUND</code>.</p>
 </blockquote>
 <hr />
 <h2 id="5-recommended-usage-patterns">5. Recommended Usage Patterns<a class="headerlink" href="#5-recommended-usage-patterns" title="Permanent link">&para;</a></h2>

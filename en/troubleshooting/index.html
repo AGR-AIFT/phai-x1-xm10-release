@@ -3262,7 +3262,7 @@
 <p><strong>Resolution:</strong> See <a href="https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md#part-5">examples/README.md — Body Data guide</a>.</p>
 <h4 id="called-setassisttorque-but-kit-h10-does-not-move">Called <code>SetAssistTorque</code> but KIT H10 Does Not Move<a class="headerlink" href="#called-setassisttorque-but-kit-h10-does-not-move" title="Permanent link">&para;</a></h4>
 <ul>
-<li><code>XM_SetControlMode(XM_CTRL_TORQUE)</code> is missing → Call it once when entering the Active state</li>
+<li><code>XM_SetControlMode(XM_CTRL_CONTROL)</code> is missing → Call it once when entering the Active state</li>
 <li>Safety switch is triggered → Check the ERROR state</li>
 <li>KIT H10 motor activation did not complete → Check the chassis LED and torque queue</li>
 </ul>
