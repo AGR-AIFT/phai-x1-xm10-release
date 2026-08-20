@@ -44,7 +44,11 @@ With torque output disabled (`control_ON = 0` or `XM_CTRL_MONITOR`), verify the 
 - **Extension cable disconnect / CM link lost** — When `XM_IsCmConnected()` returns `false`, the firmware **automatically switches OFF** (torque 0).
 - **Cut power** — Last resort.
 
-> ⚠️ The XM10 firmware has no hardware watchdog. Therefore, **in an emergency a person must use one of the above paths to stop the suit manually** — this is the primary safety net. A dedicated **safety assistant** who can reach the stop control must always be present alongside the wearer.
+> ⚠️ **A watchdog is not an emergency stop.** As of v2.6.0 the XM10 firmware does include a hardware watchdog (IWDG, about 8 seconds), but it exists to **recover the board when the firmware hangs** — not to protect a person. Eight seconds is a very long time while someone is wearing the suit, and if your code keeps running while commanding the **wrong torque**, the watchdog never fires at all (the firmware looks perfectly healthy to it).
+>
+> So **a person using one of the paths above is still the primary safety net.** A dedicated **safety assistant** who can reach the stop control must always be present alongside the wearer.
+>
+> For reference: when a watchdog reset does occur the board reboots and comes back up in **MONITOR mode (torque output blocked)**. What happens after that is decided by your `Control_Setup` / `Control_Loop` code.
 
 ---
 

@@ -117,6 +117,8 @@ Behavior on violation:
 - Using an invalid handle → API returns `false`/`NULL` (Use-After-Delete defense)
 - Attempting self-Delete → no-op (rejected)
 
+> ⚠️ **Watchdog (v2.6.0+)**: the system watchdog (IWDG, about 8 seconds) is refreshed every cycle by the UserTask that runs `Control_Loop`. So if one of **your tasks runs at a higher priority and holds the CPU for more than 8 seconds, the board resets.** Always yield periodically from a user task (`XM_Task_Sleep()` and friends), and split long blocking work such as a large Flash erase into smaller steps.
+
 ---
 
 ## 5. Recommended Usage Patterns
