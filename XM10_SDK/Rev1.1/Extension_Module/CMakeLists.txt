@@ -105,8 +105,8 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Python 3.x + pyyaml 필요 (pip install pyyaml)
 find_package(Python3 COMPONENTS Interpreter QUIET)
 if(Python3_FOUND)
-    set(DATA_MAP_YAML  ${CMAKE_CURRENT_SOURCE_DIR}/tools/data_map/xm_total_data.yaml)
-    set(DATA_MAP_GEN   ${CMAKE_CURRENT_SOURCE_DIR}/tools/data_map/generate_data_map.py)
+    set(DATA_MAP_YAML  ${CMAKE_CURRENT_SOURCE_DIR}/tools/codegen/data_map/xm_total_data.yaml)
+    set(DATA_MAP_GEN   ${CMAKE_CURRENT_SOURCE_DIR}/tools/codegen/data_map/generate_data_map.py)
     set(DATA_MAP_HDR   ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/System/Comm/USB/xm_total_data_packet.h)
 
     add_custom_command(

@@ -17,6 +17,26 @@
 #   - "divide":          physical = raw / scale            (IMU Hub)
 #   - "none":            physical = raw                    (기본값)
 #
+# Version: 2.8
+# Date:    2026-08-20
+# Changes:
+#   - Ext_Sync 극성-불문(polarity-agnostic) 개편: sync box 실측 결과 신호가
+#     토글-홀드형(태블릿 저장 시작/종료 때마다 레벨 반전 후 유지)이고 에지
+#     극성(rising/falling)이 박스 버튼으로 바뀔 수 있음 → 절대 레벨 대신
+#     "부팅 첫 tick 레벨 = idle" 래치 대비 반전 여부로 저장 상태를 판정.
+#     sync_save_active(u8@321, 1=저장 중) 신설 (rsv_emg 2B→1B),
+#     sync_din_level 은 raw 핀 레벨로, sync_din_edge_count 는 양방향 전이
+#     카운터로 의미 확장. 기존 필드 offset 전부 불변, 365B 유지.
+#
+# Version: 2.7
+# Date:    2026-08-20
+# Changes:
+#   - rsv_emg 5B → 2B: 확보한 3B 로 Ext_Sync 섹션 신설 (외부 동기화 입력).
+#     sync_din_level(u8@322) + sync_din_edge_count(u16@323) — 외부 sync box 의
+#     TTL 을 DIO8(PF10) 로 1kHz 상시 샘플링해 게시. 시스템 소유 (App 비관여,
+#     core_process 가 Control_Setup 이전 핀 초기화 — 사용자 재설정이 이김).
+#   기존 필드 offset 전부 불변, Total packet: 365B (변경 없음)
+#
 # Version: 2.6
 # Date:    2026-05-13
 # Changes:
@@ -101,7 +121,7 @@
 #   - H10 PDO: line-by-line copy (memcpy 제거, 구조체 레이아웃 의존성 제거)
 # =============================================================================
 
-version: "2.6"
+version: "2.8"
 packet_name: XM_TotalDataPacket
 module_id: 0x20
 endian: little
@@ -295,7 +315,25 @@ groups:
       - { name: emg_envelope_uv_x10, type: int16,  scale: 10,   unit: uV, desc: "Envelope value (uV x10, EMA fc~8Hz)" }
       - { name: emg_mvc_percent,     type: uint8,  unit: "%",   desc: "MVC normalization (0~100%)" }
       - { name: emg_is_active,       type: uint8,  unit: bool,  desc: "Muscle contraction detection (0/1)" }
-      - { name: rsv_emg,             type: uint8, count: 5, unit: reserved, desc: "padding for future EMG expansion" }
+      - { name: rsv_emg,             type: uint8, count: 1, unit: reserved, desc: "padding for future EMG expansion" }
+
+  # ===========================================================================
+  # 13b. Ext_Sync (4B) — 외부 TTL 동기화 입력 (System 소유)
+  # 외부 sync box TTL 을 DIO8(PF10) 로 1kHz 상시 샘플링.
+  # 신호 = 토글-홀드형: 태블릿 저장 시작/종료 때마다 레벨 반전 후 유지,
+  # 에지 극성(rising/falling)은 sync box 버튼으로 바뀔 수 있음 → FW 는 부팅
+  # 첫 tick 레벨을 idle 로 래치, "현재 레벨 != idle" 을 저장 중으로 판정
+  # (극성 불문). xm_loop_count 와 같은 tick 에 샘플 → 시계열 정렬 보장.
+  # 시스템 소유: App 코드 비관여 (Control_Setup 이전 INPUT_PULLDOWN 초기화,
+  # 사용자가 같은 핀을 재설정하면 사용자 설정이 이겨 SDK 예제 무영향).
+  # 전제: XM10 부팅(첫 스냅샷) 시점에 sync box 연결·비저장(idle) 상태.
+  # ===========================================================================
+  - name: Ext_Sync
+    desc: "External TTL sync input (insole sync box, DIO8/PF10, 1kHz sampled)"
+    fields:
+      - { name: sync_save_active,    type: uint8,  unit: bool,  desc: "1=insole recording active (polarity-agnostic: level differs from boot-latched idle)" }
+      - { name: sync_din_level,      type: uint8,  unit: bool,  desc: "Raw TTL pin level this tick (diagnostic — absolute polarity varies per sync box setting)" }
+      - { name: sync_din_edge_count, type: uint16, unit: count, desc: "Transition counter, both directions (wraps at 65536) — event-loss cross-check" }
 
   # ===========================================================================
   # 14. FDCAN1_Diag (6B) — Ch1: XM↔CM Bus Health
