@@ -2897,7 +2897,7 @@
 <p>LED 깜빡임 타이밍 계산과 버튼 디바운싱/이벤트 판정을 수행하는 내부 엔진 구동 함수입니다.</p>
 <p><strong>파라미터</strong>: 없음</p>
 <p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
-<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준. <code>core_process</code> 가 입력 수집 단계에서 2ms(500Hz) 주기로 자동 호출하므로, <strong>일반적으로 사용자가 직접 호출할 필요는 없습니다.</strong> 다만 이 함수가 주기적으로 실행되지 않으면(예: User Task가 무한 루프에 빠짐) Blink/Heartbeat/Oneshot 효과와 버튼 이벤트가 전혀 갱신되지 않습니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준. <code>core_process</code> 가 입력 수집 단계에서 1 ms(1 kHz) 주기로 자동 호출하므로, <strong>일반적으로 사용자가 직접 호출할 필요는 없습니다.</strong> 다만 이 함수가 주기적으로 실행되지 않으면(예: User Task가 무한 루프에 빠짐) Blink/Heartbeat/Oneshot 효과와 버튼 이벤트가 전혀 갱신되지 않습니다.</p>
 <p><strong>예제</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// 일반적으로 직접 호출할 필요 없음 — core_process가 자동 호출</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1">// 참고용: 개념상의 호출 위치</span>

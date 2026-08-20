@@ -2871,7 +2871,7 @@ XM10 펌웨어는 사용자가 복잡한 타이머 인터럽트나 디바운싱(
 <h3 id="the-core-engine-xm_io_update">The Core Engine: <code>XM_IO_Update()</code><a class="headerlink" href="#the-core-engine-xm_io_update" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>역할:</strong> LED의 깜빡임 타이밍을 계산하고, 버튼의 신호를 분석하여 노이즈를 제거(Debouncing)하고 이벤트를 생성하는 <strong>엔진</strong>입니다.</li>
-<li><strong>구동:</strong> <code>core_process</code>에 의해 <strong>2ms(500Hz) 주기</strong>로 자동 호출되므로, 사용자가 직접 호출할 필요는 없으나 그 존재와 역할은 이해하고 있어야 합니다.</li>
+<li><strong>구동:</strong> <code>core_process</code>에 의해 <strong>1 ms(1 kHz) 주기</strong>로 자동 호출되므로, 사용자가 직접 호출할 필요는 없으나 그 존재와 역할은 이해하고 있어야 합니다.</li>
 <li><strong>흐름:</strong><ol>
 <li>사용자가 <code>XM_SetLedEffect</code> 호출 -&gt; 설정값 저장.</li>
 <li><code>XM_IO_Update</code> 주기적 실행 -&gt; 시간이 흐름에 따라 LED ON/OFF 토글.</li>

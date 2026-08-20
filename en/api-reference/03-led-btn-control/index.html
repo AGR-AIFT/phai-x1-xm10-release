@@ -2871,7 +2871,7 @@ The XM10 firmware lets you implement advanced input/output features — <strong>
 <h3 id="the-core-engine-xm_io_update">The Core Engine: <code>XM_IO_Update()</code><a class="headerlink" href="#the-core-engine-xm_io_update" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Role:</strong> This is the <strong>engine</strong> that calculates LED blink timing, analyzes button signals, removes noise (debouncing), and generates events.</li>
-<li><strong>Execution:</strong> Called automatically at a <strong>2 ms (500 Hz) interval</strong> by <code>core_process</code>. You do not need to call it yourself, but understanding its role is important.</li>
+<li><strong>Execution:</strong> Called automatically at a <strong>1 ms (1 kHz) interval</strong> by <code>core_process</code>. You do not need to call it yourself, but understanding its role is important.</li>
 <li><strong>Flow:</strong><ol>
 <li>User calls <code>XM_SetLedEffect</code> → settings are stored.</li>
 <li><code>XM_IO_Update</code> runs periodically → toggles the LED ON/OFF as time passes.</li>

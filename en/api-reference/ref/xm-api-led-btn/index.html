@@ -2897,7 +2897,7 @@
 <p>The internal engine function that computes LED blink timing and performs button debouncing/event detection.</p>
 <p><strong>Parameters</strong>: None</p>
 <p><strong>Returns</strong>: None (<code>void</code>)</p>
-<p><strong>⚠️ Calling context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. <code>core_process</code> calls this automatically at a 2 ms (500 Hz) interval during its input-collection stage, so <strong>you normally do not need to call it yourself.</strong> However, if this function stops being called periodically (e.g., the User Task gets stuck in an infinite loop), Blink/Heartbeat/Oneshot effects and button events will stop updating entirely.</p>
+<p><strong>⚠️ Calling context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. <code>core_process</code> calls this automatically at a 1 ms (1 kHz) interval during its input-collection stage, so <strong>you normally do not need to call it yourself.</strong> However, if this function stops being called periodically (e.g., the User Task gets stuck in an infinite loop), Blink/Heartbeat/Oneshot effects and button events will stop updating entirely.</p>
 <p><strong>Example</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// Normally you do not need to call this directly — core_process calls it automatically</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1">// For reference, a conceptual call site:</span>
