@@ -554,7 +554,6 @@ void Off_Entry(void) {
 ## 데이터 송신 (Data Outputs, Control inputs)
 
 `P-Vector`, `I-Vector`, `F-Vector` (PIF-Vectors)와 다양한 제어 명령을 통해 `KIT H10`의 움직임을 정밀하게 설계할 수 있습니다.
-**PIF-Vector와 같은 사전정의 된 제어 기법의 자세한 내용에 대해서는 `angel Robotics-Control Algorithm`(작성 예정)에서 확인할 수 있습니다.**
 
 ### `XM_SendPVector()`
 
@@ -876,7 +875,6 @@ XM_SetVelocityLimit(SYS_NODE_ID_LH, 100.0f, -100.0f);
 
 사용자가 가하는 힘이나 예상치 못한 외부 힘(외란)을 추정하고 보상하여, 더 부드럽고 안정적인 움직임을 만들어내는 `KIT H10`에 내장된 고급 제어 루틴입니다.
 **`DOB` 기능을 사용하기 위해서는 `KIT H10`의 구동기가 `DOB`기능에 대한 식별(`System Identification`)이 진행되어 모터드라이버의 `DOB` 식별 정보 기록 여부를 확인해야 합니다.(현재 `KIT H10`은 `DOB` 식별을 진행하지 않았음, 추후 변경 예정)**
-**`KIT H10`의 DOB에 대해서는 `angel Robotics-Control Algorithm`(작성 예정)에서 확인할 수 있습니다.**
 
 **Syntax**
 ```c
@@ -897,7 +895,6 @@ XM_SetDOBRoutine(SYS_NODE_ID_RH, true);
 #### 3. 보상 게인 설정 (Compensation Gain)
 
 `KIT H10`에 내장된 기본 중력/속도 보상 모드의 강도를 조절합니다.
-**`KIT H10`의 보상에 대해서는 `angel Robotics-Compensation`(작성 예정)에서 확인할 수 있습니다.**
 
 **Syntax**
 ```c
@@ -923,7 +920,7 @@ XM_SetResistiveCompGain(SYS_NODE_ID_RH, strongResistance);
 
 ### `XM_SendUserBodyData()`
 
-사용자의 신체 정보(몸무게, 키, 분절 길이 등)를 `KIT H10`로 전송합니다. `KIT H10`은 이 정보를 바탕으로 실시간 동작 분석을 수행하며 더 정확하고 개인화된 보행 데이터 및 운동 역학 데이터를 계산하여 XM10으로 보내줍니다. **`KIT H10`의 실시간 동작 분석의 자세한 내용은 `GaitAnalysis`(작성 예정)에서 확인할 수 있습니다.**
+사용자의 신체 정보(몸무게, 키, 분절 길이 등)를 `KIT H10`로 전송합니다. `KIT H10`은 이 정보를 바탕으로 실시간 동작 분석을 수행하며 더 정확하고 개인화된 보행 데이터 및 운동 역학 데이터를 계산하여 XM10으로 보내줍니다.
 **사용자가 직접 신체 정보를 측정하여 `KIT H10`으로 전송해야 합니다.**
 
 **`RxData_t` 구조체 중 신체 정보 기반 데이터:**

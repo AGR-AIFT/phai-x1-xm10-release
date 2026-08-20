@@ -556,7 +556,6 @@ void Off_Entry(void) {
 ## Data Outputs (Control Inputs)
 
 `P-Vector`, `I-Vector`, and `F-Vector` (PIF-Vectors), together with various other control commands, let you precisely design the motion of `KIT H10`.
-**For a detailed explanation of pre-defined control techniques such as PIF-Vectors, refer to `angel Robotics-Control Algorithm` (coming soon).**
 
 ### `XM_SendPVector()`
 
@@ -878,7 +877,6 @@ XM_SetVelocityLimit(SYS_NODE_ID_LH, 100.0f, -100.0f);
 
 An advanced built-in control routine in `KIT H10` that estimates and compensates for user-applied forces and unexpected external disturbances, producing smoother and more stable motion.
 **To use DOB, the `KIT H10` actuators must have undergone System Identification for DOB, and the identification data must be stored in the motor driver. (System Identification for DOB has not been performed on the current `KIT H10`; this will change in a future revision.)**
-**For details on KIT H10's DOB, refer to `angel Robotics-Control Algorithm` (coming soon).**
 
 **Syntax**
 ```c
@@ -899,7 +897,6 @@ XM_SetDOBRoutine(SYS_NODE_ID_RH, true);
 #### 3. Compensation Gain
 
 Adjusts the strength of KIT H10's built-in gravity/velocity compensation modes.
-**For details on KIT H10's compensation, refer to `angel Robotics-Compensation` (coming soon).**
 
 **Syntax**
 ```c
@@ -925,7 +922,7 @@ XM_SetResistiveCompGain(SYS_NODE_ID_RH, strongResistance);
 
 ### `XM_SendUserBodyData()`
 
-Sends the wearer's body parameters (weight, height, segment lengths, etc.) to `KIT H10`. KIT H10 uses this information for real-time motion analysis and returns more accurate, personalized gait data and motion dynamics data to XM10. **For details on KIT H10's real-time motion analysis, refer to `GaitAnalysis` (coming soon).**
+Sends the wearer's body parameters (weight, height, segment lengths, etc.) to `KIT H10`. KIT H10 uses this information for real-time motion analysis and returns more accurate, personalized gait data and motion dynamics data to XM10.
 **You must measure and supply the body parameters manually before sending them to KIT H10.**
 
 **Body-parameter-dependent fields in `RxData_t`:**
