@@ -29,7 +29,7 @@ H10 가 ASSIST 모드일 때 좌·우 고관절이 **가상의 스프링-댐퍼 
 
 USB CDC `IMP | K:0.3 B:0.02 Eq:5.0 θ:3.2 τ:0.56` 매 500 ms + PhAI 0xF0 4ch.
 
-> 📸 `![가상 스프링-댐퍼 + 평형점](../assets/img/20_impedance_phase.png)` placeholder
+> 📸 **가상 스프링-댐퍼 + 평형점** — 사진·영상 준비 중
 
 ---
 

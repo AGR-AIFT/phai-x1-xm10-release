@@ -32,7 +32,7 @@ ILC 학습 인덱스 = gaitCycle/100. **gaitCycle 부정확 시 학습 붕괴**.
 
 USB CDC `ILC | cyc:8 i:45 e:1.2 τ_ff:0.85 τ_cmd:1.40` 매 200 ms.
 
-> 📸 `![ILC 수렴 곡선](../assets/img/26_ilc_convergence.png)` placeholder
+> 📸 **ILC 수렴 곡선** — 사진·영상 준비 중
 
 ---
 

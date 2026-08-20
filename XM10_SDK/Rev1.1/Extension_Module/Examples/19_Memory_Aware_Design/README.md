@@ -28,7 +28,7 @@ USB CDC 이벤트: `[EVENT] Angle jump: 12.3 -> 18.7 (delta=6.40) at 5230ms [3/1
 
 버튼: **BTN 1** Memory Report / **BTN 2** Event Dump + Pool 해제 / **BTN 3** Ring Buffer 초기화.
 
-> 📸 `![PhAI 4채널 그래프 — Raw vs Filtered](../assets/img/19_filter_compare.png)` placeholder
+> 📸 **PhAI 4채널 그래프 — Raw vs Filtered** — 사진·영상 준비 중
 
 ---
 

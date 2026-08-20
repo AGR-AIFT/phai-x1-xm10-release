@@ -22,7 +22,7 @@
 
 USB CDC `FF_FB | θd:8.5 θ:8.1 τff:1.2 τfb:0.4 τ:1.6` 매 500 ms.
 
-> 📸 `![FF ON vs OFF 추종 비교](../assets/img/30_ff_fb_comparison.png)` placeholder
+> 📸 **FF ON vs OFF 추종 비교** — 사진·영상 준비 중
 
 ---
 

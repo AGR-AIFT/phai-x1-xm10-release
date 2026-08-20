@@ -24,7 +24,7 @@ H10 가 ASSIST 모드일 때 우측 고관절을 **목표 각도** 로 PD 제어
 
 USB CDC 500 ms 주기 디버그: `PD | Tgt:10.0 Cur:8.3 Err:1.7 Tau:0.86` + PhAI 0xF0 채널 4축 실시간 그래프.
 
-> 📸 `![PD 응답 곡선](../assets/img/14_pd_step.png)` placeholder
+> 📸 **PD 응답 곡선** — 사진·영상 준비 중
 
 ---
 

@@ -23,7 +23,7 @@ H10 가 ASSIST 모드일 때 골반 기울기를 **기준 자세 부근** 으로
 
 USB CDC `IP | th:0.05 tg:1.23 tp:0.45 tau:1.68` + PhAI 0xF0 채널 5축 (theta, theta_dot, tau_gravity, tau_pd, tau_total).
 
-> 📸 `![역진자 모델 + 토크 분해](../assets/img/15_inverted_pendulum.png)` placeholder
+> 📸 **역진자 모델 + 토크 분해** — 사진·영상 준비 중
 
 ---
 

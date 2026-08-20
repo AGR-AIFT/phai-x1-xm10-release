@@ -25,7 +25,7 @@ LED 3 ON → 비대칭 경고 (`|θ_R + θ_L| > 5°`).
 
 USB CDC `BILAT | ΔθR:2.5 K_c:0.3 τR:-0.75 τL:0.75 [ASYM]` 매 500 ms.
 
-> 📸 `![좌·우 역위상 vs 비대칭 비교](../assets/img/29_bilateral_phase.png)` placeholder
+> 📸 **좌·우 역위상 vs 비대칭 비교** — 사진·영상 준비 중
 
 ---
 

@@ -25,7 +25,7 @@ H10 가 **물속에서 걷는 듯한 저항감** 을 제공합니다 (근력 운
 Torque = -Gain × Velocity     (단위: Nm, Gain × rad/s)
 ```
 
-> 📸 `![저항 운동 데모](../assets/img/13_resistive.gif)` placeholder
+> 📸 **저항 운동 데모** — 사진·영상 준비 중
 
 ---
 

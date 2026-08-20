@@ -37,7 +37,7 @@ XM_SendUserBodyData(bodyData);
 
 USB CDC `GAIT | φ:0.45 A:2.0 τR:1.85 τL:-0.62` + PhAI 0xF0 5축.
 
-> 📸 `![보행 위상 토크 프로파일](../assets/img/23_gait_phase_profile.png)` placeholder
+> 📸 **보행 위상 토크 프로파일** — 사진·영상 준비 중
 
 ---
 

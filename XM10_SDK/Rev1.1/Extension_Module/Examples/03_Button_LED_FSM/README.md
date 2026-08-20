@@ -21,7 +21,7 @@
 
 전환 시 USB CDC 로 `"[Mode] STANDBY"` / `"[Mode] ACTIVE !!"` 로그 송출.
 
-> 📸 `![FSM 모드 전환](../assets/img/03_fsm_transition.gif)` placeholder
+> 📸 **FSM 모드 전환** — 사진·영상 준비 중
 
 ---
 

@@ -22,7 +22,7 @@ H10 가 ASSIST 모드일 때 사용자의 자세를 **3개 클래스** 로 실�
 
 USB CDC 500 ms 주기: `AI | P:5.2 R:-1.3 Class:UPRIGHT Conf:78.4%` + PhAI 0xF0 5축 (pitch / roll / pitch_rate / class_id / confidence).
 
-> 📸 `![NN 자세 분류 실시간](../assets/img/16_tinyai_posture.png)` placeholder
+> 📸 **NN 자세 분류 실시간** — 사진·영상 준비 중
 
 ---
 

@@ -53,7 +53,7 @@ IMU를 허브에 꽂고, 허브를 XM10에 연결하기만 하면 됩니다. 별
 
 IMU의 **캘리브레이션**과 **센서 설정 변경**은 Angel Robotics 자체 개발 도구인 **PhEEL Studio**로 합니다. PhEEL Studio는 IMU Hub에 직접 붙어, 각 채널의 자세를 실시간으로 보면서 영점·축 방향·출력 설정 등을 조정할 수 있습니다. *(PhEEL Studio는 공개 예정입니다.)*
 
-> 📸 `![PhEEL Studio — IMU Hub 6채널 자세 모니터링](../assets/img/41_pheel_studio_imu_hub.png)` placeholder — PhEEL Studio에서 IMU Hub를 연결해 6채널 자세를 확인하는 화면
+> 📸 **PhEEL Studio — IMU Hub 6채널 자세 모니터링** — 사진·영상 준비 중
 
 > 💡 이 예제는 "IMU 데이터로 **무엇을 할 수 있는가**"의 가장 기본 — **자세 시각화** — 를 보여줍니다. 쿼터니언→오일러 변환은 모든 자세 표시의 출발점입니다.
 
@@ -112,7 +112,7 @@ XM_SendUsbDataWithId(s_posture, sizeof(s_posture), 0xF0);
 
 > 🔧 변형: `IMU_STREAM_PERIOD_MS`를 바꿔 스트리밍 주기를 조절(10ms=100Hz ~ 50ms=20Hz)하며 부드러움 비교.
 
-> 📸 `![PhAI Studio — 0xF0 18채널 자세 그래프](../assets/img/41_phai_studio_stream.png)` placeholder — 6개 IMU의 roll/pitch/yaw가 실시간으로 그려지는 화면
+> 📸 **PhAI Studio — 0xF0 18채널 자세 그래프** — 사진·영상 준비 중
 
 ---
 

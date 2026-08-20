@@ -19,7 +19,7 @@ DIO 1 (PF3) 에 **FSR (압력 센서)** 를 연결하고, 압력이 일정 수�
 | FSR 누름 | LED 2 켜짐 (FSR 전압 > 500 mV) |
 | FSR 안 누름 | LED 2 꺼짐 |
 
-> 📸 `![FSR 분압 회로](../assets/img/05a_fsr_voltage_divider.png)` placeholder
+> 📸 **FSR 분압 회로** — 사진·영상 준비 중
 
 ---
 

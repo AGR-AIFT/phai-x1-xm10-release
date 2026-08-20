@@ -28,7 +28,7 @@ PhAI Studio 를 켜고 XM10 USB 를 연결하면:
 
 → PhAI Studio 에서 `0xF0` 채널 선택 시 본 예제가 전송한 4 변수의 실시간 그래프가 그려집니다.
 
-> 📸 `![PhAI Studio 4-channel graph](../assets/img/09_phai_stream.png)` placeholder
+> 📸 **PhAI Studio 4-channel graph** — 사진·영상 준비 중
 
 ---
 

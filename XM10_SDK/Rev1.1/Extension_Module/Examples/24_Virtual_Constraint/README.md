@@ -32,7 +32,7 @@ H10 ASSIST 모드에서 보행 위상 s 에 따라 **목표 각도 θ_d(s)** 가
 
 USB CDC `VC | s:0.45 θd:8.2 θ:7.5 τ:1.40` + PhAI 0xF0 5ch.
 
-> 📸 `![Bézier 곡선 + PD 추종](../assets/img/24_bezier_tracking.png)` placeholder
+> 📸 **Bézier 곡선 + PD 추종** — 사진·영상 준비 중
 
 ---
 

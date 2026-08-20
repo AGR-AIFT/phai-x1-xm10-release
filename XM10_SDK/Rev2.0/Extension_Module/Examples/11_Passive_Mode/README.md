@@ -24,7 +24,7 @@ KIT H10 의 좌·우 고관절을 **±25.0 도 사이로 부드럽게 왕복** �
 
 PhAI Studio 로 H10 각도/토크/IMU 9-축 등 30+ 필드를 1 kHz 실시간 스트리밍 확인 가능.
 
-> 📸 `![H10 왕복 운동](../assets/img/11_passive_motion.gif)` placeholder
+> 📸 **H10 왕복 운동** — 사진·영상 준비 중
 
 ---
 

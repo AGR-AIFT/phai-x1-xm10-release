@@ -20,7 +20,7 @@
 | 1~4 | LED 1 ON |
 | 5~8 | LED 1 + LED 2 ON |
 
-> 📸 `![FSR 8ch 배열](../assets/img/05b_fsr_8ch.png)` placeholder
+> 📸 **FSR 8ch 배열** — 사진·영상 준비 중
 
 ---
 

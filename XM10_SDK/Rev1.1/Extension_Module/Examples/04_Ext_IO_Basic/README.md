@@ -16,7 +16,7 @@
 - 외부 스위치는 DIO 3 (PF5) 에 연결 — 내부 풀업 사용 (풀업 저항 별도 X)
 - 외부 LED 는 DIO 4 (PF6) 에 출력 — 3.3 V 또는 0 V
 
-> 📸 `![외부 스위치 + LED 연결도](../assets/img/04_ext_io_basic.png)` placeholder
+> 📸 **외부 스위치 + LED 연결도** — 사진·영상 준비 중
 
 ---
 

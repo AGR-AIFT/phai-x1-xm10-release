@@ -22,7 +22,7 @@ H10 슈트가 ASSIST 모드일 때 사용자가 다리를 움직이려는 의도
 
 핵심 알고리즘: 2초간 의도 각도 추적 → 임계치 (5도) 초과 감지 → 그 방향으로 3 Nm 보조 토크 ramp.
 
-> 📸 `![Active Assist 의도 감지](../assets/img/12_active_assist.gif)` placeholder
+> 📸 **Active Assist 의도 감지** — 사진·영상 준비 중
 
 ---
 

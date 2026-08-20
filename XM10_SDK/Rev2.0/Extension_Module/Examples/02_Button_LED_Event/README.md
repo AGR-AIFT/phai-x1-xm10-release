@@ -16,7 +16,7 @@
 | BTN 1 클릭 | LED 1 **토글** (ON ↔ OFF 유지) |
 | BTN 2 클릭 | LED 2 **2초간만** 켜진 후 자동으로 꺼짐 (원샷) |
 
-> 📸 `![BTN1 토글 + BTN2 원샷](../assets/img/02_button_event.gif)` placeholder
+> 📸 **BTN1 토글 + BTN2 원샷** — 사진·영상 준비 중
 
 ---
 

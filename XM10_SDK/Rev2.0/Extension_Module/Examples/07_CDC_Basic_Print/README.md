@@ -24,7 +24,7 @@ USB-CDC 포트는 **한 번에 한 클라이언트만** 점유할 수 있습니�
 
 **BTN 1 을 누를 때마다** PC 시리얼 터미널에 `"Hello! Button 1 was clicked."` 메시지가 출력됩니다. 동시에 LED 1 이 oneshot (100 ms) 으로 깜빡여 전송을 시각 확인.
 
-> 📸 `![CDC 터미널 출력 예](../assets/img/07_cdc_terminal.png)` placeholder
+> 📸 **CDC 터미널 출력 예** — 사진·영상 준비 중
 
 ---
 

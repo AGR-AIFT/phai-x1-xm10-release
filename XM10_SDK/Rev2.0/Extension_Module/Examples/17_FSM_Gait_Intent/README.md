@@ -44,7 +44,7 @@ XM_SendUserBodyData(bodyData);
 
 모든 토크에 **LPF 스무딩** (시상수 ~100 ms) + AssistLevel × 비례 스케일 + USB-CDC 실시간 스트리밍 (상시) + PhAI 0xF0 6축.
 
-> 📸 `![7-phase Gait Cycle](../assets/img/17_gait_phases.png)` placeholder
+> 📸 **7-phase Gait Cycle** — 사진·영상 준비 중
 
 ---
 

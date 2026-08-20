@@ -41,7 +41,7 @@
 
 USB CDC `CPG | φ:1.57 ω:6.28 F:-0.32 τ:0.95` + PhAI 0xF0 4ch.
 
-> 📸 `![AFO 위상 락온 곡선](../assets/img/22_afo_locking.png)` placeholder
+> 📸 **AFO 위상 락온 곡선** — 사진·영상 준비 중
 
 ---
 

@@ -55,7 +55,7 @@
 
 EMG 신호 파형의 **실시간 확인과 진단**은 Angel Robotics 자체 개발 도구인 **PhEEL Studio**로 합니다. PhEEL Studio는 EMG Hub에 직접 붙어 원신호·envelope·활성 상태를 파형으로 보여줘, 전극 부착 상태나 신호 품질을 눈으로 점검할 수 있습니다. *(PhEEL Studio는 공개 예정입니다.)*
 
-> 📸 `![PhEEL Studio — EMG Hub 근전도 파형 모니터링](../assets/img/42_pheel_studio_emg_hub.png)` placeholder — PhEEL Studio에서 EMG Hub를 연결해 근전도 파형·활성도를 확인하는 화면
+> 📸 **PhEEL Studio — EMG Hub 근전도 파형 모니터링** — 사진·영상 준비 중
 
 > 💡 이 예제는 "EMG 데이터로 **무엇을 할 수 있는가**"의 대표 예 — **바이오피드백** — 을 보여줍니다.
 
@@ -111,7 +111,7 @@ XM_SetLedState(XM_LED_2, emg->is_active ? XM_ON : XM_OFF);
 
 > ⚠️ 전극 부착·피부 상태에 따라 신호 품질이 달라집니다. 파형이 이상하면 **PhEEL Studio**로 원신호를 먼저 점검하세요.
 
-> 📸 `![PhAI Studio — EMG 근활성도 스트리밍](../assets/img/42_phai_studio_stream.png)` placeholder — envelope·MVC%·활성 상태가 실시간으로 그려지는 화면
+> 📸 **PhAI Studio — EMG 근활성도 스트리밍** — 사진·영상 준비 중
 
 ---
 

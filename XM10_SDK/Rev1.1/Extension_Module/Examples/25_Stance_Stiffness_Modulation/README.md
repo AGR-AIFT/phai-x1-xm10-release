@@ -33,7 +33,7 @@
 
 USB CDC `STSF | R:ST K:0.4 τR:1.2 L:SW τL:-0.05` 매 500 ms.
 
-> 📸 `![입각/유각 강성 LPF 전환](../assets/img/25_stance_blending.png)` placeholder
+> 📸 **입각/유각 강성 LPF 전환** — 사진·영상 준비 중
 
 ---
 

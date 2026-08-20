@@ -19,7 +19,7 @@ XM10 보드 단독으로 다음을 확인합니다 (외부 HW 불필요):
 | BTN 1 클릭 | USB CDC 로 `"Hello XM10!"` 메시지 + LED 3 1회 깜빡임 |
 | BTN 2 클릭 | LED 2 토글 (ON ↔ OFF) |
 
-> 📸 `![부팅 LED 시퀀스](../assets/img/00_boot_sequence.gif)` — 보드 영상 placeholder
+> 📸 **부팅 LED 시퀀스** — 사진·영상 준비 중
 
 ---
 

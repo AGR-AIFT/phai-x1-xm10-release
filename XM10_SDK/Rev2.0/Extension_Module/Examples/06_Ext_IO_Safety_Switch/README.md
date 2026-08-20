@@ -20,7 +20,7 @@
 | **ACTIVE** | STANDBY 에서 시작 버튼 | LED 2 ON + 토크 제어 시작. 외부 리미트 스위치 (DIO_4) 누르면 ERROR 진입 |
 | **ERROR** | 리미트 트리거 (비상 정지) | LED 1 빠른 깜빡 + 토크 0. **내부 BTN 1 클릭으로만** STANDBY 복귀 |
 
-> 📸 `![Safety FSM 다이어그램](../assets/img/06_safety_fsm.png)` placeholder
+> 📸 **Safety FSM 다이어그램** — 사진·영상 준비 중
 
 ---
 

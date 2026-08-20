@@ -23,7 +23,7 @@ H10 가 ASSIST 일 때 **로봇 자체 무게 + 모터 마찰** 을 상쇄 → �
 
 USB CDC `GC | α:0.50 Mgl:17.2 τ_grav:1.23 τ_fric:0.15 τ_cmd:0.69` 매 500 ms.
 
-> 📸 `![투명 모드 — α 점진 활성화](../assets/img/21_transparency.png)` placeholder
+> 📸 **투명 모드 — α 점진 활성화** — 사진·영상 준비 중
 
 ---
 
