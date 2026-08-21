@@ -48,7 +48,7 @@ def _is_excluded(rel: Path) -> bool:
 
 # ZIP root 의 Extension_Module/ 에 직접 들어갈 top-level 자산 (레포 루트 기준)
 # 주의: 루트 "examples"(소문자) 는 의도적으로 제외 — SDK 가 이미 Rev 버전정합
-# Examples/(대문자, Rev1.1=47/Rev2.0=50) 를 포함하며, Windows 스테이징에서
+# Examples/(대문자, Rev1.1=42/Rev2.0=45) 를 포함하며, Windows 스테이징에서
 # 대소문자 병합으로 공개판(Rev2.0 성향 superset)이 SDK 판을 덮어쓰는 사고가
 # 있었음 (Ex.37 Rev2.0 Command Vector 판이 Rev1.1 ZIP 에 혼입). 공개 examples
 # 는 GitHub 레포 열람용.
