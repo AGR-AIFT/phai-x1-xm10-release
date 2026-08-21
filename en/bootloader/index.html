@@ -16,7 +16,7 @@
         <link rel="prev" href="../kit-h10-firmware/">
       
       
-        <link rel="next" href="XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/">
+        <link rel="next" href="../advanced/">
       
       
         
@@ -31,7 +31,7 @@
     
     
       
-        <title>Overview - XM10 Extension Module</title>
+        <title>Bootloader - XM10 Extension Module</title>
       
     
     
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Overview
+              Bootloader
             
           </span>
         </div>
@@ -1433,34 +1433,16 @@
   
   
   
-    
-    
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
       
         
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
           
-        
-      
-        
-      
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
-        
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="./" class="md-nav__link md-nav__link--active">
-              
   
   
   <span class="md-ellipsis">
@@ -1474,43 +1456,17 @@
   
   
 
-            </a>
-            
-              
-              <label class="md-nav__link md-nav__link--active" for="__nav_9" id="__nav_9_label" tabindex="">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Bootloader
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/" class="md-nav__link">
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    Upload Guide
+    Bootloader
   
 
     
@@ -1519,13 +1475,447 @@
   
 
       </a>
-    </li>
-  
+      
+        
 
-              
-            
-          </ul>
-        </nav>
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-the-bootloader-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the bootloader does
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-flash-memory-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Flash Memory Map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-initial-installation-starting-from-a-blank-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Initial Installation (starting from a blank board)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Initial Installation (starting from a blank board)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-full-chip-erase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Full Chip Erase
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-upload-the-bootloader-binary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Upload the Bootloader Binary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Verify
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-app-firmware-upload--stm32cubeide-swd-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. App Firmware Upload — STM32CubeIDE (SWD Debugging)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. App Firmware Upload — STM32CubeIDE (SWD Debugging)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-time-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One-time Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build--debug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build &amp; Debug
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-swd-debugging-is-compatible-with-the-bootloader" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why SWD Debugging is Compatible with the Bootloader
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-app-firmware-upload--phai-studio-usb-ftp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. App Firmware Upload — PhAI Studio (USB FTP)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. App Firmware Upload — PhAI Studio (USB FTP)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required File
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upload-procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upload Procedure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#forcing-ftp-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forcing FTP Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-post-build-binary-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Post-Build Binary Generation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Post-Build Binary Generation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#details-of-each-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Details of Each Step
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-how-the-bootloader-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. How the Bootloader Works
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. How the Bootloader Works">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#boot-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boot Sequence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ftp-update-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FTP Update Sequence
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i-installed-the-bootloader-but-the-app-wont-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "I installed the bootloader but the app won't run"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-swd-debugging-the-bootloader-is-gone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "After SWD debugging, the bootloader is gone"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution-halts-in-a-signal-handler-eg-sigtrap-the-moment-i-click-debug-f11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Execution halts in a signal handler (e.g. SIGTRAP) the moment I click Debug (F11)"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phai-studio-cannot-find-the-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "PhAI Studio cannot find the device"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-uploading-firmware-the-board-keeps-rebooting-and-reverts-to-the-previous-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "After uploading firmware, the board keeps rebooting and reverts to the previous version"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-build-succeeds-but-xm10_x_x_x_xbin-is-not-generated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "The build succeeds but XM10_X_X_X_X.bin is not generated"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stm32cubeprogrammer-shows-no-data-at-0x08040000-when-i-read-flash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "STM32CubeProgrammer shows no data at 0x08040000 when I read Flash"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-important-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Important Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Important Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#things-you-must-never-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Things you must never do
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-notes-for-rev11--rev20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common notes for Rev1.1 / Rev2.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-environment-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python Environment Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2990,13 +3380,13 @@ Run <code>pip install pyyaml</code> (required for Data Map code generation).</p>
         
         
           
-          <a href="XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/" class="md-footer__link md-footer__link--next" aria-label="Next: Upload Guide">
+          <a href="../advanced/" class="md-footer__link md-footer__link--next" aria-label="Next: Overview">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Upload Guide
+                Overview
               </div>
             </div>
             <div class="md-footer__button md-icon">

@@ -16,7 +16,7 @@
         <link rel="prev" href="../kit-h10-firmware/">
       
       
-        <link rel="next" href="XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/">
+        <link rel="next" href="../advanced/">
       
       
         
@@ -31,7 +31,7 @@
     
     
       
-        <title>개요 - XM10 Extension Module</title>
+        <title>부트로더 - XM10 Extension Module</title>
       
     
     
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              개요
+              부트로더
             
           </span>
         </div>
@@ -1433,34 +1433,16 @@
   
   
   
-    
-    
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
       
         
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
           
-        
-      
-        
-      
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
-        
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="./" class="md-nav__link md-nav__link--active">
-              
   
   
   <span class="md-ellipsis">
@@ -1474,43 +1456,17 @@
   
   
 
-            </a>
-            
-              
-              <label class="md-nav__link md-nav__link--active" for="__nav_9" id="__nav_9_label" tabindex="">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    부트로더
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/" class="md-nav__link">
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    업로드 방법
+    부트로더
   
 
     
@@ -1519,13 +1475,447 @@
   
 
       </a>
-    </li>
-  
+      
+        
 
-              
-            
-          </ul>
-        </nav>
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#목차" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        목차
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-개요" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 개요
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 개요">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#부트로더가-하는-일" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        부트로더가 하는 일
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#필요한-도구" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        필요한 도구
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-flash-메모리-맵" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Flash 메모리 맵
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-최초-설치-부트로더-없는-상태에서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 최초 설치 (부트로더 없는 상태에서)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 최초 설치 (부트로더 없는 상태에서)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-full-chip-erase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Full Chip Erase
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-부트로더-바이너리-업로드" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: 부트로더 바이너리 업로드
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-확인" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: 확인
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-앱-펌웨어-업로드--stm32cubeide-swd-디버깅" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 앱 펌웨어 업로드 — STM32CubeIDE (SWD 디버깅)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 앱 펌웨어 업로드 — STM32CubeIDE (SWD 디버깅)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#사전-설정-최초-1회" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        사전 설정 (최초 1회)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#빌드--디버깅" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        빌드 &amp; 디버깅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swd-디버깅이-부트로더와-호환되는-이유" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SWD 디버깅이 부트로더와 호환되는 이유
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-앱-펌웨어-업로드--phai-studio-usb-ftp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 앱 펌웨어 업로드 — PhAI Studio (USB FTP)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 앱 펌웨어 업로드 — PhAI Studio (USB FTP)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#필요한-파일" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        필요한 파일
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#업로드-절차" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        업로드 절차
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#부트로더-ftp-모드-강제-진입" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        부트로더 FTP 모드 강제 진입
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-빌드-후-바이너리-생성-과정" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 빌드 후 바이너리 생성 과정
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 빌드 후 바이너리 생성 과정">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#각-단계-상세" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        각 단계 상세
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-부트로더-동작-원리" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 부트로더 동작 원리
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 부트로더 동작 원리">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#부팅-시퀀스" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        부팅 시퀀스
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ftp-업데이트-시퀀스" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FTP 업데이트 시퀀스
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-문제-해결-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 문제 해결 (Troubleshooting)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. 문제 해결 (Troubleshooting)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#부트로더를-설치했는데-앱이-실행되지-않습니다" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "부트로더를 설치했는데 앱이 실행되지 않습니다"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swd-디버깅-후-부트로더가-사라졌습니다" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "SWD 디버깅 후 부트로더가 사라졌습니다"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugf11-하자마자-실행이-멈추고-signal-handlersigtrap-등에-빠집니다" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Debug(F11) 하자마자 실행이 멈추고 signal handler(SIGTRAP 등)에 빠집니다"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phai-studio에서-디바이스를-찾지-못합니다" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "PhAI Studio에서 디바이스를 찾지 못합니다"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fw-업로드-후-부팅이-반복되다가-이전-버전으로-돌아갔습니다" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "FW 업로드 후 부팅이 반복되다가 이전 버전으로 돌아갔습니다"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#빌드는-되는데-xm10_x_x_x_xbin이-생성되지-않습니다" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "빌드는 되는데 XM10_X_X_X_X.bin이 생성되지 않습니다"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stm32cubeprogrammer에서-read-하면-0x08040000에-데이터가-없습니다" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "STM32CubeProgrammer에서 Read 하면 0x08040000에 데이터가 없습니다"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-주의사항" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 주의사항
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. 주의사항">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#절대-하면-안-되는-것" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        절대 하면 안 되는 것
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rev11--rev20-공통-사항" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 공통 사항
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-환경-설정" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python 환경 설정
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2990,13 +3380,13 @@ SWD로 앱을 플래시해도 부트로더는 손상되지 않습니다.</p>
         
         
           
-          <a href="XM10_%EB%B6%80%ED%8A%B8%EB%A1%9C%EB%8D%94_%EC%97%85%EB%A1%9C%EB%93%9C%EB%B0%A9%EB%B2%95/" class="md-footer__link md-footer__link--next" aria-label="다음: 업로드 방법">
+          <a href="../advanced/" class="md-footer__link md-footer__link--next" aria-label="다음: 개요">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 다음
               </span>
               <div class="md-ellipsis">
-                업로드 방법
+                개요
               </div>
             </div>
             <div class="md-footer__button md-icon">
