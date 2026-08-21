@@ -110,12 +110,16 @@ plugins:
             아키텍처: Architecture
             KIT H10 펌웨어: KIT H10 Firmware
             부트로더: Bootloader
-            업로드 방법: Upload Guide
             심화: Advanced
             AI 데이터 파이프라인: AI Data Pipeline
             안전: Safety
             문제 해결: Troubleshooting
             릴리스 노트: Release Notes
+  # 구 URL 보존 — 한글 파일명 페이지(중복 안내문)를 정리하면서
+  # 기존 주소로 들어오는 방문자를 부트로더 가이드로 넘긴다.
+  - redirects:
+      redirect_maps:
+        'bootloader/XM10_부트로더_업로드방법.md': 'bootloader/README.md'
 
 markdown_extensions:
   - admonition
@@ -186,9 +190,7 @@ nav:
           - xm_api_user_custom.h (사용자 데이터): api-reference/ref/xm-api-user-custom.md
   - 아키텍처: architecture/README.md
   - KIT H10 펌웨어: kit-h10-firmware/README.md
-  - 부트로더:
-      - 개요: bootloader/README.md
-      - 업로드 방법: bootloader/XM10_부트로더_업로드방법.md
+  - 부트로더: bootloader/README.md
   - 심화:
       - 개요: advanced/README.md
       - AI 데이터 파이프라인: advanced/ai-data-pipeline.md

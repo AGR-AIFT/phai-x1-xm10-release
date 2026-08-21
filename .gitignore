@@ -4,8 +4,11 @@ Release/
 build/
 !**/tools/build/
 
+# MkDocs 빌드 산출물 (gh-pages 는 CI 가 생성)
+site/
+
 # 패키징 산출물 — GitHub Release 에 업로드 후 로컬 보관 불필요
-# (tools/package_release.ps1 가 레포 루트에 생성)
+# (tools/package_release.py 가 레포 루트에 생성)
 /Rev*.zip
 /AGR_Bootloader.bin
 /SUIT_*.bin
@@ -98,7 +101,6 @@ docs/kit-h10-firmware/*
 !docs/bootloader/
 docs/bootloader/*
 !docs/bootloader/README.md
-!docs/bootloader/XM10_부트로더_업로드방법.md
 !docs/hardware/
 docs/hardware/*
 !docs/hardware/README.md
@@ -149,7 +151,6 @@ docs/stylesheets/*
 !docs/architecture/README.en.md
 !docs/kit-h10-firmware/README.en.md
 !docs/bootloader/README.en.md
-!docs/bootloader/XM10_부트로더_업로드방법.en.md
 !docs/advanced/README.en.md
 !docs/advanced/ai-data-pipeline.en.md
 !docs/release-notes/README.en.md
