@@ -1,0 +1,459 @@
+Final_Compensation_AddOn.c Usage Guide
+======================================
+
+English
+-------
+
+1. What this code does
+
+Final_Compensation_AddOn.c is an encoder-based gravity and friction
+compensation add-on example. It uses only the built-in H10 left and right hip
+motor encoders, so no external sensor is required to test the compensation
+logic by itself.
+
+The final commanded torque is:
+
+final_assist_torque = base_assist_torque + compensation_torque
+
+Students can later replace base_assist_torque with an EMG-, FSR-, encoder-, or
+state-estimation-based assist command while reusing the compensation model.
+This file does not define a gait-event rule by itself.
+
+2. Encoder signal definition
+
+Raw encoder variables:
+
+XM.status.h10.leftHipMotorAngle
+XM.status.h10.rightHipMotorAngle
+
+Corrected control angle:
+
+control_angle = encoder_sign * (raw_encoder_angle - encoder_offset)
+
+The corrected control angle is used by the gravity and friction compensation
+model. Validate the encoder sign, offset, and torque direction on a bench setup
+before enabling torque output.
+
+3. Default compensation model
+
+gravity_torque = gravity_mgl_nm * sin(control_angle)
+
+friction_torque =
+  coulomb_friction_nm * sign(angular_velocity)
+  + viscous_friction_nms * angular_velocity
+
+compensation_torque =
+  compensation_scale * (gravity_torque + friction_torque)
+
+final_assist_torque =
+  clamp(base_assist_torque + compensation_torque)
+
+gravity_mgl_nm represents M * g * L_eff in Nm. The correct value depends on
+the mechanism and must be identified experimentally.
+
+Friction compensation is optional and defaults to OFF because encoder velocity
+is calculated by numerical differentiation and can be noisy. Enable friction
+compensation only after validating the filtered velocity signal and torque
+direction.
+
+4. Button functions
+
+BTN1 pressed:
+  Toggle total torque output through control_ON, but only while H10 is in
+  ASSIST mode.
+
+BTN2 pressed:
+  Toggle the compensation add-on through compensation_ON, but only while H10 is
+  in ASSIST mode.
+
+BTN3 pressed:
+  Force control_ON = 0 and compensation_ON = 0. This disables torque output.
+
+friction_compensation_ON is not toggled by a button. It must be changed
+separately in STM32CubeIDE Live Expressions so friction compensation cannot be
+enabled accidentally.
+
+5. Required operating procedure
+
+1) Validate encoder signs, offsets, and torque directions on a bench setup.
+2) Switch the H10 device to ASSIST mode.
+3) Confirm assist_mode_active == 1 in STM32CubeIDE Live Expressions.
+4) Keep left_base_assist_torque_nm and right_base_assist_torque_nm at 0 Nm
+   while validating compensation by itself.
+5) Press BTN1 once to request total torque output.
+6) Confirm control_ON == 1 and assist_enable == 1.
+7) Press BTN2 to toggle compensation_ON.
+8) Move each side slowly and observe control angle, velocity, compensation
+   torque, and final assist torque.
+9) Press BTN3 at any time to disable torque output.
+
+6. Safety gate for torque output
+
+Torque output is permitted only when both conditions are true:
+
+control_ON == 1
+H10 mode == ASSIST
+
+The H10 built-in assist algorithm remains disabled so measured assistance comes
+only from this user algorithm. The final command is limited by both
+assist_torque_limit_nm and HARD_MAX_ASSIST_TORQUE_NM. Start with low values and
+verify torque direction before any wearable test.
+
+7. Important Live Expressions variables
+
+Writable variables:
+
+control_ON
+  0 = output disabled
+  1 = torque requested
+
+compensation_ON
+  0 = add-on disabled
+  1 = add-on enabled
+
+friction_compensation_ON
+  0 = gravity compensation only
+  1 = gravity + friction compensation
+
+encoder_offset_lh_deg, encoder_offset_rh_deg
+  Left/right neutral-position offsets.
+
+encoder_sign_lh, encoder_sign_rh
+  Left/right angle signs. Usually +1 or -1.
+
+left_base_assist_torque_nm, right_base_assist_torque_nm
+  Base torque from another algorithm. Keep these at 0 Nm while testing the
+  compensation add-on alone.
+
+gravity_mgl_nm
+  M * g * L_eff model value in Nm. Start low.
+
+compensation_scale
+  Add-on scale. It is clamped to 0.0~1.0. Increase gradually.
+
+coulomb_friction_nm
+  Constant friction model magnitude.
+
+viscous_friction_nms
+  Velocity-proportional friction coefficient.
+
+velocity_lpf_cutoff_hz
+  Low-pass cutoff for encoder angular velocity.
+
+velocity_deadzone_rads
+  Deadzone used before applying the friction model.
+
+assist_torque_limit_nm
+  Student-adjustable torque limit.
+
+cdc_stream_enable
+  0 = custom CDC off
+  1 = custom CDC on
+
+cdc_stream_period_ms
+  CDC period. The default is 10 ms, or 100 Hz.
+
+Observe-only variables:
+
+assist_enable
+  1 only while torque mode is actually active.
+
+assist_mode_active
+  1 while H10 ASSIST mode is active.
+
+btn1_state .. btn3_state
+  Current physical button states.
+
+btn1_last_event .. btn3_last_event
+  Last detected button events.
+
+left_encoder_angle_deg, right_encoder_angle_deg
+  Raw left/right hip motor encoder angles.
+
+left_control_angle_deg, right_control_angle_deg
+  Corrected angles used by the compensation model.
+
+left_angular_velocity_rads, right_angular_velocity_rads
+  Filtered encoder angular velocities.
+
+left_gravity_torque_nm, right_gravity_torque_nm
+  Gravity-model torque before compensation_scale.
+
+left_friction_torque_nm, right_friction_torque_nm
+  Friction-model torque before compensation_scale.
+
+left_compensation_torque_nm, right_compensation_torque_nm
+  Scaled add-on torque.
+
+left_assist_torque_nm, right_assist_torque_nm
+  Final left/right torque command after clamp.
+
+left_motor_current_a, right_motor_current_a
+  Measured left/right motor current from H10.
+
+8. USB CDC data
+
+Module ID:
+  0xF0
+
+CDC payload:
+  16 float32 channels, default 100 Hz.
+
+Default CSV/channel order:
+
+1)  L Angle  = left_control_angle_deg
+2)  R Angle  = right_control_angle_deg
+3)  L Vel    = left_angular_velocity_rads
+4)  R Vel    = right_angular_velocity_rads
+5)  L Base   = left_base_assist_torque_nm
+6)  R Base   = right_base_assist_torque_nm
+7)  L Gravity = left_gravity_torque_nm
+8)  R Gravity = right_gravity_torque_nm
+9)  L Fric   = left_friction_torque_nm
+10) R Fric   = right_friction_torque_nm
+11) L Add-on = left_compensation_torque_nm
+12) R Add-on = right_compensation_torque_nm
+13) L Torque = left_assist_torque_nm
+14) R Torque = right_assist_torque_nm
+15) Control  = control_ON
+16) Comp On  = compensation_ON
+
+9. Student-safe modification points
+
+Keep friction_compensation_ON = 0 first and tune gravity_mgl_nm and
+compensation_scale gradually while observing the angle and torque signals.
+After gravity compensation is validated, set friction_compensation_ON = 1 and
+tune velocity_lpf_cutoff_hz, velocity_deadzone_rads, coulomb_friction_nm, and
+viscous_friction_nms.
+Replace left_base_assist_torque_nm and right_base_assist_torque_nm with another
+algorithm's torque command if this file is used as an add-on.
+Customize the CDC stream only in the STUDENT CDC STREAM CONFIGURATION block.
+Do not remove the safety gate, torque clamps, or low-level XM torque API calls.
+
+
+Korean / 한국어
+--------------
+
+1. 이 코드는 무엇을 하나요?
+
+Final_Compensation_AddOn.c는 encoder 기반 gravity/friction compensation add-on
+예제입니다. H10에 내장된 왼쪽/오른쪽 hip motor encoder만 사용하므로 외부 센서
+없이 compensation logic 자체를 테스트할 수 있습니다.
+
+최종 명령 토크는 다음과 같습니다.
+
+final_assist_torque = base_assist_torque + compensation_torque
+
+학생은 나중에 base_assist_torque를 EMG, FSR, encoder, state estimation 기반
+보조 명령으로 바꾸고, compensation model은 그대로 재사용할 수 있습니다. 이
+파일 자체는 gait-event rule을 정의하지 않습니다.
+
+2. Encoder 신호 정의
+
+raw encoder 변수:
+
+XM.status.h10.leftHipMotorAngle
+XM.status.h10.rightHipMotorAngle
+
+보정된 control angle:
+
+control_angle = encoder_sign * (raw_encoder_angle - encoder_offset)
+
+보정된 control angle은 gravity/friction compensation model의 입력으로 사용됩니다.
+토크를 켜기 전에 벤치 환경에서 encoder sign, offset, torque direction을 반드시
+확인하세요.
+
+3. 기본 compensation model
+
+gravity_torque = gravity_mgl_nm * sin(control_angle)
+
+friction_torque =
+  coulomb_friction_nm * sign(angular_velocity)
+  + viscous_friction_nms * angular_velocity
+
+compensation_torque =
+  compensation_scale * (gravity_torque + friction_torque)
+
+final_assist_torque =
+  clamp(base_assist_torque + compensation_torque)
+
+gravity_mgl_nm은 M * g * L_eff에 해당하는 Nm 단위 모델 값입니다. 정확한 값은
+기구 구조에 따라 다르며 실험적으로 찾아야 합니다.
+
+Friction compensation은 선택 기능이며 기본값은 OFF입니다. encoder velocity는
+수치 미분으로 계산되기 때문에 noise가 커질 수 있습니다. filtered velocity와
+torque direction을 확인한 뒤에만 friction compensation을 켜세요.
+
+4. 버튼 기능
+
+BTN1 누름:
+  H10이 ASSIST mode일 때 control_ON을 toggle해서 전체 토크 출력을 켜거나 끕니다.
+
+BTN2 누름:
+  H10이 ASSIST mode일 때 compensation_ON을 toggle해서 compensation add-on을
+  켜거나 끕니다.
+
+BTN3 누름:
+  control_ON = 0, compensation_ON = 0으로 강제로 설정합니다. 토크 출력이
+  비활성화됩니다.
+
+friction_compensation_ON은 버튼으로 toggle되지 않습니다. 실수로 friction
+compensation이 켜지는 것을 막기 위해 STM32CubeIDE Live Expressions에서 따로
+변경해야 합니다.
+
+5. 사용 순서
+
+1) 벤치 환경에서 encoder sign, offset, torque direction을 확인합니다.
+2) H10을 ASSIST mode로 전환합니다.
+3) STM32CubeIDE Live Expressions에서 assist_mode_active == 1인지 확인합니다.
+4) compensation 자체만 검증할 때는 left_base_assist_torque_nm과
+   right_base_assist_torque_nm을 0 Nm으로 둡니다.
+5) BTN1을 한 번 눌러 전체 토크 출력을 요청합니다.
+6) control_ON == 1, assist_enable == 1인지 확인합니다.
+7) BTN2를 눌러 compensation_ON을 toggle합니다.
+8) 각 side를 천천히 움직이며 control angle, velocity, compensation torque,
+   final assist torque를 관찰합니다.
+9) 언제든 BTN3을 누르면 토크 출력이 꺼집니다.
+
+6. 토크 출력 safety gate
+
+아래 두 조건이 모두 참일 때만 토크가 출력됩니다.
+
+control_ON == 1
+H10 mode == ASSIST
+
+H10 built-in assist algorithm은 비활성화되어 이 user algorithm의 보조력만
+측정되도록 되어 있습니다. 최종 명령은 assist_torque_limit_nm과
+HARD_MAX_ASSIST_TORQUE_NM으로 제한됩니다. 낮은 값부터 시작하고 착용 테스트 전에
+토크 방향을 확인하세요.
+
+7. 주요 Live Expressions 변수
+
+쓰기 가능한 변수:
+
+control_ON
+  0 = 출력 비활성화
+  1 = 토크 요청
+
+compensation_ON
+  0 = add-on 비활성화
+  1 = add-on 활성화
+
+friction_compensation_ON
+  0 = gravity compensation만 사용
+  1 = gravity + friction compensation 사용
+
+encoder_offset_lh_deg, encoder_offset_rh_deg
+  왼쪽/오른쪽 neutral-position offset입니다.
+
+encoder_sign_lh, encoder_sign_rh
+  왼쪽/오른쪽 angle sign입니다. 보통 +1 또는 -1입니다.
+
+left_base_assist_torque_nm, right_base_assist_torque_nm
+  다른 알고리즘에서 들어오는 base torque입니다. compensation add-on만 테스트할
+  때는 0 Nm으로 두세요.
+
+gravity_mgl_nm
+  M * g * L_eff에 해당하는 Nm 단위 모델 값입니다. 낮은 값부터 시작하세요.
+
+compensation_scale
+  add-on scale입니다. 0.0~1.0으로 제한됩니다. 천천히 증가시키세요.
+
+coulomb_friction_nm
+  constant friction model 크기입니다.
+
+viscous_friction_nms
+  velocity에 비례하는 friction coefficient입니다.
+
+velocity_lpf_cutoff_hz
+  encoder angular velocity low-pass filter cutoff입니다.
+
+velocity_deadzone_rads
+  friction model 적용 전 deadzone입니다.
+
+assist_torque_limit_nm
+  학생이 조정할 수 있는 토크 제한값입니다.
+
+cdc_stream_enable
+  0 = custom CDC 끔
+  1 = custom CDC 켬
+
+cdc_stream_period_ms
+  CDC 전송 주기입니다. 기본값은 10 ms, 즉 100 Hz입니다.
+
+관찰용 변수:
+
+assist_enable
+  실제 토크 모드가 활성화되었을 때만 1입니다.
+
+assist_mode_active
+  H10 ASSIST mode일 때 1입니다.
+
+btn1_state .. btn3_state
+  현재 물리 버튼 상태입니다.
+
+btn1_last_event .. btn3_last_event
+  마지막으로 감지된 버튼 이벤트입니다.
+
+left_encoder_angle_deg, right_encoder_angle_deg
+  raw 왼쪽/오른쪽 hip motor encoder angle입니다.
+
+left_control_angle_deg, right_control_angle_deg
+  compensation model에 사용하는 보정된 angle입니다.
+
+left_angular_velocity_rads, right_angular_velocity_rads
+  필터링된 encoder angular velocity입니다.
+
+left_gravity_torque_nm, right_gravity_torque_nm
+  compensation_scale 적용 전 gravity model torque입니다.
+
+left_friction_torque_nm, right_friction_torque_nm
+  compensation_scale 적용 전 friction model torque입니다.
+
+left_compensation_torque_nm, right_compensation_torque_nm
+  scale이 적용된 add-on torque입니다.
+
+left_assist_torque_nm, right_assist_torque_nm
+  clamp 이후 최종 왼쪽/오른쪽 토크 명령입니다.
+
+left_motor_current_a, right_motor_current_a
+  H10에서 측정한 왼쪽/오른쪽 motor current입니다.
+
+8. USB CDC 데이터
+
+Module ID:
+  0xF0
+
+CDC payload:
+  float32 16채널, 기본 100 Hz입니다.
+
+기본 CSV/채널 순서:
+
+1)  L Angle  = left_control_angle_deg
+2)  R Angle  = right_control_angle_deg
+3)  L Vel    = left_angular_velocity_rads
+4)  R Vel    = right_angular_velocity_rads
+5)  L Base   = left_base_assist_torque_nm
+6)  R Base   = right_base_assist_torque_nm
+7)  L Gravity = left_gravity_torque_nm
+8)  R Gravity = right_gravity_torque_nm
+9)  L Fric   = left_friction_torque_nm
+10) R Fric   = right_friction_torque_nm
+11) L Add-on = left_compensation_torque_nm
+12) R Add-on = right_compensation_torque_nm
+13) L Torque = left_assist_torque_nm
+14) R Torque = right_assist_torque_nm
+15) Control  = control_ON
+16) Comp On  = compensation_ON
+
+9. 학생이 수정하기 좋은 부분
+
+먼저 friction_compensation_ON = 0으로 두고 gravity_mgl_nm과 compensation_scale을
+천천히 조정하면서 angle과 torque 신호를 관찰합니다.
+gravity compensation을 확인한 뒤 friction_compensation_ON = 1로 설정하고
+velocity_lpf_cutoff_hz, velocity_deadzone_rads, coulomb_friction_nm,
+viscous_friction_nms를 조정합니다.
+이 파일을 add-on으로 사용할 경우 left_base_assist_torque_nm과
+right_base_assist_torque_nm을 다른 알고리즘의 토크 명령으로 대체할 수 있습니다.
+CDC stream은 STUDENT CDC STREAM CONFIGURATION block 안에서만 수정하세요.
+safety gate, torque clamp, low-level XM 토크 API 호출은 제거하지 마세요.

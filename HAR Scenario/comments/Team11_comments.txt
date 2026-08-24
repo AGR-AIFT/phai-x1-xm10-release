@@ -1,0 +1,5 @@
+- Scenario difficulty: Appropriate; implement FSR phase gating first, then add EMG modulation if time allows.
+
+- Recommended example code: Use `Final_FSR_Fuzzy_Logic.c`; add `Final_EMG.c` for effort scaling/evaluation.
+
+- Evaluation metric appropriateness: The proposed direction is appropriate; recommended metrics are normalized EMG RMS reduction, correct-phase assistance rate, and robot torque smoothness.

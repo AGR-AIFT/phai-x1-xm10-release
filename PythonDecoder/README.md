@@ -10,6 +10,7 @@ XM10 보드의 USB-CDC / USB-MSC 데이터를 처리하기 위한 Python 도구 
 PythonDecoder/
 ├── CDC/                        ← USB-CDC 도구 (실시간 + 후처리)
 │   ├── cdc_phai_receiver.py    ← 실시간 모니터링 + 로깅 GUI
+│   ├── cdc_selective_logger.py ← 포트/채널 선택형 CSV 저장 GUI
 │   └── cdc_csv_reviewer.py     ← 후처리 CSV 분석 뷰어
 ├── MSC/                        ← USB-MSC 도구
 │   └── data_decoder_xm10.py   ← 바이너리 로그 → CSV 디코더
@@ -72,6 +73,18 @@ python CDC/cdc_csv_reviewer.py data/cdc_phai_20260224_120000.csv
 - X축 연동 (줌/팬 동기화)
 - 드래그 앤 드롭 CSV 열기
 - 동적 그리드 레이아웃 (1~3열 자동)
+
+### 1.3 `cdc_selective_logger.py` — 선택형 CSV 저장 GUI
+
+USB 포트를 자동 연결하지 않고 GUI 드롭다운에서 직접 선택합니다. 연결
+후 실제로 수신된 CDC 모듈과 float 채널 수를 표시하며, 체크한 채널만 CSV로
+저장합니다. 채널 이름은 기본적으로 `ch0`, `ch1`, ... 로 표시합니다.
+`Final_FSR_Fuzzy_Logic`, `Final_EMG`, `Final_Encoder_ex01` 프리셋을 선택하면
+해당 FW의 변수명을 즉시 적용하며, GUI에서 직접 수정할 수도 있습니다.
+
+```bash
+python CDC/cdc_selective_logger.py
+```
 
 ---
 

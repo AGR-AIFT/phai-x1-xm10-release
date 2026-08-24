@@ -1,0 +1,5 @@
+- Scenario difficulty: I recommend simplifying this to walking or brisk-walking initiation; running initiation is safety-critical and the load cell is not allowed.
+
+- Recommended example code: Use `Final_EMG.c` plus `Final_Encoder_ex01.c` after simplifying to walking/brisk-walking initiation.
+
+- Evaluation metric appropriateness: Detection rate and encoder/torque smoothness are appropriate; replace loadcell metrics with commanded torque, normalized EMG RMS reduction, and false-trigger count.

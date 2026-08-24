@@ -1,0 +1,273 @@
+Final_EMG.c Usage Guide
+=======================
+
+English
+-------
+
+1. What this code does
+
+Final_EMG.c is an EMG proportional assist example. It reads up to four external
+analog EMG channels, removes the resting bias, extracts an envelope, converts
+the selected right/left EMG pair into proportional torque commands, and sends
+selected EMG and torque values to the PC through USB CDC.
+
+The default algorithm is intentionally simple. Validate signal quality, sensor
+placement, and torque direction on a bench setup before wearing the device.
+
+2. Sensor mapping
+
+PF3 = XM_EXT_ADC_5
+PF4 = XM_EXT_ADC_6
+PF5 = XM_EXT_ADC_7
+PF6 = XM_EXT_ADC_8
+
+torque_input_pair selects the EMG pair:
+
+0 = PF3 -> right hip, PF4 -> left hip
+1 = PF5 -> right hip, PF6 -> left hip
+
+The default assumption is a biased raw-EMG signal from 0.0 to 3.3 V with a
+resting center near 1.65 V.
+
+3. EMG processing pipeline
+
+raw ADC voltage
+-> resting-bias removal
+-> pre-rectification low-pass filter
+-> full-wave rectification
+-> envelope low-pass filter
+-> deadband removal
+-> active-effort normalization
+-> proportional torque gain and saturation
+
+Default maximum torque:
+
+EMG_MAX_TORQUE_NM = 2.5 Nm
+emg_assist_scale = 0.5
+
+Therefore the default maximum output is 1.25 Nm.
+
+4. Button functions
+
+BTN1 click:
+  Start resting-bias calibration. Relax the target muscles and remain still for
+  3 seconds.
+
+BTN2 click:
+  Start active-effort calibration. Contract the target muscles at a
+  representative effort level for 3 seconds.
+
+BTN3 click:
+  Reset calibration values to defaults.
+
+LED feedback:
+  LED1 fast blink = resting calibration is running
+  LED2 fast blink = active-effort calibration is running
+  LED3 one-shot   = calibration reset
+
+5. Required operating procedure
+
+1) Connect the EMG sensors and switch the H10 device to ASSIST mode.
+2) Select torque_input_pair in STM32CubeIDE Live Expressions.
+3) Relax the target muscles.
+4) Click BTN1 and remain still for 3 seconds.
+5) Contract the target muscles at a representative effort level.
+6) Click BTN2 and maintain the contraction for 3 seconds.
+7) Observe raw, centered, envelope, and torque variables.
+8) Confirm that relaxed EMG produces approximately zero torque.
+9) Validate torque direction and amplitude on a bench setup.
+10) Set control_ON = 1 only after validation.
+
+Important: this implementation does not block BTN2 before BTN1 and does not
+require completed calibration before control_ON enables torque. Always perform
+BTN1 and BTN2 calibration in order before setting control_ON = 1.
+
+6. Important Live Expressions variables
+
+Writable variables:
+
+control_ON
+  0 = torque disabled
+  1 = proportional torque enabled
+
+torque_input_pair
+  0 = PF3/PF4 pair
+  1 = PF5/PF6 pair
+
+emg_assist_scale
+  Output scale. It is clamped to 0.0~1.0. The default is 0.5.
+
+Observe-only variables:
+
+emg_pf3_raw_v .. emg_pf6_raw_v
+  Raw sensor voltages.
+
+emg_pf3_centered_v .. emg_pf6_centered_v
+  Raw voltages after resting-bias removal.
+
+emg_pf3_envelope_v .. emg_pf6_envelope_v
+  Smoothed EMG envelopes after rectification.
+
+emg_pf3_torque_nm .. emg_pf6_torque_nm
+  Per-channel proportional torque values before pair selection.
+
+7. USB CDC data
+
+Module ID:
+  0xF0
+
+CDC payload:
+  Six float32 channels. The selected pair follows torque_input_pair.
+
+Default CSV/channel order:
+
+1) Raw RH = selected right-side raw EMG voltage
+2) Raw LH = selected left-side raw EMG voltage
+3) Env RH = selected right-side EMG envelope
+4) Env LH = selected left-side EMG envelope
+5) Tau RH = requested right-side assist torque
+6) Tau LH = requested left-side assist torque
+
+8. Student-safe modification points
+
+Tune EMG_ENV_LPF_CUTOFF_HZ to change envelope smoothness and delay.
+Tune EMG_ENVELOPE_DEADBAND_V after measuring relaxed noise.
+Modify _EnvelopeToTorque() to test another EMG-to-torque mapping.
+Add a ramp or slew-rate limiter after _SelectTorquePair() if torque changes are
+too abrupt.
+Do not remove final torque saturation, zero-torque commands during calibration
+or mode exit, or low-level XM torque API calls.
+
+
+Korean / 한국어
+--------------
+
+1. 이 코드는 무엇을 하나요?
+
+Final_EMG.c는 EMG 비례 보조 예제입니다. 최대 4개의 외부 아날로그 EMG 채널을
+읽고, resting bias를 제거한 뒤 envelope를 추출합니다. 선택된 오른쪽/왼쪽 EMG
+쌍을 비례 토크 명령으로 변환하고, EMG와 토크 값을 USB CDC로 PC에 보냅니다.
+
+기본 알고리즘은 일부러 단순하게 되어 있습니다. 착용 전에 반드시 벤치 환경에서
+신호 품질, 센서 위치, 토크 방향을 확인하세요.
+
+2. 센서 매핑
+
+PF3 = XM_EXT_ADC_5
+PF4 = XM_EXT_ADC_6
+PF5 = XM_EXT_ADC_7
+PF6 = XM_EXT_ADC_8
+
+torque_input_pair로 사용할 EMG 쌍을 선택합니다.
+
+0 = PF3 -> 오른쪽 hip, PF4 -> 왼쪽 hip
+1 = PF5 -> 오른쪽 hip, PF6 -> 왼쪽 hip
+
+기본 가정은 resting center가 약 1.65 V인 0.0~3.3 V biased raw EMG 신호입니다.
+
+3. EMG 처리 과정
+
+raw ADC voltage
+-> resting-bias removal
+-> pre-rectification low-pass filter
+-> full-wave rectification
+-> envelope low-pass filter
+-> deadband removal
+-> active-effort normalization
+-> proportional torque gain and saturation
+
+기본 최대 토크:
+
+EMG_MAX_TORQUE_NM = 2.5 Nm
+emg_assist_scale = 0.5
+
+따라서 기본 최대 출력은 1.25 Nm입니다.
+
+4. 버튼 기능
+
+BTN1 클릭:
+  resting-bias 캘리브레이션 시작. 목표 근육을 이완하고 3초 동안 가만히 있습니다.
+
+BTN2 클릭:
+  active-effort 캘리브레이션 시작. 목표 근육을 기준 effort로 3초 동안 수축합니다.
+
+BTN3 클릭:
+  캘리브레이션 값을 기본값으로 리셋합니다.
+
+LED 피드백:
+  LED1 빠른 점멸 = resting calibration 진행 중
+  LED2 빠른 점멸 = active-effort calibration 진행 중
+  LED3 one-shot   = calibration reset
+
+5. 사용 순서
+
+1) EMG 센서를 연결하고 H10을 ASSIST mode로 전환합니다.
+2) STM32CubeIDE Live Expressions에서 torque_input_pair를 선택합니다.
+3) 목표 근육을 이완합니다.
+4) BTN1을 클릭하고 3초 동안 가만히 있습니다.
+5) 목표 근육을 기준 effort로 수축합니다.
+6) BTN2를 클릭하고 3초 동안 수축을 유지합니다.
+7) raw, centered, envelope, torque 변수를 관찰합니다.
+8) 이완 상태에서 토크가 거의 0인지 확인합니다.
+9) 벤치 환경에서 토크 방향과 크기를 확인합니다.
+10) 확인이 끝난 뒤 control_ON = 1로 설정합니다.
+
+중요: 이 구현은 BTN1 전에 BTN2를 누르는 것을 막지 않고, 캘리브레이션 완료
+여부로 control_ON을 강제로 막지도 않습니다. 반드시 BTN1, BTN2 순서로
+캘리브레이션을 수행한 뒤 control_ON = 1로 설정하세요.
+
+6. 주요 Live Expressions 변수
+
+쓰기 가능한 변수:
+
+control_ON
+  0 = 토크 비활성화
+  1 = 비례 토크 활성화
+
+torque_input_pair
+  0 = PF3/PF4 쌍
+  1 = PF5/PF6 쌍
+
+emg_assist_scale
+  출력 scale입니다. 0.0~1.0으로 제한됩니다. 기본값은 0.5입니다.
+
+관찰용 변수:
+
+emg_pf3_raw_v .. emg_pf6_raw_v
+  raw 센서 전압입니다.
+
+emg_pf3_centered_v .. emg_pf6_centered_v
+  resting bias를 제거한 전압입니다.
+
+emg_pf3_envelope_v .. emg_pf6_envelope_v
+  rectification 이후 smoothing된 EMG envelope입니다.
+
+emg_pf3_torque_nm .. emg_pf6_torque_nm
+  pair 선택 전 채널별 비례 토크 값입니다.
+
+7. USB CDC 데이터
+
+Module ID:
+  0xF0
+
+CDC payload:
+  float32 6채널입니다. 선택된 pair는 torque_input_pair를 따릅니다.
+
+기본 CSV/채널 순서:
+
+1) Raw RH = 선택된 오른쪽 raw EMG 전압
+2) Raw LH = 선택된 왼쪽 raw EMG 전압
+3) Env RH = 선택된 오른쪽 EMG envelope
+4) Env LH = 선택된 왼쪽 EMG envelope
+5) Tau RH = 요청된 오른쪽 보조 토크
+6) Tau LH = 요청된 왼쪽 보조 토크
+
+8. 학생이 수정하기 좋은 부분
+
+EMG_ENV_LPF_CUTOFF_HZ를 조정해서 envelope의 부드러움과 delay를 바꿀 수 있습니다.
+이완 상태 noise를 측정한 뒤 EMG_ENVELOPE_DEADBAND_V를 조정합니다.
+_EnvelopeToTorque()에서 EMG-to-torque mapping을 바꿔볼 수 있습니다.
+토크 변화가 너무 급하면 _SelectTorquePair() 뒤에 ramp 또는 slew-rate limiter를
+추가할 수 있습니다.
+최종 torque saturation, calibration/mode exit 중 zero-torque 명령, low-level XM
+토크 API 호출은 제거하지 마세요.

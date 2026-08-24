@@ -1,0 +1,5 @@
+- Scenario difficulty: Good scenario, but broad; I recommend starting with one primary phase, preferably stair swing-phase hip-flexion assistance.
+
+- Recommended example code: Use `Final_FSR_Fuzzy_Logic.c`; use `Final_Encoder_ex01.c` for simpler hip-angle triggering, and refer to `examples/17_FSM_Gait_Intent` or `examples/23_Gait_Phase_Adaptive_Torque`.
+
+- Evaluation metric appropriateness: Normalized EMG RMS, FSR/encoder-based timing, phase accuracy, and robot torque smoothness are appropriate; remove heart-rate and comfort metrics because they are not allowed or not directly quantitative.

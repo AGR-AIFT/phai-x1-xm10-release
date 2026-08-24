@@ -1,0 +1,5 @@
+- Scenario difficulty: Appropriate and feasible at a safe incline and speed.
+
+- Recommended example code: Use `Final_FSR_Fuzzy_Logic.c`; add `Final_EMG.c` for EMG reduction or effort-based scaling.
+
+- Evaluation metric appropriateness: Normalized EMG RMS and FSR-based gait detection are appropriate; add false-trigger count or assistance-timing error.

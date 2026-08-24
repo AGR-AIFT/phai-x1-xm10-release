@@ -1,0 +1,5 @@
+- Scenario difficulty: Appropriate and feasible; repeated sit-to-stand is well scoped.
+
+- Recommended example code: Use `Final_Encoder_ex01.c`; add `Final_EMG.c` for EMG effort measurement.
+
+- Evaluation metric appropriateness: The proposed direction is appropriate; recommended metrics are normalized EMG RMS reduction, trigger timing error, movement duration, encoder-based hip smoothness, and robot torque smoothness.

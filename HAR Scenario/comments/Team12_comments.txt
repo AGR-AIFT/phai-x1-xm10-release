@@ -1,0 +1,5 @@
+- Scenario difficulty: Appropriate and feasible; stair hip-flexion assistance is well scoped.
+
+- Recommended example code: Use `Final_FSR_Fuzzy_Logic.c` for toe-off/swing gating; use `Final_Encoder_ex01.c` if hip-angle triggering is enough, with `examples/17_FSM_Gait_Intent` as FSM reference.
+
+- Evaluation metric appropriateness: The proposed direction is appropriate; recommended metrics are FSR/encoder timing error, false-trigger count, encoder-based hip motion, and step-time variability.
