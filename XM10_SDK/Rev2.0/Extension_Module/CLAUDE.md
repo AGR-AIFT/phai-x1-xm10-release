@@ -27,7 +27,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **보드 리비전** | **Rev 2.0** (CAN-FD + Ethernet + PSRAM + RTC) |
 | **MCU** | STM32H743XIH6 (Cortex-M7, 480 MHz, BGA265) |
 | **OS** | FreeRTOS + CMSIS-OS2 |
-| **이 ZIP 의 출처** | https://github.com/AGR-EXO/Extension_Module/releases |
+| **이 ZIP 의 출처** | https://github.com/AGR-AIFT/phai-x1-xm10-release/releases |
 | **License** | MIT |
 | **본 SDK 의 역할** | 사용자/연구자용 공개 릴리즈 — 본인 알고리즘을 `XM_Apps/Control_Task/` 또는 `examples/` 에 작성 |
 
@@ -129,7 +129,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 |------|------|---------------|
 | **PhAI Studio** | 실시간 데이터 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
 | **angel Sensor Studio** | 진단/검증 GUI (Python/PySide6, 별도 배포) | FES/EMG/IMU Hub 등 — XM10 과 CAN-FD 로 연계 가능 |
-| **PythonDecoder** | USB-CDC 실시간 수신 파이썬 샘플 | 본 ZIP 에는 포함되지 않음 — [GitHub 레포](https://github.com/AGR-EXO/Extension_Module) 의 `PythonDecoder/CDC/` 에서 별도로 받으세요 |
+| **PythonDecoder** | USB-CDC 실시간 수신 파이썬 샘플 | 본 ZIP 에는 포함되지 않음 — [GitHub 레포](https://github.com/AGR-AIFT/phai-x1-xm10-release) 의 `PythonDecoder/CDC/` 에서 별도로 받으세요 |
 
 ---
 
@@ -137,8 +137,8 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 - 공식 문서: [docs/](docs/README.md)
 - 트러블슈팅: [docs/troubleshooting.md](docs/troubleshooting.md)
-- 새 버전 확인: https://github.com/AGR-EXO/Extension_Module/releases
-- 이슈 제출: https://github.com/AGR-EXO/Extension_Module/issues
+- 새 버전 확인: https://github.com/AGR-AIFT/phai-x1-xm10-release/releases
+- 이슈 제출: https://github.com/AGR-AIFT/phai-x1-xm10-release/issues
 - 학습용 외부 자료: [onephai.com](https://onephai.com)
 
 ---

@@ -33,7 +33,7 @@ ZIP 안에는 **본인 Rev SDK 한 벌이 ZIP root 에 평탄화** 되어 있습
 
 GitHub Releases 페이지에서 본인 Rev 의 ZIP **만** 받습니다:
 
-📦 다운로드: https://github.com/AGR-EXO/Extension_Module/releases/latest
+📦 다운로드: https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/latest
 
 - **Rev 2.0 보드** → `Rev2.0.zip` (대부분 여기)
 - **Rev 1.1 보드** → `Rev1.1.zip`
@@ -41,7 +41,7 @@ GitHub Releases 페이지에서 본인 Rev 의 ZIP **만** 받습니다:
 AI 가 다운로드 페이지를 자동 오픈할 수 있습니다 (권한 1회):
 
 ```powershell
-Start-Process "https://github.com/AGR-EXO/Extension_Module/releases/latest"
+Start-Process "https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/latest"
 ```
 
 - `Allow` → 기본 브라우저에서 Release 페이지 열림 → Assets 섹션에서 본인 Rev ZIP 클릭
