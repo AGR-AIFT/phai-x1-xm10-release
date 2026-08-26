@@ -329,13 +329,13 @@ Switches the **sensor supply voltage** of the extension port between 3.3V and 5V
 
 | Example | Difficulty | External I/O Usage |
 |------|--------|-------------|
-| [04_Ext_IO_Basic](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/) | Beginner | DIO input and output |
-| [05_Ext_IO_analog](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05_Ext_IO_analog/) | Beginner | Reading fixed ADC voltage |
-| [05a_Ext_IO_DIO_to_ADC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/) | Beginner | Single DIO → ADC switch |
-| [05b_Ext_IO_FSR_8ch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05b_Ext_IO_FSR_8ch/) | Intermediate | Batch switch all 8 channels + resolution |
-| [05c_Ext_IO_Mixed_ADC](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/) | Intermediate | Mixed fixed and dynamic ADC |
-| [05d_Ext_IO_DIO_ADC_Hybrid](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/) | Advanced | Mixed GPIO and ADC mode |
-| [06_Ext_IO_Safety_Switch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/) | Intermediate | Safety switch interlock |
+| [04_Ext_IO_Basic](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/04_Ext_IO_Basic/) | Beginner | DIO input and output |
+| [05_Ext_IO_analog](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/05_Ext_IO_analog/) | Beginner | Reading fixed ADC voltage |
+| [05a_Ext_IO_DIO_to_ADC](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/) | Beginner | Single DIO → ADC switch |
+| [05b_Ext_IO_FSR_8ch](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/05b_Ext_IO_FSR_8ch/) | Intermediate | Batch switch all 8 channels + resolution |
+| [05c_Ext_IO_Mixed_ADC](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/) | Intermediate | Mixed fixed and dynamic ADC |
+| [05d_Ext_IO_DIO_ADC_Hybrid](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/) | Advanced | Mixed GPIO and ADC mode |
+| [06_Ext_IO_Safety_Switch](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/06_Ext_IO_Safety_Switch/) | Intermediate | Safety switch interlock |
 
 ---
 

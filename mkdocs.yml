@@ -15,9 +15,9 @@
 
 site_name: XM10 Extension Module
 site_description: angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서
-site_url: https://agr-exo.github.io/Extension_Module/
-repo_url: https://github.com/AGR-EXO/Extension_Module
-repo_name: AGR-EXO/Extension_Module
+site_url: https://agr-aift.github.io/phai-x1-xm10-release/
+repo_url: https://github.com/AGR-AIFT/phai-x1-xm10-release
+repo_name: AGR-AIFT/phai-x1-xm10-release
 edit_uri: edit/Develop/docs/
 docs_dir: docs
 

@@ -56,7 +56,7 @@ The SDK is distributed as **per-revision ZIPs from GitHub Releases**. Download o
 
 **b. Download from the Releases page**:
 
-📦 https://github.com/AGR-EXO/Extension_Module/releases/latest
+📦 https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/latest
 
 Under the Assets section, select your revision:
 - **Rev 2.0** → `Rev2.0.zip`

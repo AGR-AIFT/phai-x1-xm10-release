@@ -6,8 +6,8 @@
 **Audience**: SDK users (researchers / students / general robotics developers)
 **Date**: 2026-05-15
 **Related**:
-- User API: [`XM_FW/XM_API/xm_api_freertos.h`](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM_FW/XM_API/xm_api_freertos.h)
-- Task Manager: [`XM_FW/System/Task/xm_task_manager.{c,h}`](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM_FW/System/Task/)
+- User API: [`XM_FW/XM_API/xm_api_freertos.h`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM_FW/XM_API/xm_api_freertos.h)
+- Task Manager: [`XM_FW/System/Task/xm_task_manager.{c,h}`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM_FW/System/Task/)
 - Examples: [`Examples/38_Periodic_Background_Task/`](../../Examples/38_Periodic_Background_Task/) · [`Examples/39_Task_Lifecycle/`](../../Examples/39_Task_Lifecycle/)
 
 ---

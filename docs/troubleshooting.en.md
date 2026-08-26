@@ -98,7 +98,7 @@ The API names (`XM_BTN_1/2/3`) retain their left/center/right semantics on both 
 
 **Resolution:**
 1. Check the board label for `Rev 1.1` or `Rev 2.0`. If the label is unclear, look for an RJ45 Ethernet port — only Rev 2.0 has one. For a detailed comparison, see [docs/hardware/README.md — Board Revision Comparison](hardware/README.md#보드-리비전-비교).
-2. Download the ZIP that matches your board revision from [Releases](https://github.com/AGR-EXO/Extension_Module/releases) and re-import it into STM32CubeIDE.
+2. Download the ZIP that matches your board revision from [Releases](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases) and re-import it into STM32CubeIDE.
 3. Rebuild, flash, and confirm that all three buttons in Ex.01 (Button & LED Basic) work correctly.
 
 **Diagnostic code (optional):** To directly identify the active pins on your board:
@@ -284,7 +284,7 @@ Alternatively, use the read-clear behavior of `XM_GetButtonEvent()` (see Ex.02).
 
 **Cause:** The prerequisite body parameters have not been provided — `XM_SendUserBodyData()` has not been called.
 
-**Resolution:** See [examples/README.md — Body Data guide](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md#part-5).
+**Resolution:** See [examples/README.md — Body Data guide](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5).
 
 #### Called `SetAssistTorque` but KIT H10 Does Not Move
 
@@ -311,6 +311,6 @@ Expand-Archive -Path "$HOME\Downloads\Rev2.0.zip" -DestinationPath C:\dev\ -Forc
 
 ---
 
-If your issue is not resolved, open a ticket on [GitHub Issues](https://github.com/AGR-EXO/Extension_Module/issues).
+If your issue is not resolved, open a ticket on [GitHub Issues](https://github.com/AGR-AIFT/phai-x1-xm10-release/issues).
 
 > 🤖 Claude Code users: type a single line such as `"Ex.XX isn't working"` or `"build error"` and the `example-helper` skill will reference the relevant entry on this page along with the ⚠️ section in the example's README.

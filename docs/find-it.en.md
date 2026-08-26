@@ -13,7 +13,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | I only have a URL — how do I proceed? | [Page 00 — "Download ZIP" checklist](getting-started/00-claude-code-quickstart.md) |
 | I'm stuck on environment setup | [02 Software Setup](getting-started/02-software-setup.md) → [troubleshooting.md](troubleshooting.md) |
 | My first build fails | [03 First Build](getting-started/03-first-build.md) + [troubleshooting.md](troubleshooting.md) |
-| The LED won't turn on | [Ex.00 Quick Start README](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) |
+| The LED won't turn on | [Ex.00 Quick Start README](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/) |
 
 ## 🛠️ Writing Code
 
@@ -35,12 +35,12 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 
 | Situation | Where to go |
 |-----------|-------------|
-| Full index of all 45 examples | [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) |
+| Full index of all 45 examples | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
 | Learning paths by difficulty and track | [docs/tutorials/README.md](tutorials/README.md) |
 | 16-week semester schedule | [tutorials/README.md — Semester Schedule section](tutorials/README.md#한-학기-16-주-수업-진도표-예시) |
 | An example (Ex.XX) isn't working | See the "⚠️ Common Mistakes" section in `examples/XX_*/README.md` |
-| First 30 minutes for a first-time user | [examples/README.md — Getting Started in 30 Minutes](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md#처음-오신-분--첫-30-분-동선) |
-| Algorithm examples: PD control / impedance / CPG / etc. | examples/14, 15, 20–30 (see [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) for full mapping) |
+| First 30 minutes for a first-time user | [examples/README.md — Getting Started in 30 Minutes](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#처음-오신-분--첫-30-분-동선) |
+| Algorithm examples: PD control / impedance / CPG / etc. | examples/14, 15, 20–30 (see [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) for full mapping) |
 
 ## 🔌 Hardware
 
@@ -50,7 +50,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | External GPIO pinmap (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | External GPIO pinmap (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | Is my board Rev 1.1 or Rev 2.0? | [hardware/README.md — Board Revision Comparison](hardware/README.md#보드-리비전-비교) |
-| Which board revision do the 45 examples support? | [examples/README.md — Board Revision Compatibility](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md) (42 work on both; Ex.40/41/42 are Rev 2.0-only) |
+| Which board revision do the 45 examples support? | [examples/README.md — Board Revision Compatibility](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (42 work on both; Ex.40/41/42 are Rev 2.0-only) |
 
 ## 📥 Firmware Upload
 
@@ -68,7 +68,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 |-----------|-------------|
 | Training an AI model with exoskeleton data | [docs/advanced/ai-data-pipeline.md](advanced/ai-data-pipeline.md) |
 | Running a Tiny NN inference on-board | Ex.16, Ex.36 + [advanced/README.md](advanced/README.md) |
-| How to use PythonDecoder | [PythonDecoder/](https://github.com/AGR-EXO/Extension_Module/tree/Develop/PythonDecoder/) |
+| How to use PythonDecoder | [PythonDecoder/](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/PythonDecoder/) |
 | How to use PhAI Studio | Step 4 of each example's README + [studio.onephai.com](https://studio.onephai.com) |
 | Finishing my algorithm within 1 ms | Ex.18 Debug Monitor + Ex.19 Memory Aware Design |
 | Self-directed learning paths by interest | [advanced/README.md — Recommended Self-Study Paths](advanced/README.md#자기주도-학습-권장-경로) |
@@ -88,9 +88,9 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 
 | Situation | Where to go |
 |-----------|-------------|
-| Version / changelog | [CHANGELOG.md](https://github.com/AGR-EXO/Extension_Module/blob/Develop/CHANGELOG.md) |
+| Version / changelog | [CHANGELOG.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md) |
 | Release attachments / compatibility matrix | [docs/release-notes/](release-notes/) |
-| License | [LICENSE](https://github.com/AGR-EXO/Extension_Module/blob/Develop/LICENSE) |
+| License | [LICENSE](https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/LICENSE) |
 | System architecture overview | [docs/architecture/README.md](architecture/README.md) |
 | Full documentation index for this repo | [docs/README.md](README.md) |
 

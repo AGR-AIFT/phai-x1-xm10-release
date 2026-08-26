@@ -2,7 +2,7 @@
 
 > **대상 헤더**: `XM_FW/XM_API/xm_api_user_custom.h` (Rev1.1 · Rev2.0 헤더 동일 — 기능 차이 없음, 파일 상단 `@date` 주석만 하루 차이)
 > 📚 **관련 개념 문서**: [05. USB 시리얼 통신](../05-usb-connectivity.md) (Total Data Packet 0x20 / User Custom Channel 0xF0~0xFE 구분), [02. KIT H10 제어 + 데이터](../02-h10-control-n-data.md) (`Control_Setup`/`Control_Loop` IPO 주기)
-> 🧪 **관련 예제**: 이 API를 직접 호출하는 예제는 아직 없습니다 (v2.3.0 신규 API, SDK 전수 검색 결과 사용 사례 0건). 같은 Total Data Packet(0x20) 을 다루는 [Ex.09 CDC Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) 을 먼저 읽으면 이 슬롯이 어떤 스트림에 실리는지 이해하기 쉽습니다.
+> 🧪 **관련 예제**: 이 API를 직접 호출하는 예제는 아직 없습니다 (v2.3.0 신규 API, SDK 전수 검색 결과 사용 사례 0건). 같은 Total Data Packet(0x20) 을 다루는 [Ex.09 CDC Stream](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) 을 먼저 읽으면 이 슬롯이 어떤 스트림에 실리는지 이해하기 쉽습니다.
 
 ---
 

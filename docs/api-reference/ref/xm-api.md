@@ -1,8 +1,8 @@
 # `xm_api.h` — XM10 SDK 진입점 (전체 API 통합 헤더)
 
-> **대상 헤더**: [`XM_FW/XM_API/xm_api.h`](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api.h) (Rev2.0 기준 — Rev1.1 에도 동일 파일이 있으며 차이는 [§2](#2-이-헤더가-통합하는-api)에서 다룹니다)
+> **대상 헤더**: [`XM_FW/XM_API/xm_api.h`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api.h) (Rev2.0 기준 — Rev1.1 에도 동일 파일이 있으며 차이는 [§2](#2-이-헤더가-통합하는-api)에서 다룹니다)
 > **관련 개념 문서**: [API 참고서 전체 인덱스](../README.md) — 01~09 전 항목이 이 헤더가 통합하는 하위 API 입니다
-> **관련 예제**: 사실상 모든 예제 — 저장소 예제 중 `xm_api.h` 를 include 하지 않는 것이 거의 없습니다. `XM_GetTick()` 을 직접 쓰는 대표 예제는 [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/)
+> **관련 예제**: 사실상 모든 예제 — 저장소 예제 중 `xm_api.h` 를 include 하지 않는 것이 거의 없습니다. `XM_GetTick()` 을 직접 쓰는 대표 예제는 [00_Quick_Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/)
 
 ---
 
@@ -69,7 +69,7 @@ uint32_t XM_GetTick(void);
 
 ⚠️ **호출 컨텍스트**: 헤더 주석에는 별도의 태스크/ISR 제약이 명시되어 있지 않습니다. `Control_Setup()` / `Control_Loop()` 컨텍스트 기준으로 사용하는 것을 권장합니다 — SDK 예제는 모두 이 두 함수 안에서만 호출합니다.
 
-**예제** — rollover에 안전한 경과시간 계산 ([Ex.00 Quick Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) 패턴):
+**예제** — rollover에 안전한 경과시간 계산 ([Ex.00 Quick Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/) 패턴):
 
 ```c
 static uint32_t s_boot_timer;
@@ -94,7 +94,7 @@ void Control_Loop(void)
 **참고**:
 
 - [09 보조 task + 데이터 공유](../09-task-creation.md) — 주기적 task 에서 tick 활용
-- [00_Quick_Start 예제](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/)
+- [00_Quick_Start 예제](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/)
 
 ## 내부 전용 (호출 금지)
 

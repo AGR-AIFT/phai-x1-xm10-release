@@ -21,7 +21,7 @@ XM10 communicates with KIT H10 over CAN-FD, so you must use **the KIT H10 firmwa
 | **XM10 is up to date but H10 is an older version** | Update CM / SAM10 / ESP32 + ContentsFiles | ↓ Firmware Update (USB stick) |
 | **Firmware is OK, only motion map / audio needs updating** | Replace ContentsFiles only (SD card swap) | ↓ Contents File Update (SD card) |
 | **Red LED during update** | An error occurred | ↓ Error reference table |
-| **Manual update is not feasible** | Contact support | [Discussions Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a) |
+| **Manual update is not feasible** | Contact support | [Discussions Q&A](https://github.com/AGR-AIFT/phai-x1-xm10-release/discussions/categories/q-a) |
 
 ---
 
@@ -43,7 +43,7 @@ XM10 communicates with KIT H10 over CAN-FD, so you must use **the KIT H10 firmwa
 
 All files are available on the GitHub Releases page.
 
-**[Go to Releases](https://github.com/AGR-EXO/Extension_Module/releases)**
+**[Go to Releases](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases)**
 
 ### Files attached to v2.6.0
 
@@ -127,7 +127,7 @@ Update CM → Done → Update left SAM10 → Done → Update right SAM10 → All
 | CM / SAM10 version number invalid | Light-green × 3 ON → red | Verify version numbers in the binary filename are in range 0–255 |
 | SAM10 version number invalid only | CM update completes → red | Correct the SAM10 filename and retry |
 
-> The steps above are all you need. If you get stuck, ask on [Discussions Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a).
+> The steps above are all you need. If you get stuck, ask on [Discussions Q&A](https://github.com/AGR-AIFT/phai-x1-xm10-release/discussions/categories/q-a).
 
 ---
 
@@ -161,14 +161,14 @@ The CM module contains an internal SD card (SanDisk Micro SD Max Endurance) with
 
 > **Caution:** When replacing contents files, always **delete all existing files first** before copying the new files.
 
-> The steps above are all you need. If you get stuck, ask on [Discussions Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a).
+> The steps above are all you need. If you get stuck, ask on [Discussions Q&A](https://github.com/AGR-AIFT/phai-x1-xm10-release/discussions/categories/q-a).
 
 ### If Manual Steps Are Not Feasible
 
 | Channel | Purpose |
 |---------|---------|
-| [GitHub Discussions Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a) | General questions and procedure inquiries |
-| [GitHub Issues](https://github.com/AGR-EXO/Extension_Module/issues) | Bug reports and feature requests |
+| [GitHub Discussions Q&A](https://github.com/AGR-AIFT/phai-x1-xm10-release/discussions/categories/q-a) | General questions and procedure inquiries |
+| [GitHub Issues](https://github.com/AGR-AIFT/phai-x1-xm10-release/issues) | Bug reports and feature requests |
 
 ---
 

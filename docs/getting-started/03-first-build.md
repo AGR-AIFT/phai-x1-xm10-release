@@ -74,7 +74,7 @@ Console 패널에 컴파일 로그 실시간 출력. 첫 빌드는 5분 가량 (
 
 XM10 보드의 LED 1 이 1 초 주기로 두근-두근 깜빡이면 → 펌웨어가 정상 동작 중입니다.
 
-예제 코드를 적용했다면 해당 예제 README 의 "실험" 단계를 따라가세요 (예: [Ex.00](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/README.md) 의 BTN 1 클릭 → USB 메시지 확인).
+예제 코드를 적용했다면 해당 예제 README 의 "실험" 단계를 따라가세요 (예: [Ex.00](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/README.md) 의 BTN 1 클릭 → USB 메시지 확인).
 
 ---
 
@@ -107,6 +107,6 @@ XM10 보드의 LED 1 이 1 초 주기로 두근-두근 깜빡이면 → 펌웨�
 
 환경 구축 끝났습니다. 이제 본격적으로 코드 작성으로 넘어갑니다.
 
-- 첫 예제 → [Ex.00 Quick Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/README.md) (보드 동작 확인용)
+- 첫 예제 → [Ex.00 Quick Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/README.md) (보드 동작 확인용)
 - 학습 경로 → [tutorials/README.md](../tutorials/README.md) (50 예제 + 추천 순서)
 - 추천 시작: Ex.00 → Ex.01 → Ex.02 → Ex.03 (버튼 + LED 4 종, ⭐~⭐⭐)

@@ -2,7 +2,7 @@
 
 > 📌 **After reading this page**: You will be able to control all three onboard LEDs and three buttons using both polling and event-driven approaches.
 > ⏱️ Estimated reading time: 15 minutes
-> 🧰 Prerequisites: [Ex.01](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/01_Button_LED_Basic/) (polling) + [Ex.02](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/02_Button_LED_Event/) (event-driven) + [Ex.03](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/03_Button_LED_FSM/) (long press)
+> 🧰 Prerequisites: [Ex.01](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/01_Button_LED_Basic/) (polling) + [Ex.02](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/02_Button_LED_Event/) (event-driven) + [Ex.03](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/03_Button_LED_FSM/) (long press)
 > 🎯 Key functions: `XM_SetLedState` / `XM_SetLedEffect` / `XM_GetButtonState` / `XM_GetButtonEvent` / `XM_SetChannelLedRGB` (Rev2.0)
 
 This is the detailed reference for the **onboard UI (LED, Button) control API** defined in `xm_api_led_btn.h`.
@@ -272,8 +272,8 @@ This must be called periodically inside the User Task's main loop (`Control_Loop
 
 | Example | Difficulty | LED / Button Usage |
 |---------|------------|--------------------|
-| [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) | Beginner | Boot sequence + toggle |
-| [01_Button_LED_Basic](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/01_Button_LED_Basic/) | Beginner | Polling state mirror |
-| [02_Button_LED_Event](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/02_Button_LED_Event/) | Beginner | Event-driven + ONESHOT |
-| [03_Button_LED_FSM](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/03_Button_LED_FSM/) | Intermediate | Long press + Heartbeat/Blink |
-| [18_Debug_Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) | Intermediate | Diagnostic LED patterns |
+| [00_Quick_Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/) | Beginner | Boot sequence + toggle |
+| [01_Button_LED_Basic](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/01_Button_LED_Basic/) | Beginner | Polling state mirror |
+| [02_Button_LED_Event](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/02_Button_LED_Event/) | Beginner | Event-driven + ONESHOT |
+| [03_Button_LED_FSM](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/03_Button_LED_FSM/) | Intermediate | Long press + Heartbeat/Blink |
+| [18_Debug_Monitor](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/) | Intermediate | Diagnostic LED patterns |

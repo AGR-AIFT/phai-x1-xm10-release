@@ -1,8 +1,8 @@
 # `xm_api_freertos.h` — RTOS Helper Task API
 
-> 📄 Target header: [`XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h`](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h) (Rev1.1 has **byte-for-byte the same file** at the same relative path — there are no Rev-specific items on this page)
+> 📄 Target header: [`XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h) (Rev1.1 has **byte-for-byte the same file** at the same relative path — there are no Rev-specific items on this page)
 > 🧭 Related concept doc: [09. Helper Tasks & Data Sharing](../09-task-creation.en.md) — read this first for the task priority zones, the data-flow picture, and the 4 shared-variable patterns.
-> 🧰 Related examples: [Ex.38 Periodic_Background_Task](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/38_Periodic_Background_Task/) · [Ex.39 Task_Lifecycle](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/39_Task_Lifecycle/) · [Ex.36 OnDevice_Kinesthetic_Learning](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) (an example of migrating from the deprecated API to the new one)
+> 🧰 Related examples: [Ex.38 Periodic_Background_Task](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/38_Periodic_Background_Task/) · [Ex.39 Task_Lifecycle](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/39_Task_Lifecycle/) · [Ex.36 OnDevice_Kinesthetic_Learning](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) (an example of migrating from the deprecated API to the new one)
 
 This is the API for safely creating helper RTOS tasks that run alongside `Control_Loop()` (the 1 kHz control loop) without disturbing it, and for exchanging data with those tasks safely.
 
@@ -504,6 +504,6 @@ The full pitfalls table lives in [09. Helper Tasks & Data Sharing §6](../09-tas
 ## Related Documents
 
 - [09. Helper Tasks & Data Sharing](../09-task-creation.en.md) — system task inventory, priority zones, data flow, shared-variable patterns
-- [Ex.38 Periodic_Background_Task](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/38_Periodic_Background_Task/)
-- [Ex.39 Task_Lifecycle](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/39_Task_Lifecycle/)
-- [Ex.36 OnDevice_Kinesthetic_Learning](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/)
+- [Ex.38 Periodic_Background_Task](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/38_Periodic_Background_Task/)
+- [Ex.39 Task_Lifecycle](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/39_Task_Lifecycle/)
+- [Ex.36 OnDevice_Kinesthetic_Learning](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/)

@@ -1,10 +1,20 @@
 # eXtension Module: XM10
 
+> **📢 저장소 주소가 바뀌었습니다 (2026-08-26)**
+>
+> 이 프로젝트는 이제 **`AGR-AIFT/phai-x1-xm10-release`** 에서 관리됩니다.
+> 문서 사이트 새 주소: **https://agr-aift.github.io/phai-x1-xm10-release/**
+>
+> 옛 주소(`AGR-EXO/Extension_Module`)를 북마크해 두셨다면 새 주소로 바꿔 주세요.
+> 이미 코드를 받아 두셨다면 아래 한 줄로 주소만 바꾸시면 됩니다 (다시 받지 않으셔도 됩니다).
+>
+> `git remote set-url origin https://github.com/AGR-AIFT/phai-x1-xm10-release.git`
+
 <p align="center">
   <img width="332" height="231" alt="XM10 Board" src="https://github.com/user-attachments/assets/871dc578-57ab-41ed-8d39-76a43e65f24d" />
 </p>
 <p align="center">
-  <a href="https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.6.0"><img src="https://img.shields.io/badge/Release-v2.6.0-brightgreen.svg" alt="Release"></a>
+  <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.6.0"><img src="https://img.shields.io/badge/Release-v2.6.0-brightgreen.svg" alt="Release"></a>
   <a href="#"><img src="https://img.shields.io/badge/Platform-STM32H7-blue.svg" alt="Platform"></a>
   <a href="#"><img src="https://img.shields.io/badge/OS-FreeRTOS-orange.svg" alt="OS"></a>
   <a href="#"><img src="https://img.shields.io/badge/Comm-CAN--FD-red.svg" alt="CAN-FD"></a>
@@ -31,7 +41,7 @@
 
 본 SDK 는 **GitHub Releases 에서 ZIP 으로 배포**됩니다. git clone 이 아닌 **본인 보드 리비전 ZIP 만 다운로드**하면 됩니다.
 
-📦 **다운로드**: [Releases v2.6.0](https://github.com/AGR-EXO/Extension_Module/releases/tag/v2.6.0) → Assets 섹션
+📦 **다운로드**: [Releases v2.6.0](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.6.0) → Assets 섹션
 - **Rev2.0 보드** → `Rev2.0.zip` (대부분 여기)
 - **Rev1.1 보드** → `Rev1.1.zip`
 - 보드 라벨로 본인 리비전 확인 후 선택. 모호하면 → [docs/hardware/README.md - 보드 리비전 비교](docs/hardware/README.md#보드-리비전-비교)
@@ -54,7 +64,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 ```bash
 # 1. SDK ZIP 다운로드
-#    https://github.com/AGR-EXO/Extension_Module/releases/latest
+#    https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/latest
 #    → Rev2.0.zip (또는 Rev1.1.zip) 선택
 
 # 2. 압축 해제 — 한글·공백 없는 짧은 경로에
@@ -170,8 +180,8 @@ Extension_Module/
 
 활발히 연구 개발 중인 프로젝트입니다. 기능 개선, 버그 수정, 문서 보강이 수시로 일어나니 가끔 업데이트 받아주세요.
 
-- 버그 리포트 · 기능 제안 → [GitHub Issues](https://github.com/AGR-EXO/Extension_Module/issues)
-- Q&A · 사용 사례 공유 → [GitHub Discussions](https://github.com/AGR-EXO/Extension_Module/discussions)
+- 버그 리포트 · 기능 제안 → [GitHub Issues](https://github.com/AGR-AIFT/phai-x1-xm10-release/issues)
+- Q&A · 사용 사례 공유 → [GitHub Discussions](https://github.com/AGR-AIFT/phai-x1-xm10-release/discussions)
 - "Ex.XX 가 안 돼" 트러블슈팅 → Claude Code 에서 `example-helper` 호출
 
 ---

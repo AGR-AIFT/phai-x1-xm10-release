@@ -1,5 +1,15 @@
 # XM10 문서
 
+> **📢 저장소 주소가 바뀌었습니다 (2026-08-26)**
+>
+> 이 프로젝트는 이제 **`AGR-AIFT/phai-x1-xm10-release`** 에서 관리됩니다.
+> 문서 사이트 새 주소: **https://agr-aift.github.io/phai-x1-xm10-release/**
+>
+> 옛 주소(`AGR-EXO/Extension_Module`)를 북마크해 두셨다면 새 주소로 바꿔 주세요.
+> 이미 코드를 받아 두셨다면 아래 한 줄로 주소만 바꾸시면 됩니다 (다시 받지 않으셔도 됩니다).
+>
+> `git remote set-url origin https://github.com/AGR-AIFT/phai-x1-xm10-release.git`
+
 XM10 의 전체 문서 인덱스입니다. 처음 시작하는 분은 위에서 아래로 순서대로 읽으면 됩니다.
 
 > **🧭 어디 있을까?** — 키워드로 빠른 검색이 필요하면 **[find-it.md](find-it.md)** 한 페이지에 자주 묻는 키워드 → 정답 페이지가 다 모여 있습니다.
@@ -104,8 +114,8 @@ ST-Link SWD 직접 업로드 + PhAI Studio USB 업로드 두 가지 방법 + 부
 ## 추가 자료
 
 - [🧭 find-it.md](find-it.md) — 키워드 → 페이지 빠른 찾기
-- [Examples](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/) — 45 개 예제 소스 코드 (각 폴더에 5 단계 README 포함)
-- [Python Tools](https://github.com/AGR-EXO/Extension_Module/tree/Develop/PythonDecoder/) — USB-CDC 실시간 수신 샘플
+- [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — 45 개 예제 소스 코드 (각 폴더에 5 단계 README 포함)
+- [Python Tools](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/PythonDecoder/) — USB-CDC 실시간 수신 샘플
 - [Release Notes](release-notes/) — 버전별 첨부 파일 + 호환성 매트릭스
-- [Changelog](https://github.com/AGR-EXO/Extension_Module/blob/Develop/CHANGELOG.md) — 버전별 변경 이력 요약
-- [XM10 SDK](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM10_SDK/) — Rev1.1 / Rev2.0 SDK 프로젝트
+- [Changelog](https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md) — 버전별 변경 이력 요약
+- [XM10 SDK](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/) — Rev1.1 / Rev2.0 SDK 프로젝트

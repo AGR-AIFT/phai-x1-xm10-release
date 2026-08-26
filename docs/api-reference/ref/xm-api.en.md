@@ -1,8 +1,8 @@
 # `xm_api.h` — XM10 SDK Entry Point (Umbrella API Header)
 
-> **Target header**: [`XM_FW/XM_API/xm_api.h`](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api.h) (Rev2.0 baseline — the same file also exists in Rev1.1; differences are covered in [§2](#2-what-this-header-aggregates))
+> **Target header**: [`XM_FW/XM_API/xm_api.h`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api.h) (Rev2.0 baseline — the same file also exists in Rev1.1; differences are covered in [§2](#2-what-this-header-aggregates))
 > **Related concept docs**: [Full API reference index](../README.en.md) — all of docs 01–09 cover the sub-APIs this header aggregates
-> **Related examples**: virtually every example — almost none of the repository examples skip including `xm_api.h`. The flagship example that calls `XM_GetTick()` directly is [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/)
+> **Related examples**: virtually every example — almost none of the repository examples skip including `xm_api.h`. The flagship example that calls `XM_GetTick()` directly is [00_Quick_Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/)
 
 ---
 
@@ -69,7 +69,7 @@ None.
 
 ⚠️ **Calling context**: the header comment does not state any specific task/ISR restriction. It is recommended to treat this conservatively as usable from the `Control_Setup()` / `Control_Loop()` context — every SDK example calls it only from within those two functions.
 
-**Example** — rollover-safe elapsed-time calculation (the [Ex.00 Quick Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) pattern):
+**Example** — rollover-safe elapsed-time calculation (the [Ex.00 Quick Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/) pattern):
 
 ```c
 static uint32_t s_boot_timer;
@@ -94,7 +94,7 @@ void Control_Loop(void)
 **See also**:
 
 - [09 Auxiliary Tasks & Data Sharing](../09-task-creation.en.md) — using tick values in periodic tasks
-- [00_Quick_Start example](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/)
+- [00_Quick_Start example](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/)
 
 ## Internal-only (do not call)
 

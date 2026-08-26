@@ -4,7 +4,7 @@
 >
 > - **대상 헤더**: `XM_FW/XM_API/xm_api_memory.h`
 > - **관련 개념 문서**: [07. 메모리 영역](../07-memory-management.md)
-> - **관련 예제**: [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) — `XM_UserNV_Read/Write/Erase`로 학습된 신경망 가중치를 Flash에 저장/복원
+> - **관련 예제**: [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) — `XM_UserNV_Read/Write/Erase`로 학습된 신경망 가중치를 Flash에 저장/복원
 
 ---
 
@@ -194,7 +194,7 @@ XM_UserNV_Write(NV_OFFSET_MAGIC, &magic, sizeof(magic));
 XM_UserNV_Write(NV_OFFSET_WEIGHTS, &s_nn, sizeof(s_nn));
 ```
 
-**참고**: [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/)에서 학습된 신경망 가중치를 이 방식으로 저장합니다.
+**참고**: [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/)에서 학습된 신경망 가중치를 이 방식으로 저장합니다.
 
 #### `XM_UserNV_Erase()`
 
@@ -290,4 +290,4 @@ XM_DTCM_VAR static float s_lookup_table[256];
 ## 관련 문서
 
 - [07. 메모리 영역](../07-memory-management.md) — 4개 메모리 영역의 특성 비교, 흔한 실수, 관련 예제
-- [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) — Flash User NV API의 실제 사용 예
+- [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) — Flash User NV API의 실제 사용 예

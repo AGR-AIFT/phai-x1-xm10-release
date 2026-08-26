@@ -2,7 +2,7 @@
 
 > 📌 **After reading this page**: You will be able to write state-based control algorithms using the TSM.
 > ⏱️ Estimated reading time: 15 minutes
-> 🧰 Prerequisites: Single-state TSM from [Ex.00 Quick Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/)
+> 🧰 Prerequisites: Single-state TSM from [Ex.00 Quick Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/)
 > 🎯 Key functions: `XM_TSM_Create` / `XM_TSM_AddState` / `XM_TSM_Run` / `XM_TSM_TransitionTo`
 
 The task state machine API is defined in `xm_api_tsm.h`. It lets you break complex control logic into discrete **states**, making your algorithm straightforward to implement and reason about.
@@ -115,10 +115,10 @@ Requests a transition to another state. The transition is not immediate — the 
 
 | Example | Difficulty | TSM Usage |
 |---------|------------|-----------|
-| [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) | Beginner | Single-state TSM |
-| [01_Button_LED_Basic](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/01_Button_LED_Basic/) | Beginner | Single-state basics |
-| [03_Button_LED_FSM](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/03_Button_LED_FSM/) | Intermediate | STANDBY ↔ ACTIVE transition |
-| [06_Ext_IO_Safety_Switch](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/) | Intermediate | 3-state + ERROR handling |
-| [11_Passive_Mode](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/) | Advanced | Homing + mode transition |
-| [12_Active_Assist_Mode](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/12_Active_Assist_Mode/) | Advanced | Hierarchical FSM |
-| [17_FSM_Gait_Intent](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/17_FSM_Gait_Intent/) | Advanced | 7-phase gait FSM |
+| [00_Quick_Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/) | Beginner | Single-state TSM |
+| [01_Button_LED_Basic](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/01_Button_LED_Basic/) | Beginner | Single-state basics |
+| [03_Button_LED_FSM](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/03_Button_LED_FSM/) | Intermediate | STANDBY ↔ ACTIVE transition |
+| [06_Ext_IO_Safety_Switch](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/06_Ext_IO_Safety_Switch/) | Intermediate | 3-state + ERROR handling |
+| [11_Passive_Mode](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/) | Advanced | Homing + mode transition |
+| [12_Active_Assist_Mode](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/12_Active_Assist_Mode/) | Advanced | Hierarchical FSM |
+| [17_FSM_Gait_Intent](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/17_FSM_Gait_Intent/) | Advanced | 7-phase gait FSM |

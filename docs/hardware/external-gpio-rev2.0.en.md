@@ -8,7 +8,7 @@ The XM10 Rev 2.0 board provides 8 digital IO (DIO) pins and 4 dedicated analog i
 
 ## Header Location
 
-![XM10 Rev 2.0 board — external GPIO header location](https://raw.githubusercontent.com/AGR-EXO/Extension_Module/Develop/assets/img/rev2.0-photo.png)
+![XM10 Rev 2.0 board — external GPIO header location](https://raw.githubusercontent.com/AGR-AIFT/phai-x1-xm10-release/Develop/assets/img/rev2.0-photo.png)
 
 Use the photo above to locate the external GPIO header (DIO 8 + ADC 4) on the Rev 2.0 board and to identify the pin 1 orientation. The per-pin function assignments follow the tables below.
 
@@ -110,4 +110,4 @@ Activate an external IMU (e.g., Xsens MTi series) with `XM_AttachXsensMTi630()`.
 - Integrated hardware overview: [hardware/README.md](README.md)
 - Rev 1.1 pinmap: [external-gpio-rev1.1.md](external-gpio-rev1.1.md)
 - Function reference: [External IO API](../api-reference/04-external-io.md)
-- Hands-on examples: [Ex.04 – 05d Ext IO Series](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/)
+- Hands-on examples: [Ex.04 – 05d Ext IO Series](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/04_Ext_IO_Basic/)

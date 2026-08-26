@@ -2,7 +2,7 @@
 
 This page is your single reference for all external interfaces on the XM10 board — what connectors it has, how many, and where to plug things in. It is the first page to check when getting started.
 
-> Board photos and per-revision GPIO header images are maintained under [`assets/img/`](https://github.com/AGR-EXO/Extension_Module/tree/Develop/assets/img/).
+> Board photos and per-revision GPIO header images are maintained under [`assets/img/`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/assets/img/).
 
 ---
 
@@ -26,7 +26,7 @@ This page is your single reference for all external interfaces on the XM10 board
 
 ## Board Overview
 
-![XM10 board — interface locations](https://raw.githubusercontent.com/AGR-EXO/Extension_Module/Develop/assets/img/board-photo.png)
+![XM10 board — interface locations](https://raw.githubusercontent.com/AGR-AIFT/phai-x1-xm10-release/Develop/assets/img/board-photo.png)
 
 This photo shows the physical positions of the 3 LEDs, 3 buttons, main connector, SWD header, USB-C port, CAN-FD ports, external GPIO header, and external UART port at a glance. For the external GPIO header pinmap by revision, see the [Rev 1.1](external-gpio-rev1.1.md) and [Rev 2.0](external-gpio-rev2.0.md) pages.
 

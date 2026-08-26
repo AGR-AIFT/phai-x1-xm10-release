@@ -155,7 +155,7 @@ The underlying protocol details are handled by the library. You only need to cal
 | `XM.status.h10.leftHipAngle` is always 0 | KIT H10 not connected, or assist mode not yet entered | Check `XM_IsCmConnected()` and confirm `h10Mode == XM_H10_MODE_ASSIST` |
 | Called `XM_SetAssistTorque*` but no torque output | Control mode was never set | Call `XM_SetControlMode(XM_CTRL_CONTROL)` once when entering Active |
 | Modified files in the XM library folders (IOIF, Devices, etc.) | Library code is production firmware — arbitrary changes break the system | Always work inside `Control_Task/` only |
-| `Control_Loop` does not finish within 1 ms | Heavy `sprintf` calls, accumulated floating-point operations, etc. | Measure execution time with [Ex.18 Debug Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) and spread the work across cycles |
+| `Control_Loop` does not finish within 1 ms | Heavy `sprintf` calls, accumulated floating-point operations, etc. | Measure execution time with [Ex.18 Debug Monitor](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/) and spread the work across cycles |
 | Attempting to build two examples at the same time | Only one `.c` file is allowed in `Control_Task/` | Copy one example at a time and build |
 
 ---
@@ -165,4 +165,4 @@ The underlying protocol details are handled by the library. You only need to cal
 - First build and flash: [Getting Started — 03 First Build](../getting-started/03-first-build.md)
 - State machine pattern: [TSM API Reference](../api-reference/01-task-state-machine.md)
 - Example learning path: [Tutorials](../tutorials/README.md)
-- Verify your code finishes within 1 ms: [Ex.18 Debug Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/)
+- Verify your code finishes within 1 ms: [Ex.18 Debug Monitor](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/)

@@ -21,7 +21,7 @@ XM10은 KIT H10과 CAN-FD로 연동되므로 **XM FW 버전에 맞는 KIT H10 �
 | **XM10 은 최신인데 H10 가 구버전** | CM/SAM10/ESP32 + ContentsFiles 업데이트 | ↓ 펌웨어 업데이트 (USB Stick) |
 | **펌웨어는 OK, 모션맵/음성 갱신** | ContentsFiles 만 SD카드 교체 | ↓ 컨텐츠 파일 업데이트 (SD카드) |
 | **업데이트 도중 빨간 LED** | 오류 발생 | ↓ 오류 대응 표 |
-| **수동 작업 불가** | 지원 요청 | [Discussions Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a) |
+| **수동 작업 불가** | 지원 요청 | [Discussions Q&A](https://github.com/AGR-AIFT/phai-x1-xm10-release/discussions/categories/q-a) |
 
 ---
 
@@ -43,7 +43,7 @@ XM10은 KIT H10과 CAN-FD로 연동되므로 **XM FW 버전에 맞는 KIT H10 �
 
 GitHub Releases에서 다운로드할 수 있습니다.
 
-**[Releases 페이지 바로가기](https://github.com/AGR-EXO/Extension_Module/releases)**
+**[Releases 페이지 바로가기](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases)**
 
 ### v2.6.0 첨부 파일
 
@@ -127,7 +127,7 @@ CM 업데이트 → 완료 → 왼쪽 SAM10 업데이트 → 완료 → 오른�
 | CM/SAM10 버전명 오류 | 연녹색 3개 ON → 붉은색 | 바이너리 파일의 버전 번호(0~255) 확인 |
 | SAM10만 버전명 오류 | CM 업데이트 완료 → 붉은색 | SAM10 파일명 수정 후 재시도 |
 
-> 위 절차만으로 충분합니다. 진행 중 막히면 [Discussions Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a) 로 문의하세요.
+> 위 절차만으로 충분합니다. 진행 중 막히면 [Discussions Q&A](https://github.com/AGR-AIFT/phai-x1-xm10-release/discussions/categories/q-a) 로 문의하세요.
 
 ---
 
@@ -161,14 +161,14 @@ CM 내부의 SD카드(SanDisk Micro SD Max Endurance)에는 다음 폴더가 존
 
 > **주의:** 컨텐츠 파일 교체 시 반드시 **기존 파일을 모두 삭제** 후 새 파일을 복사하세요.
 
-> 위 절차만으로 충분합니다. 진행 중 막히면 [Discussions Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a) 로 문의하세요.
+> 위 절차만으로 충분합니다. 진행 중 막히면 [Discussions Q&A](https://github.com/AGR-AIFT/phai-x1-xm10-release/discussions/categories/q-a) 로 문의하세요.
 
 ### 수동 작업이 어려운 경우
 
 | 채널 | 용도 |
 |------|------|
-| [GitHub Discussions Q&A](https://github.com/AGR-EXO/Extension_Module/discussions/categories/q-a) | 일반 질문 + 절차 문의 |
-| [GitHub Issues](https://github.com/AGR-EXO/Extension_Module/issues) | 버그 리포트 + 기능 제안 |
+| [GitHub Discussions Q&A](https://github.com/AGR-AIFT/phai-x1-xm10-release/discussions/categories/q-a) | 일반 질문 + 절차 문의 |
+| [GitHub Issues](https://github.com/AGR-AIFT/phai-x1-xm10-release/issues) | 버그 리포트 + 기능 제안 |
 
 ---
 

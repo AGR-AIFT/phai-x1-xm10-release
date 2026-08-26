@@ -2,7 +2,7 @@
 
 XM10's features are covered through 45 progressively structured examples. Each folder contains source code and a README, and every README follows the same format: Goal → Prerequisites → Key Code → Experiments → Next Steps + Common Mistakes. The introductory examples (Ex.09 and below) are designed to complete in under 30 minutes. Control and advanced examples (Ex.11 and above) may take anywhere from 45 minutes to several weeks, depending on difficulty.
 
-The full example catalog is at [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md). If you get stuck, check the "Common Mistakes" section at the bottom of each README first. Claude Code users can simply say `"Ex.XX isn't working"` and the `example-helper` skill will respond with the relevant common mistakes and troubleshooting documentation.
+The full example catalog is at [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md). If you get stuck, check the "Common Mistakes" section at the bottom of each README first. Claude Code users can simply say `"Ex.XX isn't working"` and the `example-helper` skill will respond with the relevant common mistakes and troubleshooting documentation.
 
 ---
 
@@ -57,7 +57,7 @@ Examples not in this schedule (Ex.05d, 15, 22, 24, 28–42) are naturally left f
 
 | Example | Title | Difficulty | What You Learn |
 | :---: | :--- | :---: | :--- |
-| [00](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) | Board smoke test | ⭐ | State machine + LED + USB serial — no external hardware required |
+| [00](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/) | Board smoke test | ⭐ | State machine + LED + USB serial — no external hardware required |
 
 ---
 
@@ -69,21 +69,21 @@ From fundamental I/O to state-based programming (FSM) — the core of embedded c
 
 | Example | Title | Difficulty | What You Learn |
 | :---: | :--- | :---: | :--- |
-| [01](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/01_Button_LED_Basic/) | Button + LED basics | ⭐ | Poll button state and control LEDs |
-| [02](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/02_Button_LED_Event/) | Events + special effects | ⭐⭐ | Detect click events, single-shot LED blink |
-| [03](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/03_Button_LED_FSM/) | State machine (FSM) | ⭐⭐ | Long-press mode switching, per-state behavior separation |
+| [01](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/01_Button_LED_Basic/) | Button + LED basics | ⭐ | Poll button state and control LEDs |
+| [02](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/02_Button_LED_Event/) | Events + special effects | ⭐⭐ | Detect click events, single-shot LED blink |
+| [03](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/03_Button_LED_FSM/) | State machine (FSM) | ⭐⭐ | Long-press mode switching, per-state behavior separation |
 
 ### External I/O — GPIO & ADC (Ex.04 ~ 06)
 
 | Example | Title | Difficulty | What You Learn |
 | :---: | :--- | :---: | :--- |
-| [04](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/) | External digital control | ⭐⭐ | External switch/LED on expansion port |
-| [05](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05_Ext_IO_analog/) | Analog sensor introduction | ⭐⭐ | Voltage measurement on fixed ADC pins |
-| [05a](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/) | DIO→ADC dynamic switching | ⭐⭐ | Read FSR by switching a DIO pin to ADC mode |
-| [05b](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05b_Ext_IO_FSR_8ch/) | FSR 8-channel batch read | ⭐⭐ | 8 channels + resolution configuration |
-| [05c](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/) | Mixed ADC 12-channel | ⭐⭐⭐ | Fixed 4 + DIO→ADC 8 |
-| [05d](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/) | DIO/ADC hybrid | ⭐⭐⭐ | Digital and analog simultaneously |
-| [06](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/06_Ext_IO_Safety_Switch/) | Safety state machine | ⭐⭐ | Limit-switch-based FSM |
+| [04](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/04_Ext_IO_Basic/) | External digital control | ⭐⭐ | External switch/LED on expansion port |
+| [05](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/05_Ext_IO_analog/) | Analog sensor introduction | ⭐⭐ | Voltage measurement on fixed ADC pins |
+| [05a](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/05a_Ext_IO_DIO_to_ADC/) | DIO→ADC dynamic switching | ⭐⭐ | Read FSR by switching a DIO pin to ADC mode |
+| [05b](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/05b_Ext_IO_FSR_8ch/) | FSR 8-channel batch read | ⭐⭐ | 8 channels + resolution configuration |
+| [05c](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/05c_Ext_IO_Mixed_ADC/) | Mixed ADC 12-channel | ⭐⭐⭐ | Fixed 4 + DIO→ADC 8 |
+| [05d](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/05d_Ext_IO_DIO_ADC_Hybrid/) | DIO/ADC hybrid | ⭐⭐⭐ | Digital and analog simultaneously |
+| [06](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/06_Ext_IO_Safety_Switch/) | Safety state machine | ⭐⭐ | Limit-switch-based FSM |
 
 > **Recommended ADC series order:** Ex.05 → 05a → 05b → 05c → 05d (progressive difficulty)
 
@@ -99,9 +99,9 @@ Exchange real-time messages with a PC and stream data. Essential for debugging a
 
 | Example | Title | Difficulty | What You Learn |
 | :---: | :--- | :---: | :--- |
-| [07](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) | USB serial basics | ⭐⭐ | Send text messages to a PC terminal |
-| [08](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) | Sensor data monitoring | ⭐⭐ | Real-time `sprintf` output of sensor data |
-| [09](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | High-speed binary streaming | ⭐⭐⭐ | PhAI Studio-compatible protocol, 1 kHz transmission |
+| [07](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/07_CDC_Basic_Print/) | USB serial basics | ⭐⭐ | Send text messages to a PC terminal |
+| [08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | Sensor data monitoring | ⭐⭐ | Real-time `sprintf` output of sensor data |
+| [09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | High-speed binary streaming | ⭐⭐⭐ | PhAI Studio-compatible protocol, 1 kHz transmission |
 
 > To save and analyze a captured stream on the PC, use PhAI Studio recording or the `PythonDecoder/CDC` Python samples in the repo. (On-board file storage was removed in v2.5.0 — SD card support is planned for a future HW revision.)
 
@@ -113,9 +113,9 @@ The three fundamental operating modes of the KIT H10 exoskeleton robot.
 
 | Example | Title | Difficulty | What You Learn |
 | :---: | :--- | :---: | :--- |
-| [11](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/) | Passive Mode | ⭐⭐⭐ | Automatic reciprocal motion using predefined movement commands |
-| [12](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/12_Active_Assist_Mode/) | Active Assist Mode | ⭐⭐⭐ | Detect user intent and apply assistive torque |
-| [13](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/13_Resistive_Mode/) | Resistive Mode | ⭐⭐ | Built-in H10 mode — resistance sensation like walking through water |
+| [11](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/) | Passive Mode | ⭐⭐⭐ | Automatic reciprocal motion using predefined movement commands |
+| [12](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/12_Active_Assist_Mode/) | Active Assist Mode | ⭐⭐⭐ | Detect user intent and apply assistive torque |
+| [13](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/13_Resistive_Mode/) | Resistive Mode | ⭐⭐ | Built-in H10 mode — resistance sensation like walking through water |
 
 ---
 
@@ -125,12 +125,12 @@ Your first hands-on control algorithms.
 
 | Example | Title | Difficulty | What You Learn |
 | :---: | :--- | :---: | :--- |
-| [14](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/14_PD_Realtime_Control/) | PD real-time torque control | ⭐⭐⭐ | PD formula, discrete differentiation, torque saturation |
-| [15](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/15_Inverted_Pendulum_Control/) | Inverted pendulum gait assist | ⭐⭐⭐ | Gravity compensation MgL·sin(θ) + Lyapunov stability |
-| [16](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) | Tiny AI sensor fusion | ⭐⭐⭐ | On-board 3-layer neural network inference |
-| [17](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/17_FSM_Gait_Intent/) | Gait intent recognition (FSM) | ⭐⭐⭐ | 7-phase gait state machine + per-phase torque |
-| [18](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) | System debug monitor | ⭐⭐ | Loop execution time measurement, status dashboard |
-| [19](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/) | Memory-aware design | ⭐⭐⭐ | Ring buffer, pool allocator, malloc-free implementation |
+| [14](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/14_PD_Realtime_Control/) | PD real-time torque control | ⭐⭐⭐ | PD formula, discrete differentiation, torque saturation |
+| [15](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/15_Inverted_Pendulum_Control/) | Inverted pendulum gait assist | ⭐⭐⭐ | Gravity compensation MgL·sin(θ) + Lyapunov stability |
+| [16](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) | Tiny AI sensor fusion | ⭐⭐⭐ | On-board 3-layer neural network inference |
+| [17](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/17_FSM_Gait_Intent/) | Gait intent recognition (FSM) | ⭐⭐⭐ | 7-phase gait state machine + per-phase torque |
+| [18](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/) | System debug monitor | ⭐⭐ | Loop execution time measurement, status dashboard |
+| [19](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/19_Memory_Aware_Design/) | Memory-aware design | ⭐⭐⭐ | Ring buffer, pool allocator, malloc-free implementation |
 
 ---
 
@@ -140,12 +140,12 @@ Interaction dynamics, transparent mode, and gait-phase-based control — the can
 
 | Example | Title | Difficulty | What You Learn |
 | :---: | :--- | :---: | :--- |
-| [20](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/20_Impedance_Control/) | Hogan impedance control | ⭐⭐⭐ | Virtual spring-damper interaction (Hogan 1985) |
-| [21](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/21_Gravity_Compensation/) | Gravity compensation (transparent mode) | ⭐⭐⭐ | Mgl·sin(θ) + friction compensation + gradual activation |
-| [22](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/22_CPG_Oscillator/) | CPG adaptive oscillator | ⭐⭐⭐ | Automatic gait rhythm synchronization (Ronsse 2011) |
-| [23](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/23_Gait_Phase_Adaptive_Torque/) | Gait phase adaptive torque | ⭐⭐⭐ | 4-segment sinusoidal torque profile (Quinlivan 2017) |
-| [24](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/24_Virtual_Constraint/) | Virtual constraint (HZD) | ⭐⭐⭐ | 5th-order Bézier trajectory (Westervelt 2003) |
-| [25](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/25_Stance_Stiffness_Modulation/) | Stance-phase variable stiffness | ⭐⭐⭐ | Smooth stance/swing transition (Collins 2015) |
+| [20](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/20_Impedance_Control/) | Hogan impedance control | ⭐⭐⭐ | Virtual spring-damper interaction (Hogan 1985) |
+| [21](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/21_Gravity_Compensation/) | Gravity compensation (transparent mode) | ⭐⭐⭐ | Mgl·sin(θ) + friction compensation + gradual activation |
+| [22](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/22_CPG_Oscillator/) | CPG adaptive oscillator | ⭐⭐⭐ | Automatic gait rhythm synchronization (Ronsse 2011) |
+| [23](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/23_Gait_Phase_Adaptive_Torque/) | Gait phase adaptive torque | ⭐⭐⭐ | 4-segment sinusoidal torque profile (Quinlivan 2017) |
+| [24](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/24_Virtual_Constraint/) | Virtual constraint (HZD) | ⭐⭐⭐ | 5th-order Bézier trajectory (Westervelt 2003) |
+| [25](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/25_Stance_Stiffness_Modulation/) | Stance-phase variable stiffness | ⭐⭐⭐ | Smooth stance/swing transition (Collins 2015) |
 
 ---
 
@@ -155,11 +155,11 @@ Control that learns from each gait cycle or automatically adapts to changes in t
 
 | Example | Title | Difficulty | What You Learn |
 | :---: | :--- | :---: | :--- |
-| [26](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/26_Iterative_Learning_Control/) | Iterative Learning Control (ILC) | ⭐⭐⭐ | Learn torque profile from each cycle (Emken 2007) |
-| [27](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/27_MRAC/) | Model Reference Adaptive Control | ⭐⭐⭐ | Online gain adaptation via MIT Rule (Slotine 1991) |
-| [28](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/28_Admittance_Control/) | Admittance control | ⭐⭐⭐ | Force input → position output (the dual of impedance, Keemink 2018) |
-| [29](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/29_Bilateral_Coordination/) | Left/right coordination control | ⭐⭐⭐ | Anti-phase symmetry + affected-side reinforcement (rehabilitation) |
-| [30](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/30_FF_FB_Hybrid_Control/) | FF + FB hybrid control | ⭐⭐⭐ | Model-based feedforward compensation + PD feedback |
+| [26](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/26_Iterative_Learning_Control/) | Iterative Learning Control (ILC) | ⭐⭐⭐ | Learn torque profile from each cycle (Emken 2007) |
+| [27](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/27_MRAC/) | Model Reference Adaptive Control | ⭐⭐⭐ | Online gain adaptation via MIT Rule (Slotine 1991) |
+| [28](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/28_Admittance_Control/) | Admittance control | ⭐⭐⭐ | Force input → position output (the dual of impedance, Keemink 2018) |
+| [29](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/29_Bilateral_Coordination/) | Left/right coordination control | ⭐⭐⭐ | Anti-phase symmetry + affected-side reinforcement (rehabilitation) |
+| [30](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/30_FF_FB_Hybrid_Control/) | FF + FB hybrid control | ⭐⭐⭐ | Model-based feedforward compensation + PD feedback |
 
 ---
 
@@ -169,17 +169,17 @@ The key stages of Physical AI — transparency → intent detection → learning
 
 | Example | Title | Difficulty | What You Learn |
 | :---: | :--- | :---: | :--- |
-| [31](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/31_Friction_Comp_DOB/) | Disturbance Observer (DOB) | ⭐⭐⭐ | Estimate remaining disturbances for true transparent mode |
-| [32](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/32_GRF_Gait_Intent/) | Gait intent via foot contact | ⭐⭐⭐ | Gait phase estimation from heel strike events |
-| [33](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/33_Kinesthetic_Teaching/) | Kinesthetic teaching + replay | ⭐⭐⭐ | Human demonstrates by hand → board replays the motion |
-| [35](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/35_MultiLayer_Transparent_Control/) | Multi-layer transparent control | ⭐⭐⭐ | Real-time switching between transparent / wall / left-right coupling modes |
-| [36](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) | On-device kinesthetic learning 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Train a small neural network on-board → replay with LQR — Internal Flash UserNV API is supported on Rev 2.0 only |
-| [37](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/37_FES_Hub_Module_Ctrl/) | FES Hub module control | ⭐⭐⭐ | Connect FES Hub over CAN-FD, control per-channel electrical stimulation parameters |
-| [38](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/38_Periodic_Background_Task/) | Periodic background task | ⭐⭐ | Offload low-frequency auxiliary work, minimize control loop jitter |
-| [39](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/39_Task_Lifecycle/) | Task lifecycle management | ⭐⭐⭐ | Create, suspend, and terminate tasks; RTOS task state machine pattern |
-| [40](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/40_EMG_Proportional_Assist/) | EMG proportional assist 🛑 **Rev 2.0 only** | ⭐⭐⭐⭐ | External 4-channel ADC EMG → envelope → proportional torque, button calibration + PhAI Studio 0xF0 streaming (EMG competition foundation) |
-| [41](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/41_IMU_Hub_Dashboard/) | IMU Hub attitude dashboard 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Up to 6 IMUs' quaternion → Euler (roll/pitch/yaw) conversion, auto connection detection + PhAI Studio 0xF0 18-channel (50Hz) streaming (FDCAN2 sensor-hub bus) |
-| [42](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/42_EMG_Hub_Biofeedback/) | EMG Hub biofeedback 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Receive hub-processed muscle activation (envelope/MVC%), button calibration + LED/PhAI Studio 0xF0 4-channel (50Hz) real-time feedback (FDCAN2 sensor-hub bus, no motor drive) |
+| [31](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/31_Friction_Comp_DOB/) | Disturbance Observer (DOB) | ⭐⭐⭐ | Estimate remaining disturbances for true transparent mode |
+| [32](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/32_GRF_Gait_Intent/) | Gait intent via foot contact | ⭐⭐⭐ | Gait phase estimation from heel strike events |
+| [33](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/33_Kinesthetic_Teaching/) | Kinesthetic teaching + replay | ⭐⭐⭐ | Human demonstrates by hand → board replays the motion |
+| [35](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/35_MultiLayer_Transparent_Control/) | Multi-layer transparent control | ⭐⭐⭐ | Real-time switching between transparent / wall / left-right coupling modes |
+| [36](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) | On-device kinesthetic learning 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Train a small neural network on-board → replay with LQR — Internal Flash UserNV API is supported on Rev 2.0 only |
+| [37](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/37_FES_Hub_Module_Ctrl/) | FES Hub module control | ⭐⭐⭐ | Connect FES Hub over CAN-FD, control per-channel electrical stimulation parameters |
+| [38](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/38_Periodic_Background_Task/) | Periodic background task | ⭐⭐ | Offload low-frequency auxiliary work, minimize control loop jitter |
+| [39](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/39_Task_Lifecycle/) | Task lifecycle management | ⭐⭐⭐ | Create, suspend, and terminate tasks; RTOS task state machine pattern |
+| [40](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/) | EMG proportional assist 🛑 **Rev 2.0 only** | ⭐⭐⭐⭐ | External 4-channel ADC EMG → envelope → proportional torque, button calibration + PhAI Studio 0xF0 streaming (EMG competition foundation) |
+| [41](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/) | IMU Hub attitude dashboard 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Up to 6 IMUs' quaternion → Euler (roll/pitch/yaw) conversion, auto connection detection + PhAI Studio 0xF0 18-channel (50Hz) streaming (FDCAN2 sensor-hub bus) |
+| [42](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/) | EMG Hub biofeedback 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Receive hub-processed muscle activation (envelope/MVC%), button calibration + LED/PhAI Studio 0xF0 4-channel (50Hz) real-time feedback (FDCAN2 sensor-hub bus, no motor drive) |
 
 ---
 

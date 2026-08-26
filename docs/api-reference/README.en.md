@@ -1,6 +1,6 @@
 # API Reference
 
-> Parent: [Documentation Index](../README.md) · [Examples Guide](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md)
+> Parent: [Documentation Index](../README.md) · [Examples Guide](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md)
 
 This is a function reference to keep open while writing your algorithm. You don't need to read it cover to cover — just look up the relevant group when you need it.
 

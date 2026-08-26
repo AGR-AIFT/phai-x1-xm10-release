@@ -2,7 +2,7 @@
 
 > 📌 **After reading this page** you will be able to read the H10 state via `XM.status` and send torque / PI Vector commands using `XM_Set*`.
 > ⏱️ Estimated reading time: 30 minutes
-> 🧰 Prerequisites: IPO model (Input → Process → Output 1 ms cycle) + [Ex.11~14](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/)
+> 🧰 Prerequisites: IPO model (Input → Process → Output 1 ms cycle) + [Ex.11~14](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/)
 > 🎯 Key objects: `XM.status` (read) / `XM.command` (staging commands) / `XM_SetControlMode` / `XM_SetAssistTorque` / `XM_SendPVector`
 
 One of the core values of `XM10` is controlling the `KIT H10` exoskeleton with algorithms you design yourself. This API provides everything you need to check the connection status to KIT H10, receive the robot's live state data, and send control commands — such as `PIF-Vectors` and `Aux inputs` — to drive the robot's motion.
@@ -1117,13 +1117,13 @@ void Active_Loop(void) {
 
 | Example | Difficulty | Control Method |
 |------|--------|----------|
-| [08_CDC_Sensor_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) | Beginner | Reading sensor data (XM.status) |
-| [11_Passive_Mode](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/) | Advanced | P-Vector + I-Vector trajectory control |
-| [12_Active_Assist_Mode](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/12_Active_Assist_Mode/) | Advanced | Real-time torque control (SetAssistTorque) |
-| [13_Resistive_Mode](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/13_Resistive_Mode/) | Intermediate | Compensation gain setting (SetResistiveCompGain) |
-| [14_PD_Realtime_Control](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/14_PD_Realtime_Control/) | Intermediate | PD torque control |
-| [15_Inverted_Pendulum_Control](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/15_Inverted_Pendulum_Control/) | Advanced | Model-based gravity compensation + PD |
-| [17_FSM_Gait_Intent](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/17_FSM_Gait_Intent/) | Advanced | Gait-phase-based torque assist |
+| [08_CDC_Sensor_Print](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | Beginner | Reading sensor data (XM.status) |
+| [11_Passive_Mode](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/) | Advanced | P-Vector + I-Vector trajectory control |
+| [12_Active_Assist_Mode](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/12_Active_Assist_Mode/) | Advanced | Real-time torque control (SetAssistTorque) |
+| [13_Resistive_Mode](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/13_Resistive_Mode/) | Intermediate | Compensation gain setting (SetResistiveCompGain) |
+| [14_PD_Realtime_Control](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/14_PD_Realtime_Control/) | Intermediate | PD torque control |
+| [15_Inverted_Pendulum_Control](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/15_Inverted_Pendulum_Control/) | Advanced | Model-based gravity compensation + PD |
+| [17_FSM_Gait_Intent](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/17_FSM_Gait_Intent/) | Advanced | Gait-phase-based torque assist |
 
 ---
 
@@ -1135,6 +1135,6 @@ void Active_Loop(void) {
 | `XM.status.h10.is_connected` is `false` | CAN-FD cable loose, or H10 body power is off | Verify KIT H10 24 V input and fully seat the connector |
 | `SetAssistTorque` is called but torque remains 0 | `XM_SetControlMode(XM_CTRL_CONTROL)` was never called | Set the mode once on entering the active state |
 | Torque commands are sent but H10 does not move | KIT H10 firmware < v2.3.0 (incompatible with XM v2.0.0 and later) | Update using the [kit-h10-firmware/](../kit-h10-firmware/) guide |
-| Estimated data such as knee angle and forward velocity are always 0 | `XM_SendUserBodyData()` was never called (prerequisite for body-data-dependent fields) | See the Body Data instructions in [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md#part-5) |
-| IPO cycle misalignment / missed ticks | Blocking call inside `Control_Loop` (e.g., `osDelay`) | Use `XM_GetTick()` with a non-blocking pattern ([Ex.08](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/)) |
+| Estimated data such as knee angle and forward velocity are always 0 | `XM_SendUserBodyData()` was never called (prerequisite for body-data-dependent fields) | See the Body Data instructions in [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5) |
+| IPO cycle misalignment / missed ticks | Blocking call inside `Control_Loop` (e.g., `osDelay`) | Use `XM_GetTick()` with a non-blocking pattern ([Ex.08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/)) |
 | Writing directly to `XM.command` has no effect | `XM.command` is a staging area — only `XM_Set*` functions set the dirty flag | Always use setter functions such as `XM_SetAssistTorque` |

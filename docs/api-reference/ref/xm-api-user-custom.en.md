@@ -2,7 +2,7 @@
 
 > **Target header**: `XM_FW/XM_API/xm_api_user_custom.h` (Rev1.1 and Rev2.0 headers are identical — no functional difference, only the top-of-file `@date` comment differs by one day)
 > 📚 **Related concept docs**: [05. USB Serial Communication](../05-usb-connectivity.en.md) (distinguishes Total Data Packet 0x20 from the User Custom Channel 0xF0~0xFE), [02. KIT H10 Control + Data](../02-h10-control-n-data.en.md) (the `Control_Setup`/`Control_Loop` IPO cycle)
-> 🧪 **Related examples**: No example currently calls this API directly (it is a new API in v2.3.0 — a full-SDK search turned up zero usages). Read [Ex.09 CDC Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) first, which covers the same Total Data Packet (0x20) so you can see which stream this slot rides on.
+> 🧪 **Related examples**: No example currently calls this API directly (it is a new API in v2.3.0 — a full-SDK search turned up zero usages). Read [Ex.09 CDC Stream](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) first, which covers the same Total Data Packet (0x20) so you can see which stream this slot rides on.
 
 ---
 

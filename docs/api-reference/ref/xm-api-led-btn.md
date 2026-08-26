@@ -2,7 +2,7 @@
 
 > **대상 헤더**: `XM_FW/XM_API/xm_api_led_btn.h`
 > **관련 개념 문서**: [03. LED + 버튼](../03-led-btn-control.md)
-> **관련 예제**: [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) · [01_Button_LED_Basic](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/01_Button_LED_Basic/) · [02_Button_LED_Event](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/02_Button_LED_Event/) · [03_Button_LED_FSM](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/03_Button_LED_FSM/) · [18_Debug_Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/)
+> **관련 예제**: [00_Quick_Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/) · [01_Button_LED_Basic](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/01_Button_LED_Basic/) · [02_Button_LED_Event](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/02_Button_LED_Event/) · [03_Button_LED_FSM](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/03_Button_LED_FSM/) · [18_Debug_Monitor](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/)
 
 보드에 내장된 Function LED 3개(`XM_LED_1~3`)와 Function Button 3개(`XM_BTN_1~3`)를 제어하는 API 입니다. Rev2.0 에서는 여기에 더해 센서 모듈 연결 상태를 표시하는 채널 RGB LED(`XM_CH_LED_*`) 제어도 포함합니다.
 

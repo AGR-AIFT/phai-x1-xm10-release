@@ -1,5 +1,15 @@
 # XM10 Documentation
 
+> **📢 This repository has moved (2026-08-26)**
+>
+> The project now lives at **`AGR-AIFT/phai-x1-xm10-release`**.
+> New documentation site: **https://agr-aift.github.io/phai-x1-xm10-release/**
+>
+> If you bookmarked the old address (`AGR-EXO/Extension_Module`), please update it.
+> If you already cloned the code, just update the remote — no need to clone again:
+>
+> `git remote set-url origin https://github.com/AGR-AIFT/phai-x1-xm10-release.git`
+
 This is the complete documentation index for XM10. If you are just getting started, read from top to bottom in order.
 
 > **🧭 Looking for something?** — For quick keyword search, check **[find-it.md](find-it.md)**: a single page that maps common keywords to the right documentation page.
@@ -104,8 +114,8 @@ Common issues covering build errors, USB connection problems, communication fail
 ## Additional Resources
 
 - [🧭 find-it.md](find-it.md) — Quick keyword-to-page lookup
-- [Examples](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/) — Source code for all 45 examples (each folder includes a 5-step README)
-- [Python Tools](https://github.com/AGR-EXO/Extension_Module/tree/Develop/PythonDecoder/) — USB-CDC real-time receiver samples
+- [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — Source code for all 45 examples (each folder includes a 5-step README)
+- [Python Tools](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/PythonDecoder/) — USB-CDC real-time receiver samples
 - [Release Notes](release-notes/) — Per-version attachments and compatibility matrix
-- [Changelog](https://github.com/AGR-EXO/Extension_Module/blob/Develop/CHANGELOG.md) — Summary of changes by version
-- [XM10 SDK](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM10_SDK/) — Rev1.1 / Rev2.0 SDK projects
+- [Changelog](https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md) — Summary of changes by version
+- [XM10 SDK](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/) — Rev1.1 / Rev2.0 SDK projects

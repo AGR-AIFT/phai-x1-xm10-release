@@ -2,7 +2,7 @@
 
 > 📌 **After reading this page** you will be able to handle USB-CDC text/binary send-receive end-to-end.
 > ⏱️ Estimated reading time: 20 minutes
-> 🧰 Prerequisites: [Ex.07–09](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) CDC
+> 🧰 Prerequisites: [Ex.07–09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/07_CDC_Basic_Print/) CDC
 > 🎯 Key functions: `XM_SendUsbDebugMessage` / `XM_SetUsbCustomMeta` / `XM_SendUsbDataWithId` / `XM_SetUsbStreamSource` / `XM_SetUsbAutoStream`
 >
 > ⚠️ **USB-CDC single-owner rule**: Never open PhAI Studio and a serial terminal (PuTTY, RealTerm, etc.) on the **same COM port simultaneously** — doing so causes a port conflict and data loss.
@@ -203,11 +203,11 @@ Called automatically by `core_process` — **end users do not need to call this 
 
 | Example | Difficulty | CDC Usage |
 |---------|------------|-----------|
-| [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) | Beginner | Sending debug messages |
-| [07_CDC_Basic_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) | Beginner | Text messages |
-| [08_CDC_Sensor_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) | Beginner | sprintf formatting |
-| [09_CDC_Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | Intermediate | PhAI V2 binary streaming |
-| [18_Debug_Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) | Intermediate | Health dashboard |
+| [00_Quick_Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/) | Beginner | Sending debug messages |
+| [07_CDC_Basic_Print](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/07_CDC_Basic_Print/) | Beginner | Text messages |
+| [08_CDC_Sensor_Print](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | Beginner | sprintf formatting |
+| [09_CDC_Stream](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | Intermediate | PhAI V2 binary streaming |
+| [18_Debug_Monitor](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/) | Intermediate | Health dashboard |
 
 ---
 

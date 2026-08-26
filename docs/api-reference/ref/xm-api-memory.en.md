@@ -4,7 +4,7 @@
 >
 > - **Header**: `XM_FW/XM_API/xm_api_memory.h`
 > - **Related concept doc**: [07. Memory Management](../07-memory-management.en.md)
-> - **Related example**: [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) — saves/restores trained neural-network weights to Flash with `XM_UserNV_Read/Write/Erase`
+> - **Related example**: [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) — saves/restores trained neural-network weights to Flash with `XM_UserNV_Read/Write/Erase`
 
 ---
 
@@ -194,7 +194,7 @@ XM_UserNV_Write(NV_OFFSET_MAGIC, &magic, sizeof(magic));
 XM_UserNV_Write(NV_OFFSET_WEIGHTS, &s_nn, sizeof(s_nn));
 ```
 
-**See also**: [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) saves trained neural-network weights this way.
+**See also**: [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) saves trained neural-network weights this way.
 
 #### `XM_UserNV_Erase()`
 
@@ -290,4 +290,4 @@ XM_DTCM_VAR static float s_lookup_table[256];
 ## Related Docs
 
 - [07. Memory Management](../07-memory-management.en.md) — comparison of the four memory regions, common mistakes, related examples
-- [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) — a real-world use of the Flash User NV API
+- [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) — a real-world use of the Flash User NV API

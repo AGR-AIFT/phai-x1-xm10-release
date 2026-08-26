@@ -2,7 +2,7 @@
 
 > 📌 **이 페이지를 읽고 나면**: `XM.status` 로 H10 상태를 읽고 `XM_Set*` 로 토크/PI Vector 명령을 보낼 수 있습니다.
 > ⏱️ 예상 학습 시간: 30분
-> 🧰 사전 지식: IPO 모델 (Input → Process → Output 1ms 사이클) + [Ex.11~14](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/)
+> 🧰 사전 지식: IPO 모델 (Input → Process → Output 1ms 사이클) + [Ex.11~14](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/)
 > 🎯 핵심 객체: `XM.status` (읽기) / `XM.command` (Staging 명령) / `XM_SetControlMode` / `XM_SetAssistTorque` / `XM_SendPVector`
 
 `XM10`의 핵심 가치중 하나는 `KIT H10` 로봇을 직접 설계한 알고리즘으로 제어하는 것입니다. 본 API는 KIT H10과의 연결 상태를 확인하고, 로봇의 현재 상태 데이터를 실시간으로 수신하며, `PIF-Vectors`, `Aux inputs`와 같은 제어 명령을 전송하여 로봇의 움직임을 제어하는 데 필요한 기능을 제공합니다.
@@ -1115,13 +1115,13 @@ void Active_Loop(void) {
 
 | 예제 | 난이도 | 제어 방식 |
 |------|--------|----------|
-| [08_CDC_Sensor_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) | 초급 | 센서 데이터 읽기 (XM.status) |
-| [11_Passive_Mode](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/11_Passive_Mode/) | 고급 | P-Vector + I-Vector 궤적 제어 |
-| [12_Active_Assist_Mode](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/12_Active_Assist_Mode/) | 고급 | 실시간 토크 제어 (SetAssistTorque) |
-| [13_Resistive_Mode](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/13_Resistive_Mode/) | 중급 | 보상 게인 설정 (SetResistiveCompGain) |
-| [14_PD_Realtime_Control](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/14_PD_Realtime_Control/) | 중급 | PD 토크 제어 |
-| [15_Inverted_Pendulum_Control](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/15_Inverted_Pendulum_Control/) | 고급 | 모델 기반 중력 보상 + PD |
-| [17_FSM_Gait_Intent](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/17_FSM_Gait_Intent/) | 고급 | 보행 단계별 토크 보조 |
+| [08_CDC_Sensor_Print](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | 초급 | 센서 데이터 읽기 (XM.status) |
+| [11_Passive_Mode](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/) | 고급 | P-Vector + I-Vector 궤적 제어 |
+| [12_Active_Assist_Mode](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/12_Active_Assist_Mode/) | 고급 | 실시간 토크 제어 (SetAssistTorque) |
+| [13_Resistive_Mode](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/13_Resistive_Mode/) | 중급 | 보상 게인 설정 (SetResistiveCompGain) |
+| [14_PD_Realtime_Control](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/14_PD_Realtime_Control/) | 중급 | PD 토크 제어 |
+| [15_Inverted_Pendulum_Control](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/15_Inverted_Pendulum_Control/) | 고급 | 모델 기반 중력 보상 + PD |
+| [17_FSM_Gait_Intent](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/17_FSM_Gait_Intent/) | 고급 | 보행 단계별 토크 보조 |
 
 ---
 
@@ -1133,6 +1133,6 @@ void Active_Loop(void) {
 | `XM.status.h10.is_connected` 가 false | CAN-FD 케이블 헐겁거나 H10 본체 전원 OFF | KIT H10 24 V 입력 + 깊은 커넥터 삽입 |
 | `SetAssistTorque` 호출했는데 토크 0 | `XM_SetControlMode(XM_CTRL_CONTROL)` 미호출 | Active 진입 시 1회 모드 설정 필요 |
 | 토크 명령은 보내지는데 H10 안 움직임 | KIT H10 FW < v2.3.0 (XM v2.0.0 이상 비호환) | [kit-h10-firmware/](../kit-h10-firmware/) 가이드로 업데이트 |
-| 무릎 각도·전진 속도 등 추정 데이터가 항상 0 | `XM_SendUserBodyData()` 미호출 (Body Data 전제조건) | [examples/README.md](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md#part-5) Body Data 안내 참조 |
-| IPO 사이클이 어긋남 / Tick 누락 | `Control_Loop` 안에서 blocking 호출 (osDelay 등) | `XM_GetTick()` + 논블로킹 패턴 사용 ([Ex.08](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/)) |
+| 무릎 각도·전진 속도 등 추정 데이터가 항상 0 | `XM_SendUserBodyData()` 미호출 (Body Data 전제조건) | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5) Body Data 안내 참조 |
+| IPO 사이클이 어긋남 / Tick 누락 | `Control_Loop` 안에서 blocking 호출 (osDelay 등) | `XM_GetTick()` + 논블로킹 패턴 사용 ([Ex.08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/)) |
 | `XM.command` 직접 쓰기 시 효과 없음 | `XM.command` 는 Staging 영역 — `XM_Set*` 함수가 dirty flag 설정 | 반드시 setter 함수 (`XM_SetAssistTorque` 등) 사용 |

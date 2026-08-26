@@ -8,7 +8,7 @@ This page covers the external expansion header pinmap for the XM10 Rev 1.1 board
 
 ## Header Location
 
-![XM10 Rev 1.1 board — external GPIO header location](https://raw.githubusercontent.com/AGR-EXO/Extension_Module/Develop/assets/img/rev1.1-photo.png)
+![XM10 Rev 1.1 board — external GPIO header location](https://raw.githubusercontent.com/AGR-AIFT/phai-x1-xm10-release/Develop/assets/img/rev1.1-photo.png)
 
 Use the photo above to locate the external GPIO header (DIO 8 + ADC 4) on the Rev 1.1 board and to identify which end is pin 1. Refer to the tables below for per-pin functions.
 
@@ -96,4 +96,4 @@ Activating an external IMU (e.g., XSENS MTi) via `XM_AttachXsensMTi630()` reassi
 - Overall hardware overview: [hardware/README.md](README.md)
 - Rev 2.0 pinmap: [external-gpio-rev2.0.md](external-gpio-rev2.0.md)
 - Function reference: [External IO API](../api-reference/04-external-io.md)
-- Hands-on examples: [Ex.04 – 05d Ext IO series](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/04_Ext_IO_Basic/)
+- Hands-on examples: [Ex.04 – 05d Ext IO series](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/04_Ext_IO_Basic/)

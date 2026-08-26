@@ -2,7 +2,7 @@
 
 XM10 보드의 외부 인터페이스를 한 곳에 모았습니다. 보드에 뭐가 몇 개 있는지, 어디에 꽂으면 되는지 처음 시작할 때 가장 먼저 보게 되는 페이지입니다.
 
-> 보드 외관 사진과 리비전별 GPIO 헤더 사진은 [`assets/img/`](https://github.com/AGR-EXO/Extension_Module/tree/Develop/assets/img/) 에서 관리합니다.
+> 보드 외관 사진과 리비전별 GPIO 헤더 사진은 [`assets/img/`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/assets/img/) 에서 관리합니다.
 
 ---
 
@@ -26,7 +26,7 @@ XM10 보드의 외부 인터페이스를 한 곳에 모았습니다. 보드에 �
 
 ## 보드 외관
 
-![XM10 보드 외관 — 인터페이스 위치](https://raw.githubusercontent.com/AGR-EXO/Extension_Module/Develop/assets/img/board-photo.png)
+![XM10 보드 외관 — 인터페이스 위치](https://raw.githubusercontent.com/AGR-AIFT/phai-x1-xm10-release/Develop/assets/img/board-photo.png)
 
 LED 3 개 / 버튼 3 개 / 메인 커넥터 / SWD / USB-C / CAN-FD / 외부 GPIO 헤더 / 외부 UART 의 물리적 위치를 한눈에 보여주는 사진입니다. 리비전별 외부 GPIO 헤더 핀맵은 [Rev 1.1](external-gpio-rev1.1.md) / [Rev 2.0](external-gpio-rev2.0.md) 페이지를 따로 참조하세요.
 

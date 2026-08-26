@@ -1,8 +1,8 @@
 # `xm_api_freertos.h` — RTOS 보조 Task API
 
-> 📄 대상 헤더: [`XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h`](https://github.com/AGR-EXO/Extension_Module/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h) (Rev1.1 동일 경로에 **바이트 단위로 동일한 파일**이 있습니다 — 이 페이지에 Rev 전용 항목은 없습니다)
+> 📄 대상 헤더: [`XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h) (Rev1.1 동일 경로에 **바이트 단위로 동일한 파일**이 있습니다 — 이 페이지에 Rev 전용 항목은 없습니다)
 > 🧭 관련 개념 문서: [09. 보조 task + 데이터 공유](../09-task-creation.md) — task 우선순위 영역, 데이터 흐름, 공유변수 패턴 4가지를 먼저 읽어보세요.
-> 🧰 관련 예제: [Ex.38 Periodic_Background_Task](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/38_Periodic_Background_Task/) · [Ex.39 Task_Lifecycle](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/39_Task_Lifecycle/) · [Ex.36 OnDevice_Kinesthetic_Learning](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) (deprecated API → 신규 API 마이그레이션 사례)
+> 🧰 관련 예제: [Ex.38 Periodic_Background_Task](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/38_Periodic_Background_Task/) · [Ex.39 Task_Lifecycle](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/39_Task_Lifecycle/) · [Ex.36 OnDevice_Kinesthetic_Learning](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) (deprecated API → 신규 API 마이그레이션 사례)
 
 `Control_Loop()` (1 kHz 제어 루프)를 방해하지 않고 별도의 보조 task 를 안전하게 만들고, 그 task 와 데이터를 주고받기 위한 API 입니다.
 
@@ -504,6 +504,6 @@ typedef enum {
 ## 관련 문서
 
 - [09. 보조 task + 데이터 공유](../09-task-creation.md) — 시스템 task 인벤토리, 우선순위 영역, 데이터 흐름, 공유변수 패턴
-- [Ex.38 Periodic_Background_Task](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/38_Periodic_Background_Task/)
-- [Ex.39 Task_Lifecycle](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/39_Task_Lifecycle/)
-- [Ex.36 OnDevice_Kinesthetic_Learning](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/)
+- [Ex.38 Periodic_Background_Task](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/38_Periodic_Background_Task/)
+- [Ex.39 Task_Lifecycle](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/39_Task_Lifecycle/)
+- [Ex.36 OnDevice_Kinesthetic_Learning](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/)

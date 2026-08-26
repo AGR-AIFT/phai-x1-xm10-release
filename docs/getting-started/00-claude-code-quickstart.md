@@ -52,7 +52,7 @@ Anthropic 사가 만든 AI 코딩 도구입니다. 터미널 또는 VS Code 안�
 
 GitHub Releases 페이지에서 본인 보드 리비전의 ZIP 만 받습니다:
 
-📦 https://github.com/AGR-EXO/Extension_Module/releases/latest
+📦 https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/latest
 
 - **Rev 2.0 보드** → `Rev2.0.zip` (대부분 여기)
 - **Rev 1.1 보드** → `Rev1.1.zip`
@@ -93,12 +93,12 @@ Claude Code 가 켜지면 `CLAUDE.md` 가 자동 로드됩니다. 사용자가 �
 
 ### URL 만 받은 사용자 (다운로드 전)
 
-학교에서 GitHub URL (`https://github.com/AGR-EXO/Extension_Module`) 만 받은 상태라면:
+학교에서 GitHub URL (`https://github.com/AGR-AIFT/phai-x1-xm10-release`) 만 받은 상태라면:
 
 1. Claude Code 를 설치 후 임의 디렉토리에서 실행
 2. AI 에게 다음을 입력:
    ```
-   https://github.com/AGR-EXO/Extension_Module 이걸로 처음 시작하려고 해
+   https://github.com/AGR-AIFT/phai-x1-xm10-release 이걸로 처음 시작하려고 해
    ```
 3. AI 가 `WebFetch` 로 본 페이지를 읽고 → "본인 보드 Rev 가 무엇입니까?" 부터 시작 → Releases 페이지에서 본인 Rev ZIP 다운로드 단계로 안내
 
@@ -118,4 +118,4 @@ Claude Code 가 켜지면 `CLAUDE.md` 가 자동 로드됩니다. 사용자가 �
 
 - AI 와 함께 진행: Claude Code 실행 후 `"처음 시작할게"` 입력
 - 수동 진행: [01 하드웨어 연결](01-hardware-setup.md) → [02 환경 구축](02-software-setup.md) → [03 첫 빌드](03-first-build.md)
-- 환경 구축 끝났다면: [Ex.00 Quick Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) → [학습 경로](../tutorials/README.md)
+- 환경 구축 끝났다면: [Ex.00 Quick Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/) → [학습 경로](../tutorials/README.md)

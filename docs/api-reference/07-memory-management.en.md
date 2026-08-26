@@ -2,7 +2,7 @@
 
 > 📌 **After reading this page**: You will know how to select the right memory region on XM10 — RAM_D1 / DTCM / Flash NV — based on your use case.
 > ⏱️ Estimated reading time: 15 minutes
-> 🧰 Prerequisites: Static data-structure patterns from [Ex.19 Memory Aware Design](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/)
+> 🧰 Prerequisites: Static data-structure patterns from [Ex.19 Memory Aware Design](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/19_Memory_Aware_Design/)
 > 🎯 Key APIs: `XM_RAMFUNC` / `XM_DTCM_VAR` macros + `XM_UserNV_Read/Write/Erase` Flash API
 
 > **Header file**: `xm_api_memory.h`
@@ -226,5 +226,5 @@ void SaveSettings(const UserSettings_t* s) {
 
 | Example | Difficulty | Memory Usage |
 |---------|------------|--------------|
-| [16_TinyAI_Sensor_Fusion](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) | Advanced | NN weights (`.rodata` constant arrays) |
-| [19_Memory_Aware_Design](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/19_Memory_Aware_Design/) | Advanced | Ring buffer + pool allocator (static `.bss` allocation) |
+| [16_TinyAI_Sensor_Fusion](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) | Advanced | NN weights (`.rodata` constant arrays) |
+| [19_Memory_Aware_Design](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/19_Memory_Aware_Design/) | Advanced | Ring buffer + pool allocator (static `.bss` allocation) |

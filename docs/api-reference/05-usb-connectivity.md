@@ -2,7 +2,7 @@
 
 > 📌 **이 페이지를 읽고 나면**: USB-CDC 텍스트/바이너리 송수신을 모두 다룰 수 있습니다.
 > ⏱️ 예상 학습 시간: 20분
-> 🧰 사전 지식: [Ex.07~09](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) CDC
+> 🧰 사전 지식: [Ex.07~09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/07_CDC_Basic_Print/) CDC
 > 🎯 핵심 함수: `XM_SendUsbDebugMessage` / `XM_SetUsbCustomMeta` / `XM_SendUsbDataWithId` / `XM_SetUsbStreamSource` / `XM_SetUsbAutoStream`
 >
 > ⚠️ **USB-CDC 단일 점유**: PhAI Studio 와 시리얼 터미널 (PuTTY/RealTerm 등) 을 같은 COM 포트로 **동시 사용 금지** — COM 포트 충돌로 데이터 손실.
@@ -203,11 +203,11 @@ PhAI Studio Custom 모드 사용 시, Module ID와 JSON 메타데이터를 등�
 
 | 예제 | 난이도 | CDC 활용 |
 |------|--------|---------|
-| [00_Quick_Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) | 입문 | 디버그 메시지 전송 |
-| [07_CDC_Basic_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/07_CDC_Basic_Print/) | 초급 | 텍스트 메시지 |
-| [08_CDC_Sensor_Print](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/08_CDC_Sensor_Print/) | 초급 | sprintf 포맷팅 |
-| [09_CDC_Stream](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/09_CDC_Stream/) | 중급 | PhAI V2 바이너리 스트리밍 |
-| [18_Debug_Monitor](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/18_Debug_Monitor/) | 중급 | Health 대시보드 |
+| [00_Quick_Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/) | 입문 | 디버그 메시지 전송 |
+| [07_CDC_Basic_Print](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/07_CDC_Basic_Print/) | 초급 | 텍스트 메시지 |
+| [08_CDC_Sensor_Print](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | 초급 | sprintf 포맷팅 |
+| [09_CDC_Stream](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | 중급 | PhAI V2 바이너리 스트리밍 |
+| [18_Debug_Monitor](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/) | 중급 | Health 대시보드 |
 
 ---
 

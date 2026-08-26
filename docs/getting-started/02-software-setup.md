@@ -56,7 +56,7 @@ where STM32CubeIDE.exe
 
 **b. Release 페이지에서 다운로드**:
 
-📦 https://github.com/AGR-EXO/Extension_Module/releases/latest
+📦 https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/latest
 
 Assets 섹션에서 본인 Rev 선택:
 - **Rev 2.0** → `Rev2.0.zip`

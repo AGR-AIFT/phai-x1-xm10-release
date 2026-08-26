@@ -74,7 +74,7 @@ The Console panel streams the compile log in real time. The first build takes ro
 
 If LED 1 on the XM10 board blinks in a heartbeat pattern at a 1-second interval, the firmware is running correctly.
 
-If you applied example code, follow the "Experiment" steps in that example's README (e.g., [Ex.00](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/README.md): press BTN 1 and check the USB message).
+If you applied example code, follow the "Experiment" steps in that example's README (e.g., [Ex.00](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/README.md): press BTN 1 and check the USB message).
 
 ---
 
@@ -107,6 +107,6 @@ If you applied example code, follow the "Experiment" steps in that example's REA
 
 Your development environment is ready. Time to start writing code.
 
-- First example → [Ex.00 Quick Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/README.md) (verifies board operation)
+- First example → [Ex.00 Quick Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/README.md) (verifies board operation)
 - Learning path → [tutorials/README.md](../tutorials/README.md) (45 examples + recommended order)
 - Suggested starting sequence: Ex.00 → Ex.01 → Ex.02 → Ex.03 (buttons + LEDs, ⭐~⭐⭐)

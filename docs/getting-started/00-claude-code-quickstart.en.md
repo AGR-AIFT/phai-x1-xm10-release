@@ -52,7 +52,7 @@ Follow the instructions on the official site. Windows, macOS, and Linux are all 
 
 Go to the GitHub Releases page and download only the ZIP for your board revision:
 
-📦 https://github.com/AGR-EXO/Extension_Module/releases/latest
+📦 https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/latest
 
 - **Rev 2.0 board** → `Rev2.0.zip` (most users)
 - **Rev 1.1 board** → `Rev1.1.zip`
@@ -93,12 +93,12 @@ Once Claude Code starts, `CLAUDE.md` is loaded automatically. Type one of the fo
 
 ### Starting from just a URL (before downloading)
 
-If you only have the GitHub URL (`https://github.com/AGR-EXO/Extension_Module`) — for example, from a class handout:
+If you only have the GitHub URL (`https://github.com/AGR-AIFT/phai-x1-xm10-release`) — for example, from a class handout:
 
 1. Install Claude Code and launch it from any directory.
 2. Type the following to the AI:
    ```
-   https://github.com/AGR-EXO/Extension_Module — I want to start from scratch with this
+   https://github.com/AGR-AIFT/phai-x1-xm10-release — I want to start from scratch with this
    ```
 3. The AI will use `WebFetch` to read the page, ask "Which board revision do you have?", and then guide you through downloading the correct ZIP from the Releases page.
 
@@ -118,4 +118,4 @@ If you only have the GitHub URL (`https://github.com/AGR-EXO/Extension_Module`) 
 
 - **With AI guidance:** Launch Claude Code and type `"처음 시작할게"`
 - **Manual setup:** [01 Hardware Setup](01-hardware-setup.md) → [02 Software Setup](02-software-setup.md) → [03 First Build](03-first-build.md)
-- **Already set up:** [Ex.00 Quick Start](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/00_Quick_Start/) → [Learning Path](../tutorials/README.md)
+- **Already set up:** [Ex.00 Quick Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/) → [Learning Path](../tutorials/README.md)

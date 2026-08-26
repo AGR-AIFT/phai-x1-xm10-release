@@ -16,4 +16,4 @@ This page lists release attachments, compatibility matrices, and known issues fo
 | [v2.2.0](v2.2.0.md) | 2026-05-15 | User function name cleanup + Rev 1.1 / 2.0 Task API normalization + 2 new learning examples |
 | [v2.1.1](v2.1.1.md) | 2026-04-04 | Introduced AGR_BOOT V2 bootloader + dual SDK for Rev1.1/Rev2.0 + 44 examples |
 
-For a summarized change history, see the [CHANGELOG](https://github.com/AGR-EXO/Extension_Module/blob/Develop/CHANGELOG.md). For step-by-step downloads, visit the GitHub [Releases](https://github.com/AGR-EXO/Extension_Module/releases) page.
+For a summarized change history, see the [CHANGELOG](https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md). For step-by-step downloads, visit the GitHub [Releases](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases) page.

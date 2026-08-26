@@ -98,7 +98,7 @@ API 이름 (`XM_BTN_1/2/3`) 은 양쪽 Rev 에서 좌·중·우 의미를 그대
 
 **해결:**
 1. 보드 라벨에서 `Rev 1.1` 또는 `Rev 2.0` 확인. 라벨이 모호하면 외관상 RJ45 Ethernet 포트의 유무로 구별 (Rev 2.0 만 있음). 자세한 비교는 [docs/hardware/README.md - 보드 리비전 비교](hardware/README.md#보드-리비전-비교).
-2. [Releases](https://github.com/AGR-EXO/Extension_Module/releases) 에서 본인 Rev 와 같은 ZIP 을 받아 STM32CubeIDE 에 다시 import.
+2. [Releases](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases) 에서 본인 Rev 와 같은 ZIP 을 받아 STM32CubeIDE 에 다시 import.
 3. 재빌드·플래시 후 Ex.01 (Button & LED Basic) 의 세 버튼 모두 정상 동작 확인.
 
 **진단 코드 (선택사항):** 본인 보드의 실제 핀을 직접 확인하고 싶다면:
@@ -284,7 +284,7 @@ if (pressed) { /* 1회만 실행 */ }
 
 **원인:** Body Data 전제조건 미충족 — `XM_SendUserBodyData()` 미호출
 
-**해결:** [examples/README.md — Body Data 안내](https://github.com/AGR-EXO/Extension_Module/tree/Develop/examples/README.md#part-5) 참조.
+**해결:** [examples/README.md — Body Data 안내](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5) 참조.
 
 #### `SetAssistTorque` 호출했는데 H10 안 움직임
 
@@ -311,6 +311,6 @@ Expand-Archive -Path "$HOME\Downloads\Rev2.0.zip" -DestinationPath C:\dev\ -Forc
 
 ---
 
-문제가 해결되지 않으면 [GitHub Issues](https://github.com/AGR-EXO/Extension_Module/issues)에 문의해주세요.
+문제가 해결되지 않으면 [GitHub Issues](https://github.com/AGR-AIFT/phai-x1-xm10-release/issues)에 문의해주세요.
 
 > 🤖 Claude Code 사용자: `"Ex.XX 가 안 돼"` 또는 `"빌드 에러 났어"` 한 줄로 `example-helper` 스킬이 본 페이지의 해당 항목 + 예제 README 의 ⚠️ 섹션을 인용해 답합니다.
