@@ -41,6 +41,15 @@
 
 본 SDK 는 **GitHub Releases 에서 ZIP 으로 배포**됩니다. git clone 이 아닌 **본인 보드 리비전 ZIP 만 다운로드**하면 됩니다.
 
+> ⚠️ **`git clone` 은 권장하지 않습니다.** 이 레포는 릴리스마다 사전 빌드 라이브러리(`libXM_Lib.a`,
+> Rev 당 33~50MB)가 함께 커밋돼 있어 히스토리가 약 **350MB** 입니다. ZIP 은 27~41MB 이니 훨씬 빠릅니다.
+> 그래도 clone 이 필요하면 히스토리 없이 받으세요:
+> ```bash
+> git clone --depth 1 https://github.com/AGR-AIFT/phai-x1-xm10-release.git
+> ```
+> 두 리비전 폴더의 CubeIDE 프로젝트명이 둘 다 `Extension_Module` 이라, clone 한 경우
+> **같은 워크스페이스에 Rev1.1 과 Rev2.0 을 동시에 Import 하지 마세요**(프로젝트명 충돌).
+
 📦 **다운로드**: [Releases v2.6.0](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.6.0) → Assets 섹션
 - **Rev2.0 보드** → `Rev2.0.zip` (대부분 여기)
 - **Rev1.1 보드** → `Rev1.1.zip`
