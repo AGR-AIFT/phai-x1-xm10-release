@@ -61,7 +61,7 @@ ZIP 생성 직후 `.project`, `CLAUDE.md`, `XM_FW/libXM_Lib.a` 등 핵심 항목
 
 ## 심층 검증 — `verify_release_zip.py`
 
-개발 레포(`ARC_ExtensionBoard`)에 있습니다. 패키징 스크립트와 독립적으로 ZIP 을 열어
+개발 레포(`phai-x1-xm10-develop`)에 있습니다. 패키징 스크립트와 독립적으로 ZIP 을 열어
 검사하며, **양 Rev PASS 가 릴리스 조건**입니다.
 
 ```bash
