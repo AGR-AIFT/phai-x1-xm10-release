@@ -23,6 +23,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "module.h"     /* XM_EXTERNAL_UART_XSENS_ENABLE — External UART 소유권 게이트 */
+
 /**
  *-----------------------------------------------------------
  * PUBLIC DEFINITIONS AND MACROS
@@ -318,14 +320,125 @@ void XM_SetExtPowerVoltage(XmExtPwrVoltage_t voltage);
 
 /**
  * ============================================================================
- * [Rev2.0] External UART 전용 디바이스 결합 API
- * - External UART = USART2 (PD5/PD6, 921600 8N1, DMA Idle Event)
- * - 사용자가 Control_Setup()에서 명시적 opt-in 호출 → 미사용 시 USART2는 향후
- *   범용 Serial API(계획)로 자유롭게 활용 가능.
- * - 함수명에 모델/벤더를 명시한 이유: 1:1 대응이 명확하고, 미래 다른 디바이스
- *   결합 API가 추가되어도 충돌하지 않음.
+ * [Rev2.0] External UART (USART2, PD5/PD6) API
+ *
+ * 이 포트는 921600 8N1, DMA + IDLE 라인 이벤트로 부팅 시 이미 열려 있습니다.
+ * 주인은 `module.h` 의 `XM_EXTERNAL_UART_XSENS_ENABLE` 이 빌드 타임에 정합니다:
+ *
+ *   0 (기본) → 범용 Serial API. 아래 XM_AttachExternalUart() 등을 씁니다.
+ *   1        → Xsens MTi-630 전용. 아래 XM_AttachXsensMTi630() 등을 씁니다.
+ *
+ * 두 그룹은 **동시에 선언되지 않습니다.** IOIF 가 포트당 RX 콜백을 1개만 갖고
+ * 나중 등록이 앞의 것을 경고 없이 덮어쓰기 때문에, 빌드 타임에 하나만 고르게
+ * 막아 둔 것입니다. 반대쪽 함수를 부르면 "선언되지 않은 함수" 컴파일 에러가
+ * 납니다 — 그럴 때는 module.h 의 매크로 값을 확인하세요.
  * ============================================================================
  */
+
+#if !XM_EXTERNAL_UART_XSENS_ENABLE
+
+/**
+ * @brief External UART 통신 속도.
+ * @note 상대 장비와 **같은 값**이어야 통신됩니다. 8N1(데이터 8비트/패리티 없음/
+ *       스톱 1비트)은 **고정이며 바꿀 수 없습니다** — 상대 장비를 8N1 로 맞추세요.
+ */
+typedef enum {
+    XM_UART_BAUD_9600 = 0,
+    XM_UART_BAUD_19200,
+    XM_UART_BAUD_38400,
+    XM_UART_BAUD_57600,
+    XM_UART_BAUD_115200,
+    XM_UART_BAUD_230400,
+    XM_UART_BAUD_460800,
+    XM_UART_BAUD_921600,    /**< 부팅 기본값 */
+} XmUartBaudrate_t;
+
+/**
+ * @brief XM_SendExternalUartData() 1회 최대 바이트. 넘으면 나눠 보내세요.
+ * @note 내부 송신 버퍼 크기와 같아야 하며, 어긋나면 xm_api_external_io.c 의
+ *       컴파일 타임 검사(_Static_assert)에서 빌드가 멈춥니다.
+ */
+#define XM_EXT_UART_TX_MAX_BYTES   (128U)
+
+/**
+ * @brief External UART 수신 콜백 타입.
+ * @param[in] data 수신된 바이트들
+ * @param[in] len  이번 호출의 바이트 수
+ *
+ * @warning **여기서는 복사만 하고 즉시 리턴하세요.** 이 콜백은 XM10 내부의 공유
+ *          수신 태스크에서 실행되고, 그 태스크는 발바닥 센서(GRF)의 1kHz 수신도
+ *          함께 처리합니다. 여기서 오래 걸리면 발바닥 센서 데이터가 밀립니다.
+ *          파싱·계산은 Control_Loop() 에서 하세요.
+ * @warning `data` 포인터는 **콜백이 끝나면 무효**입니다. 포인터를 저장하지 말고
+ *          내용을 자기 버퍼로 복사하세요.
+ * @warning **콜백 1번 = 메시지 1개가 아닙니다.** 수신은 최대 128바이트 조각으로
+ *          쪼개져 여러 번 올 수 있고, 한 번에 두 메시지가 붙어 올 수도 있습니다.
+ *          메시지 경계(헤더/길이/체크섬)는 직접 찾아야 합니다.
+ */
+typedef void (*XmExternalUartRxFunc_t)(const uint8_t* data, uint32_t len);
+
+/**
+ * @brief External UART 수신을 시작하고 콜백을 등록합니다.
+ * @param[in] rx_callback 수신 콜백. NULL 을 주면 수신을 해제합니다.
+ * @return true=등록 성공 / false=실패(포트 미준비)
+ * @note Control_Setup() 에서 1회 호출하세요.
+ *
+ * @code
+ * static volatile uint8_t s_rx[256];
+ * static volatile uint16_t s_rx_len;
+ *
+ * static void OnSerialRx(const uint8_t* data, uint32_t len) {
+ *     for (uint32_t i = 0; i < len && s_rx_len < sizeof(s_rx); i++) {
+ *         s_rx[s_rx_len++] = data[i];      // 복사만!
+ *     }
+ * }
+ *
+ * void Control_Setup(void) {
+ *     XM_SetExternalUartBaudrate(XM_UART_BAUD_115200);
+ *     XM_AttachExternalUart(OnSerialRx);
+ * }
+ * @endcode
+ */
+bool XM_AttachExternalUart(XmExternalUartRxFunc_t rx_callback);
+
+/**
+ * @brief 통신 속도를 바꿉니다 (상대 장비와 같은 값이어야 합니다).
+ * @return true=성공 / false=실패(포트 미준비)
+ * @note Control_Setup() 에서 XM_AttachExternalUart() 보다 먼저 호출하세요.
+ */
+bool XM_SetExternalUartBaudrate(XmUartBaudrate_t baud);
+
+/**
+ * @brief 데이터를 보냅니다 (논블로킹).
+ * @param[in] data 보낼 데이터
+ * @param[in] len  바이트 수 (1 ~ XM_EXT_UART_TX_MAX_BYTES)
+ * @return true=송신 시작됨 / false=직전 송신이 아직 안 끝났거나 인자 오류
+ *
+ * @note **false 는 에러가 아니라 "지금은 바쁘다"입니다.** 1kHz Control_Loop() 에서
+ *       매 틱 호출해도 안전하며, false 면 다음 틱에 다시 시도하면 됩니다.
+ * @note 길이가 XM_EXT_UART_TX_MAX_BYTES 를 넘으면 보내지 않고 false 를 반환합니다.
+ *       긴 데이터는 여러 번에 나눠 보내세요.
+ */
+bool XM_SendExternalUartData(const void* data, uint32_t len);
+
+/**
+ * @brief 데이터를 보냅니다 (송신 완료까지 대기).
+ * @warning **Control_Setup() 전용입니다.** 최대 5초까지 멈출 수 있어서
+ *          Control_Loop() 이나 수신 콜백 안에서 호출하면 제어 주기가 깨집니다.
+ *          초기 설정 커맨드를 한 번 보낼 때만 쓰세요.
+ */
+bool XM_SendExternalUartDataBlocking(const void* data, uint32_t len);
+
+/**
+ * @brief 수신이 멈춰 있으면 되살립니다 (안전장치).
+ * @details 케이블을 뽑았다 꽂거나 노이즈로 프레이밍 에러가 나면 하드웨어 수신이
+ *          정지한 채로 남을 수 있습니다. 이 함수를 주기적으로 부르면 그런 경우에
+ *          자동으로 복구됩니다. 정상일 때는 아무 일도 하지 않습니다.
+ * @note 100ms 정도 주기로 호출하는 것을 권장합니다 (예제 43 참고).
+ */
+void XM_EnsureExternalUartRxArmed(void);
+
+#else  /* XM_EXTERNAL_UART_XSENS_ENABLE == 1 */
 
 /**
  * @brief Xsens MTi-630 IMU를 External UART(USART2)에 결합합니다.
@@ -344,6 +457,8 @@ void XM_AttachXsensMTi630(void);
  *  - XM_AttachXsensMTi630() 선행 호출 필수.
  */
 void XM_ConfigureXsensMTi630(void);
+
+#endif /* XM_EXTERNAL_UART_XSENS_ENABLE */
 
 /**
  * ============================================================================

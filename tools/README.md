@@ -26,7 +26,7 @@ python tools/package_release.py --version 2.6.0 --rev all --out-dir C:/releases
 Rev2.0.zip  →  Extension_Module/
 ├── XM_FW/            공개 헤더 + libXM_Lib.a + boot_fw_info.c
 ├── XM_Apps/          사용자 코드 자리 (Control_Task/)
-├── Examples/         예제 — Rev1.1 = 42개, Rev2.0 = 45개
+├── Examples/         예제 — Rev1.1 = 42개, Rev2.0 = 46개
 ├── Core/ Drivers/ Compatible/ FATFS/ Middlewares/ CMSIS/
 ├── tools/build/      pre/post-build 스크립트 (size_report, version_generator,
 │                     patch_fw_info, fw_packager, patch_cubemx_overrides)

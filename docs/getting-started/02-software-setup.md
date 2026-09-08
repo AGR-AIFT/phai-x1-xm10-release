@@ -85,7 +85,7 @@ Test-Path C:\dev\Extension_Module\CLAUDE.md     # AI 진입점
 | `.project`, `.cproject`, `*.ld`, `startup_*.s` | CubeIDE 프로젝트 + 빌드 설정 |
 | `CLAUDE.md` | AI 도구 자동 안내 진입점 (Rev 특화) |
 | `.claude/skills/` | Claude Code 사용자 온보딩/예제 트러블 스킬 |
-| `docs/`, `Examples/` | 학습 문서 + 실습 예제 (Rev 2.0: 45 개 / Rev 1.1: 42 개, Ex.40~42 제외) |
+| `docs/`, `Examples/` | 학습 문서 + 실습 예제 (Rev 2.0: 46 개 / Rev 1.1: 42 개, Ex.40~43 제외) |
 | `Drivers/`, `XM_Apps/`, `XM_FW/` (`XM_API/`, `libXM_Lib.a`, `System/`, `Devices/`, `IOIF/`, `AGR_MW/`, `Services/` 포함), `Core/` | SDK 코드 |
 | `Middlewares/`, `FATFS/`, `LWIP/` (Rev 2.0 만) | HAL/CMSIS/STM32 미들웨어 |
 

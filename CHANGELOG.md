@@ -4,6 +4,34 @@
 
 ---
 
+## [v2.7.0] — 2026-09-08
+
+> **외부 장비와 시리얼로 통신할 수 있게 된 릴리즈.** External UART(PD5/PD6)를 XM_API 만으로 쓸 수 있는 범용 Serial 포트로 열었습니다. XM10 두 대를 직접 잇거나, 아두이노·PC·다른 MCU 와 자유로운 형식으로 통신할 수 있습니다. **SDK 안의 폴더 이름 두 개가 바뀌었으니(아래 Changed) 직접 include 경로를 쓰시던 분은 확인이 필요합니다.**
+
+### Added
+* **범용 Serial API (Rev 2.0)** — External UART(USART2, PD5/PD6)를 XM_API 로 개방했습니다. 5 개 함수: `XM_AttachExternalUart()` / `XM_SetExternalUartBaudrate()` / `XM_SendExternalUartData()`(논블로킹) / `XM_SendExternalUartDataBlocking()`(Control_Setup 전용) / `XM_EnsureExternalUartRxArmed()`. **하드웨어 설정은 `.ioc` 에 고정**되어 있습니다 — **USART2, TX=PD5(`EXT_UART_TX`), RX=PD6(`EXT_UART_RX`), 3.3 V, 921600 8N1, 흐름제어 없음**. 상대 장비를 이 값에 맞추세요. 속도만 `XM_SetExternalUartBaudrate()` 로 9600~921600 에서 바꿀 수 있고 **8N1 은 바꿀 수단이 없습니다**. 한 번에 보낼 수 있는 양은 **128 바이트**(`XM_EXT_UART_TX_MAX_BYTES`)입니다. 내부는 DMA + IDLE 라인 검출(RX DMA1_Stream4 circular 256 B / TX DMA2_Stream1 normal 128 B, preempt 6, HW FIFO 켜짐)이며 GPIO 에 **풀업/풀다운이 없습니다**.
+* **Ex.43 External UART Ping-Pong (Rev 2.0 전용)** — XM10 두 대를 선으로 이어 서로 데이터를 주고받는 예제. 🛑 **Rev 1.1 보드에서는 이 배선을 하지 마세요** — Rev 1.1 에는 External UART 가 없고 **PD6 이 `USB_PWR_ON`(USB 전원 제어 출력)** 이라 상대 TX 와 출력끼리 맞부딪칩니다. 배선도(TX↔RX 교차·공통 GND·3.3V), 수신 콜백에서 복사만 하는 이유, 프레임 경계를 찾는 바이트 상태기계, 증상별 원인표까지 README 에 담았습니다.
+
+### Changed
+* **SDK 안의 폴더 이름 2 개가 바뀌었습니다 (Rev 2.0 만)** — `XM_FW/IOIF/` → **`XM_FW/phoundation-ioif/`**, `XM_FW/AGR_MW/` → **`XM_FW/phoundation-mw/`**. 동봉된 `CMakeLists.txt` 와 `.cproject` 는 이미 새 경로로 맞춰 두었으므로 **SDK 를 그대로 쓰시면 아무 것도 하실 게 없습니다.** 다만 본인 빌드 스크립트에 옛 경로를 직접 적어 두셨다면 바꿔 주세요. `#include "ioif_agrb_uart.h"` 처럼 파일명만 쓰는 방식은 영향받지 않습니다. Rev 1.1 SDK 는 종전 이름 그대로입니다.
+* **센서 허브 수신 경로 분리 (Rev 2.0)** — 센서 데이터(TPDO)와 연결·설정 메시지(NMT/SDO/Heartbeat)를 CAN 수신함 두 개로 나눴습니다. 센서 데이터가 몰려도 연결 유지 메시지가 밀려나지 않게 하려는 것으로, IMU/EMG/FES 허브가 간헐적으로 끊기던 현상에 대한 조치입니다. ⚠️ **보드에서의 확인은 아직 진행 중입니다** — 아래 Notes 참고.
+* **예제 개수** — Rev 2.0 **46 개**(Ex.43 추가) / Rev 1.1 42 개(변동 없음).
+
+* **⚠️ Xsens MTi-630 API 가 기본 빌드에서 빠졌습니다** — `XM_AttachXsensMTi630()` / `XM_ConfigureXsensMTi630()` 를 쓰시던 분은 v2.7.0 에서 **컴파일 에러**가 납니다. External UART 는 포트가 하나이고 수신 콜백 자리도 하나뿐이라, 범용 Serial API 와 Xsens 드라이버가 동시에 잡으면 나중에 등록한 쪽이 앞의 것을 조용히 덮어씁니다 — 그래서 빌드 시점에 둘 중 하나만 고르게 막았습니다(조용한 오작동 대신 빌드 실패). `XM_FW/System/Config/module.h` 의 `XM_EXTERNAL_UART_XSENS_ENABLE` 을 `1` 로 바꾸고 다시 빌드하면 Xsens API 가 돌아오고, 대신 범용 Serial API 가 사라집니다. **기본값은 `0`(범용 Serial)** 입니다. Xsens 를 안 쓰시면 영향 없습니다.
+
+### Fixed
+* **IMU 채널 LED 가 늦게 꺼지던 문제** — 허브 연결이 끊겼을 때(HEARTBEAT_LOST) LED 상태가 즉시 반영되지 않던 것을 고쳤습니다.
+* **Ex.09 문서의 패킷 크기 표기** — 425 B 로 적혀 있던 Total Data 패킷 크기를 실제값 **365 B** 로 정정했습니다(동작 변경 없음, 표기만).
+* **리눅스 환경 빌드** — 헤더 파일명 대소문자가 실제 파일과 어긋난 곳 7 군데를 정정했습니다. 대소문자를 구분하는 파일시스템(리눅스·macOS 일부)에서만 나던 컴파일 실패입니다.
+
+### Notes
+* **삭제되거나 이름이 바뀐 공개 API 는 없습니다.** 다만 위 Changed 의 Xsens 항목만 예외로, 기본 빌드에서 두 함수가 **선언되지 않습니다**(빌드 스위치로 되돌릴 수 있습니다). 그 외 기존 코드는 재빌드만 하면 됩니다.
+* **센서 허브 수신 경로 분리는 아직 보드에서 확인하지 않았습니다.** 빌드·예제 전수 빌드는 모두 통과했지만, 실제 하드웨어에서 CAN 필터 동작과 수신함 배분을 확인하는 절차는 별도로 진행 중입니다. IMU/EMG/FES 허브를 쓰시는 분은 v2.6.0 대비 이 부분이 바뀌었다는 점을 알고 계시고, 이상이 있으면 알려 주세요.
+* **Ex.43 도 아직 보드에서 확인하지 않았습니다.** 코드와 빌드는 검증했지만 두 보드가 실제로 바이트를 주고받는 것은 확인 전입니다. 예제 README 에 그대로 적어 두었습니다.
+* **Rev 1.1 은 펌웨어 변경이 없습니다.** 버전만 v2.7.0 으로 맞췄습니다(SDK ZIP 은 항상 양 리비전을 함께 배포합니다).
+
+---
+
 ## [v2.6.0] — 2026-08-20
 
 > **Rev 1.1 · Rev 2.0 공통 안전성 릴리즈.** 전수 리뷰 결과를 반영해 "제어를 끄면 확실히 꺼지고, 펌웨어가 멈추면 스스로 되살아나는" 동작을 갖췄습니다. 삭제된 API 는 없으며 사용자 코드는 재빌드만 하면 됩니다 — 다만 **`MONITOR` 전환 동작과 `forwardVelocity` 값이 바뀌었습니다**(아래 Changed 참고). Rev 1.1 은 v2.5.0 이후 첫 업데이트입니다.

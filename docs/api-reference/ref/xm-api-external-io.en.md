@@ -31,7 +31,12 @@ Use this API when you want to read values from external sensors (FSR, switches, 
 | [`XM_IsDioSwitchedToAdc`](#xm_isdioswitchedtoadc) | Check whether a DIO pin has been switched to ADC mode |
 | [`XM_DIO_TO_ADC_PIN`](#xm_dio_to_adc_pin-macro) (macro) | Convert a DIO pin number to its corresponding ADC pin number |
 | [`XM_SetExtPowerVoltage`](#xm_setextpowervoltage) 🟢 Rev 2.0 Only | Switch the extension port's supply voltage to 3.3V/5V |
-| [`XM_AttachXsensMTi630`](#xm_attachxsensmti630) | Attach a Xsens MTi-630 IMU to the External UART |
+| [`XM_AttachExternalUart`](#xm_attachexternaluart) 🟢 Rev 2.0 only | Start External UART reception and register a callback |
+| [`XM_SetExternalUartBaudrate`](#xm_setexternaluartbaudrate) 🟢 Rev 2.0 only | Set the External UART baud rate |
+| [`XM_SendExternalUartData`](#xm_sendexternaluartdata) 🟢 Rev 2.0 only | Non-blocking send (max 128 B per call) |
+| [`XM_SendExternalUartDataBlocking`](#xm_sendexternaluartdatablocking) 🟢 Rev 2.0 only | Blocking send (`Control_Setup()` only) |
+| [`XM_EnsureExternalUartRxArmed`](#xm_ensureexternaluartrxarmed) 🟢 Rev 2.0 only | Revive stalled reception (call every ~100 ms) |
+| [`XM_AttachXsensMTi630`](#xm_attachxsensmti630) ⚠️ not in the default build | Attach a Xsens MTi-630 IMU to the External UART |
 | [`XM_ConfigureXsensMTi630`](#xm_configurexsensmti630) | Send the Xsens MTi-630 Output Configuration once |
 
 ---
@@ -442,6 +447,20 @@ void Control_Setup(void) {
 
 ### 5. External UART IMU Attachment (Xsens MTi-630)
 
+> ⚠️ **As of v2.7.0 these two functions are not in the default build.**
+> The single External UART port cannot be shared between the general-purpose Serial API and
+> the Xsens driver (there is only one receive-callback slot per port, and whoever registers
+> last silently overwrites the other). `XM_EXTERNAL_UART_XSENS_ENABLE` in
+> `XM_FW/System/Config/module.h` therefore selects **one or the other at build time**, and it
+> **defaults to `0` (general-purpose Serial)**.
+>
+> - Default build (`0`) → use the [general-purpose External Serial API](#6-general-purpose-external-serial-api--rev-20-only).
+>   Calling the two functions below gives an **"undeclared function" compile error**.
+> - To use the Xsens driver, set `XM_EXTERNAL_UART_XSENS_ENABLE` to `1` in `module.h` and
+>   rebuild. The general-purpose Serial API then disappears instead.
+>
+> This is deliberate: the build stops rather than misbehaving silently.
+
 ### `XM_AttachXsensMTi630`
 
 ```c
@@ -500,6 +519,139 @@ void Control_Setup(void)
 ```
 
 **See also**: [`XM_AttachXsensMTi630`](#xm_attachxsensmti630)
+
+---
+
+### 6. General-purpose External Serial API 🟢 Rev 2.0 only
+
+**New in v2.7.0.** Use the External UART port with whatever message format you decide.
+The peer can be another XM10, an Arduino, a PC, a Raspberry Pi — anything. Framing,
+checksums and parsing are yours to define (raw bytes are transferred).
+
+**The hardware settings are fixed — configure your peer to match.**
+
+| Item | Value | Changeable |
+|---|---|---|
+| Peripheral / pins | **USART2**, TX=**PD5** (`EXT_UART_TX`) / RX=**PD6** (`EXT_UART_RX`) | ✗ |
+| Logic level | **3.3 V** — never wire 5 V directly | ✗ |
+| Default baud | **921600 bps** | ✅ `XM_SetExternalUartBaudrate()` |
+| Data / parity / stop | **8 / none / 1** | ✗ |
+| Flow control | **None** (RTS/CTS unused) | ✗ |
+| Max bytes per send | **128** (`XM_EXT_UART_TX_MAX_BYTES`) | ✗ |
+
+> 🛑 **Do not use this wiring on a Rev 1.1 board.** Rev 1.1 does not have this port, and
+> **PD6 there is `USB_PWR_ON` — an output that switches USB power.** Connecting a peer's TX
+> to it puts two outputs against each other. This API is also absent from the Rev 1.1 SDK.
+
+Related example: [43_External_UART_PingPong](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/)
+
+---
+
+### `XM_AttachExternalUart`
+
+```c
+typedef void (*XmExternalUartRxFunc_t)(const uint8_t* data, uint32_t len);
+
+bool XM_AttachExternalUart(XmExternalUartRxFunc_t rx_callback);
+```
+
+Starts External UART reception and registers a callback. Call it once in `Control_Setup()`.
+Passing `NULL` detaches reception.
+
+**Returns**: `true` = registered / `false` = port not ready
+
+> ⚠️ **Copy, and nothing else, inside the callback.** It runs on the XM10's **shared receive
+> task**, and that same task also handles the **1 kHz foot-sensor (GRF) stream**. Parsing,
+> computing or waiting here delays GRF data by exactly that much.
+
+> ⚠️ **The `data` pointer is invalid once the callback returns.** It points at an internal
+> scratch buffer — copy the contents, do not store the pointer.
+
+> ⚠️ **One callback is not one message.** Reception arrives in chunks of up to 128 bytes and
+> may split or concatenate messages. You must find the message boundaries yourself.
+
+**Example**
+
+```c
+static volatile uint8_t  s_rx[256];
+static volatile uint16_t s_rx_len;
+
+static void OnSerialRx(const uint8_t* data, uint32_t len)
+{
+    for (uint32_t i = 0; i < len && s_rx_len < sizeof(s_rx); i++) {
+        s_rx[s_rx_len++] = data[i];      /* copy only! */
+    }
+}
+
+void Control_Setup(void)
+{
+    XM_SetExternalUartBaudrate(XM_UART_BAUD_115200);
+    XM_AttachExternalUart(OnSerialRx);
+}
+```
+
+---
+
+### `XM_SetExternalUartBaudrate`
+
+```c
+bool XM_SetExternalUartBaudrate(XmUartBaudrate_t baud);
+```
+
+Changes the baud rate. It **must match the peer device**. Call it **before**
+`XM_AttachExternalUart()`.
+
+**Parameters**: `XM_UART_BAUD_9600` / `_19200` / `_38400` / `_57600` / `_115200` / `_230400` /
+`_460800` / `_921600` (boot default)
+
+**Returns**: `true` = success / `false` = port not ready, or value out of range
+
+---
+
+### `XM_SendExternalUartData`
+
+```c
+bool XM_SendExternalUartData(const void* data, uint32_t len);
+```
+
+Sends data. **It does not wait.**
+
+**Parameters**: `data` payload / `len` byte count (1 – `XM_EXT_UART_TX_MAX_BYTES` = 128)
+
+**Returns**: `true` = transmission started / `false` = previous transmission still in flight,
+or invalid argument
+
+> **`false` is not an error — it means "busy right now".** Calling this every tick from a
+> 1 kHz `Control_Loop()` will not stall the loop; on `false`, just retry next tick.
+> More than 128 bytes is rejected with `false`, so split longer payloads.
+
+---
+
+### `XM_SendExternalUartDataBlocking`
+
+```c
+bool XM_SendExternalUartDataBlocking(const void* data, uint32_t len);
+```
+
+Waits until transmission completes.
+
+**⚠️ Call context**: **`Control_Setup()` only.** It can block for up to 5 seconds, so calling
+it from `Control_Loop()` breaks the control period, and calling it from the receive callback
+stalls GRF reception too. Use it only to send a one-off setup command.
+
+---
+
+### `XM_EnsureExternalUartRxArmed`
+
+```c
+void XM_EnsureExternalUartRxArmed(void);
+```
+
+Revives reception if it has stalled. Unplugging and replugging a cable, or a framing error
+caused by noise, can leave hardware reception stopped; calling this periodically recovers it
+automatically. **When everything is fine it does nothing** — it is a cheap call.
+
+**Call period**: **~100 ms** recommended (use a counter inside `Control_Loop()`).
 
 ---
 

@@ -114,7 +114,7 @@ Common issues covering build errors, USB connection problems, communication fail
 ## Additional Resources
 
 - [🧭 find-it.md](find-it.md) — Quick keyword-to-page lookup
-- [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — Source code for all 45 examples (each folder includes a 5-step README)
+- [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — Source code for all 46 examples (each folder includes a 5-step README)
 - [Python Tools](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/PythonDecoder/) — USB-CDC real-time receiver samples
 - [Release Notes](release-notes/) — Per-version attachments and compatibility matrix
 - [Changelog](https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md) — Summary of changes by version

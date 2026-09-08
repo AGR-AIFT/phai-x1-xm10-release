@@ -485,7 +485,8 @@ int main(void)
   /* Start scheduler */
   XM_BOOT_DIAG_MARK(0x4FFFu);
   /* [Phase2] 부팅 성공 — Error_Handler bounded-retry 의 연속 실패 카운터 리셋.
-   * (여기 도달 = 모든 pre-scheduler init 통과. 역사적 error_count/error_lr 은 보존) */
+   * (여기 도달 = 모든 pre-scheduler init 통과. 역사적 error_count/error_lr 은 보존)
+   * ⚠️ CubeMX 자동영역 — 재생성 시 지워진다(2026-09-04 실제 소실). 재생성 후 복원 확인. */
   g_xm_boot_diag.consec_fail = 0u;
   osKernelStart();
 
@@ -815,9 +816,9 @@ static void MX_FDCAN1_Init(void)
   hfdcan1.Init.MessageRAMOffset = 0;
   hfdcan1.Init.StdFiltersNbr = 28;
   hfdcan1.Init.ExtFiltersNbr = 0;
-  hfdcan1.Init.RxFifo0ElmtsNbr = 37;
+  hfdcan1.Init.RxFifo0ElmtsNbr = 25;
   hfdcan1.Init.RxFifo0ElmtSize = FDCAN_DATA_BYTES_64;
-  hfdcan1.Init.RxFifo1ElmtsNbr = 0;
+  hfdcan1.Init.RxFifo1ElmtsNbr = 12;
   hfdcan1.Init.RxFifo1ElmtSize = FDCAN_DATA_BYTES_64;
   hfdcan1.Init.RxBuffersNbr = 0;
   hfdcan1.Init.RxBufferSize = FDCAN_DATA_BYTES_64;
@@ -868,9 +869,9 @@ static void MX_FDCAN2_Init(void)
   hfdcan2.Init.MessageRAMOffset = 1280;
   hfdcan2.Init.StdFiltersNbr = 28;
   hfdcan2.Init.ExtFiltersNbr = 0;
-  hfdcan2.Init.RxFifo0ElmtsNbr = 37;
+  hfdcan2.Init.RxFifo0ElmtsNbr = 25;
   hfdcan2.Init.RxFifo0ElmtSize = FDCAN_DATA_BYTES_64;
-  hfdcan2.Init.RxFifo1ElmtsNbr = 0;
+  hfdcan2.Init.RxFifo1ElmtsNbr = 12;
   hfdcan2.Init.RxFifo1ElmtSize = FDCAN_DATA_BYTES_64;
   hfdcan2.Init.RxBuffersNbr = 0;
   hfdcan2.Init.RxBufferSize = FDCAN_DATA_BYTES_64;

@@ -31,8 +31,13 @@
 | [`XM_IsDioSwitchedToAdc`](#xm_isdioswitchedtoadc) | DIO 핀이 ADC 모드로 전환됐는지 조회 |
 | [`XM_DIO_TO_ADC_PIN`](#xm_dio_to_adc_pin-매크로) (매크로) | DIO 핀 번호 → 대응 ADC 핀 번호 변환 |
 | [`XM_SetExtPowerVoltage`](#xm_setextpowervoltage) 🟢 Rev 2.0 전용 | 확장 포트 공급 전압을 3.3V/5V 로 전환 |
-| [`XM_AttachXsensMTi630`](#xm_attachxsensmti630) | Xsens MTi-630 IMU 를 External UART 에 결합 |
-| [`XM_ConfigureXsensMTi630`](#xm_configurexsensmti630) | Xsens MTi-630 Output Configuration 1회 송신 |
+| [`XM_AttachExternalUart`](#xm_attachexternaluart) 🟢 Rev 2.0 전용 | External UART 수신 시작 + 콜백 등록 |
+| [`XM_SetExternalUartBaudrate`](#xm_setexternaluartbaudrate) 🟢 Rev 2.0 전용 | External UART 통신 속도 설정 |
+| [`XM_SendExternalUartData`](#xm_sendexternaluartdata) 🟢 Rev 2.0 전용 | External UART 논블로킹 송신 (1회 ≤128 B) |
+| [`XM_SendExternalUartDataBlocking`](#xm_sendexternaluartdatablocking) 🟢 Rev 2.0 전용 | External UART 대기 송신 (`Control_Setup()` 전용) |
+| [`XM_EnsureExternalUartRxArmed`](#xm_ensureexternaluartrxarmed) 🟢 Rev 2.0 전용 | 멈춘 수신 되살리기 (~100 ms 주기) |
+| [`XM_AttachXsensMTi630`](#xm_attachxsensmti630) ⚠️ 기본 빌드 미제공 | Xsens MTi-630 IMU 를 External UART 에 결합 |
+| [`XM_ConfigureXsensMTi630`](#xm_configurexsensmti630) ⚠️ 기본 빌드 미제공 | Xsens MTi-630 Output Configuration 1회 송신 |
 
 ---
 
@@ -442,6 +447,19 @@ void Control_Setup(void) {
 
 ### 5. External UART IMU 결합 (Xsens MTi-630)
 
+> ⚠️ **v2.7.0 부터 이 두 함수는 기본 빌드에 들어 있지 않습니다.**
+> External UART 포트 하나를 범용 Serial API 와 Xsens 드라이버가 **동시에 쓸 수 없기 때문**입니다
+> (수신 콜백 자리가 포트당 하나뿐이라, 나중에 등록한 쪽이 앞의 것을 조용히 덮어씁니다).
+> 그래서 `XM_FW/System/Config/module.h` 의 `XM_EXTERNAL_UART_XSENS_ENABLE` 이
+> 빌드 시점에 **둘 중 하나만** 고르게 되어 있고, **기본값은 `0`(범용 Serial)** 입니다.
+>
+> - 기본 빌드(`0`) → 위 [범용 External Serial API](#6-범용-external-serial-api--rev-20-전용) 를 씁니다.
+>   아래 두 함수를 호출하면 **"선언되지 않은 함수" 컴파일 에러**가 납니다.
+> - Xsens 를 쓰려면 `module.h` 에서 `XM_EXTERNAL_UART_XSENS_ENABLE` 을 `1` 로 바꾸고
+>   다시 빌드하세요. 그러면 반대로 범용 Serial API 쪽이 사라집니다.
+>
+> 조용히 오작동하는 대신 빌드가 멈추도록 일부러 이렇게 막아 둔 것입니다.
+
 ### `XM_AttachXsensMTi630`
 
 ```c
@@ -500,6 +518,138 @@ void Control_Setup(void)
 ```
 
 **참고**: [`XM_AttachXsensMTi630`](#xm_attachxsensmti630)
+
+---
+
+### 6. 범용 External Serial API 🟢 Rev 2.0 전용
+
+**v2.7.0 신규.** External UART 포트를 여러분이 정한 형식으로 자유롭게 쓰는 API 입니다.
+상대는 다른 XM10, 아두이노, PC, 라즈베리파이 등 무엇이든 됩니다. 프레이밍·체크섬·파싱은
+여러분이 정합니다(raw byte 전송).
+
+**하드웨어 설정은 고정입니다 — 상대 장비를 여기에 맞추세요.**
+
+| 항목 | 값 | 바꿀 수 있나 |
+|---|---|---|
+| 페리페럴 / 핀 | **USART2**, TX=**PD5**(`EXT_UART_TX`) / RX=**PD6**(`EXT_UART_RX`) | ✗ |
+| 로직 레벨 | **3.3 V** — 5 V 직결 금지 | ✗ |
+| 기본 속도 | **921600 bps** | ✅ `XM_SetExternalUartBaudrate()` |
+| 데이터 / 패리티 / 스톱 | **8 / 없음 / 1** | ✗ |
+| 흐름 제어 | **없음** (RTS/CTS 미사용) | ✗ |
+| 1회 송신 상한 | **128 바이트** (`XM_EXT_UART_TX_MAX_BYTES`) | ✗ |
+
+> 🛑 **Rev 1.1 보드에는 이 배선을 하지 마세요.** Rev 1.1 에는 이 포트가 없고,
+> **PD6 이 `USB_PWR_ON` — USB 전원을 켜고 끄는 출력 핀**입니다. 상대 보드의 TX 를 물리면
+> 출력끼리 맞부딪칩니다. 이 API 자체도 Rev 1.1 SDK 에는 들어 있지 않습니다.
+
+관련 예제: [43_External_UART_PingPong](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/)
+
+---
+
+### `XM_AttachExternalUart`
+
+```c
+typedef void (*XmExternalUartRxFunc_t)(const uint8_t* data, uint32_t len);
+
+bool XM_AttachExternalUart(XmExternalUartRxFunc_t rx_callback);
+```
+
+External UART 수신을 시작하고 콜백을 등록합니다. `Control_Setup()` 에서 1회 호출하세요.
+`NULL` 을 주면 수신을 해제합니다.
+
+**반환값**: `true` = 등록됨 / `false` = 포트 미준비
+
+> ⚠️ **콜백에서는 복사만 하고 즉시 리턴하세요.** 이 콜백은 XM10 내부의 **공유 수신
+> 태스크**에서 실행되고, 그 태스크는 **발바닥 센서(GRF)의 1 kHz 수신도 함께** 처리합니다.
+> 여기서 파싱·계산·대기를 하면 그만큼 GRF 데이터가 늦어집니다.
+
+> ⚠️ **`data` 포인터는 콜백이 끝나면 무효입니다.** 내부 임시 버퍼를 가리키므로 저장해
+> 두지 말고 내용을 복사하세요.
+
+> ⚠️ **콜백 한 번이 메시지 하나가 아닙니다.** 수신은 최대 128 바이트 조각으로 쪼개져 여러
+> 번 올 수 있고, 두 메시지가 붙어 올 수도 있습니다. 메시지 경계는 직접 찾아야 합니다.
+
+**예제**
+
+```c
+static volatile uint8_t  s_rx[256];
+static volatile uint16_t s_rx_len;
+
+static void OnSerialRx(const uint8_t* data, uint32_t len)
+{
+    for (uint32_t i = 0; i < len && s_rx_len < sizeof(s_rx); i++) {
+        s_rx[s_rx_len++] = data[i];      /* 복사만! */
+    }
+}
+
+void Control_Setup(void)
+{
+    XM_SetExternalUartBaudrate(XM_UART_BAUD_115200);
+    XM_AttachExternalUart(OnSerialRx);
+}
+```
+
+---
+
+### `XM_SetExternalUartBaudrate`
+
+```c
+bool XM_SetExternalUartBaudrate(XmUartBaudrate_t baud);
+```
+
+통신 속도를 바꿉니다. **상대 장비와 같은 값**이어야 합니다.
+`XM_AttachExternalUart()` 보다 **먼저** 호출하세요.
+
+**파라미터**: `XM_UART_BAUD_9600` / `_19200` / `_38400` / `_57600` / `_115200` / `_230400` /
+`_460800` / `_921600`(부팅 기본값)
+
+**반환값**: `true` = 성공 / `false` = 포트 미준비, 또는 범위 밖 값
+
+---
+
+### `XM_SendExternalUartData`
+
+```c
+bool XM_SendExternalUartData(const void* data, uint32_t len);
+```
+
+데이터를 보냅니다. **기다리지 않습니다.**
+
+**파라미터**: `data` 보낼 데이터 / `len` 바이트 수 (1 ~ `XM_EXT_UART_TX_MAX_BYTES`=128)
+
+**반환값**: `true` = 송신 시작됨 / `false` = 직전 송신이 아직 진행 중이거나 인자 오류
+
+> **`false` 는 에러가 아니라 "지금 바쁘다"입니다.** 1 kHz `Control_Loop()` 에서 매 틱
+> 호출해도 루프가 멈추지 않으며, `false` 면 다음 틱에 다시 시도하면 됩니다.
+> 128 바이트를 넘기면 보내지 않고 `false` 를 반환하니 나눠 보내세요.
+
+---
+
+### `XM_SendExternalUartDataBlocking`
+
+```c
+bool XM_SendExternalUartDataBlocking(const void* data, uint32_t len);
+```
+
+송신이 끝날 때까지 기다립니다.
+
+**⚠️ 호출 컨텍스트**: **`Control_Setup()` 전용**입니다. 최대 5초까지 멈출 수 있어
+`Control_Loop()` 이나 수신 콜백 안에서 호출하면 제어 주기가 깨지고, 콜백에서 부르면
+GRF 수신까지 함께 멈춥니다. 초기 설정 커맨드를 한 번 보낼 때만 쓰세요.
+
+---
+
+### `XM_EnsureExternalUartRxArmed`
+
+```c
+void XM_EnsureExternalUartRxArmed(void);
+```
+
+수신이 멈춰 있으면 되살립니다. 케이블을 뽑았다 꽂거나 노이즈로 프레이밍 에러가 나면
+하드웨어 수신이 정지한 채 남을 수 있는데, 이 함수를 주기적으로 부르면 자동 복구됩니다.
+**정상일 때는 아무 일도 하지 않는** 값싼 호출입니다.
+
+**호출 주기**: **~100 ms** 권장 (`Control_Loop()` 안에서 카운터로).
 
 ---
 
