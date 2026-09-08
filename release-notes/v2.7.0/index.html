@@ -1,6 +1,6 @@
 
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="ko" class="no-js">
   <head>
     
       <meta charset="utf-8">
@@ -10,35 +10,35 @@
       
       
       
-        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/en/hardware/external-gpio-rev2.0/">
+        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/release-notes/v2.7.0/">
       
       
-        <link rel="prev" href="../external-gpio-rev1.1/">
+        <link rel="prev" href="../">
       
       
-        <link rel="next" href="../../tutorials/">
+        <link rel="next" href="../v2.6.0/">
       
       
         
-          <link rel="alternate" href="../../../hardware/external-gpio-rev2.0/" hreflang="ko">
+          <link rel="alternate" href="./" hreflang="ko">
         
-          <link rel="alternate" href="./" hreflang="en">
+          <link rel="alternate" href="../../en/release-notes/v2.7.0/" hreflang="en">
         
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>External GPIO (Rev 2.0) - XM10 Extension Module</title>
+        <title>v2.7.0 - XM10 Extension Module</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -57,9 +57,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -84,8 +84,8 @@
     <div data-md-component="skip">
       
         
-        <a href="#external-gpio-pinmap--rev-20" class="md-skip">
-          Skip to content
+        <a href="#xm10-extension-module-sdk-v270" class="md-skip">
+          콘텐츠로 이동
         </a>
       
     </div>
@@ -99,8 +99,8 @@
   
 
 <header class="md-header md-header--shadow" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../" title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../.." title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              External GPIO (Rev 2.0)
+              v2.7.0
             
           </span>
         </div>
@@ -160,20 +160,20 @@
       <div class="md-header__option">
   <div class="md-select">
     
-    <button class="md-header__button md-icon" aria-label="Select language">
+    <button class="md-header__button md-icon" aria-label="언어설정">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
     </button>
     <div class="md-select__inner">
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../../hardware/external-gpio-rev2.0/" hreflang="ko" class="md-select__link">
+            <a href="./" hreflang="ko" class="md-select__link">
               한국어
             </a>
           </li>
         
           <li class="md-select__item">
-            <a href="./" hreflang="en" class="md-select__link">
+            <a href="../../en/release-notes/v2.7.0/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -194,16 +194,16 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="Search">
+      <nav class="md-search__options" aria-label="검색">
         
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
@@ -216,7 +216,7 @@
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            Initializing search
+            검색 초기화
           </div>
           <ol class="md-search-result__list" role="presentation"></ol>
         </div>
@@ -228,7 +228,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="저장소로 이동" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
@@ -262,9 +262,9 @@
 
 
 
-<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../" title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+    <a href="../.." title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -274,7 +274,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="저장소로 이동" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
@@ -294,14 +294,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../" class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Home
+    홈
   
 
     
@@ -328,7 +328,7 @@
   <span class="md-ellipsis">
     
   
-    Quick Find
+    빠른 찾기
   
 
     
@@ -381,7 +381,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    시작하기
   
 
     
@@ -397,7 +397,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Getting Started
+    시작하기
   
 
           </label>
@@ -417,7 +417,7 @@
   <span class="md-ellipsis">
     
   
-    Hardware Setup
+    하드웨어 연결
   
 
     
@@ -445,7 +445,7 @@
   <span class="md-ellipsis">
     
   
-    Development Setup
+    개발 환경 구축
   
 
     
@@ -473,7 +473,7 @@
   <span class="md-ellipsis">
     
   
-    First Build
+    첫 빌드
   
 
     
@@ -501,7 +501,7 @@
   <span class="md-ellipsis">
     
   
-    Start with Claude Code
+    Claude Code 와 함께 시작
   
 
     
@@ -526,8 +526,6 @@
       
   
   
-    
-  
   
   
     
@@ -550,22 +548,22 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../hardware/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Hardware
+    하드웨어
   
 
     
@@ -582,12 +580,12 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Hardware
+    하드웨어
   
 
           </label>
@@ -602,14 +600,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../external-gpio-rev1.1/" class="md-nav__link">
+      <a href="../../hardware/external-gpio-rev1.1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    External GPIO (Rev 1.1)
+    외부 GPIO (Rev 1.1)
   
 
     
@@ -627,44 +625,17 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    External GPIO (Rev 2.0)
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../hardware/external-gpio-rev2.0/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    External GPIO (Rev 2.0)
+    외부 GPIO (Rev 2.0)
   
 
     
@@ -673,114 +644,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#header-location" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Header Location
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dio-8-pins" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        DIO 8 Pins
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#adc-4-pins-fixed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ADC 4 Pins (Fixed)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dio--adc-dynamic-switching-8-additional-channels" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        DIO → ADC Dynamic Switching (8 Additional Channels)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#notes-on-using-an-external-imu" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Notes on Using an External IMU
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#common-issues" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Common Issues
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#differences-from-rev-11" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Differences from Rev 1.1
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#see-also" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        See Also
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -807,7 +670,7 @@
   <span class="md-ellipsis">
     
   
-    Tutorials
+    튜토리얼
   
 
     
@@ -875,7 +738,7 @@
   <span class="md-ellipsis">
     
   
-    API Reference
+    API 레퍼런스
   
 
     
@@ -897,7 +760,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    API Reference
+    API 레퍼런스
   
 
           </label>
@@ -919,7 +782,7 @@
   <span class="md-ellipsis">
     
   
-    State Machine (TSM)
+    상태 머신 (TSM)
   
 
     
@@ -947,7 +810,7 @@
   <span class="md-ellipsis">
     
   
-    KIT H10 Control & Data
+    KIT H10 제어·데이터
   
 
     
@@ -975,7 +838,7 @@
   <span class="md-ellipsis">
     
   
-    LED & Button
+    LED·버튼
   
 
     
@@ -1003,7 +866,7 @@
   <span class="md-ellipsis">
     
   
-    External IO
+    외부 IO
   
 
     
@@ -1031,7 +894,7 @@
   <span class="md-ellipsis">
     
   
-    USB Serial
+    USB 시리얼
   
 
     
@@ -1059,7 +922,7 @@
   <span class="md-ellipsis">
     
   
-    Memory Regions
+    메모리 영역
   
 
     
@@ -1087,7 +950,7 @@
   <span class="md-ellipsis">
     
   
-    Real-Time Clock (RTC)
+    실시간 시계 (RTC)
   
 
     
@@ -1115,7 +978,7 @@
   <span class="md-ellipsis">
     
   
-    Auxiliary Tasks
+    보조 태스크
   
 
     
@@ -1183,7 +1046,7 @@
   <span class="md-ellipsis">
     
   
-    Function Reference
+    함수 레퍼런스
   
 
     
@@ -1205,7 +1068,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Function Reference
+    함수 레퍼런스
   
 
           </label>
@@ -1227,7 +1090,7 @@
   <span class="md-ellipsis">
     
   
-    xm_api.h (Entry Point)
+    xm_api.h (진입점)
   
 
     
@@ -1255,7 +1118,7 @@
   <span class="md-ellipsis">
     
   
-    xm_api_data.h (Control & Data)
+    xm_api_data.h (제어·데이터)
   
 
     
@@ -1283,7 +1146,7 @@
   <span class="md-ellipsis">
     
   
-    xm_api_tsm.h (State Machine)
+    xm_api_tsm.h (상태 머신)
   
 
     
@@ -1311,7 +1174,7 @@
   <span class="md-ellipsis">
     
   
-    xm_api_led_btn.h (LED & Button)
+    xm_api_led_btn.h (LED·버튼)
   
 
     
@@ -1339,7 +1202,7 @@
   <span class="md-ellipsis">
     
   
-    xm_api_external_io.h (External IO)
+    xm_api_external_io.h (외부 IO)
   
 
     
@@ -1395,7 +1258,7 @@
   <span class="md-ellipsis">
     
   
-    xm_api_memory.h (Memory)
+    xm_api_memory.h (메모리)
   
 
     
@@ -1479,7 +1342,7 @@
   <span class="md-ellipsis">
     
   
-    xm_api_user_custom.h (User Data)
+    xm_api_user_custom.h (사용자 데이터)
   
 
     
@@ -1522,7 +1385,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture
+    아키텍처
   
 
     
@@ -1549,7 +1412,7 @@
   <span class="md-ellipsis">
     
   
-    KIT H10 Firmware
+    KIT H10 펌웨어
   
 
     
@@ -1576,7 +1439,7 @@
   <span class="md-ellipsis">
     
   
-    Bootloader
+    부트로더
   
 
     
@@ -1628,7 +1491,7 @@
   <span class="md-ellipsis">
     
   
-    Advanced
+    심화
   
 
     
@@ -1650,7 +1513,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Advanced
+    심화
   
 
           </label>
@@ -1672,7 +1535,7 @@
   <span class="md-ellipsis">
     
   
-    AI Data Pipeline
+    AI 데이터 파이프라인
   
 
     
@@ -1707,7 +1570,7 @@
   <span class="md-ellipsis">
     
   
-    Safety
+    안전
   
 
     
@@ -1734,7 +1597,7 @@
   <span class="md-ellipsis">
     
   
-    Troubleshooting
+    문제 해결
   
 
     
@@ -1751,6 +1614,8 @@
       
   
   
+    
+  
   
   
     
@@ -1793,22 +1658,22 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../release-notes/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Release Notes
+    릴리스 노트
   
 
     
@@ -1825,12 +1690,12 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_13">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Release Notes
+    릴리스 노트
   
 
           </label>
@@ -1842,10 +1707,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../release-notes/v2.7.0/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.7.0
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1861,6 +1753,181 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#한눈에-보기" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        한눈에 보기
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#꼭-확인할-변경-3-가지" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        꼭 확인할 변경 3 가지
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="꼭 확인할 변경 3 가지">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0-xsens-mti-630-을-쓰고-계셨다면--기본-빌드에서-그-api-가-빠졌습니다-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. Xsens MTi-630 을 쓰고 계셨다면 — 기본 빌드에서 그 API 가 빠졌습니다 ⚠️
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-sdk-안의-폴더-이름-두-개가-바뀌었습니다-rev-20-만" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. SDK 안의 폴더 이름 두 개가 바뀌었습니다 (Rev 2.0 만)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-센서-허브-수신-경로가-나뉘었습니다-rev-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 센서 허브 수신 경로가 나뉘었습니다 (Rev 2.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#새로-생긴-api--범용-serial-rev-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        새로 생긴 API — 범용 Serial (Rev 2.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="새로 생긴 API — 범용 Serial (Rev 2.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#-하드웨어-설정--상대-장비를-여기에-맞추세요" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 하드웨어 설정 — 상대 장비를 여기에 맞추세요
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#알아두셔야-할-3-가지" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        알아두셔야 할 3 가지
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#예제" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        예제
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#그-밖에-고친-것" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        그 밖에 고친 것
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#다운로드" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        다운로드
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#호환성" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        호환성
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-문서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 문서
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1873,7 +1940,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release-notes/v2.6.0/" class="md-nav__link">
+      <a href="../v2.6.0/" class="md-nav__link">
         
   
   
@@ -1901,7 +1968,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release-notes/v2.5.1/" class="md-nav__link">
+      <a href="../v2.5.1/" class="md-nav__link">
         
   
   
@@ -1929,7 +1996,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release-notes/v2.5.0/" class="md-nav__link">
+      <a href="../v2.5.0/" class="md-nav__link">
         
   
   
@@ -1957,7 +2024,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release-notes/v2.4.1/" class="md-nav__link">
+      <a href="../v2.4.1/" class="md-nav__link">
         
   
   
@@ -1985,7 +2052,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release-notes/v2.4.0/" class="md-nav__link">
+      <a href="../v2.4.0/" class="md-nav__link">
         
   
   
@@ -2013,7 +2080,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release-notes/v2.3.1/" class="md-nav__link">
+      <a href="../v2.3.1/" class="md-nav__link">
         
   
   
@@ -2041,7 +2108,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release-notes/v2.3.0/" class="md-nav__link">
+      <a href="../v2.3.0/" class="md-nav__link">
         
   
   
@@ -2069,7 +2136,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release-notes/v2.2.2/" class="md-nav__link">
+      <a href="../v2.2.2/" class="md-nav__link">
         
   
   
@@ -2097,7 +2164,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release-notes/v2.2.1/" class="md-nav__link">
+      <a href="../v2.2.1/" class="md-nav__link">
         
   
   
@@ -2125,7 +2192,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release-notes/v2.2.0/" class="md-nav__link">
+      <a href="../v2.2.0/" class="md-nav__link">
         
   
   
@@ -2153,7 +2220,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release-notes/v2.1.1/" class="md-nav__link">
+      <a href="../v2.1.1/" class="md-nav__link">
         
   
   
@@ -2194,7 +2261,7 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+<nav class="md-nav md-nav--secondary" aria-label="목차">
   
   
   
@@ -2203,15 +2270,15 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      목차
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#header-location" class="md-nav__link">
+  <a href="#한눈에-보기" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Header Location
+        한눈에 보기
       
     </span>
   </a>
@@ -2219,10 +2286,99 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dio-8-pins" class="md-nav__link">
+  <a href="#꼭-확인할-변경-3-가지" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DIO 8 Pins
+        꼭 확인할 변경 3 가지
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="꼭 확인할 변경 3 가지">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0-xsens-mti-630-을-쓰고-계셨다면--기본-빌드에서-그-api-가-빠졌습니다-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. Xsens MTi-630 을 쓰고 계셨다면 — 기본 빌드에서 그 API 가 빠졌습니다 ⚠️
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-sdk-안의-폴더-이름-두-개가-바뀌었습니다-rev-20-만" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. SDK 안의 폴더 이름 두 개가 바뀌었습니다 (Rev 2.0 만)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-센서-허브-수신-경로가-나뉘었습니다-rev-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 센서 허브 수신 경로가 나뉘었습니다 (Rev 2.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#새로-생긴-api--범용-serial-rev-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        새로 생긴 API — 범용 Serial (Rev 2.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="새로 생긴 API — 범용 Serial (Rev 2.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#-하드웨어-설정--상대-장비를-여기에-맞추세요" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 하드웨어 설정 — 상대 장비를 여기에 맞추세요
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#알아두셔야-할-3-가지" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        알아두셔야 할 3 가지
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#예제" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        예제
       
     </span>
   </a>
@@ -2230,10 +2386,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#adc-4-pins-fixed" class="md-nav__link">
+  <a href="#그-밖에-고친-것" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ADC 4 Pins (Fixed)
+        그 밖에 고친 것
       
     </span>
   </a>
@@ -2241,10 +2397,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dio--adc-dynamic-switching-8-additional-channels" class="md-nav__link">
+  <a href="#다운로드" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DIO → ADC Dynamic Switching (8 Additional Channels)
+        다운로드
       
     </span>
   </a>
@@ -2252,10 +2408,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes-on-using-an-external-imu" class="md-nav__link">
+  <a href="#호환성" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes on Using an External IMU
+        호환성
       
     </span>
   </a>
@@ -2263,32 +2419,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#common-issues" class="md-nav__link">
+  <a href="#관련-문서" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Common Issues
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#differences-from-rev-11" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Differences from Rev 1.1
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#see-also" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        See Also
+        관련 문서
       
     </span>
   </a>
@@ -2315,243 +2449,283 @@
   
 
 
-<h1 id="external-gpio-pinmap--rev-20">External GPIO Pinmap — Rev 2.0<a class="headerlink" href="#external-gpio-pinmap--rev-20" title="Permanent link">&para;</a></h1>
-<p>The XM10 Rev 2.0 board provides 8 digital IO (DIO) pins and 4 dedicated analog input (ADC) pins on its external expansion header. Any of the 8 DIO pins can be switched to ADC mode at runtime, giving you up to 12 ADC channels total.</p>
+<h1 id="xm10-extension-module-sdk-v270">XM10 Extension Module SDK v2.7.0<a class="headerlink" href="#xm10-extension-module-sdk-v270" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>For the API (function calls) to use these pins, see <a href="../../api-reference/04-external-io/">External IO API</a>. This page focuses on <strong>board pin layout</strong>.</p>
+<p><strong>릴리즈 날짜</strong>: 2026-09-08 | <strong>대상 보드</strong>: <strong>Rev 1.1 · Rev 2.0</strong> | <strong>새 API</strong>: 범용 Serial (Rev 2.0)</p>
 </blockquote>
 <hr />
-<h2 id="header-location">Header Location<a class="headerlink" href="#header-location" title="Permanent link">&para;</a></h2>
-<p><img alt="XM10 Rev 2.0 board — external GPIO header location" src="https://raw.githubusercontent.com/AGR-AIFT/phai-x1-xm10-release/Develop/assets/img/rev2.0-photo.png" /></p>
-<p>Use the photo above to locate the external GPIO header (DIO 8 + ADC 4) on the Rev 2.0 board and to identify the pin 1 orientation. The per-pin function assignments follow the tables below.</p>
-<hr />
-<h2 id="dio-8-pins">DIO 8 Pins<a class="headerlink" href="#dio-8-pins" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>API Name</th>
-<th>PCB Label</th>
-<th>Default Mode</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>XM_EXT_DIO_1</code></td>
-<td>EXT_GPIO_1</td>
-<td>Digital</td>
-<td>Can be switched to ADC</td>
-</tr>
-<tr>
-<td><code>XM_EXT_DIO_2</code></td>
-<td>EXT_GPIO_2</td>
-<td>Digital</td>
-<td>Can be switched to ADC</td>
-</tr>
-<tr>
-<td><code>XM_EXT_DIO_3</code></td>
-<td>EXT_GPIO_3</td>
-<td>Digital</td>
-<td>Can be switched to ADC</td>
-</tr>
-<tr>
-<td><code>XM_EXT_DIO_4</code></td>
-<td>EXT_GPIO_4</td>
-<td>Digital</td>
-<td>Can be switched to ADC</td>
-</tr>
-<tr>
-<td><code>XM_EXT_DIO_5</code></td>
-<td>EXT_GPIO_5</td>
-<td>Digital</td>
-<td>Can be switched to ADC</td>
-</tr>
-<tr>
-<td><code>XM_EXT_DIO_6</code></td>
-<td>EXT_GPIO_6</td>
-<td>Digital</td>
-<td>Can be switched to ADC</td>
-</tr>
-<tr>
-<td><code>XM_EXT_DIO_7</code></td>
-<td>EXT_GPIO_7</td>
-<td>Digital</td>
-<td>Can be switched to ADC</td>
-</tr>
-<tr>
-<td><code>XM_EXT_DIO_8</code></td>
-<td>EXT_GPIO_8</td>
-<td>Digital</td>
-<td>Can be switched to ADC</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Electrical specifications</strong>:
-- Input / Output: 3.3 V logic
-- Output current: <!-- Fill in from board spec -->
-- Internal pull-up / pull-down resistors: supported (select via <code>XM_SetPinMode</code>)
-- 5 V tolerance: <!-- Confirm from board spec before use --></p>
-<blockquote>
-<p>For connector placement and label differences compared to Rev 1.1, refer to the board photo (to be added by the user).</p>
-</blockquote>
-<hr />
-<h2 id="adc-4-pins-fixed">ADC 4 Pins (Fixed)<a class="headerlink" href="#adc-4-pins-fixed" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>API Name</th>
-<th>PCB Label</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>XM_EXT_ADC_1</code></td>
-<td>EXT_ADC_1</td>
-<td>16-bit analog input only</td>
-</tr>
-<tr>
-<td><code>XM_EXT_ADC_2</code></td>
-<td>EXT_ADC_2</td>
-<td>16-bit analog input only</td>
-</tr>
-<tr>
-<td><code>XM_EXT_ADC_3</code></td>
-<td>EXT_ADC_3</td>
-<td>16-bit analog input only</td>
-</tr>
-<tr>
-<td><code>XM_EXT_ADC_4</code></td>
-<td>EXT_ADC_4</td>
-<td>16-bit analog input only</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Electrical specifications</strong>:
-- Input range: 0 – 3.3 V
-- Resolution: 16-bit (native); the API can return 8 / 10 / 12 / 16-bit values
-- Sampling rate: 10 kHz</p>
-<hr />
-<h2 id="dio--adc-dynamic-switching-8-additional-channels">DIO → ADC Dynamic Switching (8 Additional Channels)<a class="headerlink" href="#dio--adc-dynamic-switching-8-additional-channels" title="Permanent link">&para;</a></h2>
-<p>Switching DIO pins to ADC mode at runtime gives you up to 12 ADC channels. Call <code>XM_SwitchDioToAdc()</code>, then read the value with <code>XM_AnalogRead(XM_DIO_TO_ADC_PIN(dio))</code>.</p>
-<table>
-<thead>
-<tr>
-<th>API After Switching</th>
-<th>Original DIO</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>XM_EXT_ADC_5</code></td>
-<td>DIO 1</td>
-</tr>
-<tr>
-<td><code>XM_EXT_ADC_6</code></td>
-<td>DIO 2</td>
-</tr>
-<tr>
-<td><code>XM_EXT_ADC_7</code></td>
-<td>DIO 3</td>
-</tr>
-<tr>
-<td><code>XM_EXT_ADC_8</code></td>
-<td>DIO 4</td>
-</tr>
-<tr>
-<td><code>XM_EXT_ADC_9</code></td>
-<td>DIO 5</td>
-</tr>
-<tr>
-<td><code>XM_EXT_ADC_10</code></td>
-<td>DIO 6</td>
-</tr>
-<tr>
-<td><code>XM_EXT_ADC_11</code></td>
-<td>DIO 7</td>
-</tr>
-<tr>
-<td><code>XM_EXT_ADC_12</code></td>
-<td>DIO 8</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>Once switched, a pin stays in ADC mode until the board is reset. This is intentional — it protects against accidental mode changes at runtime.</p>
-</blockquote>
-<hr />
-<h2 id="notes-on-using-an-external-imu">Notes on Using an External IMU<a class="headerlink" href="#notes-on-using-an-external-imu" title="Permanent link">&para;</a></h2>
-<p>Activate an external IMU (e.g., Xsens MTi series) with <code>XM_AttachXsensMTi630()</code>. On Rev 2.0, the IMU uses the dedicated USART2 port, so no external ADC pins are occupied.</p>
-<!-- User: fill in the exact pins occupied when the IMU is active on Rev 2.0 — this may differ from Rev 1.1 -->
-
-<blockquote>
-<p>For activation details, see <a href="../../api-reference/04-external-io/#35-외부-imu-제어">External IO API — External IMU Control</a></p>
-</blockquote>
-<hr />
-<h2 id="common-issues">Common Issues<a class="headerlink" href="#common-issues" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Symptom</th>
-<th>Solution</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ADC reads always 0 or 3.3 V only</td>
-<td>Missing pull-down resistor or short circuit. Check the FSR voltage-divider circuit (FSR — DIO pin — 10 kΩ — GND).</td>
-</tr>
-<tr>
-<td>Cannot switch back to DIO after ADC mode</td>
-<td>Reset the board or cycle the power. This is intentional safety behavior.</td>
-</tr>
-<tr>
-<td><code>DigitalWrite</code> is ignored</td>
-<td>The pin is currently in ADC mode. Use the ADC API to interact with it.</td>
-</tr>
-<tr>
-<td>High ADC noise</td>
-<td>Use a short jumper wire, ensure a common GND, and add an external RC filter if needed.</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="differences-from-rev-11">Differences from Rev 1.1<a class="headerlink" href="#differences-from-rev-11" title="Permanent link">&para;</a></h2>
-<!-- User: fill in the physical differences between the two boards (connector location, pin order, additional interfaces, etc.) -->
-
-<table>
-<thead>
-<tr>
-<th>Item</th>
-<th>Rev 1.1</th>
-<th>Rev 2.0</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>External GPIO connector location</td>
-<td>(to be added)</td>
-<td>(to be added)</td>
-</tr>
-<tr>
-<td>Pin order</td>
-<td>(to be added)</td>
-<td>(to be added)</td>
-</tr>
-<tr>
-<td>Additional external interfaces</td>
-<td>—</td>
-<td>(confirm and add)</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<h2 id="한눈에-보기">한눈에 보기<a class="headerlink" href="#한눈에-보기" title="Permanent link">&para;</a></h2>
+<p><strong>XM10 이 바깥 장비와 시리얼로 대화할 수 있게 된 릴리즈</strong>입니다.</p>
 <ul>
-<li>Integrated hardware overview: <a href="../">hardware/README.md</a></li>
-<li>Rev 1.1 pinmap: <a href="../external-gpio-rev1.1/">external-gpio-rev1.1.md</a></li>
-<li>Function reference: <a href="../../api-reference/04-external-io/">External IO API</a></li>
-<li>Hands-on examples: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/04_Ext_IO_Basic/">Ex.04 – 05d Ext IO Series</a></li>
+<li><strong>범용 Serial API 가 생겼습니다.</strong> XM10 의 External UART(PD5/PD6)를 <code>XM_API</code> 만으로 쓸 수 있습니다. XM10 두 대를 선으로 잇거나, 아두이노·PC·다른 MCU 와 <strong>여러분이 정한 형식으로</strong> 통신할 수 있습니다.</li>
+<li><strong>예제 43 이 추가됐습니다.</strong> XM10 두 대가 서로 데이터를 주고받는 ping-pong 예제입니다. Rev 2.0 예제가 45 → <strong>46 개</strong>가 됐습니다.</li>
+<li><strong>SDK 안의 폴더 이름 두 개가 바뀌었습니다.</strong> SDK 를 그대로 쓰시면 할 일이 없지만, 빌드 스크립트를 직접 손보신 분은 확인이 필요합니다 (아래 "꼭 확인할 변경").</li>
+<li><strong>센서 허브 수신 경로를 나눴습니다.</strong> IMU/EMG/FES 허브가 간헐적으로 끊기던 현상에 대한 조치입니다. <strong>보드 확인은 아직 진행 중</strong>입니다.</li>
+<li><strong>삭제되거나 이름이 바뀐 API 는 없습니다.</strong> 기존 코드는 재빌드만 하면 됩니다.</li>
+</ul>
+<blockquote>
+<p>Rev 1.1 은 펌웨어 변경이 없습니다. 버전 번호만 맞췄습니다.</p>
+</blockquote>
+<hr />
+<h2 id="꼭-확인할-변경-3-가지">꼭 확인할 변경 3 가지<a class="headerlink" href="#꼭-확인할-변경-3-가지" title="Permanent link">&para;</a></h2>
+<h3 id="0-xsens-mti-630-을-쓰고-계셨다면--기본-빌드에서-그-api-가-빠졌습니다-">0. Xsens MTi-630 을 쓰고 계셨다면 — 기본 빌드에서 그 API 가 빠졌습니다 ⚠️<a class="headerlink" href="#0-xsens-mti-630-을-쓰고-계셨다면--기본-빌드에서-그-api-가-빠졌습니다-" title="Permanent link">&para;</a></h3>
+<p><strong>해당되는 분만 보시면 됩니다.</strong> <code>XM_AttachXsensMTi630()</code> / <code>XM_ConfigureXsensMTi630()</code> 를
+코드에서 부르고 계셨다면, v2.7.0 으로 올린 뒤 <strong>"선언되지 않은 함수" 컴파일 에러</strong>가 납니다.</p>
+<p><strong>왜 그런가</strong>: External UART 는 포트가 <strong>하나</strong>뿐인데, 그 포트의 수신 콜백 자리도 <strong>하나</strong>뿐입니다.
+범용 Serial API 와 Xsens 드라이버가 동시에 그 자리를 잡으면 <strong>나중에 등록한 쪽이 앞의 것을 조용히
+덮어쓰고</strong>, 실행 중에는 누가 이겼는지 알 방법이 없습니다. 그래서 빌드 시점에 <strong>둘 중 하나만</strong>
+고르도록 막았습니다. 조용한 오작동 대신 빌드가 멈추게 한 것입니다.</p>
+<p><strong>어떻게 하나</strong> — <code>XM_FW/System/Config/module.h</code> 를 열어 한 줄만 바꾸고 다시 빌드하세요.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#define XM_EXTERNAL_UART_XSENS_ENABLE   1   </span><span class="cm">/* 0(기본) = 범용 Serial / 1 = Xsens */</span>
+</code></pre></div>
+<p><code>1</code> 로 바꾸면 Xsens API 가 돌아오고, 대신 범용 Serial API 쪽이 사라집니다.
+<strong>Xsens 를 안 쓰시면 아무것도 하실 필요가 없습니다.</strong></p>
+<h3 id="1-sdk-안의-폴더-이름-두-개가-바뀌었습니다-rev-20-만">1. SDK 안의 폴더 이름 두 개가 바뀌었습니다 (Rev 2.0 만)<a class="headerlink" href="#1-sdk-안의-폴더-이름-두-개가-바뀌었습니다-rev-20-만" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>예전</th>
+<th>지금</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_FW/IOIF/</code></td>
+<td><strong><code>XM_FW/phoundation-ioif/</code></strong></td>
+</tr>
+<tr>
+<td><code>XM_FW/AGR_MW/</code></td>
+<td><strong><code>XM_FW/phoundation-mw/</code></strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>대부분은 아무것도 하실 필요가 없습니다.</strong> 동봉된 <code>CMakeLists.txt</code> 와 <code>.cproject</code> 는 이미 새 경로로 맞춰 두었고, <code>#include "ioif_agrb_uart.h"</code> 처럼 <strong>파일명만 쓰는 방식은 영향받지 않습니다</strong>.</p>
+<p>확인이 필요한 경우는 하나입니다 — <strong>본인 빌드 설정에 옛 폴더 경로를 직접 적어 두신 경우</strong>입니다. 예를 들어 include 경로에 <code>XM_FW/IOIF/Inc</code> 를 손으로 추가하셨다면 <code>XM_FW/phoundation-ioif/Inc</code> 로 바꿔 주세요. <code>#include "XM_FW/AGR_MW/..."</code> 처럼 경로를 포함해 적은 include 가 있다면 그것도 마찬가지입니다.</p>
+<p>Rev 1.1 SDK 는 <strong>종전 이름 그대로</strong>입니다.</p>
+<h3 id="2-센서-허브-수신-경로가-나뉘었습니다-rev-20">2. 센서 허브 수신 경로가 나뉘었습니다 (Rev 2.0)<a class="headerlink" href="#2-센서-허브-수신-경로가-나뉘었습니다-rev-20" title="Permanent link">&para;</a></h3>
+<p>XM10 이 CAN 으로 받는 메시지를 두 종류로 나눠 각각 다른 수신함에 넣도록 바꿨습니다.</p>
+<table>
+<thead>
+<tr>
+<th>수신함</th>
+<th>담는 것</th>
+<th>꽉 차면</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 번</td>
+<td>센서 데이터 (TPDO)</td>
+<td>오래된 것을 덮어씀 — 최신 데이터 우선</td>
+</tr>
+<tr>
+<td>1 번</td>
+<td>연결·설정 메시지 (Heartbeat / NMT / SDO)</td>
+<td>새 것을 버림 — 이미 받은 것 보존</td>
+</tr>
+</tbody>
+</table>
+<p><strong>왜 나눴나</strong>: 예전에는 둘이 같은 수신함을 썼습니다. 센서 데이터가 몰리면 그 뒤에 온 <strong>연결 유지 메시지(Heartbeat)가 밀려나</strong> 허브가 "끊긴 것으로" 처리되는 일이 있었습니다. 이제는 센서 데이터가 아무리 몰려도 연결 메시지는 별도 수신함에 남습니다.</p>
+<blockquote>
+<p>⚠️ <strong>이 변경은 아직 보드에서 확인하지 않았습니다.</strong> 빌드와 예제 전수 빌드는 모두 통과했지만, 실제 하드웨어에서 CAN 필터 동작을 확인하는 절차는 별도로 진행 중입니다. IMU/EMG/FES 허브를 쓰시는 분은 v2.6.0 대비 이 부분이 바뀌었다는 점을 알고 계시고, 평소와 다른 동작이 보이면 알려 주세요.</p>
+</blockquote>
+<hr />
+<h2 id="새로-생긴-api--범용-serial-rev-20">새로 생긴 API — 범용 Serial (Rev 2.0)<a class="headerlink" href="#새로-생긴-api--범용-serial-rev-20" title="Permanent link">&para;</a></h2>
+<p>XM10 의 <strong>External UART</strong>(PD5 = TX, PD6 = RX)를 여러분이 자유롭게 쓸 수 있게 열었습니다.
+상대가 무엇이든 상관없습니다 — XM10, 아두이노, PC, 라즈베리파이, 다른 MCU 보드.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">XM_SetExternalUartBaudrate</span><span class="p">(</span><span class="n">XM_UART_BAUD_115200</span><span class="p">);</span><span class="w">   </span><span class="c1">// 상대와 같은 값</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">XM_AttachExternalUart</span><span class="p">(</span><span class="n">OnSerialRx</span><span class="p">);</span><span class="w">                  </span><span class="c1">// 수신 시작</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">{</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="cm">/* 받은 바이트 해석 (콜백이 아니라 여기서!) */</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="cm">/* 보내기 — 기다리지 않습니다 */</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="n">XM_SendExternalUartData</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>하는 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_SetExternalUartBaudrate(baud)</code></td>
+<td>통신 속도 (9600 ~ 921600)</td>
+</tr>
+<tr>
+<td><code>XM_AttachExternalUart(콜백)</code></td>
+<td>수신 시작. <code>Control_Setup()</code> 에서 1 회</td>
+</tr>
+<tr>
+<td><code>XM_SendExternalUartData(buf, len)</code></td>
+<td>보내기 — <strong>기다리지 않음</strong>, 1 회 최대 <strong>128 바이트</strong></td>
+</tr>
+<tr>
+<td><code>XM_SendExternalUartDataBlocking(buf, len)</code></td>
+<td>보내기 — 완료까지 대기. <strong><code>Control_Setup()</code> 전용</strong></td>
+</tr>
+<tr>
+<td><code>XM_EnsureExternalUartRxArmed()</code></td>
+<td>수신이 멈췄으면 되살림 (100 ms 주기 권장)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="-하드웨어-설정--상대-장비를-여기에-맞추세요">📋 하드웨어 설정 — 상대 장비를 여기에 맞추세요<a class="headerlink" href="#-하드웨어-설정--상대-장비를-여기에-맞추세요" title="Permanent link">&para;</a></h3>
+<p>보드 쪽 설정은 <strong>CubeMX(<code>.ioc</code>)에 이미 고정</strong>되어 있습니다. 아래가 실제 값이며, <strong>상대 장비를 이 값에 맞추셔야</strong> 통신됩니다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>값</th>
+<th>바꿀 수 있나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>페리페럴</td>
+<td><strong>USART2</strong> (비동기)</td>
+<td>✗</td>
+</tr>
+<tr>
+<td><strong>TX 핀</strong></td>
+<td><strong>PD5</strong> (넷 이름 <code>EXT_UART_TX</code>)</td>
+<td>✗</td>
+</tr>
+<tr>
+<td><strong>RX 핀</strong></td>
+<td><strong>PD6</strong> (넷 이름 <code>EXT_UART_RX</code>)</td>
+<td>✗</td>
+</tr>
+<tr>
+<td><strong>로직 레벨</strong></td>
+<td><strong>3.3 V</strong> — 5 V 직결 금지</td>
+<td>✗</td>
+</tr>
+<tr>
+<td><strong>기본 속도</strong></td>
+<td><strong>921600 bps</strong></td>
+<td>✅ <code>XM_SetExternalUartBaudrate()</code> (9600 ~ 921600)</td>
+</tr>
+<tr>
+<td><strong>데이터 / 패리티 / 스톱</strong></td>
+<td><strong>8 / 없음 / 1</strong></td>
+<td>✗</td>
+</tr>
+<tr>
+<td><strong>흐름 제어</strong></td>
+<td><strong>없음</strong> — RTS/CTS 선 사용 안 함</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>1 회 송신 상한</td>
+<td><strong>128 바이트</strong> (<code>XM_EXT_UART_TX_MAX_BYTES</code>)</td>
+<td>✗</td>
+</tr>
+</tbody>
+</table>
+<p><strong>한 줄로: <code>921600 8N1, 흐름제어 없음</code>.</strong> 속도만 양쪽 똑같이 바꿀 수 있고, <strong>8N1 은 펌웨어에서 바꿀 수단이 없습니다.</strong></p>
+<p>내부적으로는 <strong>DMA + IDLE 라인 검출</strong>로 받습니다(RX: DMA1_Stream4 circular 256 B / TX: DMA2_Stream1 normal 128 B, 인터럽트 preempt 6, HW FIFO 켜짐, 커널 클럭 120 MHz). GPIO 는 <strong>풀업/풀다운이 없으므로</strong>, 상대가 꺼져 있거나 선이 빠지면 RX 가 플로팅되어 잡음을 데이터로 오인할 수 있습니다.</p>
+<blockquote>
+<p>🛑 <strong>Rev 1.1 보드에서는 이 배선을 하지 마세요.</strong> Rev 1.1 에는 External UART 포트가 아예 없고(시리얼은 발바닥 센서용 UART7/UART8 뿐), <strong>PD6 은 <code>USB_PWR_ON</code> — USB 전원을 켜고 끄는 출력 핀</strong>입니다. 여기에 상대 보드의 TX 를 물리면 출력끼리 맞부딪칩니다.</p>
+</blockquote>
+<h3 id="알아두셔야-할-3-가지">알아두셔야 할 3 가지<a class="headerlink" href="#알아두셔야-할-3-가지" title="Permanent link">&para;</a></h3>
+<p><strong>① 통신 형식은 8N1 고정입니다.</strong> 데이터 8 비트 / 패리티 없음 / 스톱 1 비트. 바꿀 수 있는 건 속도뿐이니 <strong>상대 장비를 8N1 로 맞춰</strong> 주세요.</p>
+<p><strong>② 수신 콜백에서는 복사만 하세요.</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">OnSerialRx</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">{</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="cm">/* 내 버퍼로 복사만. 해석은 Control_Loop() 에서 */</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">}</span>
+</code></pre></div>
+<p>이 콜백은 XM10 내부의 <strong>공유 수신 태스크</strong>에서 실행되는데, 그 태스크는 <strong>발바닥 센서(GRF)의 1 kHz 수신도 함께</strong> 처리합니다. 콜백에서 파싱·계산·대기를 하면 그만큼 GRF 데이터가 늦어집니다. 그리고 <code>data</code> 포인터는 <strong>콜백이 끝나면 무효</strong>입니다 — 저장해 두지 말고 내용을 복사하세요.</p>
+<p><strong>③ 콜백 한 번이 메시지 하나가 아닙니다.</strong> 시리얼은 "메시지"가 아니라 "바이트 흐름"입니다. 5 바이트를 한 번에 보내도 받는 쪽에는 2 + 3 으로 쪼개져 올 수 있고, 다음 메시지가 붙어서 올 수도 있습니다. <strong>메시지 경계는 직접 찾아야 합니다</strong> — 예제 43 의 <code>DrainAndParse()</code> 가 그 방법(헤더를 찾아가며 조립)을 보여 줍니다.</p>
+<p><strong><code>XM_SendExternalUartData()</code> 가 <code>false</code> 를 돌려주는 것은 에러가 아닙니다.</strong> "직전 전송이 아직 안 끝났다"는 뜻이니 다음 주기에 다시 부르면 됩니다. 1 kHz 제어 루프에서 매 틱 불러도 루프가 멈추지 않습니다.</p>
+<hr />
+<h2 id="예제">예제<a class="headerlink" href="#예제" title="Permanent link">&para;</a></h2>
+<p><strong>Ex.43 External UART Ping-Pong</strong> 이 추가됐습니다 (🛑 <strong>Rev 2.0 전용</strong>).</p>
+<p>같은 펌웨어를 XM10 두 대에 굽고 선으로 이으면 1 초에 10 번씩 서로 메시지를 주고받습니다.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>   보드 A                            보드 B
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>   PD5 (TX) ───────────────────────► PD6 (RX)
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>   PD6 (RX) ◄─────────────────────── PD5 (TX)
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>   GND      ────────────────────────  GND
+</code></pre></div>
+<ul>
+<li><strong>TX 와 RX 를 교차</strong>해야 합니다. TX-TX 로 이으면 아무것도 오지 않습니다.</li>
+<li><strong>GND 를 반드시 이으세요.</strong></li>
+<li><strong>3.3 V 로직입니다.</strong> 5 V 장비를 직결하면 보드가 손상됩니다.</li>
+</ul>
+<p>디버거 Live Expressions 로 <code>g_tx_count</code> · <code>g_rx_frame_ok</code> · <code>g_rx_bad_crc</code> · <code>g_peer_seq</code> 를 보면서 단계별로 확인할 수 있습니다. 자세한 절차와 증상별 원인표는 <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/">예제 43 README</a> 에 있습니다.</p>
+<blockquote>
+<p>⚠️ <strong>이 예제도 아직 보드에서 확인하지 않았습니다.</strong> 코드와 빌드는 검증했지만 두 보드가 실제로 바이트를 주고받는 것은 확인 전입니다. 처음 돌려보실 때 README 의 표로 단계별 확인을 권합니다.</p>
+</blockquote>
+<p>Rev 2.0 예제는 이제 <strong>46 개</strong>, Rev 1.1 은 <strong>42 개</strong>입니다.</p>
+<hr />
+<h2 id="그-밖에-고친-것">그 밖에 고친 것<a class="headerlink" href="#그-밖에-고친-것" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>IMU 채널 LED 가 늦게 꺼지던 문제</strong> — 허브 연결이 끊겼을 때 LED 상태가 즉시 반영되지 않던 것을 고쳤습니다.</li>
+<li><strong>Ex.09 문서의 패킷 크기 표기</strong> — 425 B 로 적혀 있던 Total Data 패킷 크기를 실제값 <strong>365 B</strong> 로 정정했습니다 (동작 변경 없음, 표기만).</li>
+<li><strong>리눅스에서 빌드가 안 되던 문제</strong> — 헤더 파일명 대소문자가 실제 파일과 어긋난 곳 7 군데를 정정했습니다. 윈도우에서는 원래 문제없이 빌드되던 부분입니다.</li>
+</ul>
+<hr />
+<h2 id="다운로드">다운로드<a class="headerlink" href="#다운로드" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>파일</th>
+<th>대상</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Rev2.0.zip</code></td>
+<td>Rev 2.0 보드용 SDK (예제 46 개)</td>
+</tr>
+<tr>
+<td><code>Rev1.1.zip</code></td>
+<td>Rev 1.1 보드용 SDK (예제 42 개)</td>
+</tr>
+</tbody>
+</table>
+<p>압축을 풀 때 <strong>짧은 경로</strong>(예: <code>C:\xm10\</code>)에 푸세요. 경로가 깊으면 윈도우의 경로 길이 제한 때문에 빌드가 실패할 수 있는데, 이건 코드 문제가 아니라 경로 길이 문제입니다.</p>
+<hr />
+<h2 id="호환성">호환성<a class="headerlink" href="#호환성" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>기존 코드</td>
+<td><strong>재빌드만 하면 됩니다.</strong> 삭제되거나 이름이 바뀐 공개 API 없음</td>
+</tr>
+<tr>
+<td>빌드 설정을 직접 손본 경우</td>
+<td>폴더 이름 변경 확인 필요 — 위 "꼭 확인할 변경 1"</td>
+</tr>
+<tr>
+<td>Rev 1.1</td>
+<td>펌웨어 변경 없음. 버전 번호만 v2.7.0</td>
+</tr>
+<tr>
+<td>범용 Serial API</td>
+<td><strong>Rev 2.0 전용</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="관련-문서">관련 문서<a class="headerlink" href="#관련-문서" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/">예제 43 — External UART Ping-Pong</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md">예제 전체 인덱스</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md">변경 이력 (CHANGELOG)</a></li>
 </ul>
 
 
@@ -2576,7 +2750,7 @@
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
-  Back to top
+  맨위로
 </button>
         
       </main>
@@ -2585,33 +2759,33 @@
   
     
       
-      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
         
           
-          <a href="../external-gpio-rev1.1/" class="md-footer__link md-footer__link--prev" aria-label="Previous: External GPIO (Rev 1.1)">
+          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="이전: 개요">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
             </div>
             <div class="md-footer__title">
               <span class="md-footer__direction">
-                Previous
+                이전
               </span>
               <div class="md-ellipsis">
-                External GPIO (Rev 1.1)
+                개요
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../tutorials/" class="md-footer__link md-footer__link--next" aria-label="Next: Tutorials">
+          <a href="../v2.6.0/" class="md-footer__link md-footer__link--next" aria-label="다음: v2.6.0">
             <div class="md-footer__title">
               <span class="md-footer__direction">
-                Next
+                다음
               </span>
               <div class="md-ellipsis">
-                Tutorials
+                v2.6.0
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -2648,10 +2822,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

@@ -1512,6 +1512,72 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#6-general-purpose-external-serial-api--rev-20-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. General-purpose External Serial API 🟢 Rev 2.0 only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_attachexternaluart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_AttachExternalUart
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setexternaluartbaudrate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetExternalUartBaudrate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendexternaluartdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendExternalUartData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendexternaluartdatablocking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendExternalUartDataBlocking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_ensureexternaluartrxarmed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_EnsureExternalUartRxArmed
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2088,6 +2154,8 @@
       
         
       
+        
+      
     
     
     
@@ -2140,6 +2208,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.7.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.7.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2737,6 +2833,72 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#6-general-purpose-external-serial-api--rev-20-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. General-purpose External Serial API 🟢 Rev 2.0 only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_attachexternaluart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_AttachExternalUart
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setexternaluartbaudrate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetExternalUartBaudrate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendexternaluartdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendExternalUartData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendexternaluartdatablocking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendExternalUartDataBlocking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_ensureexternaluartrxarmed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_EnsureExternalUartRxArmed
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2968,7 +3130,27 @@
 <td>Switch the extension port's supply voltage to 3.3V/5V</td>
 </tr>
 <tr>
-<td><a href="#xm_attachxsensmti630"><code>XM_AttachXsensMTi630</code></a></td>
+<td><a href="#xm_attachexternaluart"><code>XM_AttachExternalUart</code></a> 🟢 Rev 2.0 only</td>
+<td>Start External UART reception and register a callback</td>
+</tr>
+<tr>
+<td><a href="#xm_setexternaluartbaudrate"><code>XM_SetExternalUartBaudrate</code></a> 🟢 Rev 2.0 only</td>
+<td>Set the External UART baud rate</td>
+</tr>
+<tr>
+<td><a href="#xm_sendexternaluartdata"><code>XM_SendExternalUartData</code></a> 🟢 Rev 2.0 only</td>
+<td>Non-blocking send (max 128 B per call)</td>
+</tr>
+<tr>
+<td><a href="#xm_sendexternaluartdatablocking"><code>XM_SendExternalUartDataBlocking</code></a> 🟢 Rev 2.0 only</td>
+<td>Blocking send (<code>Control_Setup()</code> only)</td>
+</tr>
+<tr>
+<td><a href="#xm_ensureexternaluartrxarmed"><code>XM_EnsureExternalUartRxArmed</code></a> 🟢 Rev 2.0 only</td>
+<td>Revive stalled reception (call every ~100 ms)</td>
+</tr>
+<tr>
+<td><a href="#xm_attachxsensmti630"><code>XM_AttachXsensMTi630</code></a> ⚠️ not in the default build</td>
 <td>Attach a Xsens MTi-630 IMU to the External UART</td>
 </tr>
 <tr>
@@ -3379,6 +3561,21 @@
 <p><strong>See also</strong>: <a href="#xmextpwrvoltage_t-🟢-rev-20-only"><code>XmExtPwrVoltage_t</code></a>, <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/">40_EMG_Proportional_Assist example</a></p>
 <hr />
 <h3 id="5-external-uart-imu-attachment-xsens-mti-630">5. External UART IMU Attachment (Xsens MTi-630)<a class="headerlink" href="#5-external-uart-imu-attachment-xsens-mti-630" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>⚠️ <strong>As of v2.7.0 these two functions are not in the default build.</strong>
+The single External UART port cannot be shared between the general-purpose Serial API and
+the Xsens driver (there is only one receive-callback slot per port, and whoever registers
+last silently overwrites the other). <code>XM_EXTERNAL_UART_XSENS_ENABLE</code> in
+<code>XM_FW/System/Config/module.h</code> therefore selects <strong>one or the other at build time</strong>, and it
+<strong>defaults to <code>0</code> (general-purpose Serial)</strong>.</p>
+<ul>
+<li>Default build (<code>0</code>) → use the <a href="#6-general-purpose-external-serial-api--rev-20-only">general-purpose External Serial API</a>.
+  Calling the two functions below gives an <strong>"undeclared function" compile error</strong>.</li>
+<li>To use the Xsens driver, set <code>XM_EXTERNAL_UART_XSENS_ENABLE</code> to <code>1</code> in <code>module.h</code> and
+  rebuild. The general-purpose Serial API then disappears instead.</li>
+</ul>
+<p>This is deliberate: the build stops rather than misbehaving silently.</p>
+</blockquote>
 <h3 id="xm_attachxsensmti630"><code>XM_AttachXsensMTi630</code><a class="headerlink" href="#xm_attachxsensmti630" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_AttachXsensMTi630</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
@@ -3416,6 +3613,132 @@
 <a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="p">}</span>
 </code></pre></div>
 <p><strong>See also</strong>: <a href="#xm_attachxsensmti630"><code>XM_AttachXsensMTi630</code></a></p>
+<hr />
+<h3 id="6-general-purpose-external-serial-api--rev-20-only">6. General-purpose External Serial API 🟢 Rev 2.0 only<a class="headerlink" href="#6-general-purpose-external-serial-api--rev-20-only" title="Permanent link">&para;</a></h3>
+<p><strong>New in v2.7.0.</strong> Use the External UART port with whatever message format you decide.
+The peer can be another XM10, an Arduino, a PC, a Raspberry Pi — anything. Framing,
+checksums and parsing are yours to define (raw bytes are transferred).</p>
+<p><strong>The hardware settings are fixed — configure your peer to match.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+<th>Changeable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Peripheral / pins</td>
+<td><strong>USART2</strong>, TX=<strong>PD5</strong> (<code>EXT_UART_TX</code>) / RX=<strong>PD6</strong> (<code>EXT_UART_RX</code>)</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>Logic level</td>
+<td><strong>3.3 V</strong> — never wire 5 V directly</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>Default baud</td>
+<td><strong>921600 bps</strong></td>
+<td>✅ <code>XM_SetExternalUartBaudrate()</code></td>
+</tr>
+<tr>
+<td>Data / parity / stop</td>
+<td><strong>8 / none / 1</strong></td>
+<td>✗</td>
+</tr>
+<tr>
+<td>Flow control</td>
+<td><strong>None</strong> (RTS/CTS unused)</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>Max bytes per send</td>
+<td><strong>128</strong> (<code>XM_EXT_UART_TX_MAX_BYTES</code>)</td>
+<td>✗</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🛑 <strong>Do not use this wiring on a Rev 1.1 board.</strong> Rev 1.1 does not have this port, and
+<strong>PD6 there is <code>USB_PWR_ON</code> — an output that switches USB power.</strong> Connecting a peer's TX
+to it puts two outputs against each other. This API is also absent from the Rev 1.1 SDK.</p>
+</blockquote>
+<p>Related example: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/">43_External_UART_PingPong</a></p>
+<hr />
+<h3 id="xm_attachexternaluart"><code>XM_AttachExternalUart</code><a class="headerlink" href="#xm_attachexternaluart" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">XmExternalUartRxFunc_t</span><span class="p">)(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_AttachExternalUart</span><span class="p">(</span><span class="n">XmExternalUartRxFunc_t</span><span class="w"> </span><span class="n">rx_callback</span><span class="p">);</span>
+</code></pre></div>
+<p>Starts External UART reception and registers a callback. Call it once in <code>Control_Setup()</code>.
+Passing <code>NULL</code> detaches reception.</p>
+<p><strong>Returns</strong>: <code>true</code> = registered / <code>false</code> = port not ready</p>
+<blockquote>
+<p>⚠️ <strong>Copy, and nothing else, inside the callback.</strong> It runs on the XM10's <strong>shared receive
+task</strong>, and that same task also handles the <strong>1 kHz foot-sensor (GRF) stream</strong>. Parsing,
+computing or waiting here delays GRF data by exactly that much.</p>
+<p>⚠️ <strong>The <code>data</code> pointer is invalid once the callback returns.</strong> It points at an internal
+scratch buffer — copy the contents, do not store the pointer.</p>
+<p>⚠️ <strong>One callback is not one message.</strong> Reception arrives in chunks of up to 128 bytes and
+may split or concatenate messages. You must find the message boundaries yourself.</p>
+</blockquote>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="k">static</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">s_rx</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="k">static</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">s_rx_len</span><span class="p">;</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">OnSerialRx</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">)</span>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="p">{</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s_rx_len</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">s_rx</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="w">        </span><span class="n">s_rx</span><span class="p">[</span><span class="n">s_rx_len</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w">      </span><span class="cm">/* copy only! */</span>
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a><span class="p">}</span>
+<a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a>
+<a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a><span class="p">{</span>
+<a id="__codelineno-31-13" name="__codelineno-31-13" href="#__codelineno-31-13"></a><span class="w">    </span><span class="n">XM_SetExternalUartBaudrate</span><span class="p">(</span><span class="n">XM_UART_BAUD_115200</span><span class="p">);</span>
+<a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a><span class="w">    </span><span class="n">XM_AttachExternalUart</span><span class="p">(</span><span class="n">OnSerialRx</span><span class="p">);</span>
+<a id="__codelineno-31-15" name="__codelineno-31-15" href="#__codelineno-31-15"></a><span class="p">}</span>
+</code></pre></div>
+<hr />
+<h3 id="xm_setexternaluartbaudrate"><code>XM_SetExternalUartBaudrate</code><a class="headerlink" href="#xm_setexternaluartbaudrate" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SetExternalUartBaudrate</span><span class="p">(</span><span class="n">XmUartBaudrate_t</span><span class="w"> </span><span class="n">baud</span><span class="p">);</span>
+</code></pre></div>
+<p>Changes the baud rate. It <strong>must match the peer device</strong>. Call it <strong>before</strong>
+<code>XM_AttachExternalUart()</code>.</p>
+<p><strong>Parameters</strong>: <code>XM_UART_BAUD_9600</code> / <code>_19200</code> / <code>_38400</code> / <code>_57600</code> / <code>_115200</code> / <code>_230400</code> /
+<code>_460800</code> / <code>_921600</code> (boot default)</p>
+<p><strong>Returns</strong>: <code>true</code> = success / <code>false</code> = port not ready, or value out of range</p>
+<hr />
+<h3 id="xm_sendexternaluartdata"><code>XM_SendExternalUartData</code><a class="headerlink" href="#xm_sendexternaluartdata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendExternalUartData</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+</code></pre></div>
+<p>Sends data. <strong>It does not wait.</strong></p>
+<p><strong>Parameters</strong>: <code>data</code> payload / <code>len</code> byte count (1 – <code>XM_EXT_UART_TX_MAX_BYTES</code> = 128)</p>
+<p><strong>Returns</strong>: <code>true</code> = transmission started / <code>false</code> = previous transmission still in flight,
+or invalid argument</p>
+<blockquote>
+<p><strong><code>false</code> is not an error — it means "busy right now".</strong> Calling this every tick from a
+1 kHz <code>Control_Loop()</code> will not stall the loop; on <code>false</code>, just retry next tick.
+More than 128 bytes is rejected with <code>false</code>, so split longer payloads.</p>
+</blockquote>
+<hr />
+<h3 id="xm_sendexternaluartdatablocking"><code>XM_SendExternalUartDataBlocking</code><a class="headerlink" href="#xm_sendexternaluartdatablocking" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendExternalUartDataBlocking</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+</code></pre></div>
+<p>Waits until transmission completes.</p>
+<p><strong>⚠️ Call context</strong>: <strong><code>Control_Setup()</code> only.</strong> It can block for up to 5 seconds, so calling
+it from <code>Control_Loop()</code> breaks the control period, and calling it from the receive callback
+stalls GRF reception too. Use it only to send a one-off setup command.</p>
+<hr />
+<h3 id="xm_ensureexternaluartrxarmed"><code>XM_EnsureExternalUartRxArmed</code><a class="headerlink" href="#xm_ensureexternaluartrxarmed" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_EnsureExternalUartRxArmed</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Revives reception if it has stalled. Unplugging and replugging a cable, or a framing error
+caused by noise, can leave hardware reception stopped; calling this periodically recovers it
+automatically. <strong>When everything is fine it does nothing</strong> — it is a cheap call.</p>
+<p><strong>Call period</strong>: <strong>~100 ms</strong> recommended (use a counter inside <code>Control_Loop()</code>).</p>
 <hr />
 <h2 id="types--macros">Types / Macros<a class="headerlink" href="#types--macros" title="Permanent link">&para;</a></h2>
 <h3 id="xmdiopin_t"><code>XmDioPin_t</code><a class="headerlink" href="#xmdiopin_t" title="Permanent link">&para;</a></h3>
@@ -3643,7 +3966,7 @@
 <hr />
 <h2 id="diagnostic-global-variable--rev-20-only">Diagnostic Global Variable 🟢 Rev 2.0 Only<a class="headerlink" href="#diagnostic-global-variable--rev-20-only" title="Permanent link">&para;</a></h2>
 <h3 id="g_xm_adc_read_before_switch"><code>g_xm_adc_read_before_switch</code><a class="headerlink" href="#g_xm_adc_read_before_switch" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">extern</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">g_xm_adc_read_before_switch</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="k">extern</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">g_xm_adc_read_before_switch</span><span class="p">;</span>
 </code></pre></div>
 <blockquote>
 <p>🟢 <strong>Rev 2.0 Only</strong> — This variable does not exist in the Rev1.1 header.</p>
@@ -3652,10 +3975,10 @@
 <p><strong>Type</strong>: <code>volatile uint16_t</code> (extern) — the header provides no write API, so treat this as read-only.</p>
 <p><strong>⚠️ Calling context</strong>: Can be read from <code>Control_Loop()</code>, STM32CubeIDE Live Expressions, or anywhere in user code (observable even in a USB-less, SWD-only setup — it does not depend on any particular output channel). Being <code>volatile</code>, every read fetches the actual memory value.</p>
 <p><strong>Example</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="c1">// When ADC reads keep coming back as 0 and you want to find out why:</span>
-<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_xm_adc_read_before_switch</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0U</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="w">    </span><span class="c1">// One of bit0=ADC_5(DIO1) ... bit7=ADC_12(DIO8) is missing its XM_SwitchDioToAdc() call</span>
-<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="c1">// When ADC reads keep coming back as 0 and you want to find out why:</span>
+<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_xm_adc_read_before_switch</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0U</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">    </span><span class="c1">// One of bit0=ADC_5(DIO1) ... bit7=ADC_12(DIO8) is missing its XM_SwitchDioToAdc() call</span>
+<a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a><span class="p">}</span>
 </code></pre></div>
 <p><strong>See also</strong>: <a href="#xm_switchdiotoadc"><code>XM_SwitchDioToAdc</code></a>, <a href="#xm_isdioswitchedtoadc"><code>XM_IsDioSwitchedToAdc</code></a></p>
 <hr />

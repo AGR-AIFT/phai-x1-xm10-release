@@ -1512,6 +1512,72 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#6-범용-external-serial-api--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 범용 External Serial API 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_attachexternaluart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_AttachExternalUart
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setexternaluartbaudrate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetExternalUartBaudrate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendexternaluartdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendExternalUartData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendexternaluartdatablocking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendExternalUartDataBlocking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_ensureexternaluartrxarmed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_EnsureExternalUartRxArmed
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2088,6 +2154,8 @@
       
         
       
+        
+      
     
     
     
@@ -2140,6 +2208,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.7.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.7.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2737,6 +2833,72 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#6-범용-external-serial-api--rev-20-전용" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 범용 External Serial API 🟢 Rev 2.0 전용
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_attachexternaluart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_AttachExternalUart
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_setexternaluartbaudrate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SetExternalUartBaudrate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendexternaluartdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendExternalUartData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_sendexternaluartdatablocking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_SendExternalUartDataBlocking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_ensureexternaluartrxarmed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_EnsureExternalUartRxArmed
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2968,11 +3130,31 @@
 <td>확장 포트 공급 전압을 3.3V/5V 로 전환</td>
 </tr>
 <tr>
-<td><a href="#xm_attachxsensmti630"><code>XM_AttachXsensMTi630</code></a></td>
+<td><a href="#xm_attachexternaluart"><code>XM_AttachExternalUart</code></a> 🟢 Rev 2.0 전용</td>
+<td>External UART 수신 시작 + 콜백 등록</td>
+</tr>
+<tr>
+<td><a href="#xm_setexternaluartbaudrate"><code>XM_SetExternalUartBaudrate</code></a> 🟢 Rev 2.0 전용</td>
+<td>External UART 통신 속도 설정</td>
+</tr>
+<tr>
+<td><a href="#xm_sendexternaluartdata"><code>XM_SendExternalUartData</code></a> 🟢 Rev 2.0 전용</td>
+<td>External UART 논블로킹 송신 (1회 ≤128 B)</td>
+</tr>
+<tr>
+<td><a href="#xm_sendexternaluartdatablocking"><code>XM_SendExternalUartDataBlocking</code></a> 🟢 Rev 2.0 전용</td>
+<td>External UART 대기 송신 (<code>Control_Setup()</code> 전용)</td>
+</tr>
+<tr>
+<td><a href="#xm_ensureexternaluartrxarmed"><code>XM_EnsureExternalUartRxArmed</code></a> 🟢 Rev 2.0 전용</td>
+<td>멈춘 수신 되살리기 (~100 ms 주기)</td>
+</tr>
+<tr>
+<td><a href="#xm_attachxsensmti630"><code>XM_AttachXsensMTi630</code></a> ⚠️ 기본 빌드 미제공</td>
 <td>Xsens MTi-630 IMU 를 External UART 에 결합</td>
 </tr>
 <tr>
-<td><a href="#xm_configurexsensmti630"><code>XM_ConfigureXsensMTi630</code></a></td>
+<td><a href="#xm_configurexsensmti630"><code>XM_ConfigureXsensMTi630</code></a> ⚠️ 기본 빌드 미제공</td>
 <td>Xsens MTi-630 Output Configuration 1회 송신</td>
 </tr>
 </tbody>
@@ -3379,6 +3561,20 @@
 <p><strong>참고</strong>: <a href="#xmextpwrvoltage_t-🟢-rev-20-전용"><code>XmExtPwrVoltage_t</code></a>, <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/">40_EMG_Proportional_Assist 예제</a></p>
 <hr />
 <h3 id="5-external-uart-imu-결합-xsens-mti-630">5. External UART IMU 결합 (Xsens MTi-630)<a class="headerlink" href="#5-external-uart-imu-결합-xsens-mti-630" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>⚠️ <strong>v2.7.0 부터 이 두 함수는 기본 빌드에 들어 있지 않습니다.</strong>
+External UART 포트 하나를 범용 Serial API 와 Xsens 드라이버가 <strong>동시에 쓸 수 없기 때문</strong>입니다
+(수신 콜백 자리가 포트당 하나뿐이라, 나중에 등록한 쪽이 앞의 것을 조용히 덮어씁니다).
+그래서 <code>XM_FW/System/Config/module.h</code> 의 <code>XM_EXTERNAL_UART_XSENS_ENABLE</code> 이
+빌드 시점에 <strong>둘 중 하나만</strong> 고르게 되어 있고, <strong>기본값은 <code>0</code>(범용 Serial)</strong> 입니다.</p>
+<ul>
+<li>기본 빌드(<code>0</code>) → 위 <a href="#6-범용-external-serial-api--rev-20-전용">범용 External Serial API</a> 를 씁니다.
+  아래 두 함수를 호출하면 <strong>"선언되지 않은 함수" 컴파일 에러</strong>가 납니다.</li>
+<li>Xsens 를 쓰려면 <code>module.h</code> 에서 <code>XM_EXTERNAL_UART_XSENS_ENABLE</code> 을 <code>1</code> 로 바꾸고
+  다시 빌드하세요. 그러면 반대로 범용 Serial API 쪽이 사라집니다.</li>
+</ul>
+<p>조용히 오작동하는 대신 빌드가 멈추도록 일부러 이렇게 막아 둔 것입니다.</p>
+</blockquote>
 <h3 id="xm_attachxsensmti630"><code>XM_AttachXsensMTi630</code><a class="headerlink" href="#xm_attachxsensmti630" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_AttachXsensMTi630</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
@@ -3416,6 +3612,131 @@
 <a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="p">}</span>
 </code></pre></div>
 <p><strong>참고</strong>: <a href="#xm_attachxsensmti630"><code>XM_AttachXsensMTi630</code></a></p>
+<hr />
+<h3 id="6-범용-external-serial-api--rev-20-전용">6. 범용 External Serial API 🟢 Rev 2.0 전용<a class="headerlink" href="#6-범용-external-serial-api--rev-20-전용" title="Permanent link">&para;</a></h3>
+<p><strong>v2.7.0 신규.</strong> External UART 포트를 여러분이 정한 형식으로 자유롭게 쓰는 API 입니다.
+상대는 다른 XM10, 아두이노, PC, 라즈베리파이 등 무엇이든 됩니다. 프레이밍·체크섬·파싱은
+여러분이 정합니다(raw byte 전송).</p>
+<p><strong>하드웨어 설정은 고정입니다 — 상대 장비를 여기에 맞추세요.</strong></p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>값</th>
+<th>바꿀 수 있나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>페리페럴 / 핀</td>
+<td><strong>USART2</strong>, TX=<strong>PD5</strong>(<code>EXT_UART_TX</code>) / RX=<strong>PD6</strong>(<code>EXT_UART_RX</code>)</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>로직 레벨</td>
+<td><strong>3.3 V</strong> — 5 V 직결 금지</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>기본 속도</td>
+<td><strong>921600 bps</strong></td>
+<td>✅ <code>XM_SetExternalUartBaudrate()</code></td>
+</tr>
+<tr>
+<td>데이터 / 패리티 / 스톱</td>
+<td><strong>8 / 없음 / 1</strong></td>
+<td>✗</td>
+</tr>
+<tr>
+<td>흐름 제어</td>
+<td><strong>없음</strong> (RTS/CTS 미사용)</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>1회 송신 상한</td>
+<td><strong>128 바이트</strong> (<code>XM_EXT_UART_TX_MAX_BYTES</code>)</td>
+<td>✗</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🛑 <strong>Rev 1.1 보드에는 이 배선을 하지 마세요.</strong> Rev 1.1 에는 이 포트가 없고,
+<strong>PD6 이 <code>USB_PWR_ON</code> — USB 전원을 켜고 끄는 출력 핀</strong>입니다. 상대 보드의 TX 를 물리면
+출력끼리 맞부딪칩니다. 이 API 자체도 Rev 1.1 SDK 에는 들어 있지 않습니다.</p>
+</blockquote>
+<p>관련 예제: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/">43_External_UART_PingPong</a></p>
+<hr />
+<h3 id="xm_attachexternaluart"><code>XM_AttachExternalUart</code><a class="headerlink" href="#xm_attachexternaluart" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">XmExternalUartRxFunc_t</span><span class="p">)(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_AttachExternalUart</span><span class="p">(</span><span class="n">XmExternalUartRxFunc_t</span><span class="w"> </span><span class="n">rx_callback</span><span class="p">);</span>
+</code></pre></div>
+<p>External UART 수신을 시작하고 콜백을 등록합니다. <code>Control_Setup()</code> 에서 1회 호출하세요.
+<code>NULL</code> 을 주면 수신을 해제합니다.</p>
+<p><strong>반환값</strong>: <code>true</code> = 등록됨 / <code>false</code> = 포트 미준비</p>
+<blockquote>
+<p>⚠️ <strong>콜백에서는 복사만 하고 즉시 리턴하세요.</strong> 이 콜백은 XM10 내부의 <strong>공유 수신
+태스크</strong>에서 실행되고, 그 태스크는 <strong>발바닥 센서(GRF)의 1 kHz 수신도 함께</strong> 처리합니다.
+여기서 파싱·계산·대기를 하면 그만큼 GRF 데이터가 늦어집니다.</p>
+<p>⚠️ <strong><code>data</code> 포인터는 콜백이 끝나면 무효입니다.</strong> 내부 임시 버퍼를 가리키므로 저장해
+두지 말고 내용을 복사하세요.</p>
+<p>⚠️ <strong>콜백 한 번이 메시지 하나가 아닙니다.</strong> 수신은 최대 128 바이트 조각으로 쪼개져 여러
+번 올 수 있고, 두 메시지가 붙어 올 수도 있습니다. 메시지 경계는 직접 찾아야 합니다.</p>
+</blockquote>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="k">static</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">s_rx</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="k">static</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">s_rx_len</span><span class="p">;</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">OnSerialRx</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">)</span>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="p">{</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s_rx_len</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">s_rx</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="w">        </span><span class="n">s_rx</span><span class="p">[</span><span class="n">s_rx_len</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w">      </span><span class="cm">/* 복사만! */</span>
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a><span class="p">}</span>
+<a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a>
+<a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a><span class="p">{</span>
+<a id="__codelineno-31-13" name="__codelineno-31-13" href="#__codelineno-31-13"></a><span class="w">    </span><span class="n">XM_SetExternalUartBaudrate</span><span class="p">(</span><span class="n">XM_UART_BAUD_115200</span><span class="p">);</span>
+<a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a><span class="w">    </span><span class="n">XM_AttachExternalUart</span><span class="p">(</span><span class="n">OnSerialRx</span><span class="p">);</span>
+<a id="__codelineno-31-15" name="__codelineno-31-15" href="#__codelineno-31-15"></a><span class="p">}</span>
+</code></pre></div>
+<hr />
+<h3 id="xm_setexternaluartbaudrate"><code>XM_SetExternalUartBaudrate</code><a class="headerlink" href="#xm_setexternaluartbaudrate" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SetExternalUartBaudrate</span><span class="p">(</span><span class="n">XmUartBaudrate_t</span><span class="w"> </span><span class="n">baud</span><span class="p">);</span>
+</code></pre></div>
+<p>통신 속도를 바꿉니다. <strong>상대 장비와 같은 값</strong>이어야 합니다.
+<code>XM_AttachExternalUart()</code> 보다 <strong>먼저</strong> 호출하세요.</p>
+<p><strong>파라미터</strong>: <code>XM_UART_BAUD_9600</code> / <code>_19200</code> / <code>_38400</code> / <code>_57600</code> / <code>_115200</code> / <code>_230400</code> /
+<code>_460800</code> / <code>_921600</code>(부팅 기본값)</p>
+<p><strong>반환값</strong>: <code>true</code> = 성공 / <code>false</code> = 포트 미준비, 또는 범위 밖 값</p>
+<hr />
+<h3 id="xm_sendexternaluartdata"><code>XM_SendExternalUartData</code><a class="headerlink" href="#xm_sendexternaluartdata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendExternalUartData</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+</code></pre></div>
+<p>데이터를 보냅니다. <strong>기다리지 않습니다.</strong></p>
+<p><strong>파라미터</strong>: <code>data</code> 보낼 데이터 / <code>len</code> 바이트 수 (1 ~ <code>XM_EXT_UART_TX_MAX_BYTES</code>=128)</p>
+<p><strong>반환값</strong>: <code>true</code> = 송신 시작됨 / <code>false</code> = 직전 송신이 아직 진행 중이거나 인자 오류</p>
+<blockquote>
+<p><strong><code>false</code> 는 에러가 아니라 "지금 바쁘다"입니다.</strong> 1 kHz <code>Control_Loop()</code> 에서 매 틱
+호출해도 루프가 멈추지 않으며, <code>false</code> 면 다음 틱에 다시 시도하면 됩니다.
+128 바이트를 넘기면 보내지 않고 <code>false</code> 를 반환하니 나눠 보내세요.</p>
+</blockquote>
+<hr />
+<h3 id="xm_sendexternaluartdatablocking"><code>XM_SendExternalUartDataBlocking</code><a class="headerlink" href="#xm_sendexternaluartdatablocking" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendExternalUartDataBlocking</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+</code></pre></div>
+<p>송신이 끝날 때까지 기다립니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <strong><code>Control_Setup()</code> 전용</strong>입니다. 최대 5초까지 멈출 수 있어
+<code>Control_Loop()</code> 이나 수신 콜백 안에서 호출하면 제어 주기가 깨지고, 콜백에서 부르면
+GRF 수신까지 함께 멈춥니다. 초기 설정 커맨드를 한 번 보낼 때만 쓰세요.</p>
+<hr />
+<h3 id="xm_ensureexternaluartrxarmed"><code>XM_EnsureExternalUartRxArmed</code><a class="headerlink" href="#xm_ensureexternaluartrxarmed" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_EnsureExternalUartRxArmed</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>수신이 멈춰 있으면 되살립니다. 케이블을 뽑았다 꽂거나 노이즈로 프레이밍 에러가 나면
+하드웨어 수신이 정지한 채 남을 수 있는데, 이 함수를 주기적으로 부르면 자동 복구됩니다.
+<strong>정상일 때는 아무 일도 하지 않는</strong> 값싼 호출입니다.</p>
+<p><strong>호출 주기</strong>: <strong>~100 ms</strong> 권장 (<code>Control_Loop()</code> 안에서 카운터로).</p>
 <hr />
 <h2 id="타입--매크로">타입 / 매크로<a class="headerlink" href="#타입--매크로" title="Permanent link">&para;</a></h2>
 <h3 id="xmdiopin_t"><code>XmDioPin_t</code><a class="headerlink" href="#xmdiopin_t" title="Permanent link">&para;</a></h3>
@@ -3643,7 +3964,7 @@
 <hr />
 <h2 id="진단용-전역-변수--rev-20-전용">진단용 전역 변수 🟢 Rev 2.0 전용<a class="headerlink" href="#진단용-전역-변수--rev-20-전용" title="Permanent link">&para;</a></h2>
 <h3 id="g_xm_adc_read_before_switch"><code>g_xm_adc_read_before_switch</code><a class="headerlink" href="#g_xm_adc_read_before_switch" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">extern</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">g_xm_adc_read_before_switch</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="k">extern</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">g_xm_adc_read_before_switch</span><span class="p">;</span>
 </code></pre></div>
 <blockquote>
 <p>🟢 <strong>Rev 2.0 전용</strong> — Rev1.1 헤더에는 이 변수가 존재하지 않습니다.</p>
@@ -3652,10 +3973,10 @@
 <p><strong>타입</strong>: <code>volatile uint16_t</code> (extern) — 헤더는 쓰기 API 를 제공하지 않으므로 읽기 전용으로 사용하세요.</p>
 <p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Loop()</code>, STM32CubeIDE Live Expressions, 또는 사용자 코드 어디서든 읽을 수 있습니다(USB 미사용·SWD-only 환경에서도 관찰 가능 — 특정 출력 채널에 의존하지 않습니다). <code>volatile</code> 이므로 매번 실제 메모리를 읽습니다.</p>
 <p><strong>예제</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="c1">// ADC read 값이 계속 0이라 원인을 확인하고 싶을 때</span>
-<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_xm_adc_read_before_switch</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0U</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="w">    </span><span class="c1">// bit0=ADC_5(DIO1) ... bit7=ADC_12(DIO8) 중 XM_SwitchDioToAdc() 호출 누락된 핀이 있음</span>
-<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="c1">// ADC read 값이 계속 0이라 원인을 확인하고 싶을 때</span>
+<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_xm_adc_read_before_switch</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0U</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">    </span><span class="c1">// bit0=ADC_5(DIO1) ... bit7=ADC_12(DIO8) 중 XM_SwitchDioToAdc() 호출 누락된 핀이 있음</span>
+<a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a><span class="p">}</span>
 </code></pre></div>
 <p><strong>참고</strong>: <a href="#xm_switchdiotoadc"><code>XM_SwitchDioToAdc</code></a>, <a href="#xm_isdioswitchedtoadc"><code>XM_IsDioSwitchedToAdc</code></a></p>
 <hr />

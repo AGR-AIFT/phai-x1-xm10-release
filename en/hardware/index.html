@@ -1647,6 +1647,8 @@
       
         
       
+        
+      
     
     
     
@@ -1699,6 +1701,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.7.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.7.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2110,10 +2140,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#external-uart-port" class="md-nav__link">
+  <a href="#external-uart-port--rev-20-only" class="md-nav__link">
     <span class="md-ellipsis">
       
-        External UART Port
+        External UART Port 🟢 Rev 2.0 only
       
     </span>
   </a>
@@ -2287,8 +2317,8 @@
 </tr>
 <tr>
 <td><strong>External UART</strong></td>
-<td>1</td>
-<td>Serial communication for external IMUs and similar devices</td>
+<td>1 (<strong>Rev 2.0 only</strong>)</td>
+<td>Serial link to external devices — general-purpose Serial API. Rev 1.1 does not have this port</td>
 </tr>
 <tr>
 <td><strong>SWD debug</strong></td>
@@ -2388,8 +2418,50 @@
 </tr>
 </tbody>
 </table>
-<h3 id="external-uart-port">External UART Port<a class="headerlink" href="#external-uart-port" title="Permanent link">&para;</a></h3>
-<p>One port for connecting external serial devices such as XSENS MTi-series IMUs. See the external IMU usage examples for configuration details.</p>
+<h3 id="external-uart-port--rev-20-only">External UART Port 🟢 <strong>Rev 2.0 only</strong><a class="headerlink" href="#external-uart-port--rev-20-only" title="Permanent link">&para;</a></h3>
+<p>A serial (UART) link to external equipment. The peer can be another XM10, an Arduino, a PC,
+another MCU — anything.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Peripheral / pins</td>
+<td><strong>USART2</strong>, TX = <strong>PD5</strong> (<code>EXT_UART_TX</code>) / RX = <strong>PD6</strong> (<code>EXT_UART_RX</code>)</td>
+</tr>
+<tr>
+<td>Logic level</td>
+<td><strong>3.3 V</strong> — never wire 5 V directly (use a level shifter)</td>
+</tr>
+<tr>
+<td>Default settings</td>
+<td><strong>921600 8N1, no flow control</strong> (only the baud rate is changeable; 8N1 is fixed)</td>
+</tr>
+<tr>
+<td>Max bytes per send</td>
+<td>128</td>
+</tr>
+</tbody>
+</table>
+<p>When wiring, <strong>cross TX and RX</strong> and <strong>always connect GND</strong>. These are the two most common mistakes.</p>
+<p><strong>Software</strong>: as of v2.7.0 the port is used through five functions — <code>XM_AttachExternalUart()</code>,
+<code>XM_SetExternalUartBaudrate()</code>, <code>XM_SendExternalUartData()</code>, <code>XM_SendExternalUartDataBlocking()</code>,
+<code>XM_EnsureExternalUartRxArmed()</code>. See the
+<a href="../api-reference/ref/xm-api-external-io/#6-general-purpose-external-serial-api--rev-20-only">API reference</a>
+and <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/">Ex.43 External UART Ping-Pong</a>.</p>
+<p>A dedicated driver for attaching a specific IMU (XSENS MTi) to this port also exists, but it
+<strong>cannot coexist</strong> with the general-purpose Serial API — a build switch selects one or the other
+(general-purpose Serial is the default). See section 5 of the API reference above.</p>
+<blockquote>
+<p>🛑 <strong>Rev 1.1 does not have this port.</strong> Its only serial ports are UART7/UART8 for the foot
+sensors (GRF), and <strong>PD6 on Rev 1.1 is <code>USB_PWR_ON</code> — an output that switches USB power.</strong>
+Applying the Rev 2.0 wiring to a Rev 1.1 board puts that output against the peer's TX output.
+Check your board revision first.</p>
+</blockquote>
 <h3 id="swd-debug-port">SWD Debug Port<a class="headerlink" href="#swd-debug-port" title="Permanent link">&para;</a></h3>
 <p>A 4-pin header for connecting an ST-Link V2/V3 debugger. Use this when flashing firmware for the first time and for debugging sessions.</p>
 <blockquote>
@@ -2553,6 +2625,11 @@
 <td>External SRAM (PSRAM)</td>
 <td>Not present</td>
 <td>Present (uses MCU pin PC10)</td>
+</tr>
+<tr>
+<td><strong>External UART port</strong></td>
+<td><strong>Not present</strong> (PD6 is the <code>USB_PWR_ON</code> output)</td>
+<td><strong>Present</strong> — USART2, PD5/PD6, general-purpose Serial API</td>
 </tr>
 <tr>
 <td>Onboard button MCU pins</td>

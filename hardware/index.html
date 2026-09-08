@@ -1647,6 +1647,8 @@
       
         
       
+        
+      
     
     
     
@@ -1699,6 +1701,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.7.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.7.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2110,10 +2140,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#외부-uart-포트" class="md-nav__link">
+  <a href="#외부-uart-포트--rev-20-전용" class="md-nav__link">
     <span class="md-ellipsis">
       
-        외부 UART 포트
+        외부 UART 포트 🟢 Rev 2.0 전용
       
     </span>
   </a>
@@ -2287,8 +2317,8 @@
 </tr>
 <tr>
 <td><strong>외부 UART</strong></td>
-<td>1 개</td>
-<td>외부 IMU 등 직렬 통신용</td>
+<td>1 개 (<strong>Rev 2.0 만</strong>)</td>
+<td>외부 장비와 직렬 통신 — 범용 Serial API. Rev 1.1 에는 이 포트가 없습니다</td>
 </tr>
 <tr>
 <td><strong>SWD 디버그</strong></td>
@@ -2388,8 +2418,50 @@
 </tr>
 </tbody>
 </table>
-<h3 id="외부-uart-포트">외부 UART 포트<a class="headerlink" href="#외부-uart-포트" title="Permanent link">&para;</a></h3>
-<p>외부 직렬 장치 (예: XSENS MTi 시리즈 IMU) 연결용 1 개. 자세한 설정은 외부 IMU 사용 예제 참조.</p>
+<h3 id="외부-uart-포트--rev-20-전용">외부 UART 포트 🟢 <strong>Rev 2.0 전용</strong><a class="headerlink" href="#외부-uart-포트--rev-20-전용" title="Permanent link">&para;</a></h3>
+<p>외부 장비와 직렬(UART)로 통신하는 포트입니다. 상대는 다른 XM10, 아두이노, PC, 다른 MCU —
+무엇이든 됩니다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>페리페럴 / 핀</td>
+<td><strong>USART2</strong>, TX = <strong>PD5</strong>(<code>EXT_UART_TX</code>) / RX = <strong>PD6</strong>(<code>EXT_UART_RX</code>)</td>
+</tr>
+<tr>
+<td>로직 레벨</td>
+<td><strong>3.3 V</strong> — 5 V 장비 직결 금지(레벨 시프터 필요)</td>
+</tr>
+<tr>
+<td>기본 설정</td>
+<td><strong>921600 8N1, 흐름 제어 없음</strong> (속도만 변경 가능, 8N1 은 고정)</td>
+</tr>
+<tr>
+<td>1 회 송신 상한</td>
+<td>128 바이트</td>
+</tr>
+</tbody>
+</table>
+<p>배선할 때 <strong>TX ↔ RX 를 교차</strong>하고 <strong>GND 를 반드시 연결</strong>하세요. 가장 많이 틀리는 부분입니다.</p>
+<p><strong>소프트웨어</strong>: v2.7.0 부터 <code>XM_AttachExternalUart()</code> · <code>XM_SetExternalUartBaudrate()</code> ·
+<code>XM_SendExternalUartData()</code> · <code>XM_SendExternalUartDataBlocking()</code> ·
+<code>XM_EnsureExternalUartRxArmed()</code> 5 개 함수로 씁니다 —
+<a href="../api-reference/ref/xm-api-external-io/#6-범용-external-serial-api--rev-20-전용">API 레퍼런스</a> ·
+<a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/">Ex.43 External UART Ping-Pong</a>.</p>
+<p>XSENS MTi 같은 특정 IMU 를 이 포트에 붙이는 전용 드라이버도 있지만, 그건 범용 Serial API 와
+<strong>동시에 쓸 수 없어</strong> 빌드 설정으로 하나만 고릅니다(기본은 범용 Serial). 자세한 내용은 위
+API 레퍼런스의 5 번 절을 보세요.</p>
+<blockquote>
+<p>🛑 <strong>Rev 1.1 에는 이 포트가 없습니다.</strong> 시리얼 포트는 발바닥 센서(GRF)용 UART7/UART8 뿐이고,
+<strong>Rev 1.1 의 PD6 은 <code>USB_PWR_ON</code> — USB 전원을 켜고 끄는 출력 핀</strong>입니다. Rev 2.0 배선을
+Rev 1.1 보드에 그대로 적용하면 상대 보드의 TX 와 출력끼리 맞부딪칩니다. 본인 보드
+리비전을 먼저 확인하세요.</p>
+</blockquote>
 <h3 id="swd-디버그-포트">SWD 디버그 포트<a class="headerlink" href="#swd-디버그-포트" title="Permanent link">&para;</a></h3>
 <p>ST-Link V2/V3 디버거 연결용 4-pin 헤더. 펌웨어를 처음 올릴 때 + 디버깅할 때 사용.</p>
 <blockquote>
@@ -2553,6 +2625,11 @@
 <td>외장 SRAM (PSRAM)</td>
 <td>없음</td>
 <td>있음 (MCU 핀 PC10 사용)</td>
+</tr>
+<tr>
+<td><strong>외부 UART 포트</strong></td>
+<td><strong>없음</strong> (PD6 은 <code>USB_PWR_ON</code> 출력)</td>
+<td><strong>있음</strong> — USART2, PD5/PD6, 범용 Serial API</td>
 </tr>
 <tr>
 <td>내장 버튼 MCU 핀</td>
