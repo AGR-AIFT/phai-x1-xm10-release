@@ -531,9 +531,10 @@ void ethernetif_input(void* argument)
         p = low_level_input( netif );
         if (p != NULL)
         {
-          /* [진단 복원 2026-07-08] RX pbuf 도착 카운터 — 8e3099a 에서 제거된 계측 복원.
+          /* [진단 복원 2026-07-08 / 재복원 2026-09-04] RX pbuf 도착 카운터.
            * OD(0x7E80:04)/RMII stimulus 가 "LAN 트래픽 수신 활동" 표시(ping 중 증가
-           * → RX DMA 정상). 단일 writer(이 task), volatile 32-bit(atomic) → lock 불필요. */
+           * → RX DMA 정상). 단일 writer(이 task), volatile 32-bit(atomic) → lock 불필요.
+           * ⚠️ CubeMX 자동영역 — 재생성 때마다 지워진다. 재생성 후 복원 확인. */
           g_eth_rx_packet_count++;
           if (netif->input( p, netif) != ERR_OK )
           {

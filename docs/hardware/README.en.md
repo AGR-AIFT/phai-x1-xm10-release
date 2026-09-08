@@ -16,7 +16,7 @@ This page is your single reference for all external interfaces on the XM10 board
 | **External GPIO** | DIO 8 + ADC 4 (+ dynamic ADC 8) | [See per-revision pinmap](#external-gpio-pinmap) |
 | **CAN-FD ports** | 2 | KIT H10 connection + sensor hub expansion |
 | **USB-C** | 1 | Serial communication (CDC) — PC connection |
-| **External UART** | 1 | Serial communication for external IMUs and similar devices |
+| **External UART** | 1 (**Rev 2.0 only**) | Serial link to external devices — general-purpose Serial API. Rev 1.1 does not have this port |
 | **SWD debug** | 4-pin | ST-Link firmware upload and debugging |
 | **Main connector** | 1 | KIT H10 body connection (24 V power + CAN-FD) |
 
@@ -66,9 +66,34 @@ Used for data exchange with a PC via USB serial communication (CDC) for real-tim
 |------|---------|----------------|
 | Serial (CDC) | Debug and data transfer via PC terminal / PhAI Studio | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
 
-### External UART Port
+### External UART Port 🟢 **Rev 2.0 only**
 
-One port for connecting external serial devices such as XSENS MTi-series IMUs. See the external IMU usage examples for configuration details.
+A serial (UART) link to external equipment. The peer can be another XM10, an Arduino, a PC,
+another MCU — anything.
+
+| Item | Value |
+|---|---|
+| Peripheral / pins | **USART2**, TX = **PD5** (`EXT_UART_TX`) / RX = **PD6** (`EXT_UART_RX`) |
+| Logic level | **3.3 V** — never wire 5 V directly (use a level shifter) |
+| Default settings | **921600 8N1, no flow control** (only the baud rate is changeable; 8N1 is fixed) |
+| Max bytes per send | 128 |
+
+When wiring, **cross TX and RX** and **always connect GND**. These are the two most common mistakes.
+
+**Software**: as of v2.7.0 the port is used through five functions — `XM_AttachExternalUart()`,
+`XM_SetExternalUartBaudrate()`, `XM_SendExternalUartData()`, `XM_SendExternalUartDataBlocking()`,
+`XM_EnsureExternalUartRxArmed()`. See the
+[API reference](../api-reference/ref/xm-api-external-io.en.md#6-general-purpose-external-serial-api--rev-20-only)
+and [Ex.43 External UART Ping-Pong](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/).
+
+A dedicated driver for attaching a specific IMU (XSENS MTi) to this port also exists, but it
+**cannot coexist** with the general-purpose Serial API — a build switch selects one or the other
+(general-purpose Serial is the default). See section 5 of the API reference above.
+
+> 🛑 **Rev 1.1 does not have this port.** Its only serial ports are UART7/UART8 for the foot
+> sensors (GRF), and **PD6 on Rev 1.1 is `USB_PWR_ON` — an output that switches USB power.**
+> Applying the Rev 2.0 wiring to a Rev 1.1 board puts that output against the peer's TX output.
+> Check your board revision first.
 
 ### SWD Debug Port
 
@@ -141,6 +166,7 @@ First, confirm which revision your board is. The board label reads either `Rev 1
 | RJ45 Ethernet port | Not present | **Present** (the quickest visual identifier) |
 | Channel LEDs (7 × RGB) | Not present (3 onboard LEDs only) | **Present** (PCA9957, `XM_SetChannelLedRGB` API) |
 | External SRAM (PSRAM) | Not present | Present (uses MCU pin PC10) |
+| **External UART port** | **Not present** (PD6 is the `USB_PWR_ON` output) | **Present** — USART2, PD5/PD6, general-purpose Serial API |
 | Onboard button MCU pins | PC10 / PC11 / PC12 | PC11 / PC12 / PC13 (shifted by one pin) |
 | External GPIO connector location / label | [Rev 1.1 pinmap](external-gpio-rev1.1.md) | [Rev 2.0 pinmap](external-gpio-rev2.0.md) |
 | Distribution ZIP | `Rev1.1.zip` | `Rev2.0.zip` |

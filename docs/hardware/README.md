@@ -16,7 +16,7 @@ XM10 보드의 외부 인터페이스를 한 곳에 모았습니다. 보드에 �
 | **외부 GPIO** | DIO 8 + ADC 4 (+ 동적 ADC 8) | [Rev 별 핀맵 참조](#외부-gpio-핀맵) |
 | **CAN-FD 포트** | 2 개 | KIT H10 연결 + 센서 허브 확장 |
 | **USB-C** | 1 개 | 시리얼 통신 (CDC) — PC 실시간 연결 |
-| **외부 UART** | 1 개 | 외부 IMU 등 직렬 통신용 |
+| **외부 UART** | 1 개 (**Rev 2.0 만**) | 외부 장비와 직렬 통신 — 범용 Serial API. Rev 1.1 에는 이 포트가 없습니다 |
 | **SWD 디버그** | 4-pin | ST-Link 펌웨어 업로드·디버깅 |
 | **메인 커넥터** | 1 개 | KIT H10 본체 연결 (24V 전원 + CAN-FD) |
 
@@ -66,9 +66,34 @@ USB 시리얼 통신 (CDC) 로 실시간 데이터 스트리밍과 디버그 메
 |------|------|--------------|
 | 시리얼 (CDC) | PC 터미널 / PhAI Studio 로 디버그·데이터 전송 | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
 
-### 외부 UART 포트
+### 외부 UART 포트 🟢 **Rev 2.0 전용**
 
-외부 직렬 장치 (예: XSENS MTi 시리즈 IMU) 연결용 1 개. 자세한 설정은 외부 IMU 사용 예제 참조.
+외부 장비와 직렬(UART)로 통신하는 포트입니다. 상대는 다른 XM10, 아두이노, PC, 다른 MCU —
+무엇이든 됩니다.
+
+| 항목 | 값 |
+|---|---|
+| 페리페럴 / 핀 | **USART2**, TX = **PD5**(`EXT_UART_TX`) / RX = **PD6**(`EXT_UART_RX`) |
+| 로직 레벨 | **3.3 V** — 5 V 장비 직결 금지(레벨 시프터 필요) |
+| 기본 설정 | **921600 8N1, 흐름 제어 없음** (속도만 변경 가능, 8N1 은 고정) |
+| 1 회 송신 상한 | 128 바이트 |
+
+배선할 때 **TX ↔ RX 를 교차**하고 **GND 를 반드시 연결**하세요. 가장 많이 틀리는 부분입니다.
+
+**소프트웨어**: v2.7.0 부터 `XM_AttachExternalUart()` · `XM_SetExternalUartBaudrate()` ·
+`XM_SendExternalUartData()` · `XM_SendExternalUartDataBlocking()` ·
+`XM_EnsureExternalUartRxArmed()` 5 개 함수로 씁니다 —
+[API 레퍼런스](../api-reference/ref/xm-api-external-io.md#6-범용-external-serial-api--rev-20-전용) ·
+[Ex.43 External UART Ping-Pong](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/).
+
+XSENS MTi 같은 특정 IMU 를 이 포트에 붙이는 전용 드라이버도 있지만, 그건 범용 Serial API 와
+**동시에 쓸 수 없어** 빌드 설정으로 하나만 고릅니다(기본은 범용 Serial). 자세한 내용은 위
+API 레퍼런스의 5 번 절을 보세요.
+
+> 🛑 **Rev 1.1 에는 이 포트가 없습니다.** 시리얼 포트는 발바닥 센서(GRF)용 UART7/UART8 뿐이고,
+> **Rev 1.1 의 PD6 은 `USB_PWR_ON` — USB 전원을 켜고 끄는 출력 핀**입니다. Rev 2.0 배선을
+> Rev 1.1 보드에 그대로 적용하면 상대 보드의 TX 와 출력끼리 맞부딪칩니다. 본인 보드
+> 리비전을 먼저 확인하세요.
 
 ### SWD 디버그 포트
 
@@ -141,6 +166,7 @@ ST-Link V2/V3 디버거 연결용 4-pin 헤더. 펌웨어를 처음 올릴 때 +
 | RJ45 Ethernet 포트 | 없음 | **있음** (외관 식별의 가장 빠른 지표) |
 | 채널 LED (RGB 7 개) | 없음 (내장 LED 3 개만) | **있음** (PCA9957, `XM_SetChannelLedRGB` API) |
 | 외장 SRAM (PSRAM) | 없음 | 있음 (MCU 핀 PC10 사용) |
+| **외부 UART 포트** | **없음** (PD6 은 `USB_PWR_ON` 출력) | **있음** — USART2, PD5/PD6, 범용 Serial API |
 | 내장 버튼 MCU 핀 | PC10 / PC11 / PC12 | PC11 / PC12 / PC13 (한 핀 시프트) |
 | 외부 GPIO 커넥터 위치/라벨 | [Rev 1.1 핀맵](external-gpio-rev1.1.md) | [Rev 2.0 핀맵](external-gpio-rev2.0.md) |
 | 배포 ZIP | `Rev1.1.zip` | `Rev2.0.zip` |

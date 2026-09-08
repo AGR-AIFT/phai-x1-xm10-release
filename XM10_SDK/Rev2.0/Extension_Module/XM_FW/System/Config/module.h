@@ -142,6 +142,25 @@
 #endif
 #define XM_GRF_FSR_CH_TOTAL         24          /**< SM-GRF: ADC1 15ch + ADC3 9ch */
 
+/* --- External UART (USART2, PD5/PD6) source selection ---
+ * 0 = 범용 Serial API 가 이 포트를 갖는다 (XM_AttachExternalUart 등). ★현재 기본값★
+ * 1 = Xsens MTi-630 드라이버가 이 포트를 갖는다 (XM_AttachXsensMTi630 등).
+ *
+ * 왜 배타적인가: IOIF 는 포트당 RX 콜백 슬롯을 1개만 갖고(ioif_agrb_uart.c 의
+ * instance->config.rx_event_callback), IOIF_UART_SetRxIdleCallback() 이 기존 값을
+ * 경고 없이 덮어쓴다. 둘을 동시에 켜면 나중에 등록한 쪽이 이기고, 런타임에는
+ * 누가 이겼는지 알 방법이 없다. 그래서 빌드 타임에 하나만 고르게 한다.
+ * (빌드 시스템 어디에서도 override 하지 않음 — 아래 #define 이 실제 동작 기준)
+ *
+ * 주의: 이 값이 0 이어도 Xsens 드라이버(mti-630.c)는 링크에서 빠지지 않는다.
+ * pnp_task.c / xm_total_data.c 가 매크로와 무관하게 항상 호출하기 때문이다.
+ * 다만 RX 콜백이 등록되지 않아 auto-sense 가 OPERATIONAL 로 올라가지 못하므로
+ * 기능적으로 no-op 이다. 완전 제거는 그 두 파일까지 손대는 별도 과제.
+ */
+#ifndef XM_EXTERNAL_UART_XSENS_ENABLE
+#define XM_EXTERNAL_UART_XSENS_ENABLE   0
+#endif
+
 /**
  *===========================================================================
  * DIAGNOSTIC FEATURE FLAGS (Step 0 of USB TightSpin Investigation Plan v1.5)

@@ -35,7 +35,7 @@
 
 | 상황 | 어디로 |
 |------|--------|
-| 45 개 예제 전체 인덱스 | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
+| 46 개 예제 전체 인덱스 | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
 | 난이도별·트랙별 학습 경로 | [docs/tutorials/README.md](tutorials/README.md) |
 | 한 학기 수업 진도표 (16 주) | [tutorials/README.md - 한 학기 진도표 섹션](tutorials/README.md#한-학기-16-주-수업-진도표-예시) |
 | Ex.XX 예제가 잘 안 됩니다 | 해당 `examples/XX_*/README.md` 의 "⚠️ 흔한 실수" 섹션 |
@@ -50,7 +50,7 @@
 | 외부 GPIO 핀맵 (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | 외부 GPIO 핀맵 (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | 내 보드가 Rev 1.1 인지 Rev 2.0 인지 | [hardware/README.md - 보드 리비전 비교](hardware/README.md#보드-리비전-비교) |
-| 45 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (42 개는 양쪽 모두 동작·외부 GPIO 핀맵만 다름, Ex.40/41/42 는 Rev 2.0 전용) |
+| 46 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (42 개는 양쪽 모두 동작·외부 GPIO 핀맵만 다름, Ex.40/41/42/43 은 Rev 2.0 전용) |
 
 ## 📥 펌웨어 업로드
 
