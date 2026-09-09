@@ -1130,6 +1130,13 @@ def run_cli(port, baud, output):
         sef = router.system_taps[PHAI_MODULE_USER_META].frame_count
         print(f"\n[DONE] {good} packets → {path}  "
               f"(Lost(global)={router.ledger.lost_count}, 0x20={s20}, 0xEF={sef})")
+        # 시스템 프레임 지문 — 개수만으로는 "보존됐다" 를 증명하지 못한다.
+        # 두 캡처의 crc32 를 비교하면 같은 바이트였는지 바로 알 수 있다.
+        sys_lines = [tap.summary() for tap in router.system_taps.values() if tap.frame_count]
+        if sys_lines:
+            print("  system frames:")
+            for line in sys_lines:
+                print(f"    {line}")
     finally:
         ser.close()
 
