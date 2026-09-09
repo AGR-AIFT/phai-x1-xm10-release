@@ -35,7 +35,6 @@ Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
 import sys
 import os
 import glob
-import struct
 import time
 import argparse
 import threading
@@ -50,49 +49,14 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 import pyqtgraph as pg
 import numpy as np
 
-# ============================================================================
-# Protocol Constants — PhAI V2.2
-# ============================================================================
+# 프레임 파싱·시퀀스 회계·module 라우팅은 frame_router.py 하나로 모았다.
+# GUI 워커와 CLI 가 같은 코드를 쓰게 하려는 것이다 (예전에는 각자 복사본을 갖고 있었다).
+from frame_router import (
+    parse_phai_frame, cobs_decode, FrameRouter,
+    PHAI_MODULE_TOTAL_DATA, PHAI_MODULE_USER_META,
+)
 
-PHAI_SOF = 0xAA
-PHAI_HEADER_SIZE = 6   # SOF(1) + LEN(1) + SEQ_ID(2) + MODULE_ID(1) + STATUS(1)
-PHAI_CRC_SIZE = 2      # CRC16-CCITT (2 bytes LE)
-PHAI_MAX_LEN_UNITS = 255
-
-CRC16_TABLE = [
-    0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
-    0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF,
-    0x1231, 0x0210, 0x3273, 0x2252, 0x52B5, 0x4294, 0x72F7, 0x62D6,
-    0x9339, 0x8318, 0xB37B, 0xA35A, 0xD3BD, 0xC39C, 0xF3FF, 0xE3DE,
-    0x2462, 0x3443, 0x0420, 0x1401, 0x64E6, 0x74C7, 0x44A4, 0x5485,
-    0xA56A, 0xB54B, 0x8528, 0x9509, 0xE5EE, 0xF5CF, 0xC5AC, 0xD58D,
-    0x3653, 0x2672, 0x1611, 0x0630, 0x76D7, 0x66F6, 0x5695, 0x46B4,
-    0xB75B, 0xA77A, 0x9719, 0x8738, 0xF7DF, 0xE7FE, 0xD79D, 0xC7BC,
-    0x48C4, 0x58E5, 0x6886, 0x78A7, 0x0840, 0x1861, 0x2802, 0x3823,
-    0xC9CC, 0xD9ED, 0xE98E, 0xF9AF, 0x8948, 0x9969, 0xA90A, 0xB92B,
-    0x5AF5, 0x4AD4, 0x7AB7, 0x6A96, 0x1A71, 0x0A50, 0x3A33, 0x2A12,
-    0xDBFD, 0xCBDC, 0xFBBF, 0xEB9E, 0x9B79, 0x8B58, 0xBB3B, 0xAB1A,
-    0x6CA6, 0x7C87, 0x4CE4, 0x5CC5, 0x2C22, 0x3C03, 0x0C60, 0x1C41,
-    0xEDAE, 0xFD8F, 0xCDEC, 0xDDCD, 0xAD2A, 0xBD0B, 0x8D68, 0x9D49,
-    0x7E97, 0x6EB6, 0x5ED5, 0x4EF4, 0x3E13, 0x2E32, 0x1E51, 0x0E70,
-    0xFF9F, 0xEFBE, 0xDFDD, 0xCFFC, 0xBF1B, 0xAF3A, 0x9F59, 0x8F78,
-    0x9188, 0x81A9, 0xB1CA, 0xA1EB, 0xD10C, 0xC12D, 0xF14E, 0xE16F,
-    0x1080, 0x00A1, 0x30C2, 0x20E3, 0x5004, 0x4025, 0x7046, 0x6067,
-    0x83B9, 0x9398, 0xA3FB, 0xB3DA, 0xC33D, 0xD31C, 0xE37F, 0xF35E,
-    0x02B1, 0x1290, 0x22F3, 0x32D2, 0x4235, 0x5214, 0x6277, 0x7256,
-    0xB5EA, 0xA5CB, 0x95A8, 0x8589, 0xF56E, 0xE54F, 0xD52C, 0xC50D,
-    0x34E2, 0x24C3, 0x14A0, 0x0481, 0x7466, 0x6447, 0x5424, 0x4405,
-    0xA7DB, 0xB7FA, 0x8799, 0x97B8, 0xE75F, 0xF77E, 0xC71D, 0xD73C,
-    0x26D3, 0x36F2, 0x0691, 0x16B0, 0x6657, 0x7676, 0x4615, 0x5634,
-    0xD94C, 0xC96D, 0xF90E, 0xE92F, 0x99C8, 0x89E9, 0xB98A, 0xA9AB,
-    0x5844, 0x4865, 0x7806, 0x6827, 0x18C0, 0x08E1, 0x3882, 0x28A3,
-    0xCB7D, 0xDB5C, 0xEB3F, 0xFB1E, 0x8BF9, 0x9BD8, 0xABBB, 0xBB9A,
-    0x4A75, 0x5A54, 0x6A37, 0x7A16, 0x0AF1, 0x1AD0, 0x2AB3, 0x3A92,
-    0xFD2E, 0xED0F, 0xDD6C, 0xCD4D, 0xBDAA, 0xAD8B, 0x9DE8, 0x8DC9,
-    0x7C26, 0x6C07, 0x5C64, 0x4C45, 0x3CA2, 0x2C83, 0x1CE0, 0x0CC1,
-    0xEF1F, 0xFF3E, 0xCF5D, 0xDF7C, 0xAF9B, 0xBFBA, 0x8FD9, 0x9FF8,
-    0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0,
-]
+# 프로토콜 상수(PHAI_SOF 등)와 CRC16 테이블은 frame_router.py 로 옮겼다.
 
 # MODULE_ID → (name, [channel_names] or None)
 # Combined V2.2: 10ch (Accel3 + Gyro3 + MotorAngle2 + MotorTorque2)
@@ -121,7 +85,6 @@ COMBINED_PLOT_GROUPS = [
     ("Motor Torque",   [8, 9]),
 ]
 
-DEVICE_PERIOD_MS = 1          # XM 제어 주기 1ms
 DEFAULT_BAUD = 921600
 DEFAULT_TIMEOUT = 0.02        # 20ms serial read timeout
 FLUSH_EVERY = 500
@@ -132,31 +95,7 @@ MAX_CHANNELS = 64
 # Helpers
 # ============================================================================
 
-def crc16_ccitt(data: bytes) -> int:
-    """CRC16-CCITT (poly 0x1021, init 0xFFFF)."""
-    crc = 0xFFFF
-    for b in data:
-        crc = ((crc << 8) & 0xFFFF) ^ CRC16_TABLE[((crc >> 8) ^ b) & 0xFF]
-    return crc
-
-
-def cobs_decode(encoded: bytes) -> bytes:
-    """COBS-decode a frame (without trailing 0x00 delimiter)."""
-    out = bytearray()
-    i = 0
-    while i < len(encoded):
-        code = encoded[i]
-        i += 1
-        if code == 0:
-            break
-        for _ in range(1, code):
-            if i >= len(encoded):
-                break
-            out.append(encoded[i])
-            i += 1
-        if code < 0xFF and i < len(encoded):
-            out.append(0x00)
-    return bytes(out)
+# crc16_ccitt() / cobs_decode() 는 frame_router.py 에 있다 (위에서 import).
 
 def get_module_name(mid: int) -> str:
     if mid in MODULE_DEFS:
@@ -188,20 +127,8 @@ def build_plot_groups(mid: int, ch_names: list) -> list:
     return groups[:6]
 
 
-# ============================================================================
-# Parsed Packet
-# ============================================================================
-
-class PhAIPacket:
-    __slots__ = ('seq_id', 'module_id', 'status', 'tx_drops', 'floats', 'recv_t')
-
-    def __init__(self, seq_id, module_id, status, floats, recv_t):
-        self.seq_id = seq_id
-        self.module_id = module_id
-        self.status = status
-        self.tx_drops = status & 0x7F
-        self.floats = floats
-        self.recv_t = recv_t
+# 이 자리에 있던 패킷 클래스는 frame_router.PhAIFrame 으로 대체됐다.
+# 차이: payload 를 float 로 미리 해석하지 않는다 (0xEF 같은 비-float 프레임 보호).
 
 
 # ============================================================================
@@ -224,6 +151,10 @@ class PhAISerialWorker(QtCore.QObject):
         self.sync_err = 0
         self.total_tx_drops = 0
         self.packet_queue = deque(maxlen=50000)
+        self.queue_overflow_count = 0   # deque 가 가득 차 조용히 버려진 프레임 수
+        # 라우터를 워커가 갖는다 — 시퀀스 회계를 큐에 넣기 '전에' 해야 하기 때문이다.
+        # 큐 뒤에서 세면 PC 쪽 처리 지연(큐 오버플로)이 와이어 손실로 둔갑한다.
+        self.router = FrameRouter()
 
     @pyqtSlot()
     def run(self):
@@ -272,44 +203,30 @@ class PhAISerialWorker(QtCore.QObject):
             self.finished.emit()
 
     def _parse_frame(self, frame: bytes, recv_t: float):
-        """Parse a single COBS-decoded frame into a PhAIPacket."""
-        min_size = PHAI_HEADER_SIZE + PHAI_CRC_SIZE
-        if len(frame) < min_size:
+        """COBS 를 푼 프레임 하나를 검증해 큐에 넣는다.
+
+        검증 로직 자체는 frame_router.parse_phai_frame() 에 있다 — CLI 와 공유한다.
+        여기서는 통계 집계와 큐 적재만 한다.
+        """
+        pkt, err = parse_phai_frame(frame, recv_t)
+        if err == 'sync':
             self.sync_err += 1
             return
-
-        if frame[0] != PHAI_SOF:
-            self.sync_err += 1
-            return
-
-        len_units = frame[1]
-        if len_units == 0 or len_units > PHAI_MAX_LEN_UNITS:
-            self.sync_err += 1
-            return
-
-        expected_size = PHAI_HEADER_SIZE + (len_units * 4) + PHAI_CRC_SIZE
-        if len(frame) < expected_size:
-            self.sync_err += 1
-            return
-
-        crc_recv = frame[expected_size - 2] | (frame[expected_size - 1] << 8)
-        crc_calc = crc16_ccitt(frame[:expected_size - PHAI_CRC_SIZE])
-        if crc_calc != crc_recv:
+        if err == 'crc':
             self.crc_err += 1
             return
 
-        seq_id = frame[2] | (frame[3] << 8)
-        module_id = frame[4]
-        status_byte = frame[5]
+        self.total_tx_drops += pkt.tx_drops
 
-        payload = frame[PHAI_HEADER_SIZE:PHAI_HEADER_SIZE + len_units * 4]
-        floats = np.frombuffer(payload, dtype='<f4').copy()
+        # 시퀀스 회계와 module 판정은 큐에 넣기 전에 끝낸다.
+        # 바로 아래 오버플로로 버려질 프레임도 '와이어로는 도착한' 프레임이다.
+        route_tag, _delta = self.router.route(pkt)
 
-        tx_drop_delta = status_byte & 0x7F
-        self.total_tx_drops += tx_drop_delta
+        # deque(maxlen) 은 가득 차면 반대쪽을 말없이 버린다. 버려졌다는 사실을 남긴다.
+        if len(self.packet_queue) >= self.packet_queue.maxlen:
+            self.queue_overflow_count += 1
 
-        pkt = PhAIPacket(seq_id, module_id, status_byte, floats, recv_t)
-        self.packet_queue.append(pkt)
+        self.packet_queue.append((pkt, route_tag))
         self.good += 1
 
     def stop(self):
@@ -405,8 +322,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self._module_name = ""
         self._module_id = -1
 
-        self._last_seq = -1
-        self._seq_drops = 0
         self._frozen = False
 
         # Throughput tracking
@@ -698,6 +613,20 @@ class MainWindow(QtWidgets.QMainWindow):
         self._start_connection(port)
 
     def _start_connection(self, port):
+        # 포트 유실 후 자동 재연결 타이머가 돌고 있는데 사용자가 Connect 를 다시 누르면
+        # 두 경로가 거의 동시에 여기로 들어와 worker/thread 를 덮어쓴다.
+        # 먼저 타이머를 멈추고, 남아 있는 이전 연결이 있으면 동기적으로 정리한다.
+        self._stop_reconnect()
+
+        if self._worker is not None or self._serial_thread is not None:
+            if self._worker is not None:
+                self._worker.stop()
+            if self._serial_thread is not None:
+                self._serial_thread.quit()
+                self._serial_thread.wait()
+            self._worker = None
+            self._serial_thread = None
+
         try:
             self._open_log_file()
         except Exception as e:
@@ -733,6 +662,9 @@ class MainWindow(QtWidgets.QMainWindow):
         QtWidgets.QMessageBox.critical(self, "Connection Failed", msg)
 
     def _on_worker_finished(self):
+        # 세션 내내 보여준 'Good' 은 파싱 성공한 '전체' 프레임 수인데
+        # _total_recv 는 사용자 채널만 센다. 둘 다 적어야 수천 개가 사라진 것처럼 안 보인다.
+        total_frames = self._worker.good if self._worker is not None else self._total_recv
         if self._serial_thread:
             self._serial_thread.quit()
             self._serial_thread.wait()
@@ -742,7 +674,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self._btn_conn.setEnabled(True)
         self._btn_disc.setEnabled(False)
         self._status_bar.showMessage(
-            f"Disconnected — {self._total_recv} packets, {self._written} lines saved")
+            f"Disconnected — {total_frames} frames ({self._total_recv} user), "
+            f"{self._written} lines saved")
 
     # Auto-reconnect
     def _on_port_lost(self):
@@ -771,10 +704,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._buf_b = np.full((self._window_size, 1 + MAX_CHANNELS), np.nan, dtype=np.float32)
         self._active_buf = self._buf_a
         self._write_idx = 0
-        self._total_recv = 0
-        self._last_seq = -1
-        self._seq_drops = 0
-        self._device_time_s = 0.0
+        self._total_recv = 0   # 사용자 채널 프레임 수 (시스템 프레임 제외)
         self._tp_count = 0
         self._tp_bytes = 0
         self._tp_time = time.perf_counter()
@@ -837,6 +767,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self._log_file and self._pending:
             try:
                 self._log_file.writelines(self._pending)
+                self._log_file.flush()   # 크래시 시 마지막 구간이 통째로 날아가지 않게
             except Exception:
                 pass
             self._pending.clear()
@@ -886,58 +817,63 @@ class MainWindow(QtWidgets.QMainWindow):
             self._update_stats_label(w)
             return
 
-        # First packet → setup
-        if self._total_recv == 0:
-            first = batch[0]
-            self._module_id = first.module_id
-            self._module_name = get_module_name(first.module_id)
-            ch = get_channel_names(first.module_id, len(first.floats))
-            self._setup_plots(ch, first.module_id)
-            self._write_csv_header(ch)
-            self._lbl_module.setText(
-                f"Module: {self._module_name} (0x{first.module_id:02X}) — {len(first.floats)} ch")
-
         buf = self._active_buf
         ws = buf.shape[0]
-        n_ch = self._n_channels
+        last_user_pkt = None
 
-        for pkt in batch:
-            # SEQ gap → device time reconstruction (1ms per seq tick)
-            if self._last_seq >= 0:
-                delta = (pkt.seq_id - self._last_seq) & 0xFFFF
-                if delta > 1000:
-                    delta = 1
-                if delta != 1:
-                    self._seq_drops += delta - 1
-                self._device_time_s += delta * (DEVICE_PERIOD_MS / 1000.0)
-            self._last_seq = pkt.seq_id
+        for pkt, route_tag in batch:
+            # 라우팅은 워커 스레드에서 이미 끝났다(큐 앞에서 회계해야 하므로).
+            # 여기서는 사용자 채널 프레임만 골라 그리고 저장한다.
+            if route_tag != 'user_primary':
+                # 0x20/0xEF/0xED/0xEE 와 primary 가 아닌 사용자 module.
+                # 그래프·CSV 에는 넣지 않는다. 버리는 게 아니라 router 가 따로 센다.
+                continue
+
+            # 채널 구성은 첫 '사용자' 프레임으로 정한다.
+            # 예전에는 배치의 첫 프레임(대개 0x20)으로 정해서 채널이 어긋났다.
+            if self._module_id < 0:
+                self._module_id = pkt.module_id
+                self._module_name = get_module_name(pkt.module_id)
+                floats0 = pkt.as_float32()
+                ch = get_channel_names(pkt.module_id, len(floats0))
+                self._setup_plots(ch, pkt.module_id)
+                self._write_csv_header(ch)
+                self._lbl_module.setText(
+                    f"Module: {self._module_name} (0x{pkt.module_id:02X}) — {len(floats0)} ch")
+
+            floats = pkt.as_float32()
 
             # Write to rolling buffer — x-axis = device time (smooth, gap-aware)
             idx = self._write_idx % ws
-            buf[idx, 0] = self._device_time_s
-            n = min(len(pkt.floats), MAX_CHANNELS)
-            buf[idx, 1:1 + n] = pkt.floats[:n]
+            buf[idx, 0] = pkt.device_time_s
+            n = min(len(floats), MAX_CHANNELS)
+            buf[idx, 1:1 + n] = floats[:n]
             self._write_idx += 1
             self._total_recv += 1
 
             # CSV — device_time (smooth) + pc_time (absolute)
             if self._log_file:
-                vals = ",".join(f"{v:.6f}" for v in pkt.floats)
+                vals = ",".join(f"{v:.6f}" for v in floats)
                 self._pending.append(
-                    f"{self._device_time_s:.6f},{pkt.recv_t:.6f},{pkt.seq_id},{pkt.module_id},{pkt.tx_drops},{vals}\n")
+                    f"{pkt.device_time_s:.6f},{pkt.recv_t:.6f},"
+                    f"{pkt.seq_id},{pkt.module_id},{pkt.tx_drops},{vals}\n")
                 self._written += 1
 
+            last_user_pkt = pkt
+
         self._tp_count += len(batch)
-        self._tp_bytes += sum(PHAI_HEADER_SIZE + len(p.floats) * 4 + PHAI_CRC_SIZE for p in batch)
+        self._tp_bytes += sum(p.wire_len for p, _tag in batch)
 
         if len(self._pending) >= FLUSH_EVERY:
             self._flush_csv()
 
-        # Update latest value labels
-        last_pkt = batch[-1]
-        for i, lbl in enumerate(self._ch_val_labels):
-            if i < len(last_pkt.floats):
-                lbl.setText(f"{last_pkt.floats[i]:.3f}")
+        # 최신값 라벨 — 이 배치의 마지막 '사용자' 프레임 기준.
+        # batch[-1] 을 그대로 쓰면 그게 0x20 일 때 라벨에 엉뚱한 값이 찍힌다.
+        if last_user_pkt is not None:
+            last_floats = last_user_pkt.as_float32()
+            for i, lbl in enumerate(self._ch_val_labels):
+                if i < len(last_floats):
+                    lbl.setText(f"{last_floats[i]:.3f}")
 
         # Update stats
         self._update_stats_label(w)
@@ -956,9 +892,23 @@ class MainWindow(QtWidgets.QMainWindow):
             self._tp_bytes = 0
             self._tp_time = now
 
+        ledger = w.router.ledger
+        sys20 = w.router.system_taps[PHAI_MODULE_TOTAL_DATA].frame_count
+        sysef = w.router.system_taps[PHAI_MODULE_USER_META].frame_count
+
+        # Other = primary 가 아닌 사용자 module_id. 그래프·CSV 에는 안 들어가므로
+        # 여기에 안 보이면 '조용히 사라진' 것과 같다.
+        # Resync = seq 가 뒤로 간 횟수. 손실이 아니라 기준을 다시 잡은 횟수다.
+        extra = ""
+        if w.router.other_user_frames:
+            extra += f"  Other:{w.router.other_user_frames}"
+        if ledger.resync_count:
+            extra += f"  Resync:{ledger.resync_count}"
+
         self._lbl_stats.setText(
             f"Good: {w.good}  CRC: {w.crc_err}  Sync: {w.sync_err}  "
-            f"SEQ↓: {self._seq_drops}  TxDrop: {w.total_tx_drops}  |  "
+            f"SEQ↓: {ledger.lost_count}  QOvf: {w.queue_overflow_count}  "
+            f"TxDrop: {w.total_tx_drops}  Sys[0x20:{sys20} 0xEF:{sysef}]{extra}  |  "
             f"{self._pkt_rate:.0f} pkt/s  {self._byte_rate / 1024:.1f} KB/s")
 
     # ------------------------------------------------------------------ Render (zero-copy)
@@ -1117,14 +1067,17 @@ def run_cli(port, baud, output):
     except Exception as e:
         print(f"[ERROR] {e}")
         return
+
     wire_buf = bytearray()
     good = 0
     errs = 0
     hdr_written = False
     t0 = time.perf_counter()
     last_print = t0
-    last_seq = -1
-    dev_time = 0.0
+    # GUI 와 똑같은 라우터를 쓴다. 예전에는 CLI 가 파싱을 따로 갖고 있어서
+    # 같은 버그(시퀀스 클램프, module 미분리)를 두 번 고쳐야 했다.
+    router = FrameRouter()
+
     try:
         with open(path, 'w') as fout:
             while True:
@@ -1138,48 +1091,45 @@ def run_cli(port, baud, output):
                     if delim < 0:
                         break
                     if delim > 0:
-                        frame = cobs_decode(bytes(wire_buf[:delim]))
-                        min_sz = PHAI_HEADER_SIZE + PHAI_CRC_SIZE
-                        if len(frame) >= min_sz and frame[0] == PHAI_SOF:
-                            lu = frame[1]
-                            tot = PHAI_HEADER_SIZE + lu * 4 + PHAI_CRC_SIZE
-                            if 0 < lu <= PHAI_MAX_LEN_UNITS and len(frame) >= tot:
-                                crc_r = frame[tot - 2] | (frame[tot - 1] << 8)
-                                crc_c = crc16_ccitt(frame[:tot - PHAI_CRC_SIZE])
-                                if crc_c != crc_r:
-                                    errs += 1
-                                else:
-                                    seq = frame[2] | (frame[3] << 8)
-                                    mid = frame[4]
-                                    st = frame[5]
-                                    if last_seq >= 0:
-                                        delta = (seq - last_seq) & 0xFFFF
-                                        if delta > 1000:
-                                            delta = 1
-                                        dev_time += delta * (DEVICE_PERIOD_MS / 1000.0)
-                                    last_seq = seq
-                                    floats = struct.unpack(f'<{lu}f', frame[PHAI_HEADER_SIZE:PHAI_HEADER_SIZE+lu*4])
-                                    if not hdr_written:
-                                        ch = get_channel_names(mid, lu)
-                                        fout.write("time_s,pc_time_s,seq_id,module_id,tx_drops," + ",".join(ch) + "\n")
-                                        hdr_written = True
-                                        print(f"  Module: {get_module_name(mid)} — {lu} ch")
-                                    vals = ",".join(f"{v:.6f}" for v in floats)
-                                    fout.write(f"{dev_time:.6f},{now:.6f},{seq},{mid},{st & 0x7F},{vals}\n")
-                                    good += 1
-                                    if good % FLUSH_EVERY == 0:
-                                        fout.flush()
-                            else:
-                                errs += 1
-                        else:
+                        raw = cobs_decode(bytes(wire_buf[:delim]))
+                        pkt, err = parse_phai_frame(raw, now)
+                        if err is not None:
                             errs += 1
+                        else:
+                            good += 1
+                            route_tag, _delta = router.route(pkt)
+                            if route_tag == 'user_primary':
+                                floats = pkt.as_float32()
+                                if not hdr_written:
+                                    ch = get_channel_names(pkt.module_id, len(floats))
+                                    fout.write("time_s,pc_time_s,seq_id,module_id,tx_drops,"
+                                               + ",".join(ch) + "\n")
+                                    hdr_written = True
+                                    print(f"  Module: {get_module_name(pkt.module_id)} — {len(floats)} ch")
+                                vals = ",".join(f"{v:.6f}" for v in floats)
+                                fout.write(
+                                    f"{pkt.device_time_s:.6f},{now:.6f},{pkt.seq_id},"
+                                    f"{pkt.module_id},{pkt.tx_drops},{vals}\n")
+                                if good % FLUSH_EVERY == 0:
+                                    fout.flush()
                     del wire_buf[:delim + 1]
                 t = time.perf_counter()
                 if t - last_print >= 2.0:
-                    print(f"  Good: {good}  Err: {errs}")
+                    s20 = router.system_taps[PHAI_MODULE_TOTAL_DATA].frame_count
+                    sef = router.system_taps[PHAI_MODULE_USER_META].frame_count
+                    extra = ""
+                    if router.other_user_frames:
+                        extra += f"  Other:{router.other_user_frames}"
+                    if router.ledger.resync_count:
+                        extra += f"  Resync:{router.ledger.resync_count}"
+                    print(f"  Good: {good}  Err: {errs}  Lost(global): {router.ledger.lost_count}  "
+                          f"Sys[0x20:{s20} 0xEF:{sef}]{extra}")
                     last_print = t
     except KeyboardInterrupt:
-        print(f"\n[DONE] {good} packets → {path}")
+        s20 = router.system_taps[PHAI_MODULE_TOTAL_DATA].frame_count
+        sef = router.system_taps[PHAI_MODULE_USER_META].frame_count
+        print(f"\n[DONE] {good} packets → {path}  "
+              f"(Lost(global)={router.ledger.lost_count}, 0x20={s20}, 0xEF={sef})")
     finally:
         ser.close()
 
