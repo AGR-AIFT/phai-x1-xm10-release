@@ -310,6 +310,38 @@ def test_routing():
     assert tap.byte_count == bytes20, (tap.byte_count, bytes20)
     ok("0x20 이 %d 프레임 / %d 바이트로 정확히 보존" % (tap.frame_count, tap.byte_count))
 
+    # 개수·합계는 오라클이 아니다 — 내용까지 봐야 한다.
+    # payload 를 전부 다른 값으로 바꾸되 **길이는 그대로** 둔 스트림과 대조한다.
+    # 구 tap(개수 + 바이트 합)은 이 두 스트림을 구분하지 못했다.
+    mutated = bytearray()
+    seq_m = 0
+    for i in range(2000):
+        w, _ = build_wire(seq_m, 0x20, [1.5] * 91)     # 0.5 -> 1.5, 길이 동일
+        mutated.extend(w); seq_m = (seq_m + 1) & 0xFFFF
+        w, _ = build_wire(seq_m, 0xF0, [float(i)] * 4)
+        mutated.extend(w); seq_m = (seq_m + 1) & 0xFFFF
+
+    router_m, _, errs_m = feed(bytes(mutated))
+    assert errs_m == 0, errs_m
+    tap_m = router_m.system_taps[0x20]
+
+    assert tap_m.frame_count == tap.frame_count, "구 지표(개수)가 달라 대조가 성립 안 함"
+    assert tap_m.byte_count == tap.byte_count, "구 지표(바이트)가 달라 대조가 성립 안 함"
+    assert tap_m.content_crc != tap.content_crc, "내용이 바뀌었는데 지문이 같다"
+    ok("payload 를 전부 바꾸고 길이만 유지하면 개수·바이트는 동일하고 crc32 만 다르다 "
+       "(%08x vs %08x) — 구 지표로는 못 잡던 것" % (tap.content_crc, tap_m.content_crc))
+
+    # 순서 뒤바뀜도 잡힌다 — 동일 payload 두 프레임의 seq 만 맞바꾼 스트림
+    fa, _ = build_wire(0, 0x20, [0.5] * 91)
+    fb, _ = build_wire(1, 0x20, [0.5] * 91)
+    r_fwd, _, e1 = feed(bytes(fa + fb))
+    r_rev, _, e2 = feed(bytes(fb + fa))
+    assert e1 == 0 and e2 == 0, (e1, e2)
+    c_fwd = r_fwd.system_taps[0x20].content_crc
+    c_rev = r_rev.system_taps[0x20].content_crc
+    assert c_fwd != c_rev, "순서가 바뀌었는데 지문이 같다"
+    ok("동일 payload 프레임의 순서가 바뀌면 crc32 도 다르다 (체인이 순서 의존)")
+
     # 거짓 손실 0건
     assert router.ledger.lost_count == 0, router.ledger.lost_count
 

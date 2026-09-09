@@ -9,6 +9,9 @@ cdc_phai_receiver.py 의 PhAISerialWorker / MainWindow / run_cli() 가 모두 �
 """
 from __future__ import annotations
 
+import struct
+import zlib
+
 import numpy as np
 
 # ============================================================================
@@ -234,22 +237,52 @@ class GlobalSequenceLedger:
 # System Frame Tap
 # ============================================================================
 
+# 내용 해시에 넣을 헤더 필드. 같은 payload 두 프레임이 자리를 바꿔도 잡히게 seq 를 포함한다.
+_TAP_HDR = struct.Struct('<HB')
+
+
 class SystemFrameTap:
     """시스템 module 프레임을 버리지 않았다는 증거.
 
     "사용자 버퍼에 안 섞였다" 와 "정확히 보존됐다" 는 다른 주장이다.
-    개수와 바이트를 세어 두 번째를 검증할 수 있게 만든다.
+
+    ⚠️ **개수와 바이트 합만으로는 두 번째를 증명하지 못한다.** 길이를 유지한 채 payload 를
+    통째로 다른 값으로 바꾸면 `frame_count` 도 `byte_count` 도 그대로다 — 오라클이 아니라
+    통계였다. (2026-09-09 PLAN rev3.2 3차 Codex 리뷰 P1-R3-8 지적)
+
+    그래서 내용 자체를 누적 CRC32 로 접는다. `zlib.crc32(data, prev)` 체인은 순서에
+    의존하므로 프레임 재배열도 잡히고, 메모리는 O(1) 이라 1 kHz 경로에 둘 수 있다.
+    해시 대상은 `(seq_id, status, payload)` — 원장이 보는 것과 같은 식별 정보다.
+
+    이것은 **무결성 검사가 아니라 대조용 지문**이다. CRC32 는 충돌 저항이 없으므로
+    악의적 위조를 막지 못한다. 여기 필요한 것은 "두 캡처가 같은 바이트였나" 뿐이다.
     """
-    __slots__ = ('module_id', 'frame_count', 'byte_count')
+    __slots__ = ('module_id', 'frame_count', 'byte_count',
+                 'content_crc', 'first_seq', 'last_seq')
 
     def __init__(self, module_id: int):
         self.module_id = module_id
         self.frame_count = 0
         self.byte_count = 0
+        # 0 = "아직 아무것도 안 봤다". zlib.crc32 의 초기값과 같아 별도 sentinel 이 필요없다.
+        self.content_crc = 0
+        self.first_seq = -1
+        self.last_seq = -1
 
     def push(self, frame: PhAIFrame):
         self.frame_count += 1
         self.byte_count += frame.wire_len
+        crc = zlib.crc32(_TAP_HDR.pack(frame.seq_id, frame.status), self.content_crc)
+        self.content_crc = zlib.crc32(frame.payload, crc)
+        if self.first_seq < 0:
+            self.first_seq = frame.seq_id
+        self.last_seq = frame.seq_id
+
+    def summary(self) -> str:
+        """로그·리포트용 한 줄. 내용 지문을 눈에 보이게 해 캡처끼리 대조할 수 있게 한다."""
+        return ("0x%02X: %d frames / %d bytes / crc32=%08x / seq %d..%d"
+                % (self.module_id, self.frame_count, self.byte_count,
+                   self.content_crc, self.first_seq, self.last_seq))
 
 
 # ============================================================================
