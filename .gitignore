@@ -176,3 +176,7 @@ build_check/
 
 # 튜토리얼 영상 촬영 가이드 — 내부 제작 자료 (공개 레포 비공개, 로컬 보관)
 video/
+
+# Python 바이트코드 (PythonDecoder 샘플 실행 시 생성)
+__pycache__/
+*.pyc
