@@ -53,13 +53,16 @@ typedef enum {
 } IOIF_FileSystem_AccessMode_e;
 
 /**
- * @brief [유지] 파일 쓰기 시 생성 모드 (덮어쓰기/생성/증가)
+ * @brief 파일 쓰기 시 생성 모드 (생성/이어쓰기/덮어쓰기)
+ * @note  구 `IOIF_FileSystem_CreateMode_INCREMENT`(data(1).bin 자동 증가)는 2026-09-10 삭제됐다.
+ *        열거자만 있고 구현이 배선되지 않아 EXCLUSIVE 와 동일 동작(두 번째 호출 FR_EXIST)이었고,
+ *        소비 5모듈·공개 SDK 어디에도 호출자가 없었다. 세션별 파일 분리가 필요하면 호출자가
+ *        이름을 직접 만들어라 - XM data_logger 의 `data_%03lu_part_%03lu.bin` 이 그 예다.
  */
 typedef enum {
     IOIF_FileSystem_CreateMode_EXCLUSIVE, // 파일이 없으면 생성 (FA_CREATE_NEW)
     IOIF_FileSystem_CreateMode_APPEND,    // 파일 끝에 이어쓰기 (FA_OPEN_APPEND)
     IOIF_FileSystem_CreateMode_OVERWRITE, // 항상 덮어쓰기 (FA_CREATE_ALWAYS)
-    IOIF_FileSystem_CreateMode_INCREMENT, // data(1).bin, data(2).bin 자동 증가
 } IOIF_FileSystem_CreateMode_e;
 
 /**
