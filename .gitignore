@@ -57,12 +57,15 @@ docs/release-notes/*
 !docs/release-notes/v2.6.0.en.md
 !docs/release-notes/v2.7.0.md
 !docs/release-notes/v2.7.0.en.md
+!docs/release-notes/v2.8.0.md
+!docs/release-notes/v2.8.0.en.md
 !docs/getting-started/
 docs/getting-started/*
 !docs/getting-started/00-claude-code-quickstart.md
 !docs/getting-started/01-hardware-setup.md
 !docs/getting-started/02-software-setup.md
 !docs/getting-started/03-first-build.md
+!docs/getting-started/04-pc-data-tool.md
 !docs/api-reference/
 docs/api-reference/*
 !docs/api-reference/01-task-state-machine.md
@@ -126,6 +129,7 @@ docs/stylesheets/*
 !docs/getting-started/01-hardware-setup.en.md
 !docs/getting-started/02-software-setup.en.md
 !docs/getting-started/03-first-build.en.md
+!docs/getting-started/04-pc-data-tool.en.md
 !docs/hardware/README.en.md
 !docs/hardware/external-gpio-rev1.1.en.md
 !docs/hardware/external-gpio-rev2.0.en.md
