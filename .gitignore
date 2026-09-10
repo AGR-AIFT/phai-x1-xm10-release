@@ -180,3 +180,10 @@ video/
 # Python 바이트코드 (PythonDecoder 샘플 실행 시 생성)
 __pycache__/
 *.pyc
+
+# PyInstaller 산출물 — xm10.exe 는 23 MB 다. 빌드는 build_exe.py 로 재현한다.
+PythonDecoder/dist/
+
+# 수신·데모 산출물 — 사용자 캡처가 커밋되면 안 된다 (CDC/data/ 의 회귀 샘플은 추적 대상)
+PythonDecoder/data/
+PythonDecoder/demo_out/

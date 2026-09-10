@@ -538,7 +538,16 @@ def test_regression():
           % list(mods)[0])
 
 
-if __name__ == "__main__":
+def main():
+    """다른 러너가 in-process 로 부를 수 있게 한 진입점 (형제 시험 파일과 같은 규약).
+
+    실패는 AssertionError 로 튄다 — 부르는 쪽이 잡아 종료코드로 옮긴다.
+    """
+    # Windows 기본 콘솔(cp949)에서 em dash 를 찍다 UnicodeEncodeError 로 죽던 것을 막는다.
+    # README 는 이 파일을 "보드 없이 돌아간다"는 검증으로 안내하는데, 정작 기본 환경에서는
+    # 실행 자체가 안 됐다 (2026-09-10 실측).
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     print("frame_router.py 검증")
     test_parse()
     test_ledger()
@@ -549,3 +558,8 @@ if __name__ == "__main__":
     test_worker_queue()
     test_regression()
     print("\n전부 통과 (%d 항목)" % _passed)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
