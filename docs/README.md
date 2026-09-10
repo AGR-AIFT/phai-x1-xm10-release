@@ -36,6 +36,7 @@ XM10 의 전체 문서 인덱스입니다. 처음 시작하는 분은 위에서 
 | 01 | [하드웨어 연결](getting-started/01-hardware-setup.md) | KIT H10, ST-Link, 센서 허브 연결 |
 | 02 | [개발 환경 구축](getting-started/02-software-setup.md) | STM32CubeIDE 설치, 레포 clone |
 | 03 | [첫 빌드 & 실행](getting-started/03-first-build.md) | 프로젝트 import, 빌드, 펌웨어 업로드 |
+| 04 | [PC 에서 데이터 받기](getting-started/04-pc-data-tool.md) | `xm10` 도구 — 그래프, 무손실 저장, CSV. 보드 없이 `demo` 로 먼저 체험 |
 
 ---
 
@@ -115,7 +116,7 @@ ST-Link SWD 직접 업로드 + PhAI Studio USB 업로드 두 가지 방법 + 부
 
 - [🧭 find-it.md](find-it.md) — 키워드 → 페이지 빠른 찾기
 - [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — 46 개 예제 소스 코드 (각 폴더에 5 단계 README 포함)
-- [Python Tools](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/PythonDecoder/) — USB-CDC 실시간 수신 샘플
+- [PC 데이터 도구 xm10](getting-started/04-pc-data-tool.md) — 그래프·무손실 저장·CSV 내보내기 (코드는 [PythonDecoder/](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/PythonDecoder/))
 - [Release Notes](release-notes/) — 버전별 첨부 파일 + 호환성 매트릭스
 - [Changelog](https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md) — 버전별 변경 이력 요약
 - [XM10 SDK](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/) — Rev1.1 / Rev2.0 SDK 프로젝트

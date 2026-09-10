@@ -33,7 +33,7 @@ XM10 기능을 단계적으로 익힐 수 있도록 46 개 예제를 준비했�
 | 4 | 다채널 ADC + 안전 스위치 | Ex.05b → 05c → 06 | FSR 8 채널 동시 측정 시연 |
 | 5 | USB 시리얼 통신 | Ex.07 → 08 | PC 터미널로 센서값 실시간 모니터링 |
 | 6 | 바이너리 스트리밍 + PhAI Studio | Ex.09 | 4 채널 그래프 캡처 + 분석 보고서 |
-| 7 | USB-CDC 데이터 수집 + 저장 | Ex.09 + PythonDecoder/CDC | 10 분 데이터 스트리밍 → CSV 저장·분석 |
+| 7 | USB-CDC 데이터 수집 + 저장 | Ex.09 + [xm10 도구](../getting-started/04-pc-data-tool.md) | 10 분 데이터 스트리밍 → .xmlog 저장 → CSV 로 뽑아 분석 |
 | 8 | **중간고사 / 프로젝트 1** | (자유) | "내 보드, 내 데이터" 미니 프로젝트 발표 |
 | 9 | KIT H10 외골격 기본 모드 | Ex.11 → 12 → 13 | 3 가지 모드 비교 영상 |
 | 10 | PD 실시간 제어 | Ex.14 | 자기 PD 게인 튜닝 + 응답 비교 |
@@ -103,7 +103,7 @@ PC 와 실시간으로 메시지를 주고받고 데이터를 스트리밍합니
 | [08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | 센서 데이터 모니터링 | ⭐⭐ | 실시간 데이터 sprintf 출력 |
 | [09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | 고속 바이너리 스트리밍 | ⭐⭐⭐ | PhAI Studio 호환 프로토콜, 1 kHz 전송 |
 
-> 수집한 스트림을 PC 에 저장·분석하려면 PhAI Studio 녹화 또는 레포 내 `PythonDecoder/CDC` 파이썬 샘플을 사용하세요. (온보드 파일 저장은 v2.5.0 에서 제거 — 향후 HW 리비전에서 SD카드로 지원 예정)
+> 수집한 스트림을 PC 에 저장·분석하려면 PhAI Studio 녹화 또는 레포 내 `xm10` 도구를 사용하세요 — `python PythonDecoder/xm10.py recv` 로 그래프를 보면서 원본이 `.xmlog` 로 저장되고, `export` 로 CSV 를 뽑습니다 ([안내](../getting-started/04-pc-data-tool.md)). (온보드 파일 저장은 v2.5.0 에서 제거 — 향후 HW 리비전에서 SD카드로 지원 예정)
 
 ---
 

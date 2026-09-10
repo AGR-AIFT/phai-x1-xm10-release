@@ -68,7 +68,9 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 |-----------|-------------|
 | Training an AI model with exoskeleton data | [docs/advanced/ai-data-pipeline.md](advanced/ai-data-pipeline.md) |
 | Running a Tiny NN inference on-board | Ex.16, Ex.36 + [advanced/README.md](advanced/README.md) |
-| How to use PythonDecoder | [PythonDecoder/](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/PythonDecoder/) |
+| Get data on your PC / save it / export CSV (Python, exe) | [getting-started/04-pc-data-tool.en.md](getting-started/04-pc-data-tool.en.md) |
+| Try the tool first, no board needed | `python xm10.py demo` — first section of [04-pc-data-tool.en.md](getting-started/04-pc-data-tool.en.md) |
+| Check whether frames are being dropped | `python xm10.py soak` — [04-pc-data-tool.en.md](getting-started/04-pc-data-tool.en.md#checking-for-dropped-frames--soak) |
 | How to use PhAI Studio | Step 4 of each example's README + [studio.onephai.com](https://studio.onephai.com) |
 | Finishing my algorithm within 1 ms | Ex.18 Debug Monitor + Ex.19 Memory Aware Design |
 | Self-directed learning paths by interest | [advanced/README.md — Recommended Self-Study Paths](advanced/README.md#자기주도-학습-권장-경로) |

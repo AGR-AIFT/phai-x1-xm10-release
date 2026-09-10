@@ -6,7 +6,7 @@
 
 이 헤더는 **PC 실시간 통신(CDC)** 도메인을 정의합니다. PhAI Studio·PuTTY 같은 PC 클라이언트와 텍스트/바이너리를 주고받으며, 등록 기반 자동화(Setup에서 소스 등록 → System이 주기적으로 자동 전송)로 동작합니다. Rev2.0 부터는 여기에 더해 **하나의 USB-CDC 케이블을 PhAI Studio 실시간 스트리밍 / 일반 터미널 두 가지 용도 중 무엇으로 쓸지 지정**하는 호스트 프로파일 API(`XM_USB_SetHostProfile`)가 추가되었습니다. (생산 검사 GUI 대응은 보드 내부에서 자동 처리되므로 사용자 선택지에는 없습니다.)
 
-> **USB 메모리(MSC) 파일 로깅 기능은 v2.5.0 에서 제거되었습니다.** 데이터 수집은 USB-CDC 실시간 스트리밍(PhAI Studio 또는 레포 내 `PythonDecoder/CDC`)으로 하며, 온보드 저장(SD카드)은 향후 HW 리비전에서 지원 예정입니다.
+> **USB 메모리(MSC) 파일 로깅 기능은 v2.5.0 에서 제거되었습니다.** 데이터 수집은 USB-CDC 실시간 스트리밍으로 합니다 — PhAI Studio, 또는 레포 내 `xm10` 도구(그래프 + 무손실 `.xmlog` 저장 + CSV 내보내기, [안내](../../getting-started/04-pc-data-tool.md)). 온보드 저장(SD카드)은 향후 HW 리비전에서 지원 예정입니다.
 
 ---
 
