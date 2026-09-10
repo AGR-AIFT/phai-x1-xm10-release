@@ -2662,7 +2662,7 @@
 <p>Detailed reference for the <strong>USB-CDC communication API</strong> defined in <code>xm_api_usb.h</code>.
 XM10 connects to a PC as a virtual serial port (CDC) for real-time data transfer and debugging.</p>
 <blockquote>
-<p><strong>USB memory (MSC) file logging was removed in v2.5.0.</strong> Data capture now uses USB-CDC real-time streaming (PhAI Studio or the <code>PythonDecoder/CDC</code> samples in the repo); on-board storage (SD card) is planned for a future HW revision.</p>
+<p><strong>USB memory (MSC) file logging was removed in v2.5.0.</strong> Data capture now uses USB-CDC real-time streaming — PhAI Studio, or the <code>xm10</code> tool in the repo (graphs + lossless <code>.xmlog</code> recording + CSV export, <a href="../getting-started/04-pc-data-tool.en.md">guide</a>). On-board storage (SD card) is planned for a future HW revision.</p>
 </blockquote>
 <p>This module uses a <strong>registration-based automation</strong> model: once you register the data struct you want to transmit, the system streams it to the PC in the background automatically.</p>
 <hr />

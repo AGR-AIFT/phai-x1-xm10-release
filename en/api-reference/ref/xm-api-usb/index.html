@@ -2591,7 +2591,7 @@
 </blockquote>
 <p>This header defines the <strong>real-time PC communication (CDC)</strong> domain. You exchange text/binary data with a PC client such as PhAI Studio or PuTTY, and it works via registration-based automation (register a source in Setup → the System transmits it automatically on a periodic basis). Starting with Rev2.0, a host-profile API (<code>XM_USB_SetHostProfile</code>) has also been added that lets you <strong>choose whether a single USB-CDC cable is used for PhAI Studio real-time streaming or a plain terminal</strong>. (Production-inspection GUI support is handled automatically inside the board, so it is not a user option.)</p>
 <blockquote>
-<p><strong>USB memory (MSC) file logging was removed in v2.5.0.</strong> Data capture now uses USB-CDC real-time streaming (PhAI Studio or the <code>PythonDecoder/CDC</code> samples in the repo); on-board storage (SD card) is planned for a future HW revision.</p>
+<p><strong>USB memory (MSC) file logging was removed in v2.5.0.</strong> Data capture now uses USB-CDC real-time streaming — PhAI Studio, or the <code>xm10</code> tool in the repo (graphs + lossless <code>.xmlog</code> recording + CSV export, <a href="../../getting-started/04-pc-data-tool.en.md">guide</a>). On-board storage (SD card) is planned for a future HW revision.</p>
 </blockquote>
 <hr />
 <h2 id="when-to-use-it">When to use it<a class="headerlink" href="#when-to-use-it" title="Permanent link">&para;</a></h2>

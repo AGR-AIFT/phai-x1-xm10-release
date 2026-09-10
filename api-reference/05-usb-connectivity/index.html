@@ -2662,7 +2662,7 @@
 <p><code>xm_api_usb.h</code>에 정의된 <strong>USB-CDC 통신 API</strong>에 대한 상세 레퍼런스입니다.
 XM10은 USB 포트를 통해 PC와 가상 시리얼 포트(CDC)로 연결하여 실시간 데이터 전송 및 디버깅을 제공합니다.</p>
 <blockquote>
-<p><strong>USB 메모리(MSC) 파일 로깅 기능은 v2.5.0 에서 제거되었습니다.</strong> 데이터 수집은 USB-CDC 실시간 스트리밍(PhAI Studio 또는 레포 내 <code>PythonDecoder/CDC</code>)으로 하며, 온보드 저장(SD카드)은 향후 HW 리비전에서 지원 예정입니다.</p>
+<p><strong>USB 메모리(MSC) 파일 로깅 기능은 v2.5.0 에서 제거되었습니다.</strong> 데이터 수집은 USB-CDC 실시간 스트리밍으로 합니다 — PhAI Studio, 또는 레포 내 <code>xm10</code> 도구(그래프 + 무손실 <code>.xmlog</code> 저장 + CSV 내보내기, <a href="../getting-started/04-pc-data-tool.md">안내</a>). 온보드 저장(SD카드)은 향후 HW 리비전에서 지원 예정입니다.</p>
 </blockquote>
 <p>이 모듈은 사용자가 <strong>원하는 데이터 구조체</strong>를 등록하면, 시스템이 백그라운드에서 자동으로 PC로 전송하는 등록 기반(Registration-based) 자동화 시스템을 갖추고 있습니다.</p>
 <hr />

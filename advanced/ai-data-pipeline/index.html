@@ -2450,7 +2450,7 @@
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  ↓                        ↓                          ↓                     ↓
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>KIT H10 착용  →  USB-CDC 실시간 스트리밍   →   CSV / npy 출력   →  PyTorch DataLoader
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                 (PhAI Studio 또는                                    또는 sklearn
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                  PythonDecoder/CDC)
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                  xm10 도구 → .xmlog → export)
 </code></pre></div>
 <p>두 가지 길이 있습니다. 목적에 따라 골라가세요.</p>
 <table>
@@ -2495,10 +2495,12 @@
 <p>두 가지 방법이 있습니다.</p>
 <ul>
 <li><strong>PhAI Studio</strong> — USB 연결 → 채널 <code>0xF0</code> 선택 → 실시간 그래프 확인 + 녹화 버튼 → export 로 <code>.csv</code> 저장. 가장 간단합니다.</li>
-<li><strong>PythonDecoder/CDC</strong> — 직접 파싱이 필요하면 레포 내 파이썬 샘플로 수신하면서 CSV 를 자동 저장합니다.</li>
+<li><strong>xm10 도구</strong> (레포 내 <code>PythonDecoder/</code>) — 받은 바이트를 그대로 <code>.xmlog</code> 에 저장해 두고 CSV 는 나중에 뽑습니다. 채널 이름·구성을 바꿔도 예전 기록을 다시 뽑을 수 있어 학습 데이터셋 관리에 유리합니다. 실행파일로 만들면 파이썬 없는 PC 에서도 됩니다 (<a href="../getting-started/04-pc-data-tool.md">안내</a>).</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>PythonDecoder/CDC/cdc_phai_receiver.py<span class="w"> </span>--cli<span class="w"> </span>--port<span class="w"> </span>COM6<span class="w">   </span><span class="c1"># CSV 자동 저장</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>PythonDecoder/xm10.py<span class="w"> </span>recv<span class="w"> </span>--cli<span class="w"> </span>--port<span class="w"> </span>COM6<span class="w"> </span>--log<span class="w">         </span><span class="c1"># 콘솔 수신 + .xmlog 저장 (Ctrl+C)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>PythonDecoder/xm10.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>data/cdc_&lt;시각&gt;.xmlog<span class="w"> </span>--csv<span class="w"> </span>out/<span class="w">   </span><span class="c1"># 채널별 CSV 로</span>
 </code></pre></div>
+<p><code>out/</code> 에 <code>..._user_0xF0.csv</code>(여러분 채널)와 <code>..._total_0x20.csv</code>(보드가 항상 보내는 197채널 — 관절 각도·토크·IMU·GRF)가 생깁니다. 두 파일 모두 앞에 <code>pc_time_us</code>(PC 수신 시각)와 <code>seq_id</code>(보드가 보낸 순번, 모든 채널이 하나의 순번을 공유) 열이 있어 시간축을 맞출 수 있습니다.</p>
 <h3 id="3-학습-프레임워크에서-로드">3. 학습 프레임워크에서 로드<a class="headerlink" href="#3-학습-프레임워크에서-로드" title="Permanent link">&para;</a></h3>
 <h4 id="pytorch-예시">PyTorch 예시<a class="headerlink" href="#pytorch-예시" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -2587,7 +2589,7 @@
 <h2 id="자주-막히는-부분">자주 막히는 부분<a class="headerlink" href="#자주-막히는-부분" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>CSV 가 너무 큼/느림</strong> — 큰 데이터셋은 <code>.npy</code> 또는 <code>.parquet</code> 로 변환해 로드. CSV 는 사람 확인용으로만.</li>
-<li><strong>스트리밍 중 패킷 누락</strong> — <code>PythonDecoder/CDC/cdc_csv_reviewer.py</code> 의 Sequence Gap(ΔSeq) / Tx Drop 분석으로 누락 시점을 확인하고, 전송 데이터량을 줄이거나 채널을 간추리세요.</li>
+<li><strong>스트리밍 중 패킷 누락</strong> — <code>python PythonDecoder/xm10.py soak --port COM6 --minutes 10</code> 으로 빠진 프레임이 있는지 판정하세요. <code>.xmlog</code> 로 받았다면 <code>export</code> 요약에 빠진 구간(GAP)이 그대로 남아 있습니다. 누락이 있으면 전송 데이터량을 줄이거나 채널을 간추리세요.</li>
 <li><strong>NaN / Inf 값</strong> — 보드 측에서 <code>assert(isfinite(value))</code> 추가. 학습 직전에 <code>np.isfinite()</code> 로 필터링.</li>
 <li><strong>클래스 불균형</strong> — Stance/Swing 같은 보행 phase 는 7:3 정도로 비균등. <code>class_weight</code> 옵션 또는 SMOTE 사용.</li>
 <li><strong>보드에서 추론이 1 ms 를 넘김</strong> — 모델 양자화 (int8) 또는 layer 수 감소. STM32H7 의 FPU 활용 확인.</li>
