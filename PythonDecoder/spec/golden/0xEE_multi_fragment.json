@@ -1,0 +1,765 @@
+{
+  "byte_length": 3048,
+  "expect": {
+    "field_count_total": 93,
+    "fields": [
+      {
+        "array_len": 1,
+        "name": "g00",
+        "offset": 0,
+        "scale": 1.0,
+        "type": "f32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g01",
+        "offset": 4,
+        "scale": 1.0,
+        "type": "i16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g02",
+        "offset": 6,
+        "scale": 1.0,
+        "type": "u8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g03",
+        "offset": 8,
+        "scale": 1.0,
+        "type": "u32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g04",
+        "offset": 12,
+        "scale": 1.0,
+        "type": "i8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g05",
+        "offset": 14,
+        "scale": 1.0,
+        "type": "u16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g06",
+        "offset": 16,
+        "scale": 1.0,
+        "type": "i32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g07",
+        "offset": 20,
+        "scale": 1.0,
+        "type": "bool",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g08",
+        "offset": 24,
+        "scale": 1.0,
+        "type": "f64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g09",
+        "offset": 32,
+        "scale": 1.0,
+        "type": "i64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g10",
+        "offset": 40,
+        "scale": 1.0,
+        "type": "u64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g11",
+        "offset": 48,
+        "scale": 1.0,
+        "type": "f32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g12",
+        "offset": 52,
+        "scale": 1.0,
+        "type": "i16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g13",
+        "offset": 54,
+        "scale": 1.0,
+        "type": "u8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g14",
+        "offset": 56,
+        "scale": 1.0,
+        "type": "u32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g15",
+        "offset": 60,
+        "scale": 1.0,
+        "type": "i8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g16",
+        "offset": 62,
+        "scale": 1.0,
+        "type": "u16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g17",
+        "offset": 64,
+        "scale": 1.0,
+        "type": "i32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g18",
+        "offset": 68,
+        "scale": 1.0,
+        "type": "bool",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g19",
+        "offset": 72,
+        "scale": 1.0,
+        "type": "f64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g20",
+        "offset": 80,
+        "scale": 1.0,
+        "type": "i64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g21",
+        "offset": 88,
+        "scale": 1.0,
+        "type": "u64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g22",
+        "offset": 96,
+        "scale": 1.0,
+        "type": "f32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g23",
+        "offset": 100,
+        "scale": 1.0,
+        "type": "i16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g24",
+        "offset": 102,
+        "scale": 1.0,
+        "type": "u8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g25",
+        "offset": 104,
+        "scale": 1.0,
+        "type": "u32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g26",
+        "offset": 108,
+        "scale": 1.0,
+        "type": "i8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g27",
+        "offset": 110,
+        "scale": 1.0,
+        "type": "u16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g28",
+        "offset": 112,
+        "scale": 1.0,
+        "type": "i32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g29",
+        "offset": 116,
+        "scale": 1.0,
+        "type": "bool",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g30",
+        "offset": 120,
+        "scale": 1.0,
+        "type": "f64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g31",
+        "offset": 128,
+        "scale": 1.0,
+        "type": "i64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g32",
+        "offset": 136,
+        "scale": 1.0,
+        "type": "u64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g33",
+        "offset": 144,
+        "scale": 1.0,
+        "type": "f32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g34",
+        "offset": 148,
+        "scale": 1.0,
+        "type": "i16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g35",
+        "offset": 150,
+        "scale": 1.0,
+        "type": "u8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g36",
+        "offset": 152,
+        "scale": 1.0,
+        "type": "u32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g37",
+        "offset": 156,
+        "scale": 1.0,
+        "type": "i8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g38",
+        "offset": 158,
+        "scale": 1.0,
+        "type": "u16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g39",
+        "offset": 160,
+        "scale": 1.0,
+        "type": "i32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g40",
+        "offset": 164,
+        "scale": 1.0,
+        "type": "bool",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g41",
+        "offset": 168,
+        "scale": 1.0,
+        "type": "f64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g42",
+        "offset": 176,
+        "scale": 1.0,
+        "type": "i64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g43",
+        "offset": 184,
+        "scale": 1.0,
+        "type": "u64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g44",
+        "offset": 192,
+        "scale": 1.0,
+        "type": "f32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g45",
+        "offset": 196,
+        "scale": 1.0,
+        "type": "i16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g46",
+        "offset": 198,
+        "scale": 1.0,
+        "type": "u8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g47",
+        "offset": 200,
+        "scale": 1.0,
+        "type": "u32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g48",
+        "offset": 204,
+        "scale": 1.0,
+        "type": "i8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g49",
+        "offset": 206,
+        "scale": 1.0,
+        "type": "u16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g50",
+        "offset": 208,
+        "scale": 1.0,
+        "type": "i32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g51",
+        "offset": 212,
+        "scale": 1.0,
+        "type": "bool",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g52",
+        "offset": 216,
+        "scale": 1.0,
+        "type": "f64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g53",
+        "offset": 224,
+        "scale": 1.0,
+        "type": "i64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g54",
+        "offset": 232,
+        "scale": 1.0,
+        "type": "u64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g55",
+        "offset": 240,
+        "scale": 1.0,
+        "type": "f32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g56",
+        "offset": 244,
+        "scale": 1.0,
+        "type": "i16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g57",
+        "offset": 246,
+        "scale": 1.0,
+        "type": "u8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g58",
+        "offset": 248,
+        "scale": 1.0,
+        "type": "u32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g59",
+        "offset": 252,
+        "scale": 1.0,
+        "type": "i8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g60",
+        "offset": 254,
+        "scale": 1.0,
+        "type": "u16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g61",
+        "offset": 256,
+        "scale": 1.0,
+        "type": "i32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g62",
+        "offset": 260,
+        "scale": 1.0,
+        "type": "bool",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g63",
+        "offset": 264,
+        "scale": 1.0,
+        "type": "f64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g64",
+        "offset": 272,
+        "scale": 1.0,
+        "type": "i64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g65",
+        "offset": 280,
+        "scale": 1.0,
+        "type": "u64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g66",
+        "offset": 288,
+        "scale": 1.0,
+        "type": "f32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g67",
+        "offset": 292,
+        "scale": 1.0,
+        "type": "i16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g68",
+        "offset": 294,
+        "scale": 1.0,
+        "type": "u8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g69",
+        "offset": 296,
+        "scale": 1.0,
+        "type": "u32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g70",
+        "offset": 300,
+        "scale": 1.0,
+        "type": "i8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g71",
+        "offset": 302,
+        "scale": 1.0,
+        "type": "u16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g72",
+        "offset": 304,
+        "scale": 1.0,
+        "type": "i32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g73",
+        "offset": 308,
+        "scale": 1.0,
+        "type": "bool",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g74",
+        "offset": 312,
+        "scale": 1.0,
+        "type": "f64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g75",
+        "offset": 320,
+        "scale": 1.0,
+        "type": "i64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g76",
+        "offset": 328,
+        "scale": 1.0,
+        "type": "u64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g77",
+        "offset": 336,
+        "scale": 1.0,
+        "type": "f32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g78",
+        "offset": 340,
+        "scale": 1.0,
+        "type": "i16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g79",
+        "offset": 342,
+        "scale": 1.0,
+        "type": "u8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g80",
+        "offset": 344,
+        "scale": 1.0,
+        "type": "u32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g81",
+        "offset": 348,
+        "scale": 1.0,
+        "type": "i8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g82",
+        "offset": 350,
+        "scale": 1.0,
+        "type": "u16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g83",
+        "offset": 352,
+        "scale": 1.0,
+        "type": "i32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g84",
+        "offset": 356,
+        "scale": 1.0,
+        "type": "bool",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g85",
+        "offset": 360,
+        "scale": 1.0,
+        "type": "f64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g86",
+        "offset": 368,
+        "scale": 1.0,
+        "type": "i64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g87",
+        "offset": 376,
+        "scale": 1.0,
+        "type": "u64",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g88",
+        "offset": 384,
+        "scale": 1.0,
+        "type": "f32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g89",
+        "offset": 388,
+        "scale": 1.0,
+        "type": "i16",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g90",
+        "offset": 390,
+        "scale": 1.0,
+        "type": "u8",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g91",
+        "offset": 392,
+        "scale": 1.0,
+        "type": "u32",
+        "unit": ""
+      },
+      {
+        "array_len": 1,
+        "name": "g92",
+        "offset": 396,
+        "scale": 1.0,
+        "type": "i8",
+        "unit": ""
+      }
+    ],
+    "frame_count": 3,
+    "schema_crc32": 1131131064,
+    "schema_proto_ver": 1,
+    "struct_name": "Multi",
+    "struct_size": 400,
+    "target_module_id": 242
+  },
+  "frame_lengths": [
+    1016,
+    1016,
+    1016
+  ],
+  "note": "설계 상한인 93 필드 = 31 x 3 프래그먼트. `.hex` 는 세 프래그먼트를 이어붙인 것이고 `frame_lengths` 로 잘라야 한다. schema_crc32 는 **세 프래그먼트의 FieldRecord 를 순서대로 이어붙인 것** 의 CRC 다 (헤더 제외).",
+  "sha256_of_bytes": "a01c80f400a7da66"
+}

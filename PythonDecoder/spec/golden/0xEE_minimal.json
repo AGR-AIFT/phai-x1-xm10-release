@@ -1,0 +1,25 @@
+{
+  "byte_length": 56,
+  "expect": {
+    "field_count_total": 1,
+    "fields": [
+      {
+        "array_len": 1,
+        "name": "speed",
+        "offset": 0,
+        "scale": 1.0,
+        "type": "f32",
+        "unit": "m/s"
+      }
+    ],
+    "frame_count": 1,
+    "frame_index": 0,
+    "schema_crc32": 3363737127,
+    "schema_proto_ver": 1,
+    "struct_name": "Demo",
+    "struct_size": 8,
+    "target_module_id": 240
+  },
+  "note": "가장 작은 유효 프래그먼트. 24 + 32 = 56 B.",
+  "sha256_of_bytes": "cba5602d382ea165"
+}

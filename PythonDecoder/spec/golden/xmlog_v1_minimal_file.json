@@ -1,0 +1,61 @@
+{
+  "byte_length": 260,
+  "expect": {
+    "create_unix_ns": 81985529216486895,
+    "format_version": 1,
+    "header_size": 32,
+    "records": [
+      {
+        "boot_epoch": 7,
+        "device_usb_serial": "SN-GOLDEN",
+        "fw_build_id": "fw-2.8",
+        "host_unix_ns": 1234605616436508552,
+        "link_epoch": 3,
+        "total_data_map_version": "2.8",
+        "type": "SESSION"
+      },
+      {
+        "activation_id": 1,
+        "module_id": 240,
+        "payload_hex": "aabbccdd",
+        "schema_crc32": 3735928559,
+        "schema_proto_ver": 1,
+        "struct_size": 8,
+        "type": "SCHEMA_ACTIVATION"
+      },
+      {
+        "activation_id": 1,
+        "module_id": 240,
+        "payload_hex": "deadbeef",
+        "pc_time_us": 1234605616436508552,
+        "seq_id": 7,
+        "type": "DATA"
+      },
+      {
+        "from_seq": 4660,
+        "lost_count": 12,
+        "reason": 1,
+        "to_seq": 4672,
+        "type": "GAP"
+      },
+      {
+        "activation_id": 0,
+        "module_id": 32,
+        "payload_hex": "0000000000000000",
+        "pc_time_us": 1234605616436508569,
+        "seq_id": 8,
+        "type": "DATA"
+      }
+    ]
+  },
+  "note": "완전한 최소 파일 하나. 마지막 DATA 는 activation_id=0 — 스키마보다 먼저 온 데이터를 그대로 기록하는 경우다(PLAN §4.1 data-before-schema). rec_crc32 는 자기 자신 4바이트만 건너뛴 skip 방식이다.",
+  "section_lengths": {
+    "activation": 32,
+    "data": 36,
+    "data_no_schema": 40,
+    "file_header": 32,
+    "gap": 32,
+    "session": 88
+  },
+  "sha256_of_bytes": "2b87793a2a2a5386"
+}
