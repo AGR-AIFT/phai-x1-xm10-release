@@ -28,15 +28,19 @@ import xmlog as X
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 
-# 배달된 사본이 먼저, 없으면 옆에 있는 개발 레포.
-# 세 번째는 PyInstaller 번들 안 — 그때는 `_HERE` 가 추출 디렉토리라서 `..` 로 올라가면
-# 번들 밖으로 나가 버린다. 벡터를 번들 루트에 같이 넣고 여기서 찾는다.
+# 배달된 사본이 먼저. 두 번째는 PyInstaller 번들 안 — 그때는 `_HERE` 가 추출 디렉토리라서
+# `..` 로 올라가면 번들 밖으로 나가 버린다. 벡터를 번들 루트에 같이 넣고 여기서 찾는다.
+#
+# 벡터를 만드는 원본 트리에서 바로 대조하고 싶으면 `XM10_SPEC_GOLDEN_DIR` 로 그 경로를
+# 넘긴다. 예전에는 옆 디렉토리 이름을 코드에 그대로 적어 뒀는데, 그러면 이 파일이 공개
+# 배포물에 들어갈 때 그 이름이 같이 나간다 — 릴리즈 검증기가 잡아냈다(2026-09-10).
 _CANDIDATES = [
     os.path.normpath(os.path.join(_HERE, "..", "spec", "golden")),
-    os.path.normpath(os.path.join(_HERE, "..", "..", "..",
-                                  "phai-x1-xm10-develop", "docs", "spec", "golden")),
     os.path.join(_HERE, "spec", "golden"),
 ]
+_ENV_DIR = os.environ.get("XM10_SPEC_GOLDEN_DIR")
+if _ENV_DIR:
+    _CANDIDATES.insert(0, os.path.normpath(_ENV_DIR))
 
 TYPE_NAMES = {v: k for k, v in
               ((n, t) for n, t in
