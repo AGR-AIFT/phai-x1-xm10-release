@@ -33,7 +33,7 @@ A suggested semester schedule for university courses. Adjust freely based on stu
 | 4 | Multi-channel ADC + safety switch | Ex.05b → 05c → 06 | Demo simultaneous measurement of 8 FSR channels |
 | 5 | USB serial communication | Ex.07 → 08 | Real-time sensor monitoring via PC terminal |
 | 6 | Binary streaming + PhAI Studio | Ex.09 | Capture 4-channel graph + analysis report |
-| 7 | USB-CDC data capture + storage | Ex.09 + PythonDecoder/CDC | Stream 10 minutes of data → save & analyze CSV |
+| 7 | USB-CDC data capture + storage | Ex.09 + [xm10 tool](../getting-started/04-pc-data-tool.en.md) | Stream 10 minutes of data → save as .xmlog → export CSV for analysis |
 | 8 | **Midterm / Mini Project 1** | (open) | "My board, my data" mini project presentation |
 | 9 | KIT H10 exoskeleton basic modes | Ex.11 → 12 → 13 | Comparison video of 3 operating modes |
 | 10 | PD real-time control | Ex.14 | Tune your own PD gains + compare step responses |
@@ -103,7 +103,7 @@ Exchange real-time messages with a PC and stream data. Essential for debugging a
 | [08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | Sensor data monitoring | ⭐⭐ | Real-time `sprintf` output of sensor data |
 | [09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | High-speed binary streaming | ⭐⭐⭐ | PhAI Studio-compatible protocol, 1 kHz transmission |
 
-> To save and analyze a captured stream on the PC, use PhAI Studio recording or the `PythonDecoder/CDC` Python samples in the repo. (On-board file storage was removed in v2.5.0 — SD card support is planned for a future HW revision.)
+> To save and analyze a captured stream on the PC, use PhAI Studio recording or the `xm10` tool in the repo — `python PythonDecoder/xm10.py recv` shows a live graph while the raw stream is saved as `.xmlog`, then `export` pulls out CSV ([guide](../getting-started/04-pc-data-tool.en.md)). (On-board file storage was removed in v2.5.0 — SD card support is planned for a future HW revision.)
 
 ---
 

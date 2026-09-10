@@ -51,6 +51,19 @@ import numpy as np
 
 # 프레임 파싱·시퀀스 회계·module 라우팅은 frame_router.py 하나로 모았다.
 # GUI 워커와 CLI 가 같은 코드를 쓰게 하려는 것이다 (예전에는 각자 복사본을 갖고 있었다).
+# 무손실 저장(.xmlog). 표준 라이브러리만 쓰므로 항상 import 된다.
+from xmlog_capture import XmLogCapture
+import schema_registry as _schema
+
+# 0x20 Total Data 디코더. 생성된 맵(xm_total_data_map.py)이 옆에 있어야 동작한다 —
+# 없으면 --total-data 만 못 쓰고 나머지(--log 포함)는 그대로 돈다.
+try:
+    from total_data_decoder import TotalDataDecoder
+    from total_data_decoder import MAP_AVAILABLE as TOTAL_DATA_MAP_AVAILABLE
+except ImportError:
+    TotalDataDecoder = None
+    TOTAL_DATA_MAP_AVAILABLE = False
+
 from frame_router import (
     parse_phai_frame, cobs_decode, FrameRouter,
     PHAI_MODULE_TOTAL_DATA, PHAI_MODULE_USER_META,
@@ -104,7 +117,43 @@ def get_module_name(mid: int) -> str:
         return f"User_0x{mid:02X}"
     return f"Unknown_0x{mid:02X}"
 
+# FW 가 보내는 채널 설명을 담는다. 예전에는 이걸 받고도 버려서 사용자 채널이
+# 늘 ch0.. 로 나왔다 — FW 는 이미 0xEF 로 이름과 단위를 보내고 있었다.
+SCHEMA_REG = _schema.SchemaRegistry()
+
+
+def feed_schema_frame(pkt, now_s: float = 0.0) -> None:
+    """스키마를 실어 오는 프레임이면 레지스트리에 먹인다. 아니면 아무 일도 안 한다."""
+    if pkt.module_id == _schema.MODULE_ID_USER_META:
+        SCHEMA_REG.feed_0xEF(pkt.payload)
+    elif pkt.module_id == _schema.MODULE_ID_SCHEMA_DESC:
+        SCHEMA_REG.feed_0xEE(pkt.payload, now_s)
+
+
+def decode_user_values(pkt):
+    """사용자 프레임 하나 -> (채널 이름들, 값들).
+
+    **타입을 아는 스키마(`0xEE`)가 있으면 그걸로 푼다.** 없을 때만 payload 를 float32
+    배열로 가정한다.
+
+    이 함수가 없던 동안 화면·CSV 는 언제나 `pkt.as_float32()` 만 썼다. 그래서 `0xEE` 가
+    도착해도 **이름만 맞고 값은 틀리는** 상태가 됐다 — 정수 필드가 float 로 재해석되니
+    숫자는 엉망인데 열 제목이 그럴듯해서 오히려 더 속기 쉽다 (2026-09-10 적대 감사 #7).
+    """
+    cs = SCHEMA_REG.get(pkt.module_id, len(pkt.payload))
+    if cs is not None and cs.source == "0xEE":
+        vals = cs.decode(pkt.payload)
+        if vals is not None and len(vals) == len(cs.names):
+            return list(cs.names), list(vals)
+    floats = pkt.as_float32()
+    return get_channel_names(pkt.module_id, len(floats)), list(floats)
+
+
 def get_channel_names(mid: int, n: int) -> list:
+    """이름의 출처 우선순위: FW 가 보낸 스키마 > 하드코딩 표 > ch0.."""
+    cs = SCHEMA_REG.get(mid, n * 4)
+    if cs is not None and cs.source in ("0xEE", "0xEF") and len(cs.names) == n:
+        return list(cs.names)
     if mid in MODULE_DEFS and MODULE_DEFS[mid][1] is not None:
         names = MODULE_DEFS[mid][1]
         if len(names) == n:
@@ -141,10 +190,14 @@ class PhAISerialWorker(QtCore.QObject):
     connection_failed = pyqtSignal(str)
     port_lost = pyqtSignal()
 
-    def __init__(self, port_name, baudrate=DEFAULT_BAUD, parent=None):
+    def __init__(self, port_name, baudrate=DEFAULT_BAUD, capture=None, parent=None):
         super().__init__(parent)
         self.port_name = port_name
         self.baudrate = baudrate
+        # 무손실 저장(.xmlog). GUI 스레드가 만들어 넘기고, 쓰기와 닫기는 **이 워커에서만**
+        # 한다 — 파일 하나를 두 스레드가 만지지 않게. 화면 큐(deque)보다 **앞**에서
+        # 적으므로 화면이 밀려 프레임을 버려도 파일은 온전하다.
+        self.capture = capture
         self._running = False
         self.good = 0
         self.crc_err = 0
@@ -200,6 +253,11 @@ class PhAISerialWorker(QtCore.QObject):
         finally:
             if ser is not None and ser.is_open:
                 ser.close()
+            if self.capture is not None:
+                try:
+                    self.capture.close()
+                except Exception as e:   # 저장 실패가 종료 신호까지 막으면 창이 굳는다
+                    self.status_msg.emit(f".xmlog close failed: {e}")
             self.finished.emit()
 
     def _parse_frame(self, frame: bytes, recv_t: float):
@@ -217,6 +275,22 @@ class PhAISerialWorker(QtCore.QObject):
             return
 
         self.total_tx_drops += pkt.tx_drops
+
+        # 스키마 프레임이면 여기서 먹인다 — 큐에 넣기 전에 해야
+        # 뒤따르는 데이터 프레임이 이름을 갖고 화면에 올라간다.
+        feed_schema_frame(pkt, pkt.recv_t)
+
+        # 무손실 저장 — 라우팅·큐보다 먼저. 화면에 안 그리는 시스템 채널도 파일에는
+        # 남아야 하고, 아래 큐 오버플로로 버려질 프레임도 파일에는 있어야 한다.
+        # CLI(run_cli)와 같은 자리다.
+        if self.capture is not None:
+            try:
+                self.capture.on_frame(pkt, int(recv_t * 1e6))
+            except Exception as e:
+                # 디스크가 찼거나 파일이 잠긴 경우. 수신은 계속하되 저장은 여기서 끝낸다 —
+                # 조용히 계속 실패하면 사용자는 파일이 있는 줄 안다.
+                self.status_msg.emit(f".xmlog write failed — 저장 중단: {e}")
+                self.capture = None
 
         # 시퀀스 회계와 module 판정은 큐에 넣기 전에 끝낸다.
         # 바로 아래 오버플로로 버려질 프레임도 '와이어로는 도착한' 프레임이다.
@@ -342,6 +416,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._pending = []
         self._written = 0
         self._last_log_path = None
+        self._xmlog_path = None
 
         self._plot_widgets = []
         self._plot_curves = []   # [(ch_idx, curve), ...]
@@ -399,6 +474,14 @@ class MainWindow(QtWidgets.QMainWindow):
         bbr.setFixedWidth(30)
         bbr.clicked.connect(self._on_browse)
         r1.addWidget(bbr)
+
+        # 무손실 저장. CSV 는 화면에 그리는 채널을 **해석한 결과**라 스키마가 늦게 오거나
+        # 디코더에 버그가 있으면 그걸로 끝이다. .xmlog 는 받은 바이트를 그대로 눕히고
+        # CSV 는 나중에 다시 뽑는다(xm10 export). 기본 ON — 이 도구를 만든 이유다.
+        self._chk_xmlog = QtWidgets.QCheckBox("Save .xmlog")
+        self._chk_xmlog.setChecked(True)
+        self._chk_xmlog.setToolTip("받은 프레임을 그대로 무손실 저장 (CSV 와 별개, 같은 폴더)")
+        r1.addWidget(self._chk_xmlog)
 
         r1.addSpacing(10)
         self._btn_screenshot = QtWidgets.QPushButton("Screenshot")
@@ -636,8 +719,24 @@ class MainWindow(QtWidgets.QMainWindow):
         self._reset_state()
         self._last_port = port
 
+        # .xmlog 는 CSV 와 같은 폴더·같은 시각 도장. 여기서 열어 SESSION 을 적고 워커에
+        # 넘긴다 — 이후 쓰기·닫기는 워커 스레드 몫이다 (PhAISerialWorker 주석 참조).
+        capture = None
+        self._xmlog_path = None
+        if self._chk_xmlog.isChecked():
+            folder = os.path.dirname(self._last_log_path) if self._last_log_path else \
+                     (self._edit_folder.text().strip() or os.path.abspath("data"))
+            stamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            try:
+                capture = XmLogCapture(os.path.join(folder, f"cdc_{stamp}.xmlog"))
+                self._xmlog_path = capture.path
+            except Exception as e:
+                self._close_log_file()
+                QtWidgets.QMessageBox.critical(self, "Error", f".xmlog 를 열 수 없다: {e}")
+                return
+
         self._serial_thread = QtCore.QThread()
-        self._worker = PhAISerialWorker(port)
+        self._worker = PhAISerialWorker(port, capture=capture)
         self._worker.moveToThread(self._serial_thread)
         self._serial_thread.started.connect(self._worker.run)
         self._worker.status_msg.connect(lambda m: self._status_bar.showMessage(m))
@@ -665,6 +764,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # 세션 내내 보여준 'Good' 은 파싱 성공한 '전체' 프레임 수인데
         # _total_recv 는 사용자 채널만 센다. 둘 다 적어야 수천 개가 사라진 것처럼 안 보인다.
         total_frames = self._worker.good if self._worker is not None else self._total_recv
+        # 워커가 닫기 전에 요약을 읽어 둔다 — finally 에서 close 된 뒤에도 카운터는 남는다.
+        cap = self._worker.capture if self._worker is not None else None
         if self._serial_thread:
             self._serial_thread.quit()
             self._serial_thread.wait()
@@ -673,9 +774,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self._close_log_file()
         self._btn_conn.setEnabled(True)
         self._btn_disc.setEnabled(False)
-        self._status_bar.showMessage(
-            f"Disconnected — {total_frames} frames ({self._total_recv} user), "
-            f"{self._written} lines saved")
+        msg = (f"Disconnected — {total_frames} frames ({self._total_recv} user), "
+               f"{self._written} lines saved")
+        if cap is not None:
+            msg += (f"  |  .xmlog: {cap.frames} frames, {cap.w.bytes_written // 1024} KB"
+                    f" → {os.path.basename(cap.path)}   (CSV 로 뽑기: xm10 export)")
+        elif self._xmlog_path is not None:
+            msg += "  |  .xmlog 저장이 도중에 중단됐다 (상태 표시줄 이전 메시지 참조)"
+        self._status_bar.showMessage(msg)
 
     # Auto-reconnect
     def _on_port_lost(self):
@@ -834,14 +940,13 @@ class MainWindow(QtWidgets.QMainWindow):
             if self._module_id < 0:
                 self._module_id = pkt.module_id
                 self._module_name = get_module_name(pkt.module_id)
-                floats0 = pkt.as_float32()
-                ch = get_channel_names(pkt.module_id, len(floats0))
+                ch, floats0 = decode_user_values(pkt)
                 self._setup_plots(ch, pkt.module_id)
                 self._write_csv_header(ch)
                 self._lbl_module.setText(
                     f"Module: {self._module_name} (0x{pkt.module_id:02X}) — {len(floats0)} ch")
 
-            floats = pkt.as_float32()
+            _names, floats = decode_user_values(pkt)
 
             # Write to rolling buffer — x-axis = device time (smooth, gap-aware)
             idx = self._write_idx % ws
@@ -870,7 +975,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # 최신값 라벨 — 이 배치의 마지막 '사용자' 프레임 기준.
         # batch[-1] 을 그대로 쓰면 그게 0x20 일 때 라벨에 엉뚱한 값이 찍힌다.
         if last_user_pkt is not None:
-            last_floats = last_user_pkt.as_float32()
+            _n2, last_floats = decode_user_values(last_user_pkt)
             for i, lbl in enumerate(self._ch_val_labels):
                 if i < len(last_floats):
                     lbl.setText(f"{last_floats[i]:.3f}")
@@ -1057,11 +1162,36 @@ class CsvReviewDialog(QtWidgets.QDialog):
 # CLI Mode
 # ============================================================================
 
-def run_cli(port, baud, output):
+def run_cli(port, baud, output, total_data=False, log=False):
     os.makedirs(output, exist_ok=True)
-    path = os.path.join(output, f"cdc_phai_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv")
+    stamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    path = os.path.join(output, f"cdc_phai_{stamp}.csv")
     print(f"[PhAI V2.2 CLI]  Port: {port}  Output: {path}")
-    print("  Ctrl+C to stop.\n")
+
+    # 0x20 은 사용자 채널이 아니라 시스템 채널이라 위 CSV 에 섞지 않는다 —
+    # 컬럼 의미가 다르고, 197채널을 사용자 CSV 에 밀어 넣으면 헤더가 어긋난다.
+    # 별도 파일로 뺀다.
+    td_dec = None
+    td_path = None
+    if total_data:
+        if not TOTAL_DATA_MAP_AVAILABLE:
+            print("  [total-data] xm_total_data_map.py 가 없어 0x20 디코딩을 건너뛴다.")
+        else:
+            td_dec = TotalDataDecoder()
+            td_path = os.path.join(output, f"cdc_total_{stamp}.csv")
+            meta_path = td_path + ".meta.txt"
+            with open(meta_path, "w", encoding="utf-8") as mf:
+                print("# XM10 Total Data (module_id 0x20) capture", file=mf)
+                print(f"port={port} baud={baud}", file=mf)
+                print(f"started={datetime.now().isoformat(timespec='seconds')}", file=mf)
+                print(td_dec.identity(), file=mf)
+                print("", file=mf)
+                print("# 주의: 보드가 어느 맵으로 보냈는지는 와이어에 없다.", file=mf)
+                print("#       위 fingerprint 는 PC 가 푼 맵이다.", file=mf)
+            print(f"  [total-data] {td_path}")
+            print(f"  [total-data] {td_dec.identity()}")
+
+    print("  Ctrl+C to stop.")
     try:
         ser = serial.Serial(port, baud, timeout=DEFAULT_TIMEOUT)
     except Exception as e:
@@ -1078,6 +1208,17 @@ def run_cli(port, baud, output):
     # 같은 버그(시퀀스 클램프, module 미분리)를 두 번 고쳐야 했다.
     router = FrameRouter()
 
+    # 두 파일을 한 with 로 묶지 않는다 — td_out 은 없을 수도 있어서다.
+    # 무손실 저장 — 해석하기 전에 먼저 눕힌다. 스키마를 몰라도 적는다.
+    cap = None
+    if log:
+        cap = XmLogCapture(os.path.join(output, f"cdc_{stamp}.xmlog"),
+                           fw_build_id="", total_data_map_version=(
+                               td_dec.version if td_dec is not None else ""))
+        print(f"  [log] {cap.path}")
+
+    td_out = open(td_path, "w", encoding="utf-8") if td_path else None
+    td_hdr_written = False
     try:
         with open(path, 'w') as fout:
             while True:
@@ -1097,11 +1238,28 @@ def run_cli(port, baud, output):
                             errs += 1
                         else:
                             good += 1
+                            feed_schema_frame(pkt, now)
+                            if cap is not None:
+                                # 라우팅 판정 전에 적는다 — 화면에 안 그리는
+                                # 시스템 채널도 파일에는 남아야 한다.
+                                cap.on_frame(pkt, int(now * 1e6))
                             route_tag, _delta = router.route(pkt)
+                            if (td_out is not None and route_tag == 'system'
+                                    and pkt.module_id == PHAI_MODULE_TOTAL_DATA):
+                                vals20 = td_dec.scaled(pkt.payload)
+                                if vals20 is not None:
+                                    if not td_hdr_written:
+                                        print(td_dec.csv_header(), file=td_out)
+                                        td_hdr_written = True
+                                    row = ','.join('%.6g' % v for v in vals20)
+                                    print('%.6f,%.6f,%d,%d,%s' % (
+                                        pkt.device_time_s, now, pkt.seq_id,
+                                        pkt.tx_drops, row), file=td_out)
+                                    if good % FLUSH_EVERY == 0:
+                                        td_out.flush()
                             if route_tag == 'user_primary':
-                                floats = pkt.as_float32()
+                                ch, floats = decode_user_values(pkt)
                                 if not hdr_written:
-                                    ch = get_channel_names(pkt.module_id, len(floats))
                                     fout.write("time_s,pc_time_s,seq_id,module_id,tx_drops,"
                                                + ",".join(ch) + "\n")
                                     hdr_written = True
@@ -1137,8 +1295,18 @@ def run_cli(port, baud, output):
             print("  system frames:")
             for line in sys_lines:
                 print(f"    {line}")
+        if cap is not None:
+            print(f"  log: {cap.summary()}")
+            print(f"       CSV 로 뽑기: python CDC/xmlog_export.py {cap.path} --csv data/")
+        if td_dec is not None:
+            print(f"  total data: {td_dec.summary()}")
+            print(f"              {td_path}")
     finally:
         ser.close()
+        if td_out is not None:
+            td_out.close()
+        if cap is not None:
+            cap.close()
 
 
 # ============================================================================
@@ -1151,12 +1319,19 @@ def main():
     ap.add_argument("--port", type=str)
     ap.add_argument("--baud", type=int, default=DEFAULT_BAUD)
     ap.add_argument("--output", type=str, default="data")
+    ap.add_argument("--log", action="store_true",
+                    help="받은 프레임을 그대로 .xmlog 에 무손실 저장 "
+                         "(스키마를 몰라도 적는다. CSV 는 xmlog_export.py 로 뽑는다)")
+    ap.add_argument("--total-data", action="store_true",
+                    help="0x20 Total Data Packet 을 생성된 맵으로 디코딩해 "
+                         "별도 CSV(cdc_total_*.csv)로 저장 (CLI 전용)")
     args = ap.parse_args()
 
     if args.cli:
         if not args.port:
             print("--port required"); sys.exit(1)
-        run_cli(args.port, args.baud, args.output)
+        run_cli(args.port, args.baud, args.output,
+                total_data=args.total_data, log=args.log)
     else:
         app = QtWidgets.QApplication(sys.argv)
         apply_theme(app, _MODERN_LIGHT)

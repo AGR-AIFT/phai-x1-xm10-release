@@ -100,7 +100,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 |------|------|---------------|
 | **PhAI Studio** | 실시간 데이터 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
 | **angel Sensor Studio** | 진단/검증 GUI (Python/PySide6, 별도 배포) | EMG/IMU Hub — XM10 과 CAN-FD 로 연계 가능 |
-| **PythonDecoder** (`PythonDecoder/`) | USB-CDC 실시간 수신 샘플 (Python) | 본 레포 내장 |
+| **xm10 PC 도구** (`PythonDecoder/xm10.py`) | 실시간 그래프 + 무손실 저장(.xmlog) + CSV 내보내기. `demo` 로 보드 없이 체험, `build_exe.py` 로 실행파일 | 본 레포 내장 — [안내](docs/getting-started/04-pc-data-tool.md) |
 
 ---
 

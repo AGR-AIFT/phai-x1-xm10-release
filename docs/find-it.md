@@ -68,7 +68,9 @@
 |------|--------|
 | 외골격 데이터로 AI 모델 학습 | [docs/advanced/ai-data-pipeline.md](advanced/ai-data-pipeline.md) |
 | 보드 안에서 Tiny NN 추론 | Ex.16, Ex.36 + [advanced/README.md](advanced/README.md) |
-| Python 디코더 사용법 | [PythonDecoder/](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/PythonDecoder/) |
+| PC 에서 데이터 받기 / 저장 / CSV 뽑기 (Python, exe) | [getting-started/04-pc-data-tool.md](getting-started/04-pc-data-tool.md) |
+| 보드 없이 도구 먼저 써 보기 | `python xm10.py demo` — [04-pc-data-tool.md](getting-started/04-pc-data-tool.md) 첫 절 |
+| 프레임이 빠지는지 판정 | `python xm10.py soak` — [04-pc-data-tool.md](getting-started/04-pc-data-tool.md#손실-없이-받고-있나-확인하기--soak) |
 | PhAI Studio 사용법 | 각 예제 README 의 4 단계 실험 부분 + [studio.onephai.com](https://studio.onephai.com) |
 | 내 알고리즘을 1 ms 안에 끝내고 싶음 | Ex.18 Debug Monitor + Ex.19 Memory Aware Design |
 | 자기주도 학습 트랙 (관심 분야별) | [advanced/README.md - 자기주도 학습 경로](advanced/README.md#자기주도-학습-권장-경로) |

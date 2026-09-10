@@ -55,6 +55,11 @@ def _is_excluded(rel: Path) -> bool:
 TOP_LEVEL_ASSETS = [
     "docs", ".claude",
     "AGENTS.md", "README.md", "CHANGELOG.md", "LICENSE",
+    # PC 데이터 도구 (xm10.py). Rev 구분이 없어 두 ZIP 에 같은 것이 들어간다.
+    # 이게 빠져 있던 동안 docs/getting-started/04 가 안내하는 `cd PythonDecoder` 를
+    # ZIP 으로 받은 학생은 따라갈 수 없었다 (2026-09-10 문서 검증에서 발견).
+    # git 추적 파일만 복사되므로 dist/·build/·data/·__pycache__ 는 자동으로 빠진다.
+    "PythonDecoder",
 ]
 
 # ZIP 검증 — 핵심 항목 (path prefix)
@@ -66,6 +71,8 @@ REQUIRED = [
     "docs/getting-started",
     "Examples/00_Quick_Start/README.md",
     "XM_FW/libXM_Lib.a",
+    "PythonDecoder/xm10.py",
+    "PythonDecoder/CDC/xm_total_data_map.py",   # 없으면 0x20 을 못 푼다
 ]
 
 

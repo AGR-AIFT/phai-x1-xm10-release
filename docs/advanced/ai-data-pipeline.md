@@ -13,7 +13,7 @@ XM10 보드에서 모은 외골격 데이터를 PyTorch / scikit-learn 같은 �
   ↓                        ↓                          ↓                     ↓
 KIT H10 착용  →  USB-CDC 실시간 스트리밍   →   CSV / npy 출력   →  PyTorch DataLoader
                  (PhAI Studio 또는                                    또는 sklearn
-                  PythonDecoder/CDC)
+                  xm10 도구 → .xmlog → export)
 ```
 
 두 가지 길이 있습니다. 목적에 따라 골라가세요.
@@ -48,11 +48,14 @@ void Control_Loop(void) {
 두 가지 방법이 있습니다.
 
 - **PhAI Studio** — USB 연결 → 채널 `0xF0` 선택 → 실시간 그래프 확인 + 녹화 버튼 → export 로 `.csv` 저장. 가장 간단합니다.
-- **PythonDecoder/CDC** — 직접 파싱이 필요하면 레포 내 파이썬 샘플로 수신하면서 CSV 를 자동 저장합니다.
+- **xm10 도구** (레포 내 `PythonDecoder/`) — 받은 바이트를 그대로 `.xmlog` 에 저장해 두고 CSV 는 나중에 뽑습니다. 채널 이름·구성을 바꿔도 예전 기록을 다시 뽑을 수 있어 학습 데이터셋 관리에 유리합니다. 실행파일로 만들면 파이썬 없는 PC 에서도 됩니다 ([안내](../getting-started/04-pc-data-tool.md)).
 
 ```bash
-python PythonDecoder/CDC/cdc_phai_receiver.py --cli --port COM6   # CSV 자동 저장
+python PythonDecoder/xm10.py recv --cli --port COM6 --log         # 콘솔 수신 + .xmlog 저장 (Ctrl+C)
+python PythonDecoder/xm10.py export data/cdc_<시각>.xmlog --csv out/   # 채널별 CSV 로
 ```
+
+`out/` 에 `..._user_0xF0.csv`(여러분 채널)와 `..._total_0x20.csv`(보드가 항상 보내는 197채널 — 관절 각도·토크·IMU·GRF)가 생깁니다. 두 파일 모두 앞에 `pc_time_us`(PC 수신 시각)와 `seq_id`(보드가 보낸 순번, 모든 채널이 하나의 순번을 공유) 열이 있어 시간축을 맞출 수 있습니다.
 
 ### 3. 학습 프레임워크에서 로드
 
@@ -140,7 +143,7 @@ void Control_Loop(void) {
 ## 자주 막히는 부분
 
 - **CSV 가 너무 큼/느림** — 큰 데이터셋은 `.npy` 또는 `.parquet` 로 변환해 로드. CSV 는 사람 확인용으로만.
-- **스트리밍 중 패킷 누락** — `PythonDecoder/CDC/cdc_csv_reviewer.py` 의 Sequence Gap(ΔSeq) / Tx Drop 분석으로 누락 시점을 확인하고, 전송 데이터량을 줄이거나 채널을 간추리세요.
+- **스트리밍 중 패킷 누락** — `python PythonDecoder/xm10.py soak --port COM6 --minutes 10` 으로 빠진 프레임이 있는지 판정하세요. `.xmlog` 로 받았다면 `export` 요약에 빠진 구간(GAP)이 그대로 남아 있습니다. 누락이 있으면 전송 데이터량을 줄이거나 채널을 간추리세요.
 - **NaN / Inf 값** — 보드 측에서 `assert(isfinite(value))` 추가. 학습 직전에 `np.isfinite()` 로 필터링.
 - **클래스 불균형** — Stance/Swing 같은 보행 phase 는 7:3 정도로 비균등. `class_weight` 옵션 또는 SMOTE 사용.
 - **보드에서 추론이 1 ms 를 넘김** — 모델 양자화 (int8) 또는 layer 수 감소. STM32H7 의 FPU 활용 확인.

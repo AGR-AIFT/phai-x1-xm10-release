@@ -13,7 +13,7 @@ This page maps the end-to-end flow from collecting exoskeleton data on the XM10 
        ↓                       ↓                             ↓                    ↓
 KIT H10 worn  →  USB-CDC real-time streaming   →   CSV / npy output  →  PyTorch DataLoader
                  (PhAI Studio or                                          or sklearn
-                  PythonDecoder/CDC)
+                  xm10 tool → .xmlog → export)
 ```
 
 There are two paths. Choose based on your goal.
@@ -48,11 +48,14 @@ void Control_Loop(void) {
 Two options:
 
 - **PhAI Studio** — connect via USB → select channel `0xF0` → watch the live graph and click the record button → export to `.csv`. Simplest.
-- **PythonDecoder/CDC** — if you need direct parsing, receive with the Python sample in the repo, which saves CSV automatically.
+- **xm10 tool** (in the repo's `PythonDecoder/`) — saves the raw bytes as-is to `.xmlog` and lets you pull CSV out later. Since you can re-export old recordings even after changing channel names/layout, it's better suited for managing a training dataset. Build it as an executable and it works on PCs without Python too ([guide](../getting-started/04-pc-data-tool.en.md)).
 
 ```bash
-python PythonDecoder/CDC/cdc_phai_receiver.py --cli --port COM6   # auto-saves CSV
+python PythonDecoder/xm10.py recv --cli --port COM6 --log         # receive to console + save .xmlog (Ctrl+C to stop)
+python PythonDecoder/xm10.py export data/cdc_<timestamp>.xmlog --csv out/   # export per-channel CSV
 ```
+
+`out/` gets `..._user_0xF0.csv` (your channel) and `..._total_0x20.csv` (the 197 channels the board always sends — joint angle/torque, IMU, GRF). Both files carry `pc_time_us` (PC receive time) and `seq_id` (the board's send sequence, shared across all channels) columns up front so you can align the time axis.
 
 ### 3. Loading into a Training Framework
 
@@ -140,7 +143,7 @@ Measure inference time using the loop profiling pattern from `Ex.18 Debug Monito
 ## Common Pitfalls
 
 - **CSV is too large / slow** — For large datasets, convert to `.npy` or `.parquet` for loading. Keep CSV for human inspection only.
-- **Packet loss while streaming** — Use the Sequence Gap (ΔSeq) / Tx Drop analysis in `PythonDecoder/CDC/cdc_csv_reviewer.py` to find where loss occurred, then reduce the data volume or trim channels.
+- **Packet loss while streaming** — Run `python PythonDecoder/xm10.py soak --port COM6 --minutes 10` to check for dropped frames. If you captured via `.xmlog`, the missing ranges (GAP) show up right in the `export` summary. If there's loss, reduce the data volume or trim channels.
 - **NaN / Inf values** — Add `assert(isfinite(value))` on the board side. Filter with `np.isfinite()` just before training.
 - **Class imbalance** — Gait phases like Stance/Swing are naturally imbalanced (roughly 7:3). Use the `class_weight` option or SMOTE.
 - **On-board inference exceeds 1 ms** — Apply model quantization (int8) or reduce the number of layers. Verify that the STM32H7's FPU is being utilized.

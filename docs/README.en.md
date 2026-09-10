@@ -36,6 +36,7 @@ Start here if this is your first time.
 | 01 | [Hardware Setup](getting-started/01-hardware-setup.md) | Connect KIT H10, ST-Link, and sensor hubs |
 | 02 | [Development Environment Setup](getting-started/02-software-setup.md) | Install STM32CubeIDE, clone the repository |
 | 03 | [First Build & Run](getting-started/03-first-build.md) | Import the project, build, and upload firmware |
+| 04 | [Get Data on Your PC](getting-started/04-pc-data-tool.en.md) | The `xm10` tool — graphs, lossless recording, CSV. Try `demo` first, no board required |
 
 ---
 
@@ -115,7 +116,7 @@ Common issues covering build errors, USB connection problems, communication fail
 
 - [🧭 find-it.md](find-it.md) — Quick keyword-to-page lookup
 - [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — Source code for all 46 examples (each folder includes a 5-step README)
-- [Python Tools](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/PythonDecoder/) — USB-CDC real-time receiver samples
+- [PC Data Tool xm10](getting-started/04-pc-data-tool.en.md) — Graphs, lossless recording, CSV export (code lives in [PythonDecoder/](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/PythonDecoder/))
 - [Release Notes](release-notes/) — Per-version attachments and compatibility matrix
 - [Changelog](https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md) — Summary of changes by version
 - [XM10 SDK](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/) — Rev1.1 / Rev2.0 SDK projects

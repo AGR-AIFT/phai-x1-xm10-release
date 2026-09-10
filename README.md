@@ -154,7 +154,7 @@ Extension_Module/
 ├── XM10_SDK/              ← STM32CubeIDE 프로젝트
 │   ├── Rev1.1/Extension_Module/  ← PCB Rev 1.1 용
 │   └── Rev2.0/Extension_Module/  ← PCB Rev 2.0 용 (대부분 여기)
-├── PythonDecoder/         ← USB-CDC 실시간 수신 샘플
+├── PythonDecoder/         ← PC 데이터 도구 xm10 (그래프·무손실 저장·CSV, exe 로도)
 ├── assets/img/            ← 보드 사진 + 다이어그램 (사용자가 추가)
 ├── .claude/skills/        ← Claude Code 사용자 온보딩 / 예제 트러블슈팅 스킬
 ├── CLAUDE.md / AGENTS.md  ← AI 코딩 도구 진입점 (Claude Code 등)
@@ -179,7 +179,7 @@ Extension_Module/
 | [Advanced Topics](docs/advanced/) | AI 데이터 파이프라인 + 관심 분야별 자기주도 학습 |
 | [Troubleshooting](docs/troubleshooting.md) | 자주 마주치는 문제 정리 |
 | [Examples](examples/) | 46 개 예제 (각 폴더에 5 단계 README) |
-| [Python Tools](PythonDecoder/) | USB-CDC 실시간 수신 샘플 (Python) |
+| [PC 데이터 도구](docs/getting-started/04-pc-data-tool.md) | `xm10` — 그래프로 보고, 원본 그대로 저장하고, CSV 로 뽑기. 보드 없이 `demo` 로 체험 |
 | [Release Notes](docs/release-notes/) | 버전별 첨부 파일 + 호환성 매트릭스 |
 | [Changelog](CHANGELOG.md) | 버전별 변경 이력 요약 |
 
