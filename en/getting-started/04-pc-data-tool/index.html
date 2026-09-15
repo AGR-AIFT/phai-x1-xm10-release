@@ -10,17 +10,17 @@
       
       
       
-        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/en/api-reference/08-rtc-clock/">
+        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/en/getting-started/04-pc-data-tool/">
       
       
-        <link rel="prev" href="../07-memory-management/">
+        <link rel="prev" href="../03-first-build/">
       
       
-        <link rel="next" href="../09-task-creation/">
+        <link rel="next" href="../00-claude-code-quickstart/">
       
       
         
-          <link rel="alternate" href="../../../api-reference/08-rtc-clock/" hreflang="ko">
+          <link rel="alternate" href="../../../getting-started/04-pc-data-tool/" hreflang="ko">
         
           <link rel="alternate" href="./" hreflang="en">
         
@@ -31,7 +31,7 @@
     
     
       
-        <title>Real-Time Clock (RTC) - XM10 Extension Module</title>
+        <title>Get Data on PC - XM10 Extension Module</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#api-08-rtc-real-time-clock" class="md-skip">
+        <a href="#04--receiving-data-on-your-pc--the-xm10-tool" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Real-Time Clock (RTC)
+              Get Data on PC
             
           </span>
         </div>
@@ -167,7 +167,7 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../../api-reference/08-rtc-clock/" hreflang="ko" class="md-select__link">
+            <a href="../../../getting-started/04-pc-data-tool/" hreflang="ko" class="md-select__link">
               한국어
             </a>
           </li>
@@ -345,8 +345,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -369,11 +371,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -394,7 +396,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -412,7 +414,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/01-hardware-setup/" class="md-nav__link">
+      <a href="../01-hardware-setup/" class="md-nav__link">
         
   
   
@@ -440,7 +442,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/02-software-setup/" class="md-nav__link">
+      <a href="../02-software-setup/" class="md-nav__link">
         
   
   
@@ -468,7 +470,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/03-first-build/" class="md-nav__link">
+      <a href="../03-first-build/" class="md-nav__link">
         
   
   
@@ -493,10 +495,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../getting-started/04-pc-data-tool/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Get Data on PC
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -512,6 +541,164 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#5-minute-demo--no-board-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-Minute Demo — No Board Required
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-a-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connecting a Board
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connecting a Board">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-find-the-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Find the Port
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-view-as-a-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. View as a Graph
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-saved-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Saved Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-export-csv-from-xmlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Export CSV from .xmlog
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#console-only-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Console-Only Mode
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-for-dropped-frames--soak" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checking for Dropped Frames — soak
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sending-your-own-data-board-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sending Your Own Data (Board Side)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-a-standalone-executable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building a Standalone Executable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-something-goes-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When Something Goes Wrong
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-in-the-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's in the Folder
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -524,7 +711,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+      <a href="../00-claude-code-quickstart/" class="md-nav__link">
         
   
   
@@ -717,8 +904,6 @@
       
   
   
-    
-  
   
   
     
@@ -755,15 +940,15 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../api-reference/" class="md-nav__link ">
               
   
   
@@ -787,7 +972,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -807,7 +992,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../01-task-state-machine/" class="md-nav__link">
+      <a href="../../api-reference/01-task-state-machine/" class="md-nav__link">
         
   
   
@@ -835,7 +1020,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../02-h10-control-n-data/" class="md-nav__link">
+      <a href="../../api-reference/02-h10-control-n-data/" class="md-nav__link">
         
   
   
@@ -863,7 +1048,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../03-led-btn-control/" class="md-nav__link">
+      <a href="../../api-reference/03-led-btn-control/" class="md-nav__link">
         
   
   
@@ -891,7 +1076,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../04-external-io/" class="md-nav__link">
+      <a href="../../api-reference/04-external-io/" class="md-nav__link">
         
   
   
@@ -919,7 +1104,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../05-usb-connectivity/" class="md-nav__link">
+      <a href="../../api-reference/05-usb-connectivity/" class="md-nav__link">
         
   
   
@@ -947,7 +1132,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../07-memory-management/" class="md-nav__link">
+      <a href="../../api-reference/07-memory-management/" class="md-nav__link">
         
   
   
@@ -972,37 +1157,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Real-Time Clock (RTC)
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../api-reference/08-rtc-clock/" class="md-nav__link">
         
   
   
@@ -1018,126 +1176,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#types" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Types
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Types">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#xmdatetime_t" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XmDateTime_t
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#api-functions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        API Functions
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="API Functions">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#xm_rtc_setdatetime" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_RTC_SetDateTime()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#xm_rtc_getdatetime" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_RTC_GetDateTime()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#xm_rtc_isrunning" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_RTC_IsRunning()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Usage Example
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#-common-mistakes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ⚠️ Common Mistakes
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1150,7 +1188,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../09-task-creation/" class="md-nav__link">
+      <a href="../../api-reference/09-task-creation/" class="md-nav__link">
         
   
   
@@ -1218,7 +1256,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../ref/" class="md-nav__link ">
+            <a href="../../api-reference/ref/" class="md-nav__link ">
               
   
   
@@ -1262,7 +1300,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ref/xm-api/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api/" class="md-nav__link">
         
   
   
@@ -1290,7 +1328,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ref/xm-api-data/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-data/" class="md-nav__link">
         
   
   
@@ -1318,7 +1356,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ref/xm-api-tsm/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-tsm/" class="md-nav__link">
         
   
   
@@ -1346,7 +1384,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ref/xm-api-led-btn/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-led-btn/" class="md-nav__link">
         
   
   
@@ -1374,7 +1412,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ref/xm-api-external-io/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-external-io/" class="md-nav__link">
         
   
   
@@ -1402,7 +1440,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ref/xm-api-usb/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-usb/" class="md-nav__link">
         
   
   
@@ -1430,7 +1468,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ref/xm-api-memory/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-memory/" class="md-nav__link">
         
   
   
@@ -1458,7 +1496,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ref/xm-api-rtc/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-rtc/" class="md-nav__link">
         
   
   
@@ -1486,7 +1524,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ref/xm-api-freertos/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-freertos/" class="md-nav__link">
         
   
   
@@ -1514,7 +1552,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ref/xm-api-user-custom/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-user-custom/" class="md-nav__link">
         
   
   
@@ -2280,22 +2318,66 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#types" class="md-nav__link">
+  <a href="#5-minute-demo--no-board-required" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Types
+        5-Minute Demo — No Board Required
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Types">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-a-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connecting a Board
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connecting a Board">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#xmdatetime_t" class="md-nav__link">
+  <a href="#1-find-the-port" class="md-nav__link">
     <span class="md-ellipsis">
       
-        XmDateTime_t
+        1. Find the Port
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-view-as-a-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. View as a Graph
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-saved-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Saved Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-export-csv-from-xmlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Export CSV from .xmlog
       
     </span>
   </a>
@@ -2308,60 +2390,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#api-functions" class="md-nav__link">
+  <a href="#console-only-mode" class="md-nav__link">
     <span class="md-ellipsis">
       
-        API Functions
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="API Functions">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#xm_rtc_setdatetime" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_RTC_SetDateTime()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#xm_rtc_getdatetime" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_RTC_GetDateTime()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#xm_rtc_isrunning" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_RTC_IsRunning()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Usage Example
+        Console-Only Mode
       
     </span>
   </a>
@@ -2369,10 +2401,54 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#-common-mistakes" class="md-nav__link">
+  <a href="#checking-for-dropped-frames--soak" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ⚠️ Common Mistakes
+        Checking for Dropped Frames — soak
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sending-your-own-data-board-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sending Your Own Data (Board Side)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-a-standalone-executable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building a Standalone Executable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-something-goes-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When Something Goes Wrong
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-in-the-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's in the Folder
       
     </span>
   </a>
@@ -2399,197 +2475,214 @@
   
 
 
-<h1 id="api-08-rtc-real-time-clock">API 08: RTC (Real-Time Clock)<a class="headerlink" href="#api-08-rtc-real-time-clock" title="Permanent link">&para;</a></h1>
+<h1 id="04--receiving-data-on-your-pc--the-xm10-tool">04 — Receiving Data on Your PC — the <code>xm10</code> Tool<a class="headerlink" href="#04--receiving-data-on-your-pc--the-xm10-tool" title="Permanent link">&para;</a></h1>
+<p>A tool for <strong>plotting as a live graph, saving raw, and exporting to CSV</strong> the data your board streams out over USB. It lives in the <code>Extension_Module/PythonDecoder/</code> folder — run it directly with Python, or bundle it into a single executable for a PC that doesn't have Python installed.</p>
 <blockquote>
-<p>📌 <strong>What you'll learn</strong>: How to read and write date/time using the external RTC (MCP79510), and how to detect a dead backup battery.
-⏱️ Estimated reading time: 10 minutes
-🧰 Prerequisites: None (standalone API)
-🎯 Key functions: <code>XM_RTC_SetDateTime</code> / <code>XM_RTC_GetDateTime</code> / <code>XM_RTC_IsRunning</code></p>
-<p><strong>Header file</strong>: <code>xm_api_rtc.h</code></p>
+<p><strong>Where is it?</strong> When you unzip the SDK, <code>Extension_Module\PythonDecoder\</code> is included. If your ZIP doesn't have that folder (an older release), grab just the <code>PythonDecoder/</code> folder from the GitHub repo and put it anywhere — it's the same files regardless of board revision.</p>
+<p><strong>How is this different from PhAI Studio?</strong> PhAI Studio is the official tool you use straight from the browser. This is an open-source, local tool. It <strong>saves the raw bytes before interpreting them</strong>, so you can re-export later even if the channel layout changes, and if you know Python you can modify it however you like. The two tools <strong>can't have the same COM port open at the same time</strong> — only run one at a time.</p>
 </blockquote>
-<p>Date/time management API for the MCP79510 RTC. Internally converts the 2-digit year (0–99) stored on the chip to a 4-digit year (2000–2099).</p>
 <hr />
-<h2 id="types">Types<a class="headerlink" href="#types" title="Permanent link">&para;</a></h2>
-<h3 id="xmdatetime_t"><code>XmDateTime_t</code><a class="headerlink" href="#xmdatetime_t" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">year</span><span class="p">;</span><span class="w">      </span><span class="c1">// Year (2000–2099)</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">month</span><span class="p">;</span><span class="w">     </span><span class="c1">// Month (1–12)</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">day</span><span class="p">;</span><span class="w">       </span><span class="c1">// Day (1–31)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">weekday</span><span class="p">;</span><span class="w">   </span><span class="c1">// Day of week (1=Mon … 7=Sun)</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">hour</span><span class="p">;</span><span class="w">      </span><span class="c1">// Hour (0–23)</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">minute</span><span class="p">;</span><span class="w">    </span><span class="c1">// Minute (0–59)</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">second</span><span class="p">;</span><span class="w">    </span><span class="c1">// Second (0–59)</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">}</span><span class="w"> </span><span class="n">XmDateTime_t</span><span class="p">;</span>
+<h2 id="5-minute-demo--no-board-required">5-Minute Demo — No Board Required<a class="headerlink" href="#5-minute-demo--no-board-required" title="Permanent link">&para;</a></h2>
+<p>You can watch the whole flow once even without a board yet.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>Extension_Module/PythonDecoder<span class="w">   </span><span class="c1"># inside the unzipped SDK folder</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>pyserial<span class="w"> </span>pyqt5<span class="w"> </span>pyqtgraph<span class="w"> </span>numpy<span class="w">      </span><span class="c1"># first time only</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>python<span class="w"> </span>xm10.py<span class="w"> </span>demo
 </code></pre></div>
+<p>This feeds data made to look like it came from a real board into the actual receive code, saves it, reads it back, exports it to CSV, and self-checks 17 items. You should see this at the end:</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>데모 통과 — 17/17 항목. 산출물:
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>   demo_out\demo.xmlog
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>   demo_out\csv\demo_total_0x20.csv
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>   demo_out\csv\demo_user_0xF0.csv
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>   ...
+</code></pre></div>
+<em>(Real console output, in Korean: "Demo passed — 17/17 items. Artifacts:" followed by the file list.)</em></p>
+<p>Open <code>demo_out\csv\demo_user_0xF0.csv</code>. The first three columns (<code>pc_time_us</code> receive time, <code>seq_id</code> receive sequence number, <code>activation_id</code> a number assigned per connection) are receive metadata added by the PC; after those come <code>state, contact, emg_rms, angle_x10, tick, torque[0], torque[1]</code> — the field names defined in the board-side C struct became the CSV columns, unchanged. That's exactly what this tool is for.</p>
 <hr />
-<h2 id="api-functions">API Functions<a class="headerlink" href="#api-functions" title="Permanent link">&para;</a></h2>
-<h3 id="xm_rtc_setdatetime"><code>XM_RTC_SetDateTime()</code><a class="headerlink" href="#xm_rtc_setdatetime" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_RTC_SetDateTime</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">XmDateTime_t</span><span class="o">*</span><span class="w"> </span><span class="n">dt</span><span class="p">);</span>
+<h2 id="connecting-a-board">Connecting a Board<a class="headerlink" href="#connecting-a-board" title="Permanent link">&para;</a></h2>
+<h3 id="1-find-the-port">1. Find the Port<a class="headerlink" href="#1-find-the-port" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>xm10.py<span class="w"> </span>ports
 </code></pre></div>
-<p>Sets the date and time on the RTC.</p>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>dt</code></td>
-<td>Date/time to set (year: 2000–2099)</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Return value</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>true</code></td>
-<td>Success</td>
-</tr>
-<tr>
-<td><code>false</code></td>
-<td>Failure (value out of range or SPI error)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="xm_rtc_getdatetime"><code>XM_RTC_GetDateTime()</code><a class="headerlink" href="#xm_rtc_getdatetime" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_RTC_GetDateTime</span><span class="p">(</span><span class="n">XmDateTime_t</span><span class="o">*</span><span class="w"> </span><span class="n">dt</span><span class="p">);</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>포트 3개:
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  COM6     0483:5740  USB 직렬 장치(COM6)          &lt;- XM10 후보
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  COM11    -          표준 Bluetooth에서 직렬 링크(COM11)
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  COM12    -          표준 Bluetooth에서 직렬 링크(COM12)
 </code></pre></div>
-<p>Reads the current date and time from the RTC.</p>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>dt</code></td>
-<td>Pointer to the structure that receives the date/time</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Return value</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>true</code></td>
-<td>Success</td>
-</tr>
-<tr>
-<td><code>false</code></td>
-<td>Failure (SPI error)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="xm_rtc_isrunning"><code>XM_RTC_IsRunning()</code><a class="headerlink" href="#xm_rtc_isrunning" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_RTC_IsRunning</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<em>(3 ports found. COM6 is flagged as the XM10 candidate; COM11/COM12 are Bluetooth virtual serial links.)</em></p>
+<p>If no XM10 candidate shows up, check the cable and the board's power. Seeing only Bluetooth virtual ports is common — those aren't the XM10.</p>
+<h3 id="2-view-as-a-graph">2. View as a Graph<a class="headerlink" href="#2-view-as-a-graph" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>xm10.py<span class="w"> </span>recv
 </code></pre></div>
-<p>Checks whether the RTC oscillator is running.</p>
+<p>A window opens. Pick your <strong>Port</strong> in the top row and click <strong>Connect</strong> — the board's user channels start plotting live. If you registered names with <code>XM_SetUsbCustomMeta</code>, as in Example 09, those names show up in the graph titles.</p>
 <table>
 <thead>
 <tr>
-<th>Return value</th>
-<th>Meaning</th>
+<th style="text-align: left;">Button</th>
+<th style="text-align: left;">What it does</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>true</code></td>
-<td>Running</td>
+<td style="text-align: left;"><strong>Refresh</strong></td>
+<td style="text-align: left;">Re-read the port list — if you opened the window before plugging in the board, click this or it won't show up</td>
 </tr>
 <tr>
-<td><code>false</code></td>
-<td>Stopped (e.g., dead backup battery)</td>
+<td style="text-align: left;"><strong>Connect / Disconnect</strong></td>
+<td style="text-align: left;">Connect / disconnect</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Freeze</strong></td>
+<td style="text-align: left;">Pause the graph only (saving keeps going)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Output</strong></td>
+<td style="text-align: left;">Folder where files are saved (default <code>data/</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Save .xmlog</strong></td>
+<td style="text-align: left;">Save the received bytes as-is (on by default — see below)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Screenshot</strong></td>
+<td style="text-align: left;">Save the current view as a PNG</td>
 </tr>
 </tbody>
 </table>
+<p>When you disconnect, the status bar at the bottom shows how many frames were received and which file they were saved to.</p>
+<h3 id="3-saved-files">3. Saved Files<a class="headerlink" href="#3-saved-files" title="Permanent link">&para;</a></h3>
+<p>Each time you connect, two kinds of files show up in the <code>Output</code> folder.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">File</th>
+<th style="text-align: left;">What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>cdc_phai_&lt;timestamp&gt;.csv</code></td>
+<td style="text-align: left;">The user channels plotted on screen, as a table (opens directly in Excel)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>cdc_&lt;timestamp&gt;.xmlog</code></td>
+<td style="text-align: left;"><strong>Every</strong> frame received, raw bytes (explained below)</td>
+</tr>
+</tbody>
+</table>
+<p>Why save a second file when the CSV should be enough? The CSV is <strong>already interpreted</strong> at the moment it's received. If the channel names arrived after the data, or you changed the channel layout afterward, or there was a mistake in interpretation, that CSV is final — you're stuck with it. The <code>.xmlog</code> is laid down without any interpretation, so you can always re-export it later. It also includes the system channels that never get plotted on screen (the 0x20 Total Data, 197 channels).</p>
+<h3 id="4-export-csv-from-xmlog">4. Export CSV from <code>.xmlog</code><a class="headerlink" href="#4-export-csv-from-xmlog" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python<span class="w"> </span>xm10.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>data/cdc_20260910_143000.xmlog<span class="w">              </span><span class="c1"># summary of what happened</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>python<span class="w"> </span>xm10.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>data/cdc_20260910_143000.xmlog<span class="w"> </span>--csv<span class="w"> </span>out/<span class="w">   </span><span class="c1"># one CSV per channel</span>
+</code></pre></div>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>CSV:
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  cdc_..._total_0x20.csv      12000 rows   [generated-map] v2.8 ...
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  cdc_..._user_0xF0.csv       12000 rows   [0xEF] JSON 메타 4채널  ⚠ 타입 미상 — float32 가정
+</code></pre></div>
+<em>("JSON meta, 4 channels"; the warning reads "type unknown — assuming float32".)</em></p>
+<p><code>total_0x20</code> is the 197 channels the board always sends (joint angles, torque, IMU, GRF, etc.), and <code>user_0xF0</code> is the channel you sent from your own example code. Channel names are stored inside the file itself, so there's nothing extra to configure when exporting.</p>
 <hr />
-<h2 id="usage-example">Usage Example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="c1">// Check whether the RTC is running and set the time if it isn't</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">XM_RTC_IsRunning</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">        </span><span class="n">XmDateTime_t</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">            </span><span class="p">.</span><span class="n">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2026</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">month</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">day</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">            </span><span class="p">.</span><span class="n">weekday</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">  </span><span class="c1">// Friday</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">            </span><span class="p">.</span><span class="n">hour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">minute</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">        </span><span class="p">};</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="n">XM_RTC_SetDateTime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dt</span><span class="p">);</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="c1">// Read the current time</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="n">XmDateTime_t</span><span class="w"> </span><span class="n">now</span><span class="p">;</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_RTC_GetDateTime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">now</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">        </span><span class="c1">// Use now.year, now.month, now.day, now.hour, now.minute, now.second</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="p">}</span>
+<h2 id="console-only-mode">Console-Only Mode<a class="headerlink" href="#console-only-mode" title="Permanent link">&para;</a></h2>
+<p>When you don't need the graph window, or you're leaving it running for a long time, console mode is lighter.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>python<span class="w"> </span>xm10.py<span class="w"> </span>recv<span class="w"> </span>--cli<span class="w"> </span>--port<span class="w"> </span>COM6<span class="w"> </span>--log<span class="w">                </span><span class="c1"># saves CSV + .xmlog, Ctrl+C to stop</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>python<span class="w"> </span>xm10.py<span class="w"> </span>recv<span class="w"> </span>--cli<span class="w"> </span>--port<span class="w"> </span>COM6<span class="w"> </span>--log<span class="w"> </span>--total-data<span class="w">   </span><span class="c1"># also exports the 0x20 (197-channel) data</span>
 </code></pre></div>
 <hr />
-<h2 id="-common-mistakes">⚠️ Common Mistakes<a class="headerlink" href="#-common-mistakes" title="Permanent link">&para;</a></h2>
+<h2 id="checking-for-dropped-frames--soak">Checking for Dropped Frames — <code>soak</code><a class="headerlink" href="#checking-for-dropped-frames--soak" title="Permanent link">&para;</a></h2>
+<p>At 1 kHz, 30 minutes is 1.8 million frames. There's no way to eyeball whether even one of them got dropped, so there's a command that judges it for you automatically.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>python<span class="w"> </span>xm10.py<span class="w"> </span>soak<span class="w"> </span>--port<span class="w"> </span>COM6<span class="w"> </span>--minutes<span class="w"> </span><span class="m">30</span>
+</code></pre></div>
+<p>When it finishes, it reports PASS / FAIL with the reason — frames the board dropped, corrupted frames, missing sequence numbers, frames per second, even whether the board restarted partway through. Run this once during initial setup, after swapping a cable, and after adding channels.</p>
+<hr />
+<h2 id="sending-your-own-data-board-side">Sending Your Own Data (Board Side)<a class="headerlink" href="#sending-your-own-data-board-side" title="Permanent link">&para;</a></h2>
+<p><code>cdc_stream.c</code> in <a href="../../examples/09_CDC_Stream/">Ex.09 CDC Stream</a> is the reference. You need three pieces — one struct, one line to register names, one line to send. The code below is taken from that file as-is.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="cm">/* The struct holding the values to send — all float; field order = channel order */</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">is_connected</span><span class="p">;</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">left_hip_angle</span><span class="p">;</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">right_hip_angle</span><span class="p">;</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">forward_velocity</span><span class="p">;</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="p">}</span><span class="w"> </span><span class="n">UserDebugData_t</span><span class="p">;</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="k">static</span><span class="w"> </span><span class="n">UserDebugData_t</span><span class="w"> </span><span class="n">s_debug</span><span class="p">;</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="cm">/* Control_Setup — register channel names (once). Entry order = struct field order */</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">    </span><span class="s">"[{</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">H10 Connected</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">bool</span><span class="se">\"</span><span class="s">},"</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">    </span><span class="s">"{</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">Left Hip Angle</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">deg</span><span class="se">\"</span><span class="s">},"</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">    </span><span class="s">"{</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">Right Hip Angle</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">deg</span><span class="se">\"</span><span class="s">},"</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">    </span><span class="s">"{</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">Forward Velocity</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">m/s</span><span class="se">\"</span><span class="s">}]"</span><span class="p">);</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="cm">/* Control_Loop — fill in values and send (every tick) */</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="n">XM_SendUsbDataWithId</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s_debug</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">s_debug</span><span class="p">),</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">);</span>
+</code></pre></div>
+<p>Four rules to follow:</p>
+<ol>
+<li><strong>The struct must be <code>float</code>-only</strong> — the name-registration mechanism doesn't send types along with it, so the PC reads every field as a float. If a single <code>uint32_t</code> sneaks in, that column comes out as garbage numbers.</li>
+<li><strong>JSON entry count = struct field count, in the same order</strong> — even a mismatch of one shifts every column after it. The values still look like plausible numbers, so it's easy to miss.</li>
+<li><strong>Module ID is <code>0xF0</code>–<code>0xFE</code></strong> — the rest are reserved for the system.</li>
+<li><strong>Only one name registration per connection</strong> — call <code>XM_SetUsbCustomMeta</code> twice and only the last one survives. If you have several channel groups, combine them under a single Module ID (Ex.41 merges six IMUs that way).</li>
+</ol>
+<p>All 24 examples in this repo are automatically checked against rules 1–3.</p>
+<blockquote>
+<p>The "struct field names <em>and types</em> become CSV columns" behavior you saw in the demo (<code>state</code> as an integer, <code>contact</code> as a bool, and so on) is already built on the PC side; board-side firmware support for it is coming in a future release. Right now the board only sends <strong>names</strong>, as shown above.</p>
+</blockquote>
+<hr />
+<h2 id="building-a-standalone-executable">Building a Standalone Executable<a class="headerlink" href="#building-a-standalone-executable" title="Permanent link">&para;</a></h2>
+<p>To carry this to a PC without Python, bundle it into one file.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>python<span class="w"> </span>build_exe.py<span class="w">            </span><span class="c1"># dist/xm10.exe — includes the graph window (~55.6 MB)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>python<span class="w"> </span>build_exe.py<span class="w"> </span>--no-gui<span class="w">   </span><span class="c1"># console-only (~23.0 MB)</span>
+</code></pre></div>
+<p>After building, it actually <strong>runs</strong> <code>demo</code> and the self-checks against that exe to confirm it works. The commands are the same as with Python — <code>xm10.exe demo</code>, <code>xm10.exe recv</code>, <code>xm10.exe export ...</code>.</p>
+<hr />
+<h2 id="when-something-goes-wrong">When Something Goes Wrong<a class="headerlink" href="#when-something-goes-wrong" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Symptom</th>
-<th>Cause</th>
-<th>Fix</th>
+<th style="text-align: left;">Symptom</th>
+<th style="text-align: left;">What to check</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>XM_RTC_GetDateTime</code> always returns false</td>
-<td>SPI communication failure (bad wiring or missing CS)</td>
-<td>Check hardware connections and verify operation with <code>XM_RTC_IsRunning()</code></td>
+<td style="text-align: left;">XM10 doesn't show up in the port list</td>
+<td style="text-align: left;">If the window was already open, click <strong>Refresh</strong>. Re-run <code>xm10.py ports</code>. Check the cable and power. See if a COM port appears in Device Manager</td>
 </tr>
 <tr>
-<td><code>XM_RTC_IsRunning</code> returns false</td>
-<td>RTC backup battery is dead (coin cell CR1220)</td>
-<td>Replace the battery and reset the time with <code>XM_RTC_SetDateTime</code></td>
+<td style="text-align: left;">Registered two name sets but only one shows</td>
+<td style="text-align: left;">Only one registration survives per connection — combine them under one Module ID</td>
 </tr>
 <tr>
-<td><code>year = 1970</code> or 2000</td>
-<td>Time was never set after the first power-on</td>
-<td>Check <code>IsRunning</code> in <code>Control_Setup</code>, then call <code>SetDateTime</code></td>
+<td style="text-align: left;">Connect fails</td>
+<td style="text-align: left;">Make sure PhAI Studio or a serial terminal isn't already holding the same port</td>
 </tr>
 <tr>
-<td><code>year = 2100</code> or other out-of-range value</td>
-<td>Invalid value passed to <code>SetDateTime</code></td>
-<td><code>year</code> must be in the range 2000–2099 (MCP79510 2-digit limit)</td>
+<td style="text-align: left;">Graph titles show <code>ch0, ch1…</code></td>
+<td style="text-align: left;">Check that <code>XM_SetUsbCustomMeta</code> is called in <code>Control_Setup</code>, and that the entry count matches the struct</td>
 </tr>
 <tr>
-<td>Calling <code>GetDateTime</code> every cycle makes the loop slow</td>
-<td>SPI communication has millisecond-level overhead</td>
-<td>Call it only once per second and cache the timestamp</td>
+<td style="text-align: left;">Values come out as garbage numbers</td>
+<td style="text-align: left;">Check for a non-<code>float</code> member in the struct</td>
 </tr>
 <tr>
-<td><code>weekday</code> value is incorrect</td>
-<td>Unfamiliarity with the 1=Monday … 7=Sunday convention</td>
-<td>Follow ISO 8601: <code>1=Mon … 7=Sun</code></td>
+<td style="text-align: left;">Frames seem to be dropping</td>
+<td style="text-align: left;">Judge it with <code>xm10.py soak</code>. Try sending fewer channels</td>
 </tr>
 <tr>
-<td>Time resets after power cycle</td>
-<td>Backup battery not installed or dead</td>
-<td>Check the battery — typical lifetime is about 5 years</td>
-</tr>
-<tr>
-<td><code>weekday</code> is not calculated automatically</td>
-<td>The MCP79510 requires the weekday to be supplied by the user</td>
-<td>Pre-calculate it using Zeller's formula or <code>&lt;time.h&gt;</code></td>
+<td style="text-align: left;">Not sure the tool is installed correctly</td>
+<td style="text-align: left;"><code>python xm10.py selftest</code> — checks everything, no board needed</td>
 </tr>
 </tbody>
 </table>
+<hr />
+<h2 id="whats-in-the-folder">What's in the Folder<a class="headerlink" href="#whats-in-the-folder" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>PythonDecoder/
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>├── xm10.py          ← Start here. demo / ports / recv / soak / export / selftest
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>├── build_exe.py     ← Build the standalone executable
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>├── run_tests.py     ← Development-time verification (a bit more than selftest)
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>├── README.md        ← Internal structure, file-by-file notes
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>└── CDC/             ← The actual implementation, for when you want to modify it directly
+</code></pre></div>
+<p>What each file under <code>CDC/</code> does is listed in the "파일 한눈에" (files at a glance) table in <a href="../../PythonDecoder/README.md">PythonDecoder/README.md</a>. Normally you only need <code>xm10.py</code>.</p>
+<hr />
+<p><strong>Next:</strong> move on to Ex.07–09 (USB communication) in <a href="../../tutorials/">Tutorials</a>.</p>
 
 
 
@@ -2625,7 +2718,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../07-memory-management/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Memory Regions">
+          <a href="../03-first-build/" class="md-footer__link md-footer__link--prev" aria-label="Previous: First Build">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -2635,20 +2728,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Memory Regions
+                First Build
               </div>
             </div>
           </a>
         
         
           
-          <a href="../09-task-creation/" class="md-footer__link md-footer__link--next" aria-label="Next: Auxiliary Tasks">
+          <a href="../00-claude-code-quickstart/" class="md-footer__link md-footer__link--next" aria-label="Next: Start with Claude Code">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Auxiliary Tasks
+                Start with Claude Code
               </div>
             </div>
             <div class="md-footer__button md-icon">

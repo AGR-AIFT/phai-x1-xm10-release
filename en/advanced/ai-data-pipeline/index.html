@@ -358,6 +358,8 @@
       
         
       
+        
+      
     
     
     
@@ -474,6 +476,34 @@
     
   
     First Build
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/04-pc-data-tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Get Data on PC
   
 
     
@@ -1846,6 +1876,8 @@
       
         
       
+        
+      
     
     
     
@@ -1898,6 +1930,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.8.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2495,7 +2555,7 @@
 <p>Two options:</p>
 <ul>
 <li><strong>PhAI Studio</strong> — connect via USB → select channel <code>0xF0</code> → watch the live graph and click the record button → export to <code>.csv</code>. Simplest.</li>
-<li><strong>xm10 tool</strong> (in the repo's <code>PythonDecoder/</code>) — saves the raw bytes as-is to <code>.xmlog</code> and lets you pull CSV out later. Since you can re-export old recordings even after changing channel names/layout, it's better suited for managing a training dataset. Build it as an executable and it works on PCs without Python too (<a href="../getting-started/04-pc-data-tool.en.md">guide</a>).</li>
+<li><strong>xm10 tool</strong> (in the repo's <code>PythonDecoder/</code>) — saves the raw bytes as-is to <code>.xmlog</code> and lets you pull CSV out later. Since you can re-export old recordings even after changing channel names/layout, it's better suited for managing a training dataset. Build it as an executable and it works on PCs without Python too (<a href="../../getting-started/04-pc-data-tool/">guide</a>).</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>PythonDecoder/xm10.py<span class="w"> </span>recv<span class="w"> </span>--cli<span class="w"> </span>--port<span class="w"> </span>COM6<span class="w"> </span>--log<span class="w">         </span><span class="c1"># receive to console + save .xmlog (Ctrl+C to stop)</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>PythonDecoder/xm10.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>data/cdc_&lt;timestamp&gt;.xmlog<span class="w"> </span>--csv<span class="w"> </span>out/<span class="w">   </span><span class="c1"># export per-channel CSV</span>

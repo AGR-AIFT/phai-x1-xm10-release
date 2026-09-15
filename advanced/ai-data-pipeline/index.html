@@ -358,6 +358,8 @@
       
         
       
+        
+      
     
     
     
@@ -474,6 +476,34 @@
     
   
     첫 빌드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/04-pc-data-tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PC 에서 데이터 받기
   
 
     
@@ -1846,6 +1876,8 @@
       
         
       
+        
+      
     
     
     
@@ -1898,6 +1930,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.8.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2495,7 +2555,7 @@
 <p>두 가지 방법이 있습니다.</p>
 <ul>
 <li><strong>PhAI Studio</strong> — USB 연결 → 채널 <code>0xF0</code> 선택 → 실시간 그래프 확인 + 녹화 버튼 → export 로 <code>.csv</code> 저장. 가장 간단합니다.</li>
-<li><strong>xm10 도구</strong> (레포 내 <code>PythonDecoder/</code>) — 받은 바이트를 그대로 <code>.xmlog</code> 에 저장해 두고 CSV 는 나중에 뽑습니다. 채널 이름·구성을 바꿔도 예전 기록을 다시 뽑을 수 있어 학습 데이터셋 관리에 유리합니다. 실행파일로 만들면 파이썬 없는 PC 에서도 됩니다 (<a href="../getting-started/04-pc-data-tool.md">안내</a>).</li>
+<li><strong>xm10 도구</strong> (레포 내 <code>PythonDecoder/</code>) — 받은 바이트를 그대로 <code>.xmlog</code> 에 저장해 두고 CSV 는 나중에 뽑습니다. 채널 이름·구성을 바꿔도 예전 기록을 다시 뽑을 수 있어 학습 데이터셋 관리에 유리합니다. 실행파일로 만들면 파이썬 없는 PC 에서도 됩니다 (<a href="../../getting-started/04-pc-data-tool/">안내</a>).</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>PythonDecoder/xm10.py<span class="w"> </span>recv<span class="w"> </span>--cli<span class="w"> </span>--port<span class="w"> </span>COM6<span class="w"> </span>--log<span class="w">         </span><span class="c1"># 콘솔 수신 + .xmlog 저장 (Ctrl+C)</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>PythonDecoder/xm10.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>data/cdc_&lt;시각&gt;.xmlog<span class="w"> </span>--csv<span class="w"> </span>out/<span class="w">   </span><span class="c1"># 채널별 CSV 로</span>

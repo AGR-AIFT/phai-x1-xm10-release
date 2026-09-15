@@ -10,35 +10,35 @@
       
       
       
-        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/en/architecture/">
+        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/en/release-notes/v2.8.0/">
       
       
-        <link rel="prev" href="../api-reference/ref/xm-api-user-custom/">
+        <link rel="prev" href="../">
       
       
-        <link rel="next" href="../kit-h10-firmware/">
+        <link rel="next" href="../v2.7.0/">
       
       
         
-          <link rel="alternate" href="../../architecture/" hreflang="ko">
+          <link rel="alternate" href="../../../release-notes/v2.8.0/" hreflang="ko">
         
           <link rel="alternate" href="./" hreflang="en">
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Architecture - XM10 Extension Module</title>
+        <title>v2.8.0 - XM10 Extension Module</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -57,9 +57,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#system-architecture" class="md-skip">
+        <a href="#xm10-extension-module-sdk-v280" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../" title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+    <a href="../../" title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Architecture
+              v2.8.0
             
           </span>
         </div>
@@ -167,7 +167,7 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../architecture/" hreflang="ko" class="md-select__link">
+            <a href="../../../release-notes/v2.8.0/" hreflang="ko" class="md-select__link">
               한국어
             </a>
           </li>
@@ -264,7 +264,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../" title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+    <a href="../../" title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -294,7 +294,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../../" class="md-nav__link">
         
   
   
@@ -321,7 +321,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../find-it/" class="md-nav__link">
+      <a href="../../find-it/" class="md-nav__link">
         
   
   
@@ -412,7 +412,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/01-hardware-setup/" class="md-nav__link">
+      <a href="../../getting-started/01-hardware-setup/" class="md-nav__link">
         
   
   
@@ -440,7 +440,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/02-software-setup/" class="md-nav__link">
+      <a href="../../getting-started/02-software-setup/" class="md-nav__link">
         
   
   
@@ -468,7 +468,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/03-first-build/" class="md-nav__link">
+      <a href="../../getting-started/03-first-build/" class="md-nav__link">
         
   
   
@@ -496,7 +496,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/04-pc-data-tool/" class="md-nav__link">
+      <a href="../../getting-started/04-pc-data-tool/" class="md-nav__link">
         
   
   
@@ -524,7 +524,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+      <a href="../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
         
   
   
@@ -586,7 +586,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../hardware/" class="md-nav__link ">
+            <a href="../../hardware/" class="md-nav__link ">
               
   
   
@@ -630,7 +630,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../hardware/external-gpio-rev1.1/" class="md-nav__link">
+      <a href="../../hardware/external-gpio-rev1.1/" class="md-nav__link">
         
   
   
@@ -658,7 +658,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../hardware/external-gpio-rev2.0/" class="md-nav__link">
+      <a href="../../hardware/external-gpio-rev2.0/" class="md-nav__link">
         
   
   
@@ -693,7 +693,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tutorials/" class="md-nav__link">
+      <a href="../../tutorials/" class="md-nav__link">
         
   
   
@@ -761,7 +761,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../api-reference/" class="md-nav__link ">
+            <a href="../../api-reference/" class="md-nav__link ">
               
   
   
@@ -805,7 +805,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/01-task-state-machine/" class="md-nav__link">
+      <a href="../../api-reference/01-task-state-machine/" class="md-nav__link">
         
   
   
@@ -833,7 +833,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/02-h10-control-n-data/" class="md-nav__link">
+      <a href="../../api-reference/02-h10-control-n-data/" class="md-nav__link">
         
   
   
@@ -861,7 +861,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/03-led-btn-control/" class="md-nav__link">
+      <a href="../../api-reference/03-led-btn-control/" class="md-nav__link">
         
   
   
@@ -889,7 +889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/04-external-io/" class="md-nav__link">
+      <a href="../../api-reference/04-external-io/" class="md-nav__link">
         
   
   
@@ -917,7 +917,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/05-usb-connectivity/" class="md-nav__link">
+      <a href="../../api-reference/05-usb-connectivity/" class="md-nav__link">
         
   
   
@@ -945,7 +945,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/07-memory-management/" class="md-nav__link">
+      <a href="../../api-reference/07-memory-management/" class="md-nav__link">
         
   
   
@@ -973,7 +973,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/08-rtc-clock/" class="md-nav__link">
+      <a href="../../api-reference/08-rtc-clock/" class="md-nav__link">
         
   
   
@@ -1001,7 +1001,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/09-task-creation/" class="md-nav__link">
+      <a href="../../api-reference/09-task-creation/" class="md-nav__link">
         
   
   
@@ -1069,7 +1069,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../api-reference/ref/" class="md-nav__link ">
+            <a href="../../api-reference/ref/" class="md-nav__link ">
               
   
   
@@ -1113,7 +1113,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api/" class="md-nav__link">
         
   
   
@@ -1141,7 +1141,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-data/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-data/" class="md-nav__link">
         
   
   
@@ -1169,7 +1169,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-tsm/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-tsm/" class="md-nav__link">
         
   
   
@@ -1197,7 +1197,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-led-btn/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-led-btn/" class="md-nav__link">
         
   
   
@@ -1225,7 +1225,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-external-io/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-external-io/" class="md-nav__link">
         
   
   
@@ -1253,7 +1253,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-usb/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-usb/" class="md-nav__link">
         
   
   
@@ -1281,7 +1281,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-memory/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-memory/" class="md-nav__link">
         
   
   
@@ -1309,7 +1309,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-rtc/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-rtc/" class="md-nav__link">
         
   
   
@@ -1337,7 +1337,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-freertos/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-freertos/" class="md-nav__link">
         
   
   
@@ -1365,7 +1365,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-user-custom/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-user-custom/" class="md-nav__link">
         
   
   
@@ -1405,37 +1405,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Architecture
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
         
   
   
@@ -1451,114 +1424,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#the-big-picture" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The Big Picture
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#xm10-firmware--where-does-my-code-live" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM10 Firmware — Where Does My Code Live?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#when-does-my-code-run--the-1-ms-control-loop" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        When Does My Code Run — The 1 ms Control Loop
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#from-power-on-to-your-code" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        From Power-On to Your Code
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#where-is-my-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Where Is My File?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#communication-at-a-glance" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Communication at a Glance
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#common-mistakes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Common Mistakes
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next Steps
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1570,7 +1435,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../kit-h10-firmware/" class="md-nav__link">
+      <a href="../../kit-h10-firmware/" class="md-nav__link">
         
   
   
@@ -1597,7 +1462,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../bootloader/" class="md-nav__link">
+      <a href="../../bootloader/" class="md-nav__link">
         
   
   
@@ -1649,7 +1514,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../advanced/" class="md-nav__link ">
+            <a href="../../advanced/" class="md-nav__link ">
               
   
   
@@ -1693,7 +1558,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../advanced/ai-data-pipeline/" class="md-nav__link">
+      <a href="../../advanced/ai-data-pipeline/" class="md-nav__link">
         
   
   
@@ -1728,7 +1593,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../safety/wearable-safety/" class="md-nav__link">
+      <a href="../../safety/wearable-safety/" class="md-nav__link">
         
   
   
@@ -1755,7 +1620,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../troubleshooting/" class="md-nav__link">
+      <a href="../../troubleshooting/" class="md-nav__link">
         
   
   
@@ -1779,6 +1644,8 @@
       
   
   
+    
+  
   
   
     
@@ -1823,15 +1690,15 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../release-notes/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -1855,7 +1722,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_13">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1872,10 +1739,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../release-notes/v2.8.0/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.0
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1891,6 +1785,175 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        At a glance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-star-of-this-release--the-pc-data-tool-xm10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The star of this release — the PC data tool xm10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The star of this release — the PC data tool xm10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmlog--saving-what-arrives-exactly-as-it-arrived" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        .xmlog — saving what arrives, exactly as it arrived
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#total-data-0x20s-197-channels-now-decode-correctly-on-the-pc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Total Data (0x20)'s 197 channels now decode correctly on the PC
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-custom-channels-now-get-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Your custom channels now get names
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fixed--example-35-multilayer-transparent-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed — Example 35 MultiLayer Transparent Control
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-things-to-keep-in-mind-when-using-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4 things to keep in mind when using this
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example count
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-yet-done--please-read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not yet done — please read
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-folders-are-renamed-in-the-rev-11-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two folders are renamed in the Rev 1.1 SDK
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#downloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Downloads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1903,7 +1966,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.7.0/" class="md-nav__link">
+      <a href="../v2.7.0/" class="md-nav__link">
         
   
   
@@ -1931,7 +1994,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.6.0/" class="md-nav__link">
+      <a href="../v2.6.0/" class="md-nav__link">
         
   
   
@@ -1959,7 +2022,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.5.1/" class="md-nav__link">
+      <a href="../v2.5.1/" class="md-nav__link">
         
   
   
@@ -1987,7 +2050,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.5.0/" class="md-nav__link">
+      <a href="../v2.5.0/" class="md-nav__link">
         
   
   
@@ -2015,7 +2078,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.4.1/" class="md-nav__link">
+      <a href="../v2.4.1/" class="md-nav__link">
         
   
   
@@ -2043,7 +2106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.4.0/" class="md-nav__link">
+      <a href="../v2.4.0/" class="md-nav__link">
         
   
   
@@ -2071,7 +2134,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.3.1/" class="md-nav__link">
+      <a href="../v2.3.1/" class="md-nav__link">
         
   
   
@@ -2099,7 +2162,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.3.0/" class="md-nav__link">
+      <a href="../v2.3.0/" class="md-nav__link">
         
   
   
@@ -2127,7 +2190,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.2.2/" class="md-nav__link">
+      <a href="../v2.2.2/" class="md-nav__link">
         
   
   
@@ -2155,7 +2218,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.2.1/" class="md-nav__link">
+      <a href="../v2.2.1/" class="md-nav__link">
         
   
   
@@ -2183,7 +2246,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.2.0/" class="md-nav__link">
+      <a href="../v2.2.0/" class="md-nav__link">
         
   
   
@@ -2211,7 +2274,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.1.1/" class="md-nav__link">
+      <a href="../v2.1.1/" class="md-nav__link">
         
   
   
@@ -2266,10 +2329,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-big-picture" class="md-nav__link">
+  <a href="#at-a-glance" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Big Picture
+        At a glance
       
     </span>
   </a>
@@ -2277,10 +2340,38 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#xm10-firmware--where-does-my-code-live" class="md-nav__link">
+  <a href="#the-star-of-this-release--the-pc-data-tool-xm10" class="md-nav__link">
     <span class="md-ellipsis">
       
-        XM10 Firmware — Where Does My Code Live?
+        The star of this release — the PC data tool xm10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The star of this release — the PC data tool xm10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmlog--saving-what-arrives-exactly-as-it-arrived" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        .xmlog — saving what arrives, exactly as it arrived
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#total-data-0x20s-197-channels-now-decode-correctly-on-the-pc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Total Data (0x20)'s 197 channels now decode correctly on the PC
       
     </span>
   </a>
@@ -2288,10 +2379,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#when-does-my-code-run--the-1-ms-control-loop" class="md-nav__link">
+  <a href="#your-custom-channels-now-get-names" class="md-nav__link">
     <span class="md-ellipsis">
       
-        When Does My Code Run — The 1 ms Control Loop
+        Your custom channels now get names
       
     </span>
   </a>
@@ -2299,10 +2390,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#from-power-on-to-your-code" class="md-nav__link">
+  <a href="#fixed--example-35-multilayer-transparent-control" class="md-nav__link">
     <span class="md-ellipsis">
       
-        From Power-On to Your Code
+        Fixed — Example 35 MultiLayer Transparent Control
       
     </span>
   </a>
@@ -2310,10 +2401,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#where-is-my-file" class="md-nav__link">
+  <a href="#4-things-to-keep-in-mind-when-using-this" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Where Is My File?
+        4 things to keep in mind when using this
       
     </span>
   </a>
@@ -2321,10 +2412,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#communication-at-a-glance" class="md-nav__link">
+  <a href="#example-count" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Communication at a Glance
+        Example count
       
     </span>
   </a>
@@ -2332,10 +2423,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#common-mistakes" class="md-nav__link">
+  <a href="#not-yet-done--please-read" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Common Mistakes
+        Not yet done — please read
       
     </span>
   </a>
@@ -2343,10 +2434,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
+  <a href="#two-folders-are-renamed-in-the-rev-11-sdk" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Next Steps
+        Two folders are renamed in the Rev 1.1 SDK
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#downloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Downloads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
       
     </span>
   </a>
@@ -2373,221 +2497,205 @@
   
 
 
-<h1 id="system-architecture">System Architecture<a class="headerlink" href="#system-architecture" title="Permanent link">&para;</a></h1>
-<p>This page gives you the big picture of <strong>how your code runs inside XM10</strong>. The goal is not deep implementation detail — it is to help first-time users understand "where my code fits, and who handles everything else."</p>
-<hr />
-<h2 id="the-big-picture">The Big Picture<a class="headerlink" href="#the-big-picture" title="Permanent link">&para;</a></h2>
-<p>The <code>KIT H10</code> exoskeleton robot is built on a distributed control architecture modeled after the human motor-control system. Each subsystem has its own responsibility, so a slowdown in one part does not freeze the whole system.</p>
-<p align="center">
-  <img width="712" height="351" alt="Angel Robotics Module Architecture" src="https://github.com/user-attachments/assets/911991bc-8c85-4590-8177-47c9af677cbf" />
-</p>
-
-<p>This is the distributed control structure of KIT H10 itself. Each motor driver operates independently while the central control module (CM) coordinates the whole system.</p>
-<p align="center">
-  <img width="753" height="383" alt="KIT H10 Distributed Control" src="https://github.com/user-attachments/assets/656dbcc5-6e87-495b-8d1c-9741060ee3d6" />
-</p>
-
-<p>Adding XM10 creates the integrated system. XM10 is a "brain-expansion" board that issues commands directly to the exoskeleton and receives sensor data so you can prototype new algorithms.</p>
-<p align="center">
-  <img width="1934" height="987" alt="KIT H10 + XM10 System Architecture" src="https://github.com/user-attachments/assets/29428128-6802-4bbf-ad9f-51a806e92d2b" />
-</p>
-
-<hr />
-<h2 id="xm10-firmware--where-does-my-code-live">XM10 Firmware — Where Does My Code Live?<a class="headerlink" href="#xm10-firmware--where-does-my-code-live" title="Permanent link">&para;</a></h2>
-<p>XM10's firmware is organized in layers. Users only ever touch <strong>the top layer</strong>.</p>
-<p align="center">
-  <img width="1984" height="900" alt="xm10-system-architecture" src="https://github.com/user-attachments/assets/16cea885-2f31-4e1e-a59f-c2eb6dc6d985" />
-</p>
-
-<table>
-<thead>
-<tr>
-<th>Layer</th>
-<th>Who builds it</th>
-<th>What you do</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>User algorithm</strong> (<code>Control_Task/control_task.c</code>)</td>
-<td>You</td>
-<td>✅ Write here only</td>
-</tr>
-<tr>
-<td><strong>XM API</strong> — thin call interface (<code>XM_*</code> functions)</td>
-<td>XM library</td>
-<td>Call, don't modify</td>
-</tr>
-<tr>
-<td><strong>Internal system</strong> — sensor comms, USB, exoskeleton protocol, etc.</td>
-<td>XM library</td>
-<td>Do not touch</td>
-</tr>
-<tr>
-<td><strong>ST platform code</strong> — OS, USB driver, board peripherals</td>
-<td>ST + open source</td>
-<td>Do not touch</td>
-</tr>
-</tbody>
-</table>
-<p>Think of it like driving a car: you are the driver. You operate the accelerator (<code>XM_SetAssistTorqueRH</code>), the brake (<code>XM_SetControlMode</code>), and the steering wheel (<code>XM_GetButtonEvent</code>). The engine, transmission, and ECU are all managed by the XM library — you never open the hood.</p>
+<h1 id="xm10-extension-module-sdk-v280">XM10 Extension Module SDK v2.8.0<a class="headerlink" href="#xm10-extension-module-sdk-v280" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Why this split?</strong>
-If every user had to implement CAN communication, USB transmission, and motor command parsing from scratch, bugs would be frequent and no one's code would be reusable by others. By moving shared infrastructure into the library and exposing only the algorithm entry point, the system stays reliable while you stay focused on what matters — the control algorithm itself.</p>
+<p><strong>Release date</strong>: 2026-09-10 | <strong>Target boards</strong>: <strong>Rev 1.1 · Rev 2.0</strong> | <strong>New</strong>: PC data tool <code>xm10</code></p>
 </blockquote>
 <hr />
-<h2 id="when-does-my-code-run--the-1-ms-control-loop">When Does My Code Run — The 1 ms Control Loop<a class="headerlink" href="#when-does-my-code-run--the-1-ms-control-loop" title="Permanent link">&para;</a></h2>
-<p>The heart of XM10 is a <strong>control loop that repeats every 1 ms (1 kHz)</strong>. Each millisecond, the following three things happen in order:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>  ┌────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  │           Repeats every 1 ms  (1 kHz control loop)        │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  │                                                            │
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  │   [INPUT]           [MY CODE]           [OUTPUT]           │
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  │     ↓                  ↓                   ↓               │
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  │  Sensor data         Control_Loop()     XM functions       │
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  │  received via  →    runs your      →   send CAN commands  │
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  │  CAN is auto-        algorithm           to KIT H10        │
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  │  refreshed                                                  │
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  │                                                            │
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  │  XM.status.h10.    XM_TSM_Run         XM_SetAssistTorque  │
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  │   leftHipAngle      → on_loop()        XM_SendUsbData     │
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  │   rightHipAngle                                            │
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  │   isLeftFootContact                                        │
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  └────────────────────────────────────────────────────────────┘
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>                              ↓ repeats 1 ms later
-</code></pre></div>
+<h2 id="at-a-glance">At a glance<a class="headerlink" href="#at-a-glance" title="Permanent link">&para;</a></h2>
+<p>This release fills out the <strong>PC side far more than the firmware</strong>.</p>
 <ul>
-<li><strong>Input (automatic)</strong>: KIT H10 sensor and status data received over CAN-FD is written into the <code>XM.status.h10.*</code> global variables automatically every cycle.</li>
-<li><strong>Processing (you write this)</strong>: Inside <code>Control_Loop()</code>, read that data and run your algorithm.</li>
-<li><strong>Output (automatic)</strong>: Call a function such as <code>XM_SetAssistTorqueRH(...)</code> and the library converts it to a CAN message and sends it to KIT H10 automatically.</li>
+<li><strong>The PC data tool <code>xm10</code> is now in the SDK.</strong> From a <code>demo</code> command that runs the whole pipeline with no board attached, to a live graph window, lossless logging, and CSV export — all from one script.</li>
+<li><strong>Total Data (0x20)'s 197 channels can now be decoded correctly on the PC.</strong> Until now the values came out mixed up and wrong.</li>
+<li><strong>Channel names you register now show up on the PC screen.</strong> Until now they only showed as <code>ch0, ch1…</code></li>
+<li><strong>Example 35 was fixed.</strong> It registered channel names but never actually sent the values behind them.</li>
+<li><strong>The firmware itself barely changed.</strong> Everything in this document that affects behavior is all there is.</li>
 </ul>
-<p>USB communication works the same way — a single function call is all you need. Your only concern is the algorithm.</p>
 <hr />
-<h2 id="from-power-on-to-your-code">From Power-On to Your Code<a class="headerlink" href="#from-power-on-to-your-code" title="Permanent link">&para;</a></h2>
-<p>After you flash firmware with <code>Debug (F11)</code>, the board starts up in the following sequence:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>  Power ON
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    ↓
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  Boot code + board initialization  (automatic)
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    ↓
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  XM library initialization
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    — peripheral setup, USB ready, CAN link, sensor discovery, etc.
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    ↓
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  Internal scheduler starts
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    ↓
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  ┌──────────────────────────────────────────────────────────────┐
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  │  Scheduler runs multiple tasks by priority, round-robin:    │
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  │                                                              │
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  │   • User task       → Control_Setup() once → Control_Loop() every 1 ms  │
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  │   • CAN RX          → receives exoskeleton sensor data, updates XM.status │
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  │   • CAN TX          → sends motor commands                  │
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  │   • USB task        → USB-CDC serial communication          │
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  │   • Device discovery → auto-connects sensor hubs            │
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>  └──────────────────────────────────────────────────────────────┘
+<h2 id="the-star-of-this-release--the-pc-data-tool-xm10">The star of this release — the PC data tool <code>xm10</code><a class="headerlink" href="#the-star-of-this-release--the-pc-data-tool-xm10" title="Permanent link">&para;</a></h2>
+<p>It lives in the SDK's <code>Extension_Module/PythonDecoder/</code> folder. It wasn't there through v2.7.0 — <strong>starting this release it ships inside the SDK.</strong>
+For the full guide see <a href="../../getting-started/04-pc-data-tool/">PC data tool guide</a>; below is just enough to get a feel for it.</p>
+<p>Here's the first thing to try — and <strong>you don't need a board</strong> nearby for it.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>Extension_Module/PythonDecoder
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>pyserial<span class="w"> </span>pyqt5<span class="w"> </span>pyqtgraph<span class="w"> </span>numpy
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>python<span class="w"> </span>xm10.py<span class="w"> </span>demo
 </code></pre></div>
-<p>Your code has two entry points:</p>
-<ul>
-<li><code>Control_Setup()</code> — called once immediately after boot. Put initialization code here (LED state setup, TSM registration, etc.).</li>
-<li><code>Control_Loop()</code> — called every 1 ms. Put your algorithm body here.</li>
-</ul>
-<p>Other tasks such as CAN RX run concurrently, but you do not need to manage them. The system handles everything.</p>
-<hr />
-<h2 id="where-is-my-file">Where Is My File?<a class="headerlink" href="#where-is-my-file" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Extension_Module/
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── XM_FW/
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   ├── XM_Apps/
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   │   └── Control_Task/
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   │       └── control_task.c     ← your workspace
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   └── (all other folders are XM library — do not modify)
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└── examples/                  ← 45 example control_task.c files
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    ├── 00_Quick_Start/quick_start.c
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    ├── 14_PD_Realtime_Control/pd_realtime_control.c
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    └── ...
-</code></pre></div>
-<p>To try an example, copy the entire contents of that folder's <code>.c</code> file into <code>XM_Apps/Control_Task/control_task.c</code> and build.</p>
-<hr />
-<h2 id="communication-at-a-glance">Communication at a Glance<a class="headerlink" href="#communication-at-a-glance" title="Permanent link">&para;</a></h2>
-<p>There are two channels — that is all you need to know.</p>
+<p>It streams prepared data through the whole path once, and tells you at the end whether each item passed.</p>
 <table>
 <thead>
 <tr>
-<th>Channel</th>
-<th>Who talks to whom</th>
-<th>Functions you use</th>
+<th>Command</th>
+<th>What it does</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>CAN-FD</strong></td>
-<td>XM10 ↔ KIT H10 exoskeleton</td>
-<td>Read <code>XM.status.h10.*</code>, write <code>XM_SetAssistTorque*()</code></td>
+<td><code>xm10.py demo</code></td>
+<td>Demonstrate the whole pipeline with no board attached</td>
 </tr>
 <tr>
-<td><strong>USB Serial (CDC)</strong></td>
-<td>XM10 → PC terminal / PhAI Studio</td>
-<td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code></td>
+<td><code>xm10.py ports</code></td>
+<td>List connected ports, flag ones that look like XM10</td>
+</tr>
+<tr>
+<td><code>xm10.py recv</code></td>
+<td>Live graph window (<code>--cli</code> for console only)</td>
+</tr>
+<tr>
+<td><code>xm10.py soak --minutes 30</code></td>
+<td>Receive for a set time and check nothing was dropped</td>
+</tr>
+<tr>
+<td><code>xm10.py export FILE --csv DIR</code></td>
+<td>Turn a saved <code>.xmlog</code> into CSV</td>
+</tr>
+<tr>
+<td><code>xm10.py selftest</code></td>
+<td>Check the tool itself, no board needed</td>
 </tr>
 </tbody>
 </table>
-<p>The underlying protocol details are handled by the library. You only need to call the functions.</p>
+<p>If you need a standalone executable, <code>build_exe.py</code> builds one. The version with the graph window is about 55.6 MB; <code>--no-gui</code> (console only, no graphs) is about 23.0 MB. After building, run <code>selftest</code> and <code>demo</code> on that executable once to confirm it actually works.</p>
+<h3 id="xmlog--saving-what-arrives-exactly-as-it-arrived"><code>.xmlog</code> — saving what arrives, exactly as it arrived<a class="headerlink" href="#xmlog--saving-what-arrives-exactly-as-it-arrived" title="Permanent link">&para;</a></h3>
+<ul>
+<li>What arrives is saved to a file <strong>before it gets interpreted</strong>, byte for byte. Turning it into CSV can be done anytime afterward with <code>export</code>.</li>
+<li>Channels the screen doesn't even draw (the system channel, 0x20) still go into the file in full.</li>
+<li>If data goes missing partway through, that gap is recorded right in the file, so you can tell later where it happened.</li>
+<li>Even if the file gets cut short (a crash, etc.), everything up to that point still reads back fine.</li>
+<li>The graph window has a <strong>"Save .xmlog" checkbox, on by default.</strong> It saves to the same folder as the CSV.</li>
+<li>File names: CSV is <code>cdc_phai_&lt;timestamp&gt;.csv</code>, xmlog is <code>cdc_&lt;timestamp&gt;.xmlog</code>.</li>
+</ul>
 <hr />
-<h2 id="common-mistakes">Common Mistakes<a class="headerlink" href="#common-mistakes" title="Permanent link">&para;</a></h2>
+<h2 id="total-data-0x20s-197-channels-now-decode-correctly-on-the-pc">Total Data (0x20)'s 197 channels now decode correctly on the PC<a class="headerlink" href="#total-data-0x20s-197-channels-now-decode-correctly-on-the-pc" title="Permanent link">&para;</a></h2>
+<p>XM10 has already been sending these 197 channels at 1 kHz, but until now the PC side read the whole struct <strong>as if it were one array of floats</strong>. In reality it's a mix of integers and floats, so that approach came out with corrupted values.</p>
+<p>This time, firmware and the PC tool read this struct from <strong>the same table</strong>, so if the two sides ever disagree, it shows up right away instead of quietly drifting apart.</p>
+<ul>
+<li>Worth knowing: the struct itself is 365 bytes, but what actually arrives on the wire is <strong>368 bytes</strong> — 3 zero-padding bytes get tacked on to round up to a 4-byte length unit. Keep that in mind if you inspect the raw values yourself.</li>
+<li>Exported CSV columns are titled with the real channel name, like <code>leftHipAngle</code>. No more counting columns by number to find the one you want.</li>
+</ul>
+<hr />
+<h2 id="your-custom-channels-now-get-names">Your custom channels now get names<a class="headerlink" href="#your-custom-channels-now-get-names" title="Permanent link">&para;</a></h2>
+<p>Firmware has always been sending the channel names you register with <code>XM_SetUsbCustomMeta()</code> — the PC side just received them and threw them away, showing <code>ch0, ch1…</code> instead. From now on it uses the name.</p>
+<ul>
+<li>Registered names appear in graph titles and CSV column headers.</li>
+<li>This path doesn't carry the value's type, though, so the PC assumes float32 and says so on screen and in the CSV summary (<code>⚠ type unknown — assuming float32</code>).</li>
+</ul>
+<hr />
+<h2 id="fixed--example-35-multilayer-transparent-control">Fixed — Example 35 MultiLayer Transparent Control<a class="headerlink" href="#fixed--example-35-multilayer-transparent-control" title="Permanent link">&para;</a></h2>
+<p>It registered 7 channel names (Gravity / DOB / Impedance / Total / Angle / Velocity / Mode, all in Nm·deg·deg/s) but never once called the function that actually sends the values. On the PC it looked like channels that had a name but would never receive data. Fixed on <strong>both Rev 2.0 and Rev 1.1</strong>.</p>
+<p>We re-checked every example that sends data over USB, confirming the number of registered channel names matches the struct actually sent. Rev 2.0's 24 examples and Rev 1.1's 21 examples all check out now.</p>
+<hr />
+<h2 id="4-things-to-keep-in-mind-when-using-this">4 things to keep in mind when using this<a class="headerlink" href="#4-things-to-keep-in-mind-when-using-this" title="Permanent link">&para;</a></h2>
+<p>Already noted in places like <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/">example 09</a>, but worth repeating now that channel names show up on their own.</p>
+<ol>
+<li>Struct members sent over USB must be <strong>float only</strong>.</li>
+<li>The number and order of the channel names registered in JSON must <strong>exactly match</strong> the number and order of the struct's members.</li>
+<li>Module ID must fall in <strong><code>0xF0</code>–<code>0xFE</code></strong>.</li>
+<li><strong><code>XM_SetUsbCustomMeta()</code> keeps only one registration per connection.</strong> Call it more than once and the later call just overwrites the earlier one — firmware has a single slot for names. If you want to register several channels, gather them into one call.</li>
+</ol>
+<hr />
+<h2 id="example-count">Example count<a class="headerlink" href="#example-count" title="Permanent link">&para;</a></h2>
+<p>Rev 2.0 <strong>46</strong>, Rev 1.1 <strong>42</strong> — same as v2.7.0.</p>
+<hr />
+<h2 id="not-yet-done--please-read">Not yet done — please read<a class="headerlink" href="#not-yet-done--please-read" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Zero hardware verification so far.</strong> This release's PC tool was checked only with prepared data and its own self-checks. It has not been tested against an actual XM10 board. Let us know if anything looks off once you try it.</li>
+<li><strong>A way for the PC to learn a struct's field types automatically is ready only on the PC side.</strong> Firmware actually sending that information is for a later version. Right now the board only sends the <strong>name</strong> — that's exactly why the PC always assumes float32, as noted above.</li>
+<li><strong>The <code>--no-gui</code> executable can't exercise the live-decoding path.</strong> The receiver itself needs PyQt5 to even start. <code>selftest</code> reports this on screen.</li>
+</ul>
+<hr />
+<h2 id="two-folders-are-renamed-in-the-rev-11-sdk">Two folders are renamed in the Rev 1.1 SDK<a class="headerlink" href="#two-folders-are-renamed-in-the-rev-11-sdk" title="Permanent link">&para;</a></h2>
+<p>Two folder names change inside the Rev 1.1 SDK. Rev 2.0 already changed in v2.7.0; Rev 1.1 now matches.</p>
 <table>
 <thead>
 <tr>
-<th>Symptom</th>
-<th>Cause</th>
-<th>Fix</th>
+<th>Was</th>
+<th>Now</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Code added to <code>main()</code> does nothing</td>
-<td><code>main()</code> starts the internal scheduler and exits immediately. User code belongs in <code>control_task.c</code></td>
-<td>Only modify <code>XM_Apps/Control_Task/control_task.c</code></td>
+<td><code>XM_FW/IOIF/</code></td>
+<td><code>XM_FW/phoundation-ioif/</code></td>
 </tr>
 <tr>
-<td><code>while(1)</code> used inside <code>Control_Loop</code></td>
-<td>The loop never returns, starving all other tasks</td>
-<td><code>Control_Loop</code> must run once and return — the system handles the repetition</td>
+<td><code>XM_FW/AGR_MW/</code></td>
+<td><code>XM_FW/phoundation-mw/</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>If you use the SDK as shipped, there is nothing to do</strong> — the bundled <code>CMakeLists.txt</code> and <code>.cproject</code> already point at the new paths. Only change your own build scripts or project settings if you wrote the old paths there by hand. Includes that name only the file, like <code>#include "ioif_agrb_uart.h"</code>, are <strong>not affected</strong>.</p>
+<hr />
+<h2 id="compatibility">Compatibility<a class="headerlink" href="#compatibility" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Existing firmware code</td>
+<td><strong>Rebuild only.</strong> No public API removed or renamed</td>
 </tr>
 <tr>
-<td><code>HAL_Delay(100)</code> used inside <code>Control_Loop</code></td>
-<td>Blocks all other tasks for 100 ms</td>
-<td>Use the difference of <code>XM_GetTick()</code> to build a non-blocking timer</td>
+<td>PC data tool</td>
+<td>Bundled with the SDK starting this release. Needs separate Python packages (<code>pyserial pyqt5 pyqtgraph numpy</code>)</td>
 </tr>
 <tr>
-<td><code>XM.status.h10.leftHipAngle</code> is always 0</td>
-<td>KIT H10 not connected, or assist mode not yet entered</td>
-<td>Check <code>XM_IsCmConnected()</code> and confirm <code>h10Mode == XM_H10_MODE_ASSIST</code></td>
+<td>Rev 1.1</td>
+<td>Includes the Example 35 fix; nothing else in the firmware changed. <strong>The two folders above are renamed</strong></td>
 </tr>
 <tr>
-<td>Called <code>XM_SetAssistTorque*</code> but no torque output</td>
-<td>Control mode was never set</td>
-<td>Call <code>XM_SetControlMode(XM_CTRL_CONTROL)</code> once when entering Active</td>
-</tr>
-<tr>
-<td>Modified files in the XM library folders (IOIF, Devices, etc.)</td>
-<td>Library code is production firmware — arbitrary changes break the system</td>
-<td>Always work inside <code>Control_Task/</code> only</td>
-</tr>
-<tr>
-<td><code>Control_Loop</code> does not finish within 1 ms</td>
-<td>Heavy <code>sprintf</code> calls, accumulated floating-point operations, etc.</td>
-<td>Measure execution time with <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/">Ex.18 Debug Monitor</a> and spread the work across cycles</td>
-</tr>
-<tr>
-<td>Attempting to build two examples at the same time</td>
-<td>Only one <code>.c</code> file is allowed in <code>Control_Task/</code></td>
-<td>Copy one example at a time and build</td>
+<td>Total Data / channel names</td>
+<td>Shared by Rev 1.1 and Rev 2.0</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<h2 id="downloads">Downloads<a class="headerlink" href="#downloads" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Rev2.0.zip</code></td>
+<td>Rev 2.0 board SDK (46 examples, includes <code>PythonDecoder/</code>)</td>
+</tr>
+<tr>
+<td><code>Rev1.1.zip</code></td>
+<td>Rev 1.1 board SDK (42 examples, includes <code>PythonDecoder/</code>)</td>
+</tr>
+<tr>
+<td><code>AGR_Bootloader.bin</code></td>
+<td>XM10 bootloader — <strong>same file as v2.6.0</strong> (unchanged in this release)</td>
+</tr>
+<tr>
+<td><code>SUIT_H10_Binary_20260820.zip</code></td>
+<td>KIT H10 firmware — <strong>same file as v2.6.0</strong></td>
+</tr>
+<tr>
+<td><code>SUIT_ContentsFiles_20260820.zip</code></td>
+<td>H10 content files — <strong>same file as v2.6.0</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>The three bootloader/H10 files are <strong>the v2.6.0 ones re-uploaded as-is</strong>. Only the XM10 side changed in this release; those are unchanged.</p>
+</blockquote>
+<p>Extract to a <strong>short path</strong> (e.g. <code>C:\xm10\</code>). A deep path can hit the Windows path-length limit and break the build — that is a path-length problem, not a code problem.</p>
+<hr />
+<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
 <ul>
-<li>First build and flash: <a href="../getting-started/03-first-build/">Getting Started — 03 First Build</a></li>
-<li>State machine pattern: <a href="../api-reference/01-task-state-machine/">TSM API Reference</a></li>
-<li>Example learning path: <a href="../tutorials/">Tutorials</a></li>
-<li>Verify your code finishes within 1 ms: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/">Ex.18 Debug Monitor</a></li>
+<li><a href="../../getting-started/04-pc-data-tool/">PC data tool guide</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/35_MultiLayer_Transparent_Control/">Example 35 — MultiLayer Transparent Control</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md">Full example index</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md">CHANGELOG</a></li>
 </ul>
 
 
@@ -2624,7 +2732,7 @@ If every user had to implement CAN communication, USB transmission, and motor co
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../api-reference/ref/xm-api-user-custom/" class="md-footer__link md-footer__link--prev" aria-label="Previous: xm_api_user_custom.h (User Data)">
+          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -2634,20 +2742,20 @@ If every user had to implement CAN communication, USB transmission, and motor co
                 Previous
               </span>
               <div class="md-ellipsis">
-                xm_api_user_custom.h (User Data)
+                Overview
               </div>
             </div>
           </a>
         
         
           
-          <a href="../kit-h10-firmware/" class="md-footer__link md-footer__link--next" aria-label="Next: KIT H10 Firmware">
+          <a href="../v2.7.0/" class="md-footer__link md-footer__link--next" aria-label="Next: v2.7.0">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                KIT H10 Firmware
+                v2.7.0
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -2684,10 +2792,10 @@ If every user had to implement CAN communication, USB transmission, and motor co
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

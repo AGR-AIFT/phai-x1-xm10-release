@@ -1,6 +1,6 @@
 
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="ko" class="no-js">
   <head>
     
       <meta charset="utf-8">
@@ -10,19 +10,19 @@
       
       
       
-        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/en/architecture/">
+        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/release-notes/v2.8.0/">
       
       
-        <link rel="prev" href="../api-reference/ref/xm-api-user-custom/">
+        <link rel="prev" href="../">
       
       
-        <link rel="next" href="../kit-h10-firmware/">
+        <link rel="next" href="../v2.7.0/">
       
       
         
-          <link rel="alternate" href="../../architecture/" hreflang="ko">
+          <link rel="alternate" href="./" hreflang="ko">
         
-          <link rel="alternate" href="./" hreflang="en">
+          <link rel="alternate" href="../../en/release-notes/v2.8.0/" hreflang="en">
         
       
       
@@ -31,7 +31,7 @@
     
     
       
-        <title>Architecture - XM10 Extension Module</title>
+        <title>v2.8.0 - XM10 Extension Module</title>
       
     
     
@@ -84,8 +84,8 @@
     <div data-md-component="skip">
       
         
-        <a href="#system-architecture" class="md-skip">
-          Skip to content
+        <a href="#xm10-extension-module-sdk-v280" class="md-skip">
+          콘텐츠로 이동
         </a>
       
     </div>
@@ -99,8 +99,8 @@
   
 
 <header class="md-header md-header--shadow" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../" title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../.." title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Architecture
+              v2.8.0
             
           </span>
         </div>
@@ -160,20 +160,20 @@
       <div class="md-header__option">
   <div class="md-select">
     
-    <button class="md-header__button md-icon" aria-label="Select language">
+    <button class="md-header__button md-icon" aria-label="언어설정">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
     </button>
     <div class="md-select__inner">
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../architecture/" hreflang="ko" class="md-select__link">
+            <a href="./" hreflang="ko" class="md-select__link">
               한국어
             </a>
           </li>
         
           <li class="md-select__item">
-            <a href="./" hreflang="en" class="md-select__link">
+            <a href="../../en/release-notes/v2.8.0/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -194,16 +194,16 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="Search">
+      <nav class="md-search__options" aria-label="검색">
         
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
@@ -216,7 +216,7 @@
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            Initializing search
+            검색 초기화
           </div>
           <ol class="md-search-result__list" role="presentation"></ol>
         </div>
@@ -228,7 +228,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="저장소로 이동" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
@@ -262,9 +262,9 @@
 
 
 
-<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../" title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+    <a href="../.." title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -274,7 +274,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="저장소로 이동" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
@@ -294,14 +294,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Home
+    홈
   
 
     
@@ -321,14 +321,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../find-it/" class="md-nav__link">
+      <a href="../../find-it/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Quick Find
+    빠른 찾기
   
 
     
@@ -383,7 +383,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    시작하기
   
 
     
@@ -399,7 +399,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Getting Started
+    시작하기
   
 
           </label>
@@ -412,14 +412,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/01-hardware-setup/" class="md-nav__link">
+      <a href="../../getting-started/01-hardware-setup/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Hardware Setup
+    하드웨어 연결
   
 
     
@@ -440,14 +440,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/02-software-setup/" class="md-nav__link">
+      <a href="../../getting-started/02-software-setup/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Development Setup
+    개발 환경 구축
   
 
     
@@ -468,14 +468,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/03-first-build/" class="md-nav__link">
+      <a href="../../getting-started/03-first-build/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    First Build
+    첫 빌드
   
 
     
@@ -496,14 +496,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/04-pc-data-tool/" class="md-nav__link">
+      <a href="../../getting-started/04-pc-data-tool/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Get Data on PC
+    PC 에서 데이터 받기
   
 
     
@@ -524,14 +524,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+      <a href="../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Start with Claude Code
+    Claude Code 와 함께 시작
   
 
     
@@ -586,14 +586,14 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../hardware/" class="md-nav__link ">
+            <a href="../../hardware/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Hardware
+    하드웨어
   
 
     
@@ -615,7 +615,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Hardware
+    하드웨어
   
 
           </label>
@@ -630,14 +630,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../hardware/external-gpio-rev1.1/" class="md-nav__link">
+      <a href="../../hardware/external-gpio-rev1.1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    External GPIO (Rev 1.1)
+    외부 GPIO (Rev 1.1)
   
 
     
@@ -658,14 +658,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../hardware/external-gpio-rev2.0/" class="md-nav__link">
+      <a href="../../hardware/external-gpio-rev2.0/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    External GPIO (Rev 2.0)
+    외부 GPIO (Rev 2.0)
   
 
     
@@ -693,14 +693,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../tutorials/" class="md-nav__link">
+      <a href="../../tutorials/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Tutorials
+    튜토리얼
   
 
     
@@ -761,14 +761,14 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../api-reference/" class="md-nav__link ">
+            <a href="../../api-reference/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    API Reference
+    API 레퍼런스
   
 
     
@@ -790,7 +790,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    API Reference
+    API 레퍼런스
   
 
           </label>
@@ -805,14 +805,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/01-task-state-machine/" class="md-nav__link">
+      <a href="../../api-reference/01-task-state-machine/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    State Machine (TSM)
+    상태 머신 (TSM)
   
 
     
@@ -833,14 +833,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/02-h10-control-n-data/" class="md-nav__link">
+      <a href="../../api-reference/02-h10-control-n-data/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    KIT H10 Control & Data
+    KIT H10 제어·데이터
   
 
     
@@ -861,14 +861,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/03-led-btn-control/" class="md-nav__link">
+      <a href="../../api-reference/03-led-btn-control/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    LED & Button
+    LED·버튼
   
 
     
@@ -889,14 +889,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/04-external-io/" class="md-nav__link">
+      <a href="../../api-reference/04-external-io/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    External IO
+    외부 IO
   
 
     
@@ -917,14 +917,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/05-usb-connectivity/" class="md-nav__link">
+      <a href="../../api-reference/05-usb-connectivity/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    USB Serial
+    USB 시리얼
   
 
     
@@ -945,14 +945,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/07-memory-management/" class="md-nav__link">
+      <a href="../../api-reference/07-memory-management/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Memory Regions
+    메모리 영역
   
 
     
@@ -973,14 +973,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/08-rtc-clock/" class="md-nav__link">
+      <a href="../../api-reference/08-rtc-clock/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Real-Time Clock (RTC)
+    실시간 시계 (RTC)
   
 
     
@@ -1001,14 +1001,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/09-task-creation/" class="md-nav__link">
+      <a href="../../api-reference/09-task-creation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Auxiliary Tasks
+    보조 태스크
   
 
     
@@ -1069,14 +1069,14 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../api-reference/ref/" class="md-nav__link ">
+            <a href="../../api-reference/ref/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Function Reference
+    함수 레퍼런스
   
 
     
@@ -1098,7 +1098,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Function Reference
+    함수 레퍼런스
   
 
           </label>
@@ -1113,14 +1113,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    xm_api.h (Entry Point)
+    xm_api.h (진입점)
   
 
     
@@ -1141,14 +1141,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-data/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-data/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    xm_api_data.h (Control & Data)
+    xm_api_data.h (제어·데이터)
   
 
     
@@ -1169,14 +1169,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-tsm/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-tsm/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    xm_api_tsm.h (State Machine)
+    xm_api_tsm.h (상태 머신)
   
 
     
@@ -1197,14 +1197,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-led-btn/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-led-btn/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    xm_api_led_btn.h (LED & Button)
+    xm_api_led_btn.h (LED·버튼)
   
 
     
@@ -1225,14 +1225,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-external-io/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-external-io/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    xm_api_external_io.h (External IO)
+    xm_api_external_io.h (외부 IO)
   
 
     
@@ -1253,7 +1253,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-usb/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-usb/" class="md-nav__link">
         
   
   
@@ -1281,14 +1281,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-memory/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-memory/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    xm_api_memory.h (Memory)
+    xm_api_memory.h (메모리)
   
 
     
@@ -1309,7 +1309,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-rtc/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-rtc/" class="md-nav__link">
         
   
   
@@ -1337,7 +1337,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-freertos/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-freertos/" class="md-nav__link">
         
   
   
@@ -1365,14 +1365,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/ref/xm-api-user-custom/" class="md-nav__link">
+      <a href="../../api-reference/ref/xm-api-user-custom/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    xm_api_user_custom.h (User Data)
+    xm_api_user_custom.h (사용자 데이터)
   
 
     
@@ -1405,179 +1405,17 @@
       
   
   
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Architecture
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Architecture
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#the-big-picture" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The Big Picture
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#xm10-firmware--where-does-my-code-live" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM10 Firmware — Where Does My Code Live?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#when-does-my-code-run--the-1-ms-control-loop" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        When Does My Code Run — The 1 ms Control Loop
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#from-power-on-to-your-code" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        From Power-On to Your Code
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#where-is-my-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Where Is My File?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#communication-at-a-glance" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Communication at a Glance
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#common-mistakes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Common Mistakes
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next Steps
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
   
   
     <li class="md-nav__item">
-      <a href="../kit-h10-firmware/" class="md-nav__link">
+      <a href="../../architecture/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    KIT H10 Firmware
+    아키텍처
   
 
     
@@ -1597,14 +1435,41 @@
   
   
     <li class="md-nav__item">
-      <a href="../bootloader/" class="md-nav__link">
+      <a href="../../kit-h10-firmware/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Bootloader
+    KIT H10 펌웨어
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../bootloader/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    부트로더
   
 
     
@@ -1649,14 +1514,14 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../advanced/" class="md-nav__link ">
+            <a href="../../advanced/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Advanced
+    심화
   
 
     
@@ -1678,7 +1543,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Advanced
+    심화
   
 
           </label>
@@ -1693,14 +1558,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../advanced/ai-data-pipeline/" class="md-nav__link">
+      <a href="../../advanced/ai-data-pipeline/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    AI Data Pipeline
+    AI 데이터 파이프라인
   
 
     
@@ -1728,14 +1593,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../safety/wearable-safety/" class="md-nav__link">
+      <a href="../../safety/wearable-safety/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Safety
+    안전
   
 
     
@@ -1755,14 +1620,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../troubleshooting/" class="md-nav__link">
+      <a href="../../troubleshooting/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Troubleshooting
+    문제 해결
   
 
     
@@ -1779,6 +1644,8 @@
       
   
   
+    
+  
   
   
     
@@ -1823,22 +1690,22 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../release-notes/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Release Notes
+    릴리스 노트
   
 
     
@@ -1855,12 +1722,12 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_13">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Release Notes
+    릴리스 노트
   
 
           </label>
@@ -1872,10 +1739,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../release-notes/v2.8.0/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.0
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1891,6 +1785,175 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#한눈에-보기" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        한눈에 보기
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#이번-릴리즈의-주인공--pc-데이터-도구-xm10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        이번 릴리즈의 주인공 — PC 데이터 도구 xm10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="이번 릴리즈의 주인공 — PC 데이터 도구 xm10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#받은-데이터를-그대로-저장하는-xmlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        받은 데이터를 그대로 저장하는 .xmlog
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#total-data0x20-197-채널-이제-pc-에서-제대로-풀립니다" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Total Data(0x20) 197 채널, 이제 PC 에서 제대로 풀립니다
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#사용자-채널에-이름이-붙습니다" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        사용자 채널에 이름이 붙습니다
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#고친-것--예제-35-multilayer-transparent-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        고친 것 — 예제 35 MultiLayer Transparent Control
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#이-도구를-쓰실-때-지켜-주실-것-4-가지" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        이 도구를 쓰실 때 지켜 주실 것 4 가지
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#예제-개수" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        예제 개수
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#아직-안-되는-것--꼭-읽어-주세요" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        아직 안 되는 것 — 꼭 읽어 주세요
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev-11-sdk-의-폴더-이름-2-개가-바뀝니다" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev 1.1 SDK 의 폴더 이름 2 개가 바뀝니다
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#호환성" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        호환성
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#다운로드" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        다운로드
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-문서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 문서
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1903,7 +1966,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.7.0/" class="md-nav__link">
+      <a href="../v2.7.0/" class="md-nav__link">
         
   
   
@@ -1931,7 +1994,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.6.0/" class="md-nav__link">
+      <a href="../v2.6.0/" class="md-nav__link">
         
   
   
@@ -1959,7 +2022,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.5.1/" class="md-nav__link">
+      <a href="../v2.5.1/" class="md-nav__link">
         
   
   
@@ -1987,7 +2050,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.5.0/" class="md-nav__link">
+      <a href="../v2.5.0/" class="md-nav__link">
         
   
   
@@ -2015,7 +2078,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.4.1/" class="md-nav__link">
+      <a href="../v2.4.1/" class="md-nav__link">
         
   
   
@@ -2043,7 +2106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.4.0/" class="md-nav__link">
+      <a href="../v2.4.0/" class="md-nav__link">
         
   
   
@@ -2071,7 +2134,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.3.1/" class="md-nav__link">
+      <a href="../v2.3.1/" class="md-nav__link">
         
   
   
@@ -2099,7 +2162,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.3.0/" class="md-nav__link">
+      <a href="../v2.3.0/" class="md-nav__link">
         
   
   
@@ -2127,7 +2190,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.2.2/" class="md-nav__link">
+      <a href="../v2.2.2/" class="md-nav__link">
         
   
   
@@ -2155,7 +2218,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.2.1/" class="md-nav__link">
+      <a href="../v2.2.1/" class="md-nav__link">
         
   
   
@@ -2183,7 +2246,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.2.0/" class="md-nav__link">
+      <a href="../v2.2.0/" class="md-nav__link">
         
   
   
@@ -2211,7 +2274,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release-notes/v2.1.1/" class="md-nav__link">
+      <a href="../v2.1.1/" class="md-nav__link">
         
   
   
@@ -2252,7 +2315,7 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+<nav class="md-nav md-nav--secondary" aria-label="목차">
   
   
   
@@ -2261,15 +2324,15 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      목차
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-big-picture" class="md-nav__link">
+  <a href="#한눈에-보기" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Big Picture
+        한눈에 보기
       
     </span>
   </a>
@@ -2277,10 +2340,38 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#xm10-firmware--where-does-my-code-live" class="md-nav__link">
+  <a href="#이번-릴리즈의-주인공--pc-데이터-도구-xm10" class="md-nav__link">
     <span class="md-ellipsis">
       
-        XM10 Firmware — Where Does My Code Live?
+        이번 릴리즈의 주인공 — PC 데이터 도구 xm10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="이번 릴리즈의 주인공 — PC 데이터 도구 xm10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#받은-데이터를-그대로-저장하는-xmlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        받은 데이터를 그대로 저장하는 .xmlog
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#total-data0x20-197-채널-이제-pc-에서-제대로-풀립니다" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Total Data(0x20) 197 채널, 이제 PC 에서 제대로 풀립니다
       
     </span>
   </a>
@@ -2288,10 +2379,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#when-does-my-code-run--the-1-ms-control-loop" class="md-nav__link">
+  <a href="#사용자-채널에-이름이-붙습니다" class="md-nav__link">
     <span class="md-ellipsis">
       
-        When Does My Code Run — The 1 ms Control Loop
+        사용자 채널에 이름이 붙습니다
       
     </span>
   </a>
@@ -2299,10 +2390,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#from-power-on-to-your-code" class="md-nav__link">
+  <a href="#고친-것--예제-35-multilayer-transparent-control" class="md-nav__link">
     <span class="md-ellipsis">
       
-        From Power-On to Your Code
+        고친 것 — 예제 35 MultiLayer Transparent Control
       
     </span>
   </a>
@@ -2310,10 +2401,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#where-is-my-file" class="md-nav__link">
+  <a href="#이-도구를-쓰실-때-지켜-주실-것-4-가지" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Where Is My File?
+        이 도구를 쓰실 때 지켜 주실 것 4 가지
       
     </span>
   </a>
@@ -2321,10 +2412,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#communication-at-a-glance" class="md-nav__link">
+  <a href="#예제-개수" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Communication at a Glance
+        예제 개수
       
     </span>
   </a>
@@ -2332,10 +2423,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#common-mistakes" class="md-nav__link">
+  <a href="#아직-안-되는-것--꼭-읽어-주세요" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Common Mistakes
+        아직 안 되는 것 — 꼭 읽어 주세요
       
     </span>
   </a>
@@ -2343,10 +2434,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
+  <a href="#rev-11-sdk-의-폴더-이름-2-개가-바뀝니다" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Next Steps
+        Rev 1.1 SDK 의 폴더 이름 2 개가 바뀝니다
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#호환성" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        호환성
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#다운로드" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        다운로드
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-문서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 문서
       
     </span>
   </a>
@@ -2373,221 +2497,205 @@
   
 
 
-<h1 id="system-architecture">System Architecture<a class="headerlink" href="#system-architecture" title="Permanent link">&para;</a></h1>
-<p>This page gives you the big picture of <strong>how your code runs inside XM10</strong>. The goal is not deep implementation detail — it is to help first-time users understand "where my code fits, and who handles everything else."</p>
-<hr />
-<h2 id="the-big-picture">The Big Picture<a class="headerlink" href="#the-big-picture" title="Permanent link">&para;</a></h2>
-<p>The <code>KIT H10</code> exoskeleton robot is built on a distributed control architecture modeled after the human motor-control system. Each subsystem has its own responsibility, so a slowdown in one part does not freeze the whole system.</p>
-<p align="center">
-  <img width="712" height="351" alt="Angel Robotics Module Architecture" src="https://github.com/user-attachments/assets/911991bc-8c85-4590-8177-47c9af677cbf" />
-</p>
-
-<p>This is the distributed control structure of KIT H10 itself. Each motor driver operates independently while the central control module (CM) coordinates the whole system.</p>
-<p align="center">
-  <img width="753" height="383" alt="KIT H10 Distributed Control" src="https://github.com/user-attachments/assets/656dbcc5-6e87-495b-8d1c-9741060ee3d6" />
-</p>
-
-<p>Adding XM10 creates the integrated system. XM10 is a "brain-expansion" board that issues commands directly to the exoskeleton and receives sensor data so you can prototype new algorithms.</p>
-<p align="center">
-  <img width="1934" height="987" alt="KIT H10 + XM10 System Architecture" src="https://github.com/user-attachments/assets/29428128-6802-4bbf-ad9f-51a806e92d2b" />
-</p>
-
-<hr />
-<h2 id="xm10-firmware--where-does-my-code-live">XM10 Firmware — Where Does My Code Live?<a class="headerlink" href="#xm10-firmware--where-does-my-code-live" title="Permanent link">&para;</a></h2>
-<p>XM10's firmware is organized in layers. Users only ever touch <strong>the top layer</strong>.</p>
-<p align="center">
-  <img width="1984" height="900" alt="xm10-system-architecture" src="https://github.com/user-attachments/assets/16cea885-2f31-4e1e-a59f-c2eb6dc6d985" />
-</p>
-
-<table>
-<thead>
-<tr>
-<th>Layer</th>
-<th>Who builds it</th>
-<th>What you do</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>User algorithm</strong> (<code>Control_Task/control_task.c</code>)</td>
-<td>You</td>
-<td>✅ Write here only</td>
-</tr>
-<tr>
-<td><strong>XM API</strong> — thin call interface (<code>XM_*</code> functions)</td>
-<td>XM library</td>
-<td>Call, don't modify</td>
-</tr>
-<tr>
-<td><strong>Internal system</strong> — sensor comms, USB, exoskeleton protocol, etc.</td>
-<td>XM library</td>
-<td>Do not touch</td>
-</tr>
-<tr>
-<td><strong>ST platform code</strong> — OS, USB driver, board peripherals</td>
-<td>ST + open source</td>
-<td>Do not touch</td>
-</tr>
-</tbody>
-</table>
-<p>Think of it like driving a car: you are the driver. You operate the accelerator (<code>XM_SetAssistTorqueRH</code>), the brake (<code>XM_SetControlMode</code>), and the steering wheel (<code>XM_GetButtonEvent</code>). The engine, transmission, and ECU are all managed by the XM library — you never open the hood.</p>
+<h1 id="xm10-extension-module-sdk-v280">XM10 Extension Module SDK v2.8.0<a class="headerlink" href="#xm10-extension-module-sdk-v280" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Why this split?</strong>
-If every user had to implement CAN communication, USB transmission, and motor command parsing from scratch, bugs would be frequent and no one's code would be reusable by others. By moving shared infrastructure into the library and exposing only the algorithm entry point, the system stays reliable while you stay focused on what matters — the control algorithm itself.</p>
+<p><strong>릴리즈 날짜</strong>: 2026-09-10 | <strong>대상 보드</strong>: <strong>Rev 1.1 · Rev 2.0</strong> | <strong>새로 생김</strong>: PC 데이터 도구 <code>xm10</code></p>
 </blockquote>
 <hr />
-<h2 id="when-does-my-code-run--the-1-ms-control-loop">When Does My Code Run — The 1 ms Control Loop<a class="headerlink" href="#when-does-my-code-run--the-1-ms-control-loop" title="Permanent link">&para;</a></h2>
-<p>The heart of XM10 is a <strong>control loop that repeats every 1 ms (1 kHz)</strong>. Each millisecond, the following three things happen in order:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>  ┌────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  │           Repeats every 1 ms  (1 kHz control loop)        │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  │                                                            │
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  │   [INPUT]           [MY CODE]           [OUTPUT]           │
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  │     ↓                  ↓                   ↓               │
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  │  Sensor data         Control_Loop()     XM functions       │
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  │  received via  →    runs your      →   send CAN commands  │
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  │  CAN is auto-        algorithm           to KIT H10        │
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  │  refreshed                                                  │
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  │                                                            │
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  │  XM.status.h10.    XM_TSM_Run         XM_SetAssistTorque  │
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  │   leftHipAngle      → on_loop()        XM_SendUsbData     │
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  │   rightHipAngle                                            │
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  │   isLeftFootContact                                        │
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  └────────────────────────────────────────────────────────────┘
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>                              ↓ repeats 1 ms later
-</code></pre></div>
+<h2 id="한눈에-보기">한눈에 보기<a class="headerlink" href="#한눈에-보기" title="Permanent link">&para;</a></h2>
+<p><strong>펌웨어보다 PC 쪽이 크게 채워진 릴리즈</strong>입니다.</p>
 <ul>
-<li><strong>Input (automatic)</strong>: KIT H10 sensor and status data received over CAN-FD is written into the <code>XM.status.h10.*</code> global variables automatically every cycle.</li>
-<li><strong>Processing (you write this)</strong>: Inside <code>Control_Loop()</code>, read that data and run your algorithm.</li>
-<li><strong>Output (automatic)</strong>: Call a function such as <code>XM_SetAssistTorqueRH(...)</code> and the library converts it to a CAN message and sends it to KIT H10 automatically.</li>
+<li><strong>PC 데이터 도구 <code>xm10</code> 이 SDK 에 들어왔습니다.</strong> 보드 없이 전체 동작을 볼 수 있는 <code>demo</code> 명령부터 실시간 그래프, 무손실 저장, CSV 내보내기까지 한 스크립트로 됩니다.</li>
+<li><strong>Total Data(0x20) 197 채널을 PC 에서 제대로 풀 수 있게 됐습니다.</strong> 지금까지는 값이 섞여서 깨져 나왔습니다.</li>
+<li><strong>직접 등록한 채널 이름이 PC 화면에 나옵니다.</strong> 지금까지는 <code>ch0, ch1…</code> 로만 보였습니다.</li>
+<li><strong>예제 35 를 고쳤습니다.</strong> 채널 이름만 등록해 두고 값은 한 번도 보내지 않던 자리였습니다.</li>
+<li><strong>펌웨어 자체는 거의 바뀌지 않았습니다.</strong> 동작에 영향을 주는 변경은 이 문서에 적힌 것이 전부입니다.</li>
 </ul>
-<p>USB communication works the same way — a single function call is all you need. Your only concern is the algorithm.</p>
 <hr />
-<h2 id="from-power-on-to-your-code">From Power-On to Your Code<a class="headerlink" href="#from-power-on-to-your-code" title="Permanent link">&para;</a></h2>
-<p>After you flash firmware with <code>Debug (F11)</code>, the board starts up in the following sequence:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>  Power ON
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    ↓
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  Boot code + board initialization  (automatic)
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    ↓
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  XM library initialization
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    — peripheral setup, USB ready, CAN link, sensor discovery, etc.
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    ↓
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  Internal scheduler starts
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    ↓
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  ┌──────────────────────────────────────────────────────────────┐
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  │  Scheduler runs multiple tasks by priority, round-robin:    │
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  │                                                              │
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  │   • User task       → Control_Setup() once → Control_Loop() every 1 ms  │
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  │   • CAN RX          → receives exoskeleton sensor data, updates XM.status │
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  │   • CAN TX          → sends motor commands                  │
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  │   • USB task        → USB-CDC serial communication          │
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  │   • Device discovery → auto-connects sensor hubs            │
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>  └──────────────────────────────────────────────────────────────┘
+<h2 id="이번-릴리즈의-주인공--pc-데이터-도구-xm10">이번 릴리즈의 주인공 — PC 데이터 도구 <code>xm10</code><a class="headerlink" href="#이번-릴리즈의-주인공--pc-데이터-도구-xm10" title="Permanent link">&para;</a></h2>
+<p>위치는 SDK 안 <code>Extension_Module\PythonDecoder\</code> 폴더입니다. v2.7.0 까지는 여기 없었고, <strong>이번부터 SDK 안에 함께 들어갑니다.</strong>
+자세한 사용법은 <a href="../../getting-started/04-pc-data-tool/">PC 데이터 도구 안내</a> 문서를 보시고, 아래는 감을 잡기 위한 요약입니다.</p>
+<p>가장 먼저 해 보실 건 이겁니다 — <strong>보드가 옆에 없어도</strong> 됩니다.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>Extension_Module<span class="se">\P</span>ythonDecoder
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>pyserial<span class="w"> </span>pyqt5<span class="w"> </span>pyqtgraph<span class="w"> </span>numpy
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>python<span class="w"> </span>xm10.py<span class="w"> </span>demo
 </code></pre></div>
-<p>Your code has two entry points:</p>
-<ul>
-<li><code>Control_Setup()</code> — called once immediately after boot. Put initialization code here (LED state setup, TSM registration, etc.).</li>
-<li><code>Control_Loop()</code> — called every 1 ms. Put your algorithm body here.</li>
-</ul>
-<p>Other tasks such as CAN RX run concurrently, but you do not need to manage them. The system handles everything.</p>
-<hr />
-<h2 id="where-is-my-file">Where Is My File?<a class="headerlink" href="#where-is-my-file" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Extension_Module/
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── XM_FW/
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   ├── XM_Apps/
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   │   └── Control_Task/
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   │       └── control_task.c     ← your workspace
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   └── (all other folders are XM library — do not modify)
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└── examples/                  ← 45 example control_task.c files
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    ├── 00_Quick_Start/quick_start.c
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    ├── 14_PD_Realtime_Control/pd_realtime_control.c
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    └── ...
-</code></pre></div>
-<p>To try an example, copy the entire contents of that folder's <code>.c</code> file into <code>XM_Apps/Control_Task/control_task.c</code> and build.</p>
-<hr />
-<h2 id="communication-at-a-glance">Communication at a Glance<a class="headerlink" href="#communication-at-a-glance" title="Permanent link">&para;</a></h2>
-<p>There are two channels — that is all you need to know.</p>
+<p>만들어 둔 데이터를 흘려보내면서 전체 경로를 한 번씩 다 돌려 보고, 마지막에 항목별로 통과했는지 스스로 알려줍니다.</p>
 <table>
 <thead>
 <tr>
-<th>Channel</th>
-<th>Who talks to whom</th>
-<th>Functions you use</th>
+<th>명령</th>
+<th>하는 일</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>CAN-FD</strong></td>
-<td>XM10 ↔ KIT H10 exoskeleton</td>
-<td>Read <code>XM.status.h10.*</code>, write <code>XM_SetAssistTorque*()</code></td>
+<td><code>xm10.py demo</code></td>
+<td>보드 없이 전체 동작을 시연</td>
 </tr>
 <tr>
-<td><strong>USB Serial (CDC)</strong></td>
-<td>XM10 → PC terminal / PhAI Studio</td>
-<td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code></td>
+<td><code>xm10.py ports</code></td>
+<td>연결된 포트 나열, XM10 으로 보이는 포트 표시</td>
+</tr>
+<tr>
+<td><code>xm10.py recv</code></td>
+<td>실시간 그래프 창 (<code>--cli</code> 옵션으로 콘솔만)</td>
+</tr>
+<tr>
+<td><code>xm10.py soak --minutes 30</code></td>
+<td>지정 시간 동안 받으면서 빠진 데이터가 없는지 확인</td>
+</tr>
+<tr>
+<td><code>xm10.py export FILE --csv DIR</code></td>
+<td>저장해 둔 <code>.xmlog</code> 를 CSV 로 변환</td>
+</tr>
+<tr>
+<td><code>xm10.py selftest</code></td>
+<td>보드 없이 도구 자체를 점검</td>
 </tr>
 </tbody>
 </table>
-<p>The underlying protocol details are handled by the library. You only need to call the functions.</p>
+<p>실행파일이 필요하면 <code>build_exe.py</code> 로 만들 수 있습니다. 그래프 창 포함 버전은 약 55.6 MB, <code>--no-gui</code> 옵션(콘솔만, 그래프 없음)은 약 23.0 MB 입니다. 만든 뒤에는 그 실행파일로 <code>selftest</code> 와 <code>demo</code> 를 한 번 돌려서 제대로 됐는지 확인하시길 권합니다.</p>
+<h3 id="받은-데이터를-그대로-저장하는-xmlog">받은 데이터를 그대로 저장하는 <code>.xmlog</code><a class="headerlink" href="#받은-데이터를-그대로-저장하는-xmlog" title="Permanent link">&para;</a></h3>
+<ul>
+<li>받은 데이터는 <strong>해석하기 전에</strong> 있는 그대로 파일에 먼저 저장됩니다. CSV 로 바꾸는 건 나중에 <code>export</code> 명령으로 언제든 할 수 있습니다.</li>
+<li>화면에는 안 그리는 채널(시스템 채널 0x20)도 파일에는 전부 들어갑니다.</li>
+<li>중간에 빠진 데이터가 있으면 그 자리가 기록으로 남아, 나중에 어디가 비었는지 알 수 있습니다.</li>
+<li>받던 도중 프로그램이 꺼지는 등으로 파일이 끊겨도, 그 앞부분까지는 정상적으로 읽힙니다.</li>
+<li>그래프 창에는 <strong>"Save .xmlog" 체크박스가 있고 기본으로 켜져 있습니다.</strong> CSV 와 같은 폴더에 저장됩니다.</li>
+<li>파일 이름은 CSV 가 <code>cdc_phai_&lt;시각&gt;.csv</code>, xmlog 가 <code>cdc_&lt;시각&gt;.xmlog</code> 입니다.</li>
+</ul>
 <hr />
-<h2 id="common-mistakes">Common Mistakes<a class="headerlink" href="#common-mistakes" title="Permanent link">&para;</a></h2>
+<h2 id="total-data0x20-197-채널-이제-pc-에서-제대로-풀립니다">Total Data(0x20) 197 채널, 이제 PC 에서 제대로 풀립니다<a class="headerlink" href="#total-data0x20-197-채널-이제-pc-에서-제대로-풀립니다" title="Permanent link">&para;</a></h2>
+<p>지금까지 XM10 은 이 197 개 채널을 이미 1 kHz 로 보내고 있었지만, PC 쪽은 <strong>하나의 구조체를 통으로 float 배열이라고 가정</strong>하고 읽었습니다. 실제로는 정수와 실수가 섞여 있는 구조체라 이 방식으로는 값이 깨져서 나왔습니다.</p>
+<p>이번에 펌웨어와 PC 도구가 <strong>같은 표를 보고</strong> 이 구조체를 해석하도록 만들었습니다. 그래서 둘 사이가 맞지 않으면 값이 슬쩍 어긋나는 대신 바로 드러납니다.</p>
+<ul>
+<li>참고로 알아두시면 좋은 점 하나 — 이 구조체는 크기가 365 바이트인데, 실제로 선을 타고 오는 데이터는 <strong>368 바이트</strong>입니다. 길이를 4 바이트 단위로 맞추다 보니 뒤에 0 이 3 바이트 붙어서 옵니다. 직접 값을 확인해 보실 때 참고하세요.</li>
+<li>CSV 로 내보내면 열 제목에 <code>leftHipAngle</code> 처럼 실제 채널 이름이 붙습니다. 더 이상 열 번호로 세어 가며 찾을 필요가 없습니다.</li>
+</ul>
+<hr />
+<h2 id="사용자-채널에-이름이-붙습니다">사용자 채널에 이름이 붙습니다<a class="headerlink" href="#사용자-채널에-이름이-붙습니다" title="Permanent link">&para;</a></h2>
+<p>펌웨어는 <code>XM_SetUsbCustomMeta()</code> 로 등록한 채널 이름을 원래부터 PC 에 보내고 있었는데, PC 쪽이 그걸 받고도 버리고 <code>ch0, ch1…</code> 로 표시했습니다. 이번부터 그 이름을 그대로 씁니다.</p>
+<ul>
+<li>그래프 제목과 CSV 열 제목에 여러분이 등록한 이름이 나옵니다.</li>
+<li>다만 이 경로로는 <strong>값의 타입까지는 전해지지 않아서</strong>, PC 는 일단 float32 로 가정하고 보여 줍니다. 그 사실을 화면과 CSV 요약에 <code>⚠ 타입 미상 — float32 가정</code> 으로 표시해 헷갈리지 않게 했습니다.</li>
+</ul>
+<hr />
+<h2 id="고친-것--예제-35-multilayer-transparent-control">고친 것 — 예제 35 MultiLayer Transparent Control<a class="headerlink" href="#고친-것--예제-35-multilayer-transparent-control" title="Permanent link">&para;</a></h2>
+<p>채널 이름 7 개(Gravity / DOB / Impedance / Total / Angle / Velocity / Mode, 단위는 Nm·deg·deg/s)를 등록만 해 두고 실제로 값을 보내는 호출을 한 번도 하지 않고 있었습니다. PC 쪽에는 이름은 있는데 값은 영원히 안 오는 채널로 보였습니다. <strong>Rev 2.0 · Rev 1.1 양쪽 다</strong> 고쳤습니다.</p>
+<p>USB 로 데이터를 보내는 예제 전체를 대상으로, 채널 이름 개수와 실제로 보내는 구조체가 서로 맞는지 자동으로 다시 점검했습니다. 지금은 Rev 2.0 24 개 예제, Rev 1.1 21 개 예제 모두 이상이 없습니다.</p>
+<hr />
+<h2 id="이-도구를-쓰실-때-지켜-주실-것-4-가지">이 도구를 쓰실 때 지켜 주실 것 4 가지<a class="headerlink" href="#이-도구를-쓰실-때-지켜-주실-것-4-가지" title="Permanent link">&para;</a></h2>
+<p>이미 <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/">예제 09</a> 등에 적혀 있는 내용이지만, 이번에 자동 채널 이름 표시가 생기면서 한 번 더 강조할 가치가 있습니다.</p>
+<ol>
+<li>USB 로 보내는 구조체 멤버는 <strong>float 만</strong> 쓰세요.</li>
+<li>JSON 에 등록하는 채널 이름의 개수와 순서는 구조체 멤버 개수·순서와 <strong>정확히 같아야</strong> 합니다.</li>
+<li>Module ID 는 <strong><code>0xF0</code> ~ <code>0xFE</code></strong> 범위를 쓰세요.</li>
+<li><strong><code>XM_SetUsbCustomMeta()</code> 는 한 연결에 한 번만 유지됩니다.</strong> 여러 번 부르면 나중 호출이 앞의 것을 그냥 덮어씁니다 — 펌웨어가 이름을 담아 두는 자리가 하나뿐이기 때문입니다. 채널마다 따로 등록하고 싶다면 한 번에 모아서 호출하세요.</li>
+</ol>
+<hr />
+<h2 id="예제-개수">예제 개수<a class="headerlink" href="#예제-개수" title="Permanent link">&para;</a></h2>
+<p>Rev 2.0 <strong>46 개</strong> / Rev 1.1 <strong>42 개</strong>. v2.7.0 과 같습니다.</p>
+<hr />
+<h2 id="아직-안-되는-것--꼭-읽어-주세요">아직 안 되는 것 — 꼭 읽어 주세요<a class="headerlink" href="#아직-안-되는-것--꼭-읽어-주세요" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>보드에서의 실측 확인은 아직 0 회입니다.</strong> 이번 PC 도구는 미리 만들어 둔 데이터와 코드 자체 점검으로만 검증했습니다. 실제 XM10 보드를 꽂고 받아 본 적은 없습니다. 써 보시다가 이상한 점이 있으면 알려 주세요.</li>
+<li><strong>채널의 타입(float 인지 정수인지 등)까지 자동으로 알려주는 방식은 PC 쪽만 준비되어 있습니다.</strong> 펌웨어가 그 정보를 실제로 보내는 건 다음 버전입니다. 지금 보드는 채널 <strong>이름만</strong> 보냅니다 — 그래서 위에서 설명한 대로 PC 는 항상 float32 로 가정합니다.</li>
+<li><strong><code>--no-gui</code> 실행파일은 실시간 수신 경로를 검사하지 못합니다.</strong> 그래프 창을 만드는 패키지가 없으면 수신기 자체가 못 뜨기 때문입니다. <code>selftest</code> 를 돌리면 이 사실을 화면에 알려 줍니다.</li>
+</ul>
+<hr />
+<h2 id="rev-11-sdk-의-폴더-이름-2-개가-바뀝니다">Rev 1.1 SDK 의 폴더 이름 2 개가 바뀝니다<a class="headerlink" href="#rev-11-sdk-의-폴더-이름-2-개가-바뀝니다" title="Permanent link">&para;</a></h2>
+<p>Rev 1.1 SDK 안에서 아래 두 폴더 이름이 바뀝니다. Rev 2.0 은 v2.7.0 에서 이미 바뀌었고, 이번에 Rev 1.1 도 같은 이름으로 맞췄습니다.</p>
 <table>
 <thead>
 <tr>
-<th>Symptom</th>
-<th>Cause</th>
-<th>Fix</th>
+<th>예전</th>
+<th>지금</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Code added to <code>main()</code> does nothing</td>
-<td><code>main()</code> starts the internal scheduler and exits immediately. User code belongs in <code>control_task.c</code></td>
-<td>Only modify <code>XM_Apps/Control_Task/control_task.c</code></td>
+<td><code>XM_FW/IOIF/</code></td>
+<td><code>XM_FW/phoundation-ioif/</code></td>
 </tr>
 <tr>
-<td><code>while(1)</code> used inside <code>Control_Loop</code></td>
-<td>The loop never returns, starving all other tasks</td>
-<td><code>Control_Loop</code> must run once and return — the system handles the repetition</td>
+<td><code>XM_FW/AGR_MW/</code></td>
+<td><code>XM_FW/phoundation-mw/</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>SDK 를 그대로 쓰시면 하실 일이 없습니다</strong> — 동봉된 <code>CMakeLists.txt</code> 와 <code>.cproject</code> 를 새 경로로 맞춰 두었습니다. 본인 빌드 스크립트나 프로젝트 설정에 옛 경로를 직접 적어 두셨다면 그것만 바꿔 주세요. <code>#include "ioif_agrb_uart.h"</code> 처럼 <strong>파일 이름만 쓰는 방식은 영향받지 않습니다.</strong></p>
+<hr />
+<h2 id="호환성">호환성<a class="headerlink" href="#호환성" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>기존 펌웨어 코드</td>
+<td><strong>재빌드만 하면 됩니다.</strong> 삭제되거나 이름이 바뀐 공개 API 없음</td>
 </tr>
 <tr>
-<td><code>HAL_Delay(100)</code> used inside <code>Control_Loop</code></td>
-<td>Blocks all other tasks for 100 ms</td>
-<td>Use the difference of <code>XM_GetTick()</code> to build a non-blocking timer</td>
+<td>PC 데이터 도구</td>
+<td>이번부터 SDK 동봉. 별도로 Python 패키지 설치 필요 (<code>pyserial pyqt5 pyqtgraph numpy</code>)</td>
 </tr>
 <tr>
-<td><code>XM.status.h10.leftHipAngle</code> is always 0</td>
-<td>KIT H10 not connected, or assist mode not yet entered</td>
-<td>Check <code>XM_IsCmConnected()</code> and confirm <code>h10Mode == XM_H10_MODE_ASSIST</code></td>
+<td>Rev 1.1</td>
+<td>예제 35 수정 반영. 그 외 펌웨어 변경 없음. 단 <strong>위 폴더 이름 2 개가 바뀝니다</strong></td>
 </tr>
 <tr>
-<td>Called <code>XM_SetAssistTorque*</code> but no torque output</td>
-<td>Control mode was never set</td>
-<td>Call <code>XM_SetControlMode(XM_CTRL_CONTROL)</code> once when entering Active</td>
-</tr>
-<tr>
-<td>Modified files in the XM library folders (IOIF, Devices, etc.)</td>
-<td>Library code is production firmware — arbitrary changes break the system</td>
-<td>Always work inside <code>Control_Task/</code> only</td>
-</tr>
-<tr>
-<td><code>Control_Loop</code> does not finish within 1 ms</td>
-<td>Heavy <code>sprintf</code> calls, accumulated floating-point operations, etc.</td>
-<td>Measure execution time with <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/">Ex.18 Debug Monitor</a> and spread the work across cycles</td>
-</tr>
-<tr>
-<td>Attempting to build two examples at the same time</td>
-<td>Only one <code>.c</code> file is allowed in <code>Control_Task/</code></td>
-<td>Copy one example at a time and build</td>
+<td>Total Data / 채널 이름</td>
+<td>Rev 1.1 · Rev 2.0 공통</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<h2 id="다운로드">다운로드<a class="headerlink" href="#다운로드" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>파일</th>
+<th>대상</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Rev2.0.zip</code></td>
+<td>Rev 2.0 보드용 SDK (예제 46 개, <code>PythonDecoder/</code> 포함)</td>
+</tr>
+<tr>
+<td><code>Rev1.1.zip</code></td>
+<td>Rev 1.1 보드용 SDK (예제 42 개, <code>PythonDecoder/</code> 포함)</td>
+</tr>
+<tr>
+<td><code>AGR_Bootloader.bin</code></td>
+<td>XM10 부트로더 — <strong>v2.6.0 과 동일본</strong>(이번 릴리즈에서 변경 없음)</td>
+</tr>
+<tr>
+<td><code>SUIT_H10_Binary_20260820.zip</code></td>
+<td>KIT H10 펌웨어 — <strong>v2.6.0 과 동일본</strong></td>
+</tr>
+<tr>
+<td><code>SUIT_ContentsFiles_20260820.zip</code></td>
+<td>H10 컨텐츠 파일 — <strong>v2.6.0 과 동일본</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>부트로더·H10 관련 3 개 파일은 <strong>v2.6.0 것을 그대로 다시 올린 것</strong>입니다. 이번 릴리즈는 XM10 쪽만 바뀌었고 그쪽은 변경이 없습니다.</p>
+</blockquote>
+<p>압축을 풀 때 <strong>짧은 경로</strong>(예: <code>C:\xm10\</code>)에 푸세요. 경로가 깊으면 윈도우의 경로 길이 제한 때문에 빌드가 실패할 수 있는데, 이건 코드 문제가 아니라 경로 길이 문제입니다.</p>
+<hr />
+<h2 id="관련-문서">관련 문서<a class="headerlink" href="#관련-문서" title="Permanent link">&para;</a></h2>
 <ul>
-<li>First build and flash: <a href="../getting-started/03-first-build/">Getting Started — 03 First Build</a></li>
-<li>State machine pattern: <a href="../api-reference/01-task-state-machine/">TSM API Reference</a></li>
-<li>Example learning path: <a href="../tutorials/">Tutorials</a></li>
-<li>Verify your code finishes within 1 ms: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/">Ex.18 Debug Monitor</a></li>
+<li><a href="../../getting-started/04-pc-data-tool/">PC 데이터 도구 안내</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/35_MultiLayer_Transparent_Control/">예제 35 — MultiLayer Transparent Control</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md">예제 전체 인덱스</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md">변경 이력 (CHANGELOG)</a></li>
 </ul>
 
 
@@ -2612,7 +2720,7 @@ If every user had to implement CAN communication, USB transmission, and motor co
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
-  Back to top
+  맨위로
 </button>
         
       </main>
@@ -2621,33 +2729,33 @@ If every user had to implement CAN communication, USB transmission, and motor co
   
     
       
-      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
         
           
-          <a href="../api-reference/ref/xm-api-user-custom/" class="md-footer__link md-footer__link--prev" aria-label="Previous: xm_api_user_custom.h (User Data)">
+          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="이전: 개요">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
             </div>
             <div class="md-footer__title">
               <span class="md-footer__direction">
-                Previous
+                이전
               </span>
               <div class="md-ellipsis">
-                xm_api_user_custom.h (User Data)
+                개요
               </div>
             </div>
           </a>
         
         
           
-          <a href="../kit-h10-firmware/" class="md-footer__link md-footer__link--next" aria-label="Next: KIT H10 Firmware">
+          <a href="../v2.7.0/" class="md-footer__link md-footer__link--next" aria-label="다음: v2.7.0">
             <div class="md-footer__title">
               <span class="md-footer__direction">
-                Next
+                다음
               </span>
               <div class="md-ellipsis">
-                KIT H10 Firmware
+                v2.7.0
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -2684,7 +2792,7 @@ If every user had to implement CAN communication, USB transmission, and motor co
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
