@@ -217,6 +217,27 @@ static float s_tau_dob_r   = 0.0f;
 static float s_tau_imp_r   = 0.0f;
 static float s_tau_total_r = 0.0f;
 static float s_tau_total_l = 0.0f;
+static float s_vel_r_dps   = 0.0f;     /* Kalman 추정 속도 (deg/s) — 스트리밍용 */
+
+/**
+ * @brief USB-CDC 스트리밍 페이로드 (Module ID 0xF0)
+ *
+ * 필드 순서는 Control_Setup 의 XM_SetUsbCustomMeta JSON 과 **같아야 한다** —
+ * `0xEF` 메타는 이름만 실어 보내고 값은 순서로 짝지어지기 때문에, 하나만 어긋나도
+ * PC 화면과 CSV 의 열이 통째로 밀린다. 전부 float 인 것도 같은 이유다(메타는
+ * 타입을 실어 보내지 않아 PC 가 float32 로 읽는다).
+ */
+typedef struct {
+    float gravity_nm;       /* "Gravity"   */
+    float dob_nm;           /* "DOB"       */
+    float impedance_nm;     /* "Impedance" */
+    float total_nm;         /* "Total"     */
+    float angle_deg;        /* "Angle"     */
+    float velocity_dps;     /* "Velocity"  */
+    float mode;             /* "Mode"      */
+} MlStreamData_t;
+
+static MlStreamData_t s_stream_data;
 
 /* --- Homing --- */
 static HomingState_t s_homing_state = HOMING_COMPLETE;
@@ -309,6 +330,19 @@ void Control_Loop(void)
     g_ml_dbg.tau_total_r   = s_tau_total_r;
     g_ml_dbg.tau_total_l   = s_tau_total_l;
     g_ml_dbg.loop_cnt++;
+
+    /* --- USB-CDC 스트리밍 (0xF0) ---
+     * Control_Setup 이 메타 7채널을 등록만 하고 정작 보내지는 않아서, PC 에는
+     * 이름만 있고 값이 영영 오지 않는 채널로 보였다(2026-09-10 예제 전수조사).
+     * XM_SendUsbDataWithId 는 non-blocking 이고 버퍼가 차면 그 tick 만 버린다. */
+    s_stream_data.gravity_nm   = s_tau_grav_r;
+    s_stream_data.dob_nm       = s_tau_dob_r;
+    s_stream_data.impedance_nm = s_tau_imp_r;
+    s_stream_data.total_nm     = s_tau_total_r;
+    s_stream_data.angle_deg    = XM.status.h10.rightHipMotorAngle;
+    s_stream_data.velocity_dps = s_vel_r_dps;
+    s_stream_data.mode         = (float)s_mode;
+    XM_SendUsbDataWithId(&s_stream_data, sizeof(s_stream_data), 0xF0);
 }
 
 /**
@@ -369,6 +403,7 @@ static void Active_Entry(void)
     s_tau_dob_r   = 0.0f;
     s_tau_imp_r   = 0.0f;
     s_tau_total_r = 0.0f;
+    s_vel_r_dps   = 0.0f;
 
 
     _UpdateLeds();
@@ -637,6 +672,7 @@ static void _RunControl(void)
     s_tau_imp_r   = tau_imp_r;
     s_tau_total_r = total_r;
     s_tau_total_l = total_l;
+    s_vel_r_dps   = vel_r_dps;      /* 스트리밍 "Velocity" 채널 */
 }
 
 /**

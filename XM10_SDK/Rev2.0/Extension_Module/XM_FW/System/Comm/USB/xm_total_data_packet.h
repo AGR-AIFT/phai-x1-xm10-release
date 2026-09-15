@@ -1,5 +1,5 @@
 /* AUTO-GENERATED from xm_total_data.yaml v2.8 — DO NOT EDIT MANUALLY */
-/* Generated: 2026-08-20 18:09:26 */
+/* Layout fingerprint: ce1c6e3a5f3e1ba6 (sha256 of the canonical descriptor list) */
 
 #ifndef XM_TOTAL_DATA_PACKET_H
 #define XM_TOTAL_DATA_PACKET_H
@@ -153,5 +153,12 @@ _Static_assert(sizeof(XM_TotalDataPacket_t) == 365,
 #define XM_TOTAL_DATA_PAYLOAD_SIZE  sizeof(XM_TotalDataPacket_t)
 #define XM_TOTAL_DATA_MODULE_ID     0x20
 #define XM_TOTAL_DATA_NUM_CHANNELS  197   /* excluding reserved */
+
+/* 맵 정체성 — PC 디코더 산출물(.ts/.py)과 같은 값이다.
+ * 지금은 어떤 .c 도 참조하지 않으므로 코드/플래시 영향이 0 이다.
+ * 와이어에 실어야 할 때(호스트가 FW 맵을 스스로 식별해야 할 때)
+ * 그 자리에 넣을 값이 이미 여기 있다. */
+#define XM_TOTAL_DATA_MAP_VERSION      "2.8"
+#define XM_TOTAL_DATA_MAP_FINGERPRINT  "ce1c6e3a5f3e1ba6"
 
 #endif /* XM_TOTAL_DATA_PACKET_H */

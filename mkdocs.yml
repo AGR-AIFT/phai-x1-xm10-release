@@ -81,6 +81,7 @@ plugins:
             하드웨어 연결: Hardware Setup
             개발 환경 구축: Development Setup
             첫 빌드: First Build
+            PC 에서 데이터 받기: Get Data on PC
             Claude Code 와 함께 시작: Start with Claude Code
             하드웨어: Hardware
             개요: Overview
@@ -160,6 +161,7 @@ nav:
       - 하드웨어 연결: getting-started/01-hardware-setup.md
       - 개발 환경 구축: getting-started/02-software-setup.md
       - 첫 빌드: getting-started/03-first-build.md
+      - PC 에서 데이터 받기: getting-started/04-pc-data-tool.md
       - Claude Code 와 함께 시작: getting-started/00-claude-code-quickstart.md
   - 하드웨어:
       - 개요: hardware/README.md
@@ -198,6 +200,7 @@ nav:
   - 문제 해결: troubleshooting.md
   - 릴리스 노트:
       - 개요: release-notes/README.md
+      - v2.8.0: release-notes/v2.8.0.md
       - v2.7.0: release-notes/v2.7.0.md
       - v2.6.0: release-notes/v2.6.0.md
       - v2.5.1: release-notes/v2.5.1.md

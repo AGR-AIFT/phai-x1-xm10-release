@@ -1,5 +1,5 @@
 /* AUTO-GENERATED from xm_total_data.yaml v2.8 — DO NOT EDIT MANUALLY */
-/* Generated: 2026-08-20 18:09:26 */
+/* Layout fingerprint: ce1c6e3a5f3e1ba6 (sha256 of the canonical descriptor list) */
 
 export interface ChannelDef {
   offset: number;
@@ -138,6 +138,7 @@ export const TOTAL_DATA_MAP: ChannelDef[] = [
 
 export const TOTAL_PACKET_SIZE = 365;
 export const DATA_MAP_VERSION = '2.8';
+export const DATA_MAP_FINGERPRINT = 'ce1c6e3a5f3e1ba6';
 export const MODULE_ID_TOTAL = 0x20;
 export const MODULE_ID_USER_META = 0xEF;
 export const MODULE_ID_USER_CUSTOM_START = 0xF0;

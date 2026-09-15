@@ -157,16 +157,16 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # User-defined include paths
     # AGR_MW (submodule)
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/AGR_MW/BOOT/Inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/AGR_MW/DOP
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/AGR_MW/DOP/Core
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/AGR_MW/DOP/Transport/CAN_FD
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/AGR_MW/DOP/Transport/CoE
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/AGR_MW/DOP/Transport/Serial
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/AGR_MW/DOP/Transport/UDP
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/AGR_MW/PnP
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/AGR_MW/RiskMngr/Inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/AGR_MW/TSM/Inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/phoundation-mw/BOOT/Inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/phoundation-mw/DOP
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/phoundation-mw/DOP/Core
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/phoundation-mw/DOP/Transport/CAN_FD
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/phoundation-mw/DOP/Transport/CoE
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/phoundation-mw/DOP/Transport/Serial
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/phoundation-mw/DOP/Transport/UDP
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/phoundation-mw/PnP
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/phoundation-mw/RiskMngr/Inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/phoundation-mw/TSM/Inc
     # System/Boot (XM-specific boot trigger)
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/System/Boot
     # Services (module-specific)
@@ -197,7 +197,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
 
     # Application & IOIF
     ${CMAKE_CURRENT_SOURCE_DIR}/XM_Apps/Control_Task
-    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/IOIF/Inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/XM_FW/phoundation-ioif/Inc
 )
 
 # Add project symbols (macros)

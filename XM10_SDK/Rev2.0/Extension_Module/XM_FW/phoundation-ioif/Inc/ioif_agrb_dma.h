@@ -23,6 +23,35 @@
 
 #include "ioif_agrb_defs.h"
 
+/*-------------------------------------------------------------------------
+ * DMA Pool Manager 와 무관한 공용 조회 유틸 - AGRB_IOIF_DMA_ENABLE 가드 밖이다.
+ *
+ * [주의] 이 선언/정의를 아래 ENABLE 가드 안으로 옮기지 말 것. UART/ADC 의
+ * Manual-Init 가 자기 ENABLE 플래그만으로 DMA NVIC 를 설정해야 하는데,
+ * DMA_ENABLE 을 켜지 않는 소비 모듈이 실제로 있다 - pheel-imu 는 UART_ENABLE 만,
+ * pheel-emg 는 ADC_ENABLE 만 켠다(각 모듈 ioif_conf.h 실측, 2026-09-10).
+ * 가드 안으로 넣으면 그 두 모듈에서 undefined reference 가 난다.
+ *
+ * MCU die 헤더만 include 한다(HAL 전체 아님). ioif_agrb_defs.h 는 CMSIS/HAL
+ * 타입을 주지 않으므로 IRQn_Type / DMA_Stream_TypeDef / DMA_Channel_TypeDef 를
+ * 여기서 확보한다.
+ *-----------------------------------------------------------------------*/
+#if defined(IOIF_MCU_SERIES_H7)
+    #include "stm32h743xx.h"
+#elif defined(IOIF_MCU_SERIES_G4)
+    #include "stm32g4xx.h"
+#endif
+
+/**
+ * @brief 주입된 DMA stream(H7) / channel(G4) 포인터에서 NVIC IRQ 번호를 조회한다.
+ * @param dma_instance HAL DMA 핸들의 Instance 필드 (예: hdma.Instance)
+ * @return 매핑된 IRQn. 모르는 stream/channel 이면 (IRQn_Type)0 -
+ *         호출자는 0 이면 NVIC 를 건드리지 않아야 한다(fail-safe).
+ * @note ioif_agrb_uart.c / ioif_agrb_adc.c 의 Manual-Init NVIC 설정 공용 진입점.
+ *       예전에는 두 파일이 같은 표를 각자 갖고 있었다(PLAN-20260907 E4-c 통합).
+ */
+IRQn_Type IOIF_DMA_GetIrqFromInstance(void* dma_instance);
+
 #if defined(AGRB_IOIF_DMA_ENABLE)
 
 #include <stdint.h>

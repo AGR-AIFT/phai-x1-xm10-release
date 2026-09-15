@@ -54,7 +54,7 @@ extern "C" {
 
 /**
  * @brief  리셋 직후 매직을 확인하고 시스템 부트로더로 점프한다.
- * @note   ★ main() 최상단, MPU_Config()/SCB_EnableICache()/HAL_Init() 보다 먼저 호출할 것.
+ * @note   ★ main() 최상단, MPU_Config / SCB_EnableICache / HAL_Init 보다 먼저 호출할 것.
  *         매직이 없으면 즉시 반환하므로 일반 부팅에는 영향이 없다.
  *         매직은 점프 직전에 클리어하므로 DFU 세션이 끝나면 정상 부팅한다.
  */
