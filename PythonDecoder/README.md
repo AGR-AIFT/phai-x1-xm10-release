@@ -106,10 +106,15 @@ pip install pyserial pyqt5 pyqtgraph numpy
 필요한 외부 패키지는 **numpy 하나**입니다(`PhAIFrame.as_float32()` 가 씁니다).
 
 - `parse_phai_frame()` — COBS 를 푼 프레임 하나를 검증해 `PhAIFrame` 으로
-- `FrameRouter` — 프레임이 사용자 채널인지 시스템 채널인지 판정
+- `FrameRouter` — 프레임이 사용자 채널인지 시스템 채널인지 판정. 사용자 module_id
+  (0xF0~0xFE) 는 **전부** `'user'` 로 라우팅되고, `router.user_modules` 에 처음 본
+  순서대로 module별 관측 상태가 쌓입니다 — GUI 는 그 순서로 탭을 만듭니다
+  (2026-09-15, "Phase E-live" 다중 module 실시간 뷰. 예전엔 처음 본 module 하나만
+  화면·CSV 에 반영하고 나머지는 세기만 했습니다).
 - `GlobalSequenceLedger` — 패킷 손실 집계
 
-화면 하단 통계줄에 나오는 값들:
+GUI 는 module_id 별로 탭 하나(사이드바 + 6-plot + CSV)를 만듭니다. 화면 하단
+통계줄에 나오는 값들:
 
 | 표시 | 뜻 |
 |---|---|
@@ -117,8 +122,10 @@ pip install pyserial pyqt5 pyqtgraph numpy
 | `SEQ↓` | 와이어에서 실제로 잃은 프레임 수 |
 | `QOvf` | PC 가 못 따라가 큐에서 버린 수 — 케이블 문제가 아니라 **로컬 지연**입니다 |
 | `Sys[...]` | 시스템 채널별 수신 프레임 수 |
-| `Other` | 첫 사용자 module 과 다른 module_id 프레임 수 (있을 때만 표시) |
 | `Resync` | seq 가 뒤로 간 횟수 — 손실이 아니라 기준을 다시 잡은 것 (있을 때만) |
+
+통계줄 위 작은 패널에는 module 별 행(frames / lost(전역 원장) / schema 출처
+`[0xEE]`·`[0xEF]`·`[float32 가정]`)이 나옵니다.
 
 `seq_id` 는 module 과 무관하게 펌웨어 카운터 하나가 발급하므로, 손실 계산은 **module 을
 나누기 전에** 전체 프레임을 대상으로 해야 합니다. 특정 module 의 프레임끼리만 비교하면

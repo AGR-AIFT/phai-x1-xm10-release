@@ -77,7 +77,7 @@ class SoakLedger:
             self.status_drop_total += pkt.tx_drops
             self.status_drop_frames += 1
         before = self._router.ledger.lost_count
-        tag, _delta = self._router.route(pkt)
+        tag, _module_id, _delta = self._router.route(pkt)
         # 원장의 lost_count 는 단조 증가라 차분이 음수가 될 수 없다. 그래도 방어한다 —
         # 음수가 나오면 원장 규약이 바뀐 것이고, 조용히 상쇄되면 손실을 놓친다.
         self.seq_lost += max(0, self._router.ledger.lost_count - before)

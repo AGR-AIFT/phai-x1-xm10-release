@@ -43,10 +43,10 @@ class ChannelSet:
     """한 module_id 를 푸는 방법. 출처가 달라도 이 인터페이스는 같다."""
 
     __slots__ = ("module_id", "names", "units", "source", "detail",
-                 "assumed_float32", "_decode")
+                 "assumed_float32", "_decode", "struct_name")
 
     def __init__(self, module_id, names, units, source, detail, decode,
-                 assumed_float32=False):
+                 assumed_float32=False, struct_name=""):
         self.module_id = module_id
         self.names = list(names)
         self.units = list(units) if units else [""] * len(self.names)
@@ -54,6 +54,9 @@ class ChannelSet:
         self.detail = detail
         self.assumed_float32 = assumed_float32
         self._decode = decode
+        # 0xEE 스키마일 때만 채워진다 — GUI 탭 제목 등, 이름이 필요한 소비자를 위한
+        # 부가 정보다(추가 필드라 기존 소비자에게는 영향이 없다).
+        self.struct_name = struct_name
 
     def decode(self, payload: bytes) -> Optional[list]:
         return self._decode(payload)
@@ -76,7 +79,7 @@ def from_ee_schema(schema: EE.Schema) -> ChannelSet:
     detail = "%s (%d필드, %dB, crc=%08x)" % (schema.struct_name, len(schema.fields),
                                              schema.struct_size, schema.schema_crc32)
     return ChannelSet(schema.module_id, schema.scalar_names(), units,
-                      "0xEE", detail, schema.decode)
+                      "0xEE", detail, schema.decode, struct_name=schema.struct_name)
 
 
 def from_ef_json(module_id: int, entries: list, payload_len: int) -> ChannelSet:
@@ -239,6 +242,25 @@ class SchemaRegistry:
         if cs is not None:
             self._by_module_len[key] = cs
         return cs
+
+    # -- 표시용 조회 (탭 제목 등, GUI 전용 — 값 디코딩과 무관) -----------
+    def struct_name(self, module_id: int) -> Optional[str]:
+        """`0xEE` 로 확정된 struct 이름. 길이와 무관하다. 없으면 None."""
+        cs = self._by_module.get(module_id)
+        return cs.struct_name if (cs is not None and cs.struct_name) else None
+
+    def meta_single_name(self, module_id: int) -> Optional[str]:
+        """`0xEF` 메타의 채널이 **하나뿐**일 때 그 이름.
+
+        `0xEF` 는 채널별 이름/단위만 나른다 — module 전체를 가리키는 이름 필드는
+        와이어에 없다. 채널이 하나뿐인 module 은 그 채널 이름이 사실상 module 이름
+        구실을 하지만, 여럿이면 대표할 이름이 없다.
+        """
+        entries = self._ef_raw.get(module_id)
+        if entries and len(entries) == 1 and isinstance(entries[0], dict):
+            name = str(entries[0].get("name", "")).strip()
+            return name or None
+        return None
 
     def known(self) -> List[ChannelSet]:
         out = [self._by_module[m] for m in sorted(self._by_module)]
