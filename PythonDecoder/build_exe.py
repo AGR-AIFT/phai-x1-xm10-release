@@ -51,7 +51,9 @@ DATA = [
 ]
 
 # 커버리지 검사에서 빼는 파일 — 진입점이거나 위 목록에 포함될 이유가 없는 것.
-COVERAGE_EXEMPT = {"__init__.py"}
+# test_gui_tabs.py 는 실제 창을 띄우는 개발용 시험(`run_tests.py` 전용)이라 exe 에 실을
+# 이유가 없다. `xm10 selftest` 는 in-process 라 창을 띄우지 않는다.
+COVERAGE_EXEMPT = {"__init__.py", "test_gui_tabs.py"}
 
 # 이 앱이 쓰지 않는데 개발 PC 에 깔려 있기 쉬운 무거운 패키지. PyInstaller 는 **선택적
 # import 경로까지** 정적으로 따라가므로, 빼지 않으면 그래프에 딸려 들어온다.

@@ -27,12 +27,16 @@ import sys
 import os
 import csv
 import argparse
+import warnings
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtCore import Qt
 
 import pyqtgraph as pg
 import numpy as np
+
+# 실시간 CSV 의 'hex 행' (값 대신 받은 바이트를 적은 행) 판별 — 규약을 정한 쪽과 같은 파일.
+from xmlog_export import HexRowFilter
 
 # ============================================================================
 # Plot Group Definitions
@@ -46,6 +50,11 @@ COMBINED_PLOT_GROUPS = [
 ]
 
 META_COLS = {"time_s", "pc_time_s", "seq_id", "module_id", "tx_drops"}
+
+
+def first_data_col(header: list) -> int:
+    """머리글에서 채널 값이 시작하는 열 번호 (time_s … tx_drops 다음)."""
+    return next((i for i, n in enumerate(header) if n not in META_COLS), len(header))
 
 
 def detect_plot_groups(data_col_names: list) -> list:
@@ -258,9 +267,28 @@ class CsvReviewWindow(QtWidgets.QMainWindow):
         try:
             with open(path, 'r', encoding='utf-8') as f:
                 header = f.readline().strip().split(',')
-            arr = np.genfromtxt(path, delimiter=",", skip_header=1, dtype=np.float64)
-            if arr.ndim == 1:
-                arr = arr.reshape(1, -1)
+                # 실시간 CSV 는 해석이 머리글과 달라진 프레임(스키마가 늦게 도착한 경우 등)을
+                # 값 대신 받은 바이트(hex)로 적는다. 그 행의 값 칸은 숫자가 아니다 — 그대로 읽으면
+                # 빈 칸이 NaN 이 되어 아래 이상치 필터가 그 자리에서 데이터를 통째로 잘라 버린다.
+                # 그렇다고 행을 통째로 빼면 안 된다: time_s · seq_id · tx_drops 는 멀쩡해서, 빼는
+                # 순간 그 자리가 없던 패킷 손실(seq 구멍)로 보이고 그 행이 실은 Tx drop 은 합계에서
+                # 빠진다. 그래서 값 칸만 nan 으로 읽고(HexRowFilter) 어느 행이었는지 기억해 두었다가
+                # 이상치 검사에서만 뺀다. 그래프에서는 그 구간이 빈 채로 남는다.
+                hex_rows = HexRowFilter(first_data_col(header))
+                with warnings.catch_warnings():
+                    # 값이 하나도 없으면 genfromtxt 가 경고를 내고 빈 배열을 준다 — 아래에서 직접 알린다
+                    warnings.simplefilter("ignore", UserWarning)
+                    arr = np.genfromtxt(hex_rows(f), delimiter=",", dtype=np.float64)
+            n_hex = len(hex_rows.rows)
+            if arr.ndim == 1 and arr.size:
+                arr = arr.reshape(1, -1)        # 행이 하나뿐이면 1차원으로 온다
+            if arr.size == 0 or n_hex == arr.shape[0]:      # 값이 있는 행이 하나도 없다
+                QtWidgets.QMessageBox.warning(
+                    self, "Warning",
+                    "숫자로 읽을 수 있는 행이 없다." + (
+                        f"\n(값 대신 받은 바이트를 적은 hex 행 {n_hex}개만 있다 — "
+                        ".xmlog 에서 다시 뽑아 보세요: xm10 export)" if n_hex else ""))
+                return
         except Exception as e:
             QtWidgets.QMessageBox.critical(self, "Error", f"Failed to load CSV:\n{e}")
             return
@@ -274,7 +302,10 @@ class CsvReviewWindow(QtWidgets.QMainWindow):
         self.txdrop_col = self.col_index.get("tx_drops")
         self.data_col_names = [n for n in header if n not in META_COLS]
 
-        # Outlier filter
+        # Outlier filter — hex 행의 nan 은 이상치가 아니다 (값이 없을 뿐, 앞쪽 칸은 멀쩡하다)
+        hex_mask = np.zeros(arr.shape[0], dtype=bool)
+        hex_mask[np.asarray(hex_rows.rows, dtype=np.intp)] = True
+        notes = []
         data_indices = [self.col_index[n] for n in self.data_col_names]
         if data_indices:
             data_slice = arr[:, data_indices]
@@ -282,13 +313,21 @@ class CsvReviewWindow(QtWidgets.QMainWindow):
                 np.isnan(data_slice).any(axis=1) |
                 np.isinf(data_slice).any(axis=1) |
                 (np.abs(data_slice) > 1e6).any(axis=1)
-            )
+            ) & ~hex_mask
             if bad_mask.any():
                 first_bad = int(np.argmax(bad_mask))
                 if first_bad > 0:
                     arr = arr[:first_bad]
-                    self.statusBar().showMessage(
+                    hex_mask = hex_mask[:first_bad]
+                    notes.append(
                         f"Outlier detected at row {first_bad} — truncated to {first_bad} rows")
+        n_hex = int(hex_mask.sum())             # 잘린 뒤에도 남은 hex 행만
+        if n_hex:
+            notes.append(f"hex 행 {n_hex}개는 값이 아니라 받은 바이트라 그래프에서 비웠다 "
+                         "(시간·seq·Tx drop 은 그대로 센다) — "
+                         "이름·값이 맞는 CSV 는 .xmlog 에서 다시 뽑는다 (xm10 export)")
+        if notes:
+            self.statusBar().showMessage("   |   ".join(notes))
 
         self.data = arr
         self.lbl_path.setText(path)
@@ -298,9 +337,11 @@ class CsvReviewWindow(QtWidgets.QMainWindow):
         if self.time_col is not None and arr.shape[0] > 1:
             duration = arr[-1, self.time_col] - arr[0, self.time_col]
 
-        self.lbl_info.setText(
-            f"{arr.shape[0]:,} rows  |  {len(self.data_col_names)} channels  |  "
-            f"Duration: {duration:.2f}s")
+        info = (f"{arr.shape[0]:,} rows  |  {len(self.data_col_names)} channels  |  "
+                f"Duration: {duration:.2f}s")
+        if n_hex:
+            info += f"  |  hex 행 {n_hex:,}개 (값 칸 비움)"
+        self.lbl_info.setText(info)
 
         # Sequence analysis
         seq_gap_count = 0

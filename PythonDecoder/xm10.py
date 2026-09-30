@@ -7,7 +7,7 @@
     python xm10.py recv --cli --log      실시간 수신 (콘솔) + .xmlog 저장
     python xm10.py soak --minutes 30     보드 실측 — 손실 0 인지 판정
     python xm10.py export FILE --csv DIR .xmlog 를 요약하거나 CSV 로
-    python xm10.py selftest              보드 없이 도는 자체 검증 전부
+    python xm10.py selftest              보드 없이 도는 자체 검증 (창을 띄우는 시험은 run_tests.py)
 
 PyInstaller 로 묶으면 `xm10.exe demo` 처럼 파이썬 없이도 같은 명령을 쓴다
 (`python build_exe.py` 참조).
@@ -46,11 +46,13 @@ COMMANDS = {
     "recv":     ("cdc_phai_receiver", "main", "실시간 수신 (GUI 기본, --cli 로 콘솔)"),
     "soak":     ("soak",              "main", "보드 실측 — 손실/CRC/재동기 0 판정"),
     "export":   ("xmlog_export",      "main", ".xmlog 요약 · CSV 내보내기"),
-    "selftest": (None,                None,   "보드 없이 도는 자체 검증 전부"),
+    "selftest": (None,                None,   "보드 없이 도는 자체 검증 (창 시험은 run_tests.py)"),
 }
 
-# selftest 가 도는 순서. `run_tests.py` 와 같은 목록이되, 여기서는 **한 프로세스 안**에서
-# 돈다 — 실행파일로 묶었을 때 하위 파이썬 프로세스를 띄울 수 없기 때문이다.
+# selftest 가 도는 순서. `run_tests.py` 의 목록에서 **실제 창을 띄우는 GUI 시험
+# (test_gui_tabs)을 뺀** 나머지다 — 그 시험은 개발용이라 실행파일에 싣지 않는다
+# (build_exe.py 의 COVERAGE_EXEMPT). 그리고 여기서는 **한 프로세스 안**에서 돈다 —
+# 실행파일로 묶었을 때 하위 파이썬 프로세스를 띄울 수 없기 때문이다.
 SELFTEST_SUITES = [
     ("frame_router (wire parsing)",   "test_frame_router",        "main",     ()),
     ("total_data_decoder self-test",  "total_data_decoder",       "_selftest", ()),
@@ -126,12 +128,13 @@ def cmd_ports(argv) -> int:
 
 
 def cmd_selftest(argv) -> int:
-    """모든 자체 검증을 **한 프로세스 안에서** 돌린다.
+    """보드 없이 도는 자체 검증을 **한 프로세스 안에서** 돌린다.
 
     `run_tests.py` 와 무엇이 다른가: 저쪽은 개발용이라 하위 프로세스를 띄우고
-    pyflakes 정적 게이트까지 돌린다(소스가 있어야 한다). 이쪽은 실행파일 안에서도
-    돌아야 하므로 in-process 다. 정적 게이트는 **여기서 못 돈다고 분명히 적는다** —
-    조용히 빠지면 돌았다고 오해한다.
+    pyflakes 정적 게이트까지 돌리며, 실제 창을 띄우는 GUI 시험(test_gui_tabs — 탭·CSV·
+    0x20 표)도 거기에만 있다(둘 다 소스가 있어야 한다). 이쪽은 실행파일 안에서도
+    돌아야 하므로 in-process 이고 창은 띄우지 않는다. 그 둘은 **여기서 못 돈다고 분명히
+    적는다** — 조용히 빠지면 돌았다고 오해한다.
     """
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -151,6 +154,7 @@ def cmd_selftest(argv) -> int:
     print("")
     print("자체 검증 %d/%d 통과" % (len(results) - len(bad), len(results)))
     print("  (pyflakes undefined-name 게이트는 소스에서만 돈다: python run_tests.py)")
+    print("  (창·CSV·0x20 표를 실제로 띄워 보는 test_gui_tabs 도 소스에서만 돈다: python run_tests.py)")
 
     # GUI 없이 만든 빌드에서는 **실시간 디코딩 경로가 검사되지 않는다.** 그 경로는
     # 한때 0xEE 스키마를 받고도 값을 float32 로 뭉개고 있었고(감사 #7), 그걸 잡는

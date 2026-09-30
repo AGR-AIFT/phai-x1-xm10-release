@@ -123,7 +123,7 @@ def main():
           "와이어 페이로드가 368 B 가 아님: %d (4바이트 패딩 규약)" % len(pkt.payload))
 
     router = FrameRouter()
-    tag, _delta = router.route(pkt)
+    tag, _module_id, _delta = router.route(pkt)
     check(tag == "system", "0x20 이 system 으로 라우팅되지 않음: %r" % tag)
     check(router.system_taps[PHAI_MODULE_TOTAL_DATA].frame_count == 1,
           "system tap 이 세지 않음")

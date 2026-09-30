@@ -10,6 +10,7 @@ cdc_phai_receiver.py 의 PhAISerialWorker / MainWindow / run_cli() 가 모두 �
 from __future__ import annotations
 
 import struct
+import threading
 import zlib
 
 import numpy as np
@@ -289,34 +290,77 @@ class SystemFrameTap:
 # Frame Router
 # ============================================================================
 
+class ModuleState:
+    """사용자 module 하나의 관측 상태.
+
+    이름·단위·스키마 출처는 SchemaRegistry 가 이미 안다 — 여기서 중복해 들고 있지
+    않는다. 라우터가 필요로 하는 최소한(몇 프레임 봤는지)만 남긴다.
+    """
+    __slots__ = ('module_id', 'frame_count')
+
+    def __init__(self, module_id: int):
+        self.module_id = module_id
+        self.frame_count = 0
+
+
 class FrameRouter:
     """프레임 하나가 갈 곳을 정한다.
 
     순서가 핵심이다 — ledger 를 먼저 갱신하고 그 다음에 module 을 나눈다.
     거꾸로 하면(시스템 프레임을 먼저 걸러내면) 걸러낸 프레임의 seq 만큼
     정상 프레임마다 거짓 손실이 잡힌다.
+
+    ⚠️ 2026-09-15 설계 변경 (PLAN rev4.2 §4.11, 사용자 승인) — "Phase E-live" 다중 모듈
+    실시간 뷰. 예전에는 처음 본 사용자 module 하나만 'primary' 로 잠그고 나머지는
+    'user_other' 로 세기만 했다 — 그래프·CSV 에서 두 번째 이후 사용자 module 값이
+    통째로 버려졌다(.xmlog 에는 남아 있었지만 실시간 화면·CSV 에는 안 나왔다).
+    이제 사용자 module_id(0xF0~0xFE) 는 **전부** 'user' 로 라우팅되고, module_id 별
+    관측 상태를 `user_modules` 에 처음 본 순서대로 쌓는다 — GUI 가 그 순서로 탭을 만든다.
+
+    seq 원장은 여전히 module 과 무관한 **하나**다. module 별로 쪼개면 그 사이에 낀
+    다른 module 프레임 수만큼 거짓 손실이 생긴다 — 이 파일 초반 GlobalSequenceLedger
+    docstring, 그리고 test_frame_router.test_routing() 의 "naive_lost" 케이스가 그
+    실패 형태를 재현해 둔다.
+
+    스레드: `route()` 는 프레임을 받는 스레드 **하나**만 부른다(원장이 스레드 안전하지
+    않다). 그 스레드가 새 module 을 처음 볼 때 `user_modules` 에 키가 늘어난다. 화면 쪽
+    다른 스레드가 이 딕셔너리를 `for ... in user_modules.items()` 로 직접 돌면 그 사이
+    키가 늘 때 "dictionary changed size during iteration" 으로 죽는다 —
+    다른 스레드에서는 `user_modules_snapshot()` 으로만 읽는다.
     """
 
     def __init__(self):
         self.ledger = GlobalSequenceLedger()
         self.system_taps = {mid: SystemFrameTap(mid) for mid in SYSTEM_MODULE_IDS}
-        self.other_user_frames = 0     # primary 아닌 사용자 module (드묾) — 세기만 한다
-        self.primary_user_module = -1  # 첫 사용자 프레임의 module_id. GUI/CSV 가 이걸 잠근다
+        # 처음 본 순서 그대로 쌓인다 (Python dict, 3.7+ 삽입 순서 보존).
+        # GUI 탭 생성 순서가 이 순서를 그대로 따라간다.
+        self.user_modules: dict = {}
+        # 키를 넣는 자리(새 module 이 처음 보일 때뿐이라 드물다)와 스냅샷을 뜨는 자리만
+        # 묶는다. 프레임마다 도는 조회·카운트에는 락이 없다.
+        self._user_modules_lock = threading.Lock()
 
     def route(self, frame: PhAIFrame):
-        """반환: ('system' | 'user_primary' | 'user_other', seq_delta)"""
+        """반환: (tag, module_id, seq_delta). tag 는 'system' | 'user'."""
         delta = self.ledger.observe(frame.seq_id)   # 반드시 module 분기보다 먼저
         frame.device_time_s = self.ledger.device_time_s
 
         if frame.module_id in SYSTEM_MODULE_IDS:
             self.system_taps[frame.module_id].push(frame)
-            return 'system', delta
+            return 'system', frame.module_id, delta
 
-        if self.primary_user_module < 0:
-            self.primary_user_module = frame.module_id
+        state = self.user_modules.get(frame.module_id)
+        if state is None:
+            state = ModuleState(frame.module_id)
+            with self._user_modules_lock:
+                self.user_modules[frame.module_id] = state
+        state.frame_count += 1
 
-        if frame.module_id != self.primary_user_module:
-            self.other_user_frames += 1
-            return 'user_other', delta
+        return 'user', frame.module_id, delta
 
-        return 'user_primary', delta
+    def user_modules_snapshot(self) -> list:
+        """`[(module_id, frame_count), ...]` — 처음 본 순서. 다른 스레드에서 불러도 안전하다.
+
+        값은 그 순간의 복사본이라 이후 라우팅이 계속돼도 바뀌지 않는다.
+        """
+        with self._user_modules_lock:
+            return [(mid, st.frame_count) for mid, st in self.user_modules.items()]

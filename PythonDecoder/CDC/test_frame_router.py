@@ -13,7 +13,10 @@ pytest 없이 그냥 실행된다. 합성 스트림을 만들어 넣고, 마지�
   2. 시스템 프레임이 섞여 있어도 거짓 손실이 잡히지 않는다
   3. 1초를 넘는 단선이 통째로 사라지지 않는다  ← 예전 코드의 진짜 결함
   4. seq 가 뒤로 가도 손실 통계와 시간축이 오염되지 않는다
-  5. 채널 구성이 0x20 이 아니라 첫 '사용자' 프레임으로 정해진다
+  5. 사용자 module_id(0xF0~0xFE) 는 전부 라우팅된다 — 2026-09-15 이전에는 처음 본
+     하나만 'primary' 로 잠기고 나머지는 세기만 하고 값을 버렸다(진짜 결함이었다)
+  6. 다른 스레드가 module 목록을 읽어도 안 죽는다 — 워커가 새 module 을 추가하는 순간
+     화면 스레드가 딕셔너리를 직접 돌면 "changed size during iteration" 이 난다
 """
 import csv
 import os
@@ -25,7 +28,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from frame_router import (            # noqa: E402
     FrameRouter, PhAIFrame, parse_phai_frame, cobs_decode, crc16_ccitt,
-    PHAI_SOF, DEVICE_PERIOD_MS,
+    PHAI_SOF, DEVICE_PERIOD_MS, SYSTEM_MODULE_IDS,
 )
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -153,7 +156,7 @@ def feed(stream: bytes, max_chunk=None, seed=4242):
                 pkt, err = parse_phai_frame(cobs_decode(bytes(wire_buf[:delim])), 0.0)
                 if err is not None:
                     errs += 1
-                elif router.route(pkt)[0] == "user_primary":
+                elif router.route(pkt)[0] == "user":
                     user_frames.append(pkt)
             del wire_buf[:delim + 1]
 
@@ -275,6 +278,30 @@ def test_ledger():
     assert r.ledger.lost_count == 0, r.ledger.lost_count
     ok("역행 직후 기준을 다시 잡고 정상 계측 재개")
 
+    # --- 경계값: delta 32767 / 32768 / 65535 / 65536 ----------------------
+    # ⚠️ 다중 module 라우팅(아래 [4])이 켜진 뒤로 이 경계가 더 가까워졌다 — seq_id 는
+    # module 과 무관하게 공유되므로, module 이 여럿이면 실제 초당 tick 수가
+    # DEVICE_PERIOD_MS(=1ms/tick, 즉 1kHz) 가정을 넘을 수 있다. 예를 들어 module 2개가
+    # 각자 1kHz 로 보내면 공유 카운터는 2kHz(2 frame/ms) 로 돈다. 아래 경계는 **카운트**
+    # 기준이라 module 수와 무관하지만, 그걸 '초' 로 환산하면 실제 tick rate 를 알아야
+    # 한다 — 2 frame/ms 로 도는 상황에서는 resync 판정 경계(delta>=32768)가
+    # 32768 / 2000 = 16.384 초에 해당한다. 그 정도로 긴 단절이면 '32768 카운트 전진'과
+    # '1 카운트 후퇴' 를 16비트 원장이 구분하지 못한다(근본적 모호성, 클램프로 못 없앤다).
+    boundary_cases = [
+        # (delta, 기대 lost, 기대 resync, 설명)
+        (32767, 32766, 0, "절반 바로 아래 — 아직 '전진'으로 읽는다 (최대 손실 케이스)"),
+        (32768, 0, 1, "절반 정확히 — 여기서부터 '후퇴(resync)'로 읽는다"),
+        (65535, 0, 1, "전체 랩 바로 아래 — 뒤로 1 간 것과 동치로 읽힌다"),
+        (65536, 0, 0, "전체 랩 정확히 한 바퀴 — delta==0 과 구분 불가 (근본적 모호성)"),
+    ]
+    for delta, want_lost, want_resync, desc in boundary_cases:
+        rb = FrameRouter()
+        rb.route(mkframe(0))
+        rb.route(mkframe(delta & 0xFFFF))
+        assert rb.ledger.lost_count == want_lost, (delta, rb.ledger.lost_count, want_lost)
+        assert rb.ledger.resync_count == want_resync, (delta, rb.ledger.resync_count, want_resync)
+        ok("경계 delta=%d -> lost=%d resync=%d  (%s)" % (delta, want_lost, want_resync, desc))
+
 
 # ============================================================================
 # 3. 시스템 프레임 라우팅 — 섞이지 않고, 버려지지도 않는다
@@ -346,7 +373,8 @@ def test_routing():
     assert router.ledger.lost_count == 0, router.ledger.lost_count
 
     # 예전 코드도 이 스트림에서는 거짓 손실이 0 이었다 — module 필터가 아예 없었기 때문이다.
-    # 즉 이 항목에서 예전 코드가 틀렸던 게 아니다(아래 test_first_frame_lock 이 진짜 결함).
+    # 즉 이 항목에서 예전 코드가 틀렸던 게 아니다(아래 [4] test_multi_module_routing 이
+    # 예전 코드의 진짜 결함 — primary 아닌 module 값을 통째로 버리던 것 — 을 다룬다).
     old_drops, _ = _old_seq_logic(all_seqs)
     assert old_drops == 0, old_drops
 
@@ -364,25 +392,73 @@ def test_routing():
        % naive_lost)
 
 
-def test_first_frame_lock():
-    print("\n[4] 첫 프레임 채널 잠금 — 예전 코드의 진짜 결함")
+def test_multi_module_routing():
+    print("\n[4] 다중 사용자 module 라우팅 — 예전 코드의 진짜 결함이었던 자리")
 
-    # 예전 _on_poll 은 배치의 '첫 프레임'으로 채널 구성을 잠갔다.
-    # 0x20 auto-stream 이 기본 ON 이라 그 첫 프레임은 대개 0x20 이었고,
-    # 그래서 사용자 채널이 0x20 기준으로 잘못 잠겼다.
-    r = FrameRouter()
-    seq = 0
-    for _ in range(50):
-        r.route(mkframe(seq, 0x20)); seq = (seq + 1) & 0xFFFF
-    tag, _ = r.route(mkframe(seq, 0xF0))
-    assert tag == "user_primary" and r.primary_user_module == 0xF0
-    ok("0x20 이 50개 먼저 와도 primary 는 0xF0 (예전에는 0x20 으로 잠겼다)")
+    # 예전 _on_poll/FrameRouter 는 처음 본 사용자 module 하나만 'primary' 로 잠그고
+    # 나머지는 'user_other' 로 세기만 했다 — 그래프·CSV 에서 두 번째 이후 사용자 module
+    # 값이 통째로 버려졌다. 2026-09-15 설계(PLAN rev4.2 §4.11)로 사용자 module 은 전부
+    # 'user' 로 라우팅되고 module_id 별 관측 상태가 FrameRouter.user_modules 에 쌓인다.
+    import demo_stream as DS
 
-    # primary 가 아닌 두 번째 사용자 module 은 그래프·CSV 에 안 들어가지만 세어는 둔다
-    tag, _ = r.route(mkframe(seq + 1, 0xF1))
-    assert tag == "user_other"
-    assert r.other_user_frames == 1
-    ok("primary 아닌 사용자 module 은 user_other 로 분리되고 개수가 남는다")
+    # cycles=6(최소) + drop_at 을 범위 밖으로 둬서 CRC 손상·시퀀스 손실이 전혀 없는
+    # 순수한 라우팅 검증 스트림을 만든다 — "손실 0" 을 확인하는 게 이 시험의 핵심이다.
+    stream, exp = DS.build_demo_session(cycles=6, drop_at=999, drop_len=0)
+    assert exp.frames_crc_bad == 0 and exp.lost_frames == 0   # 전제 확인
+
+    router = FrameRouter()
+    buf = bytearray()
+    user_by_mid = {}
+    errs = 0
+    CHUNK = 37   # 프레임 경계와 일부러 어긋나는 크기 (시리얼 read() 를 흉내)
+    for i in range(0, len(stream), CHUNK):
+        buf.extend(stream[i:i + CHUNK])
+        while True:
+            d = buf.find(0)
+            if d < 0:
+                break
+            if d > 0:
+                pkt, err = parse_phai_frame(cobs_decode(bytes(buf[:d])), 0.0)
+                if err is not None:
+                    errs += 1
+                else:
+                    tag, mid, _delta = router.route(pkt)
+                    if tag == "user":
+                        user_by_mid.setdefault(mid, []).append(pkt)
+            del buf[:d + 1]
+
+    assert errs == 0, errs
+    ok("합성 스트림(0x20 + 0xEE + 0xEF + 0xF0 타입드 + 0xF1 메타 전용) %d B, 파싱 오류 0"
+       % len(stream))
+
+    # 두 사용자 module 모두 값을 받는다 — 예전에는 0xF1(두 번째) 이 버려졌다
+    assert set(user_by_mid) == {DS.MODULE_TYPED, DS.MODULE_META_ONLY}, set(user_by_mid)
+    assert len(user_by_mid[DS.MODULE_TYPED]) == exp.typed_frames
+    assert len(user_by_mid[DS.MODULE_META_ONLY]) == exp.meta_only_frames
+    ok("0xF0 %d개 · 0xF1 %d개 — 둘 다 값을 받았다 (예전엔 0xF1 이 'user_other' 로 버려졌다)"
+       % (len(user_by_mid[DS.MODULE_TYPED]), len(user_by_mid[DS.MODULE_META_ONLY])))
+
+    # 프레임 하나도 안 잃었다 — seq 원장은 module 로 쪼개도 여전히 하나뿐이다
+    assert router.ledger.lost_count == 0, router.ledger.lost_count
+    assert router.ledger.frame_count == exp.frames_ok, (router.ledger.frame_count, exp.frames_ok)
+    ok("손실 0, 원장 프레임 수 %d = 기대 %d — seq 원장은 module 과 무관하게 하나"
+       % (router.ledger.frame_count, exp.frames_ok))
+
+    # 처음 본 순서가 그대로 보존된다 (0xF0 이 각 주기에서 0xF1 보다 먼저 나간다)
+    assert list(router.user_modules.keys()) == [DS.MODULE_TYPED, DS.MODULE_META_ONLY]
+    ok("첫 관측 순서 보존: user_modules = [0x%02X, 0x%02X]"
+       % tuple(router.user_modules.keys()))
+
+    # ModuleState 의 frame_count 도 실제 라우팅된 개수와 일치해야 한다
+    assert router.user_modules[DS.MODULE_TYPED].frame_count == exp.typed_frames
+    assert router.user_modules[DS.MODULE_META_ONLY].frame_count == exp.meta_only_frames
+    ok("ModuleState.frame_count 가 실제 라우팅 개수와 일치")
+
+    # 라우팅만 보고 내용은 안 보면 반쪽 검증이다 — 첫 0xF0 프레임의 payload 도 확인
+    first_typed = user_by_mid[DS.MODULE_TYPED][0]
+    want_state = exp.typed_rows[0]["state"]
+    assert first_typed.payload[0] == want_state, (first_typed.payload[0], want_state)
+    ok("0xF0 첫 프레임 payload 도 원본과 일치 (state=%d)" % want_state)
 
 
 # ============================================================================
@@ -406,7 +482,7 @@ def test_chunking():
     assert len(split[1]) == len(whole[1])
     assert split[0].ledger.lost_count == whole[0].ledger.lost_count
     assert split[0].ledger.frame_count == whole[0].ledger.frame_count
-    assert split[0].primary_user_module == whole[0].primary_user_module
+    assert list(split[0].user_modules.keys()) == list(whole[0].user_modules.keys())
     assert (split[0].system_taps[0x20].byte_count
             == whole[0].system_taps[0x20].byte_count)
     ok("1~50 바이트 임의 분할 결과가 일괄 투입과 완전히 동일")
@@ -490,7 +566,7 @@ def test_worker_queue():
 
     # 큐에는 (프레임, 태그) 가 들어간다
     pkt, tag = w.packet_queue[0]
-    assert tag == "user_primary" and isinstance(pkt, PhAIFrame)
+    assert tag == "user" and isinstance(pkt, PhAIFrame)
     ok("큐 원소는 (프레임, 라우팅 태그) 쌍")
 
 
@@ -521,7 +597,9 @@ def test_regression():
     assert errs == 0, errs
     assert len(user_frames) == len(rows), (len(user_frames), len(rows))
     assert router.ledger.lost_count == 0, router.ledger.lost_count
-    assert router.primary_user_module == rows[0][1]
+    # user_modules 는 이제 module_id -> ModuleState 딕셔너리다(예전엔 스칼라
+    # primary_user_module 하나였다). 이 캡처는 module 1종뿐이므로 키가 하나여야 한다.
+    assert list(router.user_modules.keys()) == [rows[0][1]], router.user_modules.keys()
     ok("%d 행 전부 사용자 채널로, 손실 0 / 파싱오류 0" % len(rows))
 
     for idx in (0, len(rows) // 2, len(rows) - 1):
@@ -531,11 +609,93 @@ def test_regression():
     ok("첫/중간/끝 행의 채널 값이 원본과 일치")
 
     # 이 캡처는 module_id 1종 · seq 연속(gap 0) 이라 순수한 바이트 왕복 검증이다.
-    # 라우팅과 손실 계산은 위 합성 스트림들이 담당한다.
+    # 라우팅과 손실 계산은 위 합성 스트림들이, 다중 module 라우팅은 [4] 가 담당한다.
     mods = {m for _, m, _ in rows}
     assert len(mods) == 1
+    assert set(router.user_modules.keys()) == mods
     print("     (참고: 이 캡처는 module 0x%02X 단일 · gap 0 이라 왕복 검증 전용이다)"
           % list(mods)[0])
+
+
+# ============================================================================
+# 9. 다른 스레드가 읽는 user_modules
+# ============================================================================
+
+def test_user_modules_snapshot():
+    print("\n[9] user_modules 스냅샷 — 프레임을 받는 스레드가 module 을 늘리는 동안 다른 스레드가 읽는다")
+    import threading
+
+    # (a) 의미: 처음 본 순서, (module_id, 프레임 수), 이미 뜬 것은 안 바뀌는 복사본
+    r = FrameRouter()
+    for seq, mid in enumerate([0xF3, 0xF0, 0xF3, 0xF1, 0xF0, 0xF3]):
+        r.route(mkframe(seq, mid))
+    snap = r.user_modules_snapshot()
+    assert snap == [(0xF3, 3), (0xF0, 2), (0xF1, 1)], snap
+    r.route(mkframe(6, 0xF3))
+    r.route(mkframe(7, 0xF7))
+    assert snap == [(0xF3, 3), (0xF0, 2), (0xF1, 1)], "이미 뜬 스냅샷이 바뀌었다"
+    assert r.user_modules_snapshot()[-1] == (0xF7, 1)
+    ok("스냅샷 = 처음 본 순서의 (module_id, 프레임 수) 복사본 — 이후 라우팅에 안 바뀐다")
+
+    # (b) 경합: 쓰는 스레드가 새 module 을 계속 넣고, 읽는 스레드가 그 사이 계속 스냅샷을 뜬다.
+    # GUI 상태 패널이 정확히 이 형태다(워커 스레드 = 쓰기, GUI 스레드 = 30ms 마다 읽기).
+    # 스레드 전환을 아주 잦게 만들어 경합이 실제로 걸리게 한다.
+    all_ids = [m for m in range(256) if m not in SYSTEM_MODULE_IDS]
+    rounds = 40
+
+    def race(reader_fn):
+        """반환: (읽는 쪽이 예외로 죽은 라운드 수, 마지막 라운드의 라우터)"""
+        crashed, last = 0, None
+        for _ in range(rounds):
+            router = FrameRouter()
+            done = threading.Event()
+            errors = []
+
+            def writer():
+                try:
+                    for seq, mid in enumerate(all_ids):
+                        router.route(mkframe(seq, mid))
+                finally:
+                    done.set()            # 쓰는 쪽이 죽어도 읽는 쪽이 영원히 돌지 않게
+
+            def reader():
+                try:
+                    while not done.is_set():
+                        reader_fn(router)
+                except Exception as e:       # noqa: BLE001 — 이 시험이 잡으려는 바로 그것
+                    errors.append(e)
+
+            tw, tr = threading.Thread(target=writer), threading.Thread(target=reader)
+            tr.start()
+            tw.start()
+            tw.join()
+            tr.join()
+            crashed += 1 if errors else 0
+            last = router
+        return crashed, last
+
+    def read_snapshot(router):
+        router.user_modules_snapshot()
+
+    def read_naive(router):                    # 예전 GUI 가 하던 방식
+        for _mid, _state in router.user_modules.items():
+            pass
+
+    old_interval = sys.getswitchinterval()
+    sys.setswitchinterval(1e-6)
+    try:
+        crashed, router = race(read_snapshot)
+        naive_crashed, _ = race(read_naive)
+    finally:
+        sys.setswitchinterval(old_interval)
+
+    assert crashed == 0, "스냅샷으로 읽는데도 %d/%d 라운드에서 예외" % (crashed, rounds)
+    assert [m for m, _n in router.user_modules_snapshot()] == all_ids
+    ok("module %d 개를 넣는 스레드와 동시에 읽어도 %d 라운드 모두 예외 0, 최종 순서 보존"
+       % (len(all_ids), rounds))
+    print("     (참고: 같은 조건에서 딕셔너리를 직접 순회하면 %d/%d 라운드가 "
+          "'dictionary changed size during iteration' 으로 죽는다%s)"
+          % (naive_crashed, rounds, "" if naive_crashed else " — 이 환경에서는 경합이 안 걸렸다"))
 
 
 def main():
@@ -552,11 +712,12 @@ def main():
     test_parse()
     test_ledger()
     test_routing()
-    test_first_frame_lock()
+    test_multi_module_routing()
     test_chunking()
     test_mixed_with_gap()
     test_worker_queue()
     test_regression()
+    test_user_modules_snapshot()
     print("\n전부 통과 (%d 항목)" % _passed)
     return 0
 
