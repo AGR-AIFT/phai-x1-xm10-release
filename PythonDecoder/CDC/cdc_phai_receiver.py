@@ -53,7 +53,7 @@ import numpy as np
 # 프레임 파싱·시퀀스 회계·module 라우팅은 frame_router.py 하나로 모았다.
 # GUI 워커와 CLI 가 같은 코드를 쓰게 하려는 것이다 (예전에는 각자 복사본을 갖고 있었다).
 # 무손실 저장(.xmlog). 표준 라이브러리만 쓰므로 항상 import 된다.
-from xmlog_capture import XmLogCapture
+from xmlog_capture import XmLogCapture, unique_path
 import schema_registry as _schema
 
 # 0x20 Total Data 디코더. 생성된 맵(xm_total_data_map.py)이 옆에 있어야 동작한다 —
@@ -1139,10 +1139,11 @@ class MainWindow(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.critical(self, "Error", str(e))
             return
 
-        # 채널 설명(0xEE 스키마 · 0xEF 이름)은 보드가 **USB 가 새로 잡힐 때** 한 번 보낸다
-        # (펌웨어: USB device-ready 상승 에지, 또는 XM_SetUsbCustomMeta() 호출). COM 포트를
-        # 닫았다 다시 여는 Disconnect -> Connect 는 그 에지가 아니라서 보드는 다시 보내지
-        # 않는다 — 그때 비우면 이름·탭 제목·CSV 열 이름이 돌아오지 않는다. 그래서 USB 가 다시
+        # 채널 이름(0xEF)은 보드가 **USB 가 새로 잡힐 때** 한 번 보낸다 (펌웨어: USB
+        # device-ready 상승 에지, 또는 XM_SetUsbCustomMeta() 호출). 타입까지 알려 주는
+        # 0xEE 스키마는 지금 펌웨어가 아직 안 보낸다. COM 포트를 닫았다 다시 여는
+        # Disconnect -> Connect 는 그 에지가 아니라서 보드는 다시 보내지 않는다 — 그때
+        # 비우면 이름·탭 제목·CSV 열 이름이 돌아오지 않는다. 그래서 USB 가 다시
         # 잡혔을 법한 경우에만 비운다: 포트가 끊겼다 되돌아온 재연결이거나, 이전과 다른 포트
         # (=다른 보드일 수 있다)일 때. 안 비우면 다른 보드가 스키마를 안 보낼 때 예전 스키마가
         # 계속 적용돼 값과 탭 제목이 조용히 틀린다. 같은 포트로 수동 재연결하면 그대로 둔다.
@@ -1162,13 +1163,20 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # .xmlog 는 CSV 와 같은 폴더·같은 시각 도장. 여기서 열어 SESSION 을 적고 워커에
         # 넘긴다 — 이후 쓰기·닫기는 워커 스레드 몫이다 (PhAISerialWorker 주석 참조).
+        #
+        # 연결(재연결 포함)마다 **새 파일**이다. 다시 붙은 장치가 아까 그 장치인지 알 방법이 아직
+        # 없어서(PLAN §9 D-H), 한 파일에 이어 쓰지 않고 파일로 끊는다 — 새 파일은 스키마도 처음부터
+        # 다시 배운다. 이름이 초 단위 시각이라 1초 안에 다시 붙으면 같은 이름이 나오는데, 그때
+        # 앞 파일을 덮어쓰지 않게 `unique_path` 로 피한다.
+        # SESSION 의 total_data_map_version 은 비워 둔다 — CLI 는 --total-data 일 때만 적는다
+        # (참고용 문자열이라 값 해석에는 안 쓰인다. `XmLogCapture` docstring 참조).
         capture = None
         self._xmlog_path = None
         if self._chk_xmlog.isChecked():
             folder = self._csv_folder or (self._edit_folder.text().strip() or os.path.abspath("data"))
             stamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             try:
-                capture = XmLogCapture(os.path.join(folder, f"cdc_{stamp}.xmlog"))
+                capture = XmLogCapture(unique_path(os.path.join(folder, f"cdc_{stamp}.xmlog")))
                 self._xmlog_path = capture.path
             except Exception as e:
                 self._close_all_csv()
@@ -1760,8 +1768,10 @@ def run_cli(port, baud, output, total_data=False, log=False):
     # 무손실 저장 — 해석하기 전에 먼저 눕힌다. 스키마를 몰라도 적는다.
     cap = None
     if log:
-        cap = XmLogCapture(os.path.join(output, f"cdc_{stamp}.xmlog"),
-                           fw_build_id="", total_data_map_version=(
+        # GUI 와 같이 unique_path — 같은 초에 두 번 시작해도(보드마다 recv 를 하나씩 띄우는 스크립트
+        # 등) 앞 파일을 열자마자 비워 버리지 않는다.
+        cap = XmLogCapture(unique_path(os.path.join(output, f"cdc_{stamp}.xmlog")),
+                           total_data_map_version=(
                                td_dec.version if td_dec is not None else ""))
         print(f"  [log] {cap.path}")
 

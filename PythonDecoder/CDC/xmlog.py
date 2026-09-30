@@ -177,7 +177,8 @@ def encode_schema_activation(activation_id, module_id, schema_proto_ver,
     """SCHEMA_ACTIVATION — payload 는 `0xEE` canonical 바이트 **그대로**.
 
     재해석해서 저장하지 않는다. 파서가 나중에 바뀌어도 원본이 남아 있어야
-    "그때 FW 가 뭐라고 했는지" 를 되짚을 수 있다.
+    "그때 FW 가 뭐라고 했는지" 를 되짚을 수 있다. 프래그먼트가 여럿인 스키마를 이어붙이는 규칙은
+    `schema_0xee.split_canonical` 에 적혀 있다(이 도구의 약속이고 wire 계약에는 아직 없다).
     """
     return encode_record(REC_SCHEMA_ACTIVATION, _ACTIVATION_HDR.pack(
         activation_id & 0xFFFF, module_id & 0xFF, schema_proto_ver & 0xFF,
@@ -299,6 +300,10 @@ def scan(buf: bytes, stop_on_error: bool = True) -> ScanResult:
 
     크래시 복구가 이 함수 하나로 끝난다. 마지막 쓰기가 중간에 끊겼으면 그 레코드
     하나만 거부되고 나머지는 살아난다. 별도 체크포인트가 필요 없는 이유다.
+
+    레코드의 `fields` 는 **파일에 적힌 그대로**다. DATA 의 activation_id 가 가리키는 activation
+    의 module_id 와 DATA 의 module_id 가 어긋나는지 대조하는 일(어긋나면 0 으로 내려 읽는다)은 이
+    층이 아니라 스키마를 고르는 `xmlog_export.resolve_rows` 가 한다.
     """
     header = decode_file_header(buf)
     records = []
@@ -348,11 +353,35 @@ class XmLogWriter:
     아예 안 하면 크래시 때 잃는 양이 OS 버퍼 크기만큼이다. 기본은 배치 flush 이고,
     **어차피 복구 파서가 부분 레코드를 하나만 버리므로** 잃는 것은 항상
     "마지막 몇 개" 지 파일 전체가 아니다.
+
+    무엇이 남는다고 말할 수 있나 (내구성의 범위)
+    -----------------------------------------
+    * `flush()` 를 마친 **완전한 레코드**는 프로세스가 죽어도(크래시 · 강제 종료) 파일에 남는다 —
+      그 시점에 OS 가 바이트를 받아 갔기 때문이다.
+    * 아직 flush 하지 않은 레코드(최대 `flush_every - 1` 개)는 파이썬 버퍼에만 있다. 프로세스가
+      죽으면 함께 사라질 수 있다. 파일에 남은 것은 항상 **앞에서부터 이어진 레코드 열**이라 읽는
+      쪽(`scan`)이 마지막 부분 레코드 하나만 거부한다.
+    * SESSION · SCHEMA_ACTIVATION 은 쓰는 즉시 flush 한다. 드물고, 뒤따르는 DATA 를 해석하는
+      열쇠라서 — 어떤 activation 을 가리키는 DATA 는 남았는데 그 activation 기록이 사라진 파일을
+      만들지 않는다. (스키마가 오기 전에 적은 DATA, 즉 activation_id=0 은 스키마 없이 남는다.)
+    * **전원 차단 · OS 크래시는 주장하지 않는다.** 그 보장은 `sync()`(fsync)를 부른 지점까지만이고
+      평소에는 부르지 않는다.
+
+    activation 재사용 (PLAN 4.6 "중복 억제")
+    ----------------------------------------
+    재연결 등으로 같은 스키마가 다시 오면 SCHEMA_ACTIVATION 을 다시 쓰지 않고 기존
+    `activation_id` 를 돌려준다. 재사용 판정은 CRC 하나가 아니다:
+
+        key   = (module_id, schema_proto_ver, struct_size, schema_crc32)
+        reuse = key 가 이미 있고  AND  저장해 둔 0xEE 바이트 == 지금 받은 바이트
+
+    `schema_crc32` 는 FieldRecord 만 해싱하므로 `struct_name` 처럼 그 밖의 차이는 CRC 로 안 보인다.
+    바이트까지 같아야 같은 스키마로 본다 — 키가 같은데 바이트가 다르면 새 activation 이다.
     """
 
     __slots__ = ("_f", "path", "records_written", "bytes_written",
                  "_flush_every", "_since_flush", "_next_activation_id",
-                 "_act_by_crc", "_session_written")
+                 "_acts_by_key", "_session_written")
 
     def __init__(self, path, create_unix_ns: Optional[int] = None,
                  flush_every: int = 256):
@@ -367,9 +396,9 @@ class XmLogWriter:
         self._flush_every = max(1, int(flush_every))
         self._since_flush = 0
         self._next_activation_id = 1
-        # (module_id, schema_crc32) -> activation_id. PLAN 4.6 "중복 억제" —
-        # DTR 재연결마다 같은 스키마가 다시 와도 레코드를 새로 쓰지 않는다.
-        self._act_by_crc = {}
+        # (module_id, proto_ver, struct_size, schema_crc32) -> [(activation_id, 0xEE 바이트), ...]
+        # PLAN 4.6 "중복 억제" — 같은 키에 바이트가 다른 스키마가 여럿 있을 수 있어 목록이다.
+        self._acts_by_key = {}
         self._session_written = False
 
     # -- 저수준 ----------------------------------------------------------
@@ -417,7 +446,14 @@ class XmLogWriter:
 
     # -- 레코드 ----------------------------------------------------------
     def session(self, **kw) -> int:
-        return self.write_raw(encode_session(**kw))
+        n = self.write_raw(encode_session(**kw))
+        self.flush()          # 새 구간의 경계 — 드물고, 이 뒤의 모든 레코드를 해석하는 기준이다
+        return n
+
+    @property
+    def activation_count(self) -> int:
+        """지금까지 이 파일에 발급한 activation 수 (재사용은 세지 않는다)."""
+        return self._next_activation_id - 1
 
     def schema_activation(self, module_id, schema_proto_ver, struct_size,
                           schema_crc32, schema_payload) -> int:
@@ -426,22 +462,31 @@ class XmLogWriter:
         schema_crc32 는 와이어(FW)가 소유한다. 폭이 달라(u16 vs u32) 서로를
         대신할 수 없어서 역할을 나눈 것이다.
         반환값은 발급된 activation_id (뒤따르는 DATA 가 이걸 참조한다).
-        """
-        # 중복 억제 (PLAN 4.6). 같은 (module, crc) 는 레코드를 다시 쓰지 않고
-        # 기존 id 를 재사용한다 — 재연결 10회에 4 KB 씩 불어나는 것을 막는다.
-        cached = self._act_by_crc.get((module_id, schema_crc32))
-        if cached is not None:
-            return cached
 
-        if len(self._act_by_crc) >= 0xFFFE:
+        같은 스키마면 레코드를 다시 쓰지 않고 기존 id 를 돌려준다(클래스 docstring 의 재사용
+        판정). 스키마 A -> B -> A 로 돌아오면 세 번째 호출도 A 의 id 를 받는다.
+
+        id 는 u16 이라 이 파일에서 서로 다른 스키마를 65535개까지 받는다. 그 뒤로 **새** 스키마는
+        ValueError 이고(이미 가진 스키마는 계속 재사용된다), 부르는 쪽이 저장을 이어 갈지 정한다.
+        """
+        payload = bytes(schema_payload)
+        # 레코드에 실제로 적히는 폭으로 자른 값을 키로 쓴다 — 읽는 쪽이 보는 값과 같아야 한다.
+        key = (module_id & 0xFF, schema_proto_ver & 0xFF, struct_size & 0xFFFF,
+               schema_crc32 & 0xFFFFFFFF)
+        for act, stored in self._acts_by_key.get(key, ()):
+            if stored == payload:
+                return act
+
+        if self._next_activation_id > 0xFFFF:
             # u16 을 다 썼다. 재사용하면 같은 파일 안에서 서로 다른 스키마가 같은 id 를
             # 갖게 되어 DATA 의 참조가 모호해진다 — 조용히 망가지느니 거부한다.
-            raise ValueError("activation_id 를 다 썼다 (65534개) — 새 파일을 열 것")
+            raise ValueError("activation_id 를 다 썼다 (65535개) — 새 파일을 열 것")
         act = self._next_activation_id
         self._next_activation_id += 1
         self.write_raw(encode_schema_activation(
-            act, module_id, schema_proto_ver, struct_size, schema_crc32, schema_payload))
-        self._act_by_crc[(module_id, schema_crc32)] = act
+            act, module_id, schema_proto_ver, struct_size, schema_crc32, payload))
+        self._acts_by_key.setdefault(key, []).append((act, payload))
+        self.flush()          # 이 id 를 참조하는 DATA 보다 반드시 먼저 나간다(flush)
         return act
 
     def data(self, module_id, seq_id, pc_time_us, payload, activation_id=0) -> int:

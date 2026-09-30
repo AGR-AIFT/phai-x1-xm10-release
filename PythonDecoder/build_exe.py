@@ -41,6 +41,7 @@ HIDDEN_CORE = [
     "xmlog", "xmlog_capture", "xmlog_export",
     "test_frame_router", "test_demo_stream", "test_golden_vectors",
     "test_schema", "test_total_data_decoder", "test_xmlog", "test_xmlog_chain",
+    "test_xmlog_activation",
 ]
 HIDDEN_GUI = ["cdc_phai_receiver", "cdc_csv_reviewer"]
 

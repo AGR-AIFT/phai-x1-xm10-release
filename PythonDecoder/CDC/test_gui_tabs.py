@@ -32,6 +32,8 @@
   [12] 상태 패널은 `router.user_modules` 를 직접 순회하지 않는다 (워커 스레드와 겹치면 죽는다)
   [13] CSV 리뷰어 — hex 행에서 데이터가 잘리지 않고, hex 행의 seq · Tx drop 도 통계에 들어간다
   [14] 실제 스레드 · QThread · 시그널 경로 (가짜 시리얼 포트만 끼운다)
+  [15] .xmlog — GUI 워커와 CLI 가 같은 파일을 만든다 · 재연결은 새 파일이고 스키마는 처음부터 ·
+       같은 초에 두 번 시작해도(GUI 재연결이든 CLI 든) 앞 파일을 덮어쓰지 않는다
 
 시리얼 포트만 가짜다. 그 뒤(읽기 루프 -> COBS 분리 -> `_parse_frame` -> 큐 -> `_on_poll`
 -> 탭)는 앱이 실제로 가는 코드다.
@@ -1519,6 +1521,211 @@ def test_threaded_connect_disconnect(RX, DS, tmp):
 
 
 # ============================================================================
+# [15] .xmlog — GUI 와 CLI 는 같은 파일을 만든다 · 재연결은 새 파일
+# ============================================================================
+
+def _xmlog_shape(res):
+    """파일의 모양 — 시각 · 호스트 도장은 빼고 무엇이 어떤 번호로 적혔는지만 본다.
+
+    SESSION 의 `total_data_map_version` 도 빼 둔다: CLI 는 `--total-data` 일 때만, GUI 는 아예 안 적는다
+    (`XmLogCapture` docstring). 여기서 비교하는 건 레코드의 모양이지 그 참고용 문자열이 아니다.
+    """
+    import xmlog as X
+    shape = []
+    for r in res.records:
+        f = r.fields
+        if r.rec_type == X.REC_DATA:
+            shape.append(("DATA", f["module_id"], f["seq_id"], f["activation_id"], r.payload))
+        elif r.rec_type == X.REC_SCHEMA_ACTIVATION:
+            shape.append(("ACT", f["module_id"], f["activation_id"], r.payload))
+        elif r.rec_type == X.REC_GAP:
+            shape.append(("GAP", f["reason"], f["from_seq"], f["to_seq"], f["lost_count"]))
+        else:
+            shape.append(("SESSION", f["fw_build_id"], f["link_epoch"], f["boot_epoch"]))
+    return shape
+
+
+def _without_schema_frames(stream):
+    """스트림에서 0xEE · 0xEF 프레임을 뺀다 -> (바이트, 남은 정상 프레임 수).
+
+    스키마를 이미 보낸 보드는 USB 가 그대로면 채널 설명을 다시 보내지 않는다 — 창에서
+    Disconnect -> Connect 만 다시 한 경우를 흉내 낸다.
+    """
+    from frame_router import parse_phai_frame
+    out, good = bytearray(), 0
+    for enc in bytes(stream).split(b"\x00"):
+        if not enc:
+            continue
+        pkt, err = parse_phai_frame(cobs_decode(enc), 0.0)
+        if err is None:
+            if pkt.module_id in (0xEE, 0xEF):
+                continue
+            good += 1
+        out += enc + b"\x00"
+    return bytes(out), good
+
+
+def test_xmlog_gui_cli_parity_and_reconnect_new_file(RX, DS, tmp):
+    print("\n[15] .xmlog — GUI 워커와 CLI 가 같은 파일을 만든다 (스키마 발급 · 참조까지), 재연결은 새 파일, "
+          "같은 초에 두 번 시작해도 파일이 둘")
+    import datetime as dt
+    import xmlog as X
+    from xmlog_capture import XmLogCapture
+
+    stream, exp = DS.build_demo_session(cycles=14, drop_at=10, drop_len=3)
+
+    # ---- (a) CLI: run_cli(--log) 가 만든 파일 ----
+    out = os.path.join(tmp, "cli")
+    buf = io.StringIO()
+    with _fresh_schema_registry(RX):
+        with _patched_serial(RX, _CliSerial(_chunks(stream))):
+            with contextlib.redirect_stdout(buf):
+                RX.run_cli("COM_TEST", 921600, out, total_data=False, log=True)
+    cli_files = [f for f in os.listdir(out) if f.endswith(".xmlog")]
+    assert len(cli_files) == 1, cli_files
+    cli = X.read_file(os.path.join(out, cli_files[0]))
+    assert cli.stopped_reason is None, cli.stopped_reason
+
+    # ---- (b) GUI 워커: _parse_frame 이 같은 스트림을 캡처에 넘긴 파일 ----
+    gui_path = os.path.join(tmp, "gui.xmlog")
+    with _fresh_schema_registry(RX):
+        worker = RX.PhAISerialWorker("TEST_PORT", capture=XmLogCapture(gui_path))
+        buf2 = bytearray(stream)
+        n = 0
+        while True:
+            d = buf2.find(0)
+            if d < 0:
+                break
+            if d > 0:
+                n += 1
+                worker._parse_frame(cobs_decode(bytes(buf2[:d])), 0.001 * n)
+            del buf2[:d + 1]
+        worker.capture.close()
+    gui = X.read_file(gui_path)
+
+    a, b = _xmlog_shape(cli), _xmlog_shape(gui)
+    assert a == b, ("GUI 워커와 CLI 가 다른 파일을 만들었다 — 캡처 정책이 두 곳에 갈라졌다:\n  cli=%r\n  gui=%r"
+                    % (a[:6], b[:6]))
+    kinds = [x[0] for x in a]
+    assert kinds.count("SESSION") == 1 and kinds.count("ACT") == 1, kinds
+    typed = [x[3] for x in a if x[0] == "DATA" and x[1] == DS.MODULE_TYPED]
+    assert typed[0] == 0 and typed[-1] == 1 and typed == sorted(typed), \
+        "0xF0 DATA 의 번호가 (스키마 전 0 -> 스키마 뒤 1) 이 아니다: %r" % (typed,)
+    assert next(x for x in a if x[0] == "SESSION")[1:] == ("unknown", 1, 0), a[0]
+    ok("CLI(run_cli --log)와 GUI 워커가 레코드 %d개를 똑같이 적었다 — 스키마 %d개 발급, 0xF0 은 %d행 중 %d행이 그 번호를 단다"
+       % (len(a), kinds.count("ACT"), len(typed), sum(1 for t in typed if t)))
+
+    # ---- (c) GUI 재연결은 새 파일 — 1초 안에 다시 붙어 이름이 같아도 앞 파일을 덮어쓰지 않는다 ----
+    sub = os.path.join(tmp, "reconnect")
+    os.makedirs(sub)
+
+    class _Frozen(dt.datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return dt.datetime(2026, 1, 2, 3, 4, 5)        # 두 연결이 같은 초에 걸린 것을 강제한다
+
+    real_datetime = RX.datetime
+    RX.datetime = _Frozen
+    win = None
+    try:
+        with _capture_message_boxes() as popups, _fresh_schema_registry(RX):
+            win = _make_window(RX, sub)
+            assert win._chk_xmlog.isChecked()
+            for round_ in (1, 2):
+                fake = _FakeSerial(_chunks(stream, 300), idle_sleep_s=0.002)
+                with _patched_serial(RX, fake):
+                    win._start_connection("COM_R")
+                    worker = win._worker
+                    pump_until(lambda: worker.good >= exp.frames_ok and not worker.packet_queue
+                               and not win._carry, "%d번째 연결의 프레임 소비" % round_)
+                    win._on_disconnect()
+                    pump_until(lambda: win._worker is None, "%d번째 연결 종료" % round_)
+            assert not popups, popups
+    finally:
+        RX.datetime = real_datetime
+        if win is not None:
+            _dispose(win)
+
+    files = sorted(f for f in os.listdir(sub) if f.endswith(".xmlog"))
+    assert files == ["cdc_20260102_030405.xmlog", "cdc_20260102_030405_2.xmlog"], (
+        "1초 안에 다시 연결했는데 파일이 %r — 이름이 같아 앞 파일이 덮어써졌다" % (files,))
+    shapes = [_xmlog_shape(X.read_file(os.path.join(sub, f))) for f in files]
+    for sh in shapes:
+        assert sh[0][0] == "SESSION" and [x[0] for x in sh].count("SESSION") == 1
+        assert [x[0] for x in sh].count("ACT") == 1, "새 파일은 스키마를 처음부터 다시 배워 자기 activation 을 갖는다"
+        first_typed = next(x for x in sh if x[0] == "DATA" and x[1] == DS.MODULE_TYPED)
+        assert first_typed[3] == 0, "새 파일의 첫 0xF0 은 스키마 전이라 0 이어야 한다 (앞 연결의 번호를 물려받았다)"
+    assert shapes[0] == shapes[1], "같은 스트림을 두 번 받았으니 두 파일의 모양이 같아야 한다"
+    ok("같은 초에 다시 연결해도 파일이 둘이다: %s — 각자 SESSION 으로 시작하고 스키마 1개씩" % ", ".join(files))
+
+    # ---- (d) CLI 도 같다 — 같은 초에 두 번 시작해도 (보드마다 recv 를 하나씩 띄우는 스크립트 등) 파일이 둘 ----
+    out2 = os.path.join(tmp, "cli_twice")
+    RX.datetime = _Frozen
+    try:
+        with _fresh_schema_registry(RX):
+            for _ in (1, 2):
+                with _patched_serial(RX, _CliSerial(_chunks(stream))):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        RX.run_cli("COM_TEST", 921600, out2, total_data=False, log=True)
+    finally:
+        RX.datetime = real_datetime
+    names = sorted(f for f in os.listdir(out2) if f.endswith(".xmlog"))
+    assert names == ["cdc_20260102_030405.xmlog", "cdc_20260102_030405_2.xmlog"], (
+        "같은 초에 CLI 를 두 번 시작했는데 .xmlog 가 %r — 뒤에 시작한 쪽이 앞 파일을 비웠다" % (names,))
+    cli_shapes = [_xmlog_shape(X.read_file(os.path.join(out2, n))) for n in names]
+    assert cli_shapes == [a, a], "같은 스트림을 받은 두 CLI 실행의 파일이 (a) 의 파일과 다르다 — 하나가 잘렸다"
+    ok("CLI 를 같은 초에 두 번 시작해도 파일이 둘이다: %s" % ", ".join(names))
+
+    # ---- (e) 같은 포트로 Disconnect -> Connect 만 다시 한 경우 (문서가 말하는 그대로다) ----
+    # USB 는 그대로라 보드가 채널 설명을 다시 보내지 않는다: 새 .xmlog 에는 스키마가 없고, 그 파일을
+    # 뽑으면 이름이 없다. 화면과 실시간 CSV 는 이전 이름을 그대로 쓴다.
+    # 이건 지금 펌웨어의 동작이다 — 채널 이름(0xEF)을 USB 가 새로 잡힐 때(device-ready 상승 에지)
+    # 또는 XM_SetUsbCustomMeta() 를 다시 부를 때 한 번 보내고, 0xEE 는 아직 보내지 않는다. 이 시험은
+    # 도구 쪽 동작만 못박는다. 펌웨어가 0xEE 를 DTR 상승 · 주기로 다시 보내게 되면(PLAN Phase C)
+    # 같은 포트 재연결에도 스키마가 들어와 이 시나리오가 달라지니, README 와 튜토리얼의
+    # '다시 연결하면' 문단과 함께 고칠 것.
+    import xmlog_export as EXP
+    sub2 = os.path.join(tmp, "same_port")
+    os.makedirs(sub2)
+    data_only, n_data_only = _without_schema_frames(stream)
+    win = None
+    try:
+        with _capture_message_boxes() as popups, _fresh_schema_registry(RX):
+            win = _make_window(RX, sub2)
+            for round_, (data, n_good) in enumerate(((stream, exp.frames_ok),
+                                                     (data_only, n_data_only)), 1):
+                fake = _FakeSerial(_chunks(data, 300), idle_sleep_s=0.002)
+                with _patched_serial(RX, fake):
+                    win._start_connection("COM_S")
+                    worker = win._worker
+                    pump_until(lambda: worker.good >= n_good and not worker.packet_queue
+                               and not win._carry, "%d번째 연결의 프레임 소비" % round_)
+                    win._on_disconnect()
+                    pump_until(lambda: win._worker is None, "%d번째 연결 종료" % round_)
+            assert not popups, popups
+    finally:
+        if win is not None:
+            _dispose(win)
+
+    files = sorted(f for f in os.listdir(sub2) if f.endswith(".xmlog"))
+    assert len(files) == 2, files
+    first, second = (X.read_file(os.path.join(sub2, f)) for f in files)
+    n_act = [sum(1 for r in res.records if r.rec_type == X.REC_SCHEMA_ACTIVATION) for res in (first, second)]
+    assert n_act == [1, 0], "첫 파일은 스키마 1개, 같은 포트로 다시 연결한 파일은 0개여야 한다: %r" % (n_act,)
+    out_dir = os.path.join(sub2, "export")
+    with contextlib.redirect_stdout(io.StringIO()):
+        written = EXP.export_csv(second, out_dir, "second", want_raw_hex=False)
+    header, _rows = _read_csv([p for p in written if p.endswith("_user_0xF0.csv")][0])
+    assert header[3:5] == ["ch0", "ch1"] and "state" not in header, \
+        "스키마 없는 파일이 이름을 알 리 없다: %r" % (header,)
+    live = sorted(f for f in os.listdir(sub2) if f.endswith("_user_0xF0.csv"))
+    assert live, os.listdir(sub2)
+    live_header, _rows = _read_csv(os.path.join(sub2, live[-1]))
+    assert "state" in live_header, "같은 포트로 다시 연결했는데 실시간 CSV 가 이름을 잃었다: %r" % (live_header,)
+    ok("Disconnect -> Connect 만 다시 하면: 새 .xmlog 는 스키마 없이(export 는 ch0.. ) · 실시간 CSV 는 이름 유지")
+
+
+# ============================================================================
 
 def _mk(base, name):
     path = os.path.join(base, name)
@@ -1561,7 +1768,7 @@ def main():
             test_total_tab_throttle_and_mismatch, test_late_schema_same_channel_count,
             test_count_only_change_without_schema,
             test_status_panel_uses_snapshot, test_reviewer_hex_rows,
-            test_threaded_connect_disconnect,
+            test_threaded_connect_disconnect, test_xmlog_gui_cli_parity_and_reconnect_new_file,
         ]
         for k, fn in enumerate(tests, 1):
             fn(RX, DS, _mk(tmp, "t%d" % k))

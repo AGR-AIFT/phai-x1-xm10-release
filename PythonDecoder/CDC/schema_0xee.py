@@ -300,10 +300,15 @@ class Reassembler:
     * 3초 안에 못 모으면 폐기
     * 같은 프래그먼트가 다시 오면 덮어쓴다
     * 키가 다른 프래그먼트가 오면 그 모듈의 진행 중 재조립을 폐기한다
+
+    스키마가 완성되면 `last_canonical` 에 **받은 바이트 그대로**(프래그먼트를 frame_index 순으로
+    이어붙인 것)가 남는다. `.xmlog` 의 SCHEMA_ACTIVATION payload 가 이것이고, 다시 해석해서
+    적지 않는 이유는 `xmlog.encode_schema_activation` 에 적혀 있다. 여러 프래그먼트를 이렇게
+    이어붙이는 규칙은 wire 계약에 아직 없는 이 도구의 약속이다(`split_canonical` 참조).
     """
 
     __slots__ = ("_pending", "timeout", "completed", "discarded_timeout",
-                 "discarded_key_change", "crc_failures", "invalid")
+                 "discarded_key_change", "crc_failures", "invalid", "last_canonical")
 
     def __init__(self, timeout_s: float = REASSEMBLY_TIMEOUT_S):
         self._pending: Dict[int, dict] = {}      # module_id -> 진행 상태
@@ -313,6 +318,7 @@ class Reassembler:
         self.discarded_key_change = 0
         self.crc_failures = 0
         self.invalid = 0
+        self.last_canonical = b""
 
     def feed(self, payload: bytes, now: float) -> Optional[Schema]:
         """`0xEE` payload 하나. 스키마가 **완성된 순간에만** Schema 를 돌려준다."""
@@ -330,7 +336,7 @@ class Reassembler:
             self.discarded_key_change += 1
             st = None
         if st is None:
-            st = {"key": frag.key, "frag": frag, "parts": {}, "t0": now}
+            st = {"key": frag.key, "frag": frag, "parts": {}, "raw": {}, "t0": now}
             self._pending[mid] = st
 
         # 재조립 키에 frame_count / field_count_total 이 없다. 같은 키인데 그 둘이
@@ -346,6 +352,10 @@ class Reassembler:
                                         frag.frame_count, frag.field_count_total))
 
         st["parts"][frag.frame_index] = frag     # 중복은 덮어쓴다
+        # 와이어가 4바이트 단위로 붙인 꼬리가 있어도 FieldRecord 끝까지만 남긴다 — 같은 스키마가
+        # 다시 와도 바이트가 똑같아야 activation 재사용 판정(바이트 동등성)이 성립한다.
+        st["raw"][frag.frame_index] = bytes(
+            payload[:HEADER_SIZE + len(frag.fields) * FIELD_RECORD_SIZE])
         st["t0"] = now
 
         if len(st["parts"]) < frag.frame_count:
@@ -374,6 +384,7 @@ class Reassembler:
                         frag.schema_crc32, tuple(fields))
         validate(schema)
         self.completed += 1
+        self.last_canonical = b"".join(st["raw"][i] for i in range(frag.frame_count))
         return schema
 
     def _expire(self, now: float) -> None:
@@ -389,3 +400,83 @@ class Reassembler:
         return ("0xEE: completed=%d  timeout=%d  key-change=%d  crc-fail=%d  invalid=%d"
                 % (self.completed, self.discarded_timeout, self.discarded_key_change,
                    self.crc_failures, self.invalid))
+
+
+# =============================================================================
+# 이어붙인 프래그먼트 -> 스키마 (`.xmlog` SCHEMA_ACTIVATION payload 를 읽는 쪽)
+# =============================================================================
+
+def split_canonical(payload: bytes) -> List[bytes]:
+    """프래그먼트를 frame_index 순으로 이어붙인 바이트(`Reassembler.last_canonical`)를 다시 나눈다.
+
+    프래그먼트 하나의 길이는 헤더에 없다(FieldRecord 몇 개인지 안 적힌다). 그래서 **다음 헤더가
+    올바르게 놓인 자리**를 찾는다: 다음 프래그먼트의 헤더는 재조립 키·field_count_total·
+    frame_count 가 앞과 같고 frame_index 만 하나 커야 한다. 끝까지 맞아떨어지는 나누기가 없으면
+    SchemaError. 프래그먼트가 하나뿐이면 그대로 돌려준다.
+
+    struct_name 은 보지 않는다. `Reassembler` 가 이름을 비교하지 않아서 프래그먼트마다 이름이 달라도
+    (NUL 뒤에 찌꺼기가 있어도) 스키마가 완성되는데, 여기서 이름까지 같아야 나눈다고 하면 화면에서는
+    풀리는 스키마를 파일에서는 못 되읽게 된다.
+
+    이어붙이는 규칙(여러 프래그먼트 스키마의 SCHEMA_ACTIVATION payload = 프래그먼트를 각자의 24 B
+    헤더째 frame_index 순으로, 와이어 꼬리는 뗀 채 이어붙인 것)은 **이 도구의 약속**이다. 동결된 wire
+    계약(§3)은 payload 를 "canonical 바이트 전체" 라고만 적고 프래그먼트 경계는 정하지 않았다. 다른
+    쪽(펌웨어 · 가져오기 도구)이 이 레코드를 쓰거나 읽기 전에 계약에 적어야 한다.
+    """
+    if len(payload) < HEADER_SIZE:
+        raise SchemaError("payload %d B < 헤더 %d B" % (len(payload), HEADER_SIZE))
+    head0 = bytes(payload[:HEADER_SIZE])
+    frame_count = head0[10]
+    if frame_count <= 1:
+        return [bytes(payload)]
+    if frame_count > MAX_FRAME_COUNT:
+        raise SchemaError("frame_count %d (1~%d)" % (frame_count, MAX_FRAME_COUNT))
+    if head0[9] != 0:
+        raise SchemaError("첫 프래그먼트의 frame_index 가 %d (0 이어야)" % head0[9])
+
+    def same_schema(head: bytes, idx: int) -> bool:
+        # 헤더 오프셋 9 = frame_index 만 다르다. 0..8(키 · field_count_total)과 10..11(frame_count ·
+        # reserved)은 `Reassembler` 가 프래그먼트끼리 같게 강제하는 값이다. 12..23(struct_name)은 아니다.
+        return head[:9] == head0[:9] and head[10:12] == head0[10:12] and head[9] == idx
+
+    total = head0[8]                                 # field_count_total
+
+    def split_from(off: int, idx: int, used: int):
+        # used = 앞 프래그먼트들이 가져간 FieldRecord 수
+        if idx == frame_count - 1:                   # 마지막: 남은 것이 정확히 나머지 FieldRecord 들
+            rest = len(payload) - off - HEADER_SIZE
+            good = (rest > 0 and rest % FIELD_RECORD_SIZE == 0
+                    and rest // FIELD_RECORD_SIZE <= MAX_FIELDS_PER_FRAME
+                    and used + rest // FIELD_RECORD_SIZE == total
+                    and same_schema(bytes(payload[off:off + HEADER_SIZE]), idx))
+            return [bytes(payload[off:])] if good else None
+        for n in range(MAX_FIELDS_PER_FRAME, 0, -1):    # 가득 채워 보내는 쪽이 흔하다
+            nxt = off + HEADER_SIZE + n * FIELD_RECORD_SIZE
+            if nxt + HEADER_SIZE > len(payload):
+                continue
+            if not same_schema(bytes(payload[nxt:nxt + HEADER_SIZE]), idx + 1):
+                continue
+            tail = split_from(nxt, idx + 1, used + n)
+            if tail is not None:
+                return [bytes(payload[off:nxt])] + tail
+        return None
+
+    parts = split_from(0, 0, 0)
+    if parts is None:
+        raise SchemaError("이어붙인 프래그먼트 %d개를 헤더 경계로 나눌 수 없다" % frame_count)
+    return parts
+
+
+def schema_from_canonical(payload: bytes) -> Schema:
+    """`.xmlog` SCHEMA_ACTIVATION 의 payload 한 덩어리 -> 완성된 Schema. 실패하면 SchemaError.
+
+    재조립 · CRC · 불변식 검사는 실시간 경로(`Reassembler`)와 **같은 코드**를 지난다.
+    """
+    parts = split_canonical(payload)
+    ra = Reassembler()
+    schema = None
+    for part in parts:
+        schema = ra.feed(part, 0.0)               # 시계는 의미가 없다 — 전부 같은 순간의 것
+    if schema is None:
+        raise SchemaError("프래그먼트가 다 모이지 않았다 (%d개)" % len(parts))
+    return schema

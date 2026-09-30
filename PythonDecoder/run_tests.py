@@ -10,6 +10,7 @@
   test_total_data_decoder   와이어 -> 0x20 디코드
   test_xmlog            .xmlog 바이트 ABI (손으로 적은 골든 바이트)
   test_xmlog_chain      와이어 -> .xmlog -> CSV 전 구간
+  test_xmlog_activation 스키마(activation)의 수명 — 발급 · 참조 · 재연결 · 시점별 디코딩
   test_gui_tabs         실제 창(오프스크린 Qt)에 합성 스트림 — 탭·CSV·0x20 표 (PyQt5 필요)
   undefined-name 게이트  pyflakes (있으면)
 
@@ -47,6 +48,7 @@ SUITES = [
     ("golden vectors (cross-impl)", "test_golden_vectors.py"),
     ("xmlog byte ABI", "test_xmlog.py"),
     ("wire -> xmlog -> CSV", "test_xmlog_chain.py"),
+    ("xmlog schema (activation) lifecycle", "test_xmlog_activation.py"),
     ("soak accounting self-test", "soak.py --selftest"),
     ("demo stream builders", "demo_stream.py"),
     ("demo stream vs test encoder", "test_demo_stream.py"),
