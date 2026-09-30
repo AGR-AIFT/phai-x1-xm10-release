@@ -2526,6 +2526,8 @@ tick, torque[0], torque[1]</code> — 보드 쪽에서 C 구조체로 정의한 
 <p>창이 뜹니다. 위쪽 줄에서 <strong>Port</strong> 를 고르고 <strong>Connect</strong> 를 누르면 보드가 보내는 사용자
 채널이 그래프로 올라옵니다. 예제 09 처럼 <code>XM_SetUsbCustomMeta</code> 로 이름을 등록했다면 그
 이름이 그래프 제목에 붙습니다.</p>
+<p>사용자 채널을 Module ID 여러 개(<code>0xF0</code>, <code>0xF1</code>, …)로 보내면 Module ID 마다 탭이 하나씩
+생깁니다. 탭마다 그래프와 저장 파일이 따로이고, 지금 보고 있지 않은 탭도 저장은 계속됩니다.</p>
 <table>
 <thead>
 <tr>
@@ -2572,8 +2574,8 @@ tick, torque[0], torque[1]</code> — 보드 쪽에서 C 구조체로 정의한 
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>cdc_phai_&lt;시각&gt;.csv</code></td>
-<td style="text-align: left;">화면에 그린 사용자 채널을 표로 (엑셀에서 바로 열림)</td>
+<td style="text-align: left;"><code>cdc_phai_&lt;시각&gt;_user_0xF0.csv</code></td>
+<td style="text-align: left;">화면에 그린 사용자 채널을 표로 (엑셀에서 바로 열림). Module ID 마다 파일이 하나씩 생깁니다</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>cdc_&lt;시각&gt;.xmlog</code></td>
@@ -2696,7 +2698,7 @@ tick, torque[0], torque[1]</code> — 보드 쪽에서 C 구조체로 정의한 
 </tr>
 <tr>
 <td style="text-align: left;">도구가 제대로 설치됐는지 모르겠다</td>
-<td style="text-align: left;"><code>python xm10.py selftest</code> — 보드 없이 전부 검사</td>
+<td style="text-align: left;"><code>python xm10.py selftest</code> — 보드 없이 자체 검증</td>
 </tr>
 </tbody>
 </table>

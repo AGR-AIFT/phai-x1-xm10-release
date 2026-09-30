@@ -2513,6 +2513,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>xm10.py<span class="w"> </span>recv
 </code></pre></div>
 <p>A window opens. Pick your <strong>Port</strong> in the top row and click <strong>Connect</strong> — the board's user channels start plotting live. If you registered names with <code>XM_SetUsbCustomMeta</code>, as in Example 09, those names show up in the graph titles.</p>
+<p>If you send user channels under several Module IDs (<code>0xF0</code>, <code>0xF1</code>, …), each Module ID gets its own tab. Every tab has its own graphs and its own saved file, and a tab you aren't looking at keeps saving.</p>
 <table>
 <thead>
 <tr>
@@ -2559,8 +2560,8 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>cdc_phai_&lt;timestamp&gt;.csv</code></td>
-<td style="text-align: left;">The user channels plotted on screen, as a table (opens directly in Excel)</td>
+<td style="text-align: left;"><code>cdc_phai_&lt;timestamp&gt;_user_0xF0.csv</code></td>
+<td style="text-align: left;">The user channels plotted on screen, as a table (opens directly in Excel). One file per Module ID</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>cdc_&lt;timestamp&gt;.xmlog</code></td>
@@ -2667,7 +2668,7 @@
 </tr>
 <tr>
 <td style="text-align: left;">Not sure the tool is installed correctly</td>
-<td style="text-align: left;"><code>python xm10.py selftest</code> — checks everything, no board needed</td>
+<td style="text-align: left;"><code>python xm10.py selftest</code> — self-check, no board needed</td>
 </tr>
 </tbody>
 </table>
