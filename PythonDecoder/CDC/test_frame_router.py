@@ -15,6 +15,8 @@ pytest 없이 그냥 실행된다. 합성 스트림을 만들어 넣고, 마지�
   4. seq 가 뒤로 가도 손실 통계와 시간축이 오염되지 않는다
   5. 사용자 module_id(0xF0~0xFE) 는 전부 라우팅된다 — 2026-09-15 이전에는 처음 본
      하나만 'primary' 로 잠기고 나머지는 세기만 하고 값을 버렸다(진짜 결함이었다)
+  6. 다른 스레드가 module 목록을 읽어도 안 죽는다 — 워커가 새 module 을 추가하는 순간
+     화면 스레드가 딕셔너리를 직접 돌면 "changed size during iteration" 이 난다
 """
 import csv
 import os
@@ -26,7 +28,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from frame_router import (            # noqa: E402
     FrameRouter, PhAIFrame, parse_phai_frame, cobs_decode, crc16_ccitt,
-    PHAI_SOF, DEVICE_PERIOD_MS,
+    PHAI_SOF, DEVICE_PERIOD_MS, SYSTEM_MODULE_IDS,
 )
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -615,6 +617,87 @@ def test_regression():
           % list(mods)[0])
 
 
+# ============================================================================
+# 9. 다른 스레드가 읽는 user_modules
+# ============================================================================
+
+def test_user_modules_snapshot():
+    print("\n[9] user_modules 스냅샷 — 프레임을 받는 스레드가 module 을 늘리는 동안 다른 스레드가 읽는다")
+    import threading
+
+    # (a) 의미: 처음 본 순서, (module_id, 프레임 수), 이미 뜬 것은 안 바뀌는 복사본
+    r = FrameRouter()
+    for seq, mid in enumerate([0xF3, 0xF0, 0xF3, 0xF1, 0xF0, 0xF3]):
+        r.route(mkframe(seq, mid))
+    snap = r.user_modules_snapshot()
+    assert snap == [(0xF3, 3), (0xF0, 2), (0xF1, 1)], snap
+    r.route(mkframe(6, 0xF3))
+    r.route(mkframe(7, 0xF7))
+    assert snap == [(0xF3, 3), (0xF0, 2), (0xF1, 1)], "이미 뜬 스냅샷이 바뀌었다"
+    assert r.user_modules_snapshot()[-1] == (0xF7, 1)
+    ok("스냅샷 = 처음 본 순서의 (module_id, 프레임 수) 복사본 — 이후 라우팅에 안 바뀐다")
+
+    # (b) 경합: 쓰는 스레드가 새 module 을 계속 넣고, 읽는 스레드가 그 사이 계속 스냅샷을 뜬다.
+    # GUI 상태 패널이 정확히 이 형태다(워커 스레드 = 쓰기, GUI 스레드 = 30ms 마다 읽기).
+    # 스레드 전환을 아주 잦게 만들어 경합이 실제로 걸리게 한다.
+    all_ids = [m for m in range(256) if m not in SYSTEM_MODULE_IDS]
+    rounds = 40
+
+    def race(reader_fn):
+        """반환: (읽는 쪽이 예외로 죽은 라운드 수, 마지막 라운드의 라우터)"""
+        crashed, last = 0, None
+        for _ in range(rounds):
+            router = FrameRouter()
+            done = threading.Event()
+            errors = []
+
+            def writer():
+                try:
+                    for seq, mid in enumerate(all_ids):
+                        router.route(mkframe(seq, mid))
+                finally:
+                    done.set()            # 쓰는 쪽이 죽어도 읽는 쪽이 영원히 돌지 않게
+
+            def reader():
+                try:
+                    while not done.is_set():
+                        reader_fn(router)
+                except Exception as e:       # noqa: BLE001 — 이 시험이 잡으려는 바로 그것
+                    errors.append(e)
+
+            tw, tr = threading.Thread(target=writer), threading.Thread(target=reader)
+            tr.start()
+            tw.start()
+            tw.join()
+            tr.join()
+            crashed += 1 if errors else 0
+            last = router
+        return crashed, last
+
+    def read_snapshot(router):
+        router.user_modules_snapshot()
+
+    def read_naive(router):                    # 예전 GUI 가 하던 방식
+        for _mid, _state in router.user_modules.items():
+            pass
+
+    old_interval = sys.getswitchinterval()
+    sys.setswitchinterval(1e-6)
+    try:
+        crashed, router = race(read_snapshot)
+        naive_crashed, _ = race(read_naive)
+    finally:
+        sys.setswitchinterval(old_interval)
+
+    assert crashed == 0, "스냅샷으로 읽는데도 %d/%d 라운드에서 예외" % (crashed, rounds)
+    assert [m for m, _n in router.user_modules_snapshot()] == all_ids
+    ok("module %d 개를 넣는 스레드와 동시에 읽어도 %d 라운드 모두 예외 0, 최종 순서 보존"
+       % (len(all_ids), rounds))
+    print("     (참고: 같은 조건에서 딕셔너리를 직접 순회하면 %d/%d 라운드가 "
+          "'dictionary changed size during iteration' 으로 죽는다%s)"
+          % (naive_crashed, rounds, "" if naive_crashed else " — 이 환경에서는 경합이 안 걸렸다"))
+
+
 def main():
     """다른 러너가 in-process 로 부를 수 있게 한 진입점 (형제 시험 파일과 같은 규약).
 
@@ -634,6 +717,7 @@ def main():
     test_mixed_with_gap()
     test_worker_queue()
     test_regression()
+    test_user_modules_snapshot()
     print("\n전부 통과 (%d 항목)" % _passed)
     return 0
 

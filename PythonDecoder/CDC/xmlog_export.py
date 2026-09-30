@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import sys
 
 import xmlog as X
@@ -140,6 +141,70 @@ def _fmt(v) -> str:
     if isinstance(v, float):
         return "%.6g" % v
     return str(v)
+
+
+# ---------------------------------------------------------------------------
+# hex 행 — 값 대신 받은 바이트를 적은 행 (읽는 쪽)
+# ---------------------------------------------------------------------------
+# 위 export_csv 와 실시간 CSV(cdc_phai_receiver) 는 해석이 헤더와 안 맞는 프레임을 **열이
+# 밀린 행으로 두지 않고** 이렇게 적는다: 값 칸은 비우고, 마지막 칸에 payload 를 hex 로.
+# 이 CSV 를 그래프로 읽는 쪽(cdc_csv_reviewer 등)은 그런 행을 값으로 읽으면 안 된다 —
+# 빈 칸은 NaN 이 되어 이상치로 처리되고, 그 뒤 데이터가 통째로 잘려 나간다.
+# 그렇다고 그 행을 **통째로 버려도** 안 된다. 앞쪽 칸(time_s · seq_id · tx_drops)은 멀쩡한 값이다 —
+# 행을 빼면 그 자리가 없던 패킷 손실(seq 구멍)로 보이고, 그 행이 실었던 Tx drop 은 합계에서 빠진다.
+_HEX_CELL = re.compile(r"[0-9a-fA-F]+")
+
+
+def is_hex_row(cells, first_data_col: int) -> bool:
+    """CSV 한 행(칸 목록)이 '값 대신 payload 를 hex 로 적은 행' 인가.
+
+    `first_data_col` 은 채널 값이 시작하는 열 번호다(실시간 CSV 는 5: time_s, pc_time_s,
+    seq_id, module_id, tx_drops 다음). 판정은 셋이 모두 맞을 때다.
+
+    * 마지막 칸이 16진 문자열이다. payload 는 와이어에서 4바이트 단위라 8자의 배수다.
+    * 그 앞의 값 칸은 전부 비어 있다.
+    * 숫자 행의 마지막 칸은 `%.6f` 라 항상 소수점이 있거나 `nan`/`inf` 다 — 그래서 값이 하나뿐인
+      module 에서도 16진 문자열과 숫자를 혼동하지 않는다.
+    """
+    if len(cells) <= first_data_col:
+        return False
+    last = cells[-1].strip()
+    if not last or len(last) % 8 or not _HEX_CELL.fullmatch(last):
+        return False
+    return all(not c.strip() for c in cells[first_data_col:-1])
+
+
+class HexRowFilter:
+    """CSV 줄 스트림에서 hex 행의 **값 칸만** `nan` 으로 바꿔 돌려주고, 몇 번째 행이었는지 기억한다.
+
+        flt = HexRowFilter(first_data_col=5)
+        arr = np.genfromtxt(flt(f), delimiter=",")     # f = 머리글 줄 다음부터의 파일 객체
+        arr[flt.rows, 5:]                               # hex 행이었던 행들의 값 칸 — 전부 nan
+
+    행은 버리지 않는다. 앞쪽 칸(time_s · seq_id · tx_drops …)이 그대로 남으므로 seq 구멍이나
+    Tx drop 합계 같은 통계는 hex 행까지 넣어 셀 수 있고, 값은 `flt.rows` 로 골라 이상치
+    검사와 그래프에서만 뺀다. `rows` 는 `genfromtxt` 가 돌려주는 배열의 행 번호(0부터)다 —
+    빈 줄은 거기서도 행으로 안 세므로 여기서도 안 센다. `#` 로 시작하는 주석 줄은 따로 처리하지
+    않는다(genfromtxt 는 건너뛰지만 이 도구들이 쓰는 CSV 에는 주석 줄이 없다).
+    """
+
+    def __init__(self, first_data_col: int):
+        self.first_data_col = first_data_col
+        self.rows = []
+
+    def __call__(self, lines):
+        self.rows = []
+        n = 0                                   # 지금까지 낸 행 수 = 다음 행이 배열에서 갖는 번호
+        for line in lines:
+            if not line.strip():
+                continue
+            cells = line.rstrip("\r\n").split(",")
+            if is_hex_row(cells, self.first_data_col):
+                self.rows.append(n)
+                line = ",".join(cells[:self.first_data_col]
+                                + ["nan"] * (len(cells) - self.first_data_col)) + "\n"
+            n += 1
+            yield line
 
 
 def dump(res: X.ScanResult, limit: int) -> None:

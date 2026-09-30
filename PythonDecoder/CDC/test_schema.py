@@ -550,6 +550,70 @@ def test_live_path_uses_typed_schema_values():
     assert naive != vals, "패딩이 없어 이 시험이 아무것도 막지 못한다"
 
 
+def test_registry_is_thread_safe():
+    """수신 스레드가 스키마를 먹이는 동안 화면 스레드가 조회해도 예외가 없다 (2026-09-29 감사).
+
+    실시간 GUI 가 정확히 이 모양이다 — 수신 스레드는 `feed_0xEF`/`feed_0xEE` 로 채우고,
+    화면 스레드는 프레임마다 `get()` 으로 조회하면서 캐시에 **새 항목을 넣는다**. 락이 없던
+    때는 수신 스레드가 캐시 딕셔너리를 돌고 있는 사이 화면 스레드가 키를 늘려
+    "dictionary changed size during iteration" 이 났다. 그 예외는 수신 스레드(QThread 슬롯)
+    밖으로 나가 앱 전체를 종료시킨다.
+
+    스레드 전환을 아주 잦게 만들어 경합이 실제로 걸리게 한다 — 이 설정에서 락이 없는
+    레지스트리는 라운드마다 예외가 난다(고치기 전 30/30 라운드).
+
+    수신 스레드는 `feed_0xEF` 와 `feed_0xEE` **둘 다** 부른다. 둘 다 "새 항목을 넣고 캐시를
+    돌며 옛 추측을 지우는" 같은 모양이라, 한쪽 락만 시험하면 다른 쪽 락을 빼도 통과한다.
+    """
+    import json
+    import threading
+
+    def ef_payload(target):
+        return bytes([target]) + json.dumps([{"name": "x", "unit": "V"}]).encode()
+
+    # 0xEE: 조각 하나로 끝나는 스키마를 계속 다시 보낸다 (FW 가 주기적으로 재전송하는 모양)
+    ee_fields = [_fld("flag", "", 3, 1, 0), _fld("speed", "m/s", 0, 1, 4), _fld("count", "n", 4, 1, 8)]
+    ee_frag = EE.encode_fragment(0xF3, 12, "Race", ee_fields, 0, 1, 3)
+
+    rounds, iters = 10, 1000
+
+    def one_round():
+        reg = R.SchemaRegistry()
+        stop = threading.Event()
+        errors = []
+
+        def screen_thread():                  # 화면 스레드: 계속 새 (module, 길이) 를 조회
+            i = 0
+            while not stop.is_set():
+                reg.get(0xF0 + (i % 15), 4 * (1 + (i // 15) % 60))
+                i += 1
+
+        def receive_thread():                 # 수신 스레드: 0xEF · 0xEE 를 계속 먹인다
+            try:
+                for i in range(iters):
+                    reg.feed_0xEF(ef_payload(0xF0 + (i % 15)))
+                    reg.feed_0xEE(ee_frag, i * 0.001)
+            except Exception as e:            # noqa: BLE001 — 이 시험이 잡으려는 바로 그것
+                errors.append(e)
+            finally:
+                stop.set()
+
+        ts = [threading.Thread(target=screen_thread), threading.Thread(target=receive_thread)]
+        for t in ts:
+            t.start()
+        for t in ts:
+            t.join()
+        return errors
+
+    old_interval = sys.getswitchinterval()
+    sys.setswitchinterval(1e-6)
+    try:
+        bad = [errs[0] for errs in (one_round() for _ in range(rounds)) if errs]
+    finally:
+        sys.setswitchinterval(old_interval)
+    assert not bad, "%d/%d 라운드에서 수신 스레드가 예외로 죽었다: %r" % (len(bad), rounds, bad[0])
+
+
 # =============================================================================
 # Runner
 # =============================================================================
@@ -586,6 +650,7 @@ def main():
         ("registry cache respects length", test_registry_cache_respects_payload_length),
         ("fragment count consistency", test_fragment_count_consistency),
         ("live path uses typed values", test_live_path_uses_typed_schema_values),
+        ("registry is thread-safe (feed 0xEF/0xEE vs get)", test_registry_is_thread_safe),
     ]
 
     failed = 0

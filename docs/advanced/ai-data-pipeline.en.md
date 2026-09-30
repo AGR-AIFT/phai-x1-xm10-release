@@ -80,7 +80,7 @@ class XM10Dataset(Dataset):
         y = self.data[idx + 100, 0]  # predict the first channel of the next step
         return torch.tensor(x), torch.tensor(y, dtype=torch.float32)
 
-ds = XM10Dataset("cdc_phai_20260224_120000.csv")
+ds = XM10Dataset("cdc_phai_20260224_120000_user_0xF0.csv")
 loader = DataLoader(ds, batch_size=64, shuffle=True)
 ```
 
@@ -92,7 +92,7 @@ loader = DataLoader(ds, batch_size=64, shuffle=True)
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 
-df = pd.read_csv("cdc_phai_20260224_120000.csv")
+df = pd.read_csv("cdc_phai_20260224_120000_user_0xF0.csv")
 X = df[["imu_ax", "imu_ay", "imu_az", "knee_angle"]].values
 y = df["gait_phase"].values
 

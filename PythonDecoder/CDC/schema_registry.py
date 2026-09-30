@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import json
 import struct
+import threading
 from typing import Dict, List, Optional
 
 import schema_0xee as EE
@@ -146,10 +147,20 @@ def float32_fallback(module_id: int, payload_len: int) -> Optional[ChannelSet]:
 # ---------------------------------------------------------------- 레지스트리
 
 class SchemaRegistry:
-    """module_id -> ChannelSet. 스트리밍 중에도, 파일을 사후에 읽을 때도 같은 것을 쓴다."""
+    """module_id -> ChannelSet. 스트리밍 중에도, 파일을 사후에 읽을 때도 같은 것을 쓴다.
+
+    스레드: 실시간 GUI 에서는 **수신 스레드**가 `feed_0xEE`/`feed_0xEF` 로 채우고, **화면
+    스레드**가 프레임마다 `get()` 으로 조회한다. `get()` 은 조회하면서 캐시에 새 항목을
+    넣기 때문에, 둘이 겹치면 한쪽이 딕셔너리를 돌고 있는 사이 다른 쪽이 크기를 바꾼다
+    ("dictionary changed size during iteration" — 수신 스레드가 죽으면 앱 전체가 종료된다).
+    그래서 딕셔너리를 **바꾸는** 자리(`feed_*`, 그리고 캐시에 없어서 새로 만들어 넣는
+    `get()` 의 느린 길)는 `_lock` 안에서 한다. 캐시에 이미 있는 항목을 읽는 `get()` 의
+    빠른 길은 락이 없다 — 프레임마다 불리는 함수라 락 비용(프레임당 약 1µs)이 아깝고,
+    딕셔너리 조회 한 번은 원자적이다.
+    """
 
     __slots__ = ("_by_module", "_by_module_len", "_ef_raw", "reasm", "_total",
-                 "ee_errors", "ef_errors")
+                 "ee_errors", "ef_errors", "_lock")
 
     def __init__(self, reassembly_timeout_s: float = EE.REASSEMBLY_TIMEOUT_S):
         # 길이와 무관한 출처(0xEE — 자기 struct_size 를 안다)
@@ -162,6 +173,9 @@ class SchemaRegistry:
         self.ee_errors: List[str] = []
         self.ef_errors: List[str] = []
         self._total = None
+        # 위 세 딕셔너리를 바꾸는 구간(과 캐시에 없어서 새로 만들어 넣는 조회)을 묶는다.
+        # 안에서 다시 이 락을 잡는 호출이 없어서 재진입 가능한 RLock 이 아니라 Lock 이다.
+        self._lock = threading.Lock()
         if _MAP_OK:
             self._total = TotalDataDecoder()
 
@@ -182,10 +196,11 @@ class SchemaRegistry:
         if schema is None:
             return None
         cs = from_ee_schema(schema)
-        self._by_module[schema.module_id] = cs      # 0xEE 는 항상 이긴다
-        # 길이 의존 캐시에 남아 있던 추측(0xEF/fallback)을 지운다.
-        for k in [k for k in self._by_module_len if k[0] == schema.module_id]:
-            del self._by_module_len[k]
+        with self._lock:
+            self._by_module[schema.module_id] = cs      # 0xEE 는 항상 이긴다
+            # 길이 의존 캐시에 남아 있던 추측(0xEF/fallback)을 지운다.
+            for k in [k for k in self._by_module_len if k[0] == schema.module_id]:
+                del self._by_module_len[k]
         return cs
 
     def feed_0xEF(self, payload: bytes) -> Optional[int]:
@@ -207,15 +222,32 @@ class SchemaRegistry:
         if not isinstance(entries, list):
             self.ef_errors.append("0xEF(0x%02X) JSON 이 배열이 아니다" % target)
             return None
-        self._ef_raw[target] = entries
-        # 이미 만들어 둔 추측을 무효화 — 다음 get() 에서 새 메타로 다시 만든다.
-        for k in [k for k in self._by_module_len if k[0] == target]:
-            del self._by_module_len[k]
+        with self._lock:
+            self._ef_raw[target] = entries
+            # 이미 만들어 둔 추측을 무효화 — 다음 get() 에서 새 메타로 다시 만든다.
+            # 새 메타를 넣는 것과 옛 캐시를 지우는 것이 한 덩어리여야, 그 사이에 끼어든
+            # get() 이 옛 메타로 만든 항목을 다시 캐시에 남기지 못한다.
+            for k in [k for k in self._by_module_len if k[0] == target]:
+                del self._by_module_len[k]
         return target
 
     # -- 조회 ----------------------------------------------------------
     def get(self, module_id: int, payload_len: int) -> Optional[ChannelSet]:
         """이 module_id 를 푸는 최선의 방법. 없으면 None (= raw 로 다뤄라)."""
+        # 빠른 길: 이미 캐시에 있으면 락 없이 돌려준다. 이 함수는 프레임마다(초당 수만 번)
+        # 불리고, 딕셔너리 조회 한 번은 원자적이다 — 캐시 항목은 다 만들어진 뒤에 넣고
+        # 락 안에서만 바꾸거나 지우므로, 여기서 읽는 항목은 늘 온전하다.
+        cs = self._by_module.get(module_id)
+        if cs is not None:
+            return cs
+        cs = self._by_module_len.get((module_id, payload_len))
+        if cs is not None:
+            return cs
+        # 느린 길: 캐시에 없어서 만들어 넣어야 한다. 다른 스레드의 feed_* 와 겹치지 않게 락 안에서.
+        with self._lock:
+            return self._get_locked(module_id, payload_len)
+
+    def _get_locked(self, module_id: int, payload_len: int) -> Optional[ChannelSet]:
         cs = self._by_module.get(module_id)          # 0xEE — 길이와 무관
         if cs is not None:
             return cs
@@ -246,7 +278,7 @@ class SchemaRegistry:
     # -- 표시용 조회 (탭 제목 등, GUI 전용 — 값 디코딩과 무관) -----------
     def struct_name(self, module_id: int) -> Optional[str]:
         """`0xEE` 로 확정된 struct 이름. 길이와 무관하다. 없으면 None."""
-        cs = self._by_module.get(module_id)
+        cs = self._by_module.get(module_id)          # 딕셔너리 조회 한 번은 원자적이다
         return cs.struct_name if (cs is not None and cs.struct_name) else None
 
     def meta_single_name(self, module_id: int) -> Optional[str]:
@@ -256,19 +288,20 @@ class SchemaRegistry:
         와이어에 없다. 채널이 하나뿐인 module 은 그 채널 이름이 사실상 module 이름
         구실을 하지만, 여럿이면 대표할 이름이 없다.
         """
-        entries = self._ef_raw.get(module_id)
+        entries = self._ef_raw.get(module_id)        # 딕셔너리 조회 한 번은 원자적이다
         if entries and len(entries) == 1 and isinstance(entries[0], dict):
             name = str(entries[0].get("name", "")).strip()
             return name or None
         return None
 
     def known(self) -> List[ChannelSet]:
-        out = [self._by_module[m] for m in sorted(self._by_module)]
-        seen = {cs.module_id for cs in out}
-        for k in sorted(self._by_module_len):
-            if k[0] not in seen:
-                out.append(self._by_module_len[k])
-                seen.add(k[0])
+        with self._lock:
+            out = [self._by_module[m] for m in sorted(self._by_module)]
+            seen = {cs.module_id for cs in out}
+            for k in sorted(self._by_module_len):
+                if k[0] not in seen:
+                    out.append(self._by_module_len[k])
+                    seen.add(k[0])
         return out
 
     def summary(self) -> str:

@@ -59,6 +59,8 @@ python xm10.py recv
 
 A window opens. Pick your **Port** in the top row and click **Connect** — the board's user channels start plotting live. If you registered names with `XM_SetUsbCustomMeta`, as in Example 09, those names show up in the graph titles.
 
+If you send user channels under several Module IDs (`0xF0`, `0xF1`, …), each Module ID gets its own tab. Every tab has its own graphs and its own saved file, and a tab you aren't looking at keeps saving.
+
 | Button | What it does |
 | :--- | :--- |
 | **Refresh** | Re-read the port list — if you opened the window before plugging in the board, click this or it won't show up |
@@ -76,7 +78,7 @@ Each time you connect, two kinds of files show up in the `Output` folder.
 
 | File | What it is |
 | :--- | :--- |
-| `cdc_phai_<timestamp>.csv` | The user channels plotted on screen, as a table (opens directly in Excel) |
+| `cdc_phai_<timestamp>_user_0xF0.csv` | The user channels plotted on screen, as a table (opens directly in Excel). One file per Module ID |
 | `cdc_<timestamp>.xmlog` | **Every** frame received, raw bytes (explained below) |
 
 Why save a second file when the CSV should be enough? The CSV is **already interpreted** at the moment it's received. If the channel names arrived after the data, or you changed the channel layout afterward, or there was a mistake in interpretation, that CSV is final — you're stuck with it. The `.xmlog` is laid down without any interpretation, so you can always re-export it later. It also includes the system channels that never get plotted on screen (the 0x20 Total Data, 197 channels).
@@ -183,7 +185,7 @@ After building, it actually **runs** `demo` and the self-checks against that exe
 | Graph titles show `ch0, ch1…` | Check that `XM_SetUsbCustomMeta` is called in `Control_Setup`, and that the entry count matches the struct |
 | Values come out as garbage numbers | Check for a non-`float` member in the struct |
 | Frames seem to be dropping | Judge it with `xm10.py soak`. Try sending fewer channels |
-| Not sure the tool is installed correctly | `python xm10.py selftest` — checks everything, no board needed |
+| Not sure the tool is installed correctly | `python xm10.py selftest` — self-check, no board needed |
 
 ---
 

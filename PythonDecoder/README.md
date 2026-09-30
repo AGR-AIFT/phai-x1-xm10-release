@@ -21,7 +21,7 @@ python xm10.py recv                  # 실시간 수신 (그래프 GUI)
 python xm10.py recv --cli --log      # 실시간 수신 (콘솔) + .xmlog 저장
 python xm10.py soak --minutes 30     # 보드 실측 — 손실 0 인지 판정
 python xm10.py export FILE --csv DIR # .xmlog 를 요약하거나 CSV 로
-python xm10.py selftest              # 보드 없이 도는 자체 검증 전부
+python xm10.py selftest              # 보드 없이 도는 자체 검증 (창을 띄우는 시험은 python run_tests.py)
 ```
 
 ### `demo` 가 무엇을 보여주나
@@ -79,7 +79,8 @@ python build_exe.py --no-gui   # 콘솔 전용 (약 23 MB)
 
 디코딩하지 않는다는 것이 무시한다는 뜻은 아닙니다. `frame_router.py` 가 시스템 채널
 (`0x20`/`0xEF`/`0xED`/`0xEE`)을 사용자 채널과 **분리해서 따로 셉니다** — 그래프와 CSV 에는
-들어가지 않지만 몇 프레임 몇 바이트가 왔는지는 화면 하단 `Sys[...]` 에 그대로 표시됩니다.
+들어가지 않지만 몇 프레임이 왔는지는 화면 위쪽 통계줄의 `Sys[...]` 에 그대로 표시됩니다
+(프레임 수만 나옵니다. 바이트 수는 `--cli` 로 받다가 Ctrl+C 로 끝낼 때의 요약에 있습니다).
 예전 버전은 이 패킷을 사용자 채널에 섞어 넣어 CSV 컬럼 수가 헤더와 어긋나곤 했습니다.
 
 ## `CDC/cdc_phai_receiver.py` — 실시간 모니터링 GUI
@@ -110,10 +111,12 @@ pip install pyserial pyqt5 pyqtgraph numpy
   (0xF0~0xFE) 는 **전부** `'user'` 로 라우팅되고, `router.user_modules` 에 처음 본
   순서대로 module별 관측 상태가 쌓입니다 — GUI 는 그 순서로 탭을 만듭니다
   (2026-09-15, "Phase E-live" 다중 module 실시간 뷰. 예전엔 처음 본 module 하나만
-  화면·CSV 에 반영하고 나머지는 세기만 했습니다).
+  화면·CSV 에 반영하고 나머지는 세기만 했습니다). 프레임을 받는 스레드와 화면을 그리는
+  스레드가 다르면 `router.user_modules_snapshot()` 으로 읽으세요 — `user_modules` 를 직접
+  순회하면 새 module 이 처음 들어오는 순간 오류가 납니다.
 - `GlobalSequenceLedger` — 패킷 손실 집계
 
-GUI 는 module_id 별로 탭 하나(사이드바 + 6-plot + CSV)를 만듭니다. 화면 하단
+GUI 는 module_id 별로 탭 하나(사이드바 + 6-plot + CSV)를 만듭니다. 탭 바로 위에 있는
 통계줄에 나오는 값들:
 
 | 표시 | 뜻 |
@@ -153,6 +156,13 @@ XM_SendUsbDataWithId(&s_debug, sizeof(s_debug), 0xF0);
 
 → 그래프·CSV 에 `Left Hip Angle` 로 나옵니다. 메타가 데이터보다 늦게 와도
 `.xmlog` 로 저장했다면 **사후 내보내기에서는 전부 이름이 붙습니다.**
+
+> 실시간 CSV 는 module 마다 **첫 프레임**을 기준으로 열을 정합니다. 그 뒤에 타입을 알려 주는
+> 정보(`0xEE`)가 도착해서 채널 수나 값을 읽는 방식이 달라지면, 그 뒤 프레임은 열이 밀리거나
+> 값의 뜻이 섞이지 않도록 값 대신 받은 바이트를 hex 로 적습니다(화면 위쪽 상태 패널에
+> `CSV hex행 N` 으로 표시). Review CSV 뷰어는 그런 행의 값은 그리지 않고(그 구간은 빈 채로
+> 남습니다) 시간·seq·Tx drop 은 그대로 세므로, 패킷 손실 통계는 어긋나지 않습니다. 이름과 값이
+> 모두 맞는 CSV 가 필요하면 `.xmlog` 에서 다시 뽑으세요.
 
 > ⚠ **`0xEF` 는 이름과 단위만 알려줍니다 — 타입은 모릅니다.** 그래서 값은 float32 로
 > **가정**해서 풉니다. 정수나 혼합 타입 struct 를 보내면 값이 깨집니다. 도구가 그럴 때
@@ -219,10 +229,14 @@ CLI 로 바로 CSV 를 뽑을 수도 있습니다 — 사용자 채널 CSV 와 *
 
 ```bash
 python CDC/cdc_phai_receiver.py --cli --port COM6 --total-data
-#  data/cdc_phai_<시각>.csv    사용자 채널 (기존)
-#  data/cdc_total_<시각>.csv   0x20 197채널
+#  data/cdc_phai_<시각>_user_0xF0.csv   사용자 채널 (module 하나당 파일 하나, 0xF0 예시)
+#  data/cdc_total_<시각>.csv            0x20 197채널
 #  data/cdc_total_<시각>.csv.meta.txt   어느 맵으로 풀었는지
 ```
+
+> 사용자 채널을 Module ID 여러 개(0xF0~0xFE)로 보내면 Module ID 마다 파일이 하나씩 생깁니다
+> (`..._user_0xF0.csv`, `..._user_0xF1.csv`, ...). `.xmlog` 에서 CSV 를 뽑을 때
+> (`python xm10.py export FILE --csv DIR`)도 같은 이름 규칙입니다.
 
 > **알아 둘 한계** — 디코더는 자기가 **어떤 맵을 쓰는지**는 말할 수 있지만, 보드가
 > **어떤 맵으로 보내는지**는 알 수 없습니다. 0x20 패킷에 버전·지문 필드가 없기 때문입니다.
@@ -230,8 +244,10 @@ python CDC/cdc_phai_receiver.py --cli --port COM6 --total-data
 > fingerprint 는 "PC 가 푼 맵"이지 "보드가 보낸 맵"이 아닙니다 — 나중에 값이 이상할 때
 > 되짚기 위한 기록입니다.
 
-> GUI(`cdc_phai_receiver.py` 그래프 화면)는 아직 0x20 을 그리지 않습니다. CLI 와 라이브러리
-> 경로만 연결돼 있습니다.
+> GUI(`cdc_phai_receiver.py` 그래프 화면)는 0x20 을 그래프로 그리지는 않습니다. 대신 "Show 0x20 tab"
+> 체크박스를 켜면 표(채널 이름 + 최신값, 초당 5번 갱신)로 볼 수 있습니다. 받은 크기가 PC 가 가진
+> 맵과 다르면 값 대신 `map mismatch` 경고를 띄웁니다 — 틀린 값을 그럴듯하게 보여주지 않습니다.
+> (크기는 같은데 배치만 다른 경우는 알아낼 수 없습니다. 위 '알아 둘 한계' 그대로입니다.)
 
 ### 검증
 
@@ -249,8 +265,12 @@ python CDC/test_xmlog_chain.py           # 와이어 -> .xmlog -> CSV 전 구간
 python CDC/test_frame_router.py          # 와이어 파싱·시퀀스 회계
 python CDC/test_schema.py                # 0xEE/0xEF 스키마 + 레지스트리
 python CDC/test_golden_vectors.py        # 독립 구현이 만든 계약 바이트와 대조
+python CDC/test_gui_tabs.py              # 실제 창(오프스크린)에 합성 스트림 — 탭·CSV·0x20 표 (PyQt5 필요)
 python CDC/soak.py --selftest            # soak 회계·판정 로직
 ```
+
+> `test_gui_tabs.py` 는 PyQt5 가 없으면 `SKIP` 으로 끝납니다. `run_tests.py` 도 이걸 통과로
+> 세지 않고 `SKIP` 으로 따로 적습니다 — 창을 검사하지 못했다는 뜻입니다.
 
 > `run_tests.py` 에는 시험 말고 **undefined-name 게이트**(pyflakes)가 하나 더 있습니다.
 > 단위 시험이 지나가지 않는 코드 경로에서 이름이 빠지는 결함을 잡습니다 — 실제로
@@ -262,11 +282,13 @@ python CDC/soak.py --selftest            # soak 회계·판정 로직
 
 ```bash
 python CDC/cdc_csv_reviewer.py                                  # 파일 선택 다이얼로그
-python CDC/cdc_csv_reviewer.py data/cdc_phai_20260224_120000.csv
+python CDC/cdc_csv_reviewer.py data/cdc_phai_20260224_120000_user_0xF0.csv
 ```
 
 주요 기능: 센서 도메인별 그래프 그룹, **Sequence Gap(ΔSeq) 분석**(패킷 누락 시점),
 **Tx Drop 누적 그래프**, 이상치 자동 필터, X축 연동, 드래그 앤 드롭.
+값 대신 받은 바이트(hex)를 적은 행은 이상치로 세지 않습니다. 그 행의 값은 그래프에서 비워 두고
+(몇 행인지 알려 줍니다), 시간·seq·Tx drop 은 그대로 세어 손실 통계에 넣습니다.
 
 ## 무손실 측정 — `CDC/soak.py`
 
@@ -315,7 +337,7 @@ python CDC/soak.py --list-ports
 | `CDC/demo_stream.py` | 보드 없이 쓰는 합성 스트림 (데모·시험 공용) |
 | `CDC/demo_run.py` | 데모 전 구간 실행 + 17항목 판정 |
 | `CDC/cdc_csv_reviewer.py` | 저장한 CSV 후처리 뷰어 |
-| `CDC/test_*.py` | 각 조각의 시험. `test_golden_vectors` 는 다른 구현이 만든 바이트와 대조, `test_demo_stream` 은 두 COBS 구현을 맞댐 |
+| `CDC/test_*.py` | 각 조각의 시험. `test_golden_vectors` 는 다른 구현이 만든 바이트와 대조, `test_demo_stream` 은 두 COBS 구현을 맞댐, `test_gui_tabs` 는 실제 창을 오프스크린으로 띄워 확인 |
 | `spec/golden/` | 와이어 계약 골든 벡터 — 개발 레포의 독립 생성기가 만든 것 |
 
 ---

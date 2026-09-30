@@ -5,12 +5,19 @@
 
 무엇이 도는가
 -------------
-  frame_router          와이어 파싱·시퀀스 회계 (기존, 28항목)
+  frame_router          와이어 파싱·시퀀스 회계
   total_data_decoder    0x20 디코더 단독 자기검사
   test_total_data_decoder   와이어 -> 0x20 디코드
   test_xmlog            .xmlog 바이트 ABI (손으로 적은 골든 바이트)
   test_xmlog_chain      와이어 -> .xmlog -> CSV 전 구간
+  test_gui_tabs         실제 창(오프스크린 Qt)에 합성 스트림 — 탭·CSV·0x20 표 (PyQt5 필요)
   undefined-name 게이트  pyflakes (있으면)
+
+SKIP 은 PASS 가 아니다
+----------------------
+시험 파일이 종료코드 77 로 끝나면 "이 환경에서는 못 돌렸다" 는 뜻이다(automake 의 관례).
+GUI 시험이 PyQt5 없이 조용히 0 으로 끝나면 "창을 검사했다" 로 읽히는데 실제로는 아무것도
+안 돈 것이다 — 그래서 SKIP 으로 따로 세고, 마지막 줄에 통과 수와 나란히 적는다.
 
 왜 undefined-name 게이트가 따로 있나
 ------------------------------------
@@ -29,6 +36,9 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 CDC = os.path.join(HERE, "CDC")
 
+# 시험 파일이 이 종료코드로 끝나면 SKIP 이다 (0 = 통과, 그 밖 = 실패).
+SKIP_RC = 77
+
 SUITES = [
     ("frame_router (wire parsing)", "test_frame_router.py"),
     ("total_data_decoder self-test", "total_data_decoder.py"),
@@ -43,6 +53,9 @@ SUITES = [
     # 데모는 전 구간을 한 번 더 밟는다 — 조각 시험이 다 통과해도 이어 붙이면
     # 틀리는 자리가 있다. `--out` 은 임시 디렉토리로 준다(_run 이 채운다).
     ("end-to-end demo", "demo_run.py --quiet --out {tmp}"),
+    # 실제 MainWindow 를 오프스크린 Qt 로 띄워 탭·CSV·0x20 표를 확인한다. PyQt5 가 없으면
+    # 종료코드 77 로 끝나 아래에서 SKIP 으로 집계된다.
+    ("gui: tabs / CSV / 0x20 table (offscreen Qt)", "test_gui_tabs.py"),
 ]
 
 # 정적 검사 대상 — 실행 경로가 얕아 시험이 못 덮는 파일들
@@ -59,6 +72,7 @@ LINT_TARGETS = [
     "xmlog_export.py",
     "demo_stream.py",
     "demo_run.py",
+    "test_gui_tabs.py",
 ]
 
 
@@ -103,6 +117,7 @@ def main():
     print("")
 
     failed = []
+    skipped = []
 
     status, lines = lint_undefined_names()
     if status == "ok":
@@ -110,6 +125,7 @@ def main():
         if lines:
             print("        참고: 치명적이지 않은 경고 %d 건 (미사용 import 등)" % len(lines))
     elif status == "skip":
+        skipped.append("undefined-name 게이트")
         print("  SKIP  undefined-name 게이트 — %s" % lines[0])
         print("        ⚠ 이 게이트가 없으면 '시험은 통과하는데 실행하면 죽는' 결함을 못 잡는다")
     else:
@@ -129,12 +145,17 @@ def main():
             print("  FAIL  %s — 파일 없음 (%s)" % (label, script))
             continue
         r = _run(script, tmp)
+        tail = ((r.stdout or "") + (r.stderr or "")).strip().splitlines()
         if r.returncode == 0:
             print("  PASS  %s" % label)
+        elif r.returncode == SKIP_RC:
+            skipped.append(label)
+            print("  SKIP  %s" % label)
+            if tail:
+                print("        " + tail[-1])
         else:
             failed.append(label)
             print("  FAIL  %s  (rc=%d)" % (label, r.returncode))
-            tail = ((r.stdout or "") + (r.stderr or "")).strip().splitlines()
             for ln in tail[-12:]:
                 print("        " + ln)
 
@@ -142,10 +163,15 @@ def main():
 
     print("")
     total = len(SUITES) + 1
+    passed = total - len(failed) - len(skipped)
     if failed:
         print("%d/%d FAILED — %s" % (len(failed), total, ", ".join(failed)))
         return 1
-    print("%d/%d passed" % (total, total))
+    if skipped:
+        print("%d/%d passed, %d SKIP — %s" % (passed, total, len(skipped), ", ".join(skipped)))
+        print("(SKIP 은 통과가 아니다: 그 부분은 이 환경에서 검사되지 않았다)")
+    else:
+        print("%d/%d passed" % (passed, total))
     return 0
 
 

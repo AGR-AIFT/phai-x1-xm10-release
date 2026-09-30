@@ -213,6 +213,52 @@ def main():
         check(h3[-1] == "payload_hex", "raw-hex 헤더 %r" % (h3,))
         check(len(r3[-1]) == 368 * 2, "hex 길이 %d (368 B = 736 자)" % len(r3[-1]))
 
+        # ---- 8. hex 행 판별 — CSV 를 읽는 쪽이 값이 아닌 행을 값으로 읽지 않는다 ------
+        # 채널 수가 헤더와 달라진 프레임은 값 칸을 비우고 마지막 칸에 payload 를 hex 로 적는다
+        # (위 export_csv 와 실시간 CSV 의 같은 규약). 읽는 쪽이 그 행을 숫자로 읽으면 빈 칸이
+        # NaN 이 되어 이상치로 처리되고 그 뒤 데이터가 통째로 잘려 나간다.
+        prefix = ["0.009000", "0.001000", "9", "240", "0"]
+        first = len(prefix)
+        hex16 = bytes(range(16)).hex()
+        check(EXP.is_hex_row(prefix + ["", "", "", hex16], first), "4채널 hex 행을 못 알아본다")
+        check(EXP.is_hex_row(prefix + ["", "", "", bytes(16).hex()], first),
+              "숫자로만 된 hex(0 바이트 16개)를 못 알아본다")
+        check(EXP.is_hex_row(prefix + [bytes(4).hex()], first), "채널 1개짜리 hex 행을 못 알아본다")
+        check(EXP.is_hex_row(prefix + ["12345678"], first),
+              "채널 1개짜리 숫자로만 된 hex(0x12345678)를 못 알아본다")
+        check(not EXP.is_hex_row(prefix + ["1.500000", "2.500000", "-0.000000", "0.000000"], first),
+              "숫자 행을 hex 행으로 착각했다")
+        check(not EXP.is_hex_row(prefix + ["0.000000"], first),
+              "채널 1개짜리 숫자 행(0.000000)을 hex 행으로 착각했다")
+        check(not EXP.is_hex_row(prefix + ["nan"], first) and not EXP.is_hex_row(prefix + ["inf"], first),
+              "nan/inf 숫자 행을 hex 행으로 착각했다")
+        check(not EXP.is_hex_row(prefix + ["", "", "", "abc"], first), "8자의 배수가 아닌 칸을 hex 로 봤다")
+        check(not EXP.is_hex_row(prefix + ["1.0", "", "", hex16], first),
+              "값 칸이 차 있는 행을 hex 행으로 봤다 (열이 밀린 행일 수 있다)")
+        check(not EXP.is_hex_row(prefix, first), "값 칸이 아예 없는 행을 hex 행으로 봤다")
+
+        # 필터는 hex 행을 **버리지 않는다** — 앞쪽 칸(시간 · seq · tx_drops)은 그대로 두고 값 칸만
+        # nan 으로 바꾼다. 버리면 그 행의 seq 가 통계에서 빠져 없던 패킷 손실이 생기고, 그 행이
+        # 실은 Tx drop 도 합계에서 빠진다.
+        flt = EXP.HexRowFilter(first)
+        lines = ["1,2,3,4,5,1.000000,2.000000\n",
+                 "1,2,3,4,9,,%s\n" % bytes(8).hex(),
+                 "1,2,3,4,5,3.000000,4.000000\r\n"]
+        out = list(flt(lines))
+        check(out == [lines[0], "1,2,3,4,9,nan,nan\n", lines[2]] and flt.rows == [1],
+              "필터가 hex 행의 값 칸만 nan 으로 바꾸지 못했다: %r rows=%r" % (out, flt.rows))
+
+        # `rows` 는 genfromtxt 가 돌려주는 배열의 행 번호다 — 빈 줄은 거기서도 행이 아니므로
+        # 번호에 넣지 않는다. 어긋나면 리뷰어가 엉뚱한 행을 hex 로 보고 이상치 검사에서 뺀다.
+        import numpy as np
+        flt = EXP.HexRowFilter(first)
+        lines = ["\n", "1,2,3,4,5,1.000000,2.000000\n", "\n", "  \n",
+                 "1,2,3,4,9,,%s\n" % bytes(8).hex(), "1,2,3,4,5,3.000000,4.000000\n"]
+        arr = np.genfromtxt(flt(lines), delimiter=",")
+        check(arr.shape == (3, 7) and flt.rows == [1] and np.isnan(arr[1, first:]).all()
+              and np.isfinite(arr[[0, 2]]).all() and arr[1, 4] == 9,
+              "hex 행 번호가 배열과 어긋났다: shape=%r rows=%r" % (arr.shape, flt.rows))
+
         # ---- 7. GUI 워커도 같은 파일을 쓴다 (시리얼 포트 없이 워커 함수만) --------
         # 워커의 _parse_frame 은 포트를 열지 않는다 — 바이트를 직접 넣을 수 있다.
         # 이 경로가 없던 동안 GUI 는 CSV 만 남겼고 무손실 저장은 CLI 전용이었다.
