@@ -29,7 +29,7 @@ This feeds data made to look like it came from a real board into the actual rece
 ```
 *(Real console output, in Korean: "Demo passed — 17/17 items. Artifacts:" followed by the file list.)*
 
-Open `demo_out\csv\demo_user_0xF0.csv`. The first three columns (`pc_time_us` receive time, `seq_id` receive sequence number, `activation_id` a number assigned per connection) are receive metadata added by the PC; after those come `state, contact, emg_rms, angle_x10, tick, torque[0], torque[1]` — the field names defined in the board-side C struct became the CSV columns, unchanged. That's exactly what this tool is for.
+Open `demo_out\csv\demo_user_0xF0.csv`. The first three columns (`pc_time_us` receive time, `seq_id` receive sequence number, `activation_id` the number of the struct description that was valid when the row was received — 0 means "the description hadn't arrived yet", as in the first few rows, which are still decoded with the description that arrived right after) are receive metadata added by the PC; after those come `state, contact, emg_rms, angle_x10, tick, torque[0], torque[1]` — the field names defined in the board-side C struct became the CSV columns, unchanged. That's exactly what this tool is for.
 
 ---
 
@@ -97,7 +97,14 @@ CSV:
 ```
 *("JSON meta, 4 channels"; the warning reads "type unknown — assuming float32".)*
 
-`total_0x20` is the 197 channels the board always sends (joint angles, torque, IMU, GRF, etc.), and `user_0xF0` is the channel you sent from your own example code. Channel names are stored inside the file itself, so there's nothing extra to configure when exporting.
+`total_0x20` is the 197 channels the board always sends (joint angles, torque, IMU, GRF, etc.), and `user_0xF0` is the channel you sent from your own example code. The channel names the board sent while you were recording are stored inside the file itself, so there's nothing extra to configure when exporting.
+
+Each row is decoded with the **channel description that was valid when the row was received** (a row received before any description is decoded with the first one that arrives afterwards on the same connection). If the struct description for a Module ID changes partway through a single file (for example, a script that keeps writing into one file across a reconnect — the graph window opens a new file for every connection), the CSV for that Module ID is split per description — `..._user_0xF0.csv`, `..._user_0xF0_schema2.csv` — because the same column name can mean something different (the same four bytes are `1.0` as a `float` but `1065353216` as a `uint32_t`).
+
+**If you connect again**, the graph window opens a new `.xmlog`. It can't tell whether the board that came back is the same one, so it doesn't carry the earlier file's channel description over — the new file only uses what the board sent on that connection. The current firmware sends the channel names your example code registered with `XM_SetUsbCustomMeta` once, the first time you connect after USB is freshly enumerated (unplugging and re-plugging the cable, or restarting the board, makes USB enumerate again). It doesn't send the types yet.
+
+- A file recorded after re-plugging the cable or restarting the board contains the channel names.
+- If you only clicked Disconnect and then Connect in the window, USB stays up and the board doesn't re-send the names. The graph and the live CSV (`cdc_phai_..._user_0xF0.csv`) keep the earlier names, but the `.xmlog` recorded that way has no channel names, so exporting it gives `ch0, ch1, …` with values assumed to be `float`. If you need the names, re-plug the cable and record again.
 
 ---
 

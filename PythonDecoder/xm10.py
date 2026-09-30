@@ -61,6 +61,7 @@ SELFTEST_SUITES = [
     ("golden vectors (cross-impl)",   "test_golden_vectors",      "main",     ()),
     ("xmlog byte ABI",                "test_xmlog",               "main",     ()),
     ("wire -> xmlog -> CSV",          "test_xmlog_chain",         "main",     ()),
+    ("xmlog schema lifecycle",        "test_xmlog_activation",    "main",     ()),
     ("demo_stream builders",          "demo_stream",              "_selfcheck", ()),
     ("demo stream vs test encoder",   "test_demo_stream",         "main",     ()),
     ("soak accounting self-test",     "soak",                     "main",     ("--selftest",)),
