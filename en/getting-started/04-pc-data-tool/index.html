@@ -2496,7 +2496,7 @@
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>   ...
 </code></pre></div>
 <em>(Real console output, in Korean: "Demo passed — 17/17 items. Artifacts:" followed by the file list.)</em></p>
-<p>Open <code>demo_out\csv\demo_user_0xF0.csv</code>. The first three columns (<code>pc_time_us</code> receive time, <code>seq_id</code> receive sequence number, <code>activation_id</code> a number assigned per connection) are receive metadata added by the PC; after those come <code>state, contact, emg_rms, angle_x10, tick, torque[0], torque[1]</code> — the field names defined in the board-side C struct became the CSV columns, unchanged. That's exactly what this tool is for.</p>
+<p>Open <code>demo_out\csv\demo_user_0xF0.csv</code>. The first three columns (<code>pc_time_us</code> receive time, <code>seq_id</code> receive sequence number, <code>activation_id</code> the number of the struct description that was valid when the row was received — 0 means "the description hadn't arrived yet", as in the first few rows, which are still decoded with the description that arrived right after) are receive metadata added by the PC; after those come <code>state, contact, emg_rms, angle_x10, tick, torque[0], torque[1]</code> — the field names defined in the board-side C struct became the CSV columns, unchanged. That's exactly what this tool is for.</p>
 <hr />
 <h2 id="connecting-a-board">Connecting a Board<a class="headerlink" href="#connecting-a-board" title="Permanent link">&para;</a></h2>
 <h3 id="1-find-the-port">1. Find the Port<a class="headerlink" href="#1-find-the-port" title="Permanent link">&para;</a></h3>
@@ -2579,7 +2579,13 @@
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  cdc_..._user_0xF0.csv       12000 rows   [0xEF] JSON 메타 4채널  ⚠ 타입 미상 — float32 가정
 </code></pre></div>
 <em>("JSON meta, 4 channels"; the warning reads "type unknown — assuming float32".)</em></p>
-<p><code>total_0x20</code> is the 197 channels the board always sends (joint angles, torque, IMU, GRF, etc.), and <code>user_0xF0</code> is the channel you sent from your own example code. Channel names are stored inside the file itself, so there's nothing extra to configure when exporting.</p>
+<p><code>total_0x20</code> is the 197 channels the board always sends (joint angles, torque, IMU, GRF, etc.), and <code>user_0xF0</code> is the channel you sent from your own example code. The channel names the board sent while you were recording are stored inside the file itself, so there's nothing extra to configure when exporting.</p>
+<p>Each row is decoded with the <strong>channel description that was valid when the row was received</strong> (a row received before any description is decoded with the first one that arrives afterwards on the same connection). If the struct description for a Module ID changes partway through a single file (for example, a script that keeps writing into one file across a reconnect — the graph window opens a new file for every connection), the CSV for that Module ID is split per description — <code>..._user_0xF0.csv</code>, <code>..._user_0xF0_schema2.csv</code> — because the same column name can mean something different (the same four bytes are <code>1.0</code> as a <code>float</code> but <code>1065353216</code> as a <code>uint32_t</code>).</p>
+<p><strong>If you connect again</strong>, the graph window opens a new <code>.xmlog</code>. It can't tell whether the board that came back is the same one, so it doesn't carry the earlier file's channel description over — the new file only uses what the board sent on that connection. The current firmware sends the channel names your example code registered with <code>XM_SetUsbCustomMeta</code> once, the first time you connect after USB is freshly enumerated (unplugging and re-plugging the cable, or restarting the board, makes USB enumerate again). It doesn't send the types yet.</p>
+<ul>
+<li>A file recorded after re-plugging the cable or restarting the board contains the channel names.</li>
+<li>If you only clicked Disconnect and then Connect in the window, USB stays up and the board doesn't re-send the names. The graph and the live CSV (<code>cdc_phai_..._user_0xF0.csv</code>) keep the earlier names, but the <code>.xmlog</code> recorded that way has no channel names, so exporting it gives <code>ch0, ch1, …</code> with values assumed to be <code>float</code>. If you need the names, re-plug the cable and record again.</li>
+</ul>
 <hr />
 <h2 id="console-only-mode">Console-Only Mode<a class="headerlink" href="#console-only-mode" title="Permanent link">&para;</a></h2>
 <p>When you don't need the graph window, or you're leaving it running for a long time, console mode is lighter.</p>
