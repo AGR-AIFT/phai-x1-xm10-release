@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PythonDecoder 전체 검증 — 보드도 시리얼 포트도 없이 돈다.
+"""pc-data-tool 전체 검증 — 보드도 시리얼 포트도 없이 돈다.
 
     python run_tests.py
 
@@ -115,7 +115,7 @@ def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-    print("PythonDecoder 검증 — 보드 없이")
+    print("pc-data-tool 검증 — 보드 없이")
     print("")
 
     failed = []

@@ -154,7 +154,7 @@ Extension_Module/
 ├── XM10_SDK/              ← STM32CubeIDE 프로젝트
 │   ├── Rev1.1/Extension_Module/  ← PCB Rev 1.1 용
 │   └── Rev2.0/Extension_Module/  ← PCB Rev 2.0 용 (대부분 여기)
-├── PythonDecoder/         ← PC 데이터 도구 xm10 (그래프·무손실 저장·CSV, exe 로도)
+├── pc-data-tool/          ← PC 데이터 도구 xm10 (그래프·무손실 저장·CSV, exe 로도)
 ├── assets/img/            ← 보드 사진 + 다이어그램
 ├── .claude/skills/        ← Claude Code 사용자 온보딩 / 예제 트러블슈팅 스킬
 ├── CLAUDE.md / AGENTS.md  ← AI 코딩 도구 진입점 (Claude Code 등)

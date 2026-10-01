@@ -42,7 +42,7 @@ PC 프로그램(PhAI Studio 또는 `xm10` 도구)으로 포트를 열면(Connect
 - **User Custom Channel (0xF0~0xFE)** — 알고리즘 내부 변수 (제어 출력, 추정치 등) 를 PC (`xm10` 도구) 로 내보냅니다. 채널 이름·단위는 메타 JSON 으로 등록하며, 등록은 하나만 유지되어 `XM_SetUsbCustomMeta` 를 다시 부르면 이전 것을 덮어씁니다.
 - **`XM_SetUsbCustomMeta(id, json)`** — Setup 단계 1회. JSON 배열로 채널별 `name` + `unit` 등록 → `xm10` 도구가 채널 이름을 그래프 제목·CSV 열 이름으로 씁니다.
 - **`XM_SendUsbDataWithId(ptr, size, id)`** — non-blocking 전송. 전송 버퍼가 가득 차거나 구조체가 1020 바이트를 넘으면 `false` 반환 + 해당 tick 드롭.
-- **PhAI V2.2 프로토콜** — SOF 0xAA + CRC16-CCITT + STATUS. PC 쪽은 레포 내 `xm10` 도구가 받는다 (`python PythonDecoder/xm10.py recv`, [안내](../../docs/getting-started/04-pc-data-tool.md)).
+- **PhAI V2.2 프로토콜** — SOF 0xAA + CRC16-CCITT + STATUS. PC 쪽은 레포 내 `xm10` 도구가 받는다 (`python pc-data-tool/xm10.py recv`, [안내](../../docs/getting-started/04-pc-data-tool.md)).
 - **지켜야 할 것** — 구조체는 `float` 만, JSON 항목 수 = 필드 수, ID 는 `0xF0`~`0xFE`. 셋 중 하나만 어긋나도 PC 화면의 열이 밀리거나 값이 이상해진다.
 
 ---

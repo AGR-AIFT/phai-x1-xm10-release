@@ -103,7 +103,7 @@ PC 와 실시간으로 메시지를 주고받고 데이터를 스트리밍합니
 | [08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | 센서 데이터 모니터링 | ⭐⭐ | 실시간 데이터 sprintf 출력 |
 | [09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | 고속 바이너리 스트리밍 | ⭐⭐⭐ | PhAI V2.2 프로토콜, 1 kHz 전송 (사용자 채널은 `xm10` 도구로 확인) |
 
-> 수집한 스트림을 PC 에 저장·분석하려면 PhAI Studio 녹화 또는 레포 내 `xm10` 도구를 사용하세요 — `python PythonDecoder/xm10.py recv` 로 그래프를 보면서 원본이 `.xmlog` 로 저장되고, `export` 로 CSV 를 뽑습니다 ([안내](../getting-started/04-pc-data-tool.md)). PhAI Studio 는 아직 개발 중이라, `XM_SendUsbDataWithId` 로 보내는 직접 정의한 데이터 구조체(커스텀 구조체)는 우선 `xm10` 도구로 보고 저장하세요. (온보드 파일 저장은 v2.5.0 에서 제거되어 현재 지원하지 않습니다)
+> 수집한 스트림을 PC 에 저장·분석하려면 PhAI Studio 녹화 또는 레포 내 `xm10` 도구를 사용하세요 — `python pc-data-tool/xm10.py recv` 로 그래프를 보면서 원본이 `.xmlog` 로 저장되고, `export` 로 CSV 를 뽑습니다 ([안내](../getting-started/04-pc-data-tool.md)). PhAI Studio 는 아직 개발 중이라, `XM_SendUsbDataWithId` 로 보내는 직접 정의한 데이터 구조체(커스텀 구조체)는 우선 `xm10` 도구로 보고 저장하세요. (온보드 파일 저장은 v2.5.0 에서 제거되어 현재 지원하지 않습니다)
 
 ---
 

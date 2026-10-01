@@ -130,7 +130,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | 도구 | 역할 | XM10 과의 관계 |
 |------|------|---------------|
 | **PhAI Studio** | Total Data(시스템 데이터) 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
-| **xm10 PC 도구** (`PythonDecoder/xm10.py`) | 실시간 그래프 + 무손실 저장(.xmlog) + CSV 내보내기. `demo` 로 보드 없이 체험, `build_exe.py` 로 실행파일 | 본 ZIP 에 들어 있음 — [안내](docs/getting-started/04-pc-data-tool.md) |
+| **xm10 PC 도구** (`pc-data-tool/xm10.py`) | 실시간 그래프 + 무손실 저장(.xmlog) + CSV 내보내기. `demo` 로 보드 없이 체험, `build_exe.py` 로 실행파일 | 본 ZIP 에 들어 있음 — [안내](docs/getting-started/04-pc-data-tool.md) |
 
 ---
 

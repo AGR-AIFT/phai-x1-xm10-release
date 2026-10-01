@@ -31,7 +31,7 @@ Rev2.0.zip  →  Extension_Module/
 ├── tools/            빌드 보조 스크립트
 ├── .project .cproject *.ld startup_*.s CMakeLists.txt Extension_Module.launch
 ├── docs/             학습 문서
-├── PythonDecoder/    xm10 PC 도구 (두 Rev 공통)
+├── pc-data-tool/     xm10 PC 도구 (두 Rev 공통)
 ├── .claude/          Claude Code 진입점 (student-onboard, example-helper)
 └── CLAUDE.md AGENTS.md README.md CHANGELOG.md LICENSE
 ```

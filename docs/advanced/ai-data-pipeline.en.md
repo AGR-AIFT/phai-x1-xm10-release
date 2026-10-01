@@ -46,13 +46,13 @@ void Control_Loop(void) {
 
 On the PC side, receive the stream with the `xm10` tool.
 
-- **xm10 tool** (in the repo's `PythonDecoder/`) — saves the raw bytes as-is to `.xmlog` and lets you pull CSV out later. Since you can re-export old recordings even after changing channel names/layout, it's better suited for managing a training dataset. Build it as an executable and it works on PCs without Python too ([guide](../getting-started/04-pc-data-tool.en.md)).
+- **xm10 tool** (in the repo's `pc-data-tool/`) — saves the raw bytes as-is to `.xmlog` and lets you pull CSV out later. Since you can re-export old recordings even after changing channel names/layout, it's better suited for managing a training dataset. Build it as an executable and it works on PCs without Python too ([guide](../getting-started/04-pc-data-tool.en.md)).
 
 > PhAI Studio is still under development, so for now use the `xm10` tool to view and save your own (custom) data structs (`0xF0`–`0xFE`).
 
 ```bash
-python PythonDecoder/xm10.py recv --cli --port COM6 --log         # receive to console + save .xmlog (Ctrl+C to stop)
-python PythonDecoder/xm10.py export data/cdc_<timestamp>.xmlog --csv out/   # export per-channel CSV
+python pc-data-tool/xm10.py recv --cli --port COM6 --log         # receive to console + save .xmlog (Ctrl+C to stop)
+python pc-data-tool/xm10.py export data/cdc_<timestamp>.xmlog --csv out/   # export per-channel CSV
 ```
 
 `out/` gets `..._user_0xF0.csv` (your channel) and `..._total_0x20.csv` (the 197 channels the board always sends — joint angle/torque, IMU, GRF). Both files carry `pc_time_us` (PC receive time) and `seq_id` (the board's send sequence, shared across all channels) columns up front so you can align the time axis.
@@ -143,7 +143,7 @@ Measure inference time using the loop profiling pattern from `Ex.18 Debug Monito
 ## Common Pitfalls
 
 - **CSV is too large / slow** — For large datasets, convert to `.npy` or `.parquet` for loading. Keep CSV for human inspection only.
-- **Packet loss while streaming** — Run `python PythonDecoder/xm10.py soak --port COM6 --minutes 10` to check for dropped frames. If you captured via `.xmlog`, the missing ranges (GAP) show up right in the `export` summary. If there's loss, reduce the data volume or trim channels.
+- **Packet loss while streaming** — Run `python pc-data-tool/xm10.py soak --port COM6 --minutes 10` to check for dropped frames. If you captured via `.xmlog`, the missing ranges (GAP) show up right in the `export` summary. If there's loss, reduce the data volume or trim channels.
 - **NaN / Inf values** — Add `assert(isfinite(value))` on the board side. Filter with `np.isfinite()` just before training.
 - **Class imbalance** — Gait phases like Stance/Swing are naturally imbalanced (roughly 7:3). Use the `class_weight` option or SMOTE.
 - **On-board inference exceeds 1 ms** — Apply model quantization (int8) or reduce the number of layers. Verify that the STM32H7's FPU is being utilized.

@@ -1,12 +1,13 @@
 # 04. PC 에서 데이터 받기 — `xm10` 도구
 
 보드가 USB 로 내보내는 데이터를 PC 에서 **그래프로 보고, 원본 그대로 저장하고, CSV 로 뽑는**
-도구입니다. `PythonDecoder/` 폴더에 있고, 파이썬으로 바로 쓰거나 실행파일 하나로 만들어
+도구입니다. `pc-data-tool/` 폴더에 있고, 파이썬으로 바로 쓰거나 실행파일 하나로 만들어
 파이썬 없는 PC 에서도 쓸 수 있습니다.
 
-> **어디에 있나요?** SDK ZIP 을 풀면 `Extension_Module\PythonDecoder\` 가 같이 들어 있습니다.
-> 받은 ZIP 에 이 폴더가 없다면(예전 버전) GitHub 레포에서 `PythonDecoder/` 폴더만 받아
+> **어디에 있나요?** SDK ZIP 을 풀면 `Extension_Module\pc-data-tool\` 이 같이 들어 있습니다.
+> 받은 ZIP 에 이 폴더가 없다면(예전 버전) GitHub 레포에서 `pc-data-tool/` 폴더만 받아
 > 아무 데나 두고 쓰면 됩니다 — 보드 리비전과 무관하게 같은 파일입니다.
+> v2.8.0 ZIP 에서는 이 폴더 이름이 `PythonDecoder` 였습니다 — 같은 도구입니다.
 
 > **PhAI Studio 와 무엇이 다른가요?** PhAI Studio 는 웹에서 바로 쓰는 공식 도구이고, 이건
 > 코드가 열려 있는 로컬 도구입니다. 받은 바이트를 **해석하기 전에 그대로 저장**하기 때문에
@@ -31,7 +32,7 @@
 보드가 아직 없어도 전체 흐름을 한 번 볼 수 있습니다.
 
 ```bash
-cd Extension_Module\PythonDecoder   # SDK ZIP 을 푼 폴더 안
+cd Extension_Module\pc-data-tool   # SDK ZIP 을 푼 폴더 안
 pip install pyserial pyqt5 pyqtgraph numpy      # 처음 한 번
 python xm10.py demo
 ```
@@ -250,7 +251,7 @@ python build_exe.py --no-gui   # 콘솔 전용 (약 23.0 MB)
 ## 폴더 안에 뭐가 있나
 
 ```
-PythonDecoder/
+pc-data-tool/
 ├── xm10.py          ← 여기서 시작. demo / ports / recv / soak / export / selftest
 ├── build_exe.py     ← 실행파일 만들기
 ├── run_tests.py     ← 개발용 검증 (selftest 보다 조금 더)
@@ -258,7 +259,7 @@ PythonDecoder/
 └── CDC/             ← 실제 코드. 직접 고치고 싶을 때
 ```
 
-`CDC/` 안 파일 하나하나가 무엇을 하는지는 [PythonDecoder/README.md](../../PythonDecoder/README.md)
+`CDC/` 안 파일 하나하나가 무엇을 하는지는 [pc-data-tool/README.md](../../pc-data-tool/README.md)
 의 "파일 한눈에" 표에 있습니다. 보통은 `xm10.py` 만 쓰시면 됩니다.
 
 ---
