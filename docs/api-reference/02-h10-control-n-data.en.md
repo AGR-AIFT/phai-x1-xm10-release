@@ -5,7 +5,7 @@
 > 🧰 Prerequisites: IPO model (Input → Process → Output 1 ms cycle) + [Ex.11~14](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/)
 > 🎯 Key objects: `XM.status` (read) / `XM.command` (staging commands) / `XM_SetControlMode` / `XM_SetAssistTorque` / `XM_SendPVector`
 
-One of the core values of `XM10` is controlling the `KIT H10` exoskeleton with algorithms you design yourself. This API provides everything you need to check the connection status to KIT H10, receive the robot's live state data, and send control commands — such as `PIF-Vectors` and `Aux inputs` — to drive the robot's motion.
+One of the core values of `XM10` is controlling the `KIT H10` exoskeleton with algorithms you design yourself. This API provides everything you need to check the connection status to KIT H10, receive the robot's live state data, and send control commands — such as `PIF-Vectors` — to drive the robot's motion.
 This is the detailed reference for the **robot data and control API** defined in `xm_api_data.h`.
 The XM10 firmware implements a **Facade pattern** so users can read robot state and issue commands through an intuitive global object (`XM`) without worrying about the underlying communication protocols (CAN-FD, UART).
 
@@ -13,7 +13,7 @@ The XM10 firmware implements a **Facade pattern** so users can read robot state 
 
 ## 📌 Operating Principle
 
-The XM10 control system follows a strict **IPO (Input-Process-Output)** model, executed precisely on a 1 ms (1 kHz) cycle by the internal **`core_process`** engine.
+The XM10 control system follows a strict **IPO (Input-Process-Output)** model, executed precisely by the system on a 1 ms (1 kHz) cycle.
 
 ### The IPO Cycle (1 ms Loop)
 
@@ -37,7 +37,7 @@ The XM10 control system follows a strict **IPO (Input-Process-Output)** model, e
 4.	**Streaming (CDC):**
 
       * After Input, Process, and Output are complete, data streaming is performed.
-      * If XM10 is connected to a PC via USB and the string `AGRB MON START` is sent over the serial port, user-defined data is forwarded to the terminal every 1 ms. Send `AGRB MON STOP` to halt streaming.
+      * By default, once a PC program opens the COM port, the system automatically sends Total Data (0x20) every 1 ms. (The legacy `AGRB MON START` / `AGRB MON STOP` strings can still start and stop it.) What goes out is binary PhAI packets, which a terminal cannot read — receive them with PhAI Studio or the `xm10` tool.
 
 > **Note:** Users never need to call receive or flush functions manually. Simply read data and set commands.
 > **Note:** No complex logic is required to save data. Just define the data struct you want to log and call the data-transmission API function.
@@ -181,7 +181,7 @@ typedef struct {
 } XmH10Data_t;
 ```
 
-Bold fields are currently being received. Additional fields may be added or modified in future releases.
+Bold fields are currently being received.
 
 | Field Name | Type | Unit | Description |
 | :--- | :--- | :--- | :--- |
@@ -331,7 +331,7 @@ typedef struct {
     XmExtImuData_t  ext_imu;  // External UART IMU (Xsens MTi-630)
     XmImuHubData_t  imu_hub;  // IMU Hub sensor (CAN-FD)
     XmEmgHubData_t  emg_hub;  // EMG Hub sensor (CAN-FD)
-    XmFesHubData_t  fes_hub;  // FES Hub stimulation feedback (CAN-FD)
+    XmFesHubData_t  fes_hub;  // FES Hub (currently not supported with the XM10)
 } XmInput_t;
 ```
 
@@ -379,7 +379,7 @@ Before starting your algorithm, always confirm that `XM10` has a stable communic
 ### `XM_IsCmConnected()`
 
 Checks whether the communication link with the **Control Module (CM)** is `Operational`.
-The connection between CM and XM10 is managed by an internal `Plug and Play` background task. The link is considered active **from the moment the first PDO data packet is received**.
+The connection between CM and XM10 is managed automatically by the system. The link is considered active **from the moment CM data is first received**.
 
 **Syntax**
 ```c
@@ -412,21 +412,21 @@ CM_NmtState_t XM_GetXMNmtState(void);
 
 | Item | Details |
 |------|------|
-| **Description** | Returns the current DOP V3 PnP (NMT) state for the CM link. |
-| **Return value** | `CM_NmtState_t` enum — current NMT state |
+| **Description** | Returns the current connection state for the CM link. |
+| **Return value** | `CM_NmtState_t` enum — current connection state |
 | **Call location** | `Control_Loop()` |
 
-**NMT state values:**
+**Connection state values:**
 
 | State | Value | Description |
 |------|-----|------|
-| `CM_NMT_INITIALISING` | 0 | Booting (boot-up message not yet received) |
-| `CM_NMT_PRE_OPERATIONAL` | 1 | SDO communication available; PDO inactive |
+| `CM_NMT_INITIALISING` | 0 | Booting (the CM's start-up notice not yet received) |
+| `CM_NMT_PRE_OPERATIONAL` | 1 | Configuration messages only; data exchange off |
 | `CM_NMT_OPERATIONAL` | 2 | All communication active (normal state) |
 | `CM_NMT_STOPPED` | 3 | Communication halted |
 
 > **Note:** `XM_IsCmConnected()` internally checks `XM_GetXMNmtState() == CM_NMT_OPERATIONAL`.
-> Use this function directly when you need finer-grained branching based on NMT state.
+> Use this function directly when you need finer-grained branching based on connection state.
 
 ---
 
@@ -876,7 +876,7 @@ XM_SetVelocityLimit(SYS_NODE_ID_LH, 100.0f, -100.0f);
 #### 2. Disturbance Observer (DOB)
 
 An advanced built-in control routine in `KIT H10` that estimates and compensates for user-applied forces and unexpected external disturbances, producing smoother and more stable motion.
-**To use DOB, the `KIT H10` actuators must have undergone System Identification for DOB, and the identification data must be stored in the motor driver. (System Identification for DOB has not been performed on the current `KIT H10`; this will change in a future revision.)**
+**To use DOB, the `KIT H10` actuators must have undergone System Identification for DOB, and the identification data must be stored in the motor driver. (System Identification for DOB has not been performed on the current `KIT H10`.)**
 
 **Syntax**
 ```c
@@ -925,9 +925,9 @@ XM_SetResistiveCompGain(SYS_NODE_ID_RH, strongResistance);
 Sends the wearer's body parameters (weight, height, segment lengths, etc.) to `KIT H10`. KIT H10 uses this information for real-time motion analysis and returns more accurate, personalized gait data and motion dynamics data to XM10.
 **You must measure and supply the body parameters manually before sending them to KIT H10.**
 
-**Body-parameter-dependent fields in `RxData_t`:**
+**Body-parameter-dependent fields in `XM.status.h10`:**
 
-| PDO field | Description | Unit | Type |
+| Field | Description | Unit | Type |
 | :--- | :--- | :--- | :-- |
 | `leftKneeAngle` | **Estimated** left knee angle | degree | float |
 | `rightKneeAngle` | **Estimated** right knee angle | degree | float |
@@ -980,7 +980,7 @@ Reading data is done by accessing the struct fields directly, but **all control 
 ### `XM_SetAssistTorque`
 
 Sets the assist torque for both legs simultaneously.
-The actual transmission (`Output`) is handled internally by the `Core Process` following the IPO model.
+The actual transmission (`Output`) is handled by the system following the IPO model.
 Users only need to compute the desired torque and set it through this function.
 
 **Syntax**
@@ -999,12 +999,12 @@ void XM_SetAssistTorque(float rh, float lh);
 **Sign · Unit · Limit (must read)**
   * **Sign convention**: **positive(+) = Flexion assist, negative(−) = Extension assist** (matches the angle convention `Extension < 0 < Flexion`).
   * **Unit chain**: the input is joint torque [Nm]. Internally it is converted to motor current — `τ_joint[Nm] = Kt(0.085) × Gear(18.75) × I[A] ≈ 1.594 × I[A]`. Apply this conversion when comparing with the feedback `XM.status.h10.*HipTorque` (unit **A**).
-  * **Hard limit (±10 Nm)**: the input torque is **clamped to ±10 Nm** inside the XM10 library (`CM_StageAuxTorque`, `libXM_Lib.a`) before it goes out on CAN. This is internal code, not the example, so users cannot change it; larger inputs saturate at ±10 Nm. (Motor-driver side: 14A max / 10A impedance saturation.)
+  * **Hard limit (±10 Nm)**: the input torque is **clamped to ±10 Nm** inside the XM10 library before it goes out on CAN. This is internal library behavior, not the example, so users cannot change it; larger inputs saturate at ±10 Nm. (Motor-driver side: 14A max / 10A impedance saturation.)
   * **Assist level**: to reflect the suit assist-strength dial (`XM.status.h10.h10AssistLevel`, 0~10), multiply the torque by `h10AssistLevel / 10.0f` — at level 0 the output is 0.
 
 **Operating Principle**
   * Stores the values in the `XM.command` struct and sets the `torque_updated` dirty flag.
-  * The actual transmission occurs at the end of the current control cycle (`_FlushAllOutputs`).
+  * The system performs the actual transmission at the end of the current control cycle.
 
 **Example**
 ```c
@@ -1135,6 +1135,6 @@ void Active_Loop(void) {
 | `XM.status.h10.is_connected` is `false` | CAN-FD cable loose, or H10 body power is off | Verify KIT H10 24 V input and fully seat the connector |
 | `SetAssistTorque` is called but torque remains 0 | `XM_SetControlMode(XM_CTRL_CONTROL)` was never called | Set the mode once on entering the active state |
 | Torque commands are sent but H10 does not move | KIT H10 firmware < v2.3.0 (incompatible with XM v2.0.0 and later) | Update using the [kit-h10-firmware/](../kit-h10-firmware/) guide |
-| Estimated data such as knee angle and forward velocity are always 0 | `XM_SendUserBodyData()` was never called (prerequisite for body-data-dependent fields) | See the Body Data instructions in [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5) |
+| Estimated data such as knee angle and forward velocity are always 0 | `XM_SendUserBodyData()` was never called (prerequisite for body-data-dependent fields) | See the Body Data instructions in [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세) |
 | IPO cycle misalignment / missed ticks | Blocking call inside `Control_Loop` (e.g., `osDelay`) | Use `XM_GetTick()` with a non-blocking pattern ([Ex.08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/)) |
 | Writing directly to `XM.command` has no effect | `XM.command` is a staging area — only `XM_Set*` functions set the dirty flag | Always use setter functions such as `XM_SetAssistTorque` |

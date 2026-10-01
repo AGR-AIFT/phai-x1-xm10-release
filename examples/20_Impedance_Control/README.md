@@ -6,7 +6,7 @@
 > - 강성 / 감쇠 / 평형점 3개를 버튼으로 실시간 조절하며 체감.
 >
 > ⏱️ 권장 시간: 40분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.14 PD](../14_PD_Realtime_Control/) (PD 와 비교) + [Ex.15 Inverted Pendulum](../15_Inverted_Pendulum_Control/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)
+> 🧰 사전 예제: [Ex.14 PD](../14_PD_Realtime_Control/) (PD 와 비교) + [Ex.15 Inverted Pendulum](../15_Inverted_Pendulum_Control/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 > 📄 논문: Hogan, N. (1985). *Impedance control: An approach to manipulation.* ASME J. Dyn. Sys., 107(1), 1–24.
 
 ---
@@ -27,7 +27,7 @@ H10 가 ASSIST 모드일 때 좌·우 고관절이 **가상의 스프링-댐퍼 
 | 0.02 (Medium) | 균형 |
 | 0.05 (Heavy) | 끈끈한 액체 속 같은 느릿함 |
 
-USB CDC `IMP | K:0.3 B:0.02 Eq:5.0 θ:3.2 τ:0.56` 매 500 ms + PhAI 0xF0 4ch.
+USB CDC `IMP | K:0.3 B:0.02 Eq:5.0 θ:3.2 τ:0.56` 매 500 ms + `xm10` 도구의 0xF0 4ch.
 
 > 📸 **가상 스프링-댐퍼 + 평형점** — 사진·영상 준비 중
 
@@ -109,6 +109,8 @@ static void _HandleButtons(void)
 ---
 
 ## 4️⃣ 실험 — 직접 해보기 (체크포인트)
+
+> 💡 PC 프로그램은 한 번에 하나만 연결하세요. 텍스트는 시리얼 터미널로, 0xF0 그래프는 `xm10` 도구로 보되 하나를 닫고 다음 것을 여세요. (터미널에 알 수 없는 글자가 섞여 보여도 정상입니다.) 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
 
 1. **빌드 + 플래시 + CM ASSIST 진입** → ✅ LED 1 빠른 깜빡 (임피던스 ON)
 2. **다리 움직이지 않음** → ✅ 평형점 θ_d=0° 부근으로 천천히 끌어당김 (느낌 약함)

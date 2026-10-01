@@ -58,13 +58,15 @@ XM10 의 전원 + 통신을 한 가닥으로 받습니다. Molex 1053081206 6-pi
 | CAN-FD #1 | KIT H10 외골격 ↔ XM10 (메인 커넥터에 포함) |
 | CAN-FD #2 | 센서 허브 모듈 확장 |
 
+> EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
+
 ### USB-C 포트
 
 USB 시리얼 통신 (CDC) 로 실시간 데이터 스트리밍과 디버그 메시지를 주고받습니다.
 
 | 모드 | 용도 | 사용하는 함수 |
 |------|------|--------------|
-| 시리얼 (CDC) | PC 터미널 / PhAI Studio 로 디버그·데이터 전송 | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
+| 시리얼 (CDC) | PC 터미널(텍스트 디버그) / `xm10` 도구(사용자 구조체)로 전송. PhAI Studio 는 Total Data(0x20)를 표시 | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
 
 ### 외부 UART 포트 🟢 **Rev 2.0 전용**
 

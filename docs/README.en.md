@@ -54,7 +54,9 @@ Each example follows a consistent 5-step structure: `Goal → Prerequisites → 
 | 5 | Advanced control algorithms (Hogan, HZD, CPG, etc.) | Ex.20–25 |
 | 6 | Learning & adaptive control (ILC, MRAC, etc.) | Ex.26–30 |
 | 7 | Physical AI applications | Ex.31–36 |
-| 8 | External module integration + RTOS utilities + Sensor Hub | Ex.37–42 |
+| 8 | RTOS utilities + Sensor Hub + serial link to outside devices | Ex.38–43 |
+
+> The IMU Hub and EMG Hub are modules under internal development. To use them, please contact us at https://huphailab.com/contact.
 
 Full learning path and recommended order: **[Tutorials README](tutorials/)**
 
@@ -115,7 +117,7 @@ Common issues covering build errors, USB connection problems, communication fail
 ## Additional Resources
 
 - [🧭 find-it.md](find-it.md) — Quick keyword-to-page lookup
-- [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — Source code for all 46 examples (each folder includes a 5-step README)
+- [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — Source code for all 45 examples (each folder includes a 5-step README)
 - [PC Data Tool xm10](getting-started/04-pc-data-tool.en.md) — Graphs, lossless recording, CSV export (code lives in [PythonDecoder/](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/PythonDecoder/))
 - [Release Notes](release-notes/) — Per-version attachments and compatibility matrix
 - [Changelog](https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md) — Summary of changes by version

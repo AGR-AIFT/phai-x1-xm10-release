@@ -58,14 +58,14 @@ XmTaskHandle_t XM_Task_CreateOneShot(const char*         name,
 
 | 이름 | 타입 | 설명 |
 |---|---|---|
-| `name` | `const char*` | Task 이름 (10자 이내 권장). `NULL`, 빈 문자열, 이미 사용 중인 이름은 거부됩니다. |
+| `name` | `const char*` | Task 이름 (10자 이내 권장). `NULL` 이나 빈 문자열은 거부됩니다. 같은 이름의 중복은 검사하지 않으니 task 마다 다른 이름을 지어 주세요. |
 | `func` | `XmTaskOneShotFunc_t` | task 로 실행할 함수. `return` 하면 완료 처리됩니다. |
 | `arg` | `void*` | `func` 에 전달할 인자. **static 변수나 heap 포인터만** 넘기세요 — 호출한 함수의 지역(stack) 변수 주소는 task 가 실행되는 시점에 이미 사라졌을 수 있어 금지입니다. |
 | `prio_hint` | `XmTaskPrio_t` | 우선순위 힌트. 특별한 이유가 없다면 `XM_PRIO_BACKGROUND` 를 사용하세요. |
 
-**반환값**: 성공 시 유효한 `XmTaskHandle_t` 핸들, 거부되면 `NULL` (+ USB-CDC 로 `[XM-WARN]` 메시지 출력).
+**반환값**: 성공 시 유효한 `XmTaskHandle_t` 핸들, 거부되면 `NULL`. 거부돼도 메시지는 나오지 않으니 반환값을 꼭 확인하세요.
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준입니다(헤더에 별도 ISR-safe 명시 없음 — ISR 안에서 호출하지 마세요). 동시에 최대 [`XM_TASK_MAX_INSTANCES`](#매크로) (4개) 까지만 만들 수 있고, 완료된 task 도 [`XM_Task_Delete`](#xm_task_delete) 로 지우기 전까지는 이 개수에 포함됩니다.
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 동시에 최대 [`XM_TASK_MAX_INSTANCES`](#매크로) (4개) 까지만 만들 수 있고, 완료된 task 도 [`XM_Task_Delete`](#xm_task_delete) 로 지우기 전까지는 이 개수에 포함됩니다.
 
 ```c
 static XmTaskHandle_t s_heavy;
@@ -93,7 +93,7 @@ OneShot task 의 함수 본체가 이미 `return` 해서 완료됐는지 확인�
 
 **반환값**: `true` — 함수가 return 하여 완료됨 / `false` — 아직 실행 중이거나 잘못된(또는 이미 삭제된) 핸들.
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음).
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요.
 
 ```c
 if (s_heavy != NULL && XM_Task_IsComplete(s_heavy)) {
@@ -128,7 +128,7 @@ XmTaskHandle_t XM_Task_CreatePeriodic(const char*          name,
 
 **반환값**: 성공 시 유효한 핸들, 거부되면 `NULL`.
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음).
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요.
 
 ```c
 static XmMutexHandle_t s_buf_mutex;
@@ -162,7 +162,7 @@ task 를 일시 중단합니다. [`XM_Task_Resume`](#xm_task_resume) 을 호출�
 
 **반환값**: 없음 (`void`).
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). 잘못된 핸들을 넘겨도 크래시 없이 무시됩니다(다른 API 와 동일한 방어 패턴).
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 잘못된 핸들을 넘겨도 크래시 없이 무시됩니다(다른 API 와 동일한 방어 패턴).
 
 **참고**: [`XM_Task_Resume`](#xm_task_resume)
 
@@ -182,7 +182,7 @@ void XM_Task_Resume(XmTaskHandle_t handle);
 
 **반환값**: 없음 (`void`).
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음).
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요.
 
 **참고**: [`XM_Task_Suspend`](#xm_task_suspend)
 
@@ -206,7 +206,7 @@ task 를 종료하고 관련 메모리(heap)를 회수합니다. task 를 하나
 - **Periodic**: 완료라는 개념이 없으므로 언제든 호출해서 강제 종료할 수 있습니다.
 - **자기 자신 삭제 금지**: 현재 실행 중인(자기 자신의) task 를 스스로 `Delete` 하려는 시도는 거부됩니다(헤더 명시 — task 함수 안에서 `XM_Task_Delete(자기_핸들)` 을 호출하지 마세요).
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음).
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요.
 
 ```c
 if (s_heavy != NULL && XM_Task_IsComplete(s_heavy)) {
@@ -233,7 +233,7 @@ Mutex 를 하나 생성합니다. 배열/구조체처럼 **여러 워드**로 �
 
 **반환값**: 성공 시 유효한 `XmMutexHandle_t`, 실패 시 `NULL`.
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). 보통 `Control_Setup()` 에서 한 번만 만들어 두고 계속 재사용합니다.
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 보통 `Control_Setup()` 에서 한 번만 만들어 두고 계속 재사용합니다.
 
 ```c
 static XmMutexHandle_t s_buf_mutex;
@@ -262,7 +262,7 @@ Mutex 잠금을 시도합니다.
 
 **반환값**: `true` — 잠금 성공 / `false` — timeout 이거나 잘못된 핸들.
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). `timeout_ms > 0` 을 Control_Loop 안에서 쓰면 최악의 경우 그만큼 1 kHz 주기가 밀립니다 — 반드시 `0` + 실패 시 skip 패턴을 쓰세요.
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. `timeout_ms > 0` 을 Control_Loop 안에서 쓰면 최악의 경우 그만큼 1 kHz 주기가 밀립니다 — 반드시 `0` + 실패 시 skip 패턴을 쓰세요.
 
 ```c
 /* Control_Loop — 1 kHz Writer, 항상 timeout=0 */
@@ -292,7 +292,7 @@ Mutex 잠금을 해제합니다. **잠갔던 task 만** 해제할 수 있습니�
 
 **반환값**: 없음 (`void`).
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). `XM_Mutex_Lock()` 성공 후 early return 하기 전에 반드시 `Unlock` 을 호출하세요 — 누락하면 그 Mutex 는 영구히 잠긴 채로 남습니다.
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. `XM_Mutex_Lock()` 성공 후 early return 하기 전에 반드시 `Unlock` 을 호출하세요 — 누락하면 그 Mutex 는 영구히 잠긴 채로 남습니다.
 
 **참고**: [`XM_Mutex_Lock`](#xm_mutex_lock)
 
@@ -312,7 +312,7 @@ Mutex 를 삭제하고 메모리를 회수합니다.
 
 **반환값**: 없음 (`void`).
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). 이 Mutex 를 사용하는 task 가 아직 남아있는 상태에서 삭제하면 안 됩니다 — 관련 task 를 먼저 [`XM_Task_Delete`](#xm_task_delete) 로 정리한 뒤 호출하세요.
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 이 Mutex 를 사용하는 task 가 아직 남아있는 상태에서 삭제하면 안 됩니다 — 관련 task 를 먼저 [`XM_Task_Delete`](#xm_task_delete) 로 정리한 뒤 호출하세요.
 
 ```c
 XM_Task_Delete(s_summary_task);
@@ -325,7 +325,7 @@ XM_Mutex_Delete(s_buf_mutex);
 
 ### HW 제약 진단 API
 
-이 네 함수는 모두 파라미터가 없고, 현재 상태를 숫자 하나로 즉시 반환하는 단순 조회(getter) 함수입니다. [09. 보조 task + 데이터 공유 §4](../09-task-creation.md) 에서 설명하는 HW 제약(최대 4개 task, 32 KB heap budget)을 코드에서 직접 확인하고 싶을 때 사용합니다.
+이 네 함수는 모두 파라미터가 없고, 현재 상태를 숫자 하나로 즉시 반환하는 단순 조회(getter) 함수입니다. [09. 보조 task + 데이터 공유 §4](../09-task-creation.md) 에서 설명하는 사용자 task 한도(최대 4개 task, 32 KB heap budget)를 코드에서 직접 확인하고 싶을 때 사용합니다.
 
 #### `XM_Task_GetHeapFreeBytes`
 
@@ -337,7 +337,7 @@ uint32_t XM_Task_GetHeapFreeBytes(void);
 
 **반환값**: 잔여 heap (bytes).
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음).
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요.
 
 ---
 
@@ -351,7 +351,7 @@ uint32_t XM_Task_GetHeapMinEverBytes(void);
 
 **반환값**: 역대 최저 heap 잔량 (bytes).
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). Ex.39 는 버튼을 3회 눌러 OneShot task 생성/삭제를 반복한 뒤 이 값이 더 줄지 않는지로 누수 여부를 검증합니다.
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. Ex.39 는 버튼을 3회 눌러 OneShot task 생성/삭제를 반복한 뒤 이 값이 더 줄지 않는지로 누수 여부를 검증합니다.
 
 **참고**: Ex.39 `README.md` (heap 누수 검증 시나리오)
 
@@ -367,7 +367,7 @@ uint32_t XM_Task_GetInstanceCount(void);
 
 **반환값**: 현재 사용자 task 개수 (0 ~ [`XM_TASK_MAX_INSTANCES`](#매크로)).
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). 이 값이 4에 도달하면 이후 `XM_Task_CreateOneShot`/`CreatePeriodic` 은 모두 `NULL` 을 반환합니다 — 새 task 를 만들기 전에 확인해보면 원인 파악에 도움이 됩니다.
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 이 값이 4에 도달하면 이후 `XM_Task_CreateOneShot`/`CreatePeriodic` 은 모두 `NULL` 을 반환합니다 — 새 task 를 만들기 전에 확인해보면 원인 파악에 도움이 됩니다.
 
 ---
 
@@ -381,7 +381,7 @@ uint32_t XM_Task_GetBudgetRemainingBytes(void);
 
 **반환값**: budget 잔량 (bytes).
 
-> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). 이 값이 부족하면 stack 이 큰 task(예: `XM_PRIO_BACKGROUND` 기본 8 KB)의 생성이 거부될 수 있습니다.
+> ⚠️ **호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 이 값이 부족하면 stack 이 큰 task(예: `XM_PRIO_BACKGROUND` 기본 8 KB)의 생성이 거부될 수 있습니다.
 
 ---
 
@@ -397,15 +397,15 @@ void XM_RTOS_PrintTaskList(void);
 
 **파라미터**: 없음. **반환값**: 없음 (`void`).
 
-> ⚠️ **현재 상태(Phase 1)**: 이 SDK 버전에서는 진단 출력 채널이 아직 연결되어 있지 않아 **호출해도 아무 동작이 없는 no-op stub** 입니다(헤더 명시). Phase 2 에서 PhAI Studio 진단 채널과 연동될 예정입니다.
+> ⚠️ **현재 상태**: 이 SDK 버전에서는 진단 출력 채널이 연결되어 있지 않아 **호출해도 아무 동작이 없는 no-op stub** 입니다(헤더 명시).
 >
-> ⚠️ **호출 컨텍스트(미리 대비)**: 지금은 stub 이라 어디서 불러도 안전하지만, 이 함수를 감싸는 내부 구현은 "**1 kHz Control_Loop 안에서 호출 금지**(문자열 포맷팅 누적으로 100 µs 이상 걸릴 수 있음)"라는 제약을 이미 명시해두고 있습니다. Phase 2 연동 이후에도 그대로 안전하게 쓰려면 지금부터 `Control_Setup()` 이나 버튼 이벤트 핸들러처럼 **1 kHz 로 돌지 않는 곳**에서만 호출하는 습관을 들이는 것을 권장합니다.
+> ⚠️ **호출 컨텍스트(미리 대비)**: 지금은 stub 이라 어디서 불러도 안전하지만, 이 함수에는 "**1 kHz Control_Loop 안에서 호출 금지**(문자열 포맷팅 누적으로 100 µs 이상 걸릴 수 있음)"라는 제약이 있습니다. 그러니 `Control_Setup()` 이나 버튼 이벤트 핸들러처럼 **1 kHz 로 돌지 않는 곳**에서만 호출하는 습관을 들이는 것을 권장합니다.
 
 ---
 
 ## Deprecated API (사용 금지 권장)
 
-v1.0 호환을 위해 남아있는 API 입니다. **다음 major 릴리즈에서 제거될 예정**이므로 새 코드에서는 사용하지 마세요. 아래 표만 남기고 함수 상세는 생략합니다.
+v1.0 호환을 위해 남아있는 API 입니다. 새 코드에서는 사용하지 마세요. 아래 표만 남기고 함수 상세는 생략합니다.
 
 | 함수 | 대체 API | 비고 |
 |---|---|---|
@@ -424,21 +424,21 @@ Task 우선순위 힌트 enum 입니다. CMSIS-OS2 의 숫자 우선순위 값�
 
 ```c
 typedef enum {
-    XM_PRIO_IDLE          = 8,   /* osPriorityLow      — DefaultTask 와 동급 */
+    XM_PRIO_IDLE          = 8,   /* osPriorityLow      — 가장 낮은 우선순위 */
     XM_PRIO_BACKGROUND    = 24,  /* osPriorityNormal   — 권장 기본값 */
     XM_PRIO_BELOW_CONTROL = 32,  /* osPriorityAboveNormal — Control_Loop 보다 낮음 */
-    XM_PRIO_ABOVE_CONTROL = 40,  /* osPriorityHigh     — USBH 와 동급, Control_Loop 보다 낮음 */
-    XM_PRIO_NEAR_REALTIME = 48,  /* osPriorityRealtime — 주의: PnP 통신과 경합 가능 */
+    XM_PRIO_ABOVE_CONTROL = 40,  /* osPriorityHigh     — Control_Loop 보다 낮음 */
+    XM_PRIO_NEAR_REALTIME = 48,  /* osPriorityRealtime — 주의: 모듈 연결 처리와 경합 가능 */
 } XmTaskPrio_t;
 ```
 
 | 값 | 숫자 | 기본 stack | 설명 |
 |---|---|---|---|
-| `XM_PRIO_IDLE` | 8 | 1 KB | `DefaultTask` 와 동급인 가장 낮은 우선순위 |
+| `XM_PRIO_IDLE` | 8 | 1 KB | 가장 낮은 우선순위 |
 | `XM_PRIO_BACKGROUND` | 24 | 8 KB | **권장 기본값** |
 | `XM_PRIO_BELOW_CONTROL` | 32 | 4 KB | Control_Loop 보다는 낮음 |
-| `XM_PRIO_ABOVE_CONTROL` | 40 | 2 KB | USBH 와 동급 — Control_Loop 보다는 여전히 낮음 |
-| `XM_PRIO_NEAR_REALTIME` | 48 | 2 KB | ⚠️ PnP 통신(`PnP_Task`, 25)과는 경합하지 않지만 그 위 시스템 task 와는 가까우므로 남용하지 마세요. |
+| `XM_PRIO_ABOVE_CONTROL` | 40 | 2 KB | Control_Loop 보다는 낮음 |
+| `XM_PRIO_NEAR_REALTIME` | 48 | 2 KB | ⚠️ 주의: 모듈 연결 처리와 경합할 수 있으니 남용하지 마세요. |
 
 우선순위 영역이 시스템 전체에서 어떻게 배치되는지(51~55 가 왜 제외됐는지)는 [09. 보조 task + 데이터 공유 §1~2](../09-task-creation.md) 에서 전체 그림을 확인하세요.
 
@@ -503,7 +503,7 @@ typedef enum {
 
 ## 관련 문서
 
-- [09. 보조 task + 데이터 공유](../09-task-creation.md) — 시스템 task 인벤토리, 우선순위 영역, 데이터 흐름, 공유변수 패턴
+- [09. 보조 task + 데이터 공유](../09-task-creation.md) — 우선순위 영역, 데이터 흐름, 공유변수 패턴
 - [Ex.38 Periodic_Background_Task](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/38_Periodic_Background_Task/)
 - [Ex.39 Task_Lifecycle](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/39_Task_Lifecycle/)
 - [Ex.36 OnDevice_Kinesthetic_Learning](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/)

@@ -13,7 +13,7 @@ Claude Code 에 다음 중 하나를 입력하세요:
 - `"XM10 시작하려고 해"`
 - `"/student-onboard"`
 
-→ AI 가 **STM32CubeIDE 설치 확인 → 프로젝트 Import → 빌드 → 플래시 → LED 점등** 까지 6 단계로 자동 안내합니다 (Phase 1 은 Studio 안내로 이미 완료된 경우 건너뜀).
+→ AI 가 **STM32CubeIDE 설치 확인 → 프로젝트 Import → 빌드 → 플래시 → LED 점등** 까지 6 단계로 자동 안내합니다 (CubeIDE 가 이미 설치되어 있으면 Phase 1 은 건너뜁니다).
 
 Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](docs/getting-started/00-claude-code-quickstart.md) 의 수동 절차를 따라가세요.
 
@@ -37,19 +37,21 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 | 항목 | Rev 2.0 (이 SDK) | Rev 1.1 (참고) |
 |------|-----------------|---------------|
-| **CAN-FD** | ✅ FDCAN1 / FDCAN2 | ✅ |
+| **CAN-FD** | ✅ 2 채널 | ✅ |
 | **Ethernet (RJ45)** | ✅ LWIP 미들웨어 포함 | ❌ 없음 |
 | **PSRAM** | ✅ 외부 PSRAM (memory-mapped) | ❌ |
 | **RTC** | ✅ 내장 RTC + 배터리 백업 | ❌ |
 | **USB Type-C** | ✅ C-to-C 직결 지원 | A-to-C 케이블 필요 |
 | **RAM_D2 여유** | 충분 | 99.21% 사용 (Rev 1.1 위험 주의) |
-| **FDCAN2 센서허브 (IMU/EMG Hub)** | ✅ Ex.41/42 지원 | ❌ 미지원 |
+| **CAN-FD 센서 허브 (IMU/EMG Hub)** | ✅ Ex.41/42 지원 | ❌ 미지원 |
+
+> IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
 
 **Rev 2.0 만 활성화된 페리페럴**:
 - ETH (LWIP) — `LWIP/` 미들웨어
-- PSRAM — `XM_FW/Drivers/PSRAM/`
-- RTC — `XM_FW/System/RTC/`
-- FDCAN2 센서허브 — IMU/EMG Hub Module 연동 (Ex.41/42)
+- PSRAM — 외부 메모리
+- RTC — `xm_api_rtc.h`
+- CAN-FD 센서 허브 — IMU/EMG Hub Module 연동 (Ex.41/42)
 
 코드에서 `STM32H743xx` 매크로는 두 Rev 공통이지만, **Ethernet/PSRAM/RTC 페리페럴 코드는 Rev 2.0 SDK 에만 존재**합니다. Rev 1.1 사용자가 본 SDK 를 잘못 쓰면 빌드 실패 또는 페리페럴 초기화 hang.
 
@@ -60,9 +62,9 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 1. **[처음 시작 (AI 자동 안내)](docs/getting-started/00-claude-code-quickstart.md)** — Claude Code 가 환경 구축까지 동반
 2. **[Ex.00 Quick Start](examples/00_Quick_Start/)** — 보드 smoke test (⭐)
 3. **[Ex.01~03 Button & LED](examples/01_Button_LED_Basic/)** — 디지털 IO 기본 (⭐~⭐⭐)
-4. **[전체 학습 로드맵](docs/tutorials/README.md)** — 50 예제 트랙
-5. **[Rev 2.0 전용 예제]** — PSRAM (`19_Memory_*`), RTC 활용. Ethernet 전용 예제는 아직 없으며, 활용 시 `XM_FW/System/Comm/ETH/` 드라이버 코드를 참고하세요.
-6. **[Ex.41 IMU Hub Dashboard](examples/41_IMU_Hub_Dashboard/) / [Ex.42 EMG Hub Biofeedback](examples/42_EMG_Hub_Biofeedback/)** — FDCAN2 센서허브(IMU/EMG Hub Module) 연동 (⭐⭐⭐, Rev 2.0 전용)
+4. **[전체 학습 로드맵](docs/tutorials/README.md)** — 45 개 예제
+5. **Rev 2.0 전용 예제** — Ex.40 · 41 · 42 · 43 은 Rev 2.0 SDK 에만 들어 있습니다.
+6. **[Ex.41 IMU Hub Dashboard](examples/41_IMU_Hub_Dashboard/) / [Ex.42 EMG Hub Biofeedback](examples/42_EMG_Hub_Biofeedback/)** — CAN-FD 센서 허브(IMU/EMG Hub Module) 연동 (⭐⭐⭐, Rev 2.0 전용)
 
 ---
 
@@ -101,13 +103,13 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
    - 권장: `C:\dev\Extension_Module\`. 비권장: `C:\Users\홍길동\내 폴더\Extension_Module\`.
 
 2. **USB-CDC 포트 단일 점유**
-   - PhAI Studio 와 시리얼 터미널 (PuTTY, RealTerm 등) 을 같은 COM 포트로 **동시에 열지 마세요**.
-   - 같은 COM 포트 충돌 → 접속 실패 / 데이터 손실. (`examples/07~09` 헤더 `@warning` 참조)
+   - **PC 프로그램(PhAI Studio · xm10 도구 · 시리얼 터미널)은 한 번에 하나만 연결하세요.** 같이 열면 접속 실패나 데이터 손실이 납니다. (`examples/07~09` 헤더 `@warning` 참조)
 
 3. **사용자 코드 영역**
    - 사용자가 수정하는 곳: `XM_Apps/Control_Task/` 또는 `examples/<번호>_<이름>/*.c`
    - 라이브러리 (`XM_FW`, `XM_FW/libXM_Lib.a`, `Drivers/`, `Middlewares/`, `LWIP/`, `Compatible/`) 는 **봉인** — 수정 시 SDK 일관성 깨짐.
-   - 알고리즘 출력을 PhAI Studio 에서 실시간으로 보고 싶다면 `xm_api_user_custom.h` 의 `XM_UserCustom_SetFloat/SetI16/SetFlag` 로 1kHz 스트리밍 + 녹화용 커스텀 슬롯에 값을 쓸 수 있습니다.
+   - 알고리즘 값 몇 개는 `xm_api_user_custom.h` 의 `XM_UserCustom_SetFloat/SetI16/SetFlag` 로 쓰면 Total Data 에 실려 1kHz 로 자동 전송됩니다 (PhAI Studio 에서 그래프·녹화, `xm10` 도구에서 표·CSV).
+   - 직접 정의한 데이터 구조체(커스텀 구조체)는 `XM_SendUsbDataWithId` 로 보냅니다. PhAI Studio 는 아직 개발 중이라, 우선 `xm10` 도구로 보고 저장하세요.
 
 4. **HW Rev 호환**
    - 본 SDK 는 **Rev 2.0 전용** 입니다. Rev 1.1 보드에 본 SDK 빌드 결과물을 플래시하지 마세요.
@@ -117,8 +119,8 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
    - 부트로더 (별도 region, `0x08000000`) 는 사용자가 직접 flash 하지 않습니다. SWD 로 한 번 설치 후, 이후 FW 업로드는 PhAI Studio USB FTP. ([docs/bootloader/](docs/bootloader/))
 
 6. **Rev 2.0 특화 페리페럴 주의**
-   - **PSRAM**: cache 정책 + memory-mapped 접근 시 D-Cache invalidate 필요. 직접 접근 시 `XM_FW/Drivers/PSRAM/` API 사용.
-   - **ETH (LWIP)**: TX/RX descriptor 가 `.eth_data` 섹션에 배치. 임의 ETH 버퍼 위치 변경 금지.
+   - **PSRAM**: 공개 API 가 없습니다. 대용량 버퍼가 필요하면 `XM_GetUserWorkspace()` 를 쓰세요.
+   - **ETH (LWIP)**: Ethernet 버퍼는 지정된 메모리 영역에 있습니다. 위치를 임의로 바꾸지 마세요.
    - **RTC**: 배터리 미장착 시 매 전원 인가 후 시간 재설정 필요.
 
 ---
@@ -127,9 +129,8 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 | 도구 | 역할 | XM10 과의 관계 |
 |------|------|---------------|
-| **PhAI Studio** | 실시간 데이터 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
-| **angel Sensor Studio** | 진단/검증 GUI (Python/PySide6, 별도 배포) | FES/EMG/IMU Hub 등 — XM10 과 CAN-FD 로 연계 가능 |
-| **PythonDecoder** | USB-CDC 실시간 수신 파이썬 샘플 | 본 ZIP 에는 포함되지 않음 — [GitHub 레포](https://github.com/AGR-AIFT/phai-x1-xm10-release) 의 `PythonDecoder/CDC/` 에서 별도로 받으세요 |
+| **PhAI Studio** | Total Data(시스템 데이터) 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
+| **xm10 PC 도구** (`PythonDecoder/xm10.py`) | 실시간 그래프 + 무손실 저장(.xmlog) + CSV 내보내기. `demo` 로 보드 없이 체험, `build_exe.py` 로 실행파일 | 본 ZIP 에 들어 있음 — [안내](docs/getting-started/04-pc-data-tool.md) |
 
 ---
 

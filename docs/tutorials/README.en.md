@@ -32,7 +32,7 @@ A suggested semester schedule for university courses. Adjust freely based on stu
 | 3 | External GPIO + ADC | Ex.04 → 05 → 05a | Control 4 LEDs using an external switch |
 | 4 | Multi-channel ADC + safety switch | Ex.05b → 05c → 06 | Demo simultaneous measurement of 8 FSR channels |
 | 5 | USB serial communication | Ex.07 → 08 | Real-time sensor monitoring via PC terminal |
-| 6 | Binary streaming + PhAI Studio | Ex.09 | Capture 4-channel graph + analysis report |
+| 6 | Binary streaming + xm10 tool | Ex.09 | Capture 4-channel graph + analysis report |
 | 7 | USB-CDC data capture + storage | Ex.09 + [xm10 tool](../getting-started/04-pc-data-tool.en.md) | Stream 10 minutes of data → save as .xmlog → export CSV for analysis |
 | 8 | **Midterm / Mini Project 1** | (open) | "My board, my data" mini project presentation |
 | 9 | KIT H10 exoskeleton basic modes | Ex.11 → 12 → 13 | Comparison video of 3 operating modes |
@@ -49,7 +49,7 @@ Teaching tips:
 - The Week 8 mini project is effective for maintaining motivation. Run it as an open-ended prompt like "build anything using what you've learned from Ex.05–09."
 - For Week 16, teams of 3–4 are recommended. Teams that dive deep into the Physical AI application track (Ex.21, 31, 32, 33) at the end tend to produce the strongest final projects.
 
-Examples not in this schedule (Ex.05d, 15, 22, 24, 28–42) are naturally left for self-directed study or a follow-on course in the next semester.
+Examples not in this schedule (Ex.05d, 15, 22, 24, 28–36, 38–43) are naturally left for self-directed study or a follow-on course in the next semester.
 
 ---
 
@@ -93,7 +93,7 @@ From fundamental I/O to state-based programming (FSM) — the core of embedded c
 
 Exchange real-time messages with a PC and stream data. Essential for debugging and data collection.
 
-> **Note**: The USB serial (CDC) port can only be opened by one program at a time. For Ex.07–09, make sure only a serial terminal **or** PhAI Studio is open — not both. Running them simultaneously will cause a conflict.
+> **Note**: The USB serial (CDC) port can only be opened by one program at a time. For Ex.07–09, make sure only one of a serial terminal, PhAI Studio **or** the `xm10` tool is open. Running them simultaneously will cause a conflict.
 
 ### USB Serial Communication — Ex.07 ~ 09
 
@@ -101,9 +101,9 @@ Exchange real-time messages with a PC and stream data. Essential for debugging a
 | :---: | :--- | :---: | :--- |
 | [07](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/07_CDC_Basic_Print/) | USB serial basics | ⭐⭐ | Send text messages to a PC terminal |
 | [08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | Sensor data monitoring | ⭐⭐ | Real-time `sprintf` output of sensor data |
-| [09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | High-speed binary streaming | ⭐⭐⭐ | PhAI Studio-compatible protocol, 1 kHz transmission |
+| [09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | High-speed binary streaming | ⭐⭐⭐ | PhAI V2.2 protocol, 1 kHz transmission (view the user channel with the `xm10` tool) |
 
-> To save and analyze a captured stream on the PC, use PhAI Studio recording or the `xm10` tool in the repo — `python PythonDecoder/xm10.py recv` shows a live graph while the raw stream is saved as `.xmlog`, then `export` pulls out CSV ([guide](../getting-started/04-pc-data-tool.en.md)). (On-board file storage was removed in v2.5.0 — SD card support is planned for a future HW revision.)
+> To save and analyze a captured stream on the PC, use PhAI Studio recording or the `xm10` tool in the repo — `python PythonDecoder/xm10.py recv` shows a live graph while the raw stream is saved as `.xmlog`, then `export` pulls out CSV ([guide](../getting-started/04-pc-data-tool.en.md)). PhAI Studio is still under development, so for now use the `xm10` tool to view and save your own (custom) data structs, such as the ones you send with `XM_SendUsbDataWithId`. (On-board file storage was removed in v2.5.0 and is not supported at present.)
 
 ---
 
@@ -174,12 +174,14 @@ The key stages of Physical AI — transparency → intent detection → learning
 | [33](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/33_Kinesthetic_Teaching/) | Kinesthetic teaching + replay | ⭐⭐⭐ | Human demonstrates by hand → board replays the motion |
 | [35](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/35_MultiLayer_Transparent_Control/) | Multi-layer transparent control | ⭐⭐⭐ | Real-time switching between transparent / wall / left-right coupling modes |
 | [36](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) | On-device kinesthetic learning 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Train a small neural network on-board → replay with LQR — Internal Flash UserNV API is supported on Rev 2.0 only |
-| [37](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/37_FES_Hub_Module_Ctrl/) | FES Hub module control | ⭐⭐⭐ | Connect FES Hub over CAN-FD, control per-channel electrical stimulation parameters |
 | [38](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/38_Periodic_Background_Task/) | Periodic background task | ⭐⭐ | Offload low-frequency auxiliary work, minimize control loop jitter |
 | [39](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/39_Task_Lifecycle/) | Task lifecycle management | ⭐⭐⭐ | Create, suspend, and terminate tasks; RTOS task state machine pattern |
-| [40](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/) | EMG proportional assist 🛑 **Rev 2.0 only** | ⭐⭐⭐⭐ | External 4-channel ADC EMG → envelope → proportional torque, button calibration + PhAI Studio 0xF0 streaming (EMG competition foundation) |
-| [41](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/) | IMU Hub attitude dashboard 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Up to 6 IMUs' quaternion → Euler (roll/pitch/yaw) conversion, auto connection detection + PhAI Studio 0xF0 18-channel (50Hz) streaming (FDCAN2 sensor-hub bus) |
-| [42](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/) | EMG Hub biofeedback 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Receive hub-processed muscle activation (envelope/MVC%), button calibration + LED/PhAI Studio 0xF0 4-channel (50Hz) real-time feedback (FDCAN2 sensor-hub bus, no motor drive) |
+| [40](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/) | EMG proportional assist 🛑 **Rev 2.0 only** | ⭐⭐⭐⭐ | External 4-channel ADC EMG → envelope → proportional torque, button calibration + 0xF0 streaming to the xm10 tool (EMG competition foundation) |
+| [41](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/) | IMU Hub attitude dashboard 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Up to 6 IMUs' quaternion → Euler (roll/pitch/yaw) conversion, auto connection detection + 0xF0 18-channel (50Hz) streaming to the xm10 tool (CAN-FD sensor hub) |
+| [42](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/) | EMG Hub biofeedback 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Receive hub-processed muscle activation (envelope/MVC%), button calibration + LED feedback and a 0xF0 4-channel (50Hz) live view in the xm10 tool (CAN-FD sensor hub, no motor drive) |
+| [43](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/) | Two boards talking over serial 🛑 **Rev 2.0 only** | ⭐⭐ | Connect two XM10s directly over the External UART (PD5/PD6) — copy only inside the callback, find frame boundaries with a byte state machine |
+
+> The IMU Hub and EMG Hub are modules under internal development. To use them, please contact us at https://huphailab.com/contact.
 
 ---
 

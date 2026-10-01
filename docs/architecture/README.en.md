@@ -64,7 +64,7 @@ The heart of XM10 is a **control loop that repeats every 1 ms (1 kHz)**. Each mi
   │  refreshed                                                  │
   │                                                            │
   │  XM.status.h10.    XM_TSM_Run         XM_SetAssistTorque  │
-  │   leftHipAngle      → on_loop()        XM_SendUsbData     │
+  │   leftHipAngle      → on_loop()       XM_SendUsbDataWithId │
   │   rightHipAngle                                            │
   │   isLeftFootContact                                        │
   └────────────────────────────────────────────────────────────┘
@@ -96,7 +96,7 @@ After you flash firmware with `Debug (F11)`, the board starts up in the followin
   ┌──────────────────────────────────────────────────────────────┐
   │  Scheduler runs multiple tasks by priority, round-robin:    │
   │                                                              │
-  │   • User task       → Control_Setup() once → Control_Loop() every 1 ms  │
+  │   • Control-loop task → Control_Setup() once → Control_Loop() every 1 ms  │
   │   • CAN RX          → receives exoskeleton sensor data, updates XM.status │
   │   • CAN TX          → sends motor commands                  │
   │   • USB task        → USB-CDC serial communication          │
@@ -139,7 +139,7 @@ There are two channels — that is all you need to know.
 | Channel | Who talks to whom | Functions you use |
 |---------|-------------------|------------------|
 | **CAN-FD** | XM10 ↔ KIT H10 exoskeleton | Read `XM.status.h10.*`, write `XM_SetAssistTorque*()` |
-| **USB Serial (CDC)** | XM10 → PC terminal / PhAI Studio | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
+| **USB Serial (CDC)** | XM10 → PC terminal (text) / `xm10` tool (user structs) | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
 
 The underlying protocol details are handled by the library. You only need to call the functions.
 
@@ -154,7 +154,7 @@ The underlying protocol details are handled by the library. You only need to cal
 | `HAL_Delay(100)` used inside `Control_Loop` | Blocks all other tasks for 100 ms | Use the difference of `XM_GetTick()` to build a non-blocking timer |
 | `XM.status.h10.leftHipAngle` is always 0 | KIT H10 not connected, or assist mode not yet entered | Check `XM_IsCmConnected()` and confirm `h10Mode == XM_H10_MODE_ASSIST` |
 | Called `XM_SetAssistTorque*` but no torque output | Control mode was never set | Call `XM_SetControlMode(XM_CTRL_CONTROL)` once when entering Active |
-| Modified files in the XM library folders (IOIF, Devices, etc.) | Library code is production firmware — arbitrary changes break the system | Always work inside `Control_Task/` only |
+| Modified files in the XM library folders | Library code is provided by the SDK — arbitrary changes break the system | Always work inside `Control_Task/` only |
 | `Control_Loop` does not finish within 1 ms | Heavy `sprintf` calls, accumulated floating-point operations, etc. | Measure execution time with [Ex.18 Debug Monitor](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/) and spread the work across cycles |
 | Attempting to build two examples at the same time | Only one `.c` file is allowed in `Control_Task/` | Copy one example at a time and build |
 

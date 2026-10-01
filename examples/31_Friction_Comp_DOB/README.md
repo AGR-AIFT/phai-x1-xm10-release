@@ -4,7 +4,7 @@
 예제 21(중력+마찰 보상)로는 제거하지 못한 **잔류 외란**을 실시간으로 추정·보상합니다.
 이로써 진정한 **액추에이터 투명성(Physical Transparency, Stage 1)**이 완성됩니다.
 
-> 📖 API 레퍼런스: [H10 Control & Data](../../docs/api-reference/02-h10-control-n-data.md) · [Task State Machine](../../docs/api-reference/01-task-state-machine.md)
+> 📖 API 레퍼런스: [H10 Control & Data](../../docs/api-reference/02-h10-control-n-data.md) · [Task State Machine](../../docs/api-reference/01-task-state-machine.md) · PC 에서 0xF1 채널 보기: [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 >
 > 📄 전제 예제: [Ex.21 중력+마찰 보상](../21_Gravity_Compensation/) (공칭 모델 기반)
 
@@ -49,7 +49,7 @@ Stage 5    Shared Autonomy
 ```
 [XM10 Control_Loop 1kHz]
   XM_SetAssistTorqueRH(τ)        ← 사용자가 명령하는 레벨
-       ↓ DOP V3 (CAN-FD, ~0.5ms 지연)
+       ↓ CAN-FD (~0.5ms 지연)
 [H10 CM ~1kHz]
   Assist Torque를 수신 → 자체 제어에 합산
        ↓
@@ -98,7 +98,7 @@ DOB 기반 투명 모드: τ_out = τ_grav + τ_fric + d_hat  (이 예제)
                = M·g·L_eff·sin(θ)  +  B_f·sign(θ̇) + B_v·θ̇
 
 실측 토크: τ_meas = XM.status.h10.rightHipTorque  (이미 Nm — 그대로 사용)
-  ※ 이 필드는 드라이버(cm_drv.c)가 모터 전류(A)에 Kt×기어비(0.085×18.75 ≈ 1.594 Nm/A)를
+  ※ 이 필드는 펌웨어가 모터 전류(A)에 Kt×기어비(0.085×18.75 ≈ 1.594 Nm/A)를
      곱해 이미 관절 토크(Nm)로 변환해 둔 값입니다. 예제 코드에서 다시 Kt 를 곱하면
      이중 변환(약 1.594배 과대)이 됩니다.
 
@@ -141,9 +141,8 @@ Q-filter:  d_hat[k] = α_q·d_hat[k-1] + (1-α_q)·residual
 `XM.status.h10.rightHipTorque`는 이름 그대로 **관절 토크(Nm)**입니다 — 추가 변환 금지.
 
 ```c
-// cm_drv.c 내부 변환 (드라이버가 이미 수행)
-//   scaled_current_A × CURRENT_TO_TORQUE_NM(= Kt 0.085 × 기어비 18.75 ≈ 1.594)
-dst_buf->rightHipTorque = scaled_current_A * CURRENT_TO_TORQUE_NM;  // 단위: Nm
+// 펌웨어가 이미 수행하는 변환 (사용자 코드에서 반복하지 마세요)
+//   모터 전류(A) × (Kt 0.085 × 기어비 18.75 ≈ 1.594) = 관절 토크(Nm)
 
 // Ex.31 코드가 올바르게 사용하는 방법 (friction_comp_dob.c 실제 코드와 동일)
 float tau_meas_r = XM.status.h10.rightHipTorque;    // 이미 Nm — 그대로 사용 ✓
@@ -156,7 +155,7 @@ float tau_meas_r = XM.status.h10.rightHipTorque;    // 이미 Nm — 그대로 �
 
 ```
 XM10 → (CAN-FD 명령, ~0.5ms) → H10 CM → MD → 모터 출력
-H10 CM → (PDO 응답, ~0.5ms + CM 처리) → XM10 수신
+H10 CM → (응답, ~0.5ms + CM 처리) → XM10 수신
 총 왕복 지연: ~1~2ms → 등가 샘플링 지연
 ```
 
@@ -214,7 +213,7 @@ f_c > 159 Hz → α_q < 0 → IIR 발산 ❌
 | 파라미터 | 기본값 | 의미 | 튜닝 방향 |
 |---------|--------|------|----------|
 | `MGL_EFF` | 17.16 Nm | M·g·L_eff (70kg 기준) | 실제 착용자 체중으로 조정: 체중(kg)×9.81×0.25 |
-| `B_COULOMB_NM` | 0.3 Nm | 정마찰 | PhAI Studio에서 저속 토크 관찰 후 조정 |
+| `B_COULOMB_NM` | 0.3 Nm | 정마찰 | `xm10` 도구의 0xF1 채널로 저속 토크 관찰 후 조정 |
 | `B_VISCOUS_NMS` | 0.01 Nm·s/rad | 속도 비례 마찰 | 고속 운동 중 `Model Torque` 채널로 확인 |
 | `KT_NM_PER_A` | 0.8 Nm/A | 모터 토크 상수 | MD 모터 사양서 참조 |
 | `DOB_CUTOFF_HZ` | 5 Hz | Q-filter BW | 낮을수록 느리고 안정, 높을수록 빠르고 채터링 |
@@ -227,7 +226,7 @@ f_c > 159 Hz → α_q < 0 → IIR 발산 ❌
 1. `friction_comp_dob.c`의 내용을 `XM_Apps/Control_Task/control_task.c`에 반영(복사) 후 빌드하여 XM10에 플래시합니다.
 2. H10 전원 ON → ASSIST MODE 전환.
 3. LED1 빠른 깜빡임(200ms) → ACTIVE 진입 확인.
-4. PhAI Studio에서 Module ID `0xF1` 채널을 열어 4개 채널을 실시간 모니터링합니다.
+4. `xm10` 도구([안내](../../docs/getting-started/04-pc-data-tool.md))의 Module ID `0xF1` 탭에서 4개 채널을 실시간 모니터링합니다.
 5. BTN1로 DOB ON/OFF를 전환하며 `tau_out`의 변화를 관찰합니다.
 6. BTN2로 Q-filter 주파수를 변경하며 응답 속도와 노이즈의 트레이드오프를 체험합니다.
 
@@ -235,7 +234,7 @@ f_c > 159 Hz → α_q < 0 → IIR 발산 ❌
 
 ## 직접 해보기
 
-- **DOB 비교 실험**: BTN1로 DOB OFF → Ex.21과 동일. 같은 동작에서 `tau_out`이 달라지는지 PhAI Studio에서 비교하세요.
+- **DOB 비교 실험**: BTN1로 DOB OFF → Ex.21과 동일. 같은 동작에서 `tau_out`이 달라지는지 `xm10` 도구에서 비교하세요.
 - **Q-filter 튜닝**: f_c = 1Hz vs 20Hz에서 착용자가 느끼는 응답감의 차이를 체험하세요.
 - **τ_ext_est 관찰**: 손으로 외골격을 밀 때 `Ext Est` 채널이 반응하는지 확인하세요. 이것이 Stage 2가 사용할 신호입니다.
 - **파라미터 식별**: `Model Torque`와 `Ext Est`를 동시에 관찰하며 공칭 모델 파라미터를 튜닝하세요. `Ext Est`가 0에 가까울수록 모델이 정확합니다.
@@ -274,6 +273,6 @@ f_c > 159 Hz → α_q < 0 → IIR 발산 ❌
 > **이전 예제 권장**: 이 예제는 Ex.21(중력+마찰 보상)이 선행되어야 합니다.
 > 공칭 모델 파라미터(`MGL_EFF`, `B_COULOMB_NM`, `B_VISCOUS_NMS`)를 실제 시스템에 맞게 튜닝하세요.
 
-> **rightHipTorque 단위**: 이 필드는 **관절 토크 추정값 [Nm]** 입니다 — FW(cm_drv)가
+> **rightHipTorque 단위**: 이 필드는 **관절 토크 추정값 [Nm]** 입니다 — 펌웨어가
 > 모터 전류(A)에 Kt×감속비(≈1.594)를 이미 곱해 제공합니다. 여기에 Kt 를 다시 곱하면
 > 1.594배 이중 변환 버그가 됩니다. Nm 으로 바로 사용하세요 (본문 상단 설명과 동일).

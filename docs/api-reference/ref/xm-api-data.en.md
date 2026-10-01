@@ -2,17 +2,17 @@
 
 > **Header**: `XM_FW/XM_API/xm_api_data.h` (shared by Rev1.1 / Rev2.0 — the GRF extension fields are 🟢 Rev 2.0 only)
 > **Related concept doc**: [02. KIT H10 Control & Data](../02-h10-control-n-data.en.md) (IPO cycle, Body Data, torque sign convention)
-> **Related examples**: [11 Passive Mode](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/) · [12 Active Assist](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/12_Active_Assist_Mode/) · [13 Resistive](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/13_Resistive_Mode/) · [14 PD Realtime](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/14_PD_Realtime_Control/) · [16 TinyAI Sensor Fusion](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) · [32 GRF Gait Intent](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/32_GRF_Gait_Intent/) · [37 FES Hub Ctrl](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/37_FES_Hub_Module_Ctrl/) 🛑 Rev 2.0 only · [41 IMU Hub Dashboard](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/) 🛑 Rev 2.0 only · [42 EMG Hub Biofeedback](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/) 🛑 Rev 2.0 only
+> **Related examples**: [11 Passive Mode](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/) · [12 Active Assist](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/12_Active_Assist_Mode/) · [13 Resistive](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/13_Resistive_Mode/) · [14 PD Realtime](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/14_PD_Realtime_Control/) · [16 TinyAI Sensor Fusion](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) · [32 GRF Gait Intent](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/32_GRF_Gait_Intent/) · [41 IMU Hub Dashboard](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/) 🛑 Rev 2.0 only · [42 EMG Hub Biofeedback](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/) 🛑 Rev 2.0 only
 
 ---
 
 ## When to use this
 
-`xm_api_data.h` is the facade you will open **most often** while working on XM10 firmware. Every function that reads the latest state of `KIT H10` and the various sensor hubs (GRF, External IMU, IMU Hub, EMG Hub, FES Hub) inside `Control_Loop()` (`XM.status`), and every function that issues control commands (`XM_Set*` / `XM_Send*`), is declared here.
+`xm_api_data.h` is the facade you will open **most often** while working on XM10 firmware. Every function that reads the latest state of `KIT H10` and the various sensor hubs (GRF, External IMU, IMU Hub, EMG Hub) inside `Control_Loop()` (`XM.status`), and every function that issues control commands (`XM_Set*` / `XM_Send*`), is declared here.
 
 This page does not re-explain how the global `XM` object gets filled and flushed (the **IPO — Input-Process-Output — cycle**), the torque sign convention, or the Body Data prerequisite. If this is your first time, read [02. KIT H10 Control & Data](../02-h10-control-n-data.en.md) first; use this page to quickly look up function signatures, parameters, and struct fields.
 
-> ℹ️ **Note on the common `nodeId` parameter**: most joint-control functions in this header take a `SystemNodeID_t nodeId`. In practice only two values are used — `SYS_NODE_ID_RH` (right hip) and `SYS_NODE_ID_LH` (left hip) — defined in `data_object_dictionaries.h` (a different header). Since this page only covers `xm_api_data.h`, it does not list the full `SystemNodeID_t` enum.
+> ℹ️ **Note on the common `nodeId` parameter**: most joint-control functions in this header take a `SystemNodeID_t nodeId`. In practice only two values are used — `SYS_NODE_ID_RH` (right hip) and `SYS_NODE_ID_LH` (left hip). Including `xm_api.h` alone is enough to use them.
 
 ---
 
@@ -31,7 +31,7 @@ This page does not re-explain how the global `XM` object gets filled and flushed
 | Function | One-line description |
 |---|---|
 | [`XM_IsCmConnected()`](#xm_iscmconnected) | Checks whether communication with the CM is Operational |
-| [`XM_GetXMNmtState()`](#xm_getxmnmtstate) | Returns the detailed PnP (NMT) state with the CM |
+| [`XM_GetXMNmtState()`](#xm_getxmnmtstate) | Returns the detailed connection state with the CM |
 
 ### Data Transmission (Body Data · PIF-Vector)
 
@@ -83,7 +83,7 @@ This is the safety switch that decides whether the robot's **output (actuation) 
 
 **Safety logic**: the instant the mode changes (especially MONITOR → TORQUE), **all torque commands are internally reset to 0** to prevent a jerk at the start of actuation.
 
-⚠️ **Call context**: assumed to be called from `Control_Setup()`/`Control_Loop()` (the header does not state any ISR-safety guarantee). The common pattern is `XM_CTRL_CONTROL` on algorithm Entry and `XM_CTRL_MONITOR` on Exit.
+⚠️ **Call context**: call it from `Control_Setup()`/`Control_Loop()`, not from an ISR. The common pattern is `XM_CTRL_CONTROL` on algorithm Entry and `XM_CTRL_MONITOR` on Exit.
 
 **Example**
 ```c
@@ -190,14 +190,14 @@ if (XM_IsCmConnected()) {
 CM_NmtState_t XM_GetXMNmtState(void);
 ```
 
-Returns the detailed DOP V3 PnP (NMT) state with the CM. `XM_IsCmConnected()` is internally equivalent to checking `XM_GetXMNmtState() == CM_NMT_OPERATIONAL`.
+Returns the detailed connection state with the CM. `XM_IsCmConnected()` is internally equivalent to checking `XM_GetXMNmtState() == CM_NMT_OPERATIONAL`.
 
-**Return value**: `CM_NmtState_t` (defined in `cm_drv.h` — a different header this one includes)
+**Return value**: `CM_NmtState_t` (the CM connection-state enum)
 
 | State | Value | Description |
 |---|---|---|
-| `CM_NMT_INITIALISING` | 0 | Booting (boot-up message not yet received) |
-| `CM_NMT_PRE_OPERATIONAL` | 1 | SDO communication available, PDO inactive |
+| `CM_NMT_INITIALISING` | 0 | Booting (the CM's start-up notice not yet received) |
+| `CM_NMT_PRE_OPERATIONAL` | 1 | Configuration messages only; data exchange off |
 | `CM_NMT_OPERATIONAL` | 2 | All communication active (normal state) |
 | `CM_NMT_STOPPED` | 3 | Communication stopped |
 
@@ -557,8 +557,8 @@ void Active_Loop(void) {
 |---|---|---|
 | `XM_GRF_CHANNEL_SIZE` | `14` | Channel count of the legacy GRF (FSR) shoe sensor |
 | `XM_IMU_HUB_SENSOR_COUNT` | `6` | Number of sensors (ports) on the IMU Hub Module |
-| `XM_FES_HUB_CH_COUNT` | `2` | Channel count of the FES Hub Module |
-| `XM_GRF_FSR_CH_TOTAL` 🟢 Rev 2.0 only | `24` | FSR channel count of the SM-GRF fixed-frame module (ADC1 15ch + ADC3 9ch). Defined in `module.h`, which `xm_api_data.h` includes — Rev1.1 does not have that include at all |
+| `XM_FES_HUB_CH_COUNT` | `2` | The FES Hub is currently not supported with the XM10. |
+| `XM_GRF_FSR_CH_TOTAL` 🟢 Rev 2.0 only | `24` | FSR channel count of one GRF (foot-sensor) module. Available when you include `xm_api.h` — Rev1.1 does not have this value |
 
 ---
 
@@ -668,7 +668,7 @@ typedef struct {
 
 ### `XmH10Data_t`
 
-**KIT H10 body data** (DOP V1), accessed via `XM.status.h10`. Includes encoders, joint angles, gait state, and more.
+**KIT H10 body data**, accessed via `XM.status.h10`. Includes encoders, joint angles, gait state, and more.
 
 | Field | Type | Unit | Description |
 |---|---|---|---|
@@ -748,7 +748,9 @@ typedef enum {
 
 ### `XmImuHubSensor_t` / `XmImuHubData_t`
 
-**IMU Hub Module** data (EBIMU-9DOFV6 × 6, DOP V3), accessed via `XM.status.imu_hub`.
+**IMU Hub Module** data (EBIMU-9DOFV6 × 6), accessed via `XM.status.imu_hub`.
+
+> The IMU Hub and EMG Hub are modules under internal development. To use them, please contact us at https://huphailab.com/contact.
 
 ```c
 typedef struct {
@@ -790,12 +792,12 @@ if (hub->is_connected) {
 
 ### `XmEmgHubData_t`
 
-**EMG Hub Module** data (sEMG sensor hub, DOP V3), accessed via `XM.status.emg_hub`. Sourced from the EMG Hub's TPDO1 (CAN ID `0x18F`), 1kHz sampling, including the results of the HPF 20Hz → rectification → RMS 200ms → envelope 8Hz → MVC → activation pipeline.
+**EMG Hub Module** data (sEMG sensor hub), accessed via `XM.status.emg_hub`. It holds the results of the 1kHz-sampled HPF 20Hz → rectification → RMS 200ms → envelope 8Hz → MVC → activation pipeline.
 
 | Field | Type | Unit | Description |
 |---|---|---|---|
 | `is_connected` | `bool` | - | EMG Hub Module connection status |
-| `lastUpdateTick` | `uint32_t` | ms | Slave control tick (OD `0x6050 ctrl_tick_ms`, 32-bit, wraps at ~49.7 days). If the delta between consecutive receives isn't 1, it's a gap. Falls back to the 24-bit Metadata timestamp on the older 14B TPDO format |
+| `lastUpdateTick` | `uint32_t` | ms | Hub control tick (32-bit, wraps back to 0 after ~49.7 days). If the difference between consecutive receives isn't 1, something was missed. Older hub firmware reports a 24-bit time value instead |
 | `raw_adc` | `uint16_t` | 12-bit (HW OVS 16×) | Raw ADC value |
 | `voltage_uv` | `float` | µV | EMG voltage (AFE-converted) |
 | `rms_uv` | `float` | µV | RMS value (200ms sliding window) |
@@ -826,28 +828,7 @@ if (emg->is_connected) {
 
 ### `XmFesHubData_t`
 
-**FES Hub Module** feedback data (functional electrical stimulation, DOP V3 ES-vector, Node `0x0C`), accessed via `XM.status.fes_hub`. Sourced from the FES Hub's TPDO1 (CAN ID `0x18C`, 37B, 10ms period) — composed of a legacy 16B block (channel state/current/HV, etc.) plus a 21B KHJ extension (FSM/ISI/target amplitude, etc.). Commands are sent via SDO (`0x6300` ES-vector, `0x6310` Master Command), not through this struct.
-
-| Field | Type | Unit | Description |
-|---|---|---|---|
-| `is_connected` | `bool` | - | FES Hub Module connection status |
-| `lastUpdateTick` | `uint32_t` | ms | Data receive timestamp (FES slave 24-bit timestamp, LE) |
-| `ch_state[2]` | `uint8_t[XM_FES_HUB_CH_COUNT]` | 0~3 | Channel state: 0=IDLE, 1=READY, 2=STIMULATING, 3=FAULT |
-| `ch_current_mA[2]` | `float[2]` | mA | Current feedback (PID output) |
-| `ch_fault_code[2]` | `uint8_t[2]` | - | Per-channel fault code |
-| `hv_voltage_V` | `float` | V | HV boost converter output voltage |
-| `digipot_pos` | `uint8_t` | 0~127 | Digipot position (amplitude control) |
-| `es_state_packed` | `uint8_t` | bitfield | `[3:0]`=CH0 ESState, `[7:4]`=CH1 ESState |
-| `error_register` | `uint8_t` | - | Error register |
-| `fsm_state` / `fsm_state_prev` | `uint8_t` | - | Current/previous FSM state (KHJ Control Task) |
-| `isi_packed` | `uint8_t` | bitmap | `bit[N]`=ISI[N]. EXT7(bit7)/EXT8(bit8)=trace of a Master Command action |
-| `ch_es_error_lo[2]` | `uint8_t[2]` | - | ES-vector error code low byte (per channel, separate from the CiA 301 Abort code) |
-| `ch_target_amplitude_mA[2]` | `float[2]` | mA | Target amplitude (setpoint) commanded by the Master |
-| `ch_impedance[2]` | `float[2]` | ohm | Filtered impedance — an indicator for judging electrode contact |
-| `ch_pulse_cnt[2]` | `uint16_t[2]` | - | Cumulative stimulation pulse counter |
-| `ch_voltage_diff_V[2]` | `float[2]` | V | Actual stimulation differential voltage |
-
-**See also**: the channel index (0/1) and array sizes are defined by [`XM_FES_HUB_CH_COUNT`](#macros).
+`XM.status.fes_hub` — The FES Hub is currently not supported with the XM10.
 
 ---
 
@@ -860,9 +841,9 @@ typedef struct {
     XmH10Data_t     h10;      // KIT H10 body data
     XmGrfData_t     grf;      // GRF foot-pressure sensor data
     XmExtImuData_t  ext_imu;  // External UART IMU (Xsens MTi-630)
-    XmImuHubData_t  imu_hub;  // IMU Hub sensor data (DOP V3)
-    XmEmgHubData_t  emg_hub;  // EMG Hub sensor data (DOP V3)
-    XmFesHubData_t  fes_hub;  // FES Hub stimulation feedback (DOP V3)
+    XmImuHubData_t  imu_hub;  // IMU Hub sensor data
+    XmEmgHubData_t  emg_hub;  // EMG Hub sensor data
+    XmFesHubData_t  fes_hub;  // FES Hub (currently not supported with the XM10)
 } XmInput_t;
 ```
 
@@ -907,7 +888,7 @@ extern XmRobot_t XM;
 
 | Field | Type | Description |
 |---|---|---|
-| `status` | `XmInput_t` | Read-only sensor data (H10/GRF/ExtIMU/IMU Hub/EMG Hub/FES Hub) |
+| `status` | `XmInput_t` | Read-only sensor data (H10/GRF/ExtIMU/IMU Hub/EMG Hub) |
 | `command` | `XmOutput_t` | Write-only control-command staging area — don't write directly, use `XM_Set*` functions |
 
 **Example**

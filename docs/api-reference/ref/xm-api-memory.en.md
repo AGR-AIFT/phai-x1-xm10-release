@@ -54,7 +54,7 @@ Returns the base address of the user workspace reserved in RAM_D1. This is a cac
 |--------|---------|
 | `void*` | Base address of the contiguous memory block |
 
-**⚠️ Calling context**: The header does not state any specific restriction. This page is written conservatively against a `Control_Setup()`/`Control_Loop()` task context. The usual pattern is to fetch the pointer once in `Control_Setup()`, store it in a static/global pointer, and reuse it in `Control_Loop()`.
+**⚠️ Calling context**: Call it from Control_Setup()/Control_Loop(), not from an ISR. The usual pattern is to fetch the pointer once in `Control_Setup()`, store it in a static/global pointer, and reuse it in `Control_Loop()`.
 
 ```c
 static float* s_work_buf;
@@ -96,7 +96,7 @@ Returns the base address of the user variable area inside DTCMRAM. It is accesse
 |--------|---------|
 | `void*` | Base address of the DTCM contiguous memory block |
 
-**⚠️ Calling context**: The header does not state any specific restriction. This page is written conservatively against a `Control_Setup()`/`Control_Loop()` task context. Do not place DMA buffers in this block — the DMA controller cannot access the DTCM address space.
+**⚠️ Calling context**: Call it from Control_Setup()/Control_Loop(), not from an ISR. Do not place DMA buffers in this block — the DMA controller cannot access the DTCM address space.
 
 **See also**: [07. Memory Management — DTCM API](../07-memory-management.en.md#dtcm-api)
 
@@ -149,7 +149,7 @@ Reads data from the Flash User NV area into the `data` buffer.
 | `0` | Success |
 | `-1` | Parameter error (`offset + size` > NV size) |
 
-**⚠️ Calling context**: The header does not state any specific restriction. This page is written conservatively against a `Control_Setup()`/`Control_Loop()` task context; the usual pattern is to call this once at boot, from `Control_Setup()`.
+**⚠️ Calling context**: Call it from Control_Setup()/Control_Loop(), not from an ISR. The usual pattern is to call this once at boot, from `Control_Setup()`.
 
 **See also**: It's safer to check [`XM_UserNV_IsErased()`](#xm_usernv_iserased) first to see whether valid data exists — right after an erase, the whole area is `0xFF`.
 
@@ -177,7 +177,7 @@ Writes data to the Flash User NV area.
 | `-1` | Parameter error |
 | `-2` | Flash programming failed |
 
-**⚠️ Calling context**: The header does not state any specific restriction. This page is written conservatively against a `Control_Setup()`/`Control_Loop()` task context. However, the following two constraints are explicitly stated in the header and must be respected:
+**⚠️ Calling context**: Call it from Control_Setup()/Control_Loop(), not from an ISR. However, the following two constraints must be respected:
 
 - Flash can only be **written after an erase** (1→0 only, never 0→1). Call [`XM_UserNV_Erase()`](#xm_usernv_erase) before writing new data.
 - STM32H7 Flash is programmed in 32-byte (256-bit) units; if `offset` isn't aligned, it is automatically aligned before writing.
@@ -232,7 +232,7 @@ Checks whether the entire Flash User NV area is empty (all `0xFF`, i.e. right af
 | `true` | The entire area is `0xFF` (state right after erase) |
 | `false` | Data exists, or the area was partially written |
 
-**⚠️ Calling context**: The header does not state any specific restriction. This page is written conservatively against a `Control_Setup()`/`Control_Loop()` task context. It's typically used as a guard before `XM_UserNV_Read()`, to check whether valid data has been stored (a magic-number field checked after reading is another valid approach).
+**⚠️ Calling context**: Call it from Control_Setup()/Control_Loop(), not from an ISR. It's typically used as a guard before `XM_UserNV_Read()`, to check whether valid data has been stored (a magic-number field checked after reading is another valid approach).
 
 ---
 

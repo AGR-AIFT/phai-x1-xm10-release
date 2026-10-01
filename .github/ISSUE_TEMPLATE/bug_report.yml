@@ -48,6 +48,6 @@ body:
       label: 재현 방법 (Steps to Reproduce)
       description: 코드로 재현 가능하다면 스니펫을 첨부해주세요.
       placeholder: |
-        1. core_process.c main loop의 Real Time이 보장 안됨
+        1. `Control_Loop()` 주기가 일정하게 유지되지 않음
         2. 메인 루프에서 10ms 간격으로 데이터 전송 시도
         3. 5초 후 멈춤 현상 발생

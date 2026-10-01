@@ -45,7 +45,7 @@ Creates a new Task State Machine instance. Use the returned handle for subsequen
 
 **Returns**: `XmTsmHandle_t` — the created TSM handle (`NULL` on failure). Pass this handle to every subsequent TSM function call.
 
-**⚠️ Calling context**: Call once per state machine, in `Control_Setup()` (initialization time). Calling it from `Control_Loop()` or any repeatedly-invoked context re-creates the state machine every cycle and breaks the intended behavior. The header does not document any thread/ISR-safety guarantee, so treat it as unsafe to call from an ISR by default.
+**⚠️ Calling context**: Call once per state machine, in `Control_Setup()` (initialization time). Calling it from `Control_Loop()` or any repeatedly-invoked context re-creates the state machine every cycle and breaks the intended behavior. Do not call it from an ISR.
 
 **Example**
 

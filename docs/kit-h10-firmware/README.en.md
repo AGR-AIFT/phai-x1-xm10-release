@@ -3,7 +3,7 @@
 > 📌 **After reading this page**: You will be able to update the KIT H10 (CM / ESP32 / SAM10) firmware and ContentsFiles — matched to your XM firmware version — using either a USB stick or an SD card.
 > ⏱️ Estimated reading time: 20 min (hands-on: 30–60 min)
 > 🧰 Prerequisites: KIT H10 hardware architecture ([docs/architecture/README.md](../architecture/README.md))
-> 🎯 Key point: Compatibility matrix — **XM v2.6.0 ↔ KIT H10 v2.4.0 ↔ ContentsFiles (attached to the Release)** (mixing versions is not allowed)
+> 🎯 Key point: Compatibility matrix — **XM v2.6.0 – v2.8.0 ↔ KIT H10 v2.4.0 ↔ ContentsFiles (attached to the Release)** (mixing versions is not allowed)
 
 > ⚠️ **Do not mix versions** — combining the latest XM FW with H10 v1.0.x (or vice versa) causes CAN-FD protocol mismatch and communication errors. Apply the matrix exactly as shown.
 
@@ -29,7 +29,7 @@ XM10 communicates with KIT H10 over CAN-FD, so you must use **the KIT H10 firmwa
 
 | XM FW Version | KIT H10 FW Version | ContentsFiles | Notes |
 | :---: | :---: | :---: | :--- |
-| **v2.6.0** | **CM v2.4.0 / SAM10 v2.4.0 / ESP32 v2.3.0** | **Attached to the Release** | **Latest — recommended** |
+| **v2.6.0 – v2.8.0** | **CM v2.4.0 / SAM10 v2.4.0 / ESP32 v2.3.0** | **Attached to the Release** | **Latest — recommended** |
 | v2.3.0 – v2.5.1 | CM v2.3.0 / SAM10 v2.3.0 / ESP32 v2.3.0 | Attached to the Release | Previous |
 | v2.0.x – v2.2.2 | CM v2.3.0 / SAM10 v2.3.0 / ESP32 v2.3.0 | 2025.02 – 2026.04 | Previous |
 | v1.0.x | Factory-shipped version | Factory-shipped version | Legacy |
@@ -47,7 +47,7 @@ All files are available on the GitHub Releases page.
 
 ### Files attached to v2.6.0
 
-> KIT H10 firmware moves to **CM · SAM10 v2.4.0** in this release (ESP32 stays at v2.3.0). The contents files are unchanged; only the filename now carries a date.
+> KIT H10 firmware moves to **CM · SAM10 v2.4.0** in this release (ESP32 stays at v2.3.0). The contents files are unchanged; only the filename now carries a date. The same files are attached again, unchanged, to v2.7.0 and v2.8.0.
 
 | Filename | Purpose | Size |
 | :--- | :--- | :---: |

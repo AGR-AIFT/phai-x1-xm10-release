@@ -58,13 +58,15 @@ Two ports total. One communicates with KIT H10 through the main connector; the o
 | CAN-FD #1 | KIT H10 exoskeleton ↔ XM10 (routed through the main connector) |
 | CAN-FD #2 | Sensor hub module expansion |
 
+> The EMG Hub is a module under internal development. To use it, please contact us at https://huphailab.com/contact.
+
 ### USB-C Port
 
 Used for data exchange with a PC via USB serial communication (CDC) for real-time data streaming and debug messages.
 
 | Mode | Purpose | Functions used |
 |------|---------|----------------|
-| Serial (CDC) | Debug and data transfer via PC terminal / PhAI Studio | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
+| Serial (CDC) | Text debug via a PC terminal / user structs via the `xm10` tool. PhAI Studio shows Total Data (0x20) | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
 
 ### External UART Port 🟢 **Rev 2.0 only**
 

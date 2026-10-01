@@ -25,7 +25,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | Button / LED control | [api-reference/03-led-btn-control.md](api-reference/03-led-btn-control.md) + Ex.01–03 |
 | External GPIO / ADC | [api-reference/04-external-io.md](api-reference/04-external-io.md) + Ex.04–06 |
 | Sending data to PC over USB serial | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.07–09 |
-| Exporting data over USB (real-time) | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.09 CDC Stream · PhAI Studio |
+| Exporting data over USB (real-time) | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.09 CDC Stream · [`xm10` tool](getting-started/04-pc-data-tool.en.md) (your own structs) · PhAI Studio (Total Data) |
 | Memory regions (PSRAM, Workspace) | [api-reference/07-memory-management.md](api-reference/07-memory-management.md) + Ex.19 |
 | Date / time (RTC) | [api-reference/08-rtc-clock.md](api-reference/08-rtc-clock.md) |
 | KIT H10 exoskeleton control | [api-reference/02-h10-control-n-data.md](api-reference/02-h10-control-n-data.md) + Ex.11–13 |
@@ -35,7 +35,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 
 | Situation | Where to go |
 |-----------|-------------|
-| Full index of all 46 examples | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
+| Full index of all 45 examples | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
 | Learning paths by difficulty and track | [docs/tutorials/README.md](tutorials/README.md) |
 | 16-week semester schedule | [tutorials/README.md — Semester Schedule section](tutorials/README.md#한-학기-16-주-수업-진도표-예시) |
 | An example (Ex.XX) isn't working | See the "⚠️ Common Mistakes" section in `examples/XX_*/README.md` |
@@ -50,7 +50,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | External GPIO pinmap (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | External GPIO pinmap (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | Is my board Rev 1.1 or Rev 2.0? | [hardware/README.md — Board Revision Comparison](hardware/README.md#보드-리비전-비교) |
-| Which board revision do the 46 examples support? | [examples/README.md — Board Revision Compatibility](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (42 work on both; Ex.40/41/42/43 are Rev 2.0-only) |
+| Which board revision do the 45 examples support? | [examples/README.md — Board Revision Compatibility](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (40 work on both; Ex.36 and Ex.40/41/42/43 are Rev 2.0-only) |
 
 ## 📥 Firmware Upload
 
@@ -71,7 +71,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | Get data on your PC / save it / export CSV (Python, exe) | [getting-started/04-pc-data-tool.en.md](getting-started/04-pc-data-tool.en.md) |
 | Try the tool first, no board needed | `python xm10.py demo` — first section of [04-pc-data-tool.en.md](getting-started/04-pc-data-tool.en.md) |
 | Check whether frames are being dropped | `python xm10.py soak` — [04-pc-data-tool.en.md](getting-started/04-pc-data-tool.en.md#checking-for-dropped-frames--soak) |
-| How to use PhAI Studio | Step 4 of each example's README + [studio.onephai.com](https://studio.onephai.com) |
+| How to use PhAI Studio | [studio.onephai.com](https://studio.onephai.com) + the Ex.09 README (Studio shows Total Data (0x20) — use the [`xm10` tool](getting-started/04-pc-data-tool.en.md) for your own structs) |
 | Finishing my algorithm within 1 ms | Ex.18 Debug Monitor + Ex.19 Memory Aware Design |
 | Self-directed learning paths by interest | [advanced/README.md — Recommended Self-Study Paths](advanced/README.md#자기주도-학습-권장-경로) |
 

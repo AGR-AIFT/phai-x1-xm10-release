@@ -27,9 +27,8 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **MCU** | STM32H743XIH6 (Cortex-M7, 480 MHz, BGA265) |
 | **OS** | FreeRTOS + CMSIS-OS2 |
 | **레포 역할** | 사용자 (개발자/연구자/수강생) 대상 **공개 릴리즈** (SDK + 예제 + 문서) |
-| **개발 원본** | 내부 개발 레포 (비공개) — 본 레포는 동기화된 공개판 |
 | **License** | MIT |
-| **Latest** | [`v2.6.0`](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.6.0) (Releases → `Rev2.0.zip` / `Rev1.1.zip` 다운로드) |
+| **Latest** | [`v2.8.0`](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.8.0) (Releases → `Rev2.0.zip` / `Rev1.1.zip` 다운로드) |
 
 ---
 
@@ -41,7 +40,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 2. **[하드웨어 셋업](docs/getting-started/01-hardware-setup.md)** → **[소프트웨어 셋업](docs/getting-started/02-software-setup.md)** → **[첫 빌드](docs/getting-started/03-first-build.md)** — 수동 절차
 3. **[Ex.00 Quick Start](examples/00_Quick_Start/)** — 보드 smoke test (⭐)
 4. **[Ex.01~03 Button & LED](examples/01_Button_LED_Basic/)** — 디지털 IO 기본 (⭐~⭐⭐)
-5. **[전체 학습 로드맵](docs/tutorials/README.md)** — 50 예제 트랙 (난이도 별 표시)
+5. **[전체 학습 로드맵](docs/tutorials/README.md)** — 45 개 예제 (난이도 별 표시)
 
 ---
 
@@ -78,12 +77,11 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
    - 권장: `C:\dev\Extension_Module`. 비권장: `C:\Users\홍길동\내 폴더\Extension_Module`.
 
 2. **USB-CDC 포트 단일 점유**
-   - PhAI Studio 와 시리얼 터미널 (PuTTY, RealTerm 등) 을 같은 COM 포트로 **동시에 열지 마세요**.
-   - 같은 COM 포트 충돌 → 접속 실패 / 데이터 손실. (`examples/07~09` 헤더 `@warning` 참조)
+   - **PC 프로그램(PhAI Studio · xm10 도구 · 시리얼 터미널)은 한 번에 하나만 연결하세요.** 같이 열면 접속 실패나 데이터 손실이 납니다. (`examples/07~09` 헤더 `@warning` 참조)
 
 3. **사용자 코드 영역**
    - 사용자가 수정하는 곳: `XM_Apps/Control_Task/` 또는 `examples/<번호>_<이름>/*.c`
-   - 라이브러리 (`XM_Lib`, `IOIF`, `AGR_MW`, 시스템 코드) 는 **봉인** — 수정 시 SDK 일관성 깨짐.
+   - XM_API 밖의 라이브러리·시스템 폴더는 **봉인** — 수정 시 SDK 일관성 깨짐.
 
 4. **HW Rev 호환**
    - `XM10_SDK/Rev1.1/` 와 `XM10_SDK/Rev2.0/` 은 HW 가 다른 **독립 SDK**.
@@ -98,8 +96,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 | 도구 | 역할 | XM10 과의 관계 |
 |------|------|---------------|
-| **PhAI Studio** | 실시간 데이터 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
-| **angel Sensor Studio** | 진단/검증 GUI (Python/PySide6, 별도 배포) | EMG/IMU Hub — XM10 과 CAN-FD 로 연계 가능 |
+| **PhAI Studio** | Total Data(시스템 데이터) 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신. PhAI Studio 는 아직 개발 중이라, 직접 정의한 데이터 구조체(커스텀 구조체)는 우선 `xm10` 도구로 보고 저장하세요. |
 | **xm10 PC 도구** (`PythonDecoder/xm10.py`) | 실시간 그래프 + 무손실 저장(.xmlog) + CSV 내보내기. `demo` 로 보드 없이 체험, `build_exe.py` 로 실행파일 | 본 레포 내장 — [안내](docs/getting-started/04-pc-data-tool.md) |
 
 ---
@@ -110,6 +107,16 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 - 트러블슈팅: [docs/troubleshooting.md](docs/troubleshooting.md)
 - 이슈 제출: GitHub Issues (`.github/ISSUE_TEMPLATE/` 4종 제공 — bug / feature / hardware / config)
 - 학습용 외부 자료: [onephai.com](https://onephai.com)
+
+---
+
+## 문서 작성 원칙
+
+- 이 레포의 문서·예제 README·커밋·PR 은 모두 공개됩니다.
+- **XM API 사용법**에 집중합니다. 지원 범위는 `XM_FW/XM_API/` 헤더에 선언된 것까지입니다.
+- 내부 구현·내부 용어는 쓰지 않고, 결과만 쉬운 말로 씁니다. (예: "CAN-FD 로 연결된 IMU Hub")
+- 쉽고 짧게 — 조건을 늘어놓지 말고 행동 한 줄로 씁니다. (예: "PC 프로그램은 한 번에 하나만 연결하세요.")
+- 개발 중인 도구와 앞으로의 기능은 약속하지 않습니다. PhAI Studio 는 아직 개발 중이라, 직접 정의한 데이터 구조체(커스텀 구조체)는 우선 `xm10` 도구로 보고 저장하세요.
 
 ---
 

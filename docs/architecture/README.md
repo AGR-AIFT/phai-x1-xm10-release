@@ -64,7 +64,7 @@ XM10 의 핵심은 **1 ms (1 kHz) 주기로 반복되는 제어 루프**입니�
   │  자동 갱신                                                 │
   │                                                            │
   │  XM.status.h10.    XM_TSM_Run         XM_SetAssistTorque  │
-  │   leftHipAngle      → on_loop()        XM_SendUsbData     │
+  │   leftHipAngle      → on_loop()       XM_SendUsbDataWithId │
   │   rightHipAngle                                            │
   │   isLeftFootContact                                        │
   └────────────────────────────────────────────────────────────┘
@@ -96,7 +96,7 @@ USB 통신도 함수 호출 한 번이면 끝입니다. 내가 신경 쓸 건 �
   ┌──────────────────────────────────────────────────────────────┐
   │  스케줄러가 여러 작업을 우선순위에 따라 번갈아 실행:           │
   │                                                              │
-  │   • 사용자 작업    → Control_Setup() 1회 → Control_Loop() 매 1 ms  │
+  │   • 제어 루프 task → Control_Setup() 1회 → Control_Loop() 매 1 ms  │
   │   • CAN 수신       → 외골격 센서 데이터 받아 XM.status 갱신   │
   │   • CAN 송신       → 모터 명령 전송                          │
   │   • USB 작업       → USB-CDC 시리얼 통신                     │
@@ -122,7 +122,7 @@ Extension_Module/
 │   │   └── Control_Task/
 │   │       └── control_task.c     ← 여기가 사용자 작업 공간
 │   └── (그 외 폴더는 모두 XM 라이브러리 — 건드리지 않습니다)
-└── examples/                  ← 46 개 예제의 control_task.c 모음
+└── examples/                  ← 45 개 예제의 control_task.c 모음
     ├── 00_Quick_Start/quick_start.c
     ├── 14_PD_Realtime_Control/pd_realtime_control.c
     └── ...
@@ -139,7 +139,7 @@ Extension_Module/
 | 채널 | 누가 누구와 | 내가 쓰는 함수 |
 |------|----------|--------------|
 | **CAN-FD** | XM10 ↔ KIT H10 외골격 | `XM.status.h10.*` 읽기, `XM_SetAssistTorque*()` 쓰기 |
-| **USB 시리얼 (CDC)** | XM10 → PC 터미널/PhAI Studio | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
+| **USB 시리얼 (CDC)** | XM10 → PC 터미널(텍스트) / `xm10` 도구(사용자 구조체) | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
 
 세부 프로토콜은 라이브러리가 알아서 처리합니다. 사용자는 함수 호출만 하면 됩니다.
 
@@ -154,7 +154,7 @@ Extension_Module/
 | `Control_Loop` 안에서 `HAL_Delay(100)` 사용 | 100 ms 동안 다른 작업 모두 정지 | `XM_GetTick()` 차이로 비차단 타이머 구성 |
 | `XM.status.h10.leftHipAngle` 이 항상 0 | KIT H10 미연결 또는 ASSIST 모드 진입 전 | `XM_IsCmConnected()` + `h10Mode == XM_H10_MODE_ASSIST` 확인 |
 | `XM_SetAssistTorque*` 호출했는데 토크 안 나옴 | 제어 모드 진입 누락 | Active 진입 시 `XM_SetControlMode(XM_CTRL_CONTROL)` 1회 호출 |
-| XM 라이브러리 폴더 (IOIF, Devices 등) 코드를 수정 | 라이브러리는 양산 코드 — 임의 수정 시 시스템 깨짐 | 항상 `Control_Task/` 안에서만 작업 |
+| XM 라이브러리 폴더의 코드를 수정 | 라이브러리는 SDK 가 제공하는 코드 — 임의 수정 시 시스템 깨짐 | 항상 `Control_Task/` 안에서만 작업 |
 | Control_Loop 가 1 ms 안에 못 끝남 | 무거운 sprintf, 부동소수 누적 연산 등 | [Ex.18 Debug Monitor](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/) 로 실행 시간 측정 후 분산 |
 | 두 예제를 동시에 빌드 시도 | `Control_Task/` 안에 `.c` 파일은 하나만 | 한 번에 한 예제만 복사해서 빌드 |
 

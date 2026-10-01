@@ -24,7 +24,7 @@
 
 - **이벤트 vs 폴링** — Ex.01 의 폴링은 "현재 누름?" 만 알 수 있지만, 이벤트는 "방금 누르고 뗐다" 같은 **변화** 자체를 잡습니다.
 - **`XM_GetButtonEvent()` 는 read-clear** — 한 번 호출하면 이벤트가 소비됩니다. 다시 호출하면 새 이벤트만 보입니다.
-- **`XmBtnEvent_t`** 종류: `XM_BTN_NONE`, `XM_BTN_CLICK`, `XM_BTN_DOUBLE_CLICK`, `XM_BTN_LONG_PRESS`. ([api-ref](../../docs/api-reference/03-led-btn-control.md))
+- **`XmBtnEvent_t`** 종류: `XM_BTN_NONE`, `XM_BTN_PRESSED`, `XM_BTN_RELEASED`, `XM_BTN_CLICK`, `XM_BTN_LONG_PRESS`. ([api-ref](../../docs/api-reference/03-led-btn-control.md))
 - **`XM_LED_ONESHOT`** — 지정한 ms 동안 ON 후 자동 OFF. 사용자가 별도 타이머 코드 안 짜도 됨.
 
 ---
@@ -62,7 +62,7 @@ static void Run_Loop(void)
 3. **BTN 1 다시 클릭** → ✅ LED 1 꺼짐
 4. **BTN 2 짧게 클릭** → ✅ LED 2 가 2초 켜졌다가 자동으로 꺼짐
 5. **변형 1 — 원샷 시간**: `XM_SetLedEffect(..., XM_LED_ONESHOT, 2000)` 의 `2000` 을 `500` 또는 `5000` 으로 변경.
-6. **변형 2 — 이벤트 종류**: `XM_BTN_CLICK` → `XM_BTN_DOUBLE_CLICK` 으로 변경 → 더블 클릭해야 토글되도록.
+6. **변형 2 — 이벤트 종류**: `XM_BTN_CLICK` → `XM_BTN_LONG_PRESS` 로 변경 → 길게(1 초 이상) 눌러야 토글되도록.
 7. **변형 3 — 폴링과 결합**: Run_Loop 끝에 Ex.01 코드 (`XM_GetButtonState(XM_BTN_3) == XM_PRESSED` → `XM_LED_3` ON) 도 추가 → 이벤트와 폴링 동시 운용.
 
 ---

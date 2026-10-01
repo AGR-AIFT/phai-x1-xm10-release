@@ -1,6 +1,6 @@
 # XM10 이미지 자료 — 보드 사진·다이어그램 가이드
 
-문서·예제 곳곳에 `placeholder` 라고 표시된 자리가 사용자 (각 채널 관리자) 가 직접 채울 이미지 자리예요. 이 폴더에 같은 파일명으로 이미지를 넣으면 자동으로 렌더링됩니다.
+문서·예제 곳곳에 `placeholder` 라고 표시된 자리는 이미지를 넣을 자리예요. 이 폴더에 같은 파일명으로 이미지를 넣으면 자동으로 렌더링됩니다.
 
 이미지 파일이 없어도 문서는 정상 동작해요 (markdown 텍스트 placeholder 만 보임). 우선순위 순서로 채워가면 됩니다.
 
@@ -35,9 +35,9 @@
 | `05c_mixed_adc.png` | Ex.05c Mixed ADC | 12 채널 ADC 시스템 |
 | `05d_hybrid.png` | Ex.05d DIO+ADC Hybrid | 혼합 모드 회로 |
 | `06_safety_fsm.png` | Ex.06 Safety Switch | 3 상태 FSM 다이어그램 |
-| `07_cdc_terminal.png` | Ex.07 USB Print | PuTTY/PhAI Studio 콘솔 캡처 |
+| `07_cdc_terminal.png` | Ex.07 USB Print | 시리얼 터미널(PuTTY 등) 콘솔 캡처 |
 | `08_sensor_print.png` | Ex.08 Sensor Print | 센서 모니터링 출력 |
-| `09_phai_stream.png` | Ex.09 PhAI Stream | PhAI Studio 4 채널 실시간 그래프 |
+| `09_phai_stream.png` | Ex.09 CDC Stream | `xm10` 도구의 4 채널 실시간 그래프 |
 
 ### Tier 3 — 외골격 제어 (수업 3 주차~)
 
@@ -51,7 +51,7 @@ KIT H10 외골격을 실제 작동시키는 단계. 동영상이 있으면 사�
 
 ### Tier 4 — 제어 알고리즘 시각화 (자기주도 학습)
 
-이론 + 시뮬레이션 결과 그래프. 사용자가 "이 알고리즘이 뭘 만들어내는지" 한눈에 보는 자료. 영상보다 정적 이미지 (matplotlib / PhAI Studio 캡처) 가 더 적합.
+이론 + 시뮬레이션 결과 그래프. 사용자가 "이 알고리즘이 뭘 만들어내는지" 한눈에 보는 자료. 영상보다 정적 이미지 (matplotlib / `xm10` 도구 캡처) 가 더 적합.
 
 | 파일명 | 사용처 | 권장 형식 |
 |--------|--------|----------|
@@ -100,7 +100,7 @@ Stage 1~5 학습 흐름의 시각 자료. 학회 발표/논문급 자료. 우선
 | 인터페이스 라벨 오버레이 | [draw.io](https://app.diagrams.net/) / Figma / Inkscape |
 | 회로 연결도 | [Fritzing](https://fritzing.org/) |
 | 동작 GIF | [ScreenToGif](https://www.screentogif.com/) / OBS + ffmpeg |
-| 그래프 / 시뮬레이션 결과 | matplotlib (Python) / PhAI Studio 스크린샷 |
+| 그래프 / 시뮬레이션 결과 | matplotlib (Python) / `xm10` 도구 스크린샷 |
 | FSM 다이어그램 | draw.io / [PlantUML](https://plantuml.com/) |
 
 ---

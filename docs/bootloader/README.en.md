@@ -52,27 +52,27 @@ The XM10 Extension Module ships with the **AGR_BOOT V2** bootloader, which enabl
 The STM32H743XI has 2 MB of internal Flash (Bank1 + Bank2).
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│ Address         │ Size    │ Region         │ Description       │
-├──────────────────────────────────────────────────────────────┤
-│ 0x08000000      │ 256 KB  │ Bootloader     │ AGR_BOOT V2       │
-│                 │         │                │ (Bank1 S0-S1)     │
-├──────────────────────────────────────────────────────────────┤
-│ 0x08040000      │ 1 KB    │ FW Header      │ AGR_FwInfo_t      │
-│                 │         │                │ (signature+CRC+version) │
-├──────────────────────────────────────────────────────────────┤
-│ 0x08040400      │ 767 KB  │ App (Active)   │ User app firmware │
-│                 │         │                │ (Bank1 S2-S7)     │
-├──────────────────────────────────────────────────────────────┤
-│ 0x08100000      │ 768 KB  │ Backup Slot    │ Previous firmware backup │
-│                 │         │                │ (Bank2 S0-S5)     │
-├──────────────────────────────────────────────────────────────┤
-│ 0x081C0000      │ 128 KB  │ Boot Config    │ AGR_BootConfig_t  │
-│                 │         │                │ (Bank2 S6)        │
-├──────────────────────────────────────────────────────────────┤
-│ 0x081E0000      │ 128 KB  │ Reserved       │ Reserved for future use │
-│                 │         │                │ (Bank2 S7)        │
-└──────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────┐
+│ Address         │ Size    │ Region         │ Description                  │
+├───────────────────────────────────────────────────────────────────────────┤
+│ 0x08000000      │ 256 KB  │ Bootloader     │ AGR_BOOT V2                  │
+│                 │         │                │ (Bank1 S0-S1)                │
+├───────────────────────────────────────────────────────────────────────────┤
+│ 0x08040000      │ 1 KB    │ FW Header      │ Firmware header              │
+│                 │         │                │ (signature + CRC + version)  │
+├───────────────────────────────────────────────────────────────────────────┤
+│ 0x08040400      │ 767 KB  │ App (Active)   │ User app firmware            │
+│                 │         │                │ (Bank1 S2-S7)                │
+├───────────────────────────────────────────────────────────────────────────┤
+│ 0x08100000      │ 768 KB  │ Backup Slot    │ Previous firmware backup     │
+│                 │         │                │ (Bank2 S0-S5)                │
+├───────────────────────────────────────────────────────────────────────────┤
+│ 0x081C0000      │ 128 KB  │ Boot Config    │ Boot settings                │
+│                 │         │                │ (Bank2 S6)                   │
+├───────────────────────────────────────────────────────────────────────────┤
+│ 0x081E0000      │ 128 KB  │ Reserved       │ Reserved                     │
+│                 │         │                │ (Bank2 S7)                   │
+└───────────────────────────────────────────────────────────────────────────┘
 ```
 
 > **Important**: The bootloader (0x08000000) and the app (0x08040000) occupy completely separate regions.  
@@ -147,11 +147,11 @@ This is the most common method during development. It writes directly to Flash o
 ### Build & Debug
 
 1. **Build** the project in STM32CubeIDE (Ctrl+B)
-2. Post-build scripts run automatically:
-   - `size_report.py` → memory usage report
-   - `version_generator.py` → generates `version.h` from the git tag
-   - `patch_fw_info.py` → patches `fw_size`/CRC into the `.fw_header` section of the ELF
-   - `fw_packager.py` → creates the packaged binary for FTP upload
+2. Post-build steps run automatically:
+   - Memory usage report
+   - Version info generated from the git tag
+   - Size and CRC written into the firmware header
+   - Packaged binary for FTP upload created
 3. Click **Debug** (F11) → the app firmware is written to 0x08040000 over SWD
 4. Debug normally (breakpoints, variable watch, etc.)
 
@@ -160,8 +160,8 @@ This is the most common method during development. It writes directly to Flash o
 ### Why SWD Debugging is Compatible with the Bootloader
 
 - The linker script (`STM32H743XIHX_FLASH.ld`) places app code at `0x08040400`
-- The `.fw_header` section is placed at `0x08040000` so the bootloader can read the signature
-- `boot_fw_info.c` embeds the `AGRBOOT` signature in the ELF, ensuring the bootloader recognises the app even after an SWD flash
+- The firmware header is placed at `0x08040000` so the bootloader can read the signature
+- The SDK embeds the signature in the firmware, so the bootloader recognises the app even after an SWD flash
 
 ---
 
@@ -184,7 +184,7 @@ Debug/
 ```
 
 > **File to use in PhAI Studio**: `XM10_X_X_X_X.bin` (e.g. `XM10_2_0_1_0.bin`)  
-> This file is produced by `fw_packager.py` and consists of a 1 KB `AGR_FwInfo_t` header followed by the app binary.
+> This file is created automatically at the end of the build and consists of a 1 KB firmware header followed by the app binary.
 
 ### Upload Procedure
 
@@ -201,38 +201,37 @@ Debug/
 
 To switch to FTP mode while the app is already running:
 - Send the **Enter Bootloader** command from PhAI Studio
-- Or call `AGR_Boot_RequestUpdate()` from the app code
 
 ---
 
 ## 6. Post-Build Binary Generation
 
-When you run **Build** in STM32CubeIDE, the following post-build scripts execute in order:
+When you run **Build** in STM32CubeIDE, the following post-build steps run automatically, in order:
 
 ```
 [Build]   GCC compile + link → Extension_Module.elf
            │
-[Step 1]  size_report.py → memory usage report (console output)
+[Step 1]  memory usage report (console output)
            │
-[Step 2]  version_generator.py → git tag → auto-generate version.h
+[Step 2]  git tag → auto-generate version.h
            │
-[Step 3]  patch_fw_info.py → patch ELF .fw_header (fw_size, fw_crc32)
+[Step 3]  write size and CRC into the firmware header
            │                  → generate .bin, .hex, _app.bin
            │
-[Step 4]  fw_packager.py → _app.bin + FwInfo header → XM10_X_X_X_X.bin
+[Step 4]  _app.bin + firmware header → XM10_X_X_X_X.bin
 ```
 
 ### Details of Each Step
 
-| Step | Script | Input | Output | Description |
-|------|--------|-------|--------|-------------|
-| 1 | `size_report.py` | `.elf` | Console | Visualises FLASH/RAM usage |
-| 2 | `version_generator.py` | git tag | `version.h` | Defines `FW_VER_MAJOR/MINOR/PATCH/DEBUG` |
-| 3 | `patch_fw_info.py` | `.elf` | `.bin`, `.hex`, `_app.bin` | Patches `fw_size`/CRC into `.fw_header` |
-| 4 | `fw_packager.py` | `_app.bin` | `XM10_X_X_X_X.bin` | 1 KB header + app binary = FTP-ready package |
+| Step | Input | Output | Description |
+|------|-------|--------|-------------|
+| 1 | `.elf` | Console | Visualises FLASH/RAM usage |
+| 2 | git tag | `version.h` | Defines `FW_VER_MAJOR/MINOR/PATCH/DEBUG` |
+| 3 | `.elf` | `.bin`, `.hex`, `_app.bin` | Writes size and CRC into the firmware header |
+| 4 | `_app.bin` | `XM10_X_X_X_X.bin` | 1 KB header + app binary = FTP-ready package |
 
-> **Python 3.x required**: All post-build scripts are written in Python.  
-> Run `pip install pyyaml` (required for Data Map code generation).
+> **Python 3.x required**: The post-build steps run on Python.
+> Run `pip install pyyaml`.
 
 ---
 
@@ -243,19 +242,19 @@ When you run **Build** in STM32CubeIDE, the following post-build scripts execute
 ```
 Power ON → Bootloader starts (0x08000000)
     │
-    ├─ Read Boot Config (Bank2 S6)
-    │   └─ First boot: auto-create config with default values
+    ├─ Read boot settings (Bank2 S6)
+    │   └─ First boot: auto-create settings with default values
     │
-    ├─ Rollback check (boot_count >= 3?)
+    ├─ Rollback check (3 or more failed boots in a row?)
     │   └─ Yes: restore from Backup Slot
     │
     ├─ Validate app firmware
-    │   ├─ Check "AGRBOOT\x01" signature
+    │   ├─ Check signature
     │   ├─ Verify CRC-32 (FTP uploads only)
     │   └─ Check HW revision compatibility
     │
     ├─ Validation passed → jump to app (0x08040400)
-    │   └─ App calls AGR_Boot_ConfirmBoot() → resets boot_count
+    │   └─ Once the app starts normally, the SDK notifies the bootloader → failed-boot count reset
     │
     └─ Validation failed → enter FTP wait mode
         └─ Wait to receive new firmware over USB CDC
@@ -266,13 +265,13 @@ Power ON → Bootloader starts (0x08000000)
 ```
 FW Upload initiated from PhAI Studio
     │
-    ├─ [1] App switches to bootloader (writes magic value to RTC BKP0R + NVIC Reset)
+    ├─ [1] App switches to the bootloader (reset)
     ├─ [2] Copy current Active FW → Backup Slot
     ├─ [3] Erase Active Slot
     ├─ [4] Receive new FW + write to Active Slot
     ├─ [5] Verify CRC-32
-    ├─ [6] Update Boot Config (PENDING_CONFIRM)
-    └─ [7] Reset → new app starts → ConfirmBoot() → done
+    ├─ [6] Update boot settings (waiting for the new firmware to confirm)
+    └─ [7] Reset → new app starts → normal start confirmed → done
 ```
 
 ---
@@ -306,15 +305,15 @@ FW Upload initiated from PhAI Studio
 
 ### "After uploading firmware, the board keeps rebooting and reverts to the previous version"
 
-**Cause**: The new firmware never called `AGR_Boot_ConfirmBoot()`, triggering an automatic rollback after 3 boot attempts.
-- Check that `system_startup.c` calls `AGR_Boot_ConfirmBoot()` immediately after startup
-- The default SDK code already includes this call — verify that `system_startup.c` has not been modified by the user
+**Cause**: The new firmware never told the bootloader that it started normally, triggering an automatic rollback after 3 boot attempts.
+- The default SDK code sends this notification automatically right after boot
+- Verify that you have not modified the SDK startup code
 
 ### "The build succeeds but XM10_X_X_X_X.bin is not generated"
 
 1. Check Python 3.x installation: `python --version`
-2. Review post-build script output in the Build Console for error messages
-3. Confirm that the script files exist in the `tools/build/` folder
+2. Review the post-build output in the Build Console for error messages
+3. Confirm that the SDK's `tools/build/` folder is still in place (it holds the post-build files)
 
 ### "STM32CubeProgrammer shows no data at 0x08040000 when I read Flash"
 
@@ -343,7 +342,7 @@ FW Upload initiated from PhAI Studio
 
 ### Python Environment Setup
 
-To run the post-build scripts:
+To run the post-build steps:
 ```bash
 # After installing Python 3.x
 pip install pyyaml

@@ -17,7 +17,7 @@ This module is time-driven. Behind the scenes, internal **Managers** run continu
 ### The Core Engine: `XM_IO_Update()`
 
   * **Role:** This is the **engine** that calculates LED blink timing, analyzes button signals, removes noise (debouncing), and generates events.
-  * **Execution:** Called automatically at a **1 ms (1 kHz) interval** by `core_process`. You do not need to call it yourself, but understanding its role is important.
+  * **Execution:** Called automatically by the system at a **1 ms (1 kHz) interval**. You do not need to call it yourself, but understanding its role is important.
   * **Flow:**
     1.  User calls `XM_SetLedEffect` → settings are stored.
     2.  `XM_IO_Update` runs periodically → toggles the LED ON/OFF as time passes.
@@ -244,13 +244,13 @@ Controls per-channel RGB LEDs driven by the PCA9957. Use this to visually indica
 #### `XM_IO_Update`
 
 **[System-managed]** The driving function that updates LED and button states.
-This must be called periodically inside the User Task's main loop (`Control_Loop` or inside `TSM_Run`) for `Blink` and `Long Press` to work correctly.
+This must be called periodically from the control-loop task (Control_Loop) — in `Control_Loop` or inside `XM_TSM_Run` — for `Blink` and `Long Press` to work correctly.
 
   * **Syntax**
     ```c
     void XM_IO_Update(void);
     ```
-  * **Note**: `core_process.c` calls this automatically during the `_FetchAllInputs` stage, so **end users do not normally need to call it directly.**
+  * **Note**: The system calls this automatically while it collects inputs, so **end users do not normally need to call it directly.**
 
 ---
 
@@ -258,7 +258,7 @@ This must be called periodically inside the User Task's main loop (`Control_Loop
 
 | Symptom | Cause | Fix |
 |---------|-------|-----|
-| LED blink mode is set but nothing happens | `XM_IO_Update` is not being called (User Task has stalled, or `XM_TSM_Run` is missing) | `core_process` calls it automatically — check that your user code is not stuck in an infinite loop |
+| LED blink mode is set but nothing happens | `XM_IO_Update` is not being called (the control-loop task (Control_Loop) has stalled, or `XM_TSM_Run` is missing) | The system calls it automatically — check that your user code is not stuck in an infinite loop |
 | `GetButtonEvent` returns the same event multiple times | `GetButtonEvent` is being called in more than one place inside `Run_Loop` (concurrent Read-Clear consumers) | Read each event channel from exactly one place |
 | `XM_BTN_LONG_PRESS` never triggers | Hold time is less than 1 second | Hold the button for at least 1 second |
 | `SetLedState` has no effect after `SetLedEffect` | Effect mode takes priority — `SetLedState` is ignored or overwritten | Call `SetLedEffect(LED, XM_LED_OFF, 0)` to cancel the effect first |

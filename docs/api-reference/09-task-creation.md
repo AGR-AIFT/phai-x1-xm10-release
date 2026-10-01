@@ -1,34 +1,22 @@
 # XM10 Task Topology — RTOS Task API 사용자 가이드
 
-> XM10 SDK 의 사용자 보조 task 작성 가이드. 시스템 task 인벤토리 + 우선순위 +
-> 데이터 흐름 + 공유변수 패턴 4가지.
+> XM10 SDK 의 사용자 보조 task 작성 가이드. 우선순위 + 데이터 흐름 +
+> 공유변수 패턴 4가지.
 
 **Audience**: SDK 사용자 (연구자 / 학습자 / 일반 로보틱스 개발자)
 **Date**: 2026-05-15
 **Related**:
-- 사용자 API: [`XM_FW/XM_API/xm_api_freertos.h`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM_FW/XM_API/xm_api_freertos.h)
-- Task Manager: [`XM_FW/System/Task/xm_task_manager.{c,h}`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM_FW/System/Task/)
+- 사용자 API: [`XM_FW/XM_API/xm_api_freertos.h`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h)
 - 예제: [`Examples/38_Periodic_Background_Task/`](../../Examples/38_Periodic_Background_Task/) · [`Examples/39_Task_Lifecycle/`](../../Examples/39_Task_Lifecycle/)
 
 ---
 
-## 1. 시스템 Task 인벤토리
+## 1. 시스템 Task
 
-XM10 SDK 가 부팅 시 자동으로 생성하는 task 목록. **사용자가 직접 변경하면
-안 됩니다** (시스템 안정성 손상).
-
-| 우선순위 | 숫자 | Task 이름        | 스택  | 주기      | 책임 |
-|---|---|---|---|---|---|
-| Realtime7 | 55 | `StartupTask`     | 2 KB  | 1회 (자기 삭제) | HW init / module enumerate |
-| Realtime7 | 55 | `IOIF_UartRx`     | 512 B | event-driven  | UART 수신 (공유) |
-| **Realtime6** | **54** | **`UserTask`** | **32 KB** | **1 ms (1 kHz)** | **Control_Setup + Control_Loop 호출 + PDO snapshot** |
-| Realtime3 | 51 | `NRT_Proc`        | 2 KB  | semaphore     | SDO/NMT 처리 |
-| High      | 40 | `USBH_Queue`      | 2 KB  | event         | USB Host 이벤트 |
-| Normal1   | 25 | `PnP_Task`        | 2 KB  | 100 ms        | Plug & Play (모듈 자동 등록) |
-| Normal    | 24 | `usbContolTask`   | 2 KB  | 10 ms         | USB 모드 전환 / CDC |
-| Normal    | 24 | `DataLoggerTask`  | 8 KB  | event         | 내부 예약 (현재 미사용) |
-| **Normal** | **24** | **`XM_Task_*` (사용자)** | **prio_hint 별** | OneShot/Periodic | **사용자가 만든 보조 task** |
-| Low       | 8  | `DefaultTask`     | 2 KB  | suspended     | (사용 안 함) |
+XM10 SDK 는 부팅 시 필요한 시스템 task 를 자동으로 만듭니다. **사용자가 직접 변경하면
+안 됩니다** (시스템 안정성 손상). `Control_Setup()` 과 `Control_Loop()` 는 그중
+제어 루프 task (Control_Loop) 에서 1 ms (1 kHz) 주기로 호출됩니다 (우선순위 53, 스택 32 KB).
+사용자 보조 task 는 `XM_Task_Create*()` 와 아래 `XM_PRIO_*` 힌트로만 만드세요.
 
 ---
 
@@ -38,19 +26,21 @@ XM10 SDK 가 부팅 시 자동으로 생성하는 task 목록. **사용자가 �
 만들 때 `prio_hint` 로 선택할 수 있는 영역입니다.
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│ 시스템 task 점유 영역 — 사용자 진입 금지                       │
-│   55  Realtime7  StartupTask / IOIF_UartRx                   │
-│   54  Realtime6  UserTask (Control_Loop, 1 kHz 제어 루프)    │
-│   51  Realtime3  NRT_Proc (SDO/NMT)                          │
-├──────────────────────────────────────────────────────────────┤
-│ 사용자 선택 가능 영역                                          │
-│   48  Realtime  ← XM_PRIO_NEAR_REALTIME (주의 — PnP 경합 가능)│
-│   40  High      ← XM_PRIO_ABOVE_CONTROL                       │
-│   32  AbvNormal ← XM_PRIO_BELOW_CONTROL                       │
-│   24  Normal    ← XM_PRIO_BACKGROUND ⭐ (권장 기본값)          │
-│    8  Low       ← XM_PRIO_IDLE                                │
-└──────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────────┐
+│ 시스템 task — 사용자가 만들거나 바꿀 수 없음                                  │
+│   55  Realtime7  시스템 시작 / CAN-FD 수신  ← 로봇·센서 데이터 수신 즉시 처리 │
+│   54  Realtime6  UART 수신                  ← 센서 패킷 파싱                  │
+│   53  Realtime5  Control_Loop               ← 1 kHz 제어 루프                 │
+│   51  Realtime3  모듈 설정 메시지 처리                                        │
+│   25  Normal1    모듈 연결 관리                                               │
+├───────────────────────────────────────────────────────────────────────────────┤
+│ 사용자 선택 가능 영역 (XM_PRIO_*)                                             │
+│   48  Realtime     ← XM_PRIO_NEAR_REALTIME (주의: 모듈 연결 처리와 경합 가능) │
+│   40  High         ← XM_PRIO_ABOVE_CONTROL                                    │
+│   32  AboveNormal  ← XM_PRIO_BELOW_CONTROL                                    │
+│   24  Normal       ← XM_PRIO_BACKGROUND ⭐ (권장 기본값)                      │
+│    8  Low          ← XM_PRIO_IDLE                                             │
+└───────────────────────────────────────────────────────────────────────────────┘
 ```
 
 | 우선순위 hint | 숫자 | 기본 stack | 용도 |
@@ -69,20 +59,12 @@ XM10 SDK 가 부팅 시 자동으로 생성하는 task 목록. **사용자가 �
 ## 3. 데이터 흐름 — Control_Loop ↔ 사용자 보조 Task
 
 ```
-┌─ FDCAN ISR ──┐
-│  (PDO 수신)  │
-└──────┬───────┘
-       │ seqlock
-       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ UserTask (1 kHz)                                            │
+│ 제어 루프 task (Control_Loop, 1 kHz)                        │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │  _FetchAllInputs() ─▶ XM.status.*                   │    │
-│  │  SYNC broadcast      (CM/SM 트리거)                  │    │
-│  │  XM_TotalData_Snapshot()                            │    │
+│  │  입력 수집 ─▶ XM.status.*                           │    │
 │  │  Control_Loop() ◀── 사용자 알고리즘                 │    │
-│  │  _FlushAllOutputs() ─▶ XM.command.* ─▶ CAN TX       │    │
-│  │  XM_USB_ProcessPeriodic()                           │    │
+│  │  XM.command.* ─▶ 출력 전송                          │    │
 │  └─────────────────────────────────────────────────────┘    │
 │         ↕ (단일 워드 volatile / 멀티 워드 XM_Mutex)         │
 │  ┌─────────────────────────────────────────────────────┐    │
@@ -99,11 +81,11 @@ XM10 SDK 가 부팅 시 자동으로 생성하는 task 목록. **사용자가 �
 | **A** Single-word flag | `volatile bool ready;` | volatile 만 | Ex.38 `s_adc_avg` |
 | **B** Multi-word data  | `float buf[10];` | `XM_Mutex_*` | Ex.38 `s_adc_buf` |
 | **C** ISR → Task       | ISR write / Task read | volatile + memory barrier | (시스템 영역) |
-| **D** Snapshot         | Mutex 안 memcpy → 외부 read | Mutex+Snapshot | `CM_GetRxData` |
+| **D** Snapshot         | Mutex 안 memcpy → 외부 read | Mutex+Snapshot | `XM.status` 스냅샷 |
 
 ---
 
-## 4. HW 제약 (Task Manager API contract 가드)
+## 4. 사용자 task 한도
 
 | 상수 | 값 | 의미 |
 |---|---|---|
@@ -119,7 +101,7 @@ XM10 SDK 가 부팅 시 자동으로 생성하는 task 목록. **사용자가 �
 
 > ⚠️ **워치독 (v2.6.0~)**: 시스템 워치독(IWDG, 약 8 초)은 `Control_Loop` 가 도는 1 kHz 주기에서 갱신됩니다. 따라서 **`Control_Setup` 이나 `Control_Loop` 안에서 8 초 넘게 머물면 보드가 리셋**됩니다. 오래 걸리는 작업은 나눠서 수행하세요.
 >
-> 여기서 만드는 사용자 task 는 `XM_PRIO_*` 가 모두 `Control_Loop` 보다 낮으므로 (최고값 `XM_PRIO_NEAR_REALTIME` = 48 < UserTask 54) **워치독 갱신을 막을 수 없습니다.** 무거운 계산은 오히려 이쪽으로 옮기는 것이 안전합니다 (Ex.36 의 NN 학습이 `XM_PRIO_BACKGROUND` 로 도는 이유).
+> 여기서 만드는 사용자 task 는 `XM_PRIO_*` 가 모두 `Control_Loop` 보다 낮으므로 (최고값 `XM_PRIO_NEAR_REALTIME` = 48 < 제어 루프 task 53) **워치독 갱신을 막을 수 없습니다.** 무거운 계산은 오히려 이쪽으로 옮기는 것이 안전합니다 (Ex.36 의 NN 학습이 `XM_PRIO_BACKGROUND` 로 도는 이유).
 
 ---
 
@@ -179,7 +161,7 @@ void Control_Loop(void) {
 | Lock 후 Unlock 누락 | mutex 영구 점유 | early return 전에 Unlock |
 | Task Delete 후 handle 재사용 | API false 반환 | Delete 직후 `handle = NULL` |
 | Task Delete 누락 | 4개 도달 후 새 task 생성 NULL | IsComplete → Delete 사이클 |
-| `XM_PRIO_NEAR_REALTIME` 무한 루프 | PnP 경합 / 시스템 지연 | `XM_PRIO_BACKGROUND` 권장 |
+| `XM_PRIO_NEAR_REALTIME` 무한 루프 | 모듈 연결 처리와 경합 / 시스템 지연 | `XM_PRIO_BACKGROUND` 권장 |
 | 단일 워드 vs 멀티 워드 race | 데이터 깨짐 | 32-bit 변수는 volatile, 그 이상은 Mutex |
 | Float NaN/Inf 출력 | CAN-FD 송신 시 모터 폭주 | 계산 전 분모 != 0 / clamp |
 
@@ -190,16 +172,14 @@ void Control_Loop(void) {
 1. **[Ex.00 ~ Ex.35](../../Examples/)** — 단일 task 알고리즘 학습
 2. **[Ex.38 Periodic_Background_Task](../../Examples/38_Periodic_Background_Task/)** — Mutex+Snapshot 패턴 (이 문서 §3 참조)
 3. **[Ex.39 Task_Lifecycle](../../Examples/39_Task_Lifecycle/)** — OneShot 생성/삭제 사이클
-4. **본 문서 §4~6** — HW 제약 + Pitfalls
+4. **본 문서 §4~6** — 사용자 task 한도 + Pitfalls
 
 ---
 
-## 8. Risk Management 통합 (Phase 2 후속)
+## 8. 직접 점검할 것
 
-런타임 가드 (Control_Loop overrun / mutex deadlock / Periodic overrun / fault 분석
-등) 와 디버깅 채널 (PhAI Studio 진단 통합) 은 XM10 전체 차원 Risk Management 계획
-하에 별도 도입 예정. 본 SDK 의 Task API 자체는 Phase 1 (Task API contract 가드만)
-범위에서 안정 동작합니다.
+Task API 는 §4 의 제약(개수·스택·우선순위)을 지키면 동작합니다. 실행 시간 초과나
+교착(deadlock)은 자동으로 감시하지 않으니 직접 점검하세요.
 
 ---
 
@@ -207,4 +187,4 @@ void Control_Loop(void) {
 
 | 날짜       | 버전 | 변경 |
 |---|---|---|
-| 2026-05-15 | 1.0  | 초안 — RM 가드 분리 후 Task API 본질만 정리 |
+| 2026-05-15 | 1.0  | 초안 |

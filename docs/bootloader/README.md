@@ -52,27 +52,27 @@ XM10 Extension Module은 **AGR_BOOT V2** 부트로더를 탑재하여 USB를 통
 STM32H743XI는 2MB 내부 Flash (Bank1 + Bank2)를 가집니다.
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│ Address         │ Size    │ Region         │ 설명              │
-├──────────────────────────────────────────────────────────────┤
-│ 0x08000000      │ 256 KB  │ Bootloader     │ AGR_BOOT V2       │
-│                 │         │                │ (Bank1 S0-S1)     │
-├──────────────────────────────────────────────────────────────┤
-│ 0x08040000      │ 1 KB    │ FW Header      │ AGR_FwInfo_t      │
-│                 │         │                │ (시그니처+CRC+버전) │
-├──────────────────────────────────────────────────────────────┤
-│ 0x08040400      │ 767 KB  │ App (Active)   │ 사용자 앱 펌웨어    │
-│                 │         │                │ (Bank1 S2-S7)     │
-├──────────────────────────────────────────────────────────────┤
-│ 0x08100000      │ 768 KB  │ Backup Slot    │ 이전 펌웨어 백업    │
-│                 │         │                │ (Bank2 S0-S5)     │
-├──────────────────────────────────────────────────────────────┤
-│ 0x081C0000      │ 128 KB  │ Boot Config    │ AGR_BootConfig_t  │
-│                 │         │                │ (Bank2 S6)        │
-├──────────────────────────────────────────────────────────────┤
-│ 0x081E0000      │ 128 KB  │ Reserved       │ 향후 확장용        │
-│                 │         │                │ (Bank2 S7)        │
-└──────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Address         │ Size    │ Region         │ 설명                       │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 0x08000000      │ 256 KB  │ Bootloader     │ AGR_BOOT V2                │
+│                 │         │                │ (Bank1 S0-S1)              │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 0x08040000      │ 1 KB    │ FW Header      │ 펌웨어 헤더                │
+│                 │         │                │ (시그니처 + CRC + 버전)    │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 0x08040400      │ 767 KB  │ App (Active)   │ 사용자 앱 펌웨어           │
+│                 │         │                │ (Bank1 S2-S7)              │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 0x08100000      │ 768 KB  │ Backup Slot    │ 이전 펌웨어 백업           │
+│                 │         │                │ (Bank2 S0-S5)              │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 0x081C0000      │ 128 KB  │ Boot Config    │ 부트 설정                  │
+│                 │         │                │ (Bank2 S6)                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 0x081E0000      │ 128 KB  │ Reserved       │ 예약 영역                  │
+│                 │         │                │ (Bank2 S7)                 │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 > **중요**: 부트로더(0x08000000)와 앱(0x08040000)은 완전히 분리된 영역입니다.  
@@ -147,11 +147,11 @@ STM32H743XI는 2MB 내부 Flash (Bank1 + Bank2)를 가집니다.
 ### 빌드 & 디버깅
 
 1. STM32CubeIDE에서 프로젝트 **Build** (Ctrl+B)
-2. Post-Build 스크립트가 자동 실행:
-   - `size_report.py` → 메모리 사용량 리포트
-   - `version_generator.py` → git tag에서 version.h 생성
-   - `patch_fw_info.py` → ELF의 .fw_header 섹션에 fw_size/CRC 패치
-   - `fw_packager.py` → FTP 업로드용 패키징 바이너리 생성
+2. 빌드가 끝나면 후처리가 자동으로 실행됩니다:
+   - 메모리 사용량 리포트
+   - git tag 에서 버전 정보 생성
+   - 펌웨어 헤더에 크기·CRC 기록
+   - FTP 업로드용 패키징 바이너리 생성
 3. **Debug** (F11) 클릭 → SWD를 통해 0x08040000에 앱 펌웨어 기록
 4. 디버깅 시작 (브레이크포인트, 변수 감시 등 정상 사용 가능)
 
@@ -160,8 +160,8 @@ STM32H743XI는 2MB 내부 Flash (Bank1 + Bank2)를 가집니다.
 ### SWD 디버깅이 부트로더와 호환되는 이유
 
 - 링커 스크립트(`STM32H743XIHX_FLASH.ld`)가 앱 코드를 `0x08040400`에 배치
-- `.fw_header` 섹션이 `0x08040000`에 배치되어 부트로더가 시그니처를 인식
-- `boot_fw_info.c`가 ELF에 `AGRBOOT` 시그니처를 포함시켜 SWD 플래시 후에도 부트로더가 앱을 정상 인식
+- 펌웨어 헤더가 `0x08040000`에 배치되어 부트로더가 시그니처를 인식
+- SDK 가 시그니처를 펌웨어에 포함시켜 SWD 플래시 후에도 부트로더가 앱을 정상 인식
 
 ---
 
@@ -184,7 +184,7 @@ Debug/
 ```
 
 > **PhAI Studio에서 사용할 파일**: `XM10_X_X_X_X.bin` (예: `XM10_2_0_1_0.bin`)  
-> 이 파일은 `fw_packager.py`가 생성하며, 1KB AGR_FwInfo_t 헤더 + 앱 바이너리로 구성됩니다.
+> 이 파일은 빌드가 끝나면 자동으로 만들어지며, 1KB 펌웨어 헤더 + 앱 바이너리로 구성됩니다.
 
 ### 업로드 절차
 
@@ -201,38 +201,37 @@ Debug/
 
 앱이 정상 실행 중일 때 FTP 모드로 전환하려면:
 - PhAI Studio에서 **Enter Bootloader** 명령 전송
-- 또는 앱 코드에서 `AGR_Boot_RequestUpdate()` 호출
 
 ---
 
 ## 6. 빌드 후 바이너리 생성 과정
 
-STM32CubeIDE에서 **Build**를 실행하면 다음 순서로 Post-Build 스크립트가 실행됩니다:
+STM32CubeIDE에서 **Build**를 실행하면 컴파일 뒤에 다음 후처리가 순서대로 자동 실행됩니다:
 
 ```
 [Build]  GCC 컴파일 + 링크 → Extension_Module.elf
            │
-[Step 1]  size_report.py → 메모리 사용량 리포트 (콘솔 출력)
+[Step 1]  메모리 사용량 리포트 (콘솔 출력)
            │
-[Step 2]  version_generator.py → git tag → version.h 자동 생성
+[Step 2]  git tag → version.h 자동 생성
            │
-[Step 3]  patch_fw_info.py → ELF .fw_header 패치 (fw_size, fw_crc32)
+[Step 3]  펌웨어 헤더에 크기·CRC 기록
            │                  → .bin, .hex, _app.bin 생성
            │
-[Step 4]  fw_packager.py → _app.bin + FwInfo 헤더 → XM10_X_X_X_X.bin
+[Step 4]  _app.bin + 펌웨어 헤더 → XM10_X_X_X_X.bin
 ```
 
 ### 각 단계 상세
 
-| 단계 | 스크립트 | 입력 | 출력 | 설명 |
-|------|---------|------|------|------|
-| 1 | `size_report.py` | `.elf` | 콘솔 | FLASH/RAM 사용량 시각화 |
-| 2 | `version_generator.py` | git tag | `version.h` | `FW_VER_MAJOR/MINOR/PATCH/DEBUG` 정의 |
-| 3 | `patch_fw_info.py` | `.elf` | `.bin`, `.hex`, `_app.bin` | fw_size/CRC를 .fw_header에 패치 |
-| 4 | `fw_packager.py` | `_app.bin` | `XM10_X_X_X_X.bin` | 1KB 헤더 + 앱 바이너리 = FTP용 |
+| 단계 | 입력 | 출력 | 설명 |
+|------|------|------|------|
+| 1 | `.elf` | 콘솔 | FLASH/RAM 사용량 시각화 |
+| 2 | git tag | `version.h` | `FW_VER_MAJOR/MINOR/PATCH/DEBUG` 정의 |
+| 3 | `.elf` | `.bin`, `.hex`, `_app.bin` | 펌웨어 헤더에 크기/CRC 기록 |
+| 4 | `_app.bin` | `XM10_X_X_X_X.bin` | 1KB 헤더 + 앱 바이너리 = FTP용 |
 
-> **Python 3.x 필수**: Post-Build 스크립트는 Python으로 작성되어 있습니다.  
-> `pip install pyyaml` 필요 (Data Map Code-Gen용).
+> **Python 3.x 필수**: 빌드 후처리는 Python으로 실행됩니다.
+> `pip install pyyaml` 이 필요합니다.
 
 ---
 
@@ -243,19 +242,19 @@ STM32CubeIDE에서 **Build**를 실행하면 다음 순서로 Post-Build 스크�
 ```
 전원 ON → 부트로더 시작 (0x08000000)
     │
-    ├─ Boot Config 읽기 (Bank2 S6)
-    │   └─ 최초 부팅: 기본값으로 Config 자동 생성
+    ├─ 부트 설정 읽기 (Bank2 S6)
+    │   └─ 최초 부팅: 기본값으로 설정 자동 생성
     │
-    ├─ 롤백 체크 (boot_count >= 3?)
+    ├─ 롤백 체크 (연속 부팅 실패 3회 이상?)
     │   └─ Yes: 백업 슬롯에서 복원
     │
     ├─ 앱 펌웨어 검증
-    │   ├─ "AGRBOOT\x01" 시그니처 확인
+    │   ├─ 시그니처 확인
     │   ├─ CRC-32 검증 (FTP 업로드 시에만)
     │   └─ HW 리비전 호환성 확인
     │
     ├─ 검증 성공 → 앱으로 점프 (0x08040400)
-    │   └─ 앱에서 AGR_Boot_ConfirmBoot() 호출 → boot_count 리셋
+    │   └─ 앱이 정상 시작하면 SDK 가 부트로더에 알림 → 부팅 실패 횟수 초기화
     │
     └─ 검증 실패 → FTP 대기 모드
         └─ USB CDC로 새 펌웨어 수신 대기
@@ -266,13 +265,13 @@ STM32CubeIDE에서 **Build**를 실행하면 다음 순서로 Post-Build 스크�
 ```
 PhAI Studio에서 FW Upload 시작
     │
-    ├─ [1] 앱에서 BL로 전환 (RTC BKP0R에 매직값 기록 + NVIC Reset)
+    ├─ [1] 앱이 부트로더로 전환 (리셋)
     ├─ [2] 현재 Active FW → Backup Slot 복사
     ├─ [3] Active Slot 삭제
     ├─ [4] 새 FW 수신 + Active Slot 기록
     ├─ [5] CRC-32 검증
-    ├─ [6] Boot Config 업데이트 (PENDING_CONFIRM)
-    └─ [7] 리셋 → 새 앱 시작 → ConfirmBoot() → 완료
+    ├─ [6] 부트 설정 업데이트 (새 펌웨어 확인 대기)
+    └─ [7] 리셋 → 새 앱 시작 → 정상 시작 확인 → 완료
 ```
 
 ---
@@ -306,15 +305,15 @@ PhAI Studio에서 FW Upload 시작
 
 ### "FW 업로드 후 부팅이 반복되다가 이전 버전으로 돌아갔습니다"
 
-**원인**: 새 펌웨어에서 `AGR_Boot_ConfirmBoot()`가 호출되지 않아 3회 부팅 후 자동 롤백.
-- `system_startup.c`에서 부팅 직후 `AGR_Boot_ConfirmBoot()` 호출이 포함되어 있는지 확인
-- SDK 기본 코드에는 이미 포함되어 있으므로, 사용자가 `system_startup.c`를 수정하지 않았는지 확인
+**원인**: 새 펌웨어가 정상 시작했다는 알림을 부트로더에 보내지 못해 3회 부팅 후 자동 롤백.
+- 이 알림은 SDK 기본 코드가 부팅 직후 자동으로 보냅니다
+- 사용자가 SDK 시작 코드를 수정하지 않았는지 확인
 
 ### "빌드는 되는데 XM10_X_X_X_X.bin이 생성되지 않습니다"
 
 1. Python 3.x 설치 확인: `python --version`
-2. Post-Build 스크립트 콘솔 출력 확인 (Build Console에 에러 메시지)
-3. `tools/build/` 폴더에 스크립트 파일이 있는지 확인
+2. 빌드 후처리 단계의 콘솔 출력 확인 (Build Console에 에러 메시지)
+3. SDK 의 `tools/build/` 폴더가 그대로 있는지 확인 (빌드 후처리 파일이 들어 있습니다)
 
 ### "STM32CubeProgrammer에서 Read 하면 0x08040000에 데이터가 없습니다"
 
@@ -343,7 +342,7 @@ PhAI Studio에서 FW Upload 시작
 
 ### Python 환경 설정
 
-Post-Build 스크립트 실행을 위해:
+빌드 후처리 실행을 위해:
 ```bash
 # Python 3.x 설치 후
 pip install pyyaml

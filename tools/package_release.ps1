@@ -30,7 +30,7 @@
   깊은 경로) 와 다름. 다음 검증 항목 통과 확인:
     - Test-Path "<폴더>\.project"                            (CubeIDE Import root)
     - Test-Path "<폴더>\CLAUDE.md"                           (Rev 특화 AI 진입점)
-    - Test-Path "<폴더>\AGENTS.md"                           (Codex 진입점)
+    - Test-Path "<폴더>\AGENTS.md"                           (보조 AI 진입점)
     - Test-Path "<폴더>\.claude\skills\student-onboard"      (온보딩 skill)
     - Test-Path "<폴더>\docs\getting-started"                (학습 문서)
     - Test-Path "<폴더>\examples\00_Quick_Start\README.md"   (예제 학습 가이드)

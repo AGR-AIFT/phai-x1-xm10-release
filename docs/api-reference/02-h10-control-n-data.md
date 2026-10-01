@@ -5,7 +5,7 @@
 > 🧰 사전 지식: IPO 모델 (Input → Process → Output 1ms 사이클) + [Ex.11~14](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/)
 > 🎯 핵심 객체: `XM.status` (읽기) / `XM.command` (Staging 명령) / `XM_SetControlMode` / `XM_SetAssistTorque` / `XM_SendPVector`
 
-`XM10`의 핵심 가치중 하나는 `KIT H10` 로봇을 직접 설계한 알고리즘으로 제어하는 것입니다. 본 API는 KIT H10과의 연결 상태를 확인하고, 로봇의 현재 상태 데이터를 실시간으로 수신하며, `PIF-Vectors`, `Aux inputs`와 같은 제어 명령을 전송하여 로봇의 움직임을 제어하는 데 필요한 기능을 제공합니다.
+`XM10`의 핵심 가치중 하나는 `KIT H10` 로봇을 직접 설계한 알고리즘으로 제어하는 것입니다. 본 API는 KIT H10과의 연결 상태를 확인하고, 로봇의 현재 상태 데이터를 실시간으로 수신하며, `PIF-Vectors`와 같은 제어 명령을 전송하여 로봇의 움직임을 제어하는 데 필요한 기능을 제공합니다.
 `xm_api_data.h`에 정의된 **로봇 데이터 및 제어 API**에 대한 상세 레퍼런스입니다.
 XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 신경 쓰지 않고, 직관적인 전역 객체(`XM`)를 통해 로봇의 상태를 읽고 명령을 내릴 수 있도록 **파사드(Facade) 패턴**을 제공합니다.
 
@@ -13,7 +13,7 @@ XM10 펌웨어는 사용자가 복잡한 통신 프로토콜(CAN-FD, UART)을 �
 
 ## 📌 동작 원리 (Operating Principle)
 
-XM10의 제어 시스템은 엄격한 **IPO (Input-Process-Output)** 모델을 따르며, 이는 시스템 내부의 **`core_process`** 엔진에 의해 1ms(1kHz) 주기로 정확하게 수행됩니다.
+XM10의 제어 시스템은 엄격한 **IPO (Input-Process-Output)** 모델을 따르며, 이는 시스템이 1ms(1kHz) 주기로 정확하게 수행합니다.
 
 ### The IPO Cycle (1ms Loop)
 
@@ -37,7 +37,7 @@ XM10의 제어 시스템은 엄격한 **IPO (Input-Process-Output)** 모델을 �
 4.	**Streaming (CDC):**
 
       * Input Data, Process, Output Data가 처리된 후 Data Streaming을 수행합니다.
-      * PC와 USB로 연결되어 시리얼 포트로 `AGRB MON START`문자열을 XM10으로 전송하면 사용자 정의 데이터를 1ms마다 터미널로 전달합니다. `AGRB MON STOP`을 입력하면 전송을 중단합니다.
+      * 기본 설정에서는 PC 프로그램이 COM 포트를 열면 시스템이 Total Data(0x20)를 1ms마다 자동으로 보냅니다. (예전 방식인 `AGRB MON START` / `AGRB MON STOP` 문자열로도 시작·중단할 수 있습니다.) 전송되는 것은 PhAI 바이너리 패킷이라 터미널에서는 읽을 수 없고, PhAI Studio 나 `xm10` 도구로 받습니다.
 
 > **Note:** 사용자는 데이터를 수신(Receive)하거나 전송(Flush)하는 함수를 직접 호출할 필요가 없습니다. 오직 데이터를 읽고(Read), 설정(Set)하기만 하면 됩니다.
 > **Note:** 데이터를 전송할 때 복잡한 로직을 수행할 필요가 없습니다. 전송할 데이터 구조체 정의 및 데이터 전송 API 함수를 호출하기만 하면 됩니다.
@@ -180,7 +180,7 @@ typedef struct {
 } XmH10Data_t;
 ```
 
-강조 표시한 데이터는 현재 받고 있는 데이터 입니다. 추후 추가되거나 수정될 수 있습니다.
+강조 표시한 데이터는 현재 받고 있는 데이터 입니다.
 
 | Field Name | Type | Unit | Description |
 | :--- | :--- | :--- | :--- |
@@ -330,7 +330,7 @@ typedef struct {
     XmExtImuData_t  ext_imu;  // External UART IMU (Xsens MTi-630)
     XmImuHubData_t  imu_hub;  // IMU Hub 센서 (CAN-FD)
     XmEmgHubData_t  emg_hub;  // EMG Hub 센서 (CAN-FD)
-    XmFesHubData_t  fes_hub;  // FES Hub 자극 피드백 (CAN-FD)
+    XmFesHubData_t  fes_hub;  // FES Hub (현재 XM10 연결 미지원)
 } XmInput_t;
 ```
 ### `XmOutput_t`
@@ -377,7 +377,7 @@ typedef struct {
 ### `XM_IsCmConnected()`
 
 `제어 모듈(CM)`과의 통신 연결이 활성화(`Operational`) 상태인지 확인합니다.
-`제어 모듈(CM)`과 `XM10`간 연결은 내부 `Plug and Play` 백그라운드 태스크에 의해 수행되며, **PDO 데이터를 수신 받은 첫 시점부터 통신 연결을 활성화 상태**로 판단합니다.
+`제어 모듈(CM)`과 `XM10`간 연결은 시스템이 자동으로 관리하며, **CM 데이터를 처음 받은 시점부터 통신 연결을 활성화 상태**로 판단합니다.
 
 **Syntax**
 ```c
@@ -410,21 +410,21 @@ CM_NmtState_t XM_GetXMNmtState(void);
 
 | 항목 | 내용 |
 |------|------|
-| **설명** | CM과의 DOP V3 PnP(NMT) 상태를 반환합니다. |
-| **반환값** | `CM_NmtState_t` 열거형 — 현재 NMT 상태 |
+| **설명** | CM과의 연결 상태를 반환합니다. |
+| **반환값** | `CM_NmtState_t` 열거형 — 현재 연결 상태 |
 | **호출 위치** | `Control_Loop()` |
 
-**NMT 상태 값:**
+**연결 상태 값:**
 
 | 상태 | 값 | 설명 |
 |------|-----|------|
-| `CM_NMT_INITIALISING` | 0 | 부팅 중 (Boot-up 메시지 미수신) |
-| `CM_NMT_PRE_OPERATIONAL` | 1 | SDO 통신 가능, PDO 비활성 |
+| `CM_NMT_INITIALISING` | 0 | 부팅 중 (CM 의 시작 알림을 아직 받지 못함) |
+| `CM_NMT_PRE_OPERATIONAL` | 1 | 설정 메시지만 주고받음, 데이터 전송은 꺼짐 |
 | `CM_NMT_OPERATIONAL` | 2 | 모든 통신 활성 (정상 상태) |
 | `CM_NMT_STOPPED` | 3 | 통신 중단됨 |
 
 > **참고**: `XM_IsCmConnected()`는 내부적으로 `XM_GetXMNmtState() == CM_NMT_OPERATIONAL`을 확인합니다.
-> NMT 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 사용하세요.
+> 연결 상태에 따른 세밀한 분기가 필요한 경우 이 함수를 직접 사용하세요.
 
 ---
 
@@ -874,7 +874,7 @@ XM_SetVelocityLimit(SYS_NODE_ID_LH, 100.0f, -100.0f);
 #### 2. 외란 관측기 (Disturbance Observer)
 
 사용자가 가하는 힘이나 예상치 못한 외부 힘(외란)을 추정하고 보상하여, 더 부드럽고 안정적인 움직임을 만들어내는 `KIT H10`에 내장된 고급 제어 루틴입니다.
-**`DOB` 기능을 사용하기 위해서는 `KIT H10`의 구동기가 `DOB`기능에 대한 식별(`System Identification`)이 진행되어 모터드라이버의 `DOB` 식별 정보 기록 여부를 확인해야 합니다.(현재 `KIT H10`은 `DOB` 식별을 진행하지 않았음, 추후 변경 예정)**
+**`DOB` 기능을 사용하기 위해서는 `KIT H10`의 구동기가 `DOB`기능에 대한 식별(`System Identification`)이 진행되어 모터드라이버의 `DOB` 식별 정보 기록 여부를 확인해야 합니다.(현재 `KIT H10` 은 `DOB` 식별을 진행하지 않았습니다.)**
 
 **Syntax**
 ```c
@@ -923,9 +923,9 @@ XM_SetResistiveCompGain(SYS_NODE_ID_RH, strongResistance);
 사용자의 신체 정보(몸무게, 키, 분절 길이 등)를 `KIT H10`로 전송합니다. `KIT H10`은 이 정보를 바탕으로 실시간 동작 분석을 수행하며 더 정확하고 개인화된 보행 데이터 및 운동 역학 데이터를 계산하여 XM10으로 보내줍니다.
 **사용자가 직접 신체 정보를 측정하여 `KIT H10`으로 전송해야 합니다.**
 
-**`RxData_t` 구조체 중 신체 정보 기반 데이터:**
+**`XM.status.h10` 중 신체 정보 기반 데이터:**
 
-| PDO데이터 | 설명 | 단위 | 타입 |
+| 데이터 | 설명 | 단위 | 타입 |
 | :--- | :--- | :--- | :-- |
 | `leftKneeAngle` | **추정된** 왼쪽 무릎 각도 | degree | float |
 | `rightKneeAngle` | **추정된** 오른쪽 무릎 각도 | degree | float |
@@ -978,7 +978,7 @@ XM_SendUserBodyData(&bodyData[0]);
 ### `XM_SetAssistTorque`
 
 왼쪽과 오른쪽 다리의 보조 토크를 동시에 설정합니다.
-토크를 실제로 전송(`Output`)하는 것은 `Core Process`에서 내부적으로 IPO 모델에 따라 처리하고 있습니다.
+토크를 실제로 전송(`Output`)하는 것은 시스템이 IPO 모델에 따라 알아서 처리합니다.
 사용자는 알고리즘 계산을 통해 목표 토크를 해당 함수를 통해 설정하기만 하면 됩니다.
 
 **Syntax**
@@ -997,12 +997,12 @@ void XM_SetAssistTorque(float rh, float lh);
 **부호 · 단위 · 한계 (필독)**
   * **부호 규약**: **양수(+) = Flexion(굴곡) 방향 보조, 음수(−) = Extension(신전) 방향 보조** (각도 규약 `Extension < 0 < Flexion` 과 동일).
   * **단위 사슬**: 입력은 관절 토크[Nm]. 내부에서 모터 전류로 환산되어 구동됩니다 — `τ_joint[Nm] = Kt(0.085) × Gear(18.75) × I[A] ≈ 1.594 × I[A]`. 피드백 `XM.status.h10.*HipTorque`(단위 **A**)와 비교할 때 이 환산을 적용하세요.
-  * **하드 한계 (±10 Nm)**: 입력 토크는 XM10 내부 라이브러리(`CM_StageAuxTorque`, `libXM_Lib.a`)에서 **±10 Nm 로 클램프**된 뒤 CAN 으로 전송됩니다. 예제가 아닌 내부 코드라 사용자가 바꿀 수 없으며, 그 이상 입력해도 ±10 Nm 에서 포화됩니다. (모터드라이버단 추가 보호: 최대 전류 14A / 임피던스 입력 10A Saturation)
+  * **하드 한계 (±10 Nm)**: 입력 토크는 XM10 라이브러리 안에서 **±10 Nm 로 클램프**된 뒤 CAN 으로 전송됩니다. 예제가 아닌 라이브러리 내부 동작이라 사용자가 바꿀 수 없으며, 그 이상 입력해도 ±10 Nm 에서 포화됩니다. (모터드라이버단 추가 보호: 최대 전류 14A / 임피던스 입력 10A Saturation)
   * **보조 레벨 반영**: 슈트 보조 강도 다이얼(`XM.status.h10.h10AssistLevel`, 0~10)을 반영하려면 토크에 `h10AssistLevel / 10.0f` 를 곱하세요 — 레벨 0 이면 출력이 0 이 됩니다.
 
 **Operating Principle**
   * 입력된 값을 `XM.command` 구조체에 저장하고, `torque_updated` 플래그를 세팅합니다.
-  * 실제 전송은 현재 제어 주기의 끝(`_FlushAllOutputs`)에서 이루어집니다.
+  * 실제 전송은 현재 제어 주기의 끝에서 시스템이 수행합니다.
 
 **Example**
 ```c
@@ -1133,6 +1133,6 @@ void Active_Loop(void) {
 | `XM.status.h10.is_connected` 가 false | CAN-FD 케이블 헐겁거나 H10 본체 전원 OFF | KIT H10 24 V 입력 + 깊은 커넥터 삽입 |
 | `SetAssistTorque` 호출했는데 토크 0 | `XM_SetControlMode(XM_CTRL_CONTROL)` 미호출 | Active 진입 시 1회 모드 설정 필요 |
 | 토크 명령은 보내지는데 H10 안 움직임 | KIT H10 FW < v2.3.0 (XM v2.0.0 이상 비호환) | [kit-h10-firmware/](../kit-h10-firmware/) 가이드로 업데이트 |
-| 무릎 각도·전진 속도 등 추정 데이터가 항상 0 | `XM_SendUserBodyData()` 미호출 (Body Data 전제조건) | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5) Body Data 안내 참조 |
+| 무릎 각도·전진 속도 등 추정 데이터가 항상 0 | `XM_SendUserBodyData()` 미호출 (Body Data 전제조건) | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세) Body Data 안내 참조 |
 | IPO 사이클이 어긋남 / Tick 누락 | `Control_Loop` 안에서 blocking 호출 (osDelay 등) | `XM_GetTick()` + 논블로킹 패턴 사용 ([Ex.08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/)) |
 | `XM.command` 직접 쓰기 시 효과 없음 | `XM.command` 는 Staging 영역 — `XM_Set*` 함수가 dirty flag 설정 | 반드시 setter 함수 (`XM_SetAssistTorque` 등) 사용 |

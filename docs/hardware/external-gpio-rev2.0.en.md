@@ -29,11 +29,9 @@ Use the photo above to locate the external GPIO header (DIO 8 + ADC 4) on the Re
 
 **Electrical specifications**:
 - Input / Output: 3.3 V logic
-- Output current: <!-- Fill in from board spec -->
 - Internal pull-up / pull-down resistors: supported (select via `XM_SetPinMode`)
-- 5 V tolerance: <!-- Confirm from board spec before use -->
 
-> For connector placement and label differences compared to Rev 1.1, refer to the board photo (to be added by the user).
+> For differences from Rev 1.1, see [Board Revision Comparison](README.en.md#board-revision-comparison).
 
 ---
 
@@ -76,8 +74,6 @@ Switching DIO pins to ADC mode at runtime gives you up to 12 ADC channels. Call 
 
 Activate an external IMU (e.g., Xsens MTi series) with `XM_AttachXsensMTi630()`. On Rev 2.0, the IMU uses the dedicated USART2 port, so no external ADC pins are occupied.
 
-<!-- User: fill in the exact pins occupied when the IMU is active on Rev 2.0 — this may differ from Rev 1.1 -->
-
 > For activation details, see [External IO API — External IMU Control](../api-reference/04-external-io.md#35-외부-imu-제어)
 
 ---
@@ -90,18 +86,6 @@ Activate an external IMU (e.g., Xsens MTi series) with `XM_AttachXsensMTi630()`.
 | Cannot switch back to DIO after ADC mode | Reset the board or cycle the power. This is intentional safety behavior. |
 | `DigitalWrite` is ignored | The pin is currently in ADC mode. Use the ADC API to interact with it. |
 | High ADC noise | Use a short jumper wire, ensure a common GND, and add an external RC filter if needed. |
-
----
-
-## Differences from Rev 1.1
-
-<!-- User: fill in the physical differences between the two boards (connector location, pin order, additional interfaces, etc.) -->
-
-| Item | Rev 1.1 | Rev 2.0 |
-|------|---------|---------|
-| External GPIO connector location | (to be added) | (to be added) |
-| Pin order | (to be added) | (to be added) |
-| Additional external interfaces | — | (confirm and add) |
 
 ---
 
