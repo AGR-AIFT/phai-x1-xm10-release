@@ -2449,7 +2449,7 @@ If every user had to implement CAN communication, USB transmission, and motor co
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  │  refreshed                                                  │
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  │                                                            │
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  │  XM.status.h10.    XM_TSM_Run         XM_SetAssistTorque  │
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  │   leftHipAngle      → on_loop()        XM_SendUsbData     │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  │   leftHipAngle      → on_loop()       XM_SendUsbDataWithId │
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  │   rightHipAngle                                            │
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  │   isLeftFootContact                                        │
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  └────────────────────────────────────────────────────────────┘
@@ -2476,7 +2476,7 @@ If every user had to implement CAN communication, USB transmission, and motor co
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  ┌──────────────────────────────────────────────────────────────┐
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  │  Scheduler runs multiple tasks by priority, round-robin:    │
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  │                                                              │
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  │   • User task       → Control_Setup() once → Control_Loop() every 1 ms  │
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  │   • Control-loop task → Control_Setup() once → Control_Loop() every 1 ms  │
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  │   • CAN RX          → receives exoskeleton sensor data, updates XM.status │
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  │   • CAN TX          → sends motor commands                  │
 <a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  │   • USB task        → USB-CDC serial communication          │
@@ -2522,7 +2522,7 @@ If every user had to implement CAN communication, USB transmission, and motor co
 </tr>
 <tr>
 <td><strong>USB Serial (CDC)</strong></td>
-<td>XM10 → PC terminal / PhAI Studio</td>
+<td>XM10 → PC terminal (text) / <code>xm10</code> tool (user structs)</td>
 <td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code></td>
 </tr>
 </tbody>
@@ -2565,8 +2565,8 @@ If every user had to implement CAN communication, USB transmission, and motor co
 <td>Call <code>XM_SetControlMode(XM_CTRL_CONTROL)</code> once when entering Active</td>
 </tr>
 <tr>
-<td>Modified files in the XM library folders (IOIF, Devices, etc.)</td>
-<td>Library code is production firmware — arbitrary changes break the system</td>
+<td>Modified files in the XM library folders</td>
+<td>Library code is provided by the SDK — arbitrary changes break the system</td>
 <td>Always work inside <code>Control_Task/</code> only</td>
 </tr>
 <tr>

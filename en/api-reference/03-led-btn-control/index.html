@@ -2884,7 +2884,7 @@ The XM10 firmware lets you implement advanced input/output features — <strong>
 <h3 id="the-core-engine-xm_io_update">The Core Engine: <code>XM_IO_Update()</code><a class="headerlink" href="#the-core-engine-xm_io_update" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Role:</strong> This is the <strong>engine</strong> that calculates LED blink timing, analyzes button signals, removes noise (debouncing), and generates events.</li>
-<li><strong>Execution:</strong> Called automatically at a <strong>1 ms (1 kHz) interval</strong> by <code>core_process</code>. You do not need to call it yourself, but understanding its role is important.</li>
+<li><strong>Execution:</strong> Called automatically by the system at a <strong>1 ms (1 kHz) interval</strong>. You do not need to call it yourself, but understanding its role is important.</li>
 <li><strong>Flow:</strong><ol>
 <li>User calls <code>XM_SetLedEffect</code> → settings are stored.</li>
 <li><code>XM_IO_Update</code> runs periodically → toggles the LED ON/OFF as time passes.</li>
@@ -3138,12 +3138,12 @@ Each event is consumed once it is read — it is removed from the internal queue
 <h3 id="34-system-functions">3.4. System Functions<a class="headerlink" href="#34-system-functions" title="Permanent link">&para;</a></h3>
 <h4 id="xm_io_update"><code>XM_IO_Update</code><a class="headerlink" href="#xm_io_update" title="Permanent link">&para;</a></h4>
 <p><strong>[System-managed]</strong> The driving function that updates LED and button states.
-This must be called periodically inside the User Task's main loop (<code>Control_Loop</code> or inside <code>TSM_Run</code>) for <code>Blink</code> and <code>Long Press</code> to work correctly.</p>
+This must be called periodically from the control-loop task (Control_Loop) — in <code>Control_Loop</code> or inside <code>XM_TSM_Run</code> — for <code>Blink</code> and <code>Long Press</code> to work correctly.</p>
 <ul>
 <li><strong>Syntax</strong>
     <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_IO_Update</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div></li>
-<li><strong>Note</strong>: <code>core_process.c</code> calls this automatically during the <code>_FetchAllInputs</code> stage, so <strong>end users do not normally need to call it directly.</strong></li>
+<li><strong>Note</strong>: The system calls this automatically while it collects inputs, so <strong>end users do not normally need to call it directly.</strong></li>
 </ul>
 <hr />
 <h2 id="-common-mistakes">⚠️ Common Mistakes<a class="headerlink" href="#-common-mistakes" title="Permanent link">&para;</a></h2>
@@ -3158,8 +3158,8 @@ This must be called periodically inside the User Task's main loop (<code>Control
 <tbody>
 <tr>
 <td>LED blink mode is set but nothing happens</td>
-<td><code>XM_IO_Update</code> is not being called (User Task has stalled, or <code>XM_TSM_Run</code> is missing)</td>
-<td><code>core_process</code> calls it automatically — check that your user code is not stuck in an infinite loop</td>
+<td><code>XM_IO_Update</code> is not being called (the control-loop task (Control_Loop) has stalled, or <code>XM_TSM_Run</code> is missing)</td>
+<td>The system calls it automatically — check that your user code is not stuck in an infinite loop</td>
 </tr>
 <tr>
 <td><code>GetButtonEvent</code> returns the same event multiple times</td>

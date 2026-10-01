@@ -2443,7 +2443,6 @@
 <li>Updated the SDK's firmware library (<code>libXM_Lib.a</code>) and system code (<code>Core/</code>) to the latest version — fixing places where some system code had fallen behind the library. Every file in an SDK build is now on the same version.</li>
 <li>Fixed runtime behavior in control/logging examples (Ex.12 / 17 / 28 control, Ex.10 / 10c logging, etc.)</li>
 <li>Corrected <code>version.h</code> to the actual release version (<strong>2.3.0</strong>) — the version number had not been updated in the v2.2.1 / v2.2.2 patches, so the firmware kept reporting 2.2.0</li>
-<li>Verified every example builds: Rev 2.0 SDK 50 / 50 · Rev 1.1 SDK 47 / 47 with zero errors</li>
 </ul>
 <p><strong>Existing user code continues to work as-is.</strong> No changes to user code (<code>Control_Setup</code> / <code>Control_Loop</code>) or public API signatures.</p>
 <hr />
@@ -2468,7 +2467,7 @@
 </table>
 <p>Extracting the archive produces a single folder. That folder is both the STM32CubeIDE import root and the Claude Code entry directory.</p>
 <blockquote>
-<p>Download the ZIP that matches your board revision. If the board label is unclear, a quick visual check works: <strong>an RJ45 Ethernet port means Rev 2.0; no RJ45 means Rev 1.1</strong>. For a detailed comparison, see <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.0/docs/hardware/README.md#보드-리비전-비교">docs/hardware/README.md — Board Revision Comparison</a>.</p>
+<p>Download the ZIP that matches your board revision. If the board label is unclear, a quick visual check works: <strong>an RJ45 Ethernet port means Rev 2.0; no RJ45 means Rev 1.1</strong>. For a detailed comparison, see <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.0/docs/hardware/README.en.md#board-revision-comparison">docs/hardware/README.en.md — Board Revision Comparison</a>.</p>
 </blockquote>
 <h3 id="release-attachments">Release Attachments<a class="headerlink" href="#release-attachments" title="Permanent link">&para;</a></h3>
 <blockquote>
@@ -2530,23 +2529,21 @@
 </table>
 <hr />
 <h2 id="new-examples--two-sensor-hub-programs-rev-20-only">New Examples — Two Sensor-Hub Programs (Rev 2.0-only)<a class="headerlink" href="#new-examples--two-sensor-hub-programs-rev-20-only" title="Permanent link">&para;</a></h2>
-<p>XM10 Rev 2.0 connects to the IMU Hub / EMG Hub modules over FDCAN2. These two examples show that once you <strong>plug a hub into XM10 and connect it</strong>, data arrives automatically (plug-and-play), and then process/feed that data back on-device.</p>
+<p>XM10 Rev 2.0 connects to the IMU Hub / EMG Hub modules over CAN-FD. These two examples show that once you <strong>plug a hub into XM10 and connect it</strong>, data arrives automatically (plug-and-play), and then process/feed that data back on-device.</p>
 <ul>
-<li><strong>Ex.41 IMU Hub Dashboard</strong> ⭐⭐⭐ — Receives orientation (quaternions) from up to 6 channels of the IMU Hub Module and converts them to Euler angles (roll / pitch / yaw). Connection auto-detection (connected mask) + LED indication + 18-channel PhAI Studio streaming. An observation-only example with no motor, so you can safely explore posture data.</li>
-<li><strong>Ex.42 EMG Hub Biofeedback</strong> ⭐⭐⭐ — Receives muscle activation (envelope / MVC%) from the EMG Hub Module, performs MVC-normalization calibration (BTN), and provides LED / PhAI Studio biofeedback proportional to activation. No motor.</li>
+<li><strong>Ex.41 IMU Hub Dashboard</strong> ⭐⭐⭐ — Receives orientation (quaternions) from up to 6 channels of the IMU Hub Module and converts them to Euler angles (roll / pitch / yaw). Connection auto-detection + LED indication + 18-channel streaming over USB. An observation-only example with no motor, so you can safely explore posture data.</li>
+<li><strong>Ex.42 EMG Hub Biofeedback</strong> ⭐⭐⭐ — Receives muscle activation (envelope / MVC%) from the EMG Hub Module, performs MVC-normalization calibration (BTN), and provides LED and on-screen biofeedback on the PC proportional to activation. No motor.</li>
 </ul>
 <blockquote>
-<p><strong>The IMU Hub and EMG Hub Modules are research prototypes developed in-house by Angel Robotics.</strong> They are not yet commercial products and detailed specifications have not been published — for purchase and availability inquiries, please contact us via <a href="https://onephai.com/">onephai.com</a>.</p>
-<p>Sensor calibration and settings for the IMU / EMG Hub modules can also be adjusted from the dedicated diagnostic GUI (<strong>PhEEL Studio</strong>, coming soon). Both example READMEs include a placeholder for the companion screen.</p>
+<p>The IMU Hub and EMG Hub are modules under internal development. To use them, please contact us at https://huphailab.com/contact.</p>
 </blockquote>
 <hr />
 <h2 id="sdk-refresh--library-system-code-and-examples-on-one-version">SDK Refresh — Library, System Code, and Examples on One Version<a class="headerlink" href="#sdk-refresh--library-system-code-and-examples-on-one-version" title="Permanent link">&para;</a></h2>
 <p>The SDK ships the XM10 firmware core as a static library (<code>libXM_Lib.a</code>). This release brings the library, system code (<code>Core/</code>), headers, and examples onto the same v2.3.0 firmware.</p>
 <ul>
 <li><strong>Firmware library (<code>libXM_Lib.a</code>) updated</strong> — rebuilt from the v2.3.0 firmware.</li>
-<li><strong>System code (<code>Core/</code>) updated</strong> — interrupt priorities / fault handling / RTOS configuration that had fallen behind are now matched to the library.</li>
-<li><strong>Example sources updated</strong> — example <code>.c</code> files refreshed to the latest content (Rev 2.0 SDK 50 · Rev 1.1 SDK 47).</li>
-<li><strong>Final check</strong> — each SDK (Rev 2.0 / Rev 1.1) was rebuilt from scratch with 0 errors, verifying that no header, library, or system-code mismatch remains.</li>
+<li><strong>System code (<code>Core/</code>) updated</strong> — the parts that had fallen behind are now on the same version as the library.</li>
+<li><strong>Example sources updated</strong> — example <code>.c</code> files refreshed to the latest content.</li>
 </ul>
 <hr />
 <h2 id="example-runtime-fixes">Example Runtime Fixes<a class="headerlink" href="#example-runtime-fixes" title="Permanent link">&para;</a></h2>
@@ -2580,7 +2577,7 @@
 </tr>
 <tr>
 <td>Ex.41 / 42</td>
-<td><strong>Rev 2.0-only</strong> (FDCAN2 sensor hub · external-power API) — not included in the Rev 1.1 SDK</td>
+<td><strong>Rev 2.0-only</strong> (CAN-FD sensor hub · external-power API) — not included in the Rev 1.1 SDK</td>
 </tr>
 <tr>
 <td>KIT H10 firmware · contents files</td>
@@ -2601,8 +2598,8 @@
 <ul>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/v2.3.0/examples/41_IMU_Hub_Dashboard">Ex.41 IMU Hub Dashboard</a></li>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/v2.3.0/examples/42_EMG_Hub_Biofeedback">Ex.42 EMG Hub Biofeedback</a></li>
-<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.0/docs/hardware/README.md#보드-리비전-비교">Board Revision Comparison</a></li>
-<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.0/docs/release-notes/v2.2.2.md">v2.2.2 Release Notes</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.0/docs/hardware/README.en.md#board-revision-comparison">Board Revision Comparison</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.0/docs/release-notes/v2.2.2.en.md">v2.2.2 Release Notes</a></li>
 </ul>
 
 

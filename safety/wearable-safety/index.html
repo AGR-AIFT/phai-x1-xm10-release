@@ -2365,7 +2365,7 @@
 <h2 id="1-벤치-우선-착용-전-필수-검증">1. 벤치 우선 (착용 전 필수 검증)<a class="headerlink" href="#1-벤치-우선-착용-전-필수-검증" title="Permanent link">&para;</a></h2>
 <p>토크 출력을 끈 상태(<code>control_ON = 0</code> 또는 <code>XM_CTRL_MONITOR</code>)로 먼저 <strong>신호·방향·크기</strong>를 확인합니다.</p>
 <ol>
-<li>EMG 센서를 연결하고 PhAI Studio(또는 Live Expressions)로 <strong>raw / envelope</strong> 신호를 본다.</li>
+<li>EMG 센서를 연결하고 <a href="../../getting-started/04-pc-data-tool/"><code>xm10</code> 도구</a> (Ex.40 의 <code>0xF0</code> 채널 Raw/Env/Tau) 또는 Live Expressions 로 <strong>raw / envelope</strong> 신호를 본다.</li>
 <li>근육 이완 → 안정 캘리브(BTN1), 대표 수축 → 활성 캘리브(BTN2). <strong>순서 반드시 BTN1 → BTN2.</strong></li>
 <li>이완 시 envelope가 ~0, 수축 시 상승하는지 확인(노이즈가 크면 deadband 상향).</li>
 <li><strong>방향 확인</strong>: 의도한 근육 수축이 의도한 관절 방향(굴곡/신전)으로 매핑되는지 — 부호 규약은 <strong>양수(+) = Flexion(굴곡), 음수(−) = Extension(신전)</strong>.</li>
@@ -2443,7 +2443,7 @@
 <hr />
 <h2 id="6-착용-중-모니터링">6. 착용 중 모니터링<a class="headerlink" href="#6-착용-중-모니터링" title="Permanent link">&para;</a></h2>
 <ul>
-<li>PhAI Studio 로 <strong>envelope · 출력 토크 · 관절각</strong>을 실시간으로 보며 진행.</li>
+<li><code>xm10</code> 도구 하나로 <strong>envelope · 출력 토크</strong>(Ex.40 의 <code>0xF0</code> 탭)를 실시간으로 보며 진행하세요. 관절각은 같은 <code>xm10</code> 창의 <strong>Show 0x20 tab</strong>(5 Hz 표)에서 볼 수 있습니다. PC 프로그램은 한 번에 하나만 연결하세요.</li>
 <li>토크가 의도와 다르게 튀거나 이완 시 0 으로 안 떨어지면 <strong>즉시 슈트 STANDBY</strong>.</li>
 </ul>
 <hr />

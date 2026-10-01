@@ -786,17 +786,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#differences-from-rev-11" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Differences from Rev 1.1
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#see-also" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2334,17 +2323,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#differences-from-rev-11" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Differences from Rev 1.1
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#see-also" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2448,11 +2426,9 @@
 </table>
 <p><strong>Electrical specifications</strong>:
 - Input / Output: 3.3 V logic
-- Output current: <!-- Fill in from board spec -->
-- Internal pull-up / pull-down resistors: supported (select via <code>XM_SetPinMode</code>)
-- 5 V tolerance: <!-- Confirm from board spec before use --></p>
+- Internal pull-up / pull-down resistors: supported (select via <code>XM_SetPinMode</code>)</p>
 <blockquote>
-<p>For connector placement and label differences compared to Rev 1.1, refer to the board photo (to be added by the user).</p>
+<p>For differences from Rev 1.1, see <a href="../#board-revision-comparison">Board Revision Comparison</a>.</p>
 </blockquote>
 <hr />
 <h2 id="adc-4-pins-fixed">ADC 4 Pins (Fixed)<a class="headerlink" href="#adc-4-pins-fixed" title="Permanent link">&para;</a></h2>
@@ -2542,8 +2518,6 @@
 <hr />
 <h2 id="notes-on-using-an-external-imu">Notes on Using an External IMU<a class="headerlink" href="#notes-on-using-an-external-imu" title="Permanent link">&para;</a></h2>
 <p>Activate an external IMU (e.g., Xsens MTi series) with <code>XM_AttachXsensMTi630()</code>. On Rev 2.0, the IMU uses the dedicated USART2 port, so no external ADC pins are occupied.</p>
-<!-- User: fill in the exact pins occupied when the IMU is active on Rev 2.0 — this may differ from Rev 1.1 -->
-
 <blockquote>
 <p>For activation details, see <a href="../../api-reference/04-external-io/#35-외부-imu-제어">External IO API — External IMU Control</a></p>
 </blockquote>
@@ -2572,36 +2546,6 @@
 <tr>
 <td>High ADC noise</td>
 <td>Use a short jumper wire, ensure a common GND, and add an external RC filter if needed.</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="differences-from-rev-11">Differences from Rev 1.1<a class="headerlink" href="#differences-from-rev-11" title="Permanent link">&para;</a></h2>
-<!-- User: fill in the physical differences between the two boards (connector location, pin order, additional interfaces, etc.) -->
-
-<table>
-<thead>
-<tr>
-<th>Item</th>
-<th>Rev 1.1</th>
-<th>Rev 2.0</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>External GPIO connector location</td>
-<td>(to be added)</td>
-<td>(to be added)</td>
-</tr>
-<tr>
-<td>Pin order</td>
-<td>(to be added)</td>
-<td>(to be added)</td>
-</tr>
-<tr>
-<td>Additional external interfaces</td>
-<td>—</td>
-<td>(confirm and add)</td>
 </tr>
 </tbody>
 </table>

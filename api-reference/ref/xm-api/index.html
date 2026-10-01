@@ -2369,7 +2369,7 @@
 
 <h1 id="xm_apih--xm10-sdk-진입점-전체-api-통합-헤더"><code>xm_api.h</code> — XM10 SDK 진입점 (전체 API 통합 헤더)<a class="headerlink" href="#xm_apih--xm10-sdk-진입점-전체-api-통합-헤더" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>대상 헤더</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api.h"><code>XM_FW/XM_API/xm_api.h</code></a> (Rev2.0 기준 — Rev1.1 에도 동일 파일이 있으며 차이는 <a href="#2-이-헤더가-통합하는-api">§2</a>에서 다룹니다)
+<p><strong>대상 헤더</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api.h"><code>XM_FW/XM_API/xm_api.h</code></a> (Rev2.0 기준 — Rev1.1 에도 동일 파일이 있으며 차이는 <a href="#이-헤더가-통합하는-api">§2</a>에서 다룹니다)
 <strong>관련 개념 문서</strong>: <a href="../../">API 참고서 전체 인덱스</a> — 01~09 전 항목이 이 헤더가 통합하는 하위 API 입니다
 <strong>관련 예제</strong>: 사실상 모든 예제 — 저장소 예제 중 <code>xm_api.h</code> 를 include 하지 않는 것이 거의 없습니다. <code>XM_GetTick()</code> 을 직접 쓰는 대표 예제는 <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/">00_Quick_Start</a></p>
 </blockquote>
@@ -2497,7 +2497,7 @@
 </tr>
 </tbody>
 </table>
-<p>⚠️ <strong>호출 컨텍스트</strong>: 헤더 주석에는 별도의 태스크/ISR 제약이 명시되어 있지 않습니다. <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준으로 사용하는 것을 권장합니다 — SDK 예제는 모두 이 두 함수 안에서만 호출합니다.</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 에서 호출하세요. ISR 에서는 호출하지 마세요 — SDK 예제는 모두 이 두 함수 안에서만 호출합니다.</p>
 <p><strong>예제</strong> — rollover에 안전한 경과시간 계산 (<a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/">Ex.00 Quick Start</a> 패턴):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">s_boot_timer</span><span class="p">;</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>

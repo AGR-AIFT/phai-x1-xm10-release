@@ -786,17 +786,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#rev-11-과-다른-점" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Rev 1.1 과 다른 점
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#관련" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2334,17 +2323,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#rev-11-과-다른-점" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Rev 1.1 과 다른 점
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#관련" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2448,11 +2426,9 @@
 </table>
 <p><strong>전기 사양</strong>:
 - 입력 / 출력: 3.3 V 로직
-- 출력 전류: <!-- 사용자가 보드 사양 채움 -->
-- 내부 풀업·풀다운 저항: 지원 (<code>XM_SetPinMode</code> 로 선택)
-- 5 V 호환: <!-- 사용자가 보드 사양 확인 후 채움 --></p>
+- 내부 풀업·풀다운 저항: 지원 (<code>XM_SetPinMode</code> 로 선택)</p>
 <blockquote>
-<p>Rev 1.1 과의 커넥터 위치 / 라벨 차이는 보드 외관 사진 참조 (사용자가 추가 예정).</p>
+<p>Rev 1.1 과의 차이는 <a href="../#보드-리비전-비교">보드 리비전 비교</a> 를 보세요.</p>
 </blockquote>
 <hr />
 <h2 id="adc-4-핀-고정">ADC 4 핀 (고정)<a class="headerlink" href="#adc-4-핀-고정" title="Permanent link">&para;</a></h2>
@@ -2542,8 +2518,6 @@
 <hr />
 <h2 id="외부-imu-사용-시-주의">외부 IMU 사용 시 주의<a class="headerlink" href="#외부-imu-사용-시-주의" title="Permanent link">&para;</a></h2>
 <p>외부 IMU (XSENS MTi 등) 를 <code>XM_AttachXsensMTi630()</code> 로 활성화합니다. Rev 2.0 은 전용 USART2 포트를 사용하므로 외부 ADC 핀 점유가 없습니다.</p>
-<!-- 사용자가 Rev 2.0 의 IMU 활성화 시 점유 핀 정확히 채움 (Rev 1.1 과 다를 수 있음) -->
-
 <blockquote>
 <p>자세한 활성화 방법: <a href="../../api-reference/04-external-io/#35-외부-imu-제어">외부 IO API — 외부 IMU 제어</a></p>
 </blockquote>
@@ -2572,36 +2546,6 @@
 <tr>
 <td>ADC 노이즈가 큼</td>
 <td>짧은 점퍼 + 공통 GND, 필요 시 외부 RC 필터</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="rev-11-과-다른-점">Rev 1.1 과 다른 점<a class="headerlink" href="#rev-11-과-다른-점" title="Permanent link">&para;</a></h2>
-<!-- 사용자가 채울 부분 — 두 보드의 물리적 차이 (커넥터 위치, 핀 배치, 추가 인터페이스 등) -->
-
-<table>
-<thead>
-<tr>
-<th>항목</th>
-<th>Rev 1.1</th>
-<th>Rev 2.0</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>외부 GPIO 커넥터 위치</td>
-<td>(사용자 추가)</td>
-<td>(사용자 추가)</td>
-</tr>
-<tr>
-<td>핀 배치 순서</td>
-<td>(사용자 추가)</td>
-<td>(사용자 추가)</td>
-</tr>
-<tr>
-<td>추가 외부 인터페이스</td>
-<td>—</td>
-<td>(사용자 확인 후 추가)</td>
 </tr>
 </tbody>
 </table>

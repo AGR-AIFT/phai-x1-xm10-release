@@ -2144,67 +2144,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#roadmap" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Roadmap
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Roadmap">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sensor-hub-integration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sensor Hub Integration
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#communication-protocol-deep-dive" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Communication Protocol Deep Dive
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#advanced-projects" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Advanced Projects
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#python-tooling-deep-dive" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Python Tooling Deep Dive
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#recommended-self-directed-learning-paths" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2236,10 +2175,10 @@
 
 
 <h1 id="advanced-topics">Advanced Topics<a class="headerlink" href="#advanced-topics" title="Permanent link">&para;</a></h1>
-<p>A starting point for self-directed learning. This page gives you a bird's-eye view of which examples to tackle first based on your area of interest, and which topics are still on the roadmap. Skim Examples 16, 18, and 19 along with the API Reference before diving in — that will give you the right mental model.</p>
+<p>A starting point for self-directed learning. This page gives you a bird's-eye view of which examples to tackle first based on your area of interest. Skim Examples 16, 18, and 19 along with the API Reference before diving in — that will give you the right mental model.</p>
 <hr />
 <h2 id="jump-right-in-with-examples">Jump Right In with Examples<a class="headerlink" href="#jump-right-in-with-examples" title="Permanent link">&para;</a></h2>
-<p>The advanced topics below already have hands-on examples ready to run in the <code>examples/</code> folder.</p>
+<p>The advanced topics below have hands-on examples ready to run in the <code>examples/</code> folder.</p>
 <table>
 <thead>
 <tr>
@@ -2278,109 +2217,6 @@
 <td style="text-align: left;"><strong>Memory Patterns</strong></td>
 <td style="text-align: left;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/19_Memory_Aware_Design/">Ex.19 — Memory Aware Design</a></td>
 <td style="text-align: left;">Ring buffer, pool allocator, moving average</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="roadmap">Roadmap<a class="headerlink" href="#roadmap" title="Permanent link">&para;</a></h2>
-<h3 id="sensor-hub-integration">Sensor Hub Integration<a class="headerlink" href="#sensor-hub-integration" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Topic</th>
-<th style="text-align: left;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">Advanced DIO ↔ ADC Dynamic Switching</td>
-<td style="text-align: left;">Internal mechanics and advanced patterns for runtime pin-mode switching</td>
-</tr>
-<tr>
-<td style="text-align: left;">Custom Sensor Hub Development</td>
-<td style="text-align: left;">Designing and integrating a user-defined CAN-FD sensor hub module</td>
-</tr>
-<tr>
-<td style="text-align: left;">IMU Hub Module Usage</td>
-<td style="text-align: left;">IMU Hub Module data structures, calibration, and filtering</td>
-</tr>
-</tbody>
-</table>
-<h3 id="communication-protocol-deep-dive">Communication Protocol Deep Dive<a class="headerlink" href="#communication-protocol-deep-dive" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Topic</th>
-<th style="text-align: left;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">USB Serial Protocol Specification</td>
-<td style="text-align: left;">Packet header (SOF, CRC8, STATUS) and custom payload structure</td>
-</tr>
-<tr>
-<td style="text-align: left;">CAN-FD Data Objects</td>
-<td style="text-align: left;">Standard data exchange rules between KIT H10 and XM10</td>
-</tr>
-<tr>
-<td style="text-align: left;">Module Auto-Discovery</td>
-<td style="text-align: left;">Automatic sensor hub / module detection and configuration flow</td>
-</tr>
-</tbody>
-</table>
-<h3 id="advanced-projects">Advanced Projects<a class="headerlink" href="#advanced-projects" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Topic</th>
-<th style="text-align: left;">Description</th>
-<th style="text-align: center;">Status</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">TinyML on STM32</td>
-<td style="text-align: left;">Lightweight AI model training and inference pipeline on STM32H7</td>
-<td style="text-align: center;">✅ <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/16_TinyAI_Sensor_Fusion/">Ex.16</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">Paper-Based Gait Control</td>
-<td style="text-align: left;">Inverted-pendulum model gait assist algorithm</td>
-<td style="text-align: center;">✅ <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/15_Inverted_Pendulum_Control/">Ex.15</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">Reinforcement Learning Control</td>
-<td style="text-align: left;">RL pipeline integrating Jetson series with XM10</td>
-<td style="text-align: center;">Roadmap</td>
-</tr>
-<tr>
-<td style="text-align: left;">AI Training Data Pipeline</td>
-<td style="text-align: left;">Board data collection → conversion → PyTorch training → deployment</td>
-<td style="text-align: center;">✅ <a href="ai-data-pipeline/">ai-data-pipeline.md</a></td>
-</tr>
-</tbody>
-</table>
-<h3 id="python-tooling-deep-dive">Python Tooling Deep Dive<a class="headerlink" href="#python-tooling-deep-dive" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Topic</th>
-<th style="text-align: left;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">CDC Receiver Customization</td>
-<td style="text-align: left;">Configuring custom sensor data visualization</td>
-</tr>
-<tr>
-<td style="text-align: left;">USB-CDC Stream Channel Design</td>
-<td style="text-align: left;">Designing efficient user-defined data structures</td>
-</tr>
-<tr>
-<td style="text-align: left;">Data Post-Processing Pipeline</td>
-<td style="text-align: left;">Analysis workflow using Python + MATLAB</td>
 </tr>
 </tbody>
 </table>

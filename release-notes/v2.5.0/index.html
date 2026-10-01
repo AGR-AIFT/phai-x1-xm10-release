@@ -2497,7 +2497,6 @@
 <ul>
 <li><strong>USB 메모리 저장 기능을 뺐습니다</strong> — 저장 속도가 느려서 데이터가 중간중간 조용히 빠질 수 있었기 때문입니다(아래 쉬운 설명 참고).</li>
 <li><strong>데이터는 이제 USB 케이블로 실시간 전송</strong> — <strong>PhAI Studio</strong> 로 그래프를 보면서 바로 CSV 로 저장하면 됩니다. 더 빠르고, 데이터가 빠지지 않습니다.</li>
-<li><strong>앞으로</strong> — 다음 HW 리비전에서는 <strong>SD 카드</strong>를 달아, 보드에 직접(모바일) 저장하는 기능을 새로 넣을 예정입니다.</li>
 <li><strong>예제 정리</strong> — USB 메모리 저장 전용 예제 5 개를 뺐습니다. 데이터 수집은 CDC 예제(Ex.07~09)로 배웁니다.</li>
 </ul>
 <hr />
@@ -2515,7 +2514,8 @@
 </ol>
 <p>배우는 순서는 <strong>Ex.07 → 08 → 09</strong> (USB 시리얼 → 센서값 출력 → 고속 스트리밍) 예제를 따라가면 됩니다.</p>
 <blockquote>
-<p><strong>온보드(보드에 직접) 저장은 지금은 없습니다.</strong> 위에서 말한 대로, 다음 HW 리비전에서 SD 카드로 다시 지원할 예정입니다.</p>
+<p>PhAI Studio 는 아직 개발 중이라, 직접 정의한 데이터 구조체(커스텀 구조체)는 우선 <code>xm10</code> 도구로 보고 저장하세요. (<a href="../../getting-started/04-pc-data-tool/">PC 데이터 도구 안내</a>)</p>
+<p><strong>온보드(보드에 직접) 저장은 지원하지 않습니다.</strong></p>
 </blockquote>
 <hr />
 <h2 id="무엇이-바뀌었나">무엇이 바뀌었나<a class="headerlink" href="#무엇이-바뀌었나" title="Permanent link">&para;</a></h2>
@@ -2611,7 +2611,7 @@
 </tr>
 <tr>
 <td>온보드(SD 카드) 저장</td>
-<td><strong>향후 HW 리비전에서 지원 예정</strong></td>
+<td><strong>지원하지 않음</strong></td>
 </tr>
 <tr>
 <td>KIT H10 펌웨어·컨텐츠 파일</td>

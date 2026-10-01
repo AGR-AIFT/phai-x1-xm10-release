@@ -2702,7 +2702,7 @@
 <td>버튼의 최신 이벤트 조회 (Read-Clear)</td>
 </tr>
 <tr>
-<td><a href="#xm_setchannelledrgb"><code>XM_SetChannelLedRGB</code></a> 🟢 Rev 2.0 전용</td>
+<td><a href="#xm_setchannelledrgb--rev-20-전용"><code>XM_SetChannelLedRGB</code></a> 🟢 Rev 2.0 전용</td>
 <td>채널 RGB LED 색상 직접 설정</td>
 </tr>
 <tr>
@@ -2778,7 +2778,7 @@
 </tbody>
 </table>
 <p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
-<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준. 설정 직후 효과가 바로 보이지 않을 수 있으며, <code>XM_IO_Update()</code>가 주기적으로 호출되고 있어야 반영됩니다 (User Task 안에서 자동 호출되므로 일반적으로 별도 조치 불필요).</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준. 설정 직후 효과가 바로 보이지 않을 수 있으며, <code>XM_IO_Update()</code>가 주기적으로 호출되고 있어야 반영됩니다 (제어 루프 task (Control_Loop) 안에서 자동 호출되므로 일반적으로 별도 조치 불필요).</p>
 <p><strong>예제</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">XM_SetLedEffect</span><span class="p">(</span><span class="n">XM_LED_2</span><span class="p">,</span><span class="w"> </span><span class="n">XM_LED_BLINK</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">);</span><span class="w">       </span><span class="c1">// 0.5초 간격 깜빡임</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">XM_SetLedEffect</span><span class="p">(</span><span class="n">XM_LED_3</span><span class="p">,</span><span class="w"> </span><span class="n">XM_LED_HEARTBEAT</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span><span class="w">  </span><span class="c1">// 1초 주기 심장박동</span>
@@ -2902,7 +2902,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">XM_SetChannelLedRGB</span><span class="p">(</span><span class="n">XM_CH_LED_IMU</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// IMU 채널 LED를 빨간색으로</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">XM_SetChannelLedRGB</span><span class="p">(</span><span class="n">XM_CH_LED_IMU</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">    </span><span class="c1">// r=g=b=0 → 시스템 자동 제어로 복구</span>
 </code></pre></div>
-<p><strong>참고</strong>: <a href="#xmchannelled_t"><code>XmChannelLed_t</code></a> 채널 목록. <code>r=0,g=0,b=0</code> 으로 호출하면 시스템 자동 상태 표시로 복구됩니다.</p>
+<p><strong>참고</strong>: <a href="#xmchannelled_t--rev-20-전용"><code>XmChannelLed_t</code></a> 채널 목록. <code>r=0,g=0,b=0</code> 으로 호출하면 시스템 자동 상태 표시로 복구됩니다.</p>
 <hr />
 <h3 id="xm_io_update"><code>XM_IO_Update</code><a class="headerlink" href="#xm_io_update" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_IO_Update</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
@@ -2910,9 +2910,9 @@
 <p>LED 깜빡임 타이밍 계산과 버튼 디바운싱/이벤트 판정을 수행하는 내부 엔진 구동 함수입니다.</p>
 <p><strong>파라미터</strong>: 없음</p>
 <p><strong>반환값</strong>: 없음 (<code>void</code>)</p>
-<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준. <code>core_process</code> 가 입력 수집 단계에서 1 ms(1 kHz) 주기로 자동 호출하므로, <strong>일반적으로 사용자가 직접 호출할 필요는 없습니다.</strong> 다만 이 함수가 주기적으로 실행되지 않으면(예: User Task가 무한 루프에 빠짐) Blink/Heartbeat/Oneshot 효과와 버튼 이벤트가 전혀 갱신되지 않습니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준. 시스템이 입력 수집 단계에서 1 ms(1 kHz) 주기로 자동 호출하므로, <strong>일반적으로 사용자가 직접 호출할 필요는 없습니다.</strong> 다만 이 함수가 주기적으로 실행되지 않으면(예: 제어 루프 task (Control_Loop) 가 무한 루프에 빠짐) Blink/Heartbeat/Oneshot 효과와 버튼 이벤트가 전혀 갱신되지 않습니다.</p>
 <p><strong>예제</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// 일반적으로 직접 호출할 필요 없음 — core_process가 자동 호출</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// 일반적으로 직접 호출할 필요 없음 — 시스템이 자동 호출</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1">// 참고용: 개념상의 호출 위치</span>
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
 <a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="p">{</span>

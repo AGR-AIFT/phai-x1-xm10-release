@@ -2649,13 +2649,13 @@
 <strong>Related concept docs</strong>: <a href="../../05-usb-connectivity/">05. USB Serial</a>
 <strong>Related examples</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/">00_Quick_Start</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/07_CDC_Basic_Print/">07_CDC_Basic_Print</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/">08_CDC_Sensor_Print</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/">09_CDC_Stream</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/">18_Debug_Monitor</a></p>
 </blockquote>
-<p>This header defines the <strong>real-time PC communication (CDC)</strong> domain. You exchange text/binary data with a PC client such as PhAI Studio or PuTTY, and it works via registration-based automation (register a source in Setup → the System transmits it automatically on a periodic basis). Starting with Rev2.0, a host-profile API (<code>XM_USB_SetHostProfile</code>) has also been added that lets you <strong>choose whether a single USB-CDC cable is used for PhAI Studio real-time streaming or a plain terminal</strong>. (Production-inspection GUI support is handled automatically inside the board, so it is not a user option.)</p>
+<p>This header defines the <strong>real-time PC communication (CDC)</strong> domain. You exchange text/binary data with a PC client such as PhAI Studio or PuTTY: the System sends Total Data (0x20) automatically, and you send additional channels with <code>XM_SendUsbDataWithId()</code>. Starting with Rev2.0, a host-profile API (<code>XM_USB_SetHostProfile</code>) has also been added that lets you <strong>choose whether a single USB-CDC cable is used for PhAI Studio real-time streaming or a plain terminal</strong>.</p>
 <blockquote>
-<p><strong>USB memory (MSC) file logging was removed in v2.5.0.</strong> Data capture now uses USB-CDC real-time streaming — PhAI Studio, or the <code>xm10</code> tool in the repo (graphs + lossless <code>.xmlog</code> recording + CSV export, <a href="../../../getting-started/04-pc-data-tool/">guide</a>). On-board storage (SD card) is planned for a future HW revision.</p>
+<p><strong>USB memory (MSC) file logging was removed in v2.5.0.</strong> Data capture now uses USB-CDC real-time streaming — PhAI Studio, or the <code>xm10</code> tool in the repo (graphs + lossless <code>.xmlog</code> recording + CSV export, <a href="../../../getting-started/04-pc-data-tool/">guide</a>). PhAI Studio shows Total Data (0x20). PhAI Studio is still under development, so for now use the <code>xm10</code> tool to view and save your own (custom) data structs (0xF0–0xFE). On-board storage (SD card) is not supported at present.</p>
 </blockquote>
 <hr />
 <h2 id="when-to-use-it">When to use it<a class="headerlink" href="#when-to-use-it" title="Permanent link">&para;</a></h2>
-<p>Use this API when you want to exchange real-time data with a PC over a serial connection. For the registration-based automation principle (register a source in Setup → the System processes it automatically on a periodic basis) and the big picture — common mistakes, example mapping — we recommend reading <a href="../../05-usb-connectivity/">05. USB Serial</a> first. This page only covers the detailed <strong>signatures/parameters of every function and type</strong> declared in the header, and it also includes the new Rev2.0 <strong>USB-CDC host-profile API</strong>.</p>
+<p>Use this API when you want to exchange real-time data with a PC over a serial connection. For how the automatic Total Data (0x20) stream and the extra-channel path (<code>XM_SendUsbDataWithId</code>) work, and the big picture — common mistakes, example mapping — we recommend reading <a href="../../05-usb-connectivity/">05. USB Serial</a> first. This page only covers the detailed <strong>signatures/parameters of every function and type</strong> declared in the header, and it also includes the new Rev2.0 <strong>USB-CDC host-profile API</strong>.</p>
 <hr />
 <h2 id="function-list">Function list<a class="headerlink" href="#function-list" title="Permanent link">&para;</a></h2>
 <p><strong>Data Source Registration</strong></p>
@@ -2684,7 +2684,7 @@
 <tbody>
 <tr>
 <td><a href="#xm_isusbstreamconnected"><code>XM_IsUsbStreamConnected</code></a></td>
-<td>Whether a CDC virtual serial port connection to the PC exists</td>
+<td>Whether the USB device (CDC) is ready</td>
 </tr>
 <tr>
 <td><a href="#xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code></a></td>
@@ -2706,7 +2706,7 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="#xm_usb_sethostprofile"><code>XM_USB_SetHostProfile</code></a> 🟢</td>
+<td><a href="#xm_usb_sethostprofile--rev-20-only"><code>XM_USB_SetHostProfile</code></a> 🟢</td>
 <td>Selects the USB-CDC host profile (PhAI Studio / terminal)</td>
 </tr>
 </tbody>
@@ -2795,16 +2795,16 @@
 <h3 id="xm_isusbstreamconnected"><code>XM_IsUsbStreamConnected</code><a class="headerlink" href="#xm_isusbstreamconnected" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbStreamConnected</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
-<p>Checks whether a PC is connected to the USB virtual serial port (CDC).</p>
+<p>Checks whether the USB device (CDC) is ready: <code>true</code> once the cable is plugged in and USB initialization has finished — regardless of whether a PC program has opened the COM port. To check that the port is open and streaming, use <a href="#xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code></a> (on Rev2.0 with the <code>XM_USB_HOST_TERMINAL</code> profile, <code>XM_IsUsbStreamingActive()</code> stays <code>false</code> even when a terminal has the port open, while <code>XM_IsUsbStreamConnected()</code> stays <code>true</code>).</p>
 <p><strong>Parameters</strong>: none</p>
-<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> if connected</p>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> once the USB device is ready (also while the port is closed)</p>
 <p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context.</p>
 <p><strong>See also</strong>: <a href="#xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code></a></p>
 <hr />
 <h3 id="xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code><a class="headerlink" href="#xm_isusbstreamingactive" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbStreamingActive</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
-<p>Checks whether streaming is active. In Auto-Stream mode this automatically becomes <code>true</code> when USB connects; in Legacy mode it becomes <code>true</code> when <code>"AGRB MON START"</code> is received.</p>
+<p>Checks whether streaming is active. In Auto-Stream mode this automatically becomes <code>true</code> when a PC program opens the COM port — plugging in the cable alone is not enough; in Legacy mode it becomes <code>true</code> when <code>"AGRB MON START"</code> is received.</p>
 <p><strong>Parameters</strong>: none</p>
 <p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: streaming active (data being sent), <code>false</code>: idle</p>
 <p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context.</p>
@@ -2813,7 +2813,7 @@
 <h3 id="xm_setusbautostream"><code>XM_SetUsbAutoStream</code><a class="headerlink" href="#xm_setusbautostream" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbAutoStream</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">enabled</span><span class="p">);</span>
 </code></pre></div>
-<p>Sets Auto-Stream mode. Default is ON — streaming starts automatically when USB connects (PhAI Studio's default behavior).</p>
+<p>Sets Auto-Stream mode. Default is ON — streaming starts automatically when a PC program opens the COM port (on Rev2.0, only with the default <code>XM_USB_HOST_PHAI_STUDIO</code> profile).</p>
 <p><strong>Parameters</strong></p>
 <table>
 <thead>
@@ -2827,7 +2827,7 @@
 <tr>
 <td><code>enabled</code></td>
 <td><code>bool</code></td>
-<td><code>true</code>: automatic streaming on USB connect (default). <code>false</code>: wait for the <code>"AGRB MON START"</code> command (Legacy Python compatibility)</td>
+<td><code>true</code>: automatic streaming when the COM port is opened (default). <code>false</code>: wait for the <code>"AGRB MON START"</code> command (Legacy Python compatibility)</td>
 </tr>
 </tbody>
 </table>
@@ -2835,14 +2835,15 @@
 <p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> context.</p>
 <p><strong>See also</strong>: <a href="#xm_isusbstreamingactive"><code>XM_IsUsbStreamingActive</code></a></p>
 <hr />
+<p><a id="xm_usb_sethostprofile"></a></p>
 <h3 id="xm_usb_sethostprofile--rev-20-only"><code>XM_USB_SetHostProfile</code> 🟢 Rev 2.0 only<a class="headerlink" href="#xm_usb_sethostprofile--rev-20-only" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_USB_SetHostProfile</span><span class="p">(</span><span class="n">XM_USB_HostProfile_e</span><span class="w"> </span><span class="n">profile</span><span class="p">);</span>
 </code></pre></div>
 <blockquote>
-<p>🟢 <strong>Rev 2.0 only</strong> — This function and the <a href="#xm_usb_hostprofile_e"><code>XM_USB_HostProfile_e</code></a> type itself do not exist at all in the Rev1.1 header.</p>
+<p>🟢 <strong>Rev 2.0 only</strong> — This function and the <a href="#xm_usb_hostprofile_e--rev-20-only"><code>XM_USB_HostProfile_e</code></a> type itself do not exist at all in the Rev1.1 header.</p>
 </blockquote>
 <p>Specifies the kind of PC app attached to this board's USB-CDC cable. <strong>If never called, the default is <code>XM_USB_HOST_PHAI_STUDIO</code></strong>, so leaving the profile untouched keeps the existing PhAI Studio real-time streaming behavior unchanged.</p>
-<p>To use a plain serial terminal / custom program (Tera Term · VS Code Serial Monitor · your own Python GUI, etc.) with <strong>clean text / custom IO only</strong>, call <code>XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL)</code> once in <code>Control_Setup()</code>. The 1 kHz Total Data auto-pump is turned off, and this setting <strong>persists across DTR re-toggle / cable reconnect</strong>.</p>
+<p>To use a plain serial terminal / custom program (Tera Term · VS Code Serial Monitor · your own Python GUI, etc.) with <strong>clean text / custom IO only</strong>, call <code>XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL)</code> once in <code>Control_Setup()</code>. Automatic Total Data and channel-name sending are turned off, and this setting <strong>is kept even if you re-plug the cable</strong>. Do not set it when you receive with the <code>xm10</code> tool or PhAI Studio (keep the default).</p>
 <p><strong>Parameters</strong></p>
 <table>
 <thead>
@@ -2855,7 +2856,7 @@
 <tbody>
 <tr>
 <td><code>profile</code></td>
-<td><a href="#xm_usb_hostprofile_e"><code>XM_USB_HostProfile_e</code></a></td>
+<td><a href="#xm_usb_hostprofile_e--rev-20-only"><code>XM_USB_HostProfile_e</code></a></td>
 <td><code>XM_USB_HOST_PHAI_STUDIO</code> (default) or <code>XM_USB_HOST_TERMINAL</code></td>
 </tr>
 </tbody>
@@ -2868,10 +2869,7 @@
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="n">XM_USB_SetHostProfile</span><span class="p">(</span><span class="n">XM_USB_HOST_TERMINAL</span><span class="p">);</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">}</span>
 </code></pre></div>
-<blockquote>
-<p>The production-inspection (PRODUCTION) behavior is entered/exited automatically inside the board on receiving the first valid DOP frame, and is not a user option. Setting <code>XM_USB_HOST_TERMINAL</code> disables that automatic entry so it does not interfere with your terminal output.</p>
-</blockquote>
-<p><strong>See also</strong>: <a href="#xm_usb_hostprofile_e"><code>XM_USB_HostProfile_e</code></a>, <a href="../../05-usb-connectivity/">05. USB Serial</a></p>
+<p><strong>See also</strong>: <a href="#xm_usb_hostprofile_e--rev-20-only"><code>XM_USB_HostProfile_e</code></a>, <a href="../../05-usb-connectivity/">05. USB Serial</a></p>
 <hr />
 <h3 id="xm_sendusbdata"><code>XM_SendUsbData</code><a class="headerlink" href="#xm_sendusbdata" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbData</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
@@ -2879,7 +2877,7 @@
 <blockquote>
 <p>⚠️ <strong>Deprecated</strong> — Replaced by <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a>. Specify the Module ID explicitly.</p>
 </blockquote>
-<p>Sends data over USB CDC, automatically wrapped in a PhAI packet (SOF + LEN + SEQ_ID + MODULE_ID + CRC16).</p>
+<p>Sends data over USB CDC, automatically wrapped in a PhAI packet (binary).</p>
 <p><strong>Parameters</strong></p>
 <table>
 <thead>
@@ -2902,8 +2900,8 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> on successful send, <code>false</code> if the buffer is full or not connected</p>
-<p><strong>⚠️ Call context</strong>: Safe to call within the 2 ms cycle of <code>Control_Loop()</code> (non-blocking).</p>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: queued in the transmit buffer (says nothing about whether the PC received it), <code>false</code>: buffer full, USB not ready, or invalid arguments (NULL pointer, length 0, or more than 1020 bytes)</p>
+<p><strong>⚠️ Call context</strong>: Safe to call within the 1 ms cycle of <code>Control_Loop()</code> (non-blocking).</p>
 <p><strong>See also</strong>: <a href="#xm_sendusbdatawithid"><code>XM_SendUsbDataWithId</code></a></p>
 <hr />
 <h3 id="xm_setusbstreammoduleid"><code>XM_SetUsbStreamModuleId</code><a class="headerlink" href="#xm_setusbstreammoduleid" title="Permanent link">&para;</a></h3>
@@ -2926,7 +2924,7 @@
 <tr>
 <td><code>module_id</code></td>
 <td><code>uint8_t</code></td>
-<td>Module ID (default <code>0x10</code> = COMBINED). See the <code>PHAI_MODULE_*</code> macros in <code>phai_packet_builder.h</code></td>
+<td>Module ID (default <code>0x10</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -2936,7 +2934,7 @@
 <h3 id="xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code><a class="headerlink" href="#xm_setusbcustommeta" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">json_str</span><span class="p">);</span>
 </code></pre></div>
-<p>Registers metadata (channel names/units, etc.) for the User Custom channel. Automatically sent with Module ID <code>0xEF</code> when USB connects, so channel names are displayed in PhAI Studio.</p>
+<p>Registers metadata (channel names/units, etc.) for the User Custom channel. Channel names arrive once when you connect; if they are missing, re-plug the USB cable and connect again. The <code>xm10</code> tool uses the names for graph titles and CSV columns (on Rev2.0, only with the default <code>XM_USB_HOST_PHAI_STUDIO</code> profile).</p>
 <p><strong>Parameters</strong></p>
 <table>
 <thead>
@@ -2955,7 +2953,7 @@
 <tr>
 <td><code>json_str</code></td>
 <td><code>const char*</code></td>
-<td>JSON string of channel definitions (NULL-terminated; a string literal is recommended)</td>
+<td>JSON array string of channel definitions (NULL-terminated; a string literal is recommended). <strong>512 bytes or less</strong> — if it is longer, the channel names are not sent</td>
 </tr>
 </tbody>
 </table>
@@ -3003,7 +3001,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> on successful send, <code>false</code> if the buffer is full or not connected</p>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: queued in the transmit buffer (says nothing about whether the PC received it), <code>false</code>: buffer full, USB not ready, or invalid arguments (NULL pointer, length 0, or more than 1020 bytes)</p>
 <p><strong>⚠️ Call context</strong>: Call from within <code>Control_Loop()</code> (non-blocking). Calling it on every tick is not mandatory — call it only when needed.</p>
 <p><strong>Example</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">current</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">torque</span><span class="w"> </span><span class="p">};</span>
@@ -3015,6 +3013,9 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
 </code></pre></div>
 <p>Sends a debug message to the PC as raw text (no PhAI packet wrapping).</p>
+<blockquote>
+<p>⚠️ If you send text while PhAI Studio or the <code>xm10</code> tool is decoding the stream, one data packet is lost per message. Use it for text you read in a plain terminal. For text-only output, call <code>XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL)</code> once in <code>Control_Setup()</code> on Rev2.0 (or <code>XM_SetUsbAutoStream(false)</code> on Rev1.1); the output then stays clean.</p>
+</blockquote>
 <p><strong>Parameters</strong></p>
 <table>
 <thead>
@@ -3032,7 +3033,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Return value</strong>: <code>bool</code> — <code>true</code> on successful send</p>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: queued in the transmit buffer, <code>false</code>: buffer full, USB not ready, or an empty string</p>
 <p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. Non-blocking.</p>
 <p><strong>Example</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
@@ -3068,14 +3069,15 @@
 </tbody>
 </table>
 <p><strong>Return value</strong>: <code>uint32_t</code> — number of bytes actually read (0 means no data received)</p>
-<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. The header has no <code>@details</code> description, so error states other than a 0 return value are not documented — we recommend verifying empirically before use.</p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. Within one tick of <code>Control_Loop()</code>, keep reading until it returns 0 — anything you leave behind is taken by the system later in the same tick and cannot be received again. Error states other than a 0 return value are not documented — we recommend verifying empirically before use.</p>
 <hr />
 <h2 id="types--macros">Types / macros<a class="headerlink" href="#types--macros" title="Permanent link">&para;</a></h2>
+<p><a id="xm_usb_hostprofile_e"></a></p>
 <h3 id="xm_usb_hostprofile_e--rev-20-only"><code>XM_USB_HostProfile_e</code> 🟢 Rev 2.0 only<a class="headerlink" href="#xm_usb_hostprofile_e--rev-20-only" title="Permanent link">&para;</a></h3>
 <blockquote>
 <p>Not defined in the Rev1.1 header.</p>
 </blockquote>
-<p>The USB-CDC host profile you set to say what a single board/cable is used for. There are two choices, set with <a href="#xm_usb_sethostprofile"><code>XM_USB_SetHostProfile()</code></a>.</p>
+<p>The USB-CDC host profile you set to say what a single board/cable is used for. There are two choices, set with <a href="#xm_usb_sethostprofile--rev-20-only"><code>XM_USB_SetHostProfile()</code></a>.</p>
 <table>
 <thead>
 <tr>
@@ -3086,38 +3088,33 @@
 <tbody>
 <tr>
 <td><code>XM_USB_HOST_PHAI_STUDIO</code> = 0</td>
-<td><strong>Default</strong> — PhAI Studio real-time streaming (Total Data auto-pump ON)</td>
+<td><strong>Default</strong> — for receiving with PhAI Studio or the <code>xm10</code> tool (automatic Total Data sending + channel-name sending ON)</td>
 </tr>
 <tr>
 <td><code>XM_USB_HOST_TERMINAL</code> = 1</td>
-<td>Plain terminal / custom program — auto-pump OFF, user-initiated TX only</td>
+<td>Plain terminal / custom program — automatic sending OFF, user-initiated TX only</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>The production-inspection (PRODUCTION) behavior is not a user choice — it is handled <strong>automatically inside the board</strong>: entered on receiving the first valid DOP frame, exited on DTR=0 (cable unplug). Setting the profile to <code>XM_USB_HOST_TERMINAL</code> disables that automatic entry (protecting your terminal output). The profile setting persists across DTR re-toggle / reconnect.</p>
-</blockquote>
 <hr />
 <h2 id="internal-only-do-not-call">Internal-only (do not call)<a class="headerlink" href="#internal-only-do-not-call" title="Permanent link">&para;</a></h2>
-<p>The function below is for exclusive use by an internal system component (core_process). User code does not need to call it directly, and calling it does not guarantee the intended behavior.</p>
+<p>The function below is called automatically by the system. User code does not need to call it directly, and calling it does not guarantee the intended behavior.</p>
 <table>
 <thead>
 <tr>
 <th>Function</th>
-<th>Actual caller</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>void XM_USB_ProcessPeriodic(void)</code></td>
-<td><code>core_process</code></td>
-<td>The periodic-processing engine for USB streaming logic. <code>core_process</code> calls this automatically, so user code does not need to call it directly</td>
+<td>The periodic-processing function for USB streaming. The system calls it automatically, so user code does not need to call it directly</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>🟢 <strong>Rev 2.0 note</strong> — The PRODUCTION auto-latch / DTR handling that used to live here in v2.3.1 (the former <code>XM_USB_RequestProductionLatch</code> / <code>XM_USB_OnDtrLost</code>) was moved inside the System layer (<code>usb_host_mode</code>) in v2.4.0 and is no longer in the public header. The only public user-facing API is <a href="#xm_usb_sethostprofile"><code>XM_USB_SetHostProfile()</code></a>.</p>
+<p>🟢 <strong>Rev 2.0 note</strong> — The only public user-facing API for choosing the USB-CDC host profile is <a href="#xm_usb_sethostprofile--rev-20-only"><code>XM_USB_SetHostProfile()</code></a>.</p>
 </blockquote>
 <hr />
 <h2 id="rev11--rev20-difference-summary">Rev1.1 / Rev2.0 Difference Summary<a class="headerlink" href="#rev11--rev20-difference-summary" title="Permanent link">&para;</a></h2>
@@ -3139,11 +3136,6 @@
 <td><code>XM_USB_HostProfile_e</code> / <code>XM_USB_SetHostProfile</code> (PhAI Studio / terminal host-profile selection)</td>
 <td>❌ Absent</td>
 <td>🟢 Exclusive</td>
-</tr>
-<tr>
-<td>PRODUCTION auto-entry / DTR handling (inside System <code>usb_host_mode</code>, not a public API)</td>
-<td>❌ Absent</td>
-<td>🟢 Exclusive (Internal)</td>
 </tr>
 </tbody>
 </table>

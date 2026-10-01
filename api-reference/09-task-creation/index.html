@@ -1063,10 +1063,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-시스템-task-인벤토리" class="md-nav__link">
+  <a href="#1-시스템-task" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 시스템 Task 인벤토리
+        1. 시스템 Task
       
     </span>
   </a>
@@ -1113,10 +1113,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-hw-제약-task-manager-api-contract-가드" class="md-nav__link">
+  <a href="#4-사용자-task-한도" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. HW 제약 (Task Manager API contract 가드)
+        4. 사용자 task 한도
       
     </span>
   </a>
@@ -1185,10 +1185,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-risk-management-통합-phase-2-후속" class="md-nav__link">
+  <a href="#8-직접-점검할-것" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Risk Management 통합 (Phase 2 후속)
+        8. 직접 점검할 것
       
     </span>
   </a>
@@ -2324,10 +2324,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-시스템-task-인벤토리" class="md-nav__link">
+  <a href="#1-시스템-task" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 시스템 Task 인벤토리
+        1. 시스템 Task
       
     </span>
   </a>
@@ -2374,10 +2374,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-hw-제약-task-manager-api-contract-가드" class="md-nav__link">
+  <a href="#4-사용자-task-한도" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. HW 제약 (Task Manager API contract 가드)
+        4. 사용자 task 한도
       
     </span>
   </a>
@@ -2446,10 +2446,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-risk-management-통합-phase-2-후속" class="md-nav__link">
+  <a href="#8-직접-점검할-것" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Risk Management 통합 (Phase 2 후속)
+        8. 직접 점검할 것
       
     </span>
   </a>
@@ -2489,130 +2489,39 @@
 
 <h1 id="xm10-task-topology--rtos-task-api-사용자-가이드">XM10 Task Topology — RTOS Task API 사용자 가이드<a class="headerlink" href="#xm10-task-topology--rtos-task-api-사용자-가이드" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>XM10 SDK 의 사용자 보조 task 작성 가이드. 시스템 task 인벤토리 + 우선순위 +
-데이터 흐름 + 공유변수 패턴 4가지.</p>
+<p>XM10 SDK 의 사용자 보조 task 작성 가이드. 우선순위 + 데이터 흐름 +
+공유변수 패턴 4가지.</p>
 </blockquote>
 <p><strong>Audience</strong>: SDK 사용자 (연구자 / 학습자 / 일반 로보틱스 개발자)
 <strong>Date</strong>: 2026-05-15
 <strong>Related</strong>:
-- 사용자 API: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM_FW/XM_API/xm_api_freertos.h"><code>XM_FW/XM_API/xm_api_freertos.h</code></a>
-- Task Manager: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM_FW/System/Task/"><code>XM_FW/System/Task/xm_task_manager.{c,h}</code></a>
+- 사용자 API: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h"><code>XM_FW/XM_API/xm_api_freertos.h</code></a>
 - 예제: <a href="../../Examples/38_Periodic_Background_Task/"><code>Examples/38_Periodic_Background_Task/</code></a> · <a href="../../Examples/39_Task_Lifecycle/"><code>Examples/39_Task_Lifecycle/</code></a></p>
 <hr />
-<h2 id="1-시스템-task-인벤토리">1. 시스템 Task 인벤토리<a class="headerlink" href="#1-시스템-task-인벤토리" title="Permanent link">&para;</a></h2>
-<p>XM10 SDK 가 부팅 시 자동으로 생성하는 task 목록. <strong>사용자가 직접 변경하면
-안 됩니다</strong> (시스템 안정성 손상).</p>
-<table>
-<thead>
-<tr>
-<th>우선순위</th>
-<th>숫자</th>
-<th>Task 이름</th>
-<th>스택</th>
-<th>주기</th>
-<th>책임</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Realtime7</td>
-<td>55</td>
-<td><code>StartupTask</code></td>
-<td>2 KB</td>
-<td>1회 (자기 삭제)</td>
-<td>HW init / module enumerate</td>
-</tr>
-<tr>
-<td>Realtime7</td>
-<td>55</td>
-<td><code>IOIF_UartRx</code></td>
-<td>512 B</td>
-<td>event-driven</td>
-<td>UART 수신 (공유)</td>
-</tr>
-<tr>
-<td><strong>Realtime6</strong></td>
-<td><strong>54</strong></td>
-<td><strong><code>UserTask</code></strong></td>
-<td><strong>32 KB</strong></td>
-<td><strong>1 ms (1 kHz)</strong></td>
-<td><strong>Control_Setup + Control_Loop 호출 + PDO snapshot</strong></td>
-</tr>
-<tr>
-<td>Realtime3</td>
-<td>51</td>
-<td><code>NRT_Proc</code></td>
-<td>2 KB</td>
-<td>semaphore</td>
-<td>SDO/NMT 처리</td>
-</tr>
-<tr>
-<td>High</td>
-<td>40</td>
-<td><code>USBH_Queue</code></td>
-<td>2 KB</td>
-<td>event</td>
-<td>USB Host 이벤트</td>
-</tr>
-<tr>
-<td>Normal1</td>
-<td>25</td>
-<td><code>PnP_Task</code></td>
-<td>2 KB</td>
-<td>100 ms</td>
-<td>Plug &amp; Play (모듈 자동 등록)</td>
-</tr>
-<tr>
-<td>Normal</td>
-<td>24</td>
-<td><code>usbContolTask</code></td>
-<td>2 KB</td>
-<td>10 ms</td>
-<td>USB 모드 전환 / CDC</td>
-</tr>
-<tr>
-<td>Normal</td>
-<td>24</td>
-<td><code>DataLoggerTask</code></td>
-<td>8 KB</td>
-<td>event</td>
-<td>내부 예약 (현재 미사용)</td>
-</tr>
-<tr>
-<td><strong>Normal</strong></td>
-<td><strong>24</strong></td>
-<td><strong><code>XM_Task_*</code> (사용자)</strong></td>
-<td><strong>prio_hint 별</strong></td>
-<td>OneShot/Periodic</td>
-<td><strong>사용자가 만든 보조 task</strong></td>
-</tr>
-<tr>
-<td>Low</td>
-<td>8</td>
-<td><code>DefaultTask</code></td>
-<td>2 KB</td>
-<td>suspended</td>
-<td>(사용 안 함)</td>
-</tr>
-</tbody>
-</table>
+<h2 id="1-시스템-task">1. 시스템 Task<a class="headerlink" href="#1-시스템-task" title="Permanent link">&para;</a></h2>
+<p>XM10 SDK 는 부팅 시 필요한 시스템 task 를 자동으로 만듭니다. <strong>사용자가 직접 변경하면
+안 됩니다</strong> (시스템 안정성 손상). <code>Control_Setup()</code> 과 <code>Control_Loop()</code> 는 그중
+제어 루프 task (Control_Loop) 에서 1 ms (1 kHz) 주기로 호출됩니다 (우선순위 53, 스택 32 KB).
+사용자 보조 task 는 <code>XM_Task_Create*()</code> 와 아래 <code>XM_PRIO_*</code> 힌트로만 만드세요.</p>
 <hr />
 <h2 id="2-사용자-task-우선순위-영역">2. 사용자 Task 우선순위 영역<a class="headerlink" href="#2-사용자-task-우선순위-영역" title="Permanent link">&para;</a></h2>
 <p>사용자가 <code>XM_Task_CreateOneShot()</code> / <code>XM_Task_CreatePeriodic()</code> 로 보조 task 를
 만들 때 <code>prio_hint</code> 로 선택할 수 있는 영역입니다.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌──────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│ 시스템 task 점유 영역 — 사용자 진입 금지                       │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   55  Realtime7  StartupTask / IOIF_UartRx                   │
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   54  Realtime6  UserTask (Control_Loop, 1 kHz 제어 루프)    │
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│   51  Realtime3  NRT_Proc (SDO/NMT)                          │
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│ 사용자 선택 가능 영역                                          │
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   48  Realtime  ← XM_PRIO_NEAR_REALTIME (주의 — PnP 경합 가능)│
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   40  High      ← XM_PRIO_ABOVE_CONTROL                       │
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   32  AbvNormal ← XM_PRIO_BELOW_CONTROL                       │
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   24  Normal    ← XM_PRIO_BACKGROUND ⭐ (권장 기본값)          │
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│    8  Low       ← XM_PRIO_IDLE                                │
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>└──────────────────────────────────────────────────────────────┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌───────────────────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│ 시스템 task — 사용자가 만들거나 바꿀 수 없음                                  │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   55  Realtime7  시스템 시작 / CAN-FD 수신  ← 로봇·센서 데이터 수신 즉시 처리 │
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   54  Realtime6  UART 수신                  ← 센서 패킷 파싱                  │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│   53  Realtime5  Control_Loop               ← 1 kHz 제어 루프                 │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│   51  Realtime3  모듈 설정 메시지 처리                                        │
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│   25  Normal1    모듈 연결 관리                                               │
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>├───────────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│ 사용자 선택 가능 영역 (XM_PRIO_*)                                             │
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   48  Realtime     ← XM_PRIO_NEAR_REALTIME (주의: 모듈 연결 처리와 경합 가능) │
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   40  High         ← XM_PRIO_ABOVE_CONTROL                                    │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   32  AboveNormal  ← XM_PRIO_BELOW_CONTROL                                    │
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   24  Normal       ← XM_PRIO_BACKGROUND ⭐ (권장 기본값)                      │
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│    8  Low          ← XM_PRIO_IDLE                                             │
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>└───────────────────────────────────────────────────────────────────────────────┘
 </code></pre></div>
 <table>
 <thead>
@@ -2662,27 +2571,19 @@
 </blockquote>
 <hr />
 <h2 id="3-데이터-흐름--control_loop--사용자-보조-task">3. 데이터 흐름 — Control_Loop ↔ 사용자 보조 Task<a class="headerlink" href="#3-데이터-흐름--control_loop--사용자-보조-task" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌─ FDCAN ISR ──┐
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│  (PDO 수신)  │
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>└──────┬───────┘
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>       │ seqlock
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>       ▼
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>┌─────────────────────────────────────────────────────────────┐
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│ UserTask (1 kHz)                                            │
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│  ┌─────────────────────────────────────────────────────┐    │
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│  │  _FetchAllInputs() ─▶ XM.status.*                   │    │
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│  │  SYNC broadcast      (CM/SM 트리거)                  │    │
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>│  │  XM_TotalData_Snapshot()                            │    │
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│  │  Control_Loop() ◀── 사용자 알고리즘                 │    │
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│  │  _FlushAllOutputs() ─▶ XM.command.* ─▶ CAN TX       │    │
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│  │  XM_USB_ProcessPeriodic()                           │    │
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│  └─────────────────────────────────────────────────────┘    │
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>│         ↕ (단일 워드 volatile / 멀티 워드 XM_Mutex)         │
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>│  ┌─────────────────────────────────────────────────────┐    │
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>│  │  사용자 보조 task (Normal=24 등) — XM_Task_*        │    │
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│  │  예: AdcSummary (100 Hz), HeavyCalc (OneShot)       │    │
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>│  └─────────────────────────────────────────────────────┘    │
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>└─────────────────────────────────────────────────────────────┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌─────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│ 제어 루프 task (Control_Loop, 1 kHz)                        │
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│  ┌─────────────────────────────────────────────────────┐    │
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│  │  입력 수집 ─▶ XM.status.*                           │    │
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│  │  Control_Loop() ◀── 사용자 알고리즘                 │    │
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│  │  XM.command.* ─▶ 출력 전송                          │    │
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│  └─────────────────────────────────────────────────────┘    │
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│         ↕ (단일 워드 volatile / 멀티 워드 XM_Mutex)         │
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│  ┌─────────────────────────────────────────────────────┐    │
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│  │  사용자 보조 task (Normal=24 등) — XM_Task_*        │    │
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>│  │  예: AdcSummary (100 Hz), HeavyCalc (OneShot)       │    │
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│  └─────────────────────────────────────────────────────┘    │
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>└─────────────────────────────────────────────────────────────┘
 </code></pre></div>
 <h3 id="공유변수-패턴-4가지">공유변수 패턴 4가지<a class="headerlink" href="#공유변수-패턴-4가지" title="Permanent link">&para;</a></h3>
 <table>
@@ -2717,12 +2618,12 @@
 <td><strong>D</strong> Snapshot</td>
 <td>Mutex 안 memcpy → 외부 read</td>
 <td>Mutex+Snapshot</td>
-<td><code>CM_GetRxData</code></td>
+<td><code>XM.status</code> 스냅샷</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="4-hw-제약-task-manager-api-contract-가드">4. HW 제약 (Task Manager API contract 가드)<a class="headerlink" href="#4-hw-제약-task-manager-api-contract-가드" title="Permanent link">&para;</a></h2>
+<h2 id="4-사용자-task-한도">4. 사용자 task 한도<a class="headerlink" href="#4-사용자-task-한도" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2760,7 +2661,7 @@
 - self-Delete 시도 → no-op (거부)</p>
 <blockquote>
 <p>⚠️ <strong>워치독 (v2.6.0~)</strong>: 시스템 워치독(IWDG, 약 8 초)은 <code>Control_Loop</code> 가 도는 1 kHz 주기에서 갱신됩니다. 따라서 <strong><code>Control_Setup</code> 이나 <code>Control_Loop</code> 안에서 8 초 넘게 머물면 보드가 리셋</strong>됩니다. 오래 걸리는 작업은 나눠서 수행하세요.</p>
-<p>여기서 만드는 사용자 task 는 <code>XM_PRIO_*</code> 가 모두 <code>Control_Loop</code> 보다 낮으므로 (최고값 <code>XM_PRIO_NEAR_REALTIME</code> = 48 &lt; UserTask 54) <strong>워치독 갱신을 막을 수 없습니다.</strong> 무거운 계산은 오히려 이쪽으로 옮기는 것이 안전합니다 (Ex.36 의 NN 학습이 <code>XM_PRIO_BACKGROUND</code> 로 도는 이유).</p>
+<p>여기서 만드는 사용자 task 는 <code>XM_PRIO_*</code> 가 모두 <code>Control_Loop</code> 보다 낮으므로 (최고값 <code>XM_PRIO_NEAR_REALTIME</code> = 48 &lt; 제어 루프 task 53) <strong>워치독 갱신을 막을 수 없습니다.</strong> 무거운 계산은 오히려 이쪽으로 옮기는 것이 안전합니다 (Ex.36 의 NN 학습이 <code>XM_PRIO_BACKGROUND</code> 로 도는 이유).</p>
 </blockquote>
 <hr />
 <h2 id="5-권장-사용-패턴">5. 권장 사용 패턴<a class="headerlink" href="#5-권장-사용-패턴" title="Permanent link">&para;</a></h2>
@@ -2835,7 +2736,7 @@
 </tr>
 <tr>
 <td><code>XM_PRIO_NEAR_REALTIME</code> 무한 루프</td>
-<td>PnP 경합 / 시스템 지연</td>
+<td>모듈 연결 처리와 경합 / 시스템 지연</td>
 <td><code>XM_PRIO_BACKGROUND</code> 권장</td>
 </tr>
 <tr>
@@ -2856,14 +2757,12 @@
 <li><strong><a href="../../Examples/">Ex.00 ~ Ex.35</a></strong> — 단일 task 알고리즘 학습</li>
 <li><strong><a href="../../Examples/38_Periodic_Background_Task/">Ex.38 Periodic_Background_Task</a></strong> — Mutex+Snapshot 패턴 (이 문서 §3 참조)</li>
 <li><strong><a href="../../Examples/39_Task_Lifecycle/">Ex.39 Task_Lifecycle</a></strong> — OneShot 생성/삭제 사이클</li>
-<li><strong>본 문서 §4~6</strong> — HW 제약 + Pitfalls</li>
+<li><strong>본 문서 §4~6</strong> — 사용자 task 한도 + Pitfalls</li>
 </ol>
 <hr />
-<h2 id="8-risk-management-통합-phase-2-후속">8. Risk Management 통합 (Phase 2 후속)<a class="headerlink" href="#8-risk-management-통합-phase-2-후속" title="Permanent link">&para;</a></h2>
-<p>런타임 가드 (Control_Loop overrun / mutex deadlock / Periodic overrun / fault 분석
-등) 와 디버깅 채널 (PhAI Studio 진단 통합) 은 XM10 전체 차원 Risk Management 계획
-하에 별도 도입 예정. 본 SDK 의 Task API 자체는 Phase 1 (Task API contract 가드만)
-범위에서 안정 동작합니다.</p>
+<h2 id="8-직접-점검할-것">8. 직접 점검할 것<a class="headerlink" href="#8-직접-점검할-것" title="Permanent link">&para;</a></h2>
+<p>Task API 는 §4 의 제약(개수·스택·우선순위)을 지키면 동작합니다. 실행 시간 초과나
+교착(deadlock)은 자동으로 감시하지 않으니 직접 점검하세요.</p>
 <hr />
 <h2 id="9-변경-이력">9. 변경 이력<a class="headerlink" href="#9-변경-이력" title="Permanent link">&para;</a></h2>
 <table>
@@ -2878,7 +2777,7 @@
 <tr>
 <td>2026-05-15</td>
 <td>1.0</td>
-<td>초안 — RM 가드 분리 후 Task API 본질만 정리</td>
+<td>초안</td>
 </tr>
 </tbody>
 </table>

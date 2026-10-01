@@ -3270,12 +3270,12 @@
 🧰 Prerequisites: IPO model (Input → Process → Output 1 ms cycle) + <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/">Ex.11~14</a>
 🎯 Key objects: <code>XM.status</code> (read) / <code>XM.command</code> (staging commands) / <code>XM_SetControlMode</code> / <code>XM_SetAssistTorque</code> / <code>XM_SendPVector</code></p>
 </blockquote>
-<p>One of the core values of <code>XM10</code> is controlling the <code>KIT H10</code> exoskeleton with algorithms you design yourself. This API provides everything you need to check the connection status to KIT H10, receive the robot's live state data, and send control commands — such as <code>PIF-Vectors</code> and <code>Aux inputs</code> — to drive the robot's motion.
+<p>One of the core values of <code>XM10</code> is controlling the <code>KIT H10</code> exoskeleton with algorithms you design yourself. This API provides everything you need to check the connection status to KIT H10, receive the robot's live state data, and send control commands — such as <code>PIF-Vectors</code> — to drive the robot's motion.
 This is the detailed reference for the <strong>robot data and control API</strong> defined in <code>xm_api_data.h</code>.
 The XM10 firmware implements a <strong>Facade pattern</strong> so users can read robot state and issue commands through an intuitive global object (<code>XM</code>) without worrying about the underlying communication protocols (CAN-FD, UART).</p>
 <hr />
 <h2 id="-operating-principle">📌 Operating Principle<a class="headerlink" href="#-operating-principle" title="Permanent link">&para;</a></h2>
-<p>The XM10 control system follows a strict <strong>IPO (Input-Process-Output)</strong> model, executed precisely on a 1 ms (1 kHz) cycle by the internal <strong><code>core_process</code></strong> engine.</p>
+<p>The XM10 control system follows a strict <strong>IPO (Input-Process-Output)</strong> model, executed precisely by the system on a 1 ms (1 kHz) cycle.</p>
 <h3 id="the-ipo-cycle-1-ms-loop">The IPO Cycle (1 ms Loop)<a class="headerlink" href="#the-ipo-cycle-1-ms-loop" title="Permanent link">&para;</a></h3>
 <ol>
 <li>
@@ -3305,7 +3305,7 @@ The XM10 firmware implements a <strong>Facade pattern</strong> so users can read
 <p><strong>Streaming (CDC):</strong></p>
 <ul>
 <li>After Input, Process, and Output are complete, data streaming is performed.</li>
-<li>If XM10 is connected to a PC via USB and the string <code>AGRB MON START</code> is sent over the serial port, user-defined data is forwarded to the terminal every 1 ms. Send <code>AGRB MON STOP</code> to halt streaming.</li>
+<li>By default, once a PC program opens the COM port, the system automatically sends Total Data (0x20) every 1 ms. (The legacy <code>AGRB MON START</code> / <code>AGRB MON STOP</code> strings can still start and stop it.) What goes out is binary PhAI packets, which a terminal cannot read — receive them with PhAI Studio or the <code>xm10</code> tool.</li>
 </ul>
 </li>
 </ol>
@@ -3426,7 +3426,7 @@ The actual fields received may be revised in future firmware versions.</p>
 <a id="__codelineno-5-60" name="__codelineno-5-60" href="#__codelineno-5-60"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">rightHipImuGlobalGyrZ</span><span class="p">;</span>
 <a id="__codelineno-5-61" name="__codelineno-5-61" href="#__codelineno-5-61"></a><span class="p">}</span><span class="w"> </span><span class="n">XmH10Data_t</span><span class="p">;</span>
 </code></pre></div>
-<p>Bold fields are currently being received. Additional fields may be added or modified in future releases.</p>
+<p>Bold fields are currently being received.</p>
 <table>
 <thead>
 <tr>
@@ -3895,7 +3895,7 @@ On Rev 1.1, attaching this module repurposes the <code>XM_EXT_ADC_1</code> / <co
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="n">XmExtImuData_t</span><span class="w">  </span><span class="n">ext_imu</span><span class="p">;</span><span class="w">  </span><span class="c1">// External UART IMU (Xsens MTi-630)</span>
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="n">XmImuHubData_t</span><span class="w">  </span><span class="n">imu_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// IMU Hub sensor (CAN-FD)</span>
 <a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="n">XmEmgHubData_t</span><span class="w">  </span><span class="n">emg_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// EMG Hub sensor (CAN-FD)</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">    </span><span class="n">XmFesHubData_t</span><span class="w">  </span><span class="n">fes_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// FES Hub stimulation feedback (CAN-FD)</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">    </span><span class="n">XmFesHubData_t</span><span class="w">  </span><span class="n">fes_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// FES Hub (currently not supported with the XM10)</span>
 <a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="p">}</span><span class="w"> </span><span class="n">XmInput_t</span><span class="p">;</span>
 </code></pre></div>
 <h3 id="xmoutput_t"><code>XmOutput_t</code><a class="headerlink" href="#xmoutput_t" title="Permanent link">&para;</a></h3>
@@ -3934,7 +3934,7 @@ On Rev 1.1, attaching this module repurposes the <code>XM_EXT_ADC_1</code> / <co
 <p>Before starting your algorithm, always confirm that <code>XM10</code> has a stable communication link with the <code>KIT H10</code> Control Module (CM).</p>
 <h3 id="xm_iscmconnected"><code>XM_IsCmConnected()</code><a class="headerlink" href="#xm_iscmconnected" title="Permanent link">&para;</a></h3>
 <p>Checks whether the communication link with the <strong>Control Module (CM)</strong> is <code>Operational</code>.
-The connection between CM and XM10 is managed by an internal <code>Plug and Play</code> background task. The link is considered active <strong>from the moment the first PDO data packet is received</strong>.</p>
+The connection between CM and XM10 is managed automatically by the system. The link is considered active <strong>from the moment CM data is first received</strong>.</p>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsCmConnected</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div></p>
@@ -3965,11 +3965,11 @@ The connection between CM and XM10 is managed by an internal <code>Plug and Play
 <tbody>
 <tr>
 <td><strong>Description</strong></td>
-<td>Returns the current DOP V3 PnP (NMT) state for the CM link.</td>
+<td>Returns the current connection state for the CM link.</td>
 </tr>
 <tr>
 <td><strong>Return value</strong></td>
-<td><code>CM_NmtState_t</code> enum — current NMT state</td>
+<td><code>CM_NmtState_t</code> enum — current connection state</td>
 </tr>
 <tr>
 <td><strong>Call location</strong></td>
@@ -3977,7 +3977,7 @@ The connection between CM and XM10 is managed by an internal <code>Plug and Play
 </tr>
 </tbody>
 </table>
-<p><strong>NMT state values:</strong></p>
+<p><strong>Connection state values:</strong></p>
 <table>
 <thead>
 <tr>
@@ -3990,12 +3990,12 @@ The connection between CM and XM10 is managed by an internal <code>Plug and Play
 <tr>
 <td><code>CM_NMT_INITIALISING</code></td>
 <td>0</td>
-<td>Booting (boot-up message not yet received)</td>
+<td>Booting (the CM's start-up notice not yet received)</td>
 </tr>
 <tr>
 <td><code>CM_NMT_PRE_OPERATIONAL</code></td>
 <td>1</td>
-<td>SDO communication available; PDO inactive</td>
+<td>Configuration messages only; data exchange off</td>
 </tr>
 <tr>
 <td><code>CM_NMT_OPERATIONAL</code></td>
@@ -4011,7 +4011,7 @@ The connection between CM and XM10 is managed by an internal <code>Plug and Play
 </table>
 <blockquote>
 <p><strong>Note:</strong> <code>XM_IsCmConnected()</code> internally checks <code>XM_GetXMNmtState() == CM_NMT_OPERATIONAL</code>.
-Use this function directly when you need finer-grained branching based on NMT state.</p>
+Use this function directly when you need finer-grained branching based on connection state.</p>
 </blockquote>
 <hr />
 <h3 id="xm_setcontrolmode"><code>XM_SetControlMode</code><a class="headerlink" href="#xm_setcontrolmode" title="Permanent link">&para;</a></h3>
@@ -4451,7 +4451,7 @@ Calling this function resets the corresponding <code>isPVectorRHDone</code> or <
 <hr />
 <h4 id="2-disturbance-observer-dob">2. Disturbance Observer (DOB)<a class="headerlink" href="#2-disturbance-observer-dob" title="Permanent link">&para;</a></h4>
 <p>An advanced built-in control routine in <code>KIT H10</code> that estimates and compensates for user-applied forces and unexpected external disturbances, producing smoother and more stable motion.
-<strong>To use DOB, the <code>KIT H10</code> actuators must have undergone System Identification for DOB, and the identification data must be stored in the motor driver. (System Identification for DOB has not been performed on the current <code>KIT H10</code>; this will change in a future revision.)</strong></p>
+<strong>To use DOB, the <code>KIT H10</code> actuators must have undergone System Identification for DOB, and the identification data must be stored in the motor driver. (System Identification for DOB has not been performed on the current <code>KIT H10</code>.)</strong></p>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetDOBRoutine</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isSet</span><span class="p">);</span>
 </code></pre></div></p>
@@ -4483,11 +4483,11 @@ Calling this function resets the corresponding <code>isPVectorRHDone</code> or <
 <h3 id="xm_senduserbodydata"><code>XM_SendUserBodyData()</code><a class="headerlink" href="#xm_senduserbodydata" title="Permanent link">&para;</a></h3>
 <p>Sends the wearer's body parameters (weight, height, segment lengths, etc.) to <code>KIT H10</code>. KIT H10 uses this information for real-time motion analysis and returns more accurate, personalized gait data and motion dynamics data to XM10.
 <strong>You must measure and supply the body parameters manually before sending them to KIT H10.</strong></p>
-<p><strong>Body-parameter-dependent fields in <code>RxData_t</code>:</strong></p>
+<p><strong>Body-parameter-dependent fields in <code>XM.status.h10</code>:</strong></p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">PDO field</th>
+<th style="text-align: left;">Field</th>
 <th style="text-align: left;">Description</th>
 <th style="text-align: left;">Unit</th>
 <th style="text-align: left;">Type</th>
@@ -4615,7 +4615,7 @@ Calling this function resets the corresponding <code>isPVectorRHDone</code> or <
 Reading data is done by accessing the struct fields directly, but <strong>all control outputs must be issued through the helper functions below.</strong> These functions manage <strong>dirty flags</strong> internally to ensure only changed values are transmitted efficiently.</p>
 <h3 id="xm_setassisttorque"><code>XM_SetAssistTorque</code><a class="headerlink" href="#xm_setassisttorque" title="Permanent link">&para;</a></h3>
 <p>Sets the assist torque for both legs simultaneously.
-The actual transmission (<code>Output</code>) is handled internally by the <code>Core Process</code> following the IPO model.
+The actual transmission (<code>Output</code>) is handled by the system following the IPO model.
 Users only need to compute the desired torque and set it through this function.</p>
 <p><strong>Syntax</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetAssistTorque</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">rh</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lh</span><span class="p">);</span>
@@ -4630,11 +4630,11 @@ Users only need to compute the desired torque and set it through this function.<
 <p><strong>Sign · Unit · Limit (must read)</strong>
   * <strong>Sign convention</strong>: <strong>positive(+) = Flexion assist, negative(−) = Extension assist</strong> (matches the angle convention <code>Extension &lt; 0 &lt; Flexion</code>).
   * <strong>Unit chain</strong>: the input is joint torque [Nm]. Internally it is converted to motor current — <code>τ_joint[Nm] = Kt(0.085) × Gear(18.75) × I[A] ≈ 1.594 × I[A]</code>. Apply this conversion when comparing with the feedback <code>XM.status.h10.*HipTorque</code> (unit <strong>A</strong>).
-  * <strong>Hard limit (±10 Nm)</strong>: the input torque is <strong>clamped to ±10 Nm</strong> inside the XM10 library (<code>CM_StageAuxTorque</code>, <code>libXM_Lib.a</code>) before it goes out on CAN. This is internal code, not the example, so users cannot change it; larger inputs saturate at ±10 Nm. (Motor-driver side: 14A max / 10A impedance saturation.)
+  * <strong>Hard limit (±10 Nm)</strong>: the input torque is <strong>clamped to ±10 Nm</strong> inside the XM10 library before it goes out on CAN. This is internal library behavior, not the example, so users cannot change it; larger inputs saturate at ±10 Nm. (Motor-driver side: 14A max / 10A impedance saturation.)
   * <strong>Assist level</strong>: to reflect the suit assist-strength dial (<code>XM.status.h10.h10AssistLevel</code>, 0~10), multiply the torque by <code>h10AssistLevel / 10.0f</code> — at level 0 the output is 0.</p>
 <p><strong>Operating Principle</strong>
   * Stores the values in the <code>XM.command</code> struct and sets the <code>torque_updated</code> dirty flag.
-  * The actual transmission occurs at the end of the current control cycle (<code>_FlushAllOutputs</code>).</p>
+  * The system performs the actual transmission at the end of the current control cycle.</p>
 <p><strong>Example</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="w">    </span><span class="c1">// P-control: generate torque proportional to the current angle</span>
@@ -4791,7 +4791,7 @@ Users only need to compute the desired torque and set it through this function.<
 <tr>
 <td>Estimated data such as knee angle and forward velocity are always 0</td>
 <td><code>XM_SendUserBodyData()</code> was never called (prerequisite for body-data-dependent fields)</td>
-<td>See the Body Data instructions in <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5">examples/README.md</a></td>
+<td>See the Body Data instructions in <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세">examples/README.md</a></td>
 </tr>
 <tr>
 <td>IPO cycle misalignment / missed ticks</td>

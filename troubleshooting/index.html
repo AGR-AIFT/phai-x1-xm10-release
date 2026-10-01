@@ -1725,10 +1725,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ioif-매크로-재정의-경고" class="md-nav__link">
+  <a href="#redefined-경고-rev-11-sdk-cmake-빌드" class="md-nav__link">
     <span class="md-ellipsis">
       
-        IOIF 매크로 재정의 경고
+        redefined 경고 (Rev 1.1 SDK, CMake 빌드)
       
     </span>
   </a>
@@ -1993,10 +1993,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usb-cdc-메시지가-phai-studio-또는-터미널에-안-보임" class="md-nav__link">
+  <a href="#usb-cdc-텍스트-메시지가-터미널에-안-보임" class="md-nav__link">
     <span class="md-ellipsis">
       
-        USB-CDC 메시지가 PhAI Studio 또는 터미널에 안 보임
+        USB-CDC 텍스트 메시지가 터미널에 안 보임
       
     </span>
   </a>
@@ -2646,10 +2646,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ioif-매크로-재정의-경고" class="md-nav__link">
+  <a href="#redefined-경고-rev-11-sdk-cmake-빌드" class="md-nav__link">
     <span class="md-ellipsis">
       
-        IOIF 매크로 재정의 경고
+        redefined 경고 (Rev 1.1 SDK, CMake 빌드)
       
     </span>
   </a>
@@ -2914,10 +2914,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usb-cdc-메시지가-phai-studio-또는-터미널에-안-보임" class="md-nav__link">
+  <a href="#usb-cdc-텍스트-메시지가-터미널에-안-보임" class="md-nav__link">
     <span class="md-ellipsis">
       
-        USB-CDC 메시지가 PhAI Studio 또는 터미널에 안 보임
+        USB-CDC 텍스트 메시지가 터미널에 안 보임
       
     </span>
   </a>
@@ -3106,10 +3106,10 @@
 <p><strong>원인:</strong> CMake 빌드 설정에서 <code>--specs=nano.specs</code> 플래그가 중복 적용</p>
 <p><strong>해결:</strong> <code>CMakeLists.txt</code>에서 <code>CMAKE_C_FLAGS</code>와 <code>CMAKE_C_FLAGS_DEBUG/RELEASE</code>가 동일한 플래그를 중복 포함하지 않는지 확인하세요. <code>CMAKE_C_FLAGS</code>에 공통 플래그를 넣고, <code>DEBUG/RELEASE</code>에는 빌드 타입별 플래그만 설정합니다.</p>
 <hr />
-<h3 id="ioif-매크로-재정의-경고">IOIF 매크로 재정의 경고<a class="headerlink" href="#ioif-매크로-재정의-경고" title="Permanent link">&para;</a></h3>
-<p><strong>증상:</strong> <code>warning: "AGRB_IOIF_FDCAN_ENABLE" redefined</code> 등의 경고 (Rev 1.1 SDK 를 CMake 로 빌드할 때 발생 — STM32CubeIDE 빌드나 Rev 2.0 SDK 에서는 나타나지 않습니다)</p>
-<p><strong>원인:</strong> <code>AGRB_IOIF_*_ENABLE</code> 매크로가 <code>CMakeLists.txt</code> 의 매크로 정의 블록(<code>target_compile_definitions</code>)과 <code>ioif_conf.h</code> 양쪽에서 중복 정의</p>
-<p><strong>해결:</strong> <code>CMakeLists.txt</code> 의 <code>target_compile_definitions</code> 블록에서 <code>AGRB_IOIF_*</code> 관련 정의를 제거하고, <code>ioif_conf.h</code>에서만 관리하세요. 경고 자체는 동작에 영향을 주지 않지만, 제거하는 것이 깔끔합니다.</p>
+<h3 id="redefined-경고-rev-11-sdk-cmake-빌드"><code>redefined</code> 경고 (Rev 1.1 SDK, CMake 빌드)<a class="headerlink" href="#redefined-경고-rev-11-sdk-cmake-빌드" title="Permanent link">&para;</a></h3>
+<p><strong>증상:</strong> <code>warning: "AGRB_IOIF_FDCAN_ENABLE" redefined</code> 처럼 <code>..._ENABLE</code> 이름의 값이 다시 정의되었다는 경고 (Rev 1.1 SDK 를 CMake 로 빌드할 때만 나타납니다 — STM32CubeIDE 빌드나 Rev 2.0 SDK 에서는 나타나지 않습니다)</p>
+<p><strong>원인:</strong> SDK 안에서 같은 설정 값이 두 군데에 정의되어 있어서 나오는 경고입니다.</p>
+<p><strong>해결:</strong> 동작에는 영향이 없으니 <strong>무시해도 됩니다.</strong> STM32CubeIDE 로 빌드하면 나타나지 않습니다.</p>
 <hr />
 <h2 id="보드-리비전--sdk-zip-불일치">보드 리비전 / SDK ZIP 불일치<a class="headerlink" href="#보드-리비전--sdk-zip-불일치" title="Permanent link">&para;</a></h2>
 <h3 id="가운데우측-버튼이-안-눌리거나-누르지-않은-버튼이-항상-눌린-것으로-잡힘">가운데·우측 버튼이 안 눌리거나, 누르지 않은 버튼이 항상 눌린 것으로 잡힘<a class="headerlink" href="#가운데우측-버튼이-안-눌리거나-누르지-않은-버튼이-항상-눌린-것으로-잡힘" title="Permanent link">&para;</a></h3>
@@ -3167,7 +3167,7 @@
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>control_task.c:(.text.Active_Loop+0x292): undefined reference to `XM_UserNV_Write'
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>collect2.exe: error: ld returned 1 exit status
 </code></pre></div>
-<p><strong>원인:</strong> Ex.36 은 학습된 NN 가중치를 전원 OFF/ON 사이에 보존하기 위해 Internal Flash UserNV API (<code>XM_UserNV_Read/Write/Erase</code>) 를 사용합니다. 이 API 는 <strong>Rev 2.0 SDK 의 <code>libXM_Lib.a</code> 에만 포함</strong>되어 있고 Rev 1.1 lib 에는 아직 이식되지 않았습니다.</p>
+<p><strong>원인:</strong> Ex.36 은 학습된 NN 가중치를 전원 OFF/ON 사이에 보존하기 위해 Internal Flash UserNV API (<code>XM_UserNV_Read/Write/Erase</code>) 를 사용합니다. 이 API 는 <strong>Rev 2.0 SDK 의 <code>libXM_Lib.a</code> 에만 포함</strong>되어 있고 Rev 1.1 lib 에는 없습니다.</p>
 <p><strong>해결:</strong>
 - <strong>본인 보드가 Rev 2.0</strong> → Rev 2.0 SDK ZIP 으로 다시 import 후 빌드.
 - <strong>본인 보드가 Rev 1.1</strong> → Ex.36 은 진행 불가. Ex.35 (<code>MultiLayer_Transparent_Control</code>) 까지 학습한 뒤, Rev 2.0 보드를 확보하면 Ex.36 로 넘어가세요. Ex.36 의 NN + LQR 부분만 보고 싶다면 BTN1 long-press (Flash 저장) 동작을 제거하고 RAM 상에서만 학습/재생하도록 임시 수정해 학습용으로 활용 가능.</p>
@@ -3192,9 +3192,12 @@
 4. CAN-FD 보레이트 설정이 일치하는지 확인</p>
 <h3 id="센서-허브-모듈-연동-오류">센서 허브 모듈 연동 오류<a class="headerlink" href="#센서-허브-모듈-연동-오류" title="Permanent link">&para;</a></h3>
 <p><strong>체크리스트:</strong>
-1. 센서 허브 모듈의 CAN 주소(Node ID)가 충돌하지 않는지 확인
-2. AGR PnP V2를 통한 디바이스 검색이 정상 수행되는지 확인
+1. 센서 허브 모듈의 전원과 CAN-FD 케이블이 제대로 연결되었는지 확인
+2. 센서 허브가 XM10 에 자동으로 인식(연결)되는지 확인
 3. 센서 허브 모듈의 펌웨어 버전이 XM10 SDK와 호환되는지 확인</p>
+<blockquote>
+<p>IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.</p>
+</blockquote>
 <hr />
 <h2 id="디버깅-관련">디버깅 관련<a class="headerlink" href="#디버깅-관련" title="Permanent link">&para;</a></h2>
 <h3 id="st-link-연결-실패">ST-Link 연결 실패<a class="headerlink" href="#st-link-연결-실패" title="Permanent link">&para;</a></h3>
@@ -3255,8 +3258,9 @@
 </code></pre></div>
 <p>또는 <code>XM_GetButtonEvent()</code> 의 read-clear 동작 활용 (Ex.02 참조).</p>
 <h3 id="usb--통신-함정">USB / 통신 함정<a class="headerlink" href="#usb--통신-함정" title="Permanent link">&para;</a></h3>
-<h4 id="usb-cdc-메시지가-phai-studio-또는-터미널에-안-보임">USB-CDC 메시지가 PhAI Studio 또는 터미널에 안 보임<a class="headerlink" href="#usb-cdc-메시지가-phai-studio-또는-터미널에-안-보임" title="Permanent link">&para;</a></h4>
-<p><strong>원인 1:</strong> 다른 시리얼 클라이언트가 동일 COM 포트 점유 (PhAI Studio + PuTTY 동시 실행)</p>
+<h4 id="usb-cdc-텍스트-메시지가-터미널에-안-보임">USB-CDC 텍스트 메시지가 터미널에 안 보임<a class="headerlink" href="#usb-cdc-텍스트-메시지가-터미널에-안-보임" title="Permanent link">&para;</a></h4>
+<p><code>XM_SendUsbDebugMessage</code> 로 보낸 텍스트는 일반 시리얼 터미널에서 읽는 용도입니다.</p>
+<p><strong>원인 1:</strong> 다른 PC 프로그램이 동일 COM 포트 점유 (PhAI Studio · <code>xm10</code> 도구 · 다른 터미널 — PC 프로그램은 한 번에 하나만 연결하세요)</p>
 <p><strong>원인 2:</strong> USB-C 케이블이 데이터 전송 불가 (충전 전용)</p>
 <p><strong>원인 3:</strong> Windows 장치 관리자에서 <code>STMicroelectronics Virtual COM Port</code> 미인식</p>
 <p><strong>해결 순서:</strong>
@@ -3272,7 +3276,7 @@
 </ul>
 <h4 id="forwardvelocity-footcontact-등-보행-분석-데이터가-항상-0"><code>forwardVelocity</code>, <code>footContact</code> 등 보행 분석 데이터가 항상 0<a class="headerlink" href="#forwardvelocity-footcontact-등-보행-분석-데이터가-항상-0" title="Permanent link">&para;</a></h4>
 <p><strong>원인:</strong> Body Data 전제조건 미충족 — <code>XM_SendUserBodyData()</code> 미호출</p>
-<p><strong>해결:</strong> <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5">examples/README.md — Body Data 안내</a> 참조.</p>
+<p><strong>해결:</strong> <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세">examples/README.md — Body Data 안내</a> 참조.</p>
 <h4 id="setassisttorque-호출했는데-h10-안-움직임"><code>SetAssistTorque</code> 호출했는데 H10 안 움직임<a class="headerlink" href="#setassisttorque-호출했는데-h10-안-움직임" title="Permanent link">&para;</a></h4>
 <ul>
 <li><code>XM_SetControlMode(XM_CTRL_CONTROL)</code> 누락 → Active 진입 시 1회 호출</li>

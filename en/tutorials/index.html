@@ -2617,7 +2617,7 @@
 </tr>
 <tr>
 <td style="text-align: center;">6</td>
-<td>Binary streaming + PhAI Studio</td>
+<td>Binary streaming + xm10 tool</td>
 <td>Ex.09</td>
 <td>Capture 4-channel graph + analysis report</td>
 </tr>
@@ -2687,7 +2687,7 @@
 - The first 2 weeks are where students struggle most with environment setup. Schedule dedicated time for TA or instructor-led check-ins.
 - The Week 8 mini project is effective for maintaining motivation. Run it as an open-ended prompt like "build anything using what you've learned from Ex.05–09."
 - For Week 16, teams of 3–4 are recommended. Teams that dive deep into the Physical AI application track (Ex.21, 31, 32, 33) at the end tend to produce the strongest final projects.</p>
-<p>Examples not in this schedule (Ex.05d, 15, 22, 24, 28–42) are naturally left for self-directed study or a follow-on course in the next semester.</p>
+<p>Examples not in this schedule (Ex.05d, 15, 22, 24, 28–36, 38–43) are naturally left for self-directed study or a follow-on course in the next semester.</p>
 <hr />
 <h2 id="part-0--board-verification">Part 0 — Board Verification<a class="headerlink" href="#part-0--board-verification" title="Permanent link">&para;</a></h2>
 <table>
@@ -2804,7 +2804,7 @@
 <h2 id="part-2--usb-communication">Part 2 — USB Communication<a class="headerlink" href="#part-2--usb-communication" title="Permanent link">&para;</a></h2>
 <p>Exchange real-time messages with a PC and stream data. Essential for debugging and data collection.</p>
 <blockquote>
-<p><strong>Note</strong>: The USB serial (CDC) port can only be opened by one program at a time. For Ex.07–09, make sure only a serial terminal <strong>or</strong> PhAI Studio is open — not both. Running them simultaneously will cause a conflict.</p>
+<p><strong>Note</strong>: The USB serial (CDC) port can only be opened by one program at a time. For Ex.07–09, make sure only one of a serial terminal, PhAI Studio <strong>or</strong> the <code>xm10</code> tool is open. Running them simultaneously will cause a conflict.</p>
 </blockquote>
 <h3 id="usb-serial-communication--ex07--09">USB Serial Communication — Ex.07 ~ 09<a class="headerlink" href="#usb-serial-communication--ex07--09" title="Permanent link">&para;</a></h3>
 <table>
@@ -2833,12 +2833,12 @@
 <td style="text-align: center;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/">09</a></td>
 <td style="text-align: left;">High-speed binary streaming</td>
 <td style="text-align: center;">⭐⭐⭐</td>
-<td style="text-align: left;">PhAI Studio-compatible protocol, 1 kHz transmission</td>
+<td style="text-align: left;">PhAI V2.2 protocol, 1 kHz transmission (view the user channel with the <code>xm10</code> tool)</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>To save and analyze a captured stream on the PC, use PhAI Studio recording or the <code>xm10</code> tool in the repo — <code>python PythonDecoder/xm10.py recv</code> shows a live graph while the raw stream is saved as <code>.xmlog</code>, then <code>export</code> pulls out CSV (<a href="../getting-started/04-pc-data-tool/">guide</a>). (On-board file storage was removed in v2.5.0 — SD card support is planned for a future HW revision.)</p>
+<p>To save and analyze a captured stream on the PC, use PhAI Studio recording or the <code>xm10</code> tool in the repo — <code>python PythonDecoder/xm10.py recv</code> shows a live graph while the raw stream is saved as <code>.xmlog</code>, then <code>export</code> pulls out CSV (<a href="../getting-started/04-pc-data-tool/">guide</a>). PhAI Studio is still under development, so for now use the <code>xm10</code> tool to view and save your own (custom) data structs, such as the ones you send with <code>XM_SendUsbDataWithId</code>. (On-board file storage was removed in v2.5.0 and is not supported at present.)</p>
 </blockquote>
 <hr />
 <h2 id="part-3--kit-h10-exoskeleton-basic-modes">Part 3 — KIT H10 Exoskeleton Basic Modes<a class="headerlink" href="#part-3--kit-h10-exoskeleton-basic-modes" title="Permanent link">&para;</a></h2>
@@ -3064,12 +3064,6 @@
 <td style="text-align: left;">Train a small neural network on-board → replay with LQR — Internal Flash UserNV API is supported on Rev 2.0 only</td>
 </tr>
 <tr>
-<td style="text-align: center;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/37_FES_Hub_Module_Ctrl/">37</a></td>
-<td style="text-align: left;">FES Hub module control</td>
-<td style="text-align: center;">⭐⭐⭐</td>
-<td style="text-align: left;">Connect FES Hub over CAN-FD, control per-channel electrical stimulation parameters</td>
-</tr>
-<tr>
 <td style="text-align: center;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/38_Periodic_Background_Task/">38</a></td>
 <td style="text-align: left;">Periodic background task</td>
 <td style="text-align: center;">⭐⭐</td>
@@ -3085,22 +3079,31 @@
 <td style="text-align: center;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/">40</a></td>
 <td style="text-align: left;">EMG proportional assist 🛑 <strong>Rev 2.0 only</strong></td>
 <td style="text-align: center;">⭐⭐⭐⭐</td>
-<td style="text-align: left;">External 4-channel ADC EMG → envelope → proportional torque, button calibration + PhAI Studio 0xF0 streaming (EMG competition foundation)</td>
+<td style="text-align: left;">External 4-channel ADC EMG → envelope → proportional torque, button calibration + 0xF0 streaming to the xm10 tool (EMG competition foundation)</td>
 </tr>
 <tr>
 <td style="text-align: center;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/">41</a></td>
 <td style="text-align: left;">IMU Hub attitude dashboard 🛑 <strong>Rev 2.0 only</strong></td>
 <td style="text-align: center;">⭐⭐⭐</td>
-<td style="text-align: left;">Up to 6 IMUs' quaternion → Euler (roll/pitch/yaw) conversion, auto connection detection + PhAI Studio 0xF0 18-channel (50Hz) streaming (FDCAN2 sensor-hub bus)</td>
+<td style="text-align: left;">Up to 6 IMUs' quaternion → Euler (roll/pitch/yaw) conversion, auto connection detection + 0xF0 18-channel (50Hz) streaming to the xm10 tool (CAN-FD sensor hub)</td>
 </tr>
 <tr>
 <td style="text-align: center;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/">42</a></td>
 <td style="text-align: left;">EMG Hub biofeedback 🛑 <strong>Rev 2.0 only</strong></td>
 <td style="text-align: center;">⭐⭐⭐</td>
-<td style="text-align: left;">Receive hub-processed muscle activation (envelope/MVC%), button calibration + LED/PhAI Studio 0xF0 4-channel (50Hz) real-time feedback (FDCAN2 sensor-hub bus, no motor drive)</td>
+<td style="text-align: left;">Receive hub-processed muscle activation (envelope/MVC%), button calibration + LED feedback and a 0xF0 4-channel (50Hz) live view in the xm10 tool (CAN-FD sensor hub, no motor drive)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/">43</a></td>
+<td style="text-align: left;">Two boards talking over serial 🛑 <strong>Rev 2.0 only</strong></td>
+<td style="text-align: center;">⭐⭐</td>
+<td style="text-align: left;">Connect two XM10s directly over the External UART (PD5/PD6) — copy only inside the callback, find frame boundaries with a byte state machine</td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p>The IMU Hub and EMG Hub are modules under internal development. To use them, please contact us at https://huphailab.com/contact.</p>
+</blockquote>
 <hr />
 <h2 id="trying-an-example">Trying an Example<a class="headerlink" href="#trying-an-example" title="Permanent link">&para;</a></h2>
 <ol>

@@ -2664,7 +2664,7 @@
 </tbody>
 </table>
 <p><strong>반환값</strong>: <code>XmTsmHandle_t</code> — 생성된 TSM 핸들 (실패 시 <code>NULL</code>). 이후 모든 TSM 함수 호출에 이 핸들을 넘깁니다.</p>
-<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> 에서 상태 머신당 1회만 호출합니다 (초기화 시점). <code>Control_Loop()</code> 이나 반복 호출 컨텍스트에서 부르면 상태 머신이 매 주기 재생성되어 의도한 동작이 깨집니다. 헤더에 스레드/ISR 안전성이 별도로 명시되어 있지 않으므로, ISR에서는 호출하지 않는 것을 기본 원칙으로 합니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> 에서 상태 머신당 1회만 호출합니다 (초기화 시점). <code>Control_Loop()</code> 이나 반복 호출 컨텍스트에서 부르면 상태 머신이 매 주기 재생성되어 의도한 동작이 깨집니다. ISR 에서는 호출하지 마세요.</p>
 <p><strong>예제</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XmTsmHandle_t</span><span class="w"> </span><span class="n">s_tsm</span><span class="p">;</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>

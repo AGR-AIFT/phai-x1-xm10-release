@@ -2293,17 +2293,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#coming-up-in-v230" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Coming up in v2.3.0
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#getting-help" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2568,17 +2557,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#coming-up-in-v230" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Coming up in v2.3.0
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#getting-help" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2714,7 +2692,7 @@
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="cm">/* runs every 1 ms */</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <p><strong>Your existing code keeps working.</strong> The SDK internally accepts both the old and new names. Use the new names for any new code you write.</p>
-<p>The folder has been renamed from <code>XM_Apps/User_Algorithm/</code> to <code>XM_Apps/Control_Task/</code> for the same reason — aligning with the naming convention used across other company modules (CM-WH, etc.).</p>
+<p>The folder has been renamed from <code>XM_Apps/User_Algorithm/</code> to <code>XM_Apps/Control_Task/</code> for the same reason.</p>
 <h3 id="2-auxiliary-task-api-added-to-rev-11">2. Auxiliary task API added to Rev 1.1<a class="headerlink" href="#2-auxiliary-task-api-added-to-rev-11" title="Permanent link">&para;</a></h3>
 <p>The following APIs, previously available only on Rev 2.0, are now included in <strong>Rev 1.1 as well</strong>. You can write multi-task code in exactly the same way regardless of which board you use.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// Run a heavy computation once (e.g., training, FFT)</span>
@@ -2816,19 +2794,7 @@
 </ul>
 <hr />
 <h2 id="changed-files">Changed files<a class="headerlink" href="#changed-files" title="Permanent link">&para;</a></h2>
-<p>Internal system code is bundled in <code>libXM_Lib.a</code> (static library), so there is nothing you need to do on your end. The library was rebuilt for v2.2.0 to include:</p>
-<ul>
-<li>New task management code (<code>xm_task_manager</code>)</li>
-<li>Automatic mapping from old to new function names (<code>user_compat</code>)</li>
-<li>Diagnostics and measurement utilities (<code>diag_perf</code>, <code>hardfault_dump</code>, <code>xm_imu_diag</code> (Rev 1.1) / <code>xm_periph_stimulus</code> + <code>xm_production_od</code> (Rev 2.0))</li>
-</ul>
-<hr />
-<h2 id="coming-up-in-v230">Coming up in v2.3.0<a class="headerlink" href="#coming-up-in-v230" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Improved user workflow (tighter data pipeline integration with PhAI Studio)</li>
-<li>Additional examples (FES Hub / EMG Hub usage)</li>
-<li>Enhanced AI assistant integration tooling</li>
-</ul>
+<p>The firmware library inside the SDK (<code>libXM_Lib.a</code>) was also rebuilt to include the changes above. There is nothing you need to do on your end.</p>
 <hr />
 <h2 id="getting-help">Getting help<a class="headerlink" href="#getting-help" title="Permanent link">&para;</a></h2>
 <ul>

@@ -2451,8 +2451,8 @@
 <h2 id="한눈에-보기">한눈에 보기<a class="headerlink" href="#한눈에-보기" title="Permanent link">&para;</a></h2>
 <p><strong>다운로드한 SDK 가 STM32CubeIDE clean build 에서 "undefined reference" 22 건으로 실패하던 문제를 수정한 패치 릴리즈</strong> 입니다. 라이브러리 빌드 단계에서 일부 모듈의 소스가 누락되어 있던 게 원인이었습니다.</p>
 <ul>
-<li>Rev 2.0 SDK: 새 <code>libXM_Lib.a</code> 로 교체. clean build 169/169 link 통과 확인</li>
-<li>Rev 1.1 SDK: 같은 정합성 차원의 작은 수정 (FreeRTOS 설정 + USB MSC 진단 함수)</li>
+<li>Rev 2.0 SDK: 새 <code>libXM_Lib.a</code> 로 교체. clean build 가 링크 오류 없이 통과하는 것을 확인했습니다</li>
+<li>Rev 1.1 SDK: SDK 안에서 빠져 있던 부분 2 건(함수 1 건, 설정 1 건)을 채웠습니다 (사용자 코드에는 영향 없음)</li>
 <li>보드 리비전 비교 문서 보강 — 본인 보드와 다른 ZIP 으로 빌드하면 내장 버튼/LED 핀이 한 칸 어긋난다는 점이 어디에도 명시되어 있지 않던 문제</li>
 </ul>
 <p><strong>기존 사용자 코드는 그대로 동작합니다.</strong> API / 동작 변경 없음, 빌드 환경 그대로. v2.2.0 으로 빌드가 됐던 분은 굳이 받지 않으셔도 되고, 빌드가 안 됐던 분은 본 ZIP 으로 다시 받아주세요.</p>
@@ -2542,22 +2542,12 @@
 <h2 id="수정-내용">수정 내용<a class="headerlink" href="#수정-내용" title="Permanent link">&para;</a></h2>
 <h3 id="1-rev-20-sdk-빌드-실패-22-건-수정">1. Rev 2.0 SDK 빌드 실패 22 건 수정<a class="headerlink" href="#1-rev-20-sdk-빌드-실패-22-건-수정" title="Permanent link">&para;</a></h3>
 <p>다운로드 직후 STM32CubeIDE clean build 에서 다음 패턴의 link error 가 22 건 발생하던 문제를 수정했습니다.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>undefined reference to `CdcDopRouter_Init'
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>undefined reference to `CdcDopRouter_Process'
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>undefined reference to `USBH_DiskIO_GetDiag'
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>undefined reference to `USBH_DiskIO_ResetDiag'
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>undefined reference to `XM_Ethernetif_GetMdioId'
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>undefined reference to `g_eth_rx_packet_count'
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>undefined reference to `xTaskGetHandle'
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>... (총 22 건)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>undefined reference to `…'
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>... (총 22 건)
 </code></pre></div>
-<p>새 <code>libXM_Lib.a</code> 와 sync 된 소스로 교체했고, clean build 169/169 link 통과를 확인했습니다.</p>
+<p>새 <code>libXM_Lib.a</code> 와 소스로 교체했고, clean build 가 링크 오류 없이 통과하는 것을 확인했습니다.</p>
 <h3 id="2-rev-11-sdk-안정성-개선">2. Rev 1.1 SDK 안정성 개선<a class="headerlink" href="#2-rev-11-sdk-안정성-개선" title="Permanent link">&para;</a></h3>
-<p>Rev 1.1 자체는 link 실패가 없었지만, 라이브러리가 호출하는 함수 중 일부가 SDK 트리에서 누락되어 있던 작은 정합성 문제를 함께 해결했습니다.</p>
-<ul>
-<li><code>Compatible/FATFS/Target/usbh_diskio.c</code> — USB MSC 진단 함수 정의 복원</li>
-<li><code>Core/Inc/FreeRTOSConfig.h</code> — <code>INCLUDE_xTaskGetHandle = 1</code> 매크로 추가</li>
-</ul>
+<p>Rev 1.1 자체는 링크 실패가 없었지만, 라이브러리가 쓰는 함수·설정 중 일부가 SDK 에서 빠져 있던 작은 문제를 함께 해결했습니다. 사용자 코드에는 영향이 없습니다.</p>
 <h3 id="3-보드-리비전-비교-문서-보강">3. 보드 리비전 비교 문서 보강<a class="headerlink" href="#3-보드-리비전-비교-문서-보강" title="Permanent link">&para;</a></h3>
 <p>본인 보드 리비전을 확인하는 진입점이 깨진 링크로 가던 문제를 정리하고, 비어 있던 비교 표를 채웠습니다.</p>
 <ul>

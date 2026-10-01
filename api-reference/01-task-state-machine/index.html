@@ -2558,7 +2558,7 @@
 </code></pre></div></li>
 </ul>
 <h3 id="xm_tsm_run"><code>XM_TSM_Run</code><a class="headerlink" href="#xm_tsm_run" title="Permanent link">&para;</a></h3>
-<p>TSM을 실행합니다. <strong>User Task의 무한 루프 내에서 반드시 호출</strong>되어야 합니다.</p>
+<p>TSM을 실행합니다. <strong>제어 루프 task (Control_Loop) 안에서 매 주기 반드시 호출</strong>되어야 합니다.</p>
 <ul>
 <li><strong>Parameters</strong><ul>
 <li><code>XmTsmHandle_t handle</code>: 실행할 TSM 핸들</li>

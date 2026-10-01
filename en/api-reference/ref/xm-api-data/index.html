@@ -3209,14 +3209,14 @@
 <blockquote>
 <p><strong>Header</strong>: <code>XM_FW/XM_API/xm_api_data.h</code> (shared by Rev1.1 / Rev2.0 — the GRF extension fields are 🟢 Rev 2.0 only)
 <strong>Related concept doc</strong>: <a href="../../02-h10-control-n-data/">02. KIT H10 Control &amp; Data</a> (IPO cycle, Body Data, torque sign convention)
-<strong>Related examples</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/">11 Passive Mode</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/12_Active_Assist_Mode/">12 Active Assist</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/13_Resistive_Mode/">13 Resistive</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/14_PD_Realtime_Control/">14 PD Realtime</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/16_TinyAI_Sensor_Fusion/">16 TinyAI Sensor Fusion</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/32_GRF_Gait_Intent/">32 GRF Gait Intent</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/37_FES_Hub_Module_Ctrl/">37 FES Hub Ctrl</a> 🛑 Rev 2.0 only · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/">41 IMU Hub Dashboard</a> 🛑 Rev 2.0 only · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/">42 EMG Hub Biofeedback</a> 🛑 Rev 2.0 only</p>
+<strong>Related examples</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/">11 Passive Mode</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/12_Active_Assist_Mode/">12 Active Assist</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/13_Resistive_Mode/">13 Resistive</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/14_PD_Realtime_Control/">14 PD Realtime</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/16_TinyAI_Sensor_Fusion/">16 TinyAI Sensor Fusion</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/32_GRF_Gait_Intent/">32 GRF Gait Intent</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/">41 IMU Hub Dashboard</a> 🛑 Rev 2.0 only · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/">42 EMG Hub Biofeedback</a> 🛑 Rev 2.0 only</p>
 </blockquote>
 <hr />
 <h2 id="when-to-use-this">When to use this<a class="headerlink" href="#when-to-use-this" title="Permanent link">&para;</a></h2>
-<p><code>xm_api_data.h</code> is the facade you will open <strong>most often</strong> while working on XM10 firmware. Every function that reads the latest state of <code>KIT H10</code> and the various sensor hubs (GRF, External IMU, IMU Hub, EMG Hub, FES Hub) inside <code>Control_Loop()</code> (<code>XM.status</code>), and every function that issues control commands (<code>XM_Set*</code> / <code>XM_Send*</code>), is declared here.</p>
+<p><code>xm_api_data.h</code> is the facade you will open <strong>most often</strong> while working on XM10 firmware. Every function that reads the latest state of <code>KIT H10</code> and the various sensor hubs (GRF, External IMU, IMU Hub, EMG Hub) inside <code>Control_Loop()</code> (<code>XM.status</code>), and every function that issues control commands (<code>XM_Set*</code> / <code>XM_Send*</code>), is declared here.</p>
 <p>This page does not re-explain how the global <code>XM</code> object gets filled and flushed (the <strong>IPO — Input-Process-Output — cycle</strong>), the torque sign convention, or the Body Data prerequisite. If this is your first time, read <a href="../../02-h10-control-n-data/">02. KIT H10 Control &amp; Data</a> first; use this page to quickly look up function signatures, parameters, and struct fields.</p>
 <blockquote>
-<p>ℹ️ <strong>Note on the common <code>nodeId</code> parameter</strong>: most joint-control functions in this header take a <code>SystemNodeID_t nodeId</code>. In practice only two values are used — <code>SYS_NODE_ID_RH</code> (right hip) and <code>SYS_NODE_ID_LH</code> (left hip) — defined in <code>data_object_dictionaries.h</code> (a different header). Since this page only covers <code>xm_api_data.h</code>, it does not list the full <code>SystemNodeID_t</code> enum.</p>
+<p>ℹ️ <strong>Note on the common <code>nodeId</code> parameter</strong>: most joint-control functions in this header take a <code>SystemNodeID_t nodeId</code>. In practice only two values are used — <code>SYS_NODE_ID_RH</code> (right hip) and <code>SYS_NODE_ID_LH</code> (left hip). Including <code>xm_api.h</code> alone is enough to use them.</p>
 </blockquote>
 <hr />
 <h2 id="function-list">Function List<a class="headerlink" href="#function-list" title="Permanent link">&para;</a></h2>
@@ -3258,7 +3258,7 @@
 </tr>
 <tr>
 <td><a href="#xm_getxmnmtstate"><code>XM_GetXMNmtState()</code></a></td>
-<td>Returns the detailed PnP (NMT) state with the CM</td>
+<td>Returns the detailed connection state with the CM</td>
 </tr>
 </tbody>
 </table>
@@ -3372,7 +3372,7 @@
 </table>
 <p><strong>Return value</strong>: none</p>
 <p><strong>Safety logic</strong>: the instant the mode changes (especially MONITOR → TORQUE), <strong>all torque commands are internally reset to 0</strong> to prevent a jerk at the start of actuation.</p>
-<p>⚠️ <strong>Call context</strong>: assumed to be called from <code>Control_Setup()</code>/<code>Control_Loop()</code> (the header does not state any ISR-safety guarantee). The common pattern is <code>XM_CTRL_CONTROL</code> on algorithm Entry and <code>XM_CTRL_MONITOR</code> on Exit.</p>
+<p>⚠️ <strong>Call context</strong>: call it from <code>Control_Setup()</code>/<code>Control_Loop()</code>, not from an ISR. The common pattern is <code>XM_CTRL_CONTROL</code> on algorithm Entry and <code>XM_CTRL_MONITOR</code> on Exit.</p>
 <p><strong>Example</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Active_Entry</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">XM_SetControlMode</span><span class="p">(</span><span class="n">XM_CTRL_CONTROL</span><span class="p">);</span><span class="w">   </span><span class="c1">// start real actuation</span>
@@ -3489,8 +3489,8 @@ For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../
 <h3 id="xm_getxmnmtstate"><code>XM_GetXMNmtState()</code><a class="headerlink" href="#xm_getxmnmtstate" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">CM_NmtState_t</span><span class="w"> </span><span class="nf">XM_GetXMNmtState</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
-<p>Returns the detailed DOP V3 PnP (NMT) state with the CM. <code>XM_IsCmConnected()</code> is internally equivalent to checking <code>XM_GetXMNmtState() == CM_NMT_OPERATIONAL</code>.</p>
-<p><strong>Return value</strong>: <code>CM_NmtState_t</code> (defined in <code>cm_drv.h</code> — a different header this one includes)</p>
+<p>Returns the detailed connection state with the CM. <code>XM_IsCmConnected()</code> is internally equivalent to checking <code>XM_GetXMNmtState() == CM_NMT_OPERATIONAL</code>.</p>
+<p><strong>Return value</strong>: <code>CM_NmtState_t</code> (the CM connection-state enum)</p>
 <table>
 <thead>
 <tr>
@@ -3503,12 +3503,12 @@ For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../
 <tr>
 <td><code>CM_NMT_INITIALISING</code></td>
 <td>0</td>
-<td>Booting (boot-up message not yet received)</td>
+<td>Booting (the CM's start-up notice not yet received)</td>
 </tr>
 <tr>
 <td><code>CM_NMT_PRE_OPERATIONAL</code></td>
 <td>1</td>
-<td>SDO communication available, PDO inactive</td>
+<td>Configuration messages only; data exchange off</td>
 </tr>
 <tr>
 <td><code>CM_NMT_OPERATIONAL</code></td>
@@ -4014,12 +4014,12 @@ For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../
 <tr>
 <td><code>XM_FES_HUB_CH_COUNT</code></td>
 <td><code>2</code></td>
-<td>Channel count of the FES Hub Module</td>
+<td>The FES Hub is currently not supported with the XM10.</td>
 </tr>
 <tr>
 <td><code>XM_GRF_FSR_CH_TOTAL</code> 🟢 Rev 2.0 only</td>
 <td><code>24</code></td>
-<td>FSR channel count of the SM-GRF fixed-frame module (ADC1 15ch + ADC3 9ch). Defined in <code>module.h</code>, which <code>xm_api_data.h</code> includes — Rev1.1 does not have that include at all</td>
+<td>FSR channel count of one GRF (foot-sensor) module. Available when you include <code>xm_api.h</code> — Rev1.1 does not have this value</td>
 </tr>
 </tbody>
 </table>
@@ -4212,7 +4212,7 @@ For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../
 </table>
 <hr />
 <h3 id="xmh10data_t"><code>XmH10Data_t</code><a class="headerlink" href="#xmh10data_t" title="Permanent link">&para;</a></h3>
-<p><strong>KIT H10 body data</strong> (DOP V1), accessed via <code>XM.status.h10</code>. Includes encoders, joint angles, gait state, and more.</p>
+<p><strong>KIT H10 body data</strong>, accessed via <code>XM.status.h10</code>. Includes encoders, joint angles, gait state, and more.</p>
 <table>
 <thead>
 <tr>
@@ -4491,7 +4491,10 @@ For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../
 </table>
 <hr />
 <h3 id="xmimuhubsensor_t--xmimuhubdata_t"><code>XmImuHubSensor_t</code> / <code>XmImuHubData_t</code><a class="headerlink" href="#xmimuhubsensor_t--xmimuhubdata_t" title="Permanent link">&para;</a></h3>
-<p><strong>IMU Hub Module</strong> data (EBIMU-9DOFV6 × 6, DOP V3), accessed via <code>XM.status.imu_hub</code>.</p>
+<p><strong>IMU Hub Module</strong> data (EBIMU-9DOFV6 × 6), accessed via <code>XM.status.imu_hub</code>.</p>
+<blockquote>
+<p>The IMU Hub and EMG Hub are modules under internal development. To use them, please contact us at https://huphailab.com/contact.</p>
+</blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">q_w</span><span class="p">,</span><span class="w"> </span><span class="n">q_x</span><span class="p">,</span><span class="w"> </span><span class="n">q_y</span><span class="p">,</span><span class="w"> </span><span class="n">q_z</span><span class="p">;</span><span class="w">           </span><span class="c1">// orientation (quaternion)</span>
 <a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">roll</span><span class="p">,</span><span class="w"> </span><span class="n">pitch</span><span class="p">,</span><span class="w"> </span><span class="n">yaw</span><span class="p">;</span><span class="w">             </span><span class="c1">// orientation (Euler, deg)</span>
@@ -4583,7 +4586,7 @@ For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../
 </code></pre></div></p>
 <hr />
 <h3 id="xmemghubdata_t"><code>XmEmgHubData_t</code><a class="headerlink" href="#xmemghubdata_t" title="Permanent link">&para;</a></h3>
-<p><strong>EMG Hub Module</strong> data (sEMG sensor hub, DOP V3), accessed via <code>XM.status.emg_hub</code>. Sourced from the EMG Hub's TPDO1 (CAN ID <code>0x18F</code>), 1kHz sampling, including the results of the HPF 20Hz → rectification → RMS 200ms → envelope 8Hz → MVC → activation pipeline.</p>
+<p><strong>EMG Hub Module</strong> data (sEMG sensor hub), accessed via <code>XM.status.emg_hub</code>. It holds the results of the 1kHz-sampled HPF 20Hz → rectification → RMS 200ms → envelope 8Hz → MVC → activation pipeline.</p>
 <table>
 <thead>
 <tr>
@@ -4604,7 +4607,7 @@ For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../
 <td><code>lastUpdateTick</code></td>
 <td><code>uint32_t</code></td>
 <td>ms</td>
-<td>Slave control tick (OD <code>0x6050 ctrl_tick_ms</code>, 32-bit, wraps at ~49.7 days). If the delta between consecutive receives isn't 1, it's a gap. Falls back to the 24-bit Metadata timestamp on the older 14B TPDO format</td>
+<td>Hub control tick (32-bit, wraps back to 0 after ~49.7 days). If the difference between consecutive receives isn't 1, something was missed. Older hub firmware reports a 24-bit time value instead</td>
 </tr>
 <tr>
 <td><code>raw_adc</code></td>
@@ -4691,116 +4694,7 @@ For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../
 </code></pre></div></p>
 <hr />
 <h3 id="xmfeshubdata_t"><code>XmFesHubData_t</code><a class="headerlink" href="#xmfeshubdata_t" title="Permanent link">&para;</a></h3>
-<p><strong>FES Hub Module</strong> feedback data (functional electrical stimulation, DOP V3 ES-vector, Node <code>0x0C</code>), accessed via <code>XM.status.fes_hub</code>. Sourced from the FES Hub's TPDO1 (CAN ID <code>0x18C</code>, 37B, 10ms period) — composed of a legacy 16B block (channel state/current/HV, etc.) plus a 21B KHJ extension (FSM/ISI/target amplitude, etc.). Commands are sent via SDO (<code>0x6300</code> ES-vector, <code>0x6310</code> Master Command), not through this struct.</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Unit</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>is_connected</code></td>
-<td><code>bool</code></td>
-<td>-</td>
-<td>FES Hub Module connection status</td>
-</tr>
-<tr>
-<td><code>lastUpdateTick</code></td>
-<td><code>uint32_t</code></td>
-<td>ms</td>
-<td>Data receive timestamp (FES slave 24-bit timestamp, LE)</td>
-</tr>
-<tr>
-<td><code>ch_state[2]</code></td>
-<td><code>uint8_t[XM_FES_HUB_CH_COUNT]</code></td>
-<td>0~3</td>
-<td>Channel state: 0=IDLE, 1=READY, 2=STIMULATING, 3=FAULT</td>
-</tr>
-<tr>
-<td><code>ch_current_mA[2]</code></td>
-<td><code>float[2]</code></td>
-<td>mA</td>
-<td>Current feedback (PID output)</td>
-</tr>
-<tr>
-<td><code>ch_fault_code[2]</code></td>
-<td><code>uint8_t[2]</code></td>
-<td>-</td>
-<td>Per-channel fault code</td>
-</tr>
-<tr>
-<td><code>hv_voltage_V</code></td>
-<td><code>float</code></td>
-<td>V</td>
-<td>HV boost converter output voltage</td>
-</tr>
-<tr>
-<td><code>digipot_pos</code></td>
-<td><code>uint8_t</code></td>
-<td>0~127</td>
-<td>Digipot position (amplitude control)</td>
-</tr>
-<tr>
-<td><code>es_state_packed</code></td>
-<td><code>uint8_t</code></td>
-<td>bitfield</td>
-<td><code>[3:0]</code>=CH0 ESState, <code>[7:4]</code>=CH1 ESState</td>
-</tr>
-<tr>
-<td><code>error_register</code></td>
-<td><code>uint8_t</code></td>
-<td>-</td>
-<td>Error register</td>
-</tr>
-<tr>
-<td><code>fsm_state</code> / <code>fsm_state_prev</code></td>
-<td><code>uint8_t</code></td>
-<td>-</td>
-<td>Current/previous FSM state (KHJ Control Task)</td>
-</tr>
-<tr>
-<td><code>isi_packed</code></td>
-<td><code>uint8_t</code></td>
-<td>bitmap</td>
-<td><code>bit[N]</code>=ISI[N]. EXT7(bit7)/EXT8(bit8)=trace of a Master Command action</td>
-</tr>
-<tr>
-<td><code>ch_es_error_lo[2]</code></td>
-<td><code>uint8_t[2]</code></td>
-<td>-</td>
-<td>ES-vector error code low byte (per channel, separate from the CiA 301 Abort code)</td>
-</tr>
-<tr>
-<td><code>ch_target_amplitude_mA[2]</code></td>
-<td><code>float[2]</code></td>
-<td>mA</td>
-<td>Target amplitude (setpoint) commanded by the Master</td>
-</tr>
-<tr>
-<td><code>ch_impedance[2]</code></td>
-<td><code>float[2]</code></td>
-<td>ohm</td>
-<td>Filtered impedance — an indicator for judging electrode contact</td>
-</tr>
-<tr>
-<td><code>ch_pulse_cnt[2]</code></td>
-<td><code>uint16_t[2]</code></td>
-<td>-</td>
-<td>Cumulative stimulation pulse counter</td>
-</tr>
-<tr>
-<td><code>ch_voltage_diff_V[2]</code></td>
-<td><code>float[2]</code></td>
-<td>V</td>
-<td>Actual stimulation differential voltage</td>
-</tr>
-</tbody>
-</table>
-<p><strong>See also</strong>: the channel index (0/1) and array sizes are defined by <a href="#macros"><code>XM_FES_HUB_CH_COUNT</code></a>.</p>
+<p><code>XM.status.fes_hub</code> — The FES Hub is currently not supported with the XM10.</p>
 <hr />
 <h3 id="xminput_t"><code>XmInput_t</code><a class="headerlink" href="#xminput_t" title="Permanent link">&para;</a></h3>
 <p>The <strong>integrated robot state struct</strong>, accessed via <code>XM.status</code>. All read-only sensor data is collected here.</p>
@@ -4808,9 +4702,9 @@ For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../
 <a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="w">    </span><span class="n">XmH10Data_t</span><span class="w">     </span><span class="n">h10</span><span class="p">;</span><span class="w">      </span><span class="c1">// KIT H10 body data</span>
 <a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="w">    </span><span class="n">XmGrfData_t</span><span class="w">     </span><span class="n">grf</span><span class="p">;</span><span class="w">      </span><span class="c1">// GRF foot-pressure sensor data</span>
 <a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a><span class="w">    </span><span class="n">XmExtImuData_t</span><span class="w">  </span><span class="n">ext_imu</span><span class="p">;</span><span class="w">  </span><span class="c1">// External UART IMU (Xsens MTi-630)</span>
-<a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a><span class="w">    </span><span class="n">XmImuHubData_t</span><span class="w">  </span><span class="n">imu_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// IMU Hub sensor data (DOP V3)</span>
-<a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a><span class="w">    </span><span class="n">XmEmgHubData_t</span><span class="w">  </span><span class="n">emg_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// EMG Hub sensor data (DOP V3)</span>
-<a id="__codelineno-41-7" name="__codelineno-41-7" href="#__codelineno-41-7"></a><span class="w">    </span><span class="n">XmFesHubData_t</span><span class="w">  </span><span class="n">fes_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// FES Hub stimulation feedback (DOP V3)</span>
+<a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a><span class="w">    </span><span class="n">XmImuHubData_t</span><span class="w">  </span><span class="n">imu_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// IMU Hub sensor data</span>
+<a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a><span class="w">    </span><span class="n">XmEmgHubData_t</span><span class="w">  </span><span class="n">emg_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// EMG Hub sensor data</span>
+<a id="__codelineno-41-7" name="__codelineno-41-7" href="#__codelineno-41-7"></a><span class="w">    </span><span class="n">XmFesHubData_t</span><span class="w">  </span><span class="n">fes_hub</span><span class="p">;</span><span class="w">  </span><span class="c1">// FES Hub (currently not supported with the XM10)</span>
 <a id="__codelineno-41-8" name="__codelineno-41-8" href="#__codelineno-41-8"></a><span class="p">}</span><span class="w"> </span><span class="n">XmInput_t</span><span class="p">;</span>
 </code></pre></div>
 <hr />
@@ -4876,7 +4770,7 @@ For the sign convention, unit, and the hard clamp (±10 Nm), see <a href="../../
 <tr>
 <td><code>status</code></td>
 <td><code>XmInput_t</code></td>
-<td>Read-only sensor data (H10/GRF/ExtIMU/IMU Hub/EMG Hub/FES Hub)</td>
+<td>Read-only sensor data (H10/GRF/ExtIMU/IMU Hub/EMG Hub)</td>
 </tr>
 <tr>
 <td><code>command</code></td>

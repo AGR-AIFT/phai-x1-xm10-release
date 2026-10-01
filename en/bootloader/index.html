@@ -3109,27 +3109,27 @@
 <hr />
 <h2 id="2-flash-memory-map">2. Flash Memory Map<a class="headerlink" href="#2-flash-memory-map" title="Permanent link">&para;</a></h2>
 <p>The STM32H743XI has 2 MB of internal Flash (Bank1 + Bank2).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌──────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│ Address         │ Size    │ Region         │ Description       │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│ 0x08000000      │ 256 KB  │ Bootloader     │ AGR_BOOT V2       │
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│                 │         │                │ (Bank1 S0-S1)     │
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│ 0x08040000      │ 1 KB    │ FW Header      │ AGR_FwInfo_t      │
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│                 │         │                │ (signature+CRC+version) │
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│ 0x08040400      │ 767 KB  │ App (Active)   │ User app firmware │
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│                 │         │                │ (Bank1 S2-S7)     │
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│ 0x08100000      │ 768 KB  │ Backup Slot    │ Previous firmware backup │
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│                 │         │                │ (Bank2 S0-S5)     │
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│ 0x081C0000      │ 128 KB  │ Boot Config    │ AGR_BootConfig_t  │
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│                 │         │                │ (Bank2 S6)        │
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│ 0x081E0000      │ 128 KB  │ Reserved       │ Reserved for future use │
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│                 │         │                │ (Bank2 S7)        │
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>└──────────────────────────────────────────────────────────────┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌───────────────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│ Address         │ Size    │ Region         │ Description                  │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├───────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│ 0x08000000      │ 256 KB  │ Bootloader     │ AGR_BOOT V2                  │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│                 │         │                │ (Bank1 S0-S1)                │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├───────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│ 0x08040000      │ 1 KB    │ FW Header      │ Firmware header              │
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│                 │         │                │ (signature + CRC + version)  │
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>├───────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│ 0x08040400      │ 767 KB  │ App (Active)   │ User app firmware            │
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│                 │         │                │ (Bank1 S2-S7)                │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>├───────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│ 0x08100000      │ 768 KB  │ Backup Slot    │ Previous firmware backup     │
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│                 │         │                │ (Bank2 S0-S5)                │
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>├───────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│ 0x081C0000      │ 128 KB  │ Boot Config    │ Boot settings                │
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│                 │         │                │ (Bank2 S6)                   │
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>├───────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│ 0x081E0000      │ 128 KB  │ Reserved       │ Reserved                     │
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│                 │         │                │ (Bank2 S7)                   │
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>└───────────────────────────────────────────────────────────────────────────┘
 </code></pre></div>
 <blockquote>
 <p><strong>Important</strong>: The bootloader (0x08000000) and the app (0x08040000) occupy completely separate regions.<br />
@@ -3198,11 +3198,11 @@ The two addresses play different roles:
 <h3 id="build--debug">Build &amp; Debug<a class="headerlink" href="#build--debug" title="Permanent link">&para;</a></h3>
 <ol>
 <li><strong>Build</strong> the project in STM32CubeIDE (Ctrl+B)</li>
-<li>Post-build scripts run automatically:</li>
-<li><code>size_report.py</code> → memory usage report</li>
-<li><code>version_generator.py</code> → generates <code>version.h</code> from the git tag</li>
-<li><code>patch_fw_info.py</code> → patches <code>fw_size</code>/CRC into the <code>.fw_header</code> section of the ELF</li>
-<li><code>fw_packager.py</code> → creates the packaged binary for FTP upload</li>
+<li>Post-build steps run automatically:</li>
+<li>Memory usage report</li>
+<li>Version info generated from the git tag</li>
+<li>Size and CRC written into the firmware header</li>
+<li>Packaged binary for FTP upload created</li>
 <li>Click <strong>Debug</strong> (F11) → the app firmware is written to 0x08040000 over SWD</li>
 <li>Debug normally (breakpoints, variable watch, etc.)</li>
 </ol>
@@ -3212,8 +3212,8 @@ The two addresses play different roles:
 <h3 id="why-swd-debugging-is-compatible-with-the-bootloader">Why SWD Debugging is Compatible with the Bootloader<a class="headerlink" href="#why-swd-debugging-is-compatible-with-the-bootloader" title="Permanent link">&para;</a></h3>
 <ul>
 <li>The linker script (<code>STM32H743XIHX_FLASH.ld</code>) places app code at <code>0x08040400</code></li>
-<li>The <code>.fw_header</code> section is placed at <code>0x08040000</code> so the bootloader can read the signature</li>
-<li><code>boot_fw_info.c</code> embeds the <code>AGRBOOT</code> signature in the ELF, ensuring the bootloader recognises the app even after an SWD flash</li>
+<li>The firmware header is placed at <code>0x08040000</code> so the bootloader can read the signature</li>
+<li>The SDK embeds the signature in the firmware, so the bootloader recognises the app even after an SWD flash</li>
 </ul>
 <hr />
 <h2 id="5-app-firmware-upload--phai-studio-usb-ftp">5. App Firmware Upload — PhAI Studio (USB FTP)<a class="headerlink" href="#5-app-firmware-upload--phai-studio-usb-ftp" title="Permanent link">&para;</a></h2>
@@ -3230,7 +3230,7 @@ It is the recommended approach for <strong>production environments</strong>, <st
 </code></pre></div>
 <blockquote>
 <p><strong>File to use in PhAI Studio</strong>: <code>XM10_X_X_X_X.bin</code> (e.g. <code>XM10_2_0_1_0.bin</code>)<br />
-This file is produced by <code>fw_packager.py</code> and consists of a 1 KB <code>AGR_FwInfo_t</code> header followed by the app binary.</p>
+This file is created automatically at the end of the build and consists of a 1 KB firmware header followed by the app binary.</p>
 </blockquote>
 <h3 id="upload-procedure">Upload Procedure<a class="headerlink" href="#upload-procedure" title="Permanent link">&para;</a></h3>
 <ol>
@@ -3245,28 +3245,26 @@ This file is produced by <code>fw_packager.py</code> and consists of a 1 KB <cod
 </ol>
 <h3 id="forcing-ftp-mode">Forcing FTP Mode<a class="headerlink" href="#forcing-ftp-mode" title="Permanent link">&para;</a></h3>
 <p>To switch to FTP mode while the app is already running:
-- Send the <strong>Enter Bootloader</strong> command from PhAI Studio
-- Or call <code>AGR_Boot_RequestUpdate()</code> from the app code</p>
+- Send the <strong>Enter Bootloader</strong> command from PhAI Studio</p>
 <hr />
 <h2 id="6-post-build-binary-generation">6. Post-Build Binary Generation<a class="headerlink" href="#6-post-build-binary-generation" title="Permanent link">&para;</a></h2>
-<p>When you run <strong>Build</strong> in STM32CubeIDE, the following post-build scripts execute in order:</p>
+<p>When you run <strong>Build</strong> in STM32CubeIDE, the following post-build steps run automatically, in order:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>[Build]   GCC compile + link → Extension_Module.elf
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>           │
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>[Step 1]  size_report.py → memory usage report (console output)
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>[Step 1]  memory usage report (console output)
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>           │
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>[Step 2]  version_generator.py → git tag → auto-generate version.h
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>[Step 2]  git tag → auto-generate version.h
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>           │
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>[Step 3]  patch_fw_info.py → patch ELF .fw_header (fw_size, fw_crc32)
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>[Step 3]  write size and CRC into the firmware header
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>           │                  → generate .bin, .hex, _app.bin
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>           │
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>[Step 4]  fw_packager.py → _app.bin + FwInfo header → XM10_X_X_X_X.bin
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>[Step 4]  _app.bin + firmware header → XM10_X_X_X_X.bin
 </code></pre></div>
 <h3 id="details-of-each-step">Details of Each Step<a class="headerlink" href="#details-of-each-step" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
 <th>Step</th>
-<th>Script</th>
 <th>Input</th>
 <th>Output</th>
 <th>Description</th>
@@ -3275,28 +3273,24 @@ This file is produced by <code>fw_packager.py</code> and consists of a 1 KB <cod
 <tbody>
 <tr>
 <td>1</td>
-<td><code>size_report.py</code></td>
 <td><code>.elf</code></td>
 <td>Console</td>
 <td>Visualises FLASH/RAM usage</td>
 </tr>
 <tr>
 <td>2</td>
-<td><code>version_generator.py</code></td>
 <td>git tag</td>
 <td><code>version.h</code></td>
 <td>Defines <code>FW_VER_MAJOR/MINOR/PATCH/DEBUG</code></td>
 </tr>
 <tr>
 <td>3</td>
-<td><code>patch_fw_info.py</code></td>
 <td><code>.elf</code></td>
 <td><code>.bin</code>, <code>.hex</code>, <code>_app.bin</code></td>
-<td>Patches <code>fw_size</code>/CRC into <code>.fw_header</code></td>
+<td>Writes size and CRC into the firmware header</td>
 </tr>
 <tr>
 <td>4</td>
-<td><code>fw_packager.py</code></td>
 <td><code>_app.bin</code></td>
 <td><code>XM10_X_X_X_X.bin</code></td>
 <td>1 KB header + app binary = FTP-ready package</td>
@@ -3304,27 +3298,27 @@ This file is produced by <code>fw_packager.py</code> and consists of a 1 KB <cod
 </tbody>
 </table>
 <blockquote>
-<p><strong>Python 3.x required</strong>: All post-build scripts are written in Python.<br />
-Run <code>pip install pyyaml</code> (required for Data Map code generation).</p>
+<p><strong>Python 3.x required</strong>: The post-build steps run on Python.
+Run <code>pip install pyyaml</code>.</p>
 </blockquote>
 <hr />
 <h2 id="7-how-the-bootloader-works">7. How the Bootloader Works<a class="headerlink" href="#7-how-the-bootloader-works" title="Permanent link">&para;</a></h2>
 <h3 id="boot-sequence">Boot Sequence<a class="headerlink" href="#boot-sequence" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Power ON → Bootloader starts (0x08000000)
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    │
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    ├─ Read Boot Config (Bank2 S6)
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    │   └─ First boot: auto-create config with default values
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    ├─ Read boot settings (Bank2 S6)
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    │   └─ First boot: auto-create settings with default values
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    │
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    ├─ Rollback check (boot_count &gt;= 3?)
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    ├─ Rollback check (3 or more failed boots in a row?)
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    │   └─ Yes: restore from Backup Slot
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    │
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    ├─ Validate app firmware
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    │   ├─ Check "AGRBOOT\x01" signature
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    │   ├─ Check signature
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    │   ├─ Verify CRC-32 (FTP uploads only)
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    │   └─ Check HW revision compatibility
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    │
 <a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    ├─ Validation passed → jump to app (0x08040400)
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    │   └─ App calls AGR_Boot_ConfirmBoot() → resets boot_count
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    │   └─ Once the app starts normally, the SDK notifies the bootloader → failed-boot count reset
 <a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    │
 <a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    └─ Validation failed → enter FTP wait mode
 <a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>        └─ Wait to receive new firmware over USB CDC
@@ -3332,13 +3326,13 @@ Run <code>pip install pyyaml</code> (required for Data Map code generation).</p>
 <h3 id="ftp-update-sequence">FTP Update Sequence<a class="headerlink" href="#ftp-update-sequence" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>FW Upload initiated from PhAI Studio
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    │
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    ├─ [1] App switches to bootloader (writes magic value to RTC BKP0R + NVIC Reset)
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    ├─ [1] App switches to the bootloader (reset)
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    ├─ [2] Copy current Active FW → Backup Slot
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    ├─ [3] Erase Active Slot
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    ├─ [4] Receive new FW + write to Active Slot
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    ├─ [5] Verify CRC-32
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    ├─ [6] Update Boot Config (PENDING_CONFIRM)
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    └─ [7] Reset → new app starts → ConfirmBoot() → done
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    ├─ [6] Update boot settings (waiting for the new firmware to confirm)
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    └─ [7] Reset → new app starts → normal start confirmed → done
 </code></pre></div>
 <hr />
 <h2 id="8-troubleshooting">8. Troubleshooting<a class="headerlink" href="#8-troubleshooting" title="Permanent link">&para;</a></h2>
@@ -3362,14 +3356,14 @@ Run <code>pip install pyyaml</code> (required for Data Map code generation).</p>
 <li>Confirm that the bootloader is in FTP mode (if the app is running, send "Enter Bootloader" from PhAI Studio first)</li>
 </ol>
 <h3 id="after-uploading-firmware-the-board-keeps-rebooting-and-reverts-to-the-previous-version">"After uploading firmware, the board keeps rebooting and reverts to the previous version"<a class="headerlink" href="#after-uploading-firmware-the-board-keeps-rebooting-and-reverts-to-the-previous-version" title="Permanent link">&para;</a></h3>
-<p><strong>Cause</strong>: The new firmware never called <code>AGR_Boot_ConfirmBoot()</code>, triggering an automatic rollback after 3 boot attempts.
-- Check that <code>system_startup.c</code> calls <code>AGR_Boot_ConfirmBoot()</code> immediately after startup
-- The default SDK code already includes this call — verify that <code>system_startup.c</code> has not been modified by the user</p>
+<p><strong>Cause</strong>: The new firmware never told the bootloader that it started normally, triggering an automatic rollback after 3 boot attempts.
+- The default SDK code sends this notification automatically right after boot
+- Verify that you have not modified the SDK startup code</p>
 <h3 id="the-build-succeeds-but-xm10_x_x_x_xbin-is-not-generated">"The build succeeds but XM10_X_X_X_X.bin is not generated"<a class="headerlink" href="#the-build-succeeds-but-xm10_x_x_x_xbin-is-not-generated" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Check Python 3.x installation: <code>python --version</code></li>
-<li>Review post-build script output in the Build Console for error messages</li>
-<li>Confirm that the script files exist in the <code>tools/build/</code> folder</li>
+<li>Review the post-build output in the Build Console for error messages</li>
+<li>Confirm that the SDK's <code>tools/build/</code> folder is still in place (it holds the post-build files)</li>
 </ol>
 <h3 id="stm32cubeprogrammer-shows-no-data-at-0x08040000-when-i-read-flash">"STM32CubeProgrammer shows no data at 0x08040000 when I read Flash"<a class="headerlink" href="#stm32cubeprogrammer-shows-no-data-at-0x08040000-when-i-read-flash" title="Permanent link">&para;</a></h3>
 <p><strong>Cause</strong>: The Start address was set incorrectly when uploading a <code>.bin</code> file directly with STM32CubeProgrammer.
@@ -3411,7 +3405,7 @@ Run <code>pip install pyyaml</code> (required for Data Map code generation).</p>
 <li>App firmware is built with a <strong>separate <code>libXM_Lib.a</code></strong> for each revision, but the bootloader is shared</li>
 </ul>
 <h3 id="python-environment-setup">Python Environment Setup<a class="headerlink" href="#python-environment-setup" title="Permanent link">&para;</a></h3>
-<p>To run the post-build scripts:
+<p>To run the post-build steps:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># After installing Python 3.x</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>pip<span class="w"> </span>install<span class="w"> </span>pyyaml
 </code></pre></div></p>

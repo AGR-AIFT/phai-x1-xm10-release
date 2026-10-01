@@ -3168,7 +3168,7 @@
 <tr>
 <td><code>name</code></td>
 <td><code>const char*</code></td>
-<td>Task 이름 (10자 이내 권장). <code>NULL</code>, 빈 문자열, 이미 사용 중인 이름은 거부됩니다.</td>
+<td>Task 이름 (10자 이내 권장). <code>NULL</code> 이나 빈 문자열은 거부됩니다. 같은 이름의 중복은 검사하지 않으니 task 마다 다른 이름을 지어 주세요.</td>
 </tr>
 <tr>
 <td><code>func</code></td>
@@ -3187,9 +3187,9 @@
 </tr>
 </tbody>
 </table>
-<p><strong>반환값</strong>: 성공 시 유효한 <code>XmTaskHandle_t</code> 핸들, 거부되면 <code>NULL</code> (+ USB-CDC 로 <code>[XM-WARN]</code> 메시지 출력).</p>
+<p><strong>반환값</strong>: 성공 시 유효한 <code>XmTaskHandle_t</code> 핸들, 거부되면 <code>NULL</code>. 거부돼도 메시지는 나오지 않으니 반환값을 꼭 확인하세요.</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준입니다(헤더에 별도 ISR-safe 명시 없음 — ISR 안에서 호출하지 마세요). 동시에 최대 <a href="#매크로"><code>XM_TASK_MAX_INSTANCES</code></a> (4개) 까지만 만들 수 있고, 완료된 task 도 <a href="#xm_task_delete"><code>XM_Task_Delete</code></a> 로 지우기 전까지는 이 개수에 포함됩니다.</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 동시에 최대 <a href="#매크로"><code>XM_TASK_MAX_INSTANCES</code></a> (4개) 까지만 만들 수 있고, 완료된 task 도 <a href="#xm_task_delete"><code>XM_Task_Delete</code></a> 로 지우기 전까지는 이 개수에 포함됩니다.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XmTaskHandle_t</span><span class="w"> </span><span class="n">s_heavy</span><span class="p">;</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
@@ -3221,7 +3221,7 @@
 </table>
 <p><strong>반환값</strong>: <code>true</code> — 함수가 return 하여 완료됨 / <code>false</code> — 아직 실행 중이거나 잘못된(또는 이미 삭제된) 핸들.</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음).</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_heavy</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">XM_Task_IsComplete</span><span class="p">(</span><span class="n">s_heavy</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="n">XM_Task_Delete</span><span class="p">(</span><span class="n">s_heavy</span><span class="p">);</span>
@@ -3271,7 +3271,7 @@
 </table>
 <p><strong>반환값</strong>: 성공 시 유효한 핸들, 거부되면 <code>NULL</code>.</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음).</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XmMutexHandle_t</span><span class="w"> </span><span class="n">s_buf_mutex</span><span class="p">;</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">static</span><span class="w"> </span><span class="n">XmTaskHandle_t</span><span class="w">  </span><span class="n">s_summary_task</span><span class="p">;</span>
@@ -3308,7 +3308,7 @@
 </table>
 <p><strong>반환값</strong>: 없음 (<code>void</code>).</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). 잘못된 핸들을 넘겨도 크래시 없이 무시됩니다(다른 API 와 동일한 방어 패턴).</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 잘못된 핸들을 넘겨도 크래시 없이 무시됩니다(다른 API 와 동일한 방어 패턴).</p>
 </blockquote>
 <p><strong>참고</strong>: <a href="#xm_task_resume"><code>XM_Task_Resume</code></a></p>
 <hr />
@@ -3334,7 +3334,7 @@
 </table>
 <p><strong>반환값</strong>: 없음 (<code>void</code>).</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음).</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요.</p>
 </blockquote>
 <p><strong>참고</strong>: <a href="#xm_task_suspend"><code>XM_Task_Suspend</code></a></p>
 <hr />
@@ -3365,7 +3365,7 @@
 <li><strong>자기 자신 삭제 금지</strong>: 현재 실행 중인(자기 자신의) task 를 스스로 <code>Delete</code> 하려는 시도는 거부됩니다(헤더 명시 — task 함수 안에서 <code>XM_Task_Delete(자기_핸들)</code> 을 호출하지 마세요).</li>
 </ul>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음).</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_heavy</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">XM_Task_IsComplete</span><span class="p">(</span><span class="n">s_heavy</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="n">XM_Task_Delete</span><span class="p">(</span><span class="n">s_heavy</span><span class="p">);</span>
@@ -3382,7 +3382,7 @@
 <p><strong>파라미터</strong>: 없음.</p>
 <p><strong>반환값</strong>: 성공 시 유효한 <code>XmMutexHandle_t</code>, 실패 시 <code>NULL</code>.</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). 보통 <code>Control_Setup()</code> 에서 한 번만 만들어 두고 계속 재사용합니다.</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 보통 <code>Control_Setup()</code> 에서 한 번만 만들어 두고 계속 재사용합니다.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XmMutexHandle_t</span><span class="w"> </span><span class="n">s_buf_mutex</span><span class="p">;</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
@@ -3419,7 +3419,7 @@
 </table>
 <p><strong>반환값</strong>: <code>true</code> — 잠금 성공 / <code>false</code> — timeout 이거나 잘못된 핸들.</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). <code>timeout_ms &gt; 0</code> 을 Control_Loop 안에서 쓰면 최악의 경우 그만큼 1 kHz 주기가 밀립니다 — 반드시 <code>0</code> + 실패 시 skip 패턴을 쓰세요.</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. <code>timeout_ms &gt; 0</code> 을 Control_Loop 안에서 쓰면 최악의 경우 그만큼 1 kHz 주기가 밀립니다 — 반드시 <code>0</code> + 실패 시 skip 패턴을 쓰세요.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cm">/* Control_Loop — 1 kHz Writer, 항상 timeout=0 */</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_Mutex_Lock</span><span class="p">(</span><span class="n">s_buf_mutex</span><span class="p">,</span><span class="w"> </span><span class="mi">0U</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
@@ -3453,7 +3453,7 @@
 </table>
 <p><strong>반환값</strong>: 없음 (<code>void</code>).</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). <code>XM_Mutex_Lock()</code> 성공 후 early return 하기 전에 반드시 <code>Unlock</code> 을 호출하세요 — 누락하면 그 Mutex 는 영구히 잠긴 채로 남습니다.</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. <code>XM_Mutex_Lock()</code> 성공 후 early return 하기 전에 반드시 <code>Unlock</code> 을 호출하세요 — 누락하면 그 Mutex 는 영구히 잠긴 채로 남습니다.</p>
 </blockquote>
 <p><strong>참고</strong>: <a href="#xm_mutex_lock"><code>XM_Mutex_Lock</code></a></p>
 <hr />
@@ -3479,7 +3479,7 @@
 </table>
 <p><strong>반환값</strong>: 없음 (<code>void</code>).</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). 이 Mutex 를 사용하는 task 가 아직 남아있는 상태에서 삭제하면 안 됩니다 — 관련 task 를 먼저 <a href="#xm_task_delete"><code>XM_Task_Delete</code></a> 로 정리한 뒤 호출하세요.</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 이 Mutex 를 사용하는 task 가 아직 남아있는 상태에서 삭제하면 안 됩니다 — 관련 task 를 먼저 <a href="#xm_task_delete"><code>XM_Task_Delete</code></a> 로 정리한 뒤 호출하세요.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">XM_Task_Delete</span><span class="p">(</span><span class="n">s_summary_task</span><span class="p">);</span>
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">XM_Mutex_Delete</span><span class="p">(</span><span class="n">s_buf_mutex</span><span class="p">);</span>
@@ -3487,14 +3487,14 @@
 <p><strong>참고</strong>: <a href="#xm_mutex_create"><code>XM_Mutex_Create</code></a>, <a href="#xm_task_delete"><code>XM_Task_Delete</code></a></p>
 <hr />
 <h3 id="hw-제약-진단-api">HW 제약 진단 API<a class="headerlink" href="#hw-제약-진단-api" title="Permanent link">&para;</a></h3>
-<p>이 네 함수는 모두 파라미터가 없고, 현재 상태를 숫자 하나로 즉시 반환하는 단순 조회(getter) 함수입니다. <a href="../../09-task-creation/">09. 보조 task + 데이터 공유 §4</a> 에서 설명하는 HW 제약(최대 4개 task, 32 KB heap budget)을 코드에서 직접 확인하고 싶을 때 사용합니다.</p>
+<p>이 네 함수는 모두 파라미터가 없고, 현재 상태를 숫자 하나로 즉시 반환하는 단순 조회(getter) 함수입니다. <a href="../../09-task-creation/">09. 보조 task + 데이터 공유 §4</a> 에서 설명하는 사용자 task 한도(최대 4개 task, 32 KB heap budget)를 코드에서 직접 확인하고 싶을 때 사용합니다.</p>
 <h4 id="xm_task_getheapfreebytes"><code>XM_Task_GetHeapFreeBytes</code><a class="headerlink" href="#xm_task_getheapfreebytes" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_Task_GetHeapFreeBytes</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>현재 시스템 heap 의 잔여 바이트 수를 반환합니다.</p>
 <p><strong>반환값</strong>: 잔여 heap (bytes).</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음).</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요.</p>
 </blockquote>
 <hr />
 <h4 id="xm_task_getheapmineverbytes"><code>XM_Task_GetHeapMinEverBytes</code><a class="headerlink" href="#xm_task_getheapmineverbytes" title="Permanent link">&para;</a></h4>
@@ -3503,7 +3503,7 @@
 <p>시스템 heap 이 지금까지 가장 적게 남았던 시점의 잔량을 반환합니다. task 생성/삭제를 반복해도 이 값이 계속 줄어든다면 heap 누수(예: <code>XM_Task_Delete</code> 누락)를 의심할 수 있습니다.</p>
 <p><strong>반환값</strong>: 역대 최저 heap 잔량 (bytes).</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). Ex.39 는 버튼을 3회 눌러 OneShot task 생성/삭제를 반복한 뒤 이 값이 더 줄지 않는지로 누수 여부를 검증합니다.</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. Ex.39 는 버튼을 3회 눌러 OneShot task 생성/삭제를 반복한 뒤 이 값이 더 줄지 않는지로 누수 여부를 검증합니다.</p>
 </blockquote>
 <p><strong>참고</strong>: Ex.39 <code>README.md</code> (heap 누수 검증 시나리오)</p>
 <hr />
@@ -3513,7 +3513,7 @@
 <p>지금까지 만들고 아직 <code>Delete</code> 하지 않은(완료됐지만 Delete 전인 OneShot 포함) 사용자 task 개수를 반환합니다.</p>
 <p><strong>반환값</strong>: 현재 사용자 task 개수 (0 ~ <a href="#매크로"><code>XM_TASK_MAX_INSTANCES</code></a>).</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). 이 값이 4에 도달하면 이후 <code>XM_Task_CreateOneShot</code>/<code>CreatePeriodic</code> 은 모두 <code>NULL</code> 을 반환합니다 — 새 task 를 만들기 전에 확인해보면 원인 파악에 도움이 됩니다.</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 이 값이 4에 도달하면 이후 <code>XM_Task_CreateOneShot</code>/<code>CreatePeriodic</code> 은 모두 <code>NULL</code> 을 반환합니다 — 새 task 를 만들기 전에 확인해보면 원인 파악에 도움이 됩니다.</p>
 </blockquote>
 <hr />
 <h4 id="xm_task_getbudgetremainingbytes"><code>XM_Task_GetBudgetRemainingBytes</code><a class="headerlink" href="#xm_task_getbudgetremainingbytes" title="Permanent link">&para;</a></h4>
@@ -3522,7 +3522,7 @@
 <p>사용자 task 전용 heap budget(총 <a href="#매크로"><code>XM_TASK_HEAP_BUDGET_BYTES</code></a>, 32 KB) 중 남은 양을 반환합니다.</p>
 <p><strong>반환값</strong>: budget 잔량 (bytes).</p>
 <blockquote>
-<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 컨텍스트 기준(헤더에 별도 ISR-safe 명시 없음). 이 값이 부족하면 stack 이 큰 task(예: <code>XM_PRIO_BACKGROUND</code> 기본 8 KB)의 생성이 거부될 수 있습니다.</p>
+<p>⚠️ <strong>호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 이 값이 부족하면 stack 이 큰 task(예: <code>XM_PRIO_BACKGROUND</code> 기본 8 KB)의 생성이 거부될 수 있습니다.</p>
 </blockquote>
 <hr />
 <h3 id="진단-api">진단 API<a class="headerlink" href="#진단-api" title="Permanent link">&para;</a></h3>
@@ -3532,12 +3532,12 @@
 <p>현재 동작 중인 task 목록을 출력합니다(on-demand 진단용).</p>
 <p><strong>파라미터</strong>: 없음. <strong>반환값</strong>: 없음 (<code>void</code>).</p>
 <blockquote>
-<p>⚠️ <strong>현재 상태(Phase 1)</strong>: 이 SDK 버전에서는 진단 출력 채널이 아직 연결되어 있지 않아 <strong>호출해도 아무 동작이 없는 no-op stub</strong> 입니다(헤더 명시). Phase 2 에서 PhAI Studio 진단 채널과 연동될 예정입니다.</p>
-<p>⚠️ <strong>호출 컨텍스트(미리 대비)</strong>: 지금은 stub 이라 어디서 불러도 안전하지만, 이 함수를 감싸는 내부 구현은 "<strong>1 kHz Control_Loop 안에서 호출 금지</strong>(문자열 포맷팅 누적으로 100 µs 이상 걸릴 수 있음)"라는 제약을 이미 명시해두고 있습니다. Phase 2 연동 이후에도 그대로 안전하게 쓰려면 지금부터 <code>Control_Setup()</code> 이나 버튼 이벤트 핸들러처럼 <strong>1 kHz 로 돌지 않는 곳</strong>에서만 호출하는 습관을 들이는 것을 권장합니다.</p>
+<p>⚠️ <strong>현재 상태</strong>: 이 SDK 버전에서는 진단 출력 채널이 연결되어 있지 않아 <strong>호출해도 아무 동작이 없는 no-op stub</strong> 입니다(헤더 명시).</p>
+<p>⚠️ <strong>호출 컨텍스트(미리 대비)</strong>: 지금은 stub 이라 어디서 불러도 안전하지만, 이 함수에는 "<strong>1 kHz Control_Loop 안에서 호출 금지</strong>(문자열 포맷팅 누적으로 100 µs 이상 걸릴 수 있음)"라는 제약이 있습니다. 그러니 <code>Control_Setup()</code> 이나 버튼 이벤트 핸들러처럼 <strong>1 kHz 로 돌지 않는 곳</strong>에서만 호출하는 습관을 들이는 것을 권장합니다.</p>
 </blockquote>
 <hr />
 <h2 id="deprecated-api-사용-금지-권장">Deprecated API (사용 금지 권장)<a class="headerlink" href="#deprecated-api-사용-금지-권장" title="Permanent link">&para;</a></h2>
-<p>v1.0 호환을 위해 남아있는 API 입니다. <strong>다음 major 릴리즈에서 제거될 예정</strong>이므로 새 코드에서는 사용하지 마세요. 아래 표만 남기고 함수 상세는 생략합니다.</p>
+<p>v1.0 호환을 위해 남아있는 API 입니다. 새 코드에서는 사용하지 마세요. 아래 표만 남기고 함수 상세는 생략합니다.</p>
 <table>
 <thead>
 <tr>
@@ -3567,11 +3567,11 @@
 <h3 id="xmtaskprio_t"><code>XmTaskPrio_t</code><a class="headerlink" href="#xmtaskprio_t" title="Permanent link">&para;</a></h3>
 <p>Task 우선순위 힌트 enum 입니다. CMSIS-OS2 의 숫자 우선순위 값을 그대로 노출하는 대신, 의미 단위로 감싸서 제공합니다. 시스템 task 가 이미 점유한 숫자 영역(51~55)은 이 enum 에 존재하지 않습니다 — 실수로라도 시스템 task 와 우선순위가 겹칠 수 없습니다.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="n">XM_PRIO_IDLE</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">   </span><span class="cm">/* osPriorityLow      — DefaultTask 와 동급 */</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="n">XM_PRIO_IDLE</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">   </span><span class="cm">/* osPriorityLow      — 가장 낮은 우선순위 */</span>
 <a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="n">XM_PRIO_BACKGROUND</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityNormal   — 권장 기본값 */</span>
 <a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">    </span><span class="n">XM_PRIO_BELOW_CONTROL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityAboveNormal — Control_Loop 보다 낮음 */</span>
-<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">    </span><span class="n">XM_PRIO_ABOVE_CONTROL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityHigh     — USBH 와 동급, Control_Loop 보다 낮음 */</span>
-<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">    </span><span class="n">XM_PRIO_NEAR_REALTIME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">48</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityRealtime — 주의: PnP 통신과 경합 가능 */</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">    </span><span class="n">XM_PRIO_ABOVE_CONTROL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityHigh     — Control_Loop 보다 낮음 */</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">    </span><span class="n">XM_PRIO_NEAR_REALTIME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">48</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityRealtime — 주의: 모듈 연결 처리와 경합 가능 */</span>
 <a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="p">}</span><span class="w"> </span><span class="n">XmTaskPrio_t</span><span class="p">;</span>
 </code></pre></div>
 <table>
@@ -3588,7 +3588,7 @@
 <td><code>XM_PRIO_IDLE</code></td>
 <td>8</td>
 <td>1 KB</td>
-<td><code>DefaultTask</code> 와 동급인 가장 낮은 우선순위</td>
+<td>가장 낮은 우선순위</td>
 </tr>
 <tr>
 <td><code>XM_PRIO_BACKGROUND</code></td>
@@ -3606,13 +3606,13 @@
 <td><code>XM_PRIO_ABOVE_CONTROL</code></td>
 <td>40</td>
 <td>2 KB</td>
-<td>USBH 와 동급 — Control_Loop 보다는 여전히 낮음</td>
+<td>Control_Loop 보다는 낮음</td>
 </tr>
 <tr>
 <td><code>XM_PRIO_NEAR_REALTIME</code></td>
 <td>48</td>
 <td>2 KB</td>
-<td>⚠️ PnP 통신(<code>PnP_Task</code>, 25)과는 경합하지 않지만 그 위 시스템 task 와는 가까우므로 남용하지 마세요.</td>
+<td>⚠️ 주의: 모듈 연결 처리와 경합할 수 있으니 남용하지 마세요.</td>
 </tr>
 </tbody>
 </table>
@@ -3785,7 +3785,7 @@
 <hr />
 <h2 id="관련-문서">관련 문서<a class="headerlink" href="#관련-문서" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../../09-task-creation/">09. 보조 task + 데이터 공유</a> — 시스템 task 인벤토리, 우선순위 영역, 데이터 흐름, 공유변수 패턴</li>
+<li><a href="../../09-task-creation/">09. 보조 task + 데이터 공유</a> — 우선순위 영역, 데이터 흐름, 공유변수 패턴</li>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/38_Periodic_Background_Task/">Ex.38 Periodic_Background_Task</a></li>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/39_Task_Lifecycle/">Ex.39 Task_Lifecycle</a></li>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/">Ex.36 OnDevice_Kinesthetic_Learning</a></li>

@@ -2479,8 +2479,31 @@
 <p>A tool for <strong>plotting as a live graph, saving raw, and exporting to CSV</strong> the data your board streams out over USB. It lives in the <code>Extension_Module/PythonDecoder/</code> folder — run it directly with Python, or bundle it into a single executable for a PC that doesn't have Python installed.</p>
 <blockquote>
 <p><strong>Where is it?</strong> When you unzip the SDK, <code>Extension_Module\PythonDecoder\</code> is included. If your ZIP doesn't have that folder (an older release), grab just the <code>PythonDecoder/</code> folder from the GitHub repo and put it anywhere — it's the same files regardless of board revision.</p>
-<p><strong>How is this different from PhAI Studio?</strong> PhAI Studio is the official tool you use straight from the browser. This is an open-source, local tool. It <strong>saves the raw bytes before interpreting them</strong>, so you can re-export later even if the channel layout changes, and if you know Python you can modify it however you like. The two tools <strong>can't have the same COM port open at the same time</strong> — only run one at a time.</p>
+<p><strong>How is this different from PhAI Studio?</strong> PhAI Studio is the official tool you use straight from the browser. This is an open-source, local tool. It <strong>saves the raw bytes before interpreting them</strong>, so you can re-export later even if the channel layout changes, and if you know Python you can modify it however you like. The two tools <strong>can't have the same COM port open at the same time</strong> — connect only one PC program at a time.</p>
+<p><strong>Use this tool to see your own structs.</strong> PhAI Studio shows the Total Data (0x20) the board sends automatically. PhAI Studio is still under development, so for now use the <code>xm10</code> tool to view and save your own (custom) data structs.</p>
 </blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">What you want to see</th>
+<th style="text-align: left;">Program to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">System data the board sends automatically — joint angles, torque, etc. (Total Data 0x20; to fill the 28-byte <code>User_Custom</code> block inside it, see <a href="../../api-reference/ref/xm-api-user-custom/"><code>xm_api_user_custom</code></a>)</td>
+<td style="text-align: left;">PhAI Studio</td>
+</tr>
+<tr>
+<td style="text-align: left;">Your own struct sent with <code>XM_SendUsbDataWithId</code> (<code>0xF0</code>–<code>0xFE</code>)</td>
+<td style="text-align: left;">the <code>xm10</code> tool (this page)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Text sent with <code>XM_SendUsbDebugMessage</code></td>
+<td style="text-align: left;">a serial terminal</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="5-minute-demo--no-board-required">5-Minute Demo — No Board Required<a class="headerlink" href="#5-minute-demo--no-board-required" title="Permanent link">&para;</a></h2>
 <p>You can watch the whole flow once even without a board yet.</p>
@@ -2513,6 +2536,9 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>xm10.py<span class="w"> </span>recv
 </code></pre></div>
 <p>A window opens. Pick your <strong>Port</strong> in the top row and click <strong>Connect</strong> — the board's user channels start plotting live. If you registered names with <code>XM_SetUsbCustomMeta</code>, as in Example 09, those names show up in the graph titles.</p>
+<blockquote>
+<p>Connect only one PC program at a time. Channel names arrive once when you connect; if they are missing, re-plug the USB cable and connect again.</p>
+</blockquote>
 <p>If you send user channels under several Module IDs (<code>0xF0</code>, <code>0xF1</code>, …), each Module ID gets its own tab. Every tab has its own graphs and its own saved file, and a tab you aren't looking at keeps saving.</p>
 <table>
 <thead>
@@ -2543,6 +2569,10 @@
 <td style="text-align: left;">Save the received bytes as-is (on by default — see below)</td>
 </tr>
 <tr>
+<td style="text-align: left;"><strong>Show 0x20 tab</strong></td>
+<td style="text-align: left;">A tab that shows Total Data (0x20) as a table (name + latest value, refreshed 5 times a second) instead of a graph — off by default</td>
+</tr>
+<tr>
 <td style="text-align: left;"><strong>Screenshot</strong></td>
 <td style="text-align: left;">Save the current view as a PNG</td>
 </tr>
@@ -2569,7 +2599,7 @@
 </tr>
 </tbody>
 </table>
-<p>Why save a second file when the CSV should be enough? The CSV is <strong>already interpreted</strong> at the moment it's received. If the channel names arrived after the data, or you changed the channel layout afterward, or there was a mistake in interpretation, that CSV is final — you're stuck with it. The <code>.xmlog</code> is laid down without any interpretation, so you can always re-export it later. It also includes the system channels that never get plotted on screen (the 0x20 Total Data, 197 channels).</p>
+<p>Why save a second file when the CSV should be enough? The CSV is <strong>already interpreted</strong> at the moment it's received. If the channel names arrived after the data, or you changed the channel layout afterward, or there was a mistake in interpretation, that CSV is final — you're stuck with it. The <code>.xmlog</code> is laid down without any interpretation, so you can always re-export it later. It also includes the system channels that are not plotted as graphs (the 0x20 Total Data, 197 channels — turn on <strong>Show 0x20 tab</strong> to see them as a table).</p>
 <h3 id="4-export-csv-from-xmlog">4. Export CSV from <code>.xmlog</code><a class="headerlink" href="#4-export-csv-from-xmlog" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python<span class="w"> </span>xm10.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>data/cdc_20260910_143000.xmlog<span class="w">              </span><span class="c1"># summary of what happened</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>python<span class="w"> </span>xm10.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>data/cdc_20260910_143000.xmlog<span class="w"> </span>--csv<span class="w"> </span>out/<span class="w">   </span><span class="c1"># one CSV per channel</span>
@@ -2581,11 +2611,7 @@
 <em>("JSON meta, 4 channels"; the warning reads "type unknown — assuming float32".)</em></p>
 <p><code>total_0x20</code> is the 197 channels the board always sends (joint angles, torque, IMU, GRF, etc.), and <code>user_0xF0</code> is the channel you sent from your own example code. The channel names the board sent while you were recording are stored inside the file itself, so there's nothing extra to configure when exporting.</p>
 <p>Each row is decoded with the <strong>channel description that was valid when the row was received</strong> (a row received before any description is decoded with the first one that arrives afterwards on the same connection). If the struct description for a Module ID changes partway through a single file (for example, a script that keeps writing into one file across a reconnect — the graph window opens a new file for every connection), the CSV for that Module ID is split per description — <code>..._user_0xF0.csv</code>, <code>..._user_0xF0_schema2.csv</code> — because the same column name can mean something different (the same four bytes are <code>1.0</code> as a <code>float</code> but <code>1065353216</code> as a <code>uint32_t</code>).</p>
-<p><strong>If you connect again</strong>, the graph window opens a new <code>.xmlog</code>. It can't tell whether the board that came back is the same one, so it doesn't carry the earlier file's channel description over — the new file only uses what the board sent on that connection. The current firmware sends the channel names your example code registered with <code>XM_SetUsbCustomMeta</code> once, the first time you connect after USB is freshly enumerated (unplugging and re-plugging the cable, or restarting the board, makes USB enumerate again). It doesn't send the types yet.</p>
-<ul>
-<li>A file recorded after re-plugging the cable or restarting the board contains the channel names.</li>
-<li>If you only clicked Disconnect and then Connect in the window, USB stays up and the board doesn't re-send the names. The graph and the live CSV (<code>cdc_phai_..._user_0xF0.csv</code>) keep the earlier names, but the <code>.xmlog</code> recorded that way has no channel names, so exporting it gives <code>ch0, ch1, …</code> with values assumed to be <code>float</code>. If you need the names, re-plug the cable and record again.</li>
-</ul>
+<p><strong>If you connect again</strong>, the graph window opens a new <code>.xmlog</code>. (A <code>.xmlog</code> recorded without channel names exports as <code>ch0, ch1, …</code> with values assumed to be <code>float</code>; types are not sent yet.)</p>
 <hr />
 <h2 id="console-only-mode">Console-Only Mode<a class="headerlink" href="#console-only-mode" title="Permanent link">&para;</a></h2>
 <p>When you don't need the graph window, or you're leaving it running for a long time, console mode is lighter.</p>
@@ -2620,16 +2646,17 @@
 <a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="cm">/* Control_Loop — fill in values and send (every tick) */</span>
 <a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="n">XM_SendUsbDataWithId</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s_debug</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">s_debug</span><span class="p">),</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">);</span>
 </code></pre></div>
-<p>Four rules to follow:</p>
+<p>Five rules to follow:</p>
 <ol>
 <li><strong>The struct must be <code>float</code>-only</strong> — the name-registration mechanism doesn't send types along with it, so the PC reads every field as a float. If a single <code>uint32_t</code> sneaks in, that column comes out as garbage numbers.</li>
 <li><strong>JSON entry count = struct field count, in the same order</strong> — even a mismatch of one shifts every column after it. The values still look like plausible numbers, so it's easy to miss.</li>
 <li><strong>Module ID is <code>0xF0</code>–<code>0xFE</code></strong> — the rest are reserved for the system.</li>
-<li><strong>Only one name registration per connection</strong> — call <code>XM_SetUsbCustomMeta</code> twice and only the last one survives. If you have several channel groups, combine them under a single Module ID (Ex.41 merges six IMUs that way).</li>
+<li><strong>Only one name registration per connection</strong> — call <code>XM_SetUsbCustomMeta</code> twice and only the last one survives. If you have several channel groups, combine them under a single Module ID (Ex.41 sends its six IMUs under a single Module ID).</li>
+<li><strong>Keep the JSON at 512 bytes or less</strong> — if it is longer, the names are not sent and the columns show up as <code>ch0, ch1, …</code> (re-plugging the cable does not fix this).</li>
 </ol>
-<p>All 24 examples in this repo are automatically checked against rules 1–3.</p>
+<p>The 24 SDK examples follow rules 1–3. Follow the same rules when you write your own.</p>
 <blockquote>
-<p>The "struct field names <em>and types</em> become CSV columns" behavior you saw in the demo (<code>state</code> as an integer, <code>contact</code> as a bool, and so on) is already built on the PC side; board-side firmware support for it is coming in a future release. Right now the board only sends <strong>names</strong>, as shown above.</p>
+<p>The "struct field names <em>and types</em> become CSV columns" behavior you saw in the demo (<code>state</code> as an integer, <code>contact</code> as a bool, and so on) is already built on the PC side, but right now the board only sends <strong>names</strong>, as shown above.</p>
 </blockquote>
 <hr />
 <h2 id="building-a-standalone-executable">Building a Standalone Executable<a class="headerlink" href="#building-a-standalone-executable" title="Permanent link">&para;</a></h2>
@@ -2662,7 +2689,7 @@
 </tr>
 <tr>
 <td style="text-align: left;">Graph titles show <code>ch0, ch1…</code></td>
-<td style="text-align: left;">Check that <code>XM_SetUsbCustomMeta</code> is called in <code>Control_Setup</code>, and that the entry count matches the struct</td>
+<td style="text-align: left;">Check that <code>XM_SetUsbCustomMeta</code> is called in <code>Control_Setup</code>, that the entry count matches the struct, and that the JSON is 512 bytes or less. The names may also have been missed when you connected — re-plug the USB cable and connect again (one PC program at a time)</td>
 </tr>
 <tr>
 <td style="text-align: left;">Values come out as garbage numbers</td>

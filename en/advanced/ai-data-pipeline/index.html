@@ -2502,15 +2502,14 @@
 <h1 id="ai-training-data-pipeline">AI Training Data Pipeline<a class="headerlink" href="#ai-training-data-pipeline" title="Permanent link">&para;</a></h1>
 <p>This page maps the end-to-end flow from collecting exoskeleton data on the XM10 board to loading it into a training framework such as PyTorch or scikit-learn. Use it as a quick-reference map while you work.</p>
 <blockquote>
-<p>USB memory (MSC) file logging was removed in v2.5.0. Data capture now uses <strong>USB-CDC real-time streaming</strong>, and Path A below is the standard route. On-board storage (SD card) is planned for a future HW revision.</p>
+<p>USB memory (MSC) file logging was removed in v2.5.0. Data capture now uses <strong>USB-CDC real-time streaming</strong>, and Path A below is the standard route. On-board storage (SD card) is not supported at present.</p>
 </blockquote>
 <hr />
 <h2 id="big-picture">Big Picture<a class="headerlink" href="#big-picture" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>[Board operation]         [Collection]                  [Conversion]          [Training]
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>       ↓                       ↓                             ↓                    ↓
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>KIT H10 worn  →  USB-CDC real-time streaming   →   CSV / npy output  →  PyTorch DataLoader
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                 (PhAI Studio or                                          or sklearn
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                  xm10 tool → .xmlog → export)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                 (xm10 tool → .xmlog → export)                            or sklearn
 </code></pre></div>
 <p>There are two paths. Choose based on your goal.</p>
 <table>
@@ -2552,11 +2551,13 @@
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="2-pc-side--receive-stream--save-csv">2. PC Side — Receive Stream + Save CSV<a class="headerlink" href="#2-pc-side--receive-stream--save-csv" title="Permanent link">&para;</a></h3>
-<p>Two options:</p>
+<p>On the PC side, receive the stream with the <code>xm10</code> tool.</p>
 <ul>
-<li><strong>PhAI Studio</strong> — connect via USB → select channel <code>0xF0</code> → watch the live graph and click the record button → export to <code>.csv</code>. Simplest.</li>
 <li><strong>xm10 tool</strong> (in the repo's <code>PythonDecoder/</code>) — saves the raw bytes as-is to <code>.xmlog</code> and lets you pull CSV out later. Since you can re-export old recordings even after changing channel names/layout, it's better suited for managing a training dataset. Build it as an executable and it works on PCs without Python too (<a href="../../getting-started/04-pc-data-tool/">guide</a>).</li>
 </ul>
+<blockquote>
+<p>PhAI Studio is still under development, so for now use the <code>xm10</code> tool to view and save your own (custom) data structs (<code>0xF0</code>–<code>0xFE</code>).</p>
+</blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>PythonDecoder/xm10.py<span class="w"> </span>recv<span class="w"> </span>--cli<span class="w"> </span>--port<span class="w"> </span>COM6<span class="w"> </span>--log<span class="w">         </span><span class="c1"># receive to console + save .xmlog (Ctrl+C to stop)</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>PythonDecoder/xm10.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>data/cdc_&lt;timestamp&gt;.xmlog<span class="w"> </span>--csv<span class="w"> </span>out/<span class="w">   </span><span class="c1"># export per-channel CSV</span>
 </code></pre></div>
@@ -2661,7 +2662,7 @@
 <li>Progress from <code>Ex.16 TinyAI Sensor Fusion</code> to <code>Ex.36 OnDevice Kinesthetic Learning</code> for on-device inference</li>
 <li>After deploying a trained model to the board, try the full expert demonstration → model training → playback cycle as shown in <code>Ex.33 Kinesthetic Teaching</code></li>
 </ul>
-<p>If you need more detail on PhAI Studio or Python post-processing, open a request on GitHub Issues.</p>
+<p>If you need more detail on the <code>xm10</code> tool or Python post-processing, open a request on GitHub Issues.</p>
 
 
 

@@ -2473,10 +2473,10 @@
 <h2 id="한눈에-보기">한눈에 보기<a class="headerlink" href="#한눈에-보기" title="Permanent link">&para;</a></h2>
 <p><strong>USB 시리얼 사용성을 크게 개선한 Rev 2.0 릴리즈</strong>입니다. 일반 시리얼 터미널에서 예제의 텍스트 출력이 보이지 않던 문제를 근본적으로 해결했고, 그 과정에서 USB 통신 모드 API를 더 단순한 형태로 정리했습니다.</p>
 <ul>
-<li><strong>일반 터미널에서 텍스트 예제가 바로 보입니다</strong> — 이전에는 Ex.07~09 같은 텍스트 예제를 Tera Term · VS Code Serial Monitor · PuTTY 로 열면, 보드가 PhAI Studio 용 실시간 데이터를 계속 내보내 텍스트가 묻혀 보이지 않았습니다(터미널의 DTR 신호를 수동으로 꺼야 했음). 이제 텍스트 예제가 <strong>터미널 프로파일을 자동 지정</strong>해, 별도 조작 없이 깨끗한 텍스트만 출력합니다.</li>
+<li><strong>일반 터미널에서 텍스트 예제가 바로 보입니다</strong> — 이전에는 Ex.07~09 같은 텍스트 예제를 Tera Term · VS Code Serial Monitor · PuTTY 로 열면, 보드가 PhAI Studio 용 실시간 데이터를 계속 내보내 텍스트가 묻혀 보이지 않았습니다(터미널 설정을 직접 바꿔야 했음). 이제 텍스트 예제가 <strong>터미널 프로파일을 자동 지정</strong>해, 별도 조작 없이 깨끗한 텍스트만 출력합니다.</li>
 <li><strong>USB 통신 모드 API 단순화</strong> — 새 함수 <code>XM_USB_SetHostProfile()</code> 하나로 "PhAI Studio 로 쓸지 / 일반 터미널로 쓸지"만 고르면 됩니다. (아래 ⚠️ <strong>API 변경</strong> 참고 — 기존 <code>XM_USB_SetMode()</code> 계열은 제거되었습니다.)</li>
 <li><strong>부트로더 디버그 안내 보강</strong> — 디버그 설정에서 벡터 테이블 주소(<code>0x08040400</code>)를 명시하도록 문서를 보강했고, 디버그 시작 시 <code>main()</code> 에서 멈추는 것이 정상 동작임을 안내했습니다.</li>
-<li><strong>안정성·빌드 개선</strong> — GRF 센서 모듈 안정성 추가 개선, MCU 리셋 핀 처리 정리, CubeIDE 빌드 파이프라인 견고화.</li>
+<li><strong>안정성·빌드 개선</strong> — GRF 센서 모듈 안정성 추가 개선, 의도하지 않은 리셋 방지, CubeIDE 빌드 안정화.</li>
 </ul>
 <h2 id="-api-변경--usb-통신-모드-rev-20">⚠️ API 변경 — USB 통신 모드 (Rev 2.0)<a class="headerlink" href="#-api-변경--usb-통신-모드-rev-20" title="Permanent link">&para;</a></h2>
 <p>USB-CDC 통신 모드를 다루는 API가 <strong>더 단순한 프로파일 방식으로 교체</strong>되었습니다.</p>
@@ -2490,7 +2490,7 @@
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="n">XM_USB_HOST_PHAI_STUDIO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// 기본값 — PhAI Studio 실시간 스트리밍</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">XM_USB_HOST_TERMINAL</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="c1">// 일반 터미널 / 커스텀 프로그램 (auto-pump OFF)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">XM_USB_HOST_TERMINAL</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="c1">// 일반 터미널 / 커스텀 프로그램 (Total Data 자동 전송 OFF)</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span><span class="w"> </span><span class="n">XM_USB_HostProfile_e</span><span class="p">;</span>
 </code></pre></div>
 <p><strong>마이그레이션</strong> — 이전에 터미널 용도로 모드를 직접 바꾸던 코드가 있다면 아래처럼 한 줄만 바꿔주세요:</p>
@@ -2502,8 +2502,7 @@
 </code></pre></div>
 <ul>
 <li><strong>미호출 시 기본값은 <code>XM_USB_HOST_PHAI_STUDIO</code></strong> 이므로, 모드를 따로 만지지 않던 코드는 <strong>변경 없이 그대로</strong> 동작합니다(기존 PhAI Studio 스트리밍 유지).</li>
-<li>생산 검사(PRODUCTION) 모드는 이제 <strong>보드 내부에서 자동으로 처리</strong>되어 사용자 선택지에서 빠졌습니다 — 예제/사용자 코드에서 신경 쓸 필요가 없습니다.</li>
-<li>선택한 프로파일은 <strong>케이블 재연결(DTR 재토글)에도 유지</strong>됩니다.</li>
+<li>선택한 프로파일은 <strong>케이블을 다시 연결하거나 PC 프로그램이 포트를 다시 열어도 유지</strong>됩니다.</li>
 </ul>
 <hr />
 <h2 id="다운로드">다운로드<a class="headerlink" href="#다운로드" title="Permanent link">&para;</a></h2>
@@ -2539,19 +2538,19 @@
 <h2 id="개선-상세">개선 상세<a class="headerlink" href="#개선-상세" title="Permanent link">&para;</a></h2>
 <h3 id="usb-시리얼-핵심">USB 시리얼 (핵심)<a class="headerlink" href="#usb-시리얼-핵심" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>텍스트 예제 자동 정리</strong> — Ex.07 (<code>07_CDC_Basic_Print</code>) · Ex.08 (<code>08_CDC_Sensor_Print</code>) 이 <code>Control_Setup()</code> 에서 호스트 프로파일을 <code>TERMINAL</code> 로 지정합니다. 1kHz 실시간 데이터 전송(auto-pump)이 꺼져, 일반 시리얼 터미널에 깨끗한 텍스트만 나옵니다. DTR 조작이 더 이상 필요 없습니다.</li>
-<li><strong>모드 관리 내부 이관</strong> — USB 통신 모드 상태 관리를 시스템 레이어로 옮기고, 사용자에게는 프로파일 2가지(PhAI Studio / 터미널)만 노출하도록 정리했습니다. 생산 검사 모드 진입은 내부 자동 처리로 바뀌었습니다.</li>
+<li><strong>텍스트 예제 자동 정리</strong> — Ex.07 (<code>07_CDC_Basic_Print</code>) · Ex.08 (<code>08_CDC_Sensor_Print</code>) 이 <code>Control_Setup()</code> 에서 호스트 프로파일을 <code>TERMINAL</code> 로 지정합니다. 1kHz 실시간 데이터 자동 전송이 꺼져, 일반 시리얼 터미널에 깨끗한 텍스트만 나옵니다. 터미널 설정을 따로 바꿀 필요가 없습니다.</li>
+<li><strong>USB 모드 선택 단순화</strong> — 사용자에게는 프로파일 2가지(PhAI Studio / 터미널)만 보입니다.</li>
 </ul>
 <h3 id="부트로더-디버그-문서">부트로더 디버그 문서<a class="headerlink" href="#부트로더-디버그-문서" title="Permanent link">&para;</a></h3>
 <ul>
-<li>디버그 설정에서 <strong>벡터 테이블 주소 <code>0x08040400</code></strong> 를 지정하도록 문서를 보강했습니다. 이 값을 비워두면 디버거가 signal handler 에서 멈추는 증상이 있었습니다.</li>
+<li>디버그 설정에서 <strong>벡터 테이블 주소 <code>0x08040400</code></strong> 를 지정하도록 문서를 보강했습니다. 이 값을 비워두면 디버거가 엉뚱한 곳에서 멈추는 증상이 있었습니다.</li>
 <li>디버그 시작 시 <strong><code>main()</code> 에서 자동 정지하는 것은 정상</strong>(CubeIDE 기본 동작)이며, <code>Resume</code>(F8) 로 진행하면 됨을 안내했습니다.</li>
 </ul>
 <h3 id="안정성--빌드">안정성 · 빌드<a class="headerlink" href="#안정성--빌드" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>GRF 센서 모듈 안정성 추가 개선</strong> — 오류(fault) 발생 시 센서 전원을 재순환(power cycling)하던 동작을 비활성화해, 불필요한 리셋 반복을 줄였습니다. (v2.3.1 의 GRF 부팅 안정화에 이은 후속 개선)</li>
-<li><strong>MCU 리셋 핀 처리 정리</strong> — 리셋 핀을 released 상태로 유지해 외부 리셋 오동작 여지를 없앴습니다.</li>
-<li><strong>CubeIDE 빌드 파이프라인 견고화</strong> — pre-build 스크립트를 단일 진입점으로 통합해 CubeMX 코드 재생성 시 빌드가 깨지던 여지를 없앴고, 미사용 USB 클럭 설정을 자동 정리, LwIP(Ethernet) 헤더 경로를 자동 반영하도록 했습니다.</li>
+<li><strong>GRF 센서 모듈 안정성 추가 개선</strong> — 불필요한 리셋 반복을 줄였습니다. (v2.3.1 의 GRF 부팅 안정화에 이은 후속 개선)</li>
+<li><strong>의도하지 않은 리셋 방지</strong> — MCU 리셋 핀 처리를 정리해, 외부 요인으로 보드가 리셋될 여지를 없앴습니다.</li>
+<li><strong>CubeIDE 빌드 안정화</strong> — CubeMX 로 코드를 다시 생성해도 빌드가 깨지지 않도록 정리했습니다.</li>
 </ul>
 <hr />
 <h2 id="호환성-안내">호환성 안내<a class="headerlink" href="#호환성-안내" title="Permanent link">&para;</a></h2>

@@ -2646,7 +2646,7 @@
 <p>📌 <strong>이 페이지를 읽고 나면</strong>: XM FW 버전에 맞는 KIT H10 (CM / ESP32 / SAM10) 펌웨어 + ContentsFiles 를 USB Stick 또는 SD카드 방식으로 업데이트할 수 있습니다.
 ⏱️ 예상 학습 시간: 20분 (실습 30~60분)
 🧰 사전 지식: KIT H10 HW 구조 (<a href="../architecture/">docs/architecture/README.md</a>)
-🎯 핵심: 호환성 매트릭스 — <strong>XM v2.6.0 ↔ KIT H10 v2.4.0 ↔ ContentsFiles (Release 첨부본)</strong> (혼용 금지)</p>
+🎯 핵심: 호환성 매트릭스 — <strong>XM v2.6.0 ~ v2.8.0 ↔ KIT H10 v2.4.0 ↔ ContentsFiles (Release 첨부본)</strong> (혼용 금지)</p>
 <p>⚠️ <strong>버전 혼용 금지</strong> — 최신 XM + H10 v1.0.x 또는 그 반대 조합 시 CAN-FD 프로토콜 불일치로 통신 오류. 매트릭스 그대로 적용 필수.</p>
 </blockquote>
 <p>XM10은 KIT H10과 CAN-FD로 연동되므로 <strong>XM FW 버전에 맞는 KIT H10 펌웨어 및 컨텐츠 파일</strong>을 사용해야 합니다. 버전이 불일치하면 통신 오류 또는 예기치 않은 동작이 발생할 수 있습니다.</p>
@@ -2704,7 +2704,7 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><strong>v2.6.0</strong></td>
+<td style="text-align: center;"><strong>v2.6.0 ~ v2.8.0</strong></td>
 <td style="text-align: center;"><strong>CM v2.4.0 / SAM10 v2.4.0 / ESP32 v2.3.0</strong></td>
 <td style="text-align: center;"><strong>Release 첨부본</strong></td>
 <td style="text-align: left;"><strong>최신 — 권장</strong></td>
@@ -2739,7 +2739,7 @@
 <p><strong><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/releases">Releases 페이지 바로가기</a></strong></p>
 <h3 id="v260-첨부-파일">v2.6.0 첨부 파일<a class="headerlink" href="#v260-첨부-파일" title="Permanent link">&para;</a></h3>
 <blockquote>
-<p>KIT H10 펌웨어가 이번 릴리즈에서 <strong>CM · SAM10 v2.4.0</strong> 으로 갱신되었습니다 (ESP32 는 v2.3.0 그대로). 컨텐츠 파일은 내용 변경 없이 파일명에 날짜만 붙었습니다.</p>
+<p>KIT H10 펌웨어가 이번 릴리즈에서 <strong>CM · SAM10 v2.4.0</strong> 으로 갱신되었습니다 (ESP32 는 v2.3.0 그대로). 컨텐츠 파일은 내용 변경 없이 파일명에 날짜만 붙었습니다. v2.7.0 · v2.8.0 에는 같은 파일이 변경 없이 그대로 첨부되어 있습니다.</p>
 </blockquote>
 <table>
 <thead>
@@ -2841,7 +2841,7 @@
 </tr>
 <tr>
 <td style="text-align: center;">6</td>
-<td style="text-align: left;">(CM+MD 모드) MD 파일 다운로드 → FDCAN 통신 준비</td>
+<td style="text-align: left;">(CM+MD 모드) MD 파일 다운로드 → CAN-FD 통신 준비</td>
 <td style="text-align: left;">초록색 LED ON</td>
 </tr>
 <tr>
@@ -2880,7 +2880,7 @@
 </tr>
 <tr>
 <td style="text-align: left;">초록색</td>
-<td style="text-align: left;">CM ↔ SAM10 FDCAN 통신 준비 완료</td>
+<td style="text-align: left;">CM ↔ SAM10 CAN-FD 통신 준비 완료</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>파란색</strong></td>
@@ -3049,7 +3049,7 @@
 </blockquote>
 <p><strong>Q: 업데이트 중 오류(붉은색 LED)가 발생하면?</strong></p>
 <blockquote>
-<p>전원을 끄고 USB Stick의 파일명과 포맷(FAT32)을 확인한 후 다시 시도하세요. 반복되면 위 담당자에게 문의하세요.</p>
+<p>전원을 끄고 USB Stick의 파일명과 포맷(FAT32)을 확인한 후 다시 시도하세요. 반복되면 위 채널(Discussions Q&amp;A / Issues)로 문의하세요.</p>
 </blockquote>
 
 

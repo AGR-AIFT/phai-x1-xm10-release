@@ -2443,7 +2443,6 @@
 <li>SDK 안의 펌웨어 라이브러리 (<code>libXM_Lib.a</code>) 와 시스템 코드 (<code>Core/</code>) 를 최신 상태로 갱신 — 일부 시스템 코드가 이전 버전 그대로 남아 라이브러리와 어긋날 수 있던 부분을 바로잡았습니다. 이제 SDK 로 빌드한 펌웨어는 어느 파일 하나 버전이 어긋나지 않습니다.</li>
 <li>제어·로깅 예제의 동작 버그 수정 (Ex.12 / 17 / 28 제어, Ex.10 / 10c 로깅 등)</li>
 <li><code>version.h</code> 를 실제 릴리즈 버전 (<strong>2.3.0</strong>) 으로 정정 — v2.2.1 / v2.2.2 때 버전 숫자가 갱신되지 않아 펌웨어가 2.2.0 으로 표시되던 문제를 바로잡았습니다</li>
-<li>전체 예제 빌드 확인: Rev 2.0 SDK 50 / 50 · Rev 1.1 SDK 47 / 47 오류 없이 통과</li>
 </ul>
 <p><strong>기존 사용자 코드는 그대로 동작합니다.</strong> 사용자 코드 (<code>Control_Setup</code> / <code>Control_Loop</code>) 와 공개 API 시그니처 변경 없음.</p>
 <hr />
@@ -2530,23 +2529,21 @@
 </table>
 <hr />
 <h2 id="새-예제--센서-허브-연동-2-종-rev-20-전용">새 예제 — 센서 허브 연동 2 종 (Rev 2.0 전용)<a class="headerlink" href="#새-예제--센서-허브-연동-2-종-rev-20-전용" title="Permanent link">&para;</a></h2>
-<p>XM10 Rev 2.0 은 FDCAN2 로 IMU Hub / EMG Hub 모듈과 연결됩니다. 두 예제는 허브를 <strong>꽂고 XM10 에 연결만 하면</strong> 데이터가 자동으로 들어온다는 점 (plug-and-play) 을 보여주고, 그 데이터를 보드 위에서 바로 가공해 피드백까지 주는 흐름을 담았습니다.</p>
+<p>XM10 Rev 2.0 은 CAN-FD 로 IMU Hub / EMG Hub 모듈과 연결됩니다. 두 예제는 허브를 <strong>꽂고 XM10 에 연결만 하면</strong> 데이터가 자동으로 들어온다는 점 (plug-and-play) 을 보여주고, 그 데이터를 보드 위에서 바로 가공해 피드백까지 주는 흐름을 담았습니다.</p>
 <ul>
-<li><strong>Ex.41 IMU Hub Dashboard</strong> ⭐⭐⭐ — IMU Hub Module 최대 6 채널의 방위 (쿼터니언) 를 받아 오일러 각 (roll / pitch / yaw) 으로 변환합니다. 연결 자동감지 (connected mask) + LED 표시 + PhAI Studio 18 채널 스트리밍. 관찰형 예제라 모터를 쓰지 않아 안전하게 자세 데이터를 다뤄볼 수 있습니다.</li>
-<li><strong>Ex.42 EMG Hub Biofeedback</strong> ⭐⭐⭐ — EMG Hub Module 의 근활성도 (envelope / MVC%) 를 받아 MVC 정규화 캘리브레이션 (BTN) 을 수행하고, 근활성도에 비례해 LED / PhAI Studio 로 바이오피드백을 줍니다. 모터 없음.</li>
+<li><strong>Ex.41 IMU Hub Dashboard</strong> ⭐⭐⭐ — IMU Hub Module 최대 6 채널의 방위 (쿼터니언) 를 받아 오일러 각 (roll / pitch / yaw) 으로 변환합니다. 연결 자동감지 + LED 표시 + USB 로 18 채널 스트리밍. 관찰형 예제라 모터를 쓰지 않아 안전하게 자세 데이터를 다뤄볼 수 있습니다.</li>
+<li><strong>Ex.42 EMG Hub Biofeedback</strong> ⭐⭐⭐ — EMG Hub Module 의 근활성도 (envelope / MVC%) 를 받아 MVC 정규화 캘리브레이션 (BTN) 을 수행하고, 근활성도에 비례해 LED 와 PC 화면으로 바이오피드백을 줍니다. 모터 없음.</li>
 </ul>
 <blockquote>
-<p><strong>IMU Hub · EMG Hub Module 은 엔젤로보틱스가 자체 개발한 연구용 프로토타입 모듈</strong>입니다. 아직 정식 제품화 전 단계로 상세 스펙 공개 전이며, 구매·이용 문의는 <a href="https://onephai.com/">onephai.com</a> 으로 부탁드립니다.</p>
-<p>IMU / EMG Hub 모듈의 센서 캘리브레이션·설정은 자체 진단 GUI (<strong>PhEEL Studio</strong>, 공개 예정) 로도 조정할 수 있습니다. 두 예제 README 에 연동 화면 자리를 마련해 두었습니다.</p>
+<p>IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.</p>
 </blockquote>
 <hr />
 <h2 id="sdk-최신화--라이브러리시스템-코드예제-버전-일치">SDK 최신화 — 라이브러리·시스템 코드·예제 버전 일치<a class="headerlink" href="#sdk-최신화--라이브러리시스템-코드예제-버전-일치" title="Permanent link">&para;</a></h2>
 <p>SDK 는 XM10 펌웨어 코어를 정적 라이브러리 (<code>libXM_Lib.a</code>) 로 담아 배포합니다. 이번 릴리즈에서 라이브러리·시스템 코드 (<code>Core/</code>) · 헤더·예제가 모두 같은 v2.3.0 펌웨어를 가리키도록 다시 맞췄습니다.</p>
 <ul>
 <li><strong>펌웨어 라이브러리 (<code>libXM_Lib.a</code>) 갱신</strong> — v2.3.0 펌웨어로 새로 빌드했습니다.</li>
-<li><strong>시스템 코드 (<code>Core/</code>) 갱신</strong> — 이전 버전 그대로 남아 있던 인터럽트 우선순위 / fault 처리 / RTOS 설정을 라이브러리와 일치시켰습니다.</li>
-<li><strong>예제 소스 갱신</strong> — 예제 <code>.c</code> 를 최신 내용으로 업데이트했습니다 (Rev 2.0 SDK 50 종 · Rev 1.1 SDK 47 종).</li>
-<li><strong>최종 확인</strong> — Rev 2.0 / Rev 1.1 SDK 를 각각 처음부터 다시 빌드해 오류 0 을 확인했습니다. 헤더·라이브러리·시스템 코드가 서로 어긋나 생기는 빌드 문제가 없는지 전체를 함께 검증했습니다.</li>
+<li><strong>시스템 코드 (<code>Core/</code>) 갱신</strong> — 이전 버전 그대로 남아 있던 부분을 라이브러리와 같은 버전으로 맞췄습니다.</li>
+<li><strong>예제 소스 갱신</strong> — 예제 <code>.c</code> 를 최신 내용으로 업데이트했습니다.</li>
 </ul>
 <hr />
 <h2 id="예제-동작-수정">예제 동작 수정<a class="headerlink" href="#예제-동작-수정" title="Permanent link">&para;</a></h2>
@@ -2580,7 +2577,7 @@
 </tr>
 <tr>
 <td>Ex.41 / 42</td>
-<td><strong>Rev 2.0 전용</strong> (FDCAN2 센서 허브 · 외부 전원 API) — Rev 1.1 SDK 에는 포함되지 않습니다</td>
+<td><strong>Rev 2.0 전용</strong> (CAN-FD 센서 허브 · 외부 전원 API) — Rev 1.1 SDK 에는 포함되지 않습니다</td>
 </tr>
 <tr>
 <td>KIT H10 펌웨어·컨텐츠 파일</td>

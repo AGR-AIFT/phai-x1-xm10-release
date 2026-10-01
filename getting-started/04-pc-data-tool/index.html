@@ -2486,8 +2486,34 @@
 <p><strong>PhAI Studio 와 무엇이 다른가요?</strong> PhAI Studio 는 웹에서 바로 쓰는 공식 도구이고, 이건
 코드가 열려 있는 로컬 도구입니다. 받은 바이트를 <strong>해석하기 전에 그대로 저장</strong>하기 때문에
 나중에 채널 구성이 바뀌어도 다시 뽑을 수 있고, 파이썬을 아신다면 원하는 대로 고쳐 쓸 수
-있습니다. 두 도구는 <strong>같은 COM 포트를 동시에 열 수 없으니</strong> 하나만 켜세요.</p>
+있습니다. 두 도구는 <strong>같은 COM 포트를 동시에 열 수 없습니다</strong> — PC 프로그램은 한 번에
+하나만 연결하세요.</p>
+<p><strong>내 구조체는 이 도구로 보세요.</strong> PhAI Studio 는 보드가 자동으로 보내는 Total Data(0x20)를
+보여 줍니다. PhAI Studio 는 아직 개발 중이라, 직접 정의한 데이터 구조체(커스텀 구조체)는
+우선 <code>xm10</code> 도구로 보고 저장하세요.</p>
 </blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">보고 싶은 것</th>
+<th style="text-align: left;">쓰는 프로그램</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">보드가 자동으로 보내는 시스템 데이터 — 관절 각도·토크 등 (Total Data 0x20. 그 안의 28바이트 <code>User_Custom</code> 칸을 채우는 방법은 <a href="../../api-reference/ref/xm-api-user-custom/"><code>xm_api_user_custom</code></a>)</td>
+<td style="text-align: left;">PhAI Studio</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>XM_SendUsbDataWithId</code> 로 직접 보낸 내 구조체 (<code>0xF0</code>~<code>0xFE</code>)</td>
+<td style="text-align: left;"><code>xm10</code> 도구 (이 문서)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>XM_SendUsbDebugMessage</code> 로 보낸 텍스트</td>
+<td style="text-align: left;">시리얼 터미널</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="5분-체험--보드-없이">5분 체험 — 보드 없이<a class="headerlink" href="#5분-체험--보드-없이" title="Permanent link">&para;</a></h2>
 <p>보드가 아직 없어도 전체 흐름을 한 번 볼 수 있습니다.</p>
@@ -2527,6 +2553,10 @@ tick, torque[0], torque[1]</code> — 보드 쪽에서 C 구조체로 정의한 
 <p>창이 뜹니다. 위쪽 줄에서 <strong>Port</strong> 를 고르고 <strong>Connect</strong> 를 누르면 보드가 보내는 사용자
 채널이 그래프로 올라옵니다. 예제 09 처럼 <code>XM_SetUsbCustomMeta</code> 로 이름을 등록했다면 그
 이름이 그래프 제목에 붙습니다.</p>
+<blockquote>
+<p>PC 프로그램은 한 번에 하나만 연결하세요. 채널 이름은 연결할 때 한 번 전달됩니다.
+이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.</p>
+</blockquote>
 <p>사용자 채널을 Module ID 여러 개(<code>0xF0</code>, <code>0xF1</code>, …)로 보내면 Module ID 마다 탭이 하나씩
 생깁니다. 탭마다 그래프와 저장 파일이 따로이고, 지금 보고 있지 않은 탭도 저장은 계속됩니다.</p>
 <table>
@@ -2558,6 +2588,10 @@ tick, torque[0], torque[1]</code> — 보드 쪽에서 C 구조체로 정의한 
 <td style="text-align: left;">받은 바이트를 그대로 저장 (기본 켜짐 — 아래 참고)</td>
 </tr>
 <tr>
+<td style="text-align: left;"><strong>Show 0x20 tab</strong></td>
+<td style="text-align: left;">Total Data(0x20)를 그래프 대신 표(이름 + 최신값, 초당 5번 갱신)로 보는 탭 — 기본 꺼짐</td>
+</tr>
+<tr>
 <td style="text-align: left;"><strong>Screenshot</strong></td>
 <td style="text-align: left;">지금 화면을 PNG 로</td>
 </tr>
@@ -2587,7 +2621,8 @@ tick, torque[0], torque[1]</code> — 보드 쪽에서 C 구조체로 정의한 
 <p>CSV 만 있으면 될 것 같은데 왜 하나 더 저장하나요 — CSV 는 받는 순간 <strong>해석한 결과</strong>입니다.
 채널 이름이 데이터보다 늦게 도착했거나, 나중에 채널 구성을 바꿨거나, 해석에 실수가 있었다면
 그 CSV 는 그걸로 끝입니다. <code>.xmlog</code> 는 해석하지 않고 그대로 눕혀 두기 때문에, 언제든 다시
-뽑을 수 있습니다. 화면에 안 그리는 시스템 채널(0x20 Total Data 197채널)도 여기엔 다 있습니다.</p>
+뽑을 수 있습니다. 그래프로는 안 그리는 시스템 채널(0x20 Total Data 197채널)도 여기엔 다
+있습니다 (<strong>Show 0x20 tab</strong> 을 켜면 표로는 볼 수 있습니다).</p>
 <h3 id="4-xmlog-에서-csv-뽑기">4. <code>.xmlog</code> 에서 CSV 뽑기<a class="headerlink" href="#4-xmlog-에서-csv-뽑기" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python<span class="w"> </span>xm10.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>data/cdc_20260910_143000.xmlog<span class="w">              </span><span class="c1"># 무슨 일이 있었는지 요약</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>python<span class="w"> </span>xm10.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>data/cdc_20260910_143000.xmlog<span class="w"> </span>--csv<span class="w"> </span>out/<span class="w">   </span><span class="c1"># 채널별 CSV 로</span>
@@ -2605,18 +2640,8 @@ tick, torque[0], torque[1]</code> — 보드 쪽에서 C 구조체로 정의한 
 그 Module ID 의 CSV 가 설명마다 나뉩니다 — <code>..._user_0xF0.csv</code>, <code>..._user_0xF0_schema2.csv</code>.
 열 이름이 같아도 값의 뜻이 다를 수 있어서입니다(같은 4바이트가 <code>float</code> 로는 <code>1.0</code>, <code>uint32_t</code> 로는
 <code>1065353216</code>).</p>
-<p><strong>다시 연결하면</strong> 그래프 창이 새 <code>.xmlog</code> 를 엽니다. 다시 붙은 보드가 아까 그 보드인지 알 수 없어서
-앞 파일의 채널 설명을 새 파일로 넘기지 않고, 그 연결에서 보드가 보낸 것만 씁니다. 지금 펌웨어는
-예제 코드가 <code>XM_SetUsbCustomMeta</code> 로 등록한 채널 이름을 USB 가 새로 잡힌 뒤 처음 연결했을 때 한 번
-보냅니다(케이블을 뽑았다 꽂거나 보드를 재시작하면 USB 가 새로 잡힙니다). 타입까지 알려 주는 설명은
-아직 보내지 않습니다.</p>
-<ul>
-<li>케이블을 다시 꽂거나 보드를 재시작한 뒤에 받은 파일에는 채널 이름이 들어 있습니다.</li>
-<li>창에서 Disconnect 했다가 Connect 만 다시 눌렀다면 USB 는 그대로라 보드가 이름을 다시 보내지
-  않습니다. 화면과 실시간 CSV(<code>cdc_phai_..._user_0xF0.csv</code>)에는 이전 이름이 남지만, 그렇게 받은
-  <code>.xmlog</code> 에는 채널 이름이 없어서 뽑으면 <code>ch0, ch1, …</code> 이고 값은 <code>float</code> 로 가정합니다. 이름이
-  필요하면 케이블을 다시 꽂고 받으세요.</li>
-</ul>
+<p><strong>다시 연결하면</strong> 그래프 창이 새 <code>.xmlog</code> 를 엽니다. (채널 이름 없이 받은 <code>.xmlog</code> 는 열
+이름이 <code>ch0, ch1, …</code> 이고 값은 <code>float</code> 로 가정합니다. 타입은 아직 보내지 않습니다.)</p>
 <hr />
 <h2 id="콘솔로만-쓰기">콘솔로만 쓰기<a class="headerlink" href="#콘솔로만-쓰기" title="Permanent link">&para;</a></h2>
 <p>그래프 창이 필요 없거나 오래 켜 둘 때는 콘솔 모드가 가볍습니다.</p>
@@ -2656,7 +2681,7 @@ tick, torque[0], torque[1]</code> — 보드 쪽에서 C 구조체로 정의한 
 <a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="cm">/* Control_Loop — 값 채우고 보내기 (매 tick) */</span>
 <a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="n">XM_SendUsbDataWithId</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s_debug</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">s_debug</span><span class="p">),</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">);</span>
 </code></pre></div>
-<p>지켜야 할 것 네 가지:</p>
+<p>지켜야 할 것 다섯 가지:</p>
 <ol>
 <li><strong>구조체는 <code>float</code> 만</strong> — 이름을 등록하는 방식은 타입을 같이 보내지 않아서, PC 는 값을
    전부 float 로 읽습니다. <code>uint32_t</code> 하나가 섞이면 그 열은 이상한 숫자가 됩니다.</li>
@@ -2664,14 +2689,15 @@ tick, torque[0], torque[1]</code> — 보드 쪽에서 C 구조체로 정의한 
    값은 그럴듯한 숫자라 알아채기 어렵습니다.</li>
 <li><strong>Module ID 는 <code>0xF0</code>~<code>0xFE</code></strong> — 나머지는 시스템이 씁니다.</li>
 <li><strong>이름 등록은 연결당 하나만</strong> — <code>XM_SetUsbCustomMeta</code> 를 두 번 부르면 마지막 것만
-   남습니다. 채널 그룹이 여럿이면 하나의 Module ID 로 묶어 등록하세요 (Ex.41 이 IMU 6개를
-   그렇게 합칩니다).</li>
+   남습니다. 채널 그룹이 여럿이면 하나의 Module ID 로 묶어 등록하세요 (Ex.41 은 IMU 6개를
+   하나의 Module ID 로 묶어 보냅니다).</li>
+<li><strong>JSON 은 512바이트 이하</strong> — 넘으면 이름이 전송되지 않아 열 이름이 <code>ch0, ch1, …</code> 로
+   나옵니다 (케이블을 다시 꽂아도 해결되지 않습니다).</li>
 </ol>
-<p>레포의 예제 24개는 1~3 을 지키는지 자동으로 검사됩니다.</p>
+<p>SDK 예제 24개는 1~3 을 지키고 있습니다. 직접 만들 때도 같은 규칙을 따라 주세요.</p>
 <blockquote>
 <p>데모에서 본 "구조체 필드 이름이 타입까지 그대로 CSV 열이 되는" 방식(<code>state</code> 는 정수,
-<code>contact</code> 는 bool …)은 PC 쪽이 먼저 준비돼 있고, 보드 펌웨어 쪽은 다음 버전에 들어갑니다.
-지금 보드는 위처럼 <strong>이름만</strong> 보냅니다.</p>
+<code>contact</code> 는 bool …)은 PC 쪽에는 이미 준비돼 있지만, 지금 보드는 위처럼 <strong>이름만</strong> 보냅니다.</p>
 </blockquote>
 <hr />
 <h2 id="실행파일로-만들기">실행파일로 만들기<a class="headerlink" href="#실행파일로-만들기" title="Permanent link">&para;</a></h2>
@@ -2705,7 +2731,7 @@ tick, torque[0], torque[1]</code> — 보드 쪽에서 C 구조체로 정의한 
 </tr>
 <tr>
 <td style="text-align: left;">그래프 제목이 <code>ch0, ch1…</code> 이다</td>
-<td style="text-align: left;"><code>XM_SetUsbCustomMeta</code> 를 <code>Control_Setup</code> 에서 불렀는지. 항목 수가 구조체와 같은지</td>
+<td style="text-align: left;"><code>XM_SetUsbCustomMeta</code> 를 <code>Control_Setup</code> 에서 불렀는지. 항목 수가 구조체와 같은지. JSON 이 512바이트 이하인지. 연결할 때 이름을 못 받았을 수 있으니 USB 케이블을 다시 꽂고 다시 연결 (PC 프로그램은 한 번에 하나만)</td>
 </tr>
 <tr>
 <td style="text-align: left;">값이 이상한 숫자다</td>

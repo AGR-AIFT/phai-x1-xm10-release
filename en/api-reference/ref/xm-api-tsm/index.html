@@ -2664,7 +2664,7 @@
 </tbody>
 </table>
 <p><strong>Returns</strong>: <code>XmTsmHandle_t</code> — the created TSM handle (<code>NULL</code> on failure). Pass this handle to every subsequent TSM function call.</p>
-<p><strong>⚠️ Calling context</strong>: Call once per state machine, in <code>Control_Setup()</code> (initialization time). Calling it from <code>Control_Loop()</code> or any repeatedly-invoked context re-creates the state machine every cycle and breaks the intended behavior. The header does not document any thread/ISR-safety guarantee, so treat it as unsafe to call from an ISR by default.</p>
+<p><strong>⚠️ Calling context</strong>: Call once per state machine, in <code>Control_Setup()</code> (initialization time). Calling it from <code>Control_Loop()</code> or any repeatedly-invoked context re-creates the state machine every cycle and breaks the intended behavior. Do not call it from an ISR.</p>
 <p><strong>Example</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XmTsmHandle_t</span><span class="w"> </span><span class="n">s_tsm</span><span class="p">;</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>

@@ -1897,10 +1897,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-happened-in-plain-terms" class="md-nav__link">
+  <a href="#what-happened" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What happened? (in plain terms)
+        What happened?
       
     </span>
   </a>
@@ -2296,10 +2296,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-happened-in-plain-terms" class="md-nav__link">
+  <a href="#what-happened" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What happened? (in plain terms)
+        What happened?
       
     </span>
   </a>
@@ -2412,11 +2412,10 @@
 <h1 id="xm10-extension-module-sdk-v251">XM10 Extension Module SDK v2.5.1<a class="headerlink" href="#xm10-extension-module-sdk-v251" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p><strong>Release date</strong>: 2026-07-29 | <strong>Target HW</strong>: <strong>Rev 2.0 only</strong> (Rev 1.1 unaffected) | <strong>KIT H10 FW</strong>: v2.3.0+</p>
-<p>✅ <strong>Verified (2026-07-30)</strong> — shortly after release we received a report that the board "still
-hangs on v2.5.1". Re-investigation showed the cause was <strong>the debugging environment, not the
-firmware</strong> (breakpoints left over from a previous session plus an outdated ST-LINK firmware kept
-interrupts masked during the debug session). <strong>v2.5.1 firmware is confirmed working.</strong>
-If you see the same thing, check the <strong>"Debugging caveats"</strong> section below first.</p>
+<p>✅ <strong>Confirmed (2026-07-30)</strong> — <strong>v2.5.1 firmware is confirmed working.</strong> If the board still seems
+to hang after you update, the cause may be <strong>your debugging environment, not the firmware</strong>
+(breakpoints left over from a previous session, or an outdated ST-LINK firmware).
+Check the <strong>"Debugging caveats"</strong> section below first.</p>
 </blockquote>
 <hr />
 <h2 id="at-a-glance">At a glance<a class="headerlink" href="#at-a-glance" title="Permanent link">&para;</a></h2>
@@ -2429,14 +2428,8 @@ If you see the same thing, check the <strong>"Debugging caveats"</strong> sectio
 <li><strong>Bootloader (optional)</strong> — a <strong>newer bootloader build (2026-07-30)</strong> with a stability improvement is attached. The existing bootloader keeps working fine, so this is not required — update when convenient.</li>
 </ul>
 <hr />
-<h2 id="what-happened-in-plain-terms">What happened? (in plain terms)<a class="headerlink" href="#what-happened-in-plain-terms" title="Permanent link">&para;</a></h2>
-<p>The board has a <strong>clock that ticks 1000 times a second</strong>. Whenever the firmware wants to "wait 0.01 seconds", it watches that clock.</p>
-<p>Very early in boot there is a short stretch where the firmware says <strong>"don't interrupt me right now"</strong>. That block is supposed to be lifted as soon as the stretch ends — but <strong>the operating system (FreeRTOS) had not started yet, so the code that lifts it did not run.</strong> The "do not disturb" flag stayed on, and the clock never ticked.</p>
-<p>That is where it bites. The <strong>first place in boot that ever says "wait a moment" is the USB initialisation</strong> — and with the clock frozen, that wait <strong>never ends.</strong> So the board stops right there.</p>
-<blockquote>
-<p>USB was not broken. USB just happened to be <strong>the first place that noticed the clock had stopped.</strong></p>
-</blockquote>
-<p>This release makes sure that "do not disturb" is always lifted when the stretch ends, and adds a second safety net that clears it once more at the very start of boot, in case anything else ever does the same thing.</p>
+<h2 id="what-happened">What happened?<a class="headerlink" href="#what-happened" title="Permanent link">&para;</a></h2>
+<p>An internal setting made very early in boot was not released in time, so the board could not get past the USB preparation step and stopped there. <strong>The USB hardware is not broken.</strong> This release makes sure that setting is always released, and adds a second safety net that checks it once more at the very start of boot.</p>
 <hr />
 <h2 id="does-this-affect-my-board">Does this affect my board?<a class="headerlink" href="#does-this-affect-my-board" title="Permanent link">&para;</a></h2>
 <table>
@@ -2474,15 +2467,15 @@ If you see the same thing, check the <strong>"Debugging caveats"</strong> sectio
 </blockquote>
 <hr />
 <h2 id="debugging-caveats--i-updated-and-it-still-looks-stuck">Debugging caveats — "I updated and it still looks stuck"<a class="headerlink" href="#debugging-caveats--i-updated-and-it-still-looks-stuck" title="Permanent link">&para;</a></h2>
-<p>If the board still appears to hang at the same place after updating to v2.5.1, the cause may be your <strong>debugging environment</strong> rather than the board or the firmware. The reproduction report we received right after release turned out to be exactly this — two things combined:</p>
+<p>If the board still appears to hang at the same place after updating to v2.5.1, the cause may be your <strong>debugging environment</strong> rather than the board or the firmware. Try these in order:</p>
 <ol>
 <li><strong>Upgrade your ST-LINK firmware</strong> — STM32CubeIDE menu <code>Help → ST-LINK Upgrade</code>.
-   An outdated ST-LINK firmware can keep interrupts masked throughout the debug session, which
-   makes perfectly good firmware look as if its 1 ms tick has stopped.</li>
+   An outdated ST-LINK firmware can make perfectly good firmware look as if it has stopped
+   while you debug.</li>
 <li><strong>Remove all breakpoints from previous sessions</strong> — <code>Run → Remove All Breakpoints</code>.</li>
 <li>Still stuck? <strong>Unplug every cable, fully power-cycle the board, then connect power only —
    no debugger.</strong> If the LEDs come up and a COM port appears, the firmware is fine.
-   (An interrupt mask left behind by a debugger is only cleared by a full power cycle.)</li>
+   (State left behind by a debugger is only cleared by a full power cycle.)</li>
 </ol>
 <hr />
 <h2 id="downloads">Downloads<a class="headerlink" href="#downloads" title="Permanent link">&para;</a></h2>
@@ -2531,8 +2524,7 @@ If you see the same thing, check the <strong>"Debugging caveats"</strong> sectio
 </tbody>
 </table>
 <blockquote>
-<p><strong>The bootloader has been replaced with a newer build (2026-07-30)</strong> — it adds a stability
-improvement that clears any leftover system-interrupt state just before handing over to the app.
+<p><strong>The bootloader has been replaced with a newer build (2026-07-30)</strong> — it improves boot stability.
 <strong>The previous bootloader keeps working fine, so this is not required</strong> — but if you get a chance
 to flash over SWD, updating to the latest build is recommended.
 The KIT H10 firmware and content files are unchanged from previous releases — if you have already installed them, there is nothing else to do. See <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.5.1/docs/bootloader/README.en.md">bootloader upload</a> and <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.5.1/docs/kit-h10-firmware/README.en.md">KIT H10 firmware</a>.</p>

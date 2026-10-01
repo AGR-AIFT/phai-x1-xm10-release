@@ -2788,7 +2788,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ 호출 컨텍스트</strong>: 헤더에 별도 제약이 명시되어 있지 않습니다. <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준으로 작성되었으며, 보통 <code>Control_Setup()</code>에서 포인터를 한 번 받아 전역/정적 포인터에 저장해두고 이후 <code>Control_Loop()</code>에서 재사용하는 방식을 권장합니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 보통 <code>Control_Setup()</code>에서 포인터를 한 번 받아 전역/정적 포인터에 저장해두고 이후 <code>Control_Loop()</code>에서 재사용하는 방식을 권장합니다.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">s_work_buf</span><span class="p">;</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -2823,7 +2823,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ 호출 컨텍스트</strong>: 헤더에 별도 제약이 명시되어 있지 않습니다. <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준으로 작성되었습니다. 이 블록에 DMA 버퍼를 두지 마세요 — DMA 컨트롤러가 DTCM 주소 공간에 접근할 수 없습니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 이 블록에 DMA 버퍼를 두지 마세요 — DMA 컨트롤러가 DTCM 주소 공간에 접근할 수 없습니다.</p>
 <p><strong>참고</strong>: <a href="../../07-memory-management/#dtcm-api">07. 메모리 영역 — DTCM API</a></p>
 <h4 id="xm_getuserdtcmsize"><code>XM_GetUserDTCMSize()</code><a class="headerlink" href="#xm_getuserdtcmsize" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserDTCMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
@@ -2888,7 +2888,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ 호출 컨텍스트</strong>: 헤더에 별도 제약이 명시되어 있지 않습니다. <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준으로 작성되었으며, 보통 부팅 시 <code>Control_Setup()</code>에서 1회 호출하는 패턴을 권장합니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 보통 부팅 시 <code>Control_Setup()</code>에서 1회 호출하는 패턴을 권장합니다.</p>
 <p><strong>참고</strong>: <a href="#xm_usernv_iserased"><code>XM_UserNV_IsErased()</code></a>로 유효한 데이터가 있는지 먼저 확인하는 것이 안전합니다 — Erase 직후에는 전체가 <code>0xFF</code>입니다.</p>
 <h4 id="xm_usernv_write"><code>XM_UserNV_Write()</code><a class="headerlink" href="#xm_usernv_write" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Write</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
@@ -2944,7 +2944,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ 호출 컨텍스트</strong>: 헤더에 별도 제약이 명시되어 있지 않습니다. <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준으로 작성되었습니다. 다만 아래 두 가지는 헤더에 명시된 제약이므로 반드시 지켜야 합니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 다만 아래 두 가지 제약은 반드시 지켜야 합니다.</p>
 <ul>
 <li>Flash는 <strong>Erase 후에만 Write 가능</strong>합니다 (1→0만 가능, 0→1 불가). 새 데이터를 쓰기 전 <a href="#xm_usernv_erase"><code>XM_UserNV_Erase()</code></a>를 먼저 호출하세요.</li>
 <li>STM32H7 Flash는 32바이트(256-bit) 단위로 기록되며, <code>offset</code>이 정렬되지 않으면 자동으로 정렬 후 기록합니다.</li>
@@ -3009,7 +3009,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ 호출 컨텍스트</strong>: 헤더에 별도 제약이 명시되어 있지 않습니다. <code>Control_Setup()</code>/<code>Control_Loop()</code> 컨텍스트 기준으로 작성되었습니다. 보통 <code>XM_UserNV_Read()</code>로 값을 불러오기 전에, 유효한 데이터가 저장되어 있는지 미리 확인하는 가드로 사용합니다 (또는 읽은 뒤 magic number 필드로 검증하는 방식도 가능).</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 보통 <code>XM_UserNV_Read()</code>로 값을 불러오기 전에, 유효한 데이터가 저장되어 있는지 미리 확인하는 가드로 사용합니다 (또는 읽은 뒤 magic number 필드로 검증하는 방식도 가능).</p>
 <hr />
 <h2 id="타입매크로">타입/매크로<a class="headerlink" href="#타입매크로" title="Permanent link">&para;</a></h2>
 <h3 id="xm_ramfunc"><code>XM_RAMFUNC</code><a class="headerlink" href="#xm_ramfunc" title="Permanent link">&para;</a></h3>

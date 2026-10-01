@@ -2221,10 +2221,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#agr_boot-v2-bootloader-new" class="md-nav__link">
+  <a href="#new-bootloader-new" class="md-nav__link">
     <span class="md-ellipsis">
       
-        AGR_BOOT V2 bootloader (new)
+        New bootloader (new)
       
     </span>
   </a>
@@ -2254,10 +2254,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#post-build-automation-pipeline" class="md-nav__link">
+  <a href="#automated-build-finishing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Post-build automation pipeline
+        Automated build finishing
       
     </span>
   </a>
@@ -2304,21 +2304,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#agr_mw--ioif-submodule-updates" class="md-nav__link">
+  <a href="#total-data-packet" class="md-nav__link">
     <span class="md-ellipsis">
       
-        AGR_MW / IOIF submodule updates
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#data-map-code-gen" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Data Map Code-Gen
+        Total Data Packet
       
     </span>
   </a>
@@ -2601,10 +2590,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#agr_boot-v2-bootloader-new" class="md-nav__link">
+  <a href="#new-bootloader-new" class="md-nav__link">
     <span class="md-ellipsis">
       
-        AGR_BOOT V2 bootloader (new)
+        New bootloader (new)
       
     </span>
   </a>
@@ -2634,10 +2623,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#post-build-automation-pipeline" class="md-nav__link">
+  <a href="#automated-build-finishing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Post-build automation pipeline
+        Automated build finishing
       
     </span>
   </a>
@@ -2684,21 +2673,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#agr_mw--ioif-submodule-updates" class="md-nav__link">
+  <a href="#total-data-packet" class="md-nav__link">
     <span class="md-ellipsis">
       
-        AGR_MW / IOIF submodule updates
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#data-map-code-gen" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Data Map Code-Gen
+        Total Data Packet
       
     </span>
   </a>
@@ -2880,12 +2858,12 @@
 <hr />
 <h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>AGR_BOOT V2 bootloader</strong> introduced for the first time — supports wireless firmware updates via USB FTP</li>
+<li><strong>New bootloader (<code>AGR_Bootloader</code>) introduced for the first time</strong> — upload firmware over USB with PhAI Studio</li>
 <li><strong>Dual HW revision SDK shipped in a single release</strong> — Rev1.1 and Rev2.0 SDKs bundled together</li>
 <li><strong>44 examples</strong> — a complete learning path from beginner to advanced control (Impedance, CPG, ILC, MRAC, DOB, and more)</li>
 <li><strong>Enhanced PhAI Studio integration</strong> — automatic Total Data Packet streaming + User Custom channels</li>
-<li><strong>xm_api_freertos</strong> added — background task API (FreeRTOS wrapper)</li>
-<li><strong>Full debugging support for libXM_Lib.a</strong> — built with <code>-Og -g3</code> and linked with <code>--whole-archive</code></li>
+<li><strong>xm_api_freertos</strong> added — background task API</li>
+<li><strong>Full debugging support</strong> — Live Expressions and breakpoints work correctly</li>
 </ul>
 <hr />
 <h2 id="downloads">Downloads<a class="headerlink" href="#downloads" title="Permanent link">&para;</a></h2>
@@ -2970,13 +2948,13 @@
 <hr />
 <h2 id="full-changelog-from-v201">Full changelog from v2.0.1<a class="headerlink" href="#full-changelog-from-v201" title="Permanent link">&para;</a></h2>
 <h3 id="new-features">New features<a class="headerlink" href="#new-features" title="Permanent link">&para;</a></h3>
-<h4 id="agr_boot-v2-bootloader-new">AGR_BOOT V2 bootloader (new)<a class="headerlink" href="#agr_boot-v2-bootloader-new" title="Permanent link">&para;</a></h4>
+<h4 id="new-bootloader-new">New bootloader (new)<a class="headerlink" href="#new-bootloader-new" title="Permanent link">&para;</a></h4>
 <ul>
-<li>Wireless firmware updates via USB CDC FTP protocol</li>
+<li>Upload firmware over USB with PhAI Studio (USB FTP)</li>
 <li>Automatic backup and rollback — restores the previous version after 3 consecutive boot failures</li>
 <li>CRC-32 firmware integrity verification</li>
-<li><strong>Single bootloader binary</strong> for both Rev1.1 and Rev2.0 (HW GPIO auto-detection)</li>
-<li>Detailed guide: <a href="../../bootloader/">docs/bootloader/README.md</a></li>
+<li><strong>Single bootloader binary</strong> for both Rev1.1 and Rev2.0 (it tells the board revision apart automatically)</li>
+<li>Detailed guide: <a href="../../bootloader/">docs/bootloader/README.en.md</a></li>
 </ul>
 <h4 id="dual-hw-revision-sdk">Dual HW revision SDK<a class="headerlink" href="#dual-hw-revision-sdk" title="Permanent link">&para;</a></h4>
 <ul>
@@ -2986,16 +2964,14 @@
 </ul>
 <h4 id="xm_api_freertos--background-task-api-new">xm_api_freertos — background task API (new)<a class="headerlink" href="#xm_api_freertos--background-task-api-new" title="Permanent link">&para;</a></h4>
 <ul>
-<li><code>XM_CreateBackgroundTask()</code> — runs heavy computation in a dedicated task without blocking UserTask (1 kHz)</li>
-<li>Priority <code>osPriorityNormal</code> (24) — lower than UserTask (54), so the control loop is unaffected</li>
+<li><code>XM_BgTask_Create()</code> — runs heavy computation in a separate task without disturbing the 1 kHz control loop</li>
+<li>This task runs at a lower priority than the control loop, so the loop is unaffected</li>
 <li>Do <strong>not</strong> call control APIs such as <code>XM_SetAssistTorque</code> from a background task — share data via <code>volatile</code> variables instead</li>
 </ul>
-<h4 id="post-build-automation-pipeline">Post-build automation pipeline<a class="headerlink" href="#post-build-automation-pipeline" title="Permanent link">&para;</a></h4>
+<h4 id="automated-build-finishing">Automated build finishing<a class="headerlink" href="#automated-build-finishing" title="Permanent link">&para;</a></h4>
 <ul>
-<li>Runs automatically on every STM32CubeIDE build:</li>
-<li><code>size_report.py</code> → <code>version_generator.py</code> → <code>patch_fw_info.py</code> → <code>fw_packager.py</code></li>
-<li>Final output: <code>XM10_X_X_X_X.bin</code> (packaged binary for PhAI Studio FTP upload)</li>
-<li><code>boot_fw_info.c</code> compiled directly in the SDK — placed in the <code>.fw_header</code> section to prevent linker garbage collection</li>
+<li>When you build in STM32CubeIDE, the final build step runs automatically and produces the upload file (Python required)</li>
+<li>Final output: <code>XM10_X_X_X_X.bin</code> (packaged binary for PhAI Studio upload)</li>
 </ul>
 <h4 id="major-example-expansion-20--44-examples">Major example expansion (20 → 44 examples)<a class="headerlink" href="#major-example-expansion-20--44-examples" title="Permanent link">&para;</a></h4>
 <ul>
@@ -3007,32 +2983,23 @@
 </ul>
 <h4 id="enhanced-phai-studio-integration">Enhanced PhAI Studio integration<a class="headerlink" href="#enhanced-phai-studio-integration" title="Permanent link">&para;</a></h4>
 <ul>
-<li><strong>Total Data Packet</strong> (Module ID 0x20, 365 B): automatically streamed by the system at 1 kHz</li>
+<li><strong>Total Data Packet</strong> (Module ID 0x20, 365 B): streamed automatically by the system at 1 kHz</li>
 <li><strong>User Custom channels</strong> (Module ID 0xF0–0xFE): <code>XM_SetUsbCustomMeta()</code> + <code>XM_SendUsbDataWithId()</code></li>
-<li><strong>Auto-Stream</strong>: streaming starts automatically on USB connection (legacy "AGRB MON START" command no longer needed)</li>
+<li><strong>Auto-Stream</strong>: streaming starts automatically on USB connection (no separate start command needed)</li>
 </ul>
 <h3 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">&para;</a></h3>
-<h4 id="agr_mw--ioif-submodule-updates">AGR_MW / IOIF submodule updates<a class="headerlink" href="#agr_mw--ioif-submodule-updates" title="Permanent link">&para;</a></h4>
+<h4 id="total-data-packet">Total Data Packet<a class="headerlink" href="#total-data-packet" title="Permanent link">&para;</a></h4>
 <ul>
-<li><strong>AGR_MW</strong>: OD Discovery (name/unit lookup), SDO non-expedited Upload (data larger than 4 bytes), <code>PDO_MAP_MAX_ENTRIES</code> config separated</li>
-<li><strong>IOIF</strong>: TIM PWM/OC interrupt support, <code>SetCallback</code> runtime callback injection, ISR-safe <code>SetOCMode</code> / <code>GenerateUpdate</code></li>
-</ul>
-<h4 id="data-map-code-gen">Data Map Code-Gen<a class="headerlink" href="#data-map-code-gen" title="Permanent link">&para;</a></h4>
-<ul>
-<li><code>xm_total_data.yaml</code> → <code>xm_total_data_packet.h</code> auto-generated</li>
-<li>Independent CAN-FD Ch1/Ch2 diagnostics (TEC / REC / LEC / BusStatus / FIFO)</li>
-<li><code>timestamp_ms</code> renamed to <code>xm_loop_count</code> (UserTask execution counter — detects blocking)</li>
+<li>Separate CAN-FD channel 1 and channel 2 communication-status diagnostics are now included</li>
+<li><code>timestamp_ms</code> renamed to <code>xm_loop_count</code> (the control-loop execution counter — you can tell when the loop gets blocked)</li>
 </ul>
 <h4 id="build-system">Build system<a class="headerlink" href="#build-system" title="Permanent link">&para;</a></h4>
 <ul>
-<li><strong><code>--whole-archive</code> linker setting</strong>: guarantees HAL <code>__weak</code> callback overrides (pattern carried over from v2.0.1)</li>
-<li><code>.cproject</code>: add <code>-Wl,--whole-archive libXM_Lib.a -Wl,--no-whole-archive</code> to Other flags</li>
-<li><code>CMakeLists.txt</code>: same wrapping applied</li>
-<li><strong>libXM_Lib.a build</strong>: <code>-Og -g3</code> (debug optimization + maximum debug symbols)</li>
-<li>Live Expressions and breakpoints work correctly (Rev1.1: 66 MB, Rev2.0: 88 MB)</li>
+<li><strong>Debugging works</strong>: <code>libXM_Lib.a</code> now carries debug symbols, so Live Expressions and breakpoints work correctly (Rev1.1: 66 MB, Rev2.0: 88 MB)</li>
 <li>No effect on the Flash binary size (debug symbols are in the <code>.elf</code> only)</li>
-<li><code>CMakeLists.txt</code> cleanup: removed dead paths, fixed capitalization (<code>Xsens</code> → <code>XSENS</code>)</li>
-<li>Added <code>ExitRun0Mode()</code> function (CubeMX 6.13+ startup compatibility)</li>
+<li><strong>Linker setting restored</strong>: fixed the runtime memory corruption that had been solved in v2.0.1 but came back in v2.1.0 (applied to both the CubeIDE project and <code>CMakeLists.txt</code>)</li>
+<li><code>CMakeLists.txt</code> cleanup: removed unused paths, fixed folder-name capitalization (<code>Xsens</code> → <code>XSENS</code>)</li>
+<li>Start-up code updated for projects generated with newer CubeMX (6.13 and later)</li>
 </ul>
 <h4 id="example-tuning">Example tuning<a class="headerlink" href="#example-tuning" title="Permanent link">&para;</a></h4>
 <ul>
@@ -3041,17 +3008,16 @@
 <h3 id="kit-h10-fw-changes-based-on-v230">KIT H10 FW changes (based on v2.3.0)<a class="headerlink" href="#kit-h10-fw-changes-based-on-v230" title="Permanent link">&para;</a></h3>
 <p>Key fixes in the H10 CM firmware:</p>
 <ul>
-<li><strong>BLE CM mode synchronization</strong>: CM internal state is now updated immediately when the mode is changed from the BLE app</li>
-<li><strong>XM ↔ CM CAN-FD SYNC</strong>: synchronization protocol improved</li>
-<li><strong>postProcessingCnt PDO added</strong>: gait analysis post-processing counter is now exposed externally</li>
-<li><strong>Left IMU data fix</strong>: corrected a data mapping error for the left IMU</li>
+<li><strong>BLE app mode synchronization</strong>: when the mode is changed from the BLE app, the H10's CM follows immediately</li>
+<li><strong>XM10 ↔ CM CAN-FD synchronization improved</strong></li>
+<li><strong>Gait analysis counter added</strong>: the gait-analysis post-processing count can now be read from outside</li>
+<li><strong>Left IMU data fix</strong>: corrected an error where the left IMU data was mapped wrongly</li>
 </ul>
 <blockquote>
-<p>For H10 FW update instructions, see: <a href="../../kit-h10-firmware/">docs/kit-h10-firmware/README.md</a></p>
+<p>For H10 FW update instructions, see: <a href="../../kit-h10-firmware/">docs/kit-h10-firmware/README.en.md</a></p>
 </blockquote>
 <h3 id="removed">Removed<a class="headerlink" href="#removed" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>BuffMngr</code> module removed (dropped from AGR_MW)</li>
 <li>Root copy of <code>user_app.c</code> removed (managed exclusively under <code>XM_Apps/User_Algorithm/</code>)</li>
 </ul>
 <hr />
@@ -3073,7 +3039,7 @@
 <td>Separate libXM_Lib.a for Rev1.1 / Rev2.0</td>
 </tr>
 <tr>
-<td><strong>AGR_BOOT (bootloader)</strong></td>
+<td><strong>XM10 bootloader</strong></td>
 <td>v1.1.0</td>
 <td>v1.1.0</td>
 <td>Single binary (shared by Rev1.1 / Rev2.0)</td>
@@ -3082,7 +3048,7 @@
 <td><strong>KIT H10 CM</strong></td>
 <td>v2.3.0</td>
 <td>v2.3.0+</td>
-<td>Includes BLE sync + ExtPDO fix</td>
+<td>Includes the BLE sync fix</td>
 </tr>
 <tr>
 <td><strong>KIT H10 ESP32</strong></td>
@@ -3112,7 +3078,7 @@
 <td><strong>Python</strong></td>
 <td>3.8+</td>
 <td>3.12+</td>
-<td>Required for post-build scripts</td>
+<td>Needed for the final build step</td>
 </tr>
 <tr>
 <td><strong>PhAI Studio</strong></td>
@@ -3126,7 +3092,7 @@
 <h2 id="quick-start-guide">Quick start guide<a class="headerlink" href="#quick-start-guide" title="Permanent link">&para;</a></h2>
 <h3 id="1-install-the-bootloader-one-time">1. Install the bootloader (one-time)<a class="headerlink" href="#1-install-the-bootloader-one-time" title="Permanent link">&para;</a></h3>
 <blockquote>
-<p>Details: <a href="../../bootloader/">docs/bootloader/README.md</a></p>
+<p>Details: <a href="../../bootloader/">docs/bootloader/README.en.md</a></p>
 </blockquote>
 <ol>
 <li>Use STM32CubeProgrammer to perform a <strong>Full Chip Erase</strong>.</li>
@@ -3137,7 +3103,7 @@
 <li>Download the ZIP for your board revision (<code>Rev1.1.zip</code> / <code>Rev2.0.zip</code>) from Releases and extract it.</li>
 <li>In STM32CubeIDE, go to <strong>Import → Existing Projects into Workspace</strong>.</li>
 <li>Select the extracted folder (the one containing the <code>.project</code> file).</li>
-<li>Build (Ctrl+B) — the post-build scripts run automatically.</li>
+<li>Build (Ctrl+B) — the final build step runs automatically.</li>
 </ol>
 <h3 id="3-upload-firmware">3. Upload firmware<a class="headerlink" href="#3-upload-firmware" title="Permanent link">&para;</a></h3>
 <ul>
@@ -3146,23 +3112,23 @@
 </ul>
 <h3 id="4-update-kit-h10-firmware">4. Update KIT H10 firmware<a class="headerlink" href="#4-update-kit-h10-firmware" title="Permanent link">&para;</a></h3>
 <blockquote>
-<p>Details: <a href="../../kit-h10-firmware/">docs/kit-h10-firmware/README.md</a></p>
+<p>Details: <a href="../../kit-h10-firmware/">docs/kit-h10-firmware/README.en.md</a></p>
 </blockquote>
 <p>Copy the bundled H10 FW binaries to a USB drive, connect it to the H10, and follow the update procedure.</p>
 <hr />
 <h2 id="known-issues">Known issues<a class="headerlink" href="#known-issues" title="Permanent link">&para;</a></h2>
 <ul>
-<li>RAM_D2 usage in the Rev1.1 SDK reaches 98.65%. Exercise caution when allocating large buffers.</li>
-<li><code>version_generator.py</code> reads the git tag from the current directory. Tags may differ between the SDK repository and the development repository — verify <code>version.h</code> manually if needed.</li>
-<li>Python must be on the system <code>PATH</code> for the post-build scripts to run. If it is not recognized even after restarting STM32CubeIDE, check your system environment variables.</li>
-<li>libXM_Lib.a is built with <code>-Og -g3</code> (Debug). The <code>.a</code> file is 66–88 MB due to debug symbols, but this has no effect on the final Flash binary size.</li>
+<li>The Rev1.1 SDK uses 98.65% of one of its memory regions. Exercise caution when allocating large buffers.</li>
+<li>After a build, check that the version in <code>version.h</code> matches the release version (the version is taken from the git tag of the current folder).</li>
+<li>Python must be on the system <code>PATH</code> for the final build step. If it is not recognized even after restarting STM32CubeIDE, check your system environment variables.</li>
+<li><code>libXM_Lib.a</code> is 66–88 MB because of its debug symbols, but this has no effect on the final Flash binary size.</li>
 </ul>
 <hr />
 <h2 id="note-for-v210-pre-release-users">Note for v2.1.0 (Pre-Release) users<a class="headerlink" href="#note-for-v210-pre-release-users" title="Permanent link">&para;</a></h2>
 <p>Two issues found in v2.1.0 were fixed in v2.1.1:</p>
 <ol>
-<li><strong>Missing <code>--whole-archive</code> linker flag</strong> → HAL <code>__weak</code> callbacks not overridden → <code>vPortFree</code> heap corruption</li>
-<li><strong><code>-O2 -g0</code> build</strong> → Live Expressions and breakpoints did not work</li>
+<li><strong>Missing linker setting</strong> → memory could get corrupted while the firmware was running</li>
+<li><strong>Build without debug symbols</strong> → Live Expressions and breakpoints did not work</li>
 </ol>
 <p><strong>Use v2.1.1. Do not use v2.1.0.</strong></p>
 <hr />

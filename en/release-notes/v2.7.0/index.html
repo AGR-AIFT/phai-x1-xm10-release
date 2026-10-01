@@ -1875,10 +1875,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-the-sensor-hub-receive-path-was-split-rev-20" class="md-nav__link">
+  <a href="#2-sensor-hub-connection-stability-was-improved-rev-20" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. The sensor hub receive path was split (Rev 2.0)
+        2. Sensor hub connection stability was improved (Rev 2.0)
       
     </span>
   </a>
@@ -2380,10 +2380,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-the-sensor-hub-receive-path-was-split-rev-20" class="md-nav__link">
+  <a href="#2-sensor-hub-connection-stability-was-improved-rev-20" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. The sensor hub receive path was split (Rev 2.0)
+        2. Sensor hub connection stability was improved (Rev 2.0)
       
     </span>
   </a>
@@ -2519,8 +2519,8 @@
 <ul>
 <li><strong>A general-purpose Serial API is now available.</strong> You can use the XM10's External UART (PD5/PD6) from <code>XM_API</code> alone — connect two XM10 boards together, or talk to an Arduino, a PC, or another MCU <strong>using whatever message format you decide</strong>.</li>
 <li><strong>Example 43 was added</strong> — a ping-pong example where two XM10 boards exchange data. Rev 2.0 now ships <strong>46 examples</strong> (was 45).</li>
-<li><strong>Two folder names inside the SDK changed.</strong> If you use the SDK as-is there is nothing to do; if you hand-edited your build settings, please check (see "Two things to check").</li>
-<li><strong>The sensor hub receive path was split in two.</strong> This addresses IMU/EMG/FES hubs occasionally dropping out. <strong>Hardware confirmation is still in progress.</strong></li>
+<li><strong>Two folder names inside the SDK changed.</strong> If you use the SDK as-is there is nothing to do; if you hand-edited your build settings, please check (see "Three things to check").</li>
+<li><strong>Sensor hub connection stability was improved.</strong> Occasional dropouts of the IMU and EMG hubs should now be rarer. <strong>It has not been confirmed on a real board yet.</strong></li>
 <li><strong>No public API was removed or renamed.</strong> Existing code only needs a rebuild.</li>
 </ul>
 <blockquote>
@@ -2531,10 +2531,9 @@
 <h3 id="0-if-you-were-using-the-xsens-mti-630--that-api-is-not-in-the-default-build-">0. If you were using the Xsens MTi-630 — that API is not in the default build ⚠️<a class="headerlink" href="#0-if-you-were-using-the-xsens-mti-630--that-api-is-not-in-the-default-build-" title="Permanent link">&para;</a></h3>
 <p><strong>Only relevant if this applies to you.</strong> If your code calls <code>XM_AttachXsensMTi630()</code> or
 <code>XM_ConfigureXsensMTi630()</code>, upgrading to v2.7.0 gives you an <strong>"undeclared function" compile error</strong>.</p>
-<p><strong>Why</strong>: there is only <strong>one</strong> External UART port, and only <strong>one</strong> receive-callback slot on it.
-If the general-purpose Serial API and the Xsens driver both claimed that slot, whoever registered
-last would <strong>silently overwrite</strong> the other, with no way to tell at runtime who won. So the choice
-is now made at build time — the build stops instead of misbehaving quietly.</p>
+<p><strong>Why</strong>: there is only <strong>one</strong> External UART port, so the general-purpose Serial API and the Xsens
+driver cannot both use it. Instead of letting the two collide and misbehave quietly, the choice is
+now made at build time — you pick <strong>one of the two</strong>.</p>
 <p><strong>What to do</strong> — open <code>XM_FW/System/Config/module.h</code>, change one line, and rebuild.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#define XM_EXTERNAL_UART_XSENS_ENABLE   1   </span><span class="cm">/* 0 (default) = general Serial / 1 = Xsens */</span>
 </code></pre></div>
@@ -2562,32 +2561,10 @@ is now made at build time — the build stops instead of misbehaving quietly.</p
 <p><strong>Most of you need to do nothing.</strong> The bundled <code>CMakeLists.txt</code> and <code>.cproject</code> already point at the new paths, and includes that use <strong>only the file name</strong> — <code>#include "ioif_agrb_uart.h"</code> — are unaffected.</p>
 <p>There is one case that needs attention: <strong>you added the old folder paths to your own build settings by hand.</strong> For example, if your include paths contain <code>XM_FW/IOIF/Inc</code>, change it to <code>XM_FW/phoundation-ioif/Inc</code>. The same applies to any <code>#include "XM_FW/AGR_MW/..."</code> that spells out the path.</p>
 <p>The Rev 1.1 SDK keeps the <strong>old names</strong>.</p>
-<h3 id="2-the-sensor-hub-receive-path-was-split-rev-20">2. The sensor hub receive path was split (Rev 2.0)<a class="headerlink" href="#2-the-sensor-hub-receive-path-was-split-rev-20" title="Permanent link">&para;</a></h3>
-<p>CAN messages arriving at the XM10 are now sorted into two separate receive queues.</p>
-<table>
-<thead>
-<tr>
-<th>Queue</th>
-<th>Holds</th>
-<th>When full</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>Sensor data (TPDO)</td>
-<td>Overwrites the oldest — newest data wins</td>
-</tr>
-<tr>
-<td>1</td>
-<td>Connection/config messages (Heartbeat / NMT / SDO)</td>
-<td>Drops the new one — keeps what was already received</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Why</strong>: both used to share one queue. When sensor data arrived in bursts, a <strong>Heartbeat that came in behind it could be pushed out</strong>, and the hub was then treated as disconnected. Now heavy sensor traffic can no longer displace connection messages.</p>
+<h3 id="2-sensor-hub-connection-stability-was-improved-rev-20">2. Sensor hub connection stability was improved (Rev 2.0)<a class="headerlink" href="#2-sensor-hub-connection-stability-was-improved-rev-20" title="Permanent link">&para;</a></h3>
+<p>The CAN-FD connection to the IMU and EMG hubs occasionally dropped out when sensor data arrived in bursts; this should now happen less.</p>
 <blockquote>
-<p>⚠️ <strong>This change has not been confirmed on hardware yet.</strong> Builds and the full example sweep all pass, but verifying the CAN filter behaviour on a real board is a separate step still in progress. If you use IMU/EMG/FES hubs, be aware this differs from v2.6.0 — please tell us if you see anything unusual.</p>
+<p>⚠️ <strong>This change has not been confirmed on a real board yet.</strong> If you use IMU or EMG hubs, be aware this differs from v2.6.0 — please tell us if you see anything unusual.</p>
 </blockquote>
 <hr />
 <h2 id="new-api--general-purpose-serial-rev-20">New API — general-purpose Serial (Rev 2.0)<a class="headerlink" href="#new-api--general-purpose-serial-rev-20" title="Permanent link">&para;</a></h2>
@@ -2637,7 +2614,7 @@ It does not matter what is on the other end — another XM10, an Arduino, a PC, 
 </tbody>
 </table>
 <h3 id="-hardware-settings--configure-your-peer-to-match">📋 Hardware settings — configure your peer to match<a class="headerlink" href="#-hardware-settings--configure-your-peer-to-match" title="Permanent link">&para;</a></h3>
-<p>The board side is <strong>already fixed in CubeMX (<code>.ioc</code>)</strong>. These are the actual values, and <strong>your peer device must match them</strong>.</p>
+<p>The board side is <strong>already fixed</strong>. These are the actual values, and <strong>your peer device must match them</strong>.</p>
 <table>
 <thead>
 <tr>
@@ -2690,7 +2667,7 @@ It does not matter what is on the other end — another XM10, an Arduino, a PC, 
 </tbody>
 </table>
 <p><strong>In one line: <code>921600 8N1, no flow control</code>.</strong> Only the baud rate can be changed (on both ends), and <strong>8N1 cannot be changed from firmware.</strong></p>
-<p>Internally, reception uses <strong>DMA plus IDLE-line detection</strong> (RX: DMA1_Stream4 circular, 256 B / TX: DMA2_Stream1 normal, 128 B; interrupt preempt priority 6; hardware FIFO enabled; 120 MHz kernel clock). The GPIOs have <strong>no pull-up or pull-down</strong>, so if the peer is powered off or the wire comes loose, RX floats and noise can be mistaken for data.</p>
+<p>The GPIOs have <strong>no pull-up or pull-down</strong>, so if the peer is powered off or the wire comes loose, the RX line floats and noise can be mistaken for data.</p>
 <blockquote>
 <p>🛑 <strong>Do not use this wiring on a Rev 1.1 board.</strong> Rev 1.1 has no External UART at all (its only serial ports are UART7/UART8 for the foot sensors), and <strong>PD6 there is <code>USB_PWR_ON</code> — an output that switches USB power</strong>. Connecting a peer's TX to it puts two outputs against each other.</p>
 </blockquote>
@@ -2702,7 +2679,7 @@ It does not matter what is on the other end — another XM10, an Arduino, a PC, 
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="cm">/* Copy into your own buffer. Parse in Control_Loop() */</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">}</span>
 </code></pre></div>
-<p>This callback runs on the XM10's <strong>shared receive task</strong>, and that same task also handles the <strong>1 kHz foot-sensor (GRF) stream</strong>. Parsing, computing or waiting here delays GRF data by exactly that much. Also, the <code>data</code> pointer is <strong>invalid once the callback returns</strong> — copy the contents, do not store the pointer.</p>
+<p>This callback runs in <strong>the same place that receives the 1 kHz foot-sensor (GRF) stream</strong>. Parsing, computing or waiting here delays GRF data by exactly that much. Also, the <code>data</code> pointer is <strong>invalid once the callback returns</strong> — copy the contents, do not store the pointer.</p>
 <p><strong>③ One callback is not one message.</strong> A serial link carries a <strong>byte stream</strong>, not messages. Five bytes sent in one go may arrive as 2 + 3, or with the next message stuck to the end. <strong>You have to find the message boundaries yourself</strong> — <code>DrainAndParse()</code> in example 43 shows how (scan for a header, then assemble).</p>
 <p><strong><code>XM_SendExternalUartData()</code> returning <code>false</code> is not an error.</strong> It means "the previous transmission is still in flight" — just try again on the next cycle. Calling it every tick from a 1 kHz control loop will not stall the loop.</p>
 <hr />
@@ -2721,7 +2698,7 @@ It does not matter what is on the other end — another XM10, an Arduino, a PC, 
 </ul>
 <p>Watch <code>g_tx_count</code>, <code>g_rx_frame_ok</code>, <code>g_rx_bad_crc</code> and <code>g_peer_seq</code> in the debugger's Live Expressions to diagnose step by step. Full procedure and a symptom-to-cause table are in the <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/">example 43 README</a>.</p>
 <blockquote>
-<p>⚠️ <strong>This example has not been run on hardware yet either.</strong> The code and the build are verified, but two boards actually exchanging bytes has not been confirmed. When you first try it, follow the table in the README step by step.</p>
+<p>⚠️ <strong>This example has not been run on a real board yet either.</strong> Two boards actually exchanging bytes has not been confirmed, so when you first try it, follow the table in the README step by step.</p>
 </blockquote>
 <p>Rev 2.0 now has <strong>46 examples</strong>, Rev 1.1 has <strong>42</strong>.</p>
 <hr />
@@ -2755,7 +2732,7 @@ It does not matter what is on the other end — another XM10, an Arduino, a PC, 
 </tr>
 <tr>
 <td><code>SUIT_H10_Binary_20260820.zip</code></td>
-<td>KIT H10 firmware — <strong>identical to v2.6.0</strong> (the date in the filename is the evidence)</td>
+<td>KIT H10 firmware — <strong>identical to v2.6.0</strong></td>
 </tr>
 <tr>
 <td><code>SUIT_ContentsFiles_20260820.zip</code></td>
@@ -2764,7 +2741,7 @@ It does not matter what is on the other end — another XM10, an Arduino, a PC, 
 </tbody>
 </table>
 <blockquote>
-<p>The three bootloader/H10 files are <strong>re-uploads of the v2.6.0 artefacts</strong>. Only the XM10 firmware changed in this release; those components are unchanged. CM and MD are under active development — they will be replaced once their verification completes.</p>
+<p>The three bootloader/H10 files are <strong>re-uploads of the v2.6.0 artefacts</strong>. Only the XM10 firmware changed in this release; those components are unchanged.</p>
 </blockquote>
 <p>Extract to a <strong>short path</strong> (e.g. <code>C:\xm10\</code>). A deep path can hit the Windows path-length limit and break the build — that is a path-length problem, not a code problem.</p>
 <hr />
@@ -2783,7 +2760,7 @@ It does not matter what is on the other end — another XM10, an Arduino, a PC, 
 </tr>
 <tr>
 <td>Hand-edited build settings</td>
-<td>Check the folder rename — see "Two things to check" #1</td>
+<td>Check the folder rename — see "Three things to check" #1</td>
 </tr>
 <tr>
 <td>Rev 1.1</td>

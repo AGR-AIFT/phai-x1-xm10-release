@@ -2417,8 +2417,8 @@
 <h2 id="한눈에-보기">한눈에 보기<a class="headerlink" href="#한눈에-보기" title="Permanent link">&para;</a></h2>
 <p><strong>부팅·통신 안정성과 SDK 사용성을 다듬은 패치 릴리즈</strong>입니다. 새 예제나 API 추가는 없습니다.</p>
 <ul>
-<li><strong>GRF(족저 압력) 센서 모듈 연결 시 부팅 안정성 개선</strong> — 센서 전원을 부팅 후 단계적으로 인가하도록 바꿔, 모듈을 꽂은 채 전원을 켤 때 보드가 재부팅을 반복할 수 있던 문제를 완화했습니다. 데이터 수신 경로도 손봐 수신 누락을 제거했습니다.</li>
-<li><strong>제어·통신·저장 내부 안정성 수정 다수</strong> — CAN 버스 회복, USB 연결 해제 처리, 로그 버퍼 배치, 메모리 접근 경계 검사 등을 보강했습니다.</li>
+<li><strong>GRF(족저 압력) 센서 모듈 연결 시 부팅 안정성 개선</strong> — 모듈을 꽂은 채 전원을 켤 때 보드가 재부팅을 반복할 수 있던 문제를 완화했습니다. 데이터 수신 누락도 없앴습니다.</li>
+<li><strong>제어·통신·저장 안정성 개선 다수</strong> — CAN-FD 오류 회복, USB 케이블 분리·재연결, 로그·설정 저장 등을 보강했습니다.</li>
 <li><strong>ZIP 받아서 CubeIDE 로 바로 빌드</strong> — 압축 해제 → import 직후 빌드가 실패하던 포장 결함(헤더 경로 누락, 빌드 스크립트 누락)을 수정했고, 빌드 결과가 <strong>0 error / 0 warning</strong> 이 되도록 정리했습니다.</li>
 <li><strong>버전 표기 안정화</strong> — ZIP 프로젝트에서 빌드 후 펌웨어 버전이 1.0.0.0 으로 바뀌던 문제를 수정했습니다. 이제 항상 릴리즈 버전(2.3.1)이 유지됩니다.</li>
 </ul>
@@ -2429,7 +2429,7 @@
 <li>Ex.31 (Friction DOB) / Ex.34 (Gait Log) 예제는 이번 릴리즈에서 이에 맞게 갱신되어 있습니다.</li>
 </ul>
 <h2 id="제거된-api">제거된 API<a class="headerlink" href="#제거된-api" title="Permanent link">&para;</a></h2>
-<p><code>XM_GetUserPSRAM()</code> / <code>XM_GetUserPSRAMSize()</code> 가 공개 API에서 제외되었습니다. 대용량 버퍼가 필요하면 <code>XM_GetUserWorkspace()</code>(RAM_D1, 200KB)를 사용하세요 — <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.1/docs/api-reference/07-memory-management.md">07. 메모리 영역</a> 참고.</p>
+<p><code>XM_GetUserPSRAM()</code> / <code>XM_GetUserPSRAMSize()</code> 가 공개 API에서 제외되었습니다. 대용량 버퍼가 필요하면 <code>XM_GetUserWorkspace()</code>(200KB)를 사용하세요 — <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.1/docs/api-reference/07-memory-management.md">07. 메모리 영역</a> 참고.</p>
 <hr />
 <h2 id="다운로드">다운로드<a class="headerlink" href="#다운로드" title="Permanent link">&para;</a></h2>
 <table>
@@ -2462,13 +2462,13 @@
 <hr />
 <h2 id="개선-상세">개선 상세<a class="headerlink" href="#개선-상세" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>GRF 센서 모듈 부팅 안정성</strong> — 센서 전원 레일을 부팅 완료 후 지연·단계 인가. 모듈을 꽂은 채 전원 인가 시 반복 재부팅 완화 (근본 원인은 하드웨어 전원 계통으로, 회로 개선과 병행 진행 중).</li>
-<li><strong>GRF 데이터 수신</strong> — 수신 누락(드랍) 제거.</li>
-<li><strong>CAN 통신 견고화</strong> — 버스 오류 상태에서 자동 회복 경로 정비, 전송 상태 관리 보강.</li>
-<li><strong>USB 안정성</strong> — 케이블 분리/재연결 처리 개선, 데이터 패킷 길이 검사 보강.</li>
-<li><strong>저장·메모리</strong> — 로그 버퍼 배치 재정리(네트워크 기능과의 메모리 충돌 예방), 설정 저장(Flash) 접근 경계 검사 추가.</li>
-<li><strong>제어 안전</strong> — 리미트 스위치 예제(Ex.06) 입력 설정 안전화, 자세 센서 데이터 파싱 경계 검사, RTC 시각 설정 검증 등.</li>
-<li><strong>프로젝트 정리</strong> — 쓰이지 않던 중복 빌드 설정 제거, 미사용 변수 경고 제거. CubeIDE 빌드 = 0 error / 0 warning.</li>
+<li><strong>GRF 센서 모듈 부팅 안정성</strong> — 모듈을 꽂은 채 전원을 켤 때 반복 재부팅하던 현상을 완화했습니다 (근본 원인은 하드웨어 전원 회로에 있습니다).</li>
+<li><strong>GRF 데이터 수신</strong> — 수신 누락(드랍)을 없앴습니다.</li>
+<li><strong>CAN-FD 통신 안정화</strong> — 버스 오류 상태에서 스스로 회복하도록 보강했습니다.</li>
+<li><strong>USB 안정성</strong> — 케이블을 뺐다 꽂을 때의 동작을 개선하고, 길이가 잘못된 데이터를 걸러냅니다.</li>
+<li><strong>저장</strong> — 로그와 설정 저장 동작의 안정성을 높였습니다.</li>
+<li><strong>제어 안전</strong> — 리미트 스위치 예제(Ex.06)의 입력 설정을 안전하게 바꾸고, 센서 데이터와 RTC 시각 설정 값을 더 엄격하게 검사합니다.</li>
+<li><strong>프로젝트 정리</strong> — 쓰이지 않던 중복 빌드 설정과 미사용 변수 경고를 없앴습니다. CubeIDE 빌드 = 0 error / 0 warning.</li>
 </ul>
 <hr />
 <h2 id="호환성-안내">호환성 안내<a class="headerlink" href="#호환성-안내" title="Permanent link">&para;</a></h2>

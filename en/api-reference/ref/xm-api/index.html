@@ -2369,7 +2369,7 @@
 
 <h1 id="xm_apih--xm10-sdk-entry-point-umbrella-api-header"><code>xm_api.h</code> — XM10 SDK Entry Point (Umbrella API Header)<a class="headerlink" href="#xm_apih--xm10-sdk-entry-point-umbrella-api-header" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Target header</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api.h"><code>XM_FW/XM_API/xm_api.h</code></a> (Rev2.0 baseline — the same file also exists in Rev1.1; differences are covered in <a href="#2-what-this-header-aggregates">§2</a>)
+<p><strong>Target header</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api.h"><code>XM_FW/XM_API/xm_api.h</code></a> (Rev2.0 baseline — the same file also exists in Rev1.1; differences are covered in <a href="#what-this-header-aggregates">§2</a>)
 <strong>Related concept docs</strong>: <a href="../../">Full API reference index</a> — all of docs 01–09 cover the sub-APIs this header aggregates
 <strong>Related examples</strong>: virtually every example — almost none of the repository examples skip including <code>xm_api.h</code>. The flagship example that calls <code>XM_GetTick()</code> directly is <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/">00_Quick_Start</a></p>
 </blockquote>
@@ -2497,7 +2497,7 @@
 </tr>
 </tbody>
 </table>
-<p>⚠️ <strong>Calling context</strong>: the header comment does not state any specific task/ISR restriction. It is recommended to treat this conservatively as usable from the <code>Control_Setup()</code> / <code>Control_Loop()</code> context — every SDK example calls it only from within those two functions.</p>
+<p>⚠️ <strong>Calling context</strong>: call it from <code>Control_Setup()</code> / <code>Control_Loop()</code>, not from an ISR — every SDK example calls it only from within those two functions.</p>
 <p><strong>Example</strong> — rollover-safe elapsed-time calculation (the <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/">Ex.00 Quick Start</a> pattern):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">s_boot_timer</span><span class="p">;</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>

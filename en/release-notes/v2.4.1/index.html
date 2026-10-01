@@ -2495,21 +2495,20 @@
 <h2 id="at-a-glance">At a Glance<a class="headerlink" href="#at-a-glance" title="Permanent link">&para;</a></h2>
 <p><strong>A patch release that fixes the C standard library on Rev 2.0.</strong> Floating-point <code>printf("%f", ...)</code> and dynamic <code>malloc()</code>, which previously failed silently, now work. No new examples or API changes.</p>
 <ul>
-<li><strong>Float <code>printf</code> (<code>%f</code>) and <code>malloc()</code> now work</strong> — previously the heap ceiling was pinned to the wrong memory region, so <code>malloc()</code> and the float <code>printf</code> that uses it internally produced no output. Fixed by correcting the heap configuration. (e.g. <code>printf("cur=%.2f\n", value);</code>)</li>
-<li><strong>Safe from multiple tasks</strong> — the C library locks are now wired to FreeRTOS, so concurrent <code>malloc</code>/<code>printf</code> calls from several FreeRTOS tasks no longer corrupt internal state.</li>
-<li><strong>Build-system parity</strong> — the CubeIDE and CMake build paths now produce exactly the same result.</li>
+<li><strong>Float <code>printf</code> (<code>%f</code>) and <code>malloc()</code> now work</strong> — previously <code>malloc()</code> and the float <code>printf</code> that uses it internally produced no output. (e.g. <code>printf("cur=%.2f\n", value);</code>)</li>
+<li><strong>Safe from multiple tasks</strong> — concurrent <code>malloc</code>/<code>printf</code> calls from several tasks no longer cause problems.</li>
+<li><strong>Same build result everywhere</strong> — building with STM32CubeIDE or with CMake now produces the same firmware.</li>
 <li><strong>USB log decoder is now an installable executable</strong> — replaced by <strong>XM10 Log Decoder</strong>, which needs no Python install (see below).</li>
 </ul>
 <h2 id="what-changed--float-printf--malloc-core">What Changed — Float <code>printf</code> / <code>malloc</code> (core)<a class="headerlink" href="#what-changed--float-printf--malloc-core" title="Permanent link">&para;</a></h2>
-<p>On Rev 2.0 the boot process moves the stack to the top of DTCMRAM, while the C library heap lives in a different region (RAM_D1). The heap's upper bound, however, was pinned to the top of the stack rather than to RAM_D1 where the heap actually resides. As a result the internal heap-growth function <code>_sbrk()</code> <strong>failed on its very first call</strong>, and <code>malloc()</code> — along with the float <code>printf</code> (<code>%f</code>, <code>%e</code>, <code>%g</code>) that relies on it — produced no output.</p>
-<p>This release corrects the heap ceiling to the <strong>actual top of RAM_D1</strong>, so the following now works:</p>
+<p>On Rev 2.0, <code>malloc()</code> — along with the float <code>printf</code> (<code>%f</code>, <code>%e</code>, <code>%g</code>) that relies on it — produced no output. This release fixes that, so the following now works:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.14f</span><span class="p">;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">printf</span><span class="p">(</span><span class="s">"cur=%.2f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w">   </span><span class="c1">// now prints "cur=3.14" (previously empty/garbled)</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">64</span><span class="p">);</span><span class="w">        </span><span class="c1">// now returns a valid pointer</span>
 </code></pre></div>
 <ul>
-<li><strong>Rev 1.1 is unaffected</strong> — on Rev 1.1 the stack and heap live in the same region, so this never occurred. The Rev 1.1 SDK is unchanged from v2.3.1.</li>
+<li><strong>Rev 1.1 is unaffected</strong> — this problem only occurred on Rev 2.0. The Rev 1.1 SDK is unchanged from v2.3.1.</li>
 <li><strong>Thread-safe standard library</strong> — alongside the fix, <code>malloc</code>/<code>free</code>/<code>printf</code> are now safe to call concurrently from multiple tasks. Nothing extra to do on your side.</li>
 </ul>
 <hr />
@@ -2549,24 +2548,24 @@
 </table>
 <blockquote>
 <p>Download the ZIP matching your board revision. <strong>RJ45 Ethernet port present → Rev 2.0; absent → Rev 1.1.</strong></p>
-<p><strong>Note for Rev 1.1 users</strong>: this v2.4.1 fix (float <code>printf</code>/<code>malloc</code> heap configuration) addresses a problem that <strong>only occurred on Rev 2.0</strong>, so it is Rev 2.0 only. <code>Rev1.1.zip</code> is <strong>identical to v2.3.1</strong>, so there is nothing new to download for Rev 1.1.</p>
+<p><strong>Note for Rev 1.1 users</strong>: this v2.4.1 fix (float <code>printf</code>/<code>malloc</code>) addresses a problem that <strong>only occurred on Rev 2.0</strong>, so it is Rev 2.0 only. <code>Rev1.1.zip</code> is <strong>identical to v2.3.1</strong>, so there is nothing new to download for Rev 1.1.</p>
 </blockquote>
 <h3 id="release-attachments">Release attachments<a class="headerlink" href="#release-attachments" title="Permanent link">&para;</a></h3>
 <blockquote>
 <p><strong>The bootloader, KIT H10 firmware, and content files are identical to v2.3.0</strong>, and are attached again to the <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.4.1">v2.4.1 release</a> for convenience (<code>AGR_Bootloader.bin</code> / <code>SUIT_H10_Binary_20260716.zip</code> / <code>SUIT_ContentsFiles.zip</code>). If you already installed/updated at v2.3.0/v2.3.1, no further action is needed.</p>
 </blockquote>
 <h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h3>
-<p>The final build step (generating the upload <code>.bin</code>) uses <strong>Python</strong>. If you haven't installed it, follow <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.4.1/docs/getting-started/02-software-setup.md">Software setup</a> to install Python 3.10+ (PATH registration required).</p>
+<p>The final build step (generating the upload <code>.bin</code>) uses <strong>Python</strong>. If you haven't installed it, follow <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.4.1/docs/getting-started/02-software-setup.en.md">Software setup</a> to install Python 3.10+ (PATH registration required).</p>
 <hr />
 <h2 id="details">Details<a class="headerlink" href="#details" title="Permanent link">&para;</a></h2>
 <h3 id="standard-library-core">Standard library (core)<a class="headerlink" href="#standard-library-core" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Float <code>printf</code> / <code>malloc</code> fixed</strong> — the heap ceiling is corrected to the top of RAM_D1, fixing the <code>_sbrk()</code> first-call failure. Float format specifiers (<code>%f</code>, etc.) and dynamic allocation now work.</li>
-<li><strong>Thread-safe</strong> — the C library's internal locks are wired to FreeRTOS mutexes, so concurrent <code>malloc</code>/<code>printf</code> from multiple tasks no longer corrupts the heap.</li>
+<li><strong>Float <code>printf</code> / <code>malloc</code> fixed</strong> — float format specifiers (<code>%f</code>, etc.) and dynamic allocation now work.</li>
+<li><strong>Thread-safe</strong> — concurrent <code>malloc</code>/<code>printf</code> calls from multiple tasks no longer cause problems.</li>
 </ul>
 <h3 id="sdk-build">SDK build<a class="headerlink" href="#sdk-build" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>CMake · CubeIDE parity</strong> — the build-file generator was dropping the float-<code>printf</code> linker option and the linker Other-flags; corrected so both build paths produce the same firmware.</li>
+<li><strong>CMake · CubeIDE parity</strong> — builds made with CMake were missing the float-<code>printf</code> settings; corrected so both build methods produce the same firmware.</li>
 </ul>
 <h3 id="tools--docs">Tools · docs<a class="headerlink" href="#tools--docs" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2617,7 +2616,7 @@
 <h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.4.1/docs/release-notes/v2.4.0.en.md">v2.4.0 release notes</a></li>
-<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.4.1/docs/hardware/README.md">Board revision comparison</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.4.1/docs/hardware/README.en.md#board-revision-comparison">Board revision comparison</a></li>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.4.1/PythonDecoder/README.md">USB log decoder usage</a></li>
 </ul>
 

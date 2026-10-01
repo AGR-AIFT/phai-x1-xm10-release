@@ -3351,7 +3351,7 @@
 </table>
 <p><strong>Returns</strong>: Normalized ADC value (0~65535 by default, range depends on the configured output resolution). <code>0</code> on an invalid pin.</p>
 <blockquote>
-<p><code>XM_EXT_ADC_5</code> ~ <code>_12</code> (the ADC3 group) only return valid values after being switched via <a href="#xm_switchdiotoadc"><code>XM_SwitchDioToAdc()</code></a>. Reading before the switch returns <code>0</code> (indistinguishable from a genuine 0V reading); on Rev2.0 this condition can be checked via the <a href="#diagnostic-global-variable-🟢-rev-20-only"><code>g_xm_adc_read_before_switch</code></a> diagnostic variable.</p>
+<p><code>XM_EXT_ADC_5</code> ~ <code>_12</code> (the ADC3 group) only return valid values after being switched via <a href="#xm_switchdiotoadc"><code>XM_SwitchDioToAdc()</code></a>. Reading before the switch returns <code>0</code> (indistinguishable from a genuine 0V reading); on Rev2.0 this condition can be checked via the <a href="#diagnostic-global-variable--rev-20-only"><code>g_xm_adc_read_before_switch</code></a> diagnostic variable.</p>
 </blockquote>
 <p><strong>⚠️ Calling context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. This is a read-only query, so it is safe to call repeatedly inside the 1ms loop.</p>
 <p><strong>Example</strong></p>
@@ -3418,7 +3418,7 @@
 </tbody>
 </table>
 <p><strong>Returns</strong>: None (<code>void</code>). Default is 16.</p>
-<p><strong>⚠️ Calling context</strong>: The header does not state any real-time restriction. The setting applies globally to every subsequent <code>XM_AnalogRead()</code> call, so it's generally recommended to call this once in <code>Control_Setup()</code>.</p>
+<p><strong>⚠️ Calling context</strong>: Call it once in <code>Control_Setup()</code>, not from an ISR. The setting applies globally to every subsequent <code>XM_AnalogRead()</code> call.</p>
 <p><strong>Example</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">XM_SetAnalogReadResolution</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span><span class="w">  </span><span class="c1">// All subsequent XM_AnalogRead() calls → 0~4095</span>
 </code></pre></div>
@@ -3618,7 +3618,7 @@
 <a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">    </span><span class="c1">// Then read the sensor voltage (mV) with XM_AnalogReadMillivolts(XM_EXT_ADC_5)</span>
 <a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="p">}</span>
 </code></pre></div>
-<p><strong>See also</strong>: <a href="#xmextpwrvoltage_t-🟢-rev-20-only"><code>XmExtPwrVoltage_t</code></a>, <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/">40_EMG_Proportional_Assist example</a></p>
+<p><strong>See also</strong>: <a href="#xmextpwrvoltage_t--rev-20-only"><code>XmExtPwrVoltage_t</code></a>, <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/">40_EMG_Proportional_Assist example</a></p>
 <hr />
 <h3 id="5-external-uart-imu-attachment-xsens-mti-630">5. External UART IMU Attachment (Xsens MTi-630)<a class="headerlink" href="#5-external-uart-imu-attachment-xsens-mti-630" title="Permanent link">&para;</a></h3>
 <blockquote>
@@ -3643,7 +3643,7 @@ last silently overwrites the other). <code>XM_EXTERNAL_UART_XSENS_ENABLE</code> 
 <blockquote>
 <p>⚠️ <strong>Revision-specific behavior</strong> — the function signature and user code are identical across both revisions, but the underlying hardware port they attach to differs.
 - <strong>Rev 2.0</strong>: Attaches to a dedicated USART2 port (PD5=TX, PD6=RX, 921600bps). No resource conflict with any ADC/DIO pin currently in use.
-- <strong>Rev 1.1</strong>: Attaches by dynamically switching PA0/PA1 to UART4 (internally calls <code>ExternalIO_SwitchToUartMode</code>). After this call, <code>XM_EXT_ADC_1</code>/<code>XM_EXT_ADC_3</code> (PA0/PA1) can no longer be used as ADC — use <code>XM_EXT_ADC_2</code>/<code>XM_EXT_ADC_4</code> (PA0_C/PA1_C) instead. If not called, PA0/PA1 remain available as ADC.</p>
+- <strong>Rev 1.1</strong>: Attaches by switching PA0/PA1 to UART4 internally and dynamically. After this call, <code>XM_EXT_ADC_1</code>/<code>XM_EXT_ADC_3</code> (PA0/PA1) can no longer be used as ADC — use <code>XM_EXT_ADC_2</code>/<code>XM_EXT_ADC_4</code> (PA0_C/PA1_C) instead. If not called, PA0/PA1 remain available as ADC.</p>
 </blockquote>
 <p><strong>Parameters</strong>: None</p>
 <p><strong>Returns</strong>: None (<code>void</code>)</p>

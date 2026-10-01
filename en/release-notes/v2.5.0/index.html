@@ -2497,7 +2497,6 @@
 <ul>
 <li><strong>USB memory saving has been removed</strong> — because it was slow enough that data could quietly go missing (see the simple explanation below).</li>
 <li><strong>Data now streams live over the USB cable</strong> — view graphs in <strong>PhAI Studio</strong> and save straight to CSV. It is faster, and nothing gets dropped.</li>
-<li><strong>Coming later</strong> — a future HW revision will add <strong>SD card</strong> support so the board can store data on-board (mobile) again.</li>
 <li><strong>Examples tidied up</strong> — the 5 USB-memory-only examples were removed. Data collection is now taught with the CDC examples (Ex.07–09).</li>
 </ul>
 <hr />
@@ -2515,7 +2514,8 @@
 </ol>
 <p>To learn the flow, follow examples <strong>Ex.07 → 08 → 09</strong> (USB serial → sensor printout → high-speed streaming).</p>
 <blockquote>
-<p><strong>On-board (direct-to-board) storage is not available right now.</strong> As noted above, it will return via SD card in a future HW revision.</p>
+<p>PhAI Studio is still under development, so for now use the <code>xm10</code> tool to view and save your own (custom) data structs. (<a href="../../getting-started/04-pc-data-tool/">PC data tool guide</a>)</p>
+<p><strong>On-board (direct-to-board) storage is not supported.</strong></p>
 </blockquote>
 <hr />
 <h2 id="what-changed">What changed<a class="headerlink" href="#what-changed" title="Permanent link">&para;</a></h2>
@@ -2586,7 +2586,7 @@
 <p><strong>The bootloader, KIT H10 firmware, and content files are identical to a previous release (v2.3.0).</strong> They are re-attached to v2.5.0 for convenience, so if you already installed/updated them since v2.3.0 there is <strong>nothing more to do.</strong> See the <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.5.0/docs/bootloader/README.en.md">Bootloader upload</a> and <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.5.0/docs/kit-h10-firmware/README.en.md">KIT H10 firmware</a> docs for installation.</p>
 </blockquote>
 <h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h3>
-<p>The final build step (generating the uploadable <code>.bin</code>) uses <strong>Python</strong>. If you haven't installed it yet, follow <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.5.0/docs/getting-started/02-software-setup.md">Software Setup</a> to install Python 3.10+ (make sure it's on your PATH).</p>
+<p>The final build step (generating the uploadable <code>.bin</code>) uses <strong>Python</strong>. If you haven't installed it yet, follow <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.5.0/docs/getting-started/02-software-setup.en.md">Software Setup</a> to install Python 3.10+ (make sure it's on your PATH).</p>
 <hr />
 <h2 id="compatibility">Compatibility<a class="headerlink" href="#compatibility" title="Permanent link">&para;</a></h2>
 <table>
@@ -2611,7 +2611,7 @@
 </tr>
 <tr>
 <td>On-board (SD card) storage</td>
-<td><strong>Planned for a future HW revision</strong></td>
+<td><strong>Not supported</strong></td>
 </tr>
 <tr>
 <td>KIT H10 firmware / content files</td>

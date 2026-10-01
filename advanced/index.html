@@ -2144,67 +2144,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#로드맵" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        로드맵
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="로드맵">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#센서-허브-연동" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        센서 허브 연동
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#통신-프로토콜-상세" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        통신 프로토콜 상세
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#심화-프로젝트" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        심화 프로젝트
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#python-도구-심화" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Python 도구 심화
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#자기주도-학습-권장-경로" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2236,10 +2175,10 @@
 
 
 <h1 id="advanced-topics--심화-주제">Advanced Topics — 심화 주제<a class="headerlink" href="#advanced-topics--심화-주제" title="Permanent link">&para;</a></h1>
-<p>자기주도 학습을 위한 출발점입니다. 관심 분야별로 어떤 예제부터 시작해야 할지, 무엇이 아직 로드맵 상태인지를 한눈에 보여줍니다. examples 16, 18, 19 와 API Reference 를 한 번 훑은 뒤 들어오면 흐름이 잡힙니다.</p>
+<p>자기주도 학습을 위한 출발점입니다. 관심 분야별로 어떤 예제부터 시작하면 좋은지 한눈에 보여줍니다. examples 16, 18, 19 와 API Reference 를 한 번 훑은 뒤 들어오면 흐름이 잡힙니다.</p>
 <hr />
 <h2 id="예제로-바로-시작하기">예제로 바로 시작하기<a class="headerlink" href="#예제로-바로-시작하기" title="Permanent link">&para;</a></h2>
-<p>아래 심화 주제는 이미 <code>examples/</code> 폴더에 실습 가능한 예제가 있습니다.</p>
+<p>아래 심화 주제는 <code>examples/</code> 폴더에 실습 가능한 예제가 있습니다.</p>
 <table>
 <thead>
 <tr>
@@ -2278,109 +2217,6 @@
 <td style="text-align: left;"><strong>메모리 패턴</strong></td>
 <td style="text-align: left;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/19_Memory_Aware_Design/">Ex.19 — Memory Aware Design</a></td>
 <td style="text-align: left;">링 버퍼, 풀 할당자, 이동 평균</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="로드맵">로드맵<a class="headerlink" href="#로드맵" title="Permanent link">&para;</a></h2>
-<h3 id="센서-허브-연동">센서 허브 연동<a class="headerlink" href="#센서-허브-연동" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">주제</th>
-<th style="text-align: left;">설명</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">DIO ↔ ADC 동적 전환 심화</td>
-<td style="text-align: left;">런타임 핀 모드 전환의 내부 동작 원리 및 고급 패턴</td>
-</tr>
-<tr>
-<td style="text-align: left;">커스텀 센서 허브 개발</td>
-<td style="text-align: left;">CAN-FD 기반 사용자 정의 센서 허브 모듈 설계 및 연동</td>
-</tr>
-<tr>
-<td style="text-align: left;">IMU Hub Module 활용</td>
-<td style="text-align: left;">IMU Hub Module의 데이터 구조, 캘리브레이션, 필터링</td>
-</tr>
-</tbody>
-</table>
-<h3 id="통신-프로토콜-상세">통신 프로토콜 상세<a class="headerlink" href="#통신-프로토콜-상세" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">주제</th>
-<th style="text-align: left;">설명</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">USB 시리얼 프로토콜 명세</td>
-<td style="text-align: left;">패킷 헤더 (SOF, CRC8, STATUS) 와 커스텀 페이로드 구조</td>
-</tr>
-<tr>
-<td style="text-align: left;">CAN-FD 데이터 객체</td>
-<td style="text-align: left;">KIT H10 ↔ XM10 사이 표준 데이터 교환 규칙</td>
-</tr>
-<tr>
-<td style="text-align: left;">모듈 자동 검색</td>
-<td style="text-align: left;">센서 허브 / 모듈 자동 인식과 구성 흐름</td>
-</tr>
-</tbody>
-</table>
-<h3 id="심화-프로젝트">심화 프로젝트<a class="headerlink" href="#심화-프로젝트" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">주제</th>
-<th style="text-align: left;">설명</th>
-<th style="text-align: center;">상태</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">TinyML on STM32</td>
-<td style="text-align: left;">STM32H7에서 경량 AI 모델 학습/추론 파이프라인</td>
-<td style="text-align: center;">✅ <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/16_TinyAI_Sensor_Fusion/">Ex.16</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">논문 기반 보행 제어</td>
-<td style="text-align: left;">역진자 모델 보행 보조 알고리즘</td>
-<td style="text-align: center;">✅ <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/15_Inverted_Pendulum_Control/">Ex.15</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">강화학습 기반 제어</td>
-<td style="text-align: left;">Jetson 시리즈 + XM10 연동 RL 파이프라인</td>
-<td style="text-align: center;">로드맵</td>
-</tr>
-<tr>
-<td style="text-align: left;">AI 학습 데이터 파이프라인</td>
-<td style="text-align: left;">보드 데이터 수집 → 변환 → PyTorch 학습 → 배포</td>
-<td style="text-align: center;">✅ <a href="ai-data-pipeline/">ai-data-pipeline.md</a></td>
-</tr>
-</tbody>
-</table>
-<h3 id="python-도구-심화">Python 도구 심화<a class="headerlink" href="#python-도구-심화" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">주제</th>
-<th style="text-align: left;">설명</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">CDC Receiver 커스터마이징</td>
-<td style="text-align: left;">사용자 정의 센서 데이터 시각화 설정</td>
-</tr>
-<tr>
-<td style="text-align: left;">USB-CDC 스트림 채널 설계</td>
-<td style="text-align: left;">효율적인 사용자 정의 데이터 구조 설계</td>
-</tr>
-<tr>
-<td style="text-align: left;">데이터 후처리 파이프라인</td>
-<td style="text-align: left;">Python + MATLAB을 활용한 분석 워크플로우</td>
 </tr>
 </tbody>
 </table>

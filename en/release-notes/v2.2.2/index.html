@@ -2116,10 +2116,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#critical--patterns-to-avoid-copying-as-is" class="md-nav__link">
+  <a href="#patterns-you-should-not-copy-as-is" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Critical — Patterns to avoid copying as-is
+        Patterns you should not copy as-is
       
     </span>
   </a>
@@ -2127,10 +2127,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#high--works-but-confuses-users" class="md-nav__link">
+  <a href="#works-but-was-confusing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        High — Works, but confuses users
+        Works, but was confusing
       
     </span>
   </a>
@@ -2138,10 +2138,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#medium--patterns-that-may-mislead-readers" class="md-nav__link">
+  <a href="#easy-to-misread" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Medium — Patterns that may mislead readers
+        Easy to misread
       
     </span>
   </a>
@@ -2161,17 +2161,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#side-note--build-sweep-tool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Side Note — Build Sweep Tool
-      
-    </span>
-  </a>
   
 </li>
       
@@ -2386,10 +2375,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#critical--patterns-to-avoid-copying-as-is" class="md-nav__link">
+  <a href="#patterns-you-should-not-copy-as-is" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Critical — Patterns to avoid copying as-is
+        Patterns you should not copy as-is
       
     </span>
   </a>
@@ -2397,10 +2386,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#high--works-but-confuses-users" class="md-nav__link">
+  <a href="#works-but-was-confusing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        High — Works, but confuses users
+        Works, but was confusing
       
     </span>
   </a>
@@ -2408,10 +2397,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#medium--patterns-that-may-mislead-readers" class="md-nav__link">
+  <a href="#easy-to-misread" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Medium — Patterns that may mislead readers
+        Easy to misread
       
     </span>
   </a>
@@ -2431,17 +2420,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#side-note--build-sweep-tool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Side Note — Build Sweep Tool
-      
-    </span>
-  </a>
   
 </li>
       
@@ -2493,11 +2471,11 @@
 </blockquote>
 <hr />
 <h2 id="at-a-glance">At a Glance<a class="headerlink" href="#at-a-glance" title="Permanent link">&para;</a></h2>
-<p><strong>This is a patch release focused on cleaning up example code across the SDK.</strong> Every one of the 47 examples was reviewed line by line to fix confusing patterns and sloppy buffer/sign handling. In addition, Ex.36 (OnDevice Kinesthetic Learning) now carries a clear Rev 2.0-only notice at every relevant entry point, since it does not build on Rev 1.1.</p>
+<p><strong>This is a patch release focused on cleaning up example code across the SDK.</strong> It fixes confusing patterns and sloppy buffer/sign handling that users could trip over while following along. In addition, Ex.36 (OnDevice Kinesthetic Learning) now carries a clear Rev 2.0-only notice everywhere it is documented, since it does not build on Rev 1.1.</p>
 <ul>
-<li>Code cleanup in 9 examples (Critical 3 / High 3 / Medium 4)</li>
+<li>Code cleanup in 9 examples</li>
 <li>Consistent <strong>Rev 2.0-only</strong> notice for Ex.36 in 4 locations: source header / README / tutorials roadmap / troubleshooting</li>
-<li>Build sweep verified: 47 / 47 (Rev 2.0) · 46 / 47 (Rev 1.1, Ex.36 excluded)</li>
+<li>Example builds verified — Rev 2.0: all pass; Rev 1.1: all pass except Ex.36</li>
 <li>Build environment, API, and KIT H10 firmware are identical to v2.2.1 — just download and replace</li>
 </ul>
 <p><strong>Existing user code continues to work as-is.</strong> No API or behavior changes. If you are already working through v2.2.1, there is no urgent reason to upgrade; if you are starting fresh, use this ZIP.</p>
@@ -2586,18 +2564,18 @@
 <hr />
 <h2 id="example-code-cleanup--9-changes">Example Code Cleanup — 9 Changes<a class="headerlink" href="#example-code-cleanup--9-changes" title="Permanent link">&para;</a></h2>
 <p>These are patterns that commonly trip up users when they copy example code. Even as a minor patch, they were worth collecting into a release.</p>
-<h3 id="critical--patterns-to-avoid-copying-as-is">Critical — Patterns to avoid copying as-is<a class="headerlink" href="#critical--patterns-to-avoid-copying-as-is" title="Permanent link">&para;</a></h3>
+<h3 id="patterns-you-should-not-copy-as-is">Patterns you should not copy as-is<a class="headerlink" href="#patterns-you-should-not-copy-as-is" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Ex.31 (Friction_Comp_DOB)</strong> — <code>MAX_TORQUE_NM</code> was <code>#define</code>d twice in the same file (<code>8.0f</code> followed by <code>5.0f</code>), causing a compiler <code>redefined</code> warning. The effective clamp was <code>5.0f</code> as intended, but the comment above pointed to <code>8 Nm</code>, leaving users wondering why the torque never reached 8. <strong>Consolidated to a single <code>5.0 Nm</code> definition.</strong></li>
-<li><strong>Ex.08 (CDC_Sensor_Print) · Ex.13 (Resistive_Mode)</strong> — Both used bare <code>sprintf(...)</code> into a 64-byte stack buffer. If the format string grows, this silently overflows the stack. <strong>Replaced with <code>snprintf(buf, sizeof(buf), ...)</code></strong>. Ex.08 is the go-to reference for CDC debug printing, so users are especially likely to copy it verbatim — hence the higher priority.</li>
+<li><strong>Ex.08 (CDC_Sensor_Print) · Ex.13 (Resistive_Mode)</strong> — Both used bare <code>sprintf(...)</code> into a 64-byte stack buffer. If the format string grows, this silently overflows the stack. <strong>Replaced with <code>snprintf(buf, sizeof(buf), ...)</code></strong>. Ex.08 is the go-to reference for CDC debug printing, so users are very likely to copy it verbatim — it was fixed first.</li>
 </ul>
-<h3 id="high--works-but-confuses-users">High — Works, but confuses users<a class="headerlink" href="#high--works-but-confuses-users" title="Permanent link">&para;</a></h3>
+<h3 id="works-but-was-confusing">Works, but was confusing<a class="headerlink" href="#works-but-was-confusing" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Ex.15 (Inverted_Pendulum)</strong> — Negative signs were dropped in the debug serial output for fixed-point values. For example, <code>theta = -0.35</code> would print as <code>0.35</code>, making it impossible to tell from the log whether the pelvis was tilting left or right — a real obstacle when tuning PD gains. <strong>Fixed by separating the sign as a <code>%s</code> prefix</strong> so <code>-0.35</code> prints correctly.</li>
 <li><strong>Ex.33 (Kinesthetic_Teaching)</strong> — The playback index advance timer reused a "loop-count macro" as a "millisecond threshold." Both happened to equal <code>10</code>, so it worked by coincidence, but changing either value would silently break the other. <strong>Introduced a dedicated <code>REPLAY_STEP_MS = 10U</code> macro</strong> to separate the two meanings.</li>
-<li><strong>Ex.36 (OnDevice_Kinesthetic_Learning)</strong> — When re-entering the TSM <code>Active</code> state, the <code>s_mode_lost_tick</code> watchdog could carry a stale value, causing an immediate fallback to <code>STANDBY</code> on the very first cycle. <strong>Added an explicit reset in <code>Active_Entry</code></strong>. Also added header comments explaining the multi-word volatile limitation between the background learning task and the foreground control loop — so that the question "why does Ex.38 use a mutex but this one doesn't?" has a visible answer in the code.</li>
+<li><strong>Ex.36 (OnDevice_Kinesthetic_Learning)</strong> — When re-entering the <code>Active</code> state, the example could fall back to <code>STANDBY</code> on the very first cycle. <strong>The value is now explicitly reset in <code>Active_Entry</code></strong>. Also added header comments explaining what to watch for when the learning task and the control loop exchange values — so that the question "why does Ex.38 use a mutex but this one doesn't?" has a visible answer in the code.</li>
 </ul>
-<h3 id="medium--patterns-that-may-mislead-readers">Medium — Patterns that may mislead readers<a class="headerlink" href="#medium--patterns-that-may-mislead-readers" title="Permanent link">&para;</a></h3>
+<h3 id="easy-to-misread">Easy to misread<a class="headerlink" href="#easy-to-misread" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Ex.22 (CPG_Oscillator)</strong> — The AFO frequency adaptation formula used <code>sin(φ)</code> evaluated <em>after</em> the phase advance, which is one step ahead of the documented Ronsse 2011 formula (which uses <code>φ[k]</code>). <strong>Pre-computed <code>sin(φ[k]) / cos(φ[k])</code></strong> so that both update equations reference the phase at the same point in time.</li>
 <li><strong>Ex.24 (Virtual_Constraint)</strong> — The 5th-order Bézier basis called <code>powf</code> 12 times per 1 kHz loop iteration. <strong>Replaced with a chained multiply sequence (<code>s2 = s*s</code>, <code>s3 = s2*s</code>, ...)</strong>, eliminating all <code>powf</code> calls and reducing the cost to approximately 14 multiplications.</li>
@@ -2605,7 +2583,7 @@
 <li><strong>Ex.16 (TinyAI Sensor_Fusion)</strong> — The NN raw logit was multiplied by <code>× 100.0f</code> and printed with a <code>Conf:%</code> label, making it look like a probability percentage even though no softmax was applied. <strong>Changed the label to <code>Score:</code>, removed the <code>× 100</code> scaling</strong>, and added a header comment noting that this is a raw logit value.</li>
 </ul>
 <h3 id="ex36-ondevice-kinesthetic-learning-is-rev-20-only--marked-in-4-places">Ex.36 (OnDevice Kinesthetic Learning) is Rev 2.0 only — marked in 4 places<a class="headerlink" href="#ex36-ondevice-kinesthetic-learning-is-rev-20-only--marked-in-4-places" title="Permanent link">&para;</a></h3>
-<p>Ex.36 uses the Internal Flash UserNV API (<code>XM_UserNV_Read/Write/Erase</code>) to persist learned NN weights across power cycles. This API is <strong>included only in the Rev 2.0 <code>libXM_Lib.a</code></strong>, so building on Rev 1.1 fails at link time with <code>undefined reference to XM_UserNV_*</code>.</p>
+<p>Ex.36 uses the on-chip Flash storage API (<code>XM_UserNV_Read/Write/Erase</code>) to persist learned NN weights across power cycles. This API is <strong>included only in the Rev 2.0 <code>libXM_Lib.a</code></strong>, so building on Rev 1.1 fails at link time with <code>undefined reference to XM_UserNV_*</code>.</p>
 <p>Previously, neither the code nor the documentation disclosed this, leaving Rev 1.1 users stuck at Ex.36 with no obvious explanation. This release adds a consistent notice in 4 places.</p>
 <table>
 <thead>
@@ -2628,7 +2606,7 @@
 <td><code>undefined reference to XM_UserNV_*</code> — symptom / cause / resolution</td>
 </tr>
 <tr>
-<td><code>docs/tutorials/README.md</code> 47-example roadmap</td>
+<td><code>docs/tutorials/README.md</code> example roadmap</td>
 <td>"Rev 2.0 only" note on the Ex.36 row</td>
 </tr>
 </tbody>
@@ -2636,9 +2614,6 @@
 <blockquote>
 <p>If you have a Rev 1.1 board, Ex.35 (Multi-Layer Transparent Control) is the final example for your board. If you want to study just the NN training and LQR portion of Ex.36, you can temporarily remove the BTN1 long-press (Flash save) path and run entirely from RAM as a learning exercise.</p>
 </blockquote>
-<hr />
-<h2 id="side-note--build-sweep-tool">Side Note — Build Sweep Tool<a class="headerlink" href="#side-note--build-sweep-tool" title="Permanent link">&para;</a></h2>
-<p><code>tools/build_all_examples.sh</code> has been added to the internal verification repository. The script swap-builds all 47 examples one at a time, substituting each into the user code area, and records PASS / FAIL, <code>.text</code> size, and failure logs automatically. This tool was the verification backbone for the code review round behind this release, and will serve as the regression test entry point for new examples going forward. (Not included in the user-facing SDK ZIP — internal verification tool only.)</p>
 <hr />
 <h2 id="compatibility">Compatibility<a class="headerlink" href="#compatibility" title="Permanent link">&para;</a></h2>
 <table>

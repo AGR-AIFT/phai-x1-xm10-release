@@ -2567,15 +2567,15 @@ For the full guide see <a href="../../getting-started/04-pc-data-tool/">PC data 
 </ul>
 <hr />
 <h2 id="total-data-0x20s-197-channels-now-decode-correctly-on-the-pc">Total Data (0x20)'s 197 channels now decode correctly on the PC<a class="headerlink" href="#total-data-0x20s-197-channels-now-decode-correctly-on-the-pc" title="Permanent link">&para;</a></h2>
-<p>XM10 has already been sending these 197 channels at 1 kHz, but until now the PC side read the whole struct <strong>as if it were one array of floats</strong>. In reality it's a mix of integers and floats, so that approach came out with corrupted values.</p>
-<p>This time, firmware and the PC tool read this struct from <strong>the same table</strong>, so if the two sides ever disagree, it shows up right away instead of quietly drifting apart.</p>
+<p>XM10 has already been sending these 197 channels at 1 kHz, but until now the PC side read them <strong>all as floats</strong>. In reality it's a mix of integers and floats, so the values came out corrupted.</p>
+<p>This time <code>xm10</code> was fixed to read each channel in its real format.</p>
 <ul>
-<li>Worth knowing: the struct itself is 365 bytes, but what actually arrives on the wire is <strong>368 bytes</strong> — 3 zero-padding bytes get tacked on to round up to a 4-byte length unit. Keep that in mind if you inspect the raw values yourself.</li>
+<li>If you use a receiver you wrote yourself, keep this in mind: the data is 365 bytes, but what reaches the PC is <strong>368 bytes</strong> — 3 zero-padding bytes get tacked on to round up to a 4-byte length unit.</li>
 <li>Exported CSV columns are titled with the real channel name, like <code>leftHipAngle</code>. No more counting columns by number to find the one you want.</li>
 </ul>
 <hr />
 <h2 id="your-custom-channels-now-get-names">Your custom channels now get names<a class="headerlink" href="#your-custom-channels-now-get-names" title="Permanent link">&para;</a></h2>
-<p>Firmware has always been sending the channel names you register with <code>XM_SetUsbCustomMeta()</code> — the PC side just received them and threw them away, showing <code>ch0, ch1…</code> instead. From now on it uses the name.</p>
+<p>Firmware has always been sending the channel names you register with <code>XM_SetUsbCustomMeta()</code> — the receiving programs from before did not use them and showed <code>ch0, ch1…</code> instead. From now on <code>xm10</code> uses the name.</p>
 <ul>
 <li>Registered names appear in graph titles and CSV column headers.</li>
 <li>This path doesn't carry the value's type, though, so the PC assumes float32 and says so on screen and in the CSV summary (<code>⚠ type unknown — assuming float32</code>).</li>
@@ -2583,7 +2583,7 @@ For the full guide see <a href="../../getting-started/04-pc-data-tool/">PC data 
 <hr />
 <h2 id="fixed--example-35-multilayer-transparent-control">Fixed — Example 35 MultiLayer Transparent Control<a class="headerlink" href="#fixed--example-35-multilayer-transparent-control" title="Permanent link">&para;</a></h2>
 <p>It registered 7 channel names (Gravity / DOB / Impedance / Total / Angle / Velocity / Mode, all in Nm·deg·deg/s) but never once called the function that actually sends the values. On the PC it looked like channels that had a name but would never receive data. Fixed on <strong>both Rev 2.0 and Rev 1.1</strong>.</p>
-<p>We re-checked every example that sends data over USB, confirming the number of registered channel names matches the struct actually sent. Rev 2.0's 24 examples and Rev 1.1's 21 examples all check out now.</p>
+<p>The other examples that send data over USB do not have this problem.</p>
 <hr />
 <h2 id="4-things-to-keep-in-mind-when-using-this">4 things to keep in mind when using this<a class="headerlink" href="#4-things-to-keep-in-mind-when-using-this" title="Permanent link">&para;</a></h2>
 <p>Already noted in places like <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/">example 09</a>, but worth repeating now that channel names show up on their own.</p>
@@ -2591,7 +2591,7 @@ For the full guide see <a href="../../getting-started/04-pc-data-tool/">PC data 
 <li>Struct members sent over USB must be <strong>float only</strong>.</li>
 <li>The number and order of the channel names registered in JSON must <strong>exactly match</strong> the number and order of the struct's members.</li>
 <li>Module ID must fall in <strong><code>0xF0</code>–<code>0xFE</code></strong>.</li>
-<li><strong><code>XM_SetUsbCustomMeta()</code> keeps only one registration per connection.</strong> Call it more than once and the later call just overwrites the earlier one — firmware has a single slot for names. If you want to register several channels, gather them into one call.</li>
+<li><strong><code>XM_SetUsbCustomMeta()</code> keeps only one registration per connection.</strong> Call it more than once and the later call just overwrites the earlier one. Do not register channels one by one — gather them into a single call.</li>
 </ol>
 <hr />
 <h2 id="example-count">Example count<a class="headerlink" href="#example-count" title="Permanent link">&para;</a></h2>
@@ -2599,8 +2599,8 @@ For the full guide see <a href="../../getting-started/04-pc-data-tool/">PC data 
 <hr />
 <h2 id="not-yet-done--please-read">Not yet done — please read<a class="headerlink" href="#not-yet-done--please-read" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Zero hardware verification so far.</strong> This release's PC tool was checked only with prepared data and its own self-checks. It has not been tested against an actual XM10 board. Let us know if anything looks off once you try it.</li>
-<li><strong>A way for the PC to learn a struct's field types automatically is ready only on the PC side.</strong> Firmware actually sending that information is for a later version. Right now the board only sends the <strong>name</strong> — that's exactly why the PC always assumes float32, as noted above.</li>
+<li><strong>Not yet confirmed on a real XM10 board.</strong> This release's PC tool was checked only with prepared data and its own self-checks, and has not been tested against an actual XM10 board. Let us know if anything looks off once you try it.</li>
+<li><strong>The type of a channel's values (float, integer, and so on) does not reach the PC yet.</strong> Right now the board only sends the <strong>name</strong> — that's exactly why the PC always assumes float32, as noted above.</li>
 <li><strong>The <code>--no-gui</code> executable can't exercise the live-decoding path.</strong> The receiver itself needs PyQt5 to even start. <code>selftest</code> reports this on screen.</li>
 </ul>
 <hr />

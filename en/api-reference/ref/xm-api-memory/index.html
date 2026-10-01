@@ -2788,7 +2788,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ Calling context</strong>: The header does not state any specific restriction. This page is written conservatively against a <code>Control_Setup()</code>/<code>Control_Loop()</code> task context. The usual pattern is to fetch the pointer once in <code>Control_Setup()</code>, store it in a static/global pointer, and reuse it in <code>Control_Loop()</code>.</p>
+<p><strong>⚠️ Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. The usual pattern is to fetch the pointer once in <code>Control_Setup()</code>, store it in a static/global pointer, and reuse it in <code>Control_Loop()</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">s_work_buf</span><span class="p">;</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -2823,7 +2823,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ Calling context</strong>: The header does not state any specific restriction. This page is written conservatively against a <code>Control_Setup()</code>/<code>Control_Loop()</code> task context. Do not place DMA buffers in this block — the DMA controller cannot access the DTCM address space.</p>
+<p><strong>⚠️ Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. Do not place DMA buffers in this block — the DMA controller cannot access the DTCM address space.</p>
 <p><strong>See also</strong>: <a href="../../07-memory-management/#dtcm-api">07. Memory Management — DTCM API</a></p>
 <h4 id="xm_getuserdtcmsize"><code>XM_GetUserDTCMSize()</code><a class="headerlink" href="#xm_getuserdtcmsize" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUserDTCMSize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
@@ -2888,7 +2888,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ Calling context</strong>: The header does not state any specific restriction. This page is written conservatively against a <code>Control_Setup()</code>/<code>Control_Loop()</code> task context; the usual pattern is to call this once at boot, from <code>Control_Setup()</code>.</p>
+<p><strong>⚠️ Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. The usual pattern is to call this once at boot, from <code>Control_Setup()</code>.</p>
 <p><strong>See also</strong>: It's safer to check <a href="#xm_usernv_iserased"><code>XM_UserNV_IsErased()</code></a> first to see whether valid data exists — right after an erase, the whole area is <code>0xFF</code>.</p>
 <h4 id="xm_usernv_write"><code>XM_UserNV_Write()</code><a class="headerlink" href="#xm_usernv_write" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="nf">XM_UserNV_Write</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
@@ -2944,7 +2944,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ Calling context</strong>: The header does not state any specific restriction. This page is written conservatively against a <code>Control_Setup()</code>/<code>Control_Loop()</code> task context. However, the following two constraints are explicitly stated in the header and must be respected:</p>
+<p><strong>⚠️ Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. However, the following two constraints must be respected:</p>
 <ul>
 <li>Flash can only be <strong>written after an erase</strong> (1→0 only, never 0→1). Call <a href="#xm_usernv_erase"><code>XM_UserNV_Erase()</code></a> before writing new data.</li>
 <li>STM32H7 Flash is programmed in 32-byte (256-bit) units; if <code>offset</code> isn't aligned, it is automatically aligned before writing.</li>
@@ -3009,7 +3009,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ Calling context</strong>: The header does not state any specific restriction. This page is written conservatively against a <code>Control_Setup()</code>/<code>Control_Loop()</code> task context. It's typically used as a guard before <code>XM_UserNV_Read()</code>, to check whether valid data has been stored (a magic-number field checked after reading is another valid approach).</p>
+<p><strong>⚠️ Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. It's typically used as a guard before <code>XM_UserNV_Read()</code>, to check whether valid data has been stored (a magic-number field checked after reading is another valid approach).</p>
 <hr />
 <h2 id="typesmacros">Types/Macros<a class="headerlink" href="#typesmacros" title="Permanent link">&para;</a></h2>
 <h3 id="xm_ramfunc"><code>XM_RAMFUNC</code><a class="headerlink" href="#xm_ramfunc" title="Permanent link">&para;</a></h3>

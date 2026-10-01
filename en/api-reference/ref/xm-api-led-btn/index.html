@@ -2702,7 +2702,7 @@
 <td>Read a button's latest event (Read-Clear)</td>
 </tr>
 <tr>
-<td><a href="#xm_setchannelledrgb"><code>XM_SetChannelLedRGB</code></a> 🟢 Rev 2.0 Only</td>
+<td><a href="#xm_setchannelledrgb--rev-20-only"><code>XM_SetChannelLedRGB</code></a> 🟢 Rev 2.0 Only</td>
 <td>Set a channel RGB LED's color directly</td>
 </tr>
 <tr>
@@ -2778,7 +2778,7 @@
 </tbody>
 </table>
 <p><strong>Returns</strong>: None (<code>void</code>)</p>
-<p><strong>⚠️ Calling context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. The effect may not appear immediately after this call; it is only reflected while <a href="#xm_io_update"><code>XM_IO_Update()</code></a> is being called periodically (this happens automatically inside the User Task, so no extra action is normally needed).</p>
+<p><strong>⚠️ Calling context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. The effect may not appear immediately after this call; it is only reflected while <a href="#xm_io_update"><code>XM_IO_Update()</code></a> is being called periodically (this happens automatically inside the control-loop task (Control_Loop), so no extra action is normally needed).</p>
 <p><strong>Example</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">XM_SetLedEffect</span><span class="p">(</span><span class="n">XM_LED_2</span><span class="p">,</span><span class="w"> </span><span class="n">XM_LED_BLINK</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">);</span><span class="w">       </span><span class="c1">// Blink every 0.5 s</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">XM_SetLedEffect</span><span class="p">(</span><span class="n">XM_LED_3</span><span class="p">,</span><span class="w"> </span><span class="n">XM_LED_HEARTBEAT</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span><span class="w">  </span><span class="c1">// Heartbeat with a 1 s period</span>
@@ -2902,7 +2902,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">XM_SetChannelLedRGB</span><span class="p">(</span><span class="n">XM_CH_LED_IMU</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// Set the IMU channel LED to red</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">XM_SetChannelLedRGB</span><span class="p">(</span><span class="n">XM_CH_LED_IMU</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">    </span><span class="c1">// r=g=b=0 -&gt; restore automatic system control</span>
 </code></pre></div>
-<p><strong>See also</strong>: <a href="#xmchannelled_t"><code>XmChannelLed_t</code></a> for the channel list. Calling with <code>r=0,g=0,b=0</code> restores automatic system status display.</p>
+<p><strong>See also</strong>: <a href="#xmchannelled_t--rev-20-only"><code>XmChannelLed_t</code></a> for the channel list. Calling with <code>r=0,g=0,b=0</code> restores automatic system status display.</p>
 <hr />
 <h3 id="xm_io_update"><code>XM_IO_Update</code><a class="headerlink" href="#xm_io_update" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_IO_Update</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
@@ -2910,9 +2910,9 @@
 <p>The internal engine function that computes LED blink timing and performs button debouncing/event detection.</p>
 <p><strong>Parameters</strong>: None</p>
 <p><strong>Returns</strong>: None (<code>void</code>)</p>
-<p><strong>⚠️ Calling context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. <code>core_process</code> calls this automatically at a 1 ms (1 kHz) interval during its input-collection stage, so <strong>you normally do not need to call it yourself.</strong> However, if this function stops being called periodically (e.g., the User Task gets stuck in an infinite loop), Blink/Heartbeat/Oneshot effects and button events will stop updating entirely.</p>
+<p><strong>⚠️ Calling context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context. The system calls this automatically at a 1 ms (1 kHz) interval during its input-collection stage, so <strong>you normally do not need to call it yourself.</strong> However, if this function stops being called periodically (e.g., the control-loop task (Control_Loop) gets stuck in an infinite loop), Blink/Heartbeat/Oneshot effects and button events will stop updating entirely.</p>
 <p><strong>Example</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// Normally you do not need to call this directly — core_process calls it automatically</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// Normally you do not need to call this directly — the system calls it automatically</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1">// For reference, a conceptual call site:</span>
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
 <a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="p">{</span>

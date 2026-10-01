@@ -3109,27 +3109,27 @@
 <hr />
 <h2 id="2-flash-메모리-맵">2. Flash 메모리 맵<a class="headerlink" href="#2-flash-메모리-맵" title="Permanent link">&para;</a></h2>
 <p>STM32H743XI는 2MB 내부 Flash (Bank1 + Bank2)를 가집니다.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌──────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│ Address         │ Size    │ Region         │ 설명              │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│ 0x08000000      │ 256 KB  │ Bootloader     │ AGR_BOOT V2       │
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│                 │         │                │ (Bank1 S0-S1)     │
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│ 0x08040000      │ 1 KB    │ FW Header      │ AGR_FwInfo_t      │
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│                 │         │                │ (시그니처+CRC+버전) │
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│ 0x08040400      │ 767 KB  │ App (Active)   │ 사용자 앱 펌웨어    │
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│                 │         │                │ (Bank1 S2-S7)     │
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│ 0x08100000      │ 768 KB  │ Backup Slot    │ 이전 펌웨어 백업    │
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│                 │         │                │ (Bank2 S0-S5)     │
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│ 0x081C0000      │ 128 KB  │ Boot Config    │ AGR_BootConfig_t  │
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│                 │         │                │ (Bank2 S6)        │
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>├──────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│ 0x081E0000      │ 128 KB  │ Reserved       │ 향후 확장용        │
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│                 │         │                │ (Bank2 S7)        │
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>└──────────────────────────────────────────────────────────────┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│ Address         │ Size    │ Region         │ 설명                       │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├─────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│ 0x08000000      │ 256 KB  │ Bootloader     │ AGR_BOOT V2                │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│                 │         │                │ (Bank1 S0-S1)              │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├─────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│ 0x08040000      │ 1 KB    │ FW Header      │ 펌웨어 헤더                │
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│                 │         │                │ (시그니처 + CRC + 버전)    │
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>├─────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│ 0x08040400      │ 767 KB  │ App (Active)   │ 사용자 앱 펌웨어           │
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│                 │         │                │ (Bank1 S2-S7)              │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>├─────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│ 0x08100000      │ 768 KB  │ Backup Slot    │ 이전 펌웨어 백업           │
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│                 │         │                │ (Bank2 S0-S5)              │
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>├─────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│ 0x081C0000      │ 128 KB  │ Boot Config    │ 부트 설정                  │
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│                 │         │                │ (Bank2 S6)                 │
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>├─────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│ 0x081E0000      │ 128 KB  │ Reserved       │ 예약 영역                  │
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│                 │         │                │ (Bank2 S7)                 │
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>└─────────────────────────────────────────────────────────────────────────┘
 </code></pre></div>
 <blockquote>
 <p><strong>중요</strong>: 부트로더(0x08000000)와 앱(0x08040000)은 완전히 분리된 영역입니다.<br />
@@ -3198,11 +3198,11 @@ SWD로 앱을 플래시해도 부트로더는 손상되지 않습니다.</p>
 <h3 id="빌드--디버깅">빌드 &amp; 디버깅<a class="headerlink" href="#빌드--디버깅" title="Permanent link">&para;</a></h3>
 <ol>
 <li>STM32CubeIDE에서 프로젝트 <strong>Build</strong> (Ctrl+B)</li>
-<li>Post-Build 스크립트가 자동 실행:</li>
-<li><code>size_report.py</code> → 메모리 사용량 리포트</li>
-<li><code>version_generator.py</code> → git tag에서 version.h 생성</li>
-<li><code>patch_fw_info.py</code> → ELF의 .fw_header 섹션에 fw_size/CRC 패치</li>
-<li><code>fw_packager.py</code> → FTP 업로드용 패키징 바이너리 생성</li>
+<li>빌드가 끝나면 후처리가 자동으로 실행됩니다:</li>
+<li>메모리 사용량 리포트</li>
+<li>git tag 에서 버전 정보 생성</li>
+<li>펌웨어 헤더에 크기·CRC 기록</li>
+<li>FTP 업로드용 패키징 바이너리 생성</li>
 <li><strong>Debug</strong> (F11) 클릭 → SWD를 통해 0x08040000에 앱 펌웨어 기록</li>
 <li>디버깅 시작 (브레이크포인트, 변수 감시 등 정상 사용 가능)</li>
 </ol>
@@ -3212,8 +3212,8 @@ SWD로 앱을 플래시해도 부트로더는 손상되지 않습니다.</p>
 <h3 id="swd-디버깅이-부트로더와-호환되는-이유">SWD 디버깅이 부트로더와 호환되는 이유<a class="headerlink" href="#swd-디버깅이-부트로더와-호환되는-이유" title="Permanent link">&para;</a></h3>
 <ul>
 <li>링커 스크립트(<code>STM32H743XIHX_FLASH.ld</code>)가 앱 코드를 <code>0x08040400</code>에 배치</li>
-<li><code>.fw_header</code> 섹션이 <code>0x08040000</code>에 배치되어 부트로더가 시그니처를 인식</li>
-<li><code>boot_fw_info.c</code>가 ELF에 <code>AGRBOOT</code> 시그니처를 포함시켜 SWD 플래시 후에도 부트로더가 앱을 정상 인식</li>
+<li>펌웨어 헤더가 <code>0x08040000</code>에 배치되어 부트로더가 시그니처를 인식</li>
+<li>SDK 가 시그니처를 펌웨어에 포함시켜 SWD 플래시 후에도 부트로더가 앱을 정상 인식</li>
 </ul>
 <hr />
 <h2 id="5-앱-펌웨어-업로드--phai-studio-usb-ftp">5. 앱 펌웨어 업로드 — PhAI Studio (USB FTP)<a class="headerlink" href="#5-앱-펌웨어-업로드--phai-studio-usb-ftp" title="Permanent link">&para;</a></h2>
@@ -3230,7 +3230,7 @@ SWD로 앱을 플래시해도 부트로더는 손상되지 않습니다.</p>
 </code></pre></div>
 <blockquote>
 <p><strong>PhAI Studio에서 사용할 파일</strong>: <code>XM10_X_X_X_X.bin</code> (예: <code>XM10_2_0_1_0.bin</code>)<br />
-이 파일은 <code>fw_packager.py</code>가 생성하며, 1KB AGR_FwInfo_t 헤더 + 앱 바이너리로 구성됩니다.</p>
+이 파일은 빌드가 끝나면 자동으로 만들어지며, 1KB 펌웨어 헤더 + 앱 바이너리로 구성됩니다.</p>
 </blockquote>
 <h3 id="업로드-절차">업로드 절차<a class="headerlink" href="#업로드-절차" title="Permanent link">&para;</a></h3>
 <ol>
@@ -3245,28 +3245,26 @@ SWD로 앱을 플래시해도 부트로더는 손상되지 않습니다.</p>
 </ol>
 <h3 id="부트로더-ftp-모드-강제-진입">부트로더 FTP 모드 강제 진입<a class="headerlink" href="#부트로더-ftp-모드-강제-진입" title="Permanent link">&para;</a></h3>
 <p>앱이 정상 실행 중일 때 FTP 모드로 전환하려면:
-- PhAI Studio에서 <strong>Enter Bootloader</strong> 명령 전송
-- 또는 앱 코드에서 <code>AGR_Boot_RequestUpdate()</code> 호출</p>
+- PhAI Studio에서 <strong>Enter Bootloader</strong> 명령 전송</p>
 <hr />
 <h2 id="6-빌드-후-바이너리-생성-과정">6. 빌드 후 바이너리 생성 과정<a class="headerlink" href="#6-빌드-후-바이너리-생성-과정" title="Permanent link">&para;</a></h2>
-<p>STM32CubeIDE에서 <strong>Build</strong>를 실행하면 다음 순서로 Post-Build 스크립트가 실행됩니다:</p>
+<p>STM32CubeIDE에서 <strong>Build</strong>를 실행하면 컴파일 뒤에 다음 후처리가 순서대로 자동 실행됩니다:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>[Build]  GCC 컴파일 + 링크 → Extension_Module.elf
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>           │
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>[Step 1]  size_report.py → 메모리 사용량 리포트 (콘솔 출력)
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>[Step 1]  메모리 사용량 리포트 (콘솔 출력)
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>           │
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>[Step 2]  version_generator.py → git tag → version.h 자동 생성
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>[Step 2]  git tag → version.h 자동 생성
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>           │
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>[Step 3]  patch_fw_info.py → ELF .fw_header 패치 (fw_size, fw_crc32)
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>[Step 3]  펌웨어 헤더에 크기·CRC 기록
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>           │                  → .bin, .hex, _app.bin 생성
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>           │
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>[Step 4]  fw_packager.py → _app.bin + FwInfo 헤더 → XM10_X_X_X_X.bin
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>[Step 4]  _app.bin + 펌웨어 헤더 → XM10_X_X_X_X.bin
 </code></pre></div>
 <h3 id="각-단계-상세">각 단계 상세<a class="headerlink" href="#각-단계-상세" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
 <th>단계</th>
-<th>스크립트</th>
 <th>입력</th>
 <th>출력</th>
 <th>설명</th>
@@ -3275,28 +3273,24 @@ SWD로 앱을 플래시해도 부트로더는 손상되지 않습니다.</p>
 <tbody>
 <tr>
 <td>1</td>
-<td><code>size_report.py</code></td>
 <td><code>.elf</code></td>
 <td>콘솔</td>
 <td>FLASH/RAM 사용량 시각화</td>
 </tr>
 <tr>
 <td>2</td>
-<td><code>version_generator.py</code></td>
 <td>git tag</td>
 <td><code>version.h</code></td>
 <td><code>FW_VER_MAJOR/MINOR/PATCH/DEBUG</code> 정의</td>
 </tr>
 <tr>
 <td>3</td>
-<td><code>patch_fw_info.py</code></td>
 <td><code>.elf</code></td>
 <td><code>.bin</code>, <code>.hex</code>, <code>_app.bin</code></td>
-<td>fw_size/CRC를 .fw_header에 패치</td>
+<td>펌웨어 헤더에 크기/CRC 기록</td>
 </tr>
 <tr>
 <td>4</td>
-<td><code>fw_packager.py</code></td>
 <td><code>_app.bin</code></td>
 <td><code>XM10_X_X_X_X.bin</code></td>
 <td>1KB 헤더 + 앱 바이너리 = FTP용</td>
@@ -3304,27 +3298,27 @@ SWD로 앱을 플래시해도 부트로더는 손상되지 않습니다.</p>
 </tbody>
 </table>
 <blockquote>
-<p><strong>Python 3.x 필수</strong>: Post-Build 스크립트는 Python으로 작성되어 있습니다.<br />
-<code>pip install pyyaml</code> 필요 (Data Map Code-Gen용).</p>
+<p><strong>Python 3.x 필수</strong>: 빌드 후처리는 Python으로 실행됩니다.
+<code>pip install pyyaml</code> 이 필요합니다.</p>
 </blockquote>
 <hr />
 <h2 id="7-부트로더-동작-원리">7. 부트로더 동작 원리<a class="headerlink" href="#7-부트로더-동작-원리" title="Permanent link">&para;</a></h2>
 <h3 id="부팅-시퀀스">부팅 시퀀스<a class="headerlink" href="#부팅-시퀀스" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>전원 ON → 부트로더 시작 (0x08000000)
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    │
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    ├─ Boot Config 읽기 (Bank2 S6)
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    │   └─ 최초 부팅: 기본값으로 Config 자동 생성
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    ├─ 부트 설정 읽기 (Bank2 S6)
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    │   └─ 최초 부팅: 기본값으로 설정 자동 생성
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    │
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    ├─ 롤백 체크 (boot_count &gt;= 3?)
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    ├─ 롤백 체크 (연속 부팅 실패 3회 이상?)
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    │   └─ Yes: 백업 슬롯에서 복원
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    │
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    ├─ 앱 펌웨어 검증
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    │   ├─ "AGRBOOT\x01" 시그니처 확인
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    │   ├─ 시그니처 확인
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    │   ├─ CRC-32 검증 (FTP 업로드 시에만)
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    │   └─ HW 리비전 호환성 확인
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    │
 <a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    ├─ 검증 성공 → 앱으로 점프 (0x08040400)
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    │   └─ 앱에서 AGR_Boot_ConfirmBoot() 호출 → boot_count 리셋
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    │   └─ 앱이 정상 시작하면 SDK 가 부트로더에 알림 → 부팅 실패 횟수 초기화
 <a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    │
 <a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    └─ 검증 실패 → FTP 대기 모드
 <a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>        └─ USB CDC로 새 펌웨어 수신 대기
@@ -3332,13 +3326,13 @@ SWD로 앱을 플래시해도 부트로더는 손상되지 않습니다.</p>
 <h3 id="ftp-업데이트-시퀀스">FTP 업데이트 시퀀스<a class="headerlink" href="#ftp-업데이트-시퀀스" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PhAI Studio에서 FW Upload 시작
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    │
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    ├─ [1] 앱에서 BL로 전환 (RTC BKP0R에 매직값 기록 + NVIC Reset)
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    ├─ [1] 앱이 부트로더로 전환 (리셋)
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    ├─ [2] 현재 Active FW → Backup Slot 복사
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    ├─ [3] Active Slot 삭제
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    ├─ [4] 새 FW 수신 + Active Slot 기록
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    ├─ [5] CRC-32 검증
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    ├─ [6] Boot Config 업데이트 (PENDING_CONFIRM)
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    └─ [7] 리셋 → 새 앱 시작 → ConfirmBoot() → 완료
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    ├─ [6] 부트 설정 업데이트 (새 펌웨어 확인 대기)
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    └─ [7] 리셋 → 새 앱 시작 → 정상 시작 확인 → 완료
 </code></pre></div>
 <hr />
 <h2 id="8-문제-해결-troubleshooting">8. 문제 해결 (Troubleshooting)<a class="headerlink" href="#8-문제-해결-troubleshooting" title="Permanent link">&para;</a></h2>
@@ -3362,14 +3356,14 @@ SWD로 앱을 플래시해도 부트로더는 손상되지 않습니다.</p>
 <li>부트로더가 FTP 모드인지 확인 (앱 실행 중이면 PhAI Studio에서 "Enter Bootloader" 먼저 실행)</li>
 </ol>
 <h3 id="fw-업로드-후-부팅이-반복되다가-이전-버전으로-돌아갔습니다">"FW 업로드 후 부팅이 반복되다가 이전 버전으로 돌아갔습니다"<a class="headerlink" href="#fw-업로드-후-부팅이-반복되다가-이전-버전으로-돌아갔습니다" title="Permanent link">&para;</a></h3>
-<p><strong>원인</strong>: 새 펌웨어에서 <code>AGR_Boot_ConfirmBoot()</code>가 호출되지 않아 3회 부팅 후 자동 롤백.
-- <code>system_startup.c</code>에서 부팅 직후 <code>AGR_Boot_ConfirmBoot()</code> 호출이 포함되어 있는지 확인
-- SDK 기본 코드에는 이미 포함되어 있으므로, 사용자가 <code>system_startup.c</code>를 수정하지 않았는지 확인</p>
+<p><strong>원인</strong>: 새 펌웨어가 정상 시작했다는 알림을 부트로더에 보내지 못해 3회 부팅 후 자동 롤백.
+- 이 알림은 SDK 기본 코드가 부팅 직후 자동으로 보냅니다
+- 사용자가 SDK 시작 코드를 수정하지 않았는지 확인</p>
 <h3 id="빌드는-되는데-xm10_x_x_x_xbin이-생성되지-않습니다">"빌드는 되는데 XM10_X_X_X_X.bin이 생성되지 않습니다"<a class="headerlink" href="#빌드는-되는데-xm10_x_x_x_xbin이-생성되지-않습니다" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Python 3.x 설치 확인: <code>python --version</code></li>
-<li>Post-Build 스크립트 콘솔 출력 확인 (Build Console에 에러 메시지)</li>
-<li><code>tools/build/</code> 폴더에 스크립트 파일이 있는지 확인</li>
+<li>빌드 후처리 단계의 콘솔 출력 확인 (Build Console에 에러 메시지)</li>
+<li>SDK 의 <code>tools/build/</code> 폴더가 그대로 있는지 확인 (빌드 후처리 파일이 들어 있습니다)</li>
 </ol>
 <h3 id="stm32cubeprogrammer에서-read-하면-0x08040000에-데이터가-없습니다">"STM32CubeProgrammer에서 Read 하면 0x08040000에 데이터가 없습니다"<a class="headerlink" href="#stm32cubeprogrammer에서-read-하면-0x08040000에-데이터가-없습니다" title="Permanent link">&para;</a></h3>
 <p><strong>원인</strong>: SWD 디버깅이 아닌 STM32CubeProgrammer로 직접 <code>.bin</code>을 업로드할 때 주소를 잘못 설정한 경우.
@@ -3411,7 +3405,7 @@ SWD로 앱을 플래시해도 부트로더는 손상되지 않습니다.</p>
 <li>앱 펌웨어는 각 리비전별 <strong>별도 libXM_Lib.a</strong>로 빌드하지만, 부트로더는 공통</li>
 </ul>
 <h3 id="python-환경-설정">Python 환경 설정<a class="headerlink" href="#python-환경-설정" title="Permanent link">&para;</a></h3>
-<p>Post-Build 스크립트 실행을 위해:
+<p>빌드 후처리 실행을 위해:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Python 3.x 설치 후</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>pip<span class="w"> </span>install<span class="w"> </span>pyyaml
 </code></pre></div></p>

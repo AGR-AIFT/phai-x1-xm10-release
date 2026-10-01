@@ -1725,10 +1725,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ioif-macro-redefinition-warnings" class="md-nav__link">
+  <a href="#redefined-warnings-rev-11-sdk-cmake-build" class="md-nav__link">
     <span class="md-ellipsis">
       
-        IOIF Macro Redefinition Warnings
+        redefined Warnings (Rev 1.1 SDK, CMake build)
       
     </span>
   </a>
@@ -1993,10 +1993,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usb-cdc-messages-not-visible-in-phai-studio-or-a-terminal" class="md-nav__link">
+  <a href="#usb-cdc-text-messages-not-visible-in-a-terminal" class="md-nav__link">
     <span class="md-ellipsis">
       
-        USB-CDC Messages Not Visible in PhAI Studio or a Terminal
+        USB-CDC Text Messages Not Visible in a Terminal
       
     </span>
   </a>
@@ -2646,10 +2646,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ioif-macro-redefinition-warnings" class="md-nav__link">
+  <a href="#redefined-warnings-rev-11-sdk-cmake-build" class="md-nav__link">
     <span class="md-ellipsis">
       
-        IOIF Macro Redefinition Warnings
+        redefined Warnings (Rev 1.1 SDK, CMake build)
       
     </span>
   </a>
@@ -2914,10 +2914,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usb-cdc-messages-not-visible-in-phai-studio-or-a-terminal" class="md-nav__link">
+  <a href="#usb-cdc-text-messages-not-visible-in-a-terminal" class="md-nav__link">
     <span class="md-ellipsis">
       
-        USB-CDC Messages Not Visible in PhAI Studio or a Terminal
+        USB-CDC Text Messages Not Visible in a Terminal
       
     </span>
   </a>
@@ -3106,10 +3106,10 @@
 <p><strong>Cause:</strong> The <code>--specs=nano.specs</code> flag is applied more than once in the CMake build configuration.</p>
 <p><strong>Resolution:</strong> In <code>CMakeLists.txt</code>, verify that <code>CMAKE_C_FLAGS</code> and <code>CMAKE_C_FLAGS_DEBUG/RELEASE</code> do not include the same flags. Place shared flags in <code>CMAKE_C_FLAGS</code> and use <code>DEBUG/RELEASE</code> variants only for build-type-specific flags.</p>
 <hr />
-<h3 id="ioif-macro-redefinition-warnings">IOIF Macro Redefinition Warnings<a class="headerlink" href="#ioif-macro-redefinition-warnings" title="Permanent link">&para;</a></h3>
-<p><strong>Symptom:</strong> Warnings such as <code>warning: "AGRB_IOIF_FDCAN_ENABLE" redefined</code> (occurs when building the Rev 1.1 SDK with CMake — it does not appear with STM32CubeIDE builds or with the Rev 2.0 SDK)</p>
-<p><strong>Cause:</strong> <code>AGRB_IOIF_*_ENABLE</code> macros are defined in both the macro-definitions block (<code>target_compile_definitions</code>) in <code>CMakeLists.txt</code> and in <code>ioif_conf.h</code>.</p>
-<p><strong>Resolution:</strong> Remove the <code>AGRB_IOIF_*</code> definitions from the <code>target_compile_definitions</code> block in <code>CMakeLists.txt</code> and manage them exclusively in <code>ioif_conf.h</code>. These warnings do not affect behavior, but eliminating them keeps the build output clean.</p>
+<h3 id="redefined-warnings-rev-11-sdk-cmake-build"><code>redefined</code> Warnings (Rev 1.1 SDK, CMake build)<a class="headerlink" href="#redefined-warnings-rev-11-sdk-cmake-build" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom:</strong> Warnings such as <code>warning: "AGRB_IOIF_FDCAN_ENABLE" redefined</code>, saying a <code>..._ENABLE</code> value was defined again (appears only when building the Rev 1.1 SDK with CMake — it does not appear with STM32CubeIDE builds or with the Rev 2.0 SDK)</p>
+<p><strong>Cause:</strong> The same setting is defined in two places inside the SDK, which triggers the warning.</p>
+<p><strong>Resolution:</strong> It does not affect behavior, so you can <strong>safely ignore it.</strong> It does not appear when you build with STM32CubeIDE.</p>
 <hr />
 <h2 id="board-revision--sdk-zip-mismatch">Board Revision / SDK ZIP Mismatch<a class="headerlink" href="#board-revision--sdk-zip-mismatch" title="Permanent link">&para;</a></h2>
 <h3 id="center-or-right-button-not-responding-or-an-unpressed-button-always-reads-as-pressed">Center or Right Button Not Responding, or an Unpressed Button Always Reads as Pressed<a class="headerlink" href="#center-or-right-button-not-responding-or-an-unpressed-button-always-reads-as-pressed" title="Permanent link">&para;</a></h3>
@@ -3167,7 +3167,7 @@
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>control_task.c:(.text.Active_Loop+0x292): undefined reference to `XM_UserNV_Write'
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>collect2.exe: error: ld returned 1 exit status
 </code></pre></div>
-<p><strong>Cause:</strong> Ex.36 uses the Internal Flash UserNV API (<code>XM_UserNV_Read/Write/Erase</code>) to persist trained NN weights across power cycles. This API is <strong>only included in the Rev 2.0 SDK's <code>libXM_Lib.a</code></strong> and has not yet been backported to the Rev 1.1 library.</p>
+<p><strong>Cause:</strong> Ex.36 uses the Internal Flash UserNV API (<code>XM_UserNV_Read/Write/Erase</code>) to persist trained NN weights across power cycles. This API is <strong>only included in the Rev 2.0 SDK's <code>libXM_Lib.a</code></strong> and is not in the Rev 1.1 library.</p>
 <p><strong>Resolution:</strong>
 - <strong>If your board is Rev 2.0</strong> → Re-import the Rev 2.0 SDK ZIP and rebuild.
 - <strong>If your board is Rev 1.1</strong> → Ex.36 is not available. Complete up through Ex.35 (<code>MultiLayer_Transparent_Control</code>), then proceed to Ex.36 once you have a Rev 2.0 board. If you only want to study the NN + LQR logic in Ex.36, you can temporarily remove the BTN1 long-press (Flash save) behavior and run the learn/replay loop in RAM only as a study exercise.</p>
@@ -3192,9 +3192,12 @@
 4. Confirm the CAN-FD baud rate settings match on both sides</p>
 <h3 id="sensor-hub-module-integration-error">Sensor Hub Module Integration Error<a class="headerlink" href="#sensor-hub-module-integration-error" title="Permanent link">&para;</a></h3>
 <p><strong>Checklist:</strong>
-1. Verify there are no Node ID conflicts among sensor hub modules
-2. Confirm device discovery via AGR PnP V2 completes successfully
+1. Verify the sensor hub module is powered and its CAN-FD cable is firmly connected
+2. Confirm the sensor hub is detected (connected) by the XM10 automatically
 3. Check that the sensor hub module firmware version is compatible with the XM10 SDK</p>
+<blockquote>
+<p>The IMU Hub and EMG Hub are modules under internal development. To use them, please contact us at https://huphailab.com/contact.</p>
+</blockquote>
 <hr />
 <h2 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h2>
 <h3 id="st-link-connection-failure">ST-Link Connection Failure<a class="headerlink" href="#st-link-connection-failure" title="Permanent link">&para;</a></h3>
@@ -3255,8 +3258,9 @@
 </code></pre></div>
 <p>Alternatively, use the read-clear behavior of <code>XM_GetButtonEvent()</code> (see Ex.02).</p>
 <h3 id="usb--communication-pitfalls">USB / Communication Pitfalls<a class="headerlink" href="#usb--communication-pitfalls" title="Permanent link">&para;</a></h3>
-<h4 id="usb-cdc-messages-not-visible-in-phai-studio-or-a-terminal">USB-CDC Messages Not Visible in PhAI Studio or a Terminal<a class="headerlink" href="#usb-cdc-messages-not-visible-in-phai-studio-or-a-terminal" title="Permanent link">&para;</a></h4>
-<p><strong>Cause 1:</strong> Another serial client is holding the same COM port open (e.g., PhAI Studio and PuTTY running simultaneously)</p>
+<h4 id="usb-cdc-text-messages-not-visible-in-a-terminal">USB-CDC Text Messages Not Visible in a Terminal<a class="headerlink" href="#usb-cdc-text-messages-not-visible-in-a-terminal" title="Permanent link">&para;</a></h4>
+<p>Text sent with <code>XM_SendUsbDebugMessage</code> is meant to be read in a plain serial terminal.</p>
+<p><strong>Cause 1:</strong> Another PC program is holding the same COM port open (PhAI Studio, the <code>xm10</code> tool, another terminal — connect only one PC program at a time)</p>
 <p><strong>Cause 2:</strong> The USB-C cable is charge-only and cannot transfer data</p>
 <p><strong>Cause 3:</strong> <code>STMicroelectronics Virtual COM Port</code> is not recognized in Windows Device Manager</p>
 <p><strong>Resolution steps:</strong>
@@ -3272,7 +3276,7 @@
 </ul>
 <h4 id="forwardvelocity-footcontact-and-other-gait-analysis-fields-are-always-zero"><code>forwardVelocity</code>, <code>footContact</code>, and Other Gait Analysis Fields Are Always Zero<a class="headerlink" href="#forwardvelocity-footcontact-and-other-gait-analysis-fields-are-always-zero" title="Permanent link">&para;</a></h4>
 <p><strong>Cause:</strong> The prerequisite body parameters have not been provided — <code>XM_SendUserBodyData()</code> has not been called.</p>
-<p><strong>Resolution:</strong> See <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5">examples/README.md — Body Data guide</a>.</p>
+<p><strong>Resolution:</strong> See <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세">examples/README.md — Body Data guide</a>.</p>
 <h4 id="called-setassisttorque-but-kit-h10-does-not-move">Called <code>SetAssistTorque</code> but KIT H10 Does Not Move<a class="headerlink" href="#called-setassisttorque-but-kit-h10-does-not-move" title="Permanent link">&para;</a></h4>
 <ul>
 <li><code>XM_SetControlMode(XM_CTRL_CONTROL)</code> is missing → Call it once when entering the Active state</li>

@@ -2473,10 +2473,10 @@
 <h2 id="at-a-glance">At a Glance<a class="headerlink" href="#at-a-glance" title="Permanent link">&para;</a></h2>
 <p><strong>A Rev 2.0 release focused on USB serial usability.</strong> It fixes the long-standing problem where example text output was invisible in a plain serial terminal, and in the process simplifies the USB communication-mode API.</p>
 <ul>
-<li><strong>Text examples now show up immediately in a plain terminal</strong> — previously, opening a text example (Ex.07–09) in Tera Term · VS Code Serial Monitor · PuTTY buried the text under the board's continuous PhAI Studio telemetry (you had to manually turn off the terminal's DTR signal). Text examples now <strong>select the terminal profile automatically</strong>, so you get clean text with no extra steps.</li>
+<li><strong>Text examples now show up immediately in a plain terminal</strong> — previously, opening a text example (Ex.07–09) in Tera Term · VS Code Serial Monitor · PuTTY buried the text under the board's continuous PhAI Studio telemetry (you had to change the terminal settings by hand). Text examples now <strong>select the terminal profile automatically</strong>, so you get clean text with no extra steps.</li>
 <li><strong>Simpler USB mode API</strong> — a single new function <code>XM_USB_SetHostProfile()</code> lets you pick "PhAI Studio vs. plain terminal." (See ⚠️ <strong>API Change</strong> below — the old <code>XM_USB_SetMode()</code> family has been removed.)</li>
 <li><strong>Better bootloader debug guidance</strong> — documented setting the vector-table address (<code>0x08040400</code>) in the debug configuration, and clarified that halting at <code>main()</code> when debugging is normal.</li>
-<li><strong>Stability &amp; build improvements</strong> — further GRF sensor-module stability, MCU reset-pin handling cleanup, and a more robust CubeIDE build pipeline.</li>
+<li><strong>Stability &amp; build improvements</strong> — further GRF sensor-module stability, protection against unintended resets, and a more robust CubeIDE build.</li>
 </ul>
 <h2 id="-api-change--usb-communication-mode-rev-20">⚠️ API Change — USB Communication Mode (Rev 2.0)<a class="headerlink" href="#-api-change--usb-communication-mode-rev-20" title="Permanent link">&para;</a></h2>
 <p>The USB-CDC communication-mode API has been <strong>replaced with a simpler profile-based one</strong>.</p>
@@ -2490,7 +2490,7 @@
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="n">XM_USB_HOST_PHAI_STUDIO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// default — PhAI Studio real-time streaming</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">XM_USB_HOST_TERMINAL</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="c1">// plain terminal / custom program (auto-pump OFF)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">XM_USB_HOST_TERMINAL</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="c1">// plain terminal / custom program (Total Data auto-send OFF)</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span><span class="w"> </span><span class="n">XM_USB_HostProfile_e</span><span class="p">;</span>
 </code></pre></div>
 <p><strong>Migration</strong> — if you switched modes for terminal use, change one line:</p>
@@ -2502,8 +2502,7 @@
 </code></pre></div>
 <ul>
 <li><strong>The default is <code>XM_USB_HOST_PHAI_STUDIO</code></strong>, so code that never touched the mode keeps working <strong>unchanged</strong> (PhAI Studio streaming as before).</li>
-<li>The production-test (PRODUCTION) mode is now <strong>handled automatically inside the board</strong> and no longer appears as a user option — example/user code doesn't need to deal with it.</li>
-<li>The selected profile <strong>persists across cable reconnects (DTR re-toggle)</strong>.</li>
+<li>The selected profile <strong>persists when you reconnect the cable or the PC program reopens the port</strong>.</li>
 </ul>
 <hr />
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
@@ -2539,19 +2538,19 @@
 <h2 id="details">Details<a class="headerlink" href="#details" title="Permanent link">&para;</a></h2>
 <h3 id="usb-serial-headline">USB Serial (headline)<a class="headerlink" href="#usb-serial-headline" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Text examples auto-configured</strong> — Ex.07 (<code>07_CDC_Basic_Print</code>) · Ex.08 (<code>08_CDC_Sensor_Print</code>) set the host profile to <code>TERMINAL</code> in <code>Control_Setup()</code>. The 1 kHz telemetry (auto-pump) is turned off, so a plain serial terminal shows clean text. No more DTR fiddling.</li>
-<li><strong>Mode management moved internal</strong> — USB mode state management was moved into the system layer, exposing only two profiles (PhAI Studio / terminal) to the user. Entering production-test mode is now handled automatically.</li>
+<li><strong>Text examples auto-configured</strong> — Ex.07 (<code>07_CDC_Basic_Print</code>) · Ex.08 (<code>08_CDC_Sensor_Print</code>) set the host profile to <code>TERMINAL</code> in <code>Control_Setup()</code>. The 1 kHz automatic telemetry is turned off, so a plain serial terminal shows clean text. No need to change any terminal settings.</li>
+<li><strong>Simpler USB mode selection</strong> — you only see two profiles (PhAI Studio / terminal).</li>
 </ul>
 <h3 id="bootloader-debug-docs">Bootloader Debug Docs<a class="headerlink" href="#bootloader-debug-docs" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Documented setting the <strong>vector-table address <code>0x08040400</code></strong> in the debug configuration. Leaving it blank caused the debugger to halt in a signal handler.</li>
+<li>Documented setting the <strong>vector-table address <code>0x08040400</code></strong> in the debug configuration. Leaving it blank caused the debugger to halt in the wrong place.</li>
 <li>Clarified that <strong>halting at <code>main()</code></strong> when the debug session starts is normal (CubeIDE default) — press <code>Resume</code> (F8) to run.</li>
 </ul>
 <h3 id="stability--build">Stability · Build<a class="headerlink" href="#stability--build" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Further GRF sensor-module stability</strong> — disabled the fault-driven power-cycling of sensor power, reducing unnecessary repeated resets. (Follow-up to the GRF boot stabilization in v2.3.1.)</li>
-<li><strong>MCU reset-pin handling cleanup</strong> — the reset pin is held released, removing a spurious external-reset possibility.</li>
-<li><strong>More robust CubeIDE build pipeline</strong> — consolidated the pre-build scripts into a single entry point (so CubeMX code regeneration no longer breaks the build), auto-removed an unused USB clock setting, and auto-applied LwIP (Ethernet) header paths.</li>
+<li><strong>Further GRF sensor-module stability</strong> — fewer unnecessary repeated resets. (Follow-up to the GRF boot stabilization in v2.3.1.)</li>
+<li><strong>Protection against unintended resets</strong> — the MCU reset-pin handling was cleaned up, removing the chance of the board being reset by an outside signal.</li>
+<li><strong>More robust CubeIDE build</strong> — regenerating the code with CubeMX no longer breaks the build.</li>
 </ul>
 <hr />
 <h2 id="compatibility">Compatibility<a class="headerlink" href="#compatibility" title="Permanent link">&para;</a></h2>
@@ -2599,7 +2598,7 @@
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.4.0/docs/release-notes/v2.3.1.en.md">v2.3.1 Release Notes</a></li>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.4.0/docs/api-reference/05-usb-connectivity.en.md">05. USB Serial</a></li>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.4.0/docs/api-reference/ref/xm-api-usb.en.md"><code>xm_api_usb.h</code> reference</a></li>
-<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.4.0/docs/hardware/README.md#보드-리비전-비교">Board Revision Comparison</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.4.0/docs/hardware/README.en.md#board-revision-comparison">Board Revision Comparison</a></li>
 </ul>
 
 

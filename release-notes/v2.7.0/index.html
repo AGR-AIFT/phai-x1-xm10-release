@@ -1875,10 +1875,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-센서-허브-수신-경로가-나뉘었습니다-rev-20" class="md-nav__link">
+  <a href="#2-센서-허브-연결-안정성이-개선됐습니다-rev-20" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 센서 허브 수신 경로가 나뉘었습니다 (Rev 2.0)
+        2. 센서 허브 연결 안정성이 개선됐습니다 (Rev 2.0)
       
     </span>
   </a>
@@ -2380,10 +2380,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-센서-허브-수신-경로가-나뉘었습니다-rev-20" class="md-nav__link">
+  <a href="#2-센서-허브-연결-안정성이-개선됐습니다-rev-20" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 센서 허브 수신 경로가 나뉘었습니다 (Rev 2.0)
+        2. 센서 허브 연결 안정성이 개선됐습니다 (Rev 2.0)
       
     </span>
   </a>
@@ -2520,7 +2520,7 @@
 <li><strong>범용 Serial API 가 생겼습니다.</strong> XM10 의 External UART(PD5/PD6)를 <code>XM_API</code> 만으로 쓸 수 있습니다. XM10 두 대를 선으로 잇거나, 아두이노·PC·다른 MCU 와 <strong>여러분이 정한 형식으로</strong> 통신할 수 있습니다.</li>
 <li><strong>예제 43 이 추가됐습니다.</strong> XM10 두 대가 서로 데이터를 주고받는 ping-pong 예제입니다. Rev 2.0 예제가 45 → <strong>46 개</strong>가 됐습니다.</li>
 <li><strong>SDK 안의 폴더 이름 두 개가 바뀌었습니다.</strong> SDK 를 그대로 쓰시면 할 일이 없지만, 빌드 스크립트를 직접 손보신 분은 확인이 필요합니다 (아래 "꼭 확인할 변경").</li>
-<li><strong>센서 허브 수신 경로를 나눴습니다.</strong> IMU/EMG/FES 허브가 간헐적으로 끊기던 현상에 대한 조치입니다. <strong>보드 확인은 아직 진행 중</strong>입니다.</li>
+<li><strong>센서 허브 연결 안정성을 개선했습니다.</strong> IMU·EMG 허브가 간헐적으로 끊기던 현상이 줄어들도록 바꿨습니다. <strong>아직 실제 보드에서는 확인하지 못했습니다.</strong></li>
 <li><strong>삭제되거나 이름이 바뀐 API 는 없습니다.</strong> 기존 코드는 재빌드만 하면 됩니다.</li>
 </ul>
 <blockquote>
@@ -2531,10 +2531,9 @@
 <h3 id="0-xsens-mti-630-을-쓰고-계셨다면--기본-빌드에서-그-api-가-빠졌습니다-">0. Xsens MTi-630 을 쓰고 계셨다면 — 기본 빌드에서 그 API 가 빠졌습니다 ⚠️<a class="headerlink" href="#0-xsens-mti-630-을-쓰고-계셨다면--기본-빌드에서-그-api-가-빠졌습니다-" title="Permanent link">&para;</a></h3>
 <p><strong>해당되는 분만 보시면 됩니다.</strong> <code>XM_AttachXsensMTi630()</code> / <code>XM_ConfigureXsensMTi630()</code> 를
 코드에서 부르고 계셨다면, v2.7.0 으로 올린 뒤 <strong>"선언되지 않은 함수" 컴파일 에러</strong>가 납니다.</p>
-<p><strong>왜 그런가</strong>: External UART 는 포트가 <strong>하나</strong>뿐인데, 그 포트의 수신 콜백 자리도 <strong>하나</strong>뿐입니다.
-범용 Serial API 와 Xsens 드라이버가 동시에 그 자리를 잡으면 <strong>나중에 등록한 쪽이 앞의 것을 조용히
-덮어쓰고</strong>, 실행 중에는 누가 이겼는지 알 방법이 없습니다. 그래서 빌드 시점에 <strong>둘 중 하나만</strong>
-고르도록 막았습니다. 조용한 오작동 대신 빌드가 멈추게 한 것입니다.</p>
+<p><strong>왜 그런가</strong>: External UART 는 포트가 <strong>하나</strong>뿐이라 범용 Serial API 와 Xsens 드라이버를 동시에
+쓸 수 없습니다. 둘이 겹쳐 쓰다 조용히 오작동하는 대신, 빌드할 때 <strong>둘 중 하나만</strong> 고르도록
+막았습니다.</p>
 <p><strong>어떻게 하나</strong> — <code>XM_FW/System/Config/module.h</code> 를 열어 한 줄만 바꾸고 다시 빌드하세요.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#define XM_EXTERNAL_UART_XSENS_ENABLE   1   </span><span class="cm">/* 0(기본) = 범용 Serial / 1 = Xsens */</span>
 </code></pre></div>
@@ -2562,32 +2561,10 @@
 <p><strong>대부분은 아무것도 하실 필요가 없습니다.</strong> 동봉된 <code>CMakeLists.txt</code> 와 <code>.cproject</code> 는 이미 새 경로로 맞춰 두었고, <code>#include "ioif_agrb_uart.h"</code> 처럼 <strong>파일명만 쓰는 방식은 영향받지 않습니다</strong>.</p>
 <p>확인이 필요한 경우는 하나입니다 — <strong>본인 빌드 설정에 옛 폴더 경로를 직접 적어 두신 경우</strong>입니다. 예를 들어 include 경로에 <code>XM_FW/IOIF/Inc</code> 를 손으로 추가하셨다면 <code>XM_FW/phoundation-ioif/Inc</code> 로 바꿔 주세요. <code>#include "XM_FW/AGR_MW/..."</code> 처럼 경로를 포함해 적은 include 가 있다면 그것도 마찬가지입니다.</p>
 <p>Rev 1.1 SDK 는 <strong>종전 이름 그대로</strong>입니다.</p>
-<h3 id="2-센서-허브-수신-경로가-나뉘었습니다-rev-20">2. 센서 허브 수신 경로가 나뉘었습니다 (Rev 2.0)<a class="headerlink" href="#2-센서-허브-수신-경로가-나뉘었습니다-rev-20" title="Permanent link">&para;</a></h3>
-<p>XM10 이 CAN 으로 받는 메시지를 두 종류로 나눠 각각 다른 수신함에 넣도록 바꿨습니다.</p>
-<table>
-<thead>
-<tr>
-<th>수신함</th>
-<th>담는 것</th>
-<th>꽉 차면</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0 번</td>
-<td>센서 데이터 (TPDO)</td>
-<td>오래된 것을 덮어씀 — 최신 데이터 우선</td>
-</tr>
-<tr>
-<td>1 번</td>
-<td>연결·설정 메시지 (Heartbeat / NMT / SDO)</td>
-<td>새 것을 버림 — 이미 받은 것 보존</td>
-</tr>
-</tbody>
-</table>
-<p><strong>왜 나눴나</strong>: 예전에는 둘이 같은 수신함을 썼습니다. 센서 데이터가 몰리면 그 뒤에 온 <strong>연결 유지 메시지(Heartbeat)가 밀려나</strong> 허브가 "끊긴 것으로" 처리되는 일이 있었습니다. 이제는 센서 데이터가 아무리 몰려도 연결 메시지는 별도 수신함에 남습니다.</p>
+<h3 id="2-센서-허브-연결-안정성이-개선됐습니다-rev-20">2. 센서 허브 연결 안정성이 개선됐습니다 (Rev 2.0)<a class="headerlink" href="#2-센서-허브-연결-안정성이-개선됐습니다-rev-20" title="Permanent link">&para;</a></h3>
+<p>센서 데이터가 몰릴 때 IMU·EMG 허브와의 CAN-FD 연결이 간헐적으로 끊기던 현상이 줄어들도록 바꿨습니다.</p>
 <blockquote>
-<p>⚠️ <strong>이 변경은 아직 보드에서 확인하지 않았습니다.</strong> 빌드와 예제 전수 빌드는 모두 통과했지만, 실제 하드웨어에서 CAN 필터 동작을 확인하는 절차는 별도로 진행 중입니다. IMU/EMG/FES 허브를 쓰시는 분은 v2.6.0 대비 이 부분이 바뀌었다는 점을 알고 계시고, 평소와 다른 동작이 보이면 알려 주세요.</p>
+<p>⚠️ <strong>이 변경은 아직 실제 보드에서 확인하지 못했습니다.</strong> IMU·EMG 허브를 쓰시는 분은 v2.6.0 대비 이 부분이 바뀌었다는 점을 알아 두시고, 평소와 다른 동작이 보이면 알려 주세요.</p>
 </blockquote>
 <hr />
 <h2 id="새로-생긴-api--범용-serial-rev-20">새로 생긴 API — 범용 Serial (Rev 2.0)<a class="headerlink" href="#새로-생긴-api--범용-serial-rev-20" title="Permanent link">&para;</a></h2>
@@ -2637,7 +2614,7 @@
 </tbody>
 </table>
 <h3 id="-하드웨어-설정--상대-장비를-여기에-맞추세요">📋 하드웨어 설정 — 상대 장비를 여기에 맞추세요<a class="headerlink" href="#-하드웨어-설정--상대-장비를-여기에-맞추세요" title="Permanent link">&para;</a></h3>
-<p>보드 쪽 설정은 <strong>CubeMX(<code>.ioc</code>)에 이미 고정</strong>되어 있습니다. 아래가 실제 값이며, <strong>상대 장비를 이 값에 맞추셔야</strong> 통신됩니다.</p>
+<p>보드 쪽 설정은 <strong>이미 고정</strong>되어 있습니다. 아래가 실제 값이며, <strong>상대 장비를 이 값에 맞추셔야</strong> 통신됩니다.</p>
 <table>
 <thead>
 <tr>
@@ -2690,7 +2667,7 @@
 </tbody>
 </table>
 <p><strong>한 줄로: <code>921600 8N1, 흐름제어 없음</code>.</strong> 속도만 양쪽 똑같이 바꿀 수 있고, <strong>8N1 은 펌웨어에서 바꿀 수단이 없습니다.</strong></p>
-<p>내부적으로는 <strong>DMA + IDLE 라인 검출</strong>로 받습니다(RX: DMA1_Stream4 circular 256 B / TX: DMA2_Stream1 normal 128 B, 인터럽트 preempt 6, HW FIFO 켜짐, 커널 클럭 120 MHz). GPIO 는 <strong>풀업/풀다운이 없으므로</strong>, 상대가 꺼져 있거나 선이 빠지면 RX 가 플로팅되어 잡음을 데이터로 오인할 수 있습니다.</p>
+<p>GPIO 에는 <strong>풀업/풀다운이 없습니다.</strong> 상대가 꺼져 있거나 선이 빠지면 RX 선이 떠 있어 잡음을 데이터로 오인할 수 있습니다.</p>
 <blockquote>
 <p>🛑 <strong>Rev 1.1 보드에서는 이 배선을 하지 마세요.</strong> Rev 1.1 에는 External UART 포트가 아예 없고(시리얼은 발바닥 센서용 UART7/UART8 뿐), <strong>PD6 은 <code>USB_PWR_ON</code> — USB 전원을 켜고 끄는 출력 핀</strong>입니다. 여기에 상대 보드의 TX 를 물리면 출력끼리 맞부딪칩니다.</p>
 </blockquote>
@@ -2702,7 +2679,7 @@
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="cm">/* 내 버퍼로 복사만. 해석은 Control_Loop() 에서 */</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">}</span>
 </code></pre></div>
-<p>이 콜백은 XM10 내부의 <strong>공유 수신 태스크</strong>에서 실행되는데, 그 태스크는 <strong>발바닥 센서(GRF)의 1 kHz 수신도 함께</strong> 처리합니다. 콜백에서 파싱·계산·대기를 하면 그만큼 GRF 데이터가 늦어집니다. 그리고 <code>data</code> 포인터는 <strong>콜백이 끝나면 무효</strong>입니다 — 저장해 두지 말고 내용을 복사하세요.</p>
+<p>이 콜백은 <strong>발바닥 센서(GRF)의 1 kHz 수신과 같은 곳</strong>에서 실행됩니다. 콜백에서 해석·계산·대기를 하면 그만큼 GRF 데이터가 늦어집니다. 그리고 <code>data</code> 포인터는 <strong>콜백이 끝나면 무효</strong>입니다 — 저장해 두지 말고 내용을 복사하세요.</p>
 <p><strong>③ 콜백 한 번이 메시지 하나가 아닙니다.</strong> 시리얼은 "메시지"가 아니라 "바이트 흐름"입니다. 5 바이트를 한 번에 보내도 받는 쪽에는 2 + 3 으로 쪼개져 올 수 있고, 다음 메시지가 붙어서 올 수도 있습니다. <strong>메시지 경계는 직접 찾아야 합니다</strong> — 예제 43 의 <code>DrainAndParse()</code> 가 그 방법(헤더를 찾아가며 조립)을 보여 줍니다.</p>
 <p><strong><code>XM_SendExternalUartData()</code> 가 <code>false</code> 를 돌려주는 것은 에러가 아닙니다.</strong> "직전 전송이 아직 안 끝났다"는 뜻이니 다음 주기에 다시 부르면 됩니다. 1 kHz 제어 루프에서 매 틱 불러도 루프가 멈추지 않습니다.</p>
 <hr />
@@ -2721,7 +2698,7 @@
 </ul>
 <p>디버거 Live Expressions 로 <code>g_tx_count</code> · <code>g_rx_frame_ok</code> · <code>g_rx_bad_crc</code> · <code>g_peer_seq</code> 를 보면서 단계별로 확인할 수 있습니다. 자세한 절차와 증상별 원인표는 <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/">예제 43 README</a> 에 있습니다.</p>
 <blockquote>
-<p>⚠️ <strong>이 예제도 아직 보드에서 확인하지 않았습니다.</strong> 코드와 빌드는 검증했지만 두 보드가 실제로 바이트를 주고받는 것은 확인 전입니다. 처음 돌려보실 때 README 의 표로 단계별 확인을 권합니다.</p>
+<p>⚠️ <strong>이 예제도 아직 실제 보드에서 확인하지 못했습니다.</strong> 두 보드가 실제로 바이트를 주고받는 것은 확인 전이니, 처음 돌려보실 때는 README 의 표로 단계별로 확인하세요.</p>
 </blockquote>
 <p>Rev 2.0 예제는 이제 <strong>46 개</strong>, Rev 1.1 은 <strong>42 개</strong>입니다.</p>
 <hr />
@@ -2755,7 +2732,7 @@
 </tr>
 <tr>
 <td><code>SUIT_H10_Binary_20260820.zip</code></td>
-<td>KIT H10 펌웨어 — <strong>v2.6.0 과 동일본</strong>(파일명 날짜가 그 근거입니다)</td>
+<td>KIT H10 펌웨어 — <strong>v2.6.0 과 동일본</strong></td>
 </tr>
 <tr>
 <td><code>SUIT_ContentsFiles_20260820.zip</code></td>
@@ -2764,7 +2741,7 @@
 </tbody>
 </table>
 <blockquote>
-<p>부트로더·H10 관련 3 개 파일은 <strong>v2.6.0 것을 그대로 다시 올린 것</strong>입니다. 이번 릴리즈는 XM10 펌웨어만 바뀌었고 그쪽은 변경이 없습니다. CM·MD 는 현재 개발 중이라, 검증이 끝나면 갱신본으로 교체할 예정입니다.</p>
+<p>부트로더·H10 관련 3 개 파일은 <strong>v2.6.0 것을 그대로 다시 올린 것</strong>입니다. 이번 릴리즈는 XM10 펌웨어만 바뀌었고 그쪽은 변경이 없습니다.</p>
 </blockquote>
 <p>압축을 풀 때 <strong>짧은 경로</strong>(예: <code>C:\xm10\</code>)에 푸세요. 경로가 깊으면 윈도우의 경로 길이 제한 때문에 빌드가 실패할 수 있는데, 이건 코드 문제가 아니라 경로 길이 문제입니다.</p>
 <hr />

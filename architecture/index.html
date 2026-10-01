@@ -2449,7 +2449,7 @@ CAN 통신, USB 송신, 모터 명령 파싱 같은 일을 사용자가 매번 �
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  │  자동 갱신                                                 │
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  │                                                            │
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  │  XM.status.h10.    XM_TSM_Run         XM_SetAssistTorque  │
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  │   leftHipAngle      → on_loop()        XM_SendUsbData     │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  │   leftHipAngle      → on_loop()       XM_SendUsbDataWithId │
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  │   rightHipAngle                                            │
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  │   isLeftFootContact                                        │
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  └────────────────────────────────────────────────────────────┘
@@ -2476,7 +2476,7 @@ CAN 통신, USB 송신, 모터 명령 파싱 같은 일을 사용자가 매번 �
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  ┌──────────────────────────────────────────────────────────────┐
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  │  스케줄러가 여러 작업을 우선순위에 따라 번갈아 실행:           │
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  │                                                              │
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  │   • 사용자 작업    → Control_Setup() 1회 → Control_Loop() 매 1 ms  │
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  │   • 제어 루프 task → Control_Setup() 1회 → Control_Loop() 매 1 ms  │
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  │   • CAN 수신       → 외골격 센서 데이터 받아 XM.status 갱신   │
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  │   • CAN 송신       → 모터 명령 전송                          │
 <a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  │   • USB 작업       → USB-CDC 시리얼 통신                     │
@@ -2497,7 +2497,7 @@ CAN 통신, USB 송신, 모터 명령 파싱 같은 일을 사용자가 매번 �
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   │   └── Control_Task/
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   │       └── control_task.c     ← 여기가 사용자 작업 공간
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   └── (그 외 폴더는 모두 XM 라이브러리 — 건드리지 않습니다)
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└── examples/                  ← 46 개 예제의 control_task.c 모음
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└── examples/                  ← 45 개 예제의 control_task.c 모음
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    ├── 00_Quick_Start/quick_start.c
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    ├── 14_PD_Realtime_Control/pd_realtime_control.c
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    └── ...
@@ -2522,7 +2522,7 @@ CAN 통신, USB 송신, 모터 명령 파싱 같은 일을 사용자가 매번 �
 </tr>
 <tr>
 <td><strong>USB 시리얼 (CDC)</strong></td>
-<td>XM10 → PC 터미널/PhAI Studio</td>
+<td>XM10 → PC 터미널(텍스트) / <code>xm10</code> 도구(사용자 구조체)</td>
 <td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code></td>
 </tr>
 </tbody>
@@ -2565,8 +2565,8 @@ CAN 통신, USB 송신, 모터 명령 파싱 같은 일을 사용자가 매번 �
 <td>Active 진입 시 <code>XM_SetControlMode(XM_CTRL_CONTROL)</code> 1회 호출</td>
 </tr>
 <tr>
-<td>XM 라이브러리 폴더 (IOIF, Devices 등) 코드를 수정</td>
-<td>라이브러리는 양산 코드 — 임의 수정 시 시스템 깨짐</td>
+<td>XM 라이브러리 폴더의 코드를 수정</td>
+<td>라이브러리는 SDK 가 제공하는 코드 — 임의 수정 시 시스템 깨짐</td>
 <td>항상 <code>Control_Task/</code> 안에서만 작업</td>
 </tr>
 <tr>

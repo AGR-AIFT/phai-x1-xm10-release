@@ -2495,21 +2495,20 @@
 <h2 id="한눈에-보기">한눈에 보기<a class="headerlink" href="#한눈에-보기" title="Permanent link">&para;</a></h2>
 <p><strong>Rev 2.0 에서 C 표준 라이브러리를 바로잡은 패치 릴리즈</strong>입니다. 실수를 출력하는 <code>printf("%f", ...)</code> 와 동적 메모리 <code>malloc()</code> 이 이전에는 조용히 실패했는데, 이번 릴리즈에서 정상 동작합니다. 새 예제나 API 변경은 없습니다.</p>
 <ul>
-<li><strong>실수 <code>printf</code>(<code>%f</code>)와 <code>malloc()</code> 이 이제 동작합니다</strong> — 이전에는 힙(heap) 상한이 잘못된 메모리 영역을 기준으로 잡혀, <code>malloc()</code> 과 이를 내부적으로 쓰는 실수 <code>printf</code> 가 값을 내보내지 못했습니다. 힙 설정을 바로잡아 해결했습니다. (예: <code>printf("cur=%.2f\n", value);</code>)</li>
-<li><strong>여러 태스크에서 써도 안전합니다</strong> — <code>malloc</code>/<code>printf</code> 계열을 여러 FreeRTOS 태스크가 동시에 호출해도 내부 자료구조가 깨지지 않도록 표준 라이브러리 락을 FreeRTOS 에 연결했습니다.</li>
-<li><strong>빌드 시스템 일치</strong> — CubeIDE 와 CMake 두 경로가 정확히 같은 결과를 내도록 빌드 파일 생성 로직을 바로잡았습니다.</li>
+<li><strong>실수 <code>printf</code>(<code>%f</code>)와 <code>malloc()</code> 이 이제 동작합니다</strong> — 이전에는 <code>malloc()</code> 과 이를 쓰는 실수 <code>printf</code> 가 값을 내보내지 못했습니다. (예: <code>printf("cur=%.2f\n", value);</code>)</li>
+<li><strong>여러 태스크에서 써도 안전합니다</strong> — <code>malloc</code>/<code>printf</code> 계열을 여러 태스크가 동시에 불러도 문제가 없습니다.</li>
+<li><strong>빌드 결과 일치</strong> — STM32CubeIDE 로 빌드하든 CMake 로 빌드하든 같은 펌웨어가 나옵니다.</li>
 <li><strong>USB 로그 디코더가 설치형 실행 파일로</strong> — 파이썬 설치 없이 바로 쓰는 <strong>XM10 Log Decoder</strong> 로 대체되었습니다(아래 참고).</li>
 </ul>
 <h2 id="무엇이-바뀌었나--실수-printf--malloc-핵심">무엇이 바뀌었나 — 실수 <code>printf</code> / <code>malloc</code> (핵심)<a class="headerlink" href="#무엇이-바뀌었나--실수-printf--malloc-핵심" title="Permanent link">&para;</a></h2>
-<p>Rev 2.0 은 부팅 과정에서 스택(stack)을 DTCMRAM 최상단으로 옮기는데, 표준 라이브러리 힙은 그와 다른 영역인 RAM_D1 에 있습니다. 그런데 힙의 상한선이 힙이 실제로 위치한 RAM_D1 이 아니라 스택 꼭대기를 기준으로 잡혀 있었습니다. 그 결과 힙을 확장하는 내부 함수 <code>_sbrk()</code> 가 <strong>첫 호출부터 실패</strong>했고, <code>malloc()</code> 과 이를 내부적으로 사용하는 실수 <code>printf</code>(<code>%f</code>, <code>%e</code>, <code>%g</code>)가 값을 출력하지 못했습니다.</p>
-<p>이번 릴리즈에서 힙 상한을 <strong>RAM_D1 의 실제 최상단</strong>으로 바로잡아, 아래 코드가 정상 동작합니다.</p>
+<p>Rev 2.0 에서 <code>malloc()</code> 과 이를 내부적으로 사용하는 실수 <code>printf</code>(<code>%f</code>, <code>%e</code>, <code>%g</code>)가 값을 출력하지 못했습니다. 이번 릴리즈에서 바로잡아, 아래 코드가 정상 동작합니다.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.14f</span><span class="p">;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">printf</span><span class="p">(</span><span class="s">"cur=%.2f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w">   </span><span class="c1">// 이제 "cur=3.14" 출력 (이전에는 빈 값/깨짐)</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">64</span><span class="p">);</span><span class="w">        </span><span class="c1">// 이제 유효한 포인터 반환</span>
 </code></pre></div>
 <ul>
-<li><strong>Rev 1.1 은 영향 없음</strong> — Rev 1.1 은 스택과 힙이 같은 메모리 영역에 있어 이 문제가 애초에 발생하지 않았습니다. Rev 1.1 SDK 는 v2.3.1 그대로입니다.</li>
+<li><strong>Rev 1.1 은 영향 없음</strong> — 이 문제는 Rev 2.0 에서만 발생했습니다. Rev 1.1 SDK 는 v2.3.1 그대로입니다.</li>
 <li><strong>표준 라이브러리 멀티태스크 안전</strong> — 위 수정과 함께, <code>malloc</code>/<code>free</code>/<code>printf</code> 계열이 여러 태스크에서 동시에 호출돼도 안전하도록 처리했습니다. 별도로 신경 쓸 것은 없습니다.</li>
 </ul>
 <hr />
@@ -2549,7 +2548,7 @@
 </table>
 <blockquote>
 <p>본인 보드 리비전과 같은 ZIP 을 받아주세요. <strong>RJ45 Ethernet 포트가 있으면 Rev 2.0, 없으면 Rev 1.1</strong> 입니다.</p>
-<p><strong>Rev 1.1 사용자 안내</strong>: 이번 v2.4.1 수정(실수 <code>printf</code>·<code>malloc</code> 힙 설정)은 <strong>Rev 2.0 에서만 발생하던 문제</strong>라 Rev 2.0 전용입니다. <code>Rev1.1.zip</code> 은 <strong>v2.3.1 과 동일한 파일</strong>을 그대로 첨부했으니, Rev 1.1 을 쓰신다면 추가로 받으실 것이 없습니다.</p>
+<p><strong>Rev 1.1 사용자 안내</strong>: 이번 v2.4.1 수정(실수 <code>printf</code>·<code>malloc</code>)은 <strong>Rev 2.0 에서만 발생하던 문제</strong>라 Rev 2.0 전용입니다. <code>Rev1.1.zip</code> 은 <strong>v2.3.1 과 동일한 파일</strong>을 그대로 첨부했으니, Rev 1.1 을 쓰신다면 추가로 받으실 것이 없습니다.</p>
 </blockquote>
 <h3 id="release-첨부-파일">Release 첨부 파일<a class="headerlink" href="#release-첨부-파일" title="Permanent link">&para;</a></h3>
 <blockquote>
@@ -2561,12 +2560,12 @@
 <h2 id="개선-상세">개선 상세<a class="headerlink" href="#개선-상세" title="Permanent link">&para;</a></h2>
 <h3 id="표준-라이브러리-핵심">표준 라이브러리 (핵심)<a class="headerlink" href="#표준-라이브러리-핵심" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>실수 <code>printf</code> / <code>malloc</code> 정상화</strong> — 힙 상한을 RAM_D1 최상단으로 바로잡아, <code>_sbrk()</code> 가 첫 호출부터 실패하던 문제를 해결했습니다. 실수 서식(<code>%f</code> 등)과 동적 메모리 할당이 정상 동작합니다.</li>
-<li><strong>멀티태스크 안전</strong> — 표준 라이브러리 내부 락을 FreeRTOS 뮤텍스에 연결해, 여러 태스크의 동시 <code>malloc</code>/<code>printf</code> 호출에서도 힙이 손상되지 않도록 했습니다.</li>
+<li><strong>실수 <code>printf</code> / <code>malloc</code> 정상화</strong> — 실수 서식(<code>%f</code> 등)과 동적 메모리 할당이 정상 동작합니다.</li>
+<li><strong>멀티태스크 안전</strong> — 여러 태스크가 동시에 <code>malloc</code>/<code>printf</code> 를 불러도 문제가 없습니다.</li>
 </ul>
 <h3 id="sdk-빌드">SDK 빌드<a class="headerlink" href="#sdk-빌드" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>CMake · CubeIDE 결과 일치</strong> — 빌드 파일 생성기가 실수 <code>printf</code> 링커 옵션과 링커 Other-flags 를 누락하던 문제를 바로잡아, 어느 빌드 경로로 빌드하든 동일한 펌웨어가 나오도록 했습니다.</li>
+<li><strong>CMake · CubeIDE 결과 일치</strong> — CMake 로 빌드할 때 실수 <code>printf</code> 관련 설정이 빠지던 문제를 바로잡아, 어느 빌드 방법으로 빌드해도 동일한 펌웨어가 나옵니다.</li>
 </ul>
 <h3 id="도구--문서">도구 · 문서<a class="headerlink" href="#도구--문서" title="Permanent link">&para;</a></h3>
 <ul>

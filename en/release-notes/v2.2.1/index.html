@@ -2451,8 +2451,8 @@
 <h2 id="at-a-glance">At a Glance<a class="headerlink" href="#at-a-glance" title="Permanent link">&para;</a></h2>
 <p><strong>This is a patch release that fixes a problem where the downloaded SDK failed with 22 "undefined reference" errors on a STM32CubeIDE clean build.</strong> The root cause was missing source files for certain modules during the library build step.</p>
 <ul>
-<li>Rev 2.0 SDK: replaced with a new <code>libXM_Lib.a</code>. All 169/169 link steps pass on a clean build.</li>
-<li>Rev 1.1 SDK: minor consistency fixes in the same spirit (FreeRTOS config + USB MSC diagnostic function).</li>
+<li>Rev 2.0 SDK: replaced with a new <code>libXM_Lib.a</code>. A clean build now links without errors.</li>
+<li>Rev 1.1 SDK: two pieces that were missing from the SDK — one function and one setting — were filled in (no effect on your code).</li>
 <li>Board revision comparison docs improved — it was never clearly stated anywhere that building with the wrong ZIP causes the built-in button/LED pins to be off by one.</li>
 </ul>
 <p><strong>Existing user code continues to work as-is.</strong> No API or behavioral changes; build environment is unchanged. If you were building successfully with v2.2.0, you do not need to upgrade. If your build was failing, re-download using this ZIP.</p>
@@ -2542,22 +2542,12 @@
 <h2 id="changes">Changes<a class="headerlink" href="#changes" title="Permanent link">&para;</a></h2>
 <h3 id="1-fixed-22-build-errors-in-the-rev-20-sdk">1. Fixed 22 build errors in the Rev 2.0 SDK<a class="headerlink" href="#1-fixed-22-build-errors-in-the-rev-20-sdk" title="Permanent link">&para;</a></h3>
 <p>Fixed a problem where performing a clean build in STM32CubeIDE immediately after downloading produced 22 link errors of the following form:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>undefined reference to `CdcDopRouter_Init'
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>undefined reference to `CdcDopRouter_Process'
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>undefined reference to `USBH_DiskIO_GetDiag'
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>undefined reference to `USBH_DiskIO_ResetDiag'
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>undefined reference to `XM_Ethernetif_GetMdioId'
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>undefined reference to `g_eth_rx_packet_count'
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>undefined reference to `xTaskGetHandle'
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>... (22 errors total)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>undefined reference to `…'
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>... (22 errors total)
 </code></pre></div>
-<p>The SDK has been updated with a new <code>libXM_Lib.a</code> and the corresponding source files, and all 169/169 link steps pass on a clean build.</p>
+<p>The SDK has been updated with a new <code>libXM_Lib.a</code> and the corresponding source files, and a clean build now links without errors.</p>
 <h3 id="2-stability-improvements-for-the-rev-11-sdk">2. Stability improvements for the Rev 1.1 SDK<a class="headerlink" href="#2-stability-improvements-for-the-rev-11-sdk" title="Permanent link">&para;</a></h3>
-<p>Rev 1.1 itself had no link failures, but a small consistency issue was addressed: certain functions called by the library were missing from the SDK tree.</p>
-<ul>
-<li><code>Compatible/FATFS/Target/usbh_diskio.c</code> — restored missing USB MSC diagnostic function definitions</li>
-<li><code>Core/Inc/FreeRTOSConfig.h</code> — added the <code>INCLUDE_xTaskGetHandle = 1</code> macro</li>
-</ul>
+<p>Rev 1.1 itself had no link failures, but a small issue was addressed: some functions and settings used by the library were missing from the SDK. Your code is not affected.</p>
 <h3 id="3-improved-board-revision-comparison-documentation">3. Improved board revision comparison documentation<a class="headerlink" href="#3-improved-board-revision-comparison-documentation" title="Permanent link">&para;</a></h3>
 <p>Fixed a broken link that was the entry point for identifying your board revision, and filled in the previously empty comparison table.</p>
 <ul>

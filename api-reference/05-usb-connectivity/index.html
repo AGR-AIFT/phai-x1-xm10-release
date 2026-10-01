@@ -991,10 +991,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-automation-cycle" class="md-nav__link">
+  <a href="#자동-전송-흐름-the-automation-cycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Automation Cycle
+        자동 전송 흐름 (The Automation Cycle)
       
     </span>
   </a>
@@ -2448,10 +2448,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-automation-cycle" class="md-nav__link">
+  <a href="#자동-전송-흐름-the-automation-cycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Automation Cycle
+        자동 전송 흐름 (The Automation Cycle)
       
     </span>
   </a>
@@ -2716,33 +2716,28 @@
 <p>📌 <strong>이 페이지를 읽고 나면</strong>: USB-CDC 텍스트/바이너리 송수신을 모두 다룰 수 있습니다.
 ⏱️ 예상 학습 시간: 20분
 🧰 사전 지식: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/07_CDC_Basic_Print/">Ex.07~09</a> CDC
-🎯 핵심 함수: <code>XM_SendUsbDebugMessage</code> / <code>XM_SetUsbCustomMeta</code> / <code>XM_SendUsbDataWithId</code> / <code>XM_SetUsbStreamSource</code> / <code>XM_SetUsbAutoStream</code></p>
-<p>⚠️ <strong>USB-CDC 단일 점유</strong>: PhAI Studio 와 시리얼 터미널 (PuTTY/RealTerm 등) 을 같은 COM 포트로 <strong>동시 사용 금지</strong> — COM 포트 충돌로 데이터 손실.</p>
+🎯 핵심 함수: <code>XM_SendUsbDebugMessage</code> / <code>XM_SetUsbCustomMeta</code> / <code>XM_SendUsbDataWithId</code></p>
+<p>⚠️ <strong>USB-CDC 단일 점유</strong>: <strong>PC 프로그램은 한 번에 하나만 연결하세요.</strong> PhAI Studio · <code>xm10</code> 도구 · 시리얼 터미널 (PuTTY/RealTerm 등) 을 같은 COM 포트로 동시에 열면 포트 충돌로 데이터가 손실됩니다.</p>
 </blockquote>
 <p><code>xm_api_usb.h</code>에 정의된 <strong>USB-CDC 통신 API</strong>에 대한 상세 레퍼런스입니다.
 XM10은 USB 포트를 통해 PC와 가상 시리얼 포트(CDC)로 연결하여 실시간 데이터 전송 및 디버깅을 제공합니다.</p>
 <blockquote>
-<p><strong>USB 메모리(MSC) 파일 로깅 기능은 v2.5.0 에서 제거되었습니다.</strong> 데이터 수집은 USB-CDC 실시간 스트리밍으로 합니다 — PhAI Studio, 또는 레포 내 <code>xm10</code> 도구(그래프 + 무손실 <code>.xmlog</code> 저장 + CSV 내보내기, <a href="../../getting-started/04-pc-data-tool/">안내</a>). 온보드 저장(SD카드)은 향후 HW 리비전에서 지원 예정입니다.</p>
+<p><strong>USB 메모리(MSC) 파일 로깅 기능은 v2.5.0 에서 제거되었습니다.</strong> 데이터 수집은 USB-CDC 실시간 스트리밍으로 합니다 — PhAI Studio, 또는 레포 내 <code>xm10</code> 도구(그래프 + 무손실 <code>.xmlog</code> 저장 + CSV 내보내기, <a href="../../getting-started/04-pc-data-tool/">안내</a>). PhAI Studio 는 자동 전송되는 Total Data(0x20)를 보여 줍니다. PhAI Studio 는 아직 개발 중이라, 직접 정의한 데이터 구조체(커스텀 구조체)는 우선 <code>xm10</code> 도구로 보고 저장하세요 (<code>XM_SendUsbDataWithId</code> 로 보내는 0xF0~0xFE 채널이 여기에 해당합니다). 온보드 저장(SD카드)은 현재 지원하지 않습니다.</p>
 </blockquote>
-<p>이 모듈은 사용자가 <strong>원하는 데이터 구조체</strong>를 등록하면, 시스템이 백그라운드에서 자동으로 PC로 전송하는 등록 기반(Registration-based) 자동화 시스템을 갖추고 있습니다.</p>
+<p>이 모듈은 시스템이 백그라운드에서 Total Data(0x20)를 PC로 자동 전송하고, 사용자는 추가로 보내고 싶은 채널을 <code>XM_SendUsbDataWithId()</code> 로 보내는 구조입니다.</p>
 <hr />
 <h2 id="1-동작-원리-operating-principle">1. 동작 원리 (Operating Principle)<a class="headerlink" href="#1-동작-원리-operating-principle" title="Permanent link">&para;</a></h2>
 <p>USB 모듈은 사용자의 개입을 최소화하기 위해 <strong>설정(Setup) 후 자동 실행(Automation)</strong> 방식을 따릅니다.</p>
-<h3 id="the-automation-cycle">The Automation Cycle<a class="headerlink" href="#the-automation-cycle" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>등록 (Registration):</strong> 사용자가 <code>Control_Setup()</code>에서 전송하고 싶은 데이터 구조체(예: <code>MyData</code>)의 주소를 <code>XM_SetUsbStreamSource()</code>로 시스템에 알려줍니다.</li>
-<li><strong>활성화 (Control):</strong> <code>XM_SetUsbAutoStream(true)</code>를 호출하거나 PC 측에서 스트림을 시작하면 전송이 켜집니다.</li>
-<li><strong>자동 처리 (Processing):</strong> <code>core_process</code> 엔진이 2ms마다 <code>XM_USB_ProcessPeriodic()</code>을 호출합니다.<ul>
-<li>이때 시스템은 등록된 구조체의 데이터를 <strong>자동으로 복사</strong>하여 PC로 전송합니다.</li>
-<li>사용자는 루프마다 <code>Send()</code> 함수를 호출할 필요가 없습니다.</li>
-</ul>
-</li>
-</ol>
+<h3 id="자동-전송-흐름-the-automation-cycle">자동 전송 흐름 (The Automation Cycle)<a class="headerlink" href="#자동-전송-흐름-the-automation-cycle" title="Permanent link">&para;</a></h3>
+<p>PC 프로그램이 COM 포트를 열면 Total Data(0x20)가 1ms마다 자동으로 전송됩니다. 더 보낼 값은 <code>XM_SetUsbCustomMeta()</code>(Setup) + <code>XM_SendUsbDataWithId()</code>(Loop)로 보냅니다 (<a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/">Ex.09</a>).</p>
 <hr />
 <h2 id="2-함수-상세-function-reference">2. 함수 상세 (Function Reference)<a class="headerlink" href="#2-함수-상세-function-reference" title="Permanent link">&para;</a></h2>
 <h3 id="21-data-source-registration-데이터-등록">2.1. Data Source Registration (데이터 등록)<a class="headerlink" href="#21-data-source-registration-데이터-등록" title="Permanent link">&para;</a></h3>
-<p>가장 먼저 호출해야 하는 함수입니다. 등록하지 않으면 기본값(<code>XM</code> 전체 구조체)이 사용됩니다.</p>
+<p>(Deprecated) 호출하지 않아도 됩니다. 등록하지 않으면 이 경로로는 아무것도 전송되지 않습니다 — <code>XM</code> 전체 상태는 별도로 자동 전송되는 Total Data(0x20)에 들어 있습니다.</p>
 <h4 id="xm_setusbstreamsource"><code>XM_SetUsbStreamSource</code><a class="headerlink" href="#xm_setusbstreamsource" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>⚠️ <strong>Deprecated</strong> — Total Data(0x20) 자동 전송 / <code>XM_SendUsbDataWithId</code> 로 대체되었습니다.</p>
+</blockquote>
 <p><strong>[CDC용]</strong> PC로 실시간 전송할 데이터의 소스를 지정합니다.</p>
 <ul>
 <li><strong>Syntax</strong>
@@ -2753,75 +2748,79 @@ XM10은 USB 포트를 통해 PC와 가상 시리얼 포트(CDC)로 연결하여 
 <li><code>size</code>: 구조체의 크기</li>
 </ul>
 </li>
-<li><strong>Note</strong>: 이 함수로 등록된 데이터는 스트리밍이 활성화되면 (<code>XM_SetUsbAutoStream(true)</code> 또는 PC 측 스트림 시작 시) <strong>바이너리(Binary)</strong> 형태로 PC에 전송됩니다. (Serial Plotter 등에 적합)</li>
+<li><strong>Note</strong>: 등록한 데이터는 스트리밍이 활성화되면 PhAI 패킷(바이너리, 기본 Module ID 0x10)으로 PC에 전송되므로 Serial Plotter·터미널로는 읽을 수 없습니다.</li>
 </ul>
 <hr />
 <h3 id="22-cdc-control-디버그-및-스트리밍">2.2. CDC Control (디버그 및 스트리밍)<a class="headerlink" href="#22-cdc-control-디버그-및-스트리밍" title="Permanent link">&para;</a></h3>
 <p>PC와 시리얼 통신을 수행합니다.</p>
 <h4 id="xm_sendusbdata"><code>XM_SendUsbData</code><a class="headerlink" href="#xm_sendusbdata" title="Permanent link">&para;</a></h4>
-<p>PC 터미널(TeraTerm 등)로 **데이터 구조체**을 전송합니다.
-'AGRB MON START'를 사용하지 않고 사용자가 원하는 대로 데이터를 전송하고자 할 때 제공하는 함수입니다.</p>
+<blockquote>
+<p>⚠️ <strong>Deprecated</strong> — Total Data(0x20) 자동 전송 / <code>XM_SendUsbDataWithId</code> 로 대체되었습니다.</p>
+</blockquote>
+<p>데이터 구조체를 PhAI 패킷으로 감싸 PC로 보냅니다(터미널에서는 읽을 수 없습니다). 사용자가 원하는 시점에 직접 호출해서 보냅니다.</p>
 <ul>
 <li><strong>Syntax</strong>
     <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbData</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
 </code></pre></div></li>
 <li><strong>Parameters</strong><ul>
-<li><code>message</code>: 전송할 문자열 (Null-terminated)</li>
+<li><code>data</code>: 전송할 구조체 포인터</li>
+<li><code>len</code>: 데이터 길이 (바이트 수)</li>
 </ul>
 </li>
-<li><strong>Example</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">time</span><span class="p">;</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">angle</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">MyLog_t</span><span class="p">;</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">MyLog_t</span><span class="w"> </span><span class="n">myLog</span><span class="p">;</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">XM_SendUsbData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">myLog</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">MyLog_t</span><span class="p">));</span>
-</code></pre></div></li>
 </ul>
 <h4 id="xm_sendusbdebugmessage"><code>XM_SendUsbDebugMessage</code><a class="headerlink" href="#xm_sendusbdebugmessage" title="Permanent link">&para;</a></h4>
 <p>PC 터미널(TeraTerm 등)로 **문자열(Text)**을 전송합니다. <code>printf</code>와 유사하게 디버깅 용도로 사용합니다.</p>
+<blockquote>
+<p>⚠️ PhAI Studio 나 <code>xm10</code> 도구가 스트림을 받는 중에 텍스트를 보내면 데이터 패킷 1개가 손실됩니다(메시지 1회당 1개). 텍스트 로그는 일반 터미널로 볼 때 쓰세요. 텍스트만 쓸 때는 <code>Control_Setup()</code> 에서 Rev2.0 은 <code>XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL)</code>, Rev1.1 은 <code>XM_SetUsbAutoStream(false)</code> 를 부르면 깨끗하게 보입니다.</p>
+</blockquote>
 <ul>
 <li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
 </code></pre></div></li>
 <li><strong>Parameters</strong><ul>
 <li><code>message</code>: 전송할 문자열 (Null-terminated)</li>
 </ul>
 </li>
 <li><strong>Example</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="s">"Current State: %d</span><span class="se">\r\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">current_state</span><span class="p">);</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="s">"Current State: %d</span><span class="se">\r\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">current_state</span><span class="p">);</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
 </code></pre></div></li>
 </ul>
 <h4 id="xm_isusbstreamconnected"><code>XM_IsUsbStreamConnected</code><a class="headerlink" href="#xm_isusbstreamconnected" title="Permanent link">&para;</a></h4>
-<p>USB 케이블이 PC에 연결되어 가상 시리얼 포트가 열렸는지 확인합니다.</p>
+<p>USB 장치(CDC)가 준비됐는지 돌려줍니다. 케이블이 꽂히고 USB 초기화가 끝나면 <code>true</code> 이며, PC 프로그램이 포트를 열었는지와는 무관합니다. 포트가 열려 스트리밍 중인지는 <code>XM_IsUsbStreamingActive()</code> 로 확인하세요 (Rev2.0 에서 <code>XM_USB_HOST_TERMINAL</code> 프로파일을 쓰면 <code>XM_IsUsbStreamingActive()</code> 는 포트를 열어도 <code>false</code> 이고, <code>XM_IsUsbStreamConnected()</code> 는 그대로 <code>true</code> 입니다).</p>
 <ul>
 <li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbStreamConnected</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbStreamConnected</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div></li>
 </ul>
 <h4 id="xm_isusbstreamingactive-v200-신규"><code>XM_IsUsbStreamingActive</code> <em>(v2.0.0 신규)</em><a class="headerlink" href="#xm_isusbstreamingactive-v200-신규" title="Permanent link">&para;</a></h4>
 <p>현재 CDC 스트리밍이 활성 상태인지 확인합니다.</p>
 <ul>
 <li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbStreamingActive</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbStreamingActive</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div></li>
 <li><strong>Returns</strong>: <code>true</code> (스트리밍 중), <code>false</code> (비활성)</li>
 </ul>
 <h4 id="xm_setusbautostream-v200-신규"><code>XM_SetUsbAutoStream</code> <em>(v2.0.0 신규)</em><a class="headerlink" href="#xm_setusbautostream-v200-신규" title="Permanent link">&para;</a></h4>
-<p>PC 연결 시 등록된 데이터를 자동으로 스트리밍하는 모드를 설정합니다.</p>
+<p>PC 프로그램이 COM 포트를 열면 Total Data(0x20)를 자동으로 스트리밍하는 모드를 설정합니다 (기본 <code>true</code>. Rev2.0 에서 <code>XM_USB_HOST_TERMINAL</code> 프로파일을 고르면 꺼집니다). USB 케이블을 꽂는 것만으로는 시작되지 않습니다.</p>
 <ul>
 <li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbAutoStream</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">enable</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbAutoStream</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">enabled</span><span class="p">);</span>
 </code></pre></div></li>
 <li><strong>Parameters</strong><ul>
-<li><code>enable</code>: <code>true</code>이면 연결 감지 시 자동 스트리밍 시작</li>
+<li><code>enabled</code>: <code>true</code>이면 COM 포트가 열릴 때 자동 스트리밍 시작, <code>false</code>이면 <code>AGRB MON START</code> 명령 대기 (Legacy)</li>
 </ul>
 </li>
 </ul>
 <h4 id="xm_setusbstreammoduleid-v200-신규"><code>XM_SetUsbStreamModuleId</code> <em>(v2.0.0 신규)</em><a class="headerlink" href="#xm_setusbstreammoduleid-v200-신규" title="Permanent link">&para;</a></h4>
-<p>PhAI V2 프로토콜에서 사용하는 모듈 ID를 설정합니다. PhAI Studio와 연동 시 사용합니다.</p>
+<blockquote>
+<p>⚠️ <strong>Deprecated</strong> — Total Data(0x20) 자동 전송 / <code>XM_SendUsbDataWithId</code> 로 대체되었습니다.</p>
+</blockquote>
+<p>예전 스트림(<code>XM_SetUsbStreamSource</code>, <code>XM_SendUsbData</code>)이 쓰는 Module ID 를 설정합니다(기본 <code>0x10</code>). PhAI Studio 연동에는 필요하지 않습니다.</p>
 <ul>
 <li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbStreamModuleId</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbStreamModuleId</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">);</span>
 </code></pre></div></li>
 <li><strong>Parameters</strong><ul>
 <li><code>module_id</code>: PhAI 프로토콜 모듈 식별자</li>
@@ -2832,17 +2831,18 @@ XM10은 USB 포트를 통해 PC와 가상 시리얼 포트(CDC)로 연결하여 
 <p>PC로부터 데이터를 수신합니다. (키보드 입력 등)</p>
 <ul>
 <li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUsbData</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">max_len</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_GetUsbData</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">max_len</span><span class="p">);</span>
 </code></pre></div></li>
 <li><strong>Returns</strong>: 실제로 읽어온 바이트 수</li>
+<li><strong>Note</strong>: <code>Control_Loop()</code> 의 한 틱 안에서 반환값이 0 이 될 때까지 반복해서 읽으세요. 남겨 두면 같은 틱 안에 시스템이 가져가 다시 받을 수 없습니다.</li>
 </ul>
 <hr />
 <h3 id="23-system-interface">2.3. System Interface<a class="headerlink" href="#23-system-interface" title="Permanent link">&para;</a></h3>
 <h4 id="xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code><a class="headerlink" href="#xm_setusbcustommeta" title="Permanent link">&para;</a></h4>
-<p>PhAI Studio Custom 모드 사용 시, Module ID와 JSON 메타데이터를 등록합니다.</p>
+<p>User Custom 채널(Module ID <code>0xF0</code>~<code>0xFE</code>)의 채널 이름·단위를 JSON 으로 등록합니다. <code>xm10</code> 도구가 그래프 제목과 CSV 열 이름으로 씁니다. 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요. JSON 문자열은 512바이트 이하여야 합니다. 넘으면 채널 이름이 전송되지 않습니다(채널이 많거나 이름이 길면 짧게 줄이세요). 연결당 하나만 유지됩니다(마지막 호출이 덮어씀). Rev2.0 에서 <code>XM_USB_HOST_TERMINAL</code> 프로파일을 고르면 전송하지 않습니다.</p>
 <ul>
 <li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">json_str</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">json_str</span><span class="p">);</span>
 </code></pre></div></li>
 <li>
 <p><strong>Parameters</strong></p>
@@ -2860,14 +2860,17 @@ XM10은 USB 포트를 통해 PC와 가상 시리얼 포트(CDC)로 연결하여 
 </tr>
 <tr>
 <td><code>json_str</code></td>
-<td>채널 정의 JSON 문자열 (PhAI Studio V2 호환)</td>
+<td>채널 정의 JSON 배열 문자열</td>
 </tr>
 </tbody>
 </table>
 </li>
 <li>
 <p><strong>Example</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="s">"{</span><span class="se">\"</span><span class="s">ch</span><span class="se">\"</span><span class="s">:[</span><span class="se">\"</span><span class="s">angle</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">torque</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">velocity</span><span class="se">\"</span><span class="s">]}"</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="mh">0xF0</span><span class="p">,</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="s">"[{</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">angle</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">deg</span><span class="se">\"</span><span class="s">},"</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="s">"{</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">torque</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">Nm</span><span class="se">\"</span><span class="s">},"</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="s">"{</span><span class="se">\"</span><span class="s">name</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">velocity</span><span class="se">\"</span><span class="s">,</span><span class="se">\"</span><span class="s">unit</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">deg/s</span><span class="se">\"</span><span class="s">}]"</span><span class="p">);</span>
 </code></pre></div></p>
 </li>
 </ul>
@@ -2875,7 +2878,7 @@ XM10은 USB 포트를 통해 PC와 가상 시리얼 포트(CDC)로 연결하여 
 <p>지정된 Module ID로 바이너리 데이터를 USB CDC 스트리밍합니다.</p>
 <ul>
 <li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbDataWithId</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbDataWithId</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">);</span>
 </code></pre></div></li>
 <li>
 <p><strong>Parameters</strong></p>
@@ -2897,13 +2900,13 @@ XM10은 USB 포트를 통해 PC와 가상 시리얼 포트(CDC)로 연결하여 
 </tr>
 <tr>
 <td><code>module_id</code></td>
-<td>Module ID (0x10: COMBINED, 0xF0~0xFE: Custom)</td>
+<td>Module ID (사용자 채널은 <code>0xF0</code>~<code>0xFE</code>)</td>
 </tr>
 </tbody>
 </table>
 </li>
 <li>
-<p><strong>Returns</strong>: <code>true</code> 전송 성공, <code>false</code> 실패 (연결 없음 등)</p>
+<p><strong>Returns</strong>: <code>true</code> = 전송 버퍼에 쌓음(PC 가 받았는지와는 무관), <code>false</code> = 버퍼가 가득 찼거나, USB 가 준비되지 않았거나, 인자가 잘못됨(NULL 포인터 · 길이 0 · 1020 바이트 초과)</p>
 </li>
 </ul>
 <blockquote>
@@ -2911,10 +2914,10 @@ XM10은 USB 포트를 통해 PC와 가상 시리얼 포트(CDC)로 연결하여 
 </blockquote>
 <h4 id="xm_usb_processperiodic"><code>XM_USB_ProcessPeriodic</code><a class="headerlink" href="#xm_usb_processperiodic" title="Permanent link">&para;</a></h4>
 <p><strong>[시스템 내부용]</strong> USB 스트리밍 로직을 처리하는 함수입니다.
-<code>core_process</code>에 의해 자동으로 호출되므로 <strong>End User는 직접 호출할 필요가 없습니다.</strong></p>
+시스템이 자동으로 호출하므로 <strong>End User는 직접 호출할 필요가 없습니다.</strong></p>
 <ul>
 <li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_USB_ProcessPeriodic</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_USB_ProcessPeriodic</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div></li>
 </ul>
 <hr />
@@ -2969,7 +2972,7 @@ XM10은 USB 포트를 통해 PC와 가상 시리얼 포트(CDC)로 연결하여 
 <tbody>
 <tr>
 <td>시리얼 터미널에 메시지 0줄</td>
-<td>PhAI Studio + 시리얼 터미널 동시 점유 (COM 충돌)</td>
+<td>PhAI Studio · <code>xm10</code> 도구 등 다른 프로그램과 시리얼 터미널 동시 점유 (COM 충돌)</td>
 <td>다른 클라이언트 모두 종료 후 재연결</td>
 </tr>
 <tr>
@@ -2979,13 +2982,23 @@ XM10은 USB 포트를 통해 PC와 가상 시리얼 포트(CDC)로 연결하여 
 </tr>
 <tr>
 <td><code>XM_SendUsbDataWithId</code> 가 자주 <code>false</code> 반환</td>
-<td>버퍼 풀 가득 (drop 발생)</td>
-<td>전송 주기 ↓ (1 kHz → 100 Hz) 또는 구조체 크기 ↓</td>
+<td>전송 버퍼 가득 (드롭 발생) — 구조체가 1020 바이트를 넘으면 항상 <code>false</code></td>
+<td>전송 주기 ↓ (1 kHz → 100 Hz) 또는 구조체 크기 ↓ (1020 바이트 이하)</td>
 </tr>
 <tr>
-<td>User Custom 채널 이름이 PhAI 에 안 보임</td>
-<td><code>XM_SetUsbCustomMeta</code> 호출 누락 또는 JSON 문법 오류</td>
-<td>Setup 에서 한 줄 JSON + jsonlint 검증</td>
+<td>PhAI Studio 에서 내 구조체(0xF0~0xFE)가 안 보임</td>
+<td>PhAI Studio 는 자동으로 보내는 Total Data(0x20)를 보여 줍니다</td>
+<td>PhAI Studio 는 아직 개발 중이라, 직접 정의한 데이터 구조체(커스텀 구조체)는 우선 <code>xm10</code> 도구로 보고 저장하세요</td>
+</tr>
+<tr>
+<td><code>xm10</code> 에서 채널 이름이 <code>ch0, ch1…</code> 로 나옴</td>
+<td><code>XM_SetUsbCustomMeta</code> 호출 누락, JSON 이 올바른 배열이 아님(문법 오류 포함), 또는 JSON 이 512바이트를 넘음</td>
+<td>Setup 에서 한 줄 JSON 배열로 등록 (jsonlint 로 검증, 512바이트 이하로)</td>
+</tr>
+<tr>
+<td>이름을 등록했는데도 <code>xm10</code> 에서 <code>ch0, ch1…</code> 로 나옴</td>
+<td>연결할 때 채널 이름을 받지 못함</td>
+<td>USB 케이블을 다시 꽂고 <code>xm10</code> 으로 다시 연결 (PC 프로그램은 한 번에 하나만 연결하세요)</td>
 </tr>
 <tr>
 <td>sprintf <code>%f</code> 출력이 정수처럼</td>

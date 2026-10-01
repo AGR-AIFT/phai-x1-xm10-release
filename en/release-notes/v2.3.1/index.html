@@ -2417,8 +2417,8 @@
 <h2 id="at-a-glance">At a Glance<a class="headerlink" href="#at-a-glance" title="Permanent link">&para;</a></h2>
 <p><strong>A patch release focused on boot/communication stability and SDK usability.</strong> No new examples or APIs.</p>
 <ul>
-<li><strong>More stable boot with the GRF (plantar-pressure) sensor module attached</strong> — sensor power is now applied in stages after boot, mitigating repeated reboots that could occur when powering on with the module plugged in. The data-receive path was also reworked to eliminate dropped samples.</li>
-<li><strong>Numerous internal stability fixes</strong> across control, communication, and storage — CAN bus recovery, USB disconnect handling, log-buffer placement, and memory-access bounds checks.</li>
+<li><strong>More stable boot with the GRF (plantar-pressure) sensor module attached</strong> — mitigates the repeated reboots that could occur when powering on with the module plugged in. Dropped samples were also eliminated.</li>
+<li><strong>Numerous stability improvements</strong> across control, communication, and storage — CAN-FD error recovery, USB cable detach/reattach, and log/settings storage.</li>
 <li><strong>Extract the ZIP, import into CubeIDE, build</strong> — fixed packaging defects (a missing header path and missing build scripts) that made the build fail right after import, and cleaned the build up to <strong>0 errors / 0 warnings</strong>.</li>
 <li><strong>Version reporting stabilized</strong> — fixed an issue where building the ZIP project rewrote the firmware version to 1.0.0.0. The release version (2.3.1) is now always preserved.</li>
 </ul>
@@ -2429,7 +2429,7 @@
 <li>Ex.31 (Friction DOB) / Ex.34 (Gait Log) are updated accordingly in this release.</li>
 </ul>
 <h2 id="removed-api">Removed API<a class="headerlink" href="#removed-api" title="Permanent link">&para;</a></h2>
-<p><code>XM_GetUserPSRAM()</code> / <code>XM_GetUserPSRAMSize()</code> have been removed from the public API. For large buffers, use <code>XM_GetUserWorkspace()</code> (RAM_D1, 200KB) — see <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.1/docs/api-reference/07-memory-management.en.md">07. Memory Regions</a>.</p>
+<p><code>XM_GetUserPSRAM()</code> / <code>XM_GetUserPSRAMSize()</code> have been removed from the public API. For large buffers, use <code>XM_GetUserWorkspace()</code> (200KB) — see <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.1/docs/api-reference/07-memory-management.en.md">07. Memory Regions</a>.</p>
 <hr />
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
 <table>
@@ -2462,12 +2462,12 @@
 <hr />
 <h2 id="details">Details<a class="headerlink" href="#details" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>GRF sensor-module boot stability</strong> — the sensor power rail is now enabled with a delay, in stages, after boot. Mitigates repeated reboots when powering on with the module attached (the root cause is in the power circuitry; a hardware revision is being pursued in parallel).</li>
+<li><strong>GRF sensor-module boot stability</strong> — mitigates the repeated reboots that happened when powering on with the module attached (the root cause is in the board's power circuitry).</li>
 <li><strong>GRF data reception</strong> — dropped samples eliminated.</li>
-<li><strong>CAN robustness</strong> — automatic recovery path from bus error states, stronger transmit-state management.</li>
-<li><strong>USB stability</strong> — improved cable detach/reattach handling, added packet-length validation.</li>
-<li><strong>Storage/memory</strong> — log-buffer placement reworked (prevents a memory collision with the networking feature), bounds checks added to settings (Flash) access.</li>
-<li><strong>Control safety</strong> — safer input configuration in the limit-switch example (Ex.06), bounds-checked orientation-sensor parsing, RTC time-set validation, and more.</li>
+<li><strong>CAN-FD stability</strong> — the bus now recovers on its own from error states.</li>
+<li><strong>USB stability</strong> — improved cable detach/reattach handling, and data with a wrong length is rejected.</li>
+<li><strong>Storage</strong> — log and settings storage is more reliable.</li>
+<li><strong>Control safety</strong> — safer input configuration in the limit-switch example (Ex.06), and stricter checks on sensor data and RTC time-setting values.</li>
 <li><strong>Project cleanup</strong> — removed unused duplicate build configurations and an unused-variable warning. CubeIDE build = 0 errors / 0 warnings.</li>
 </ul>
 <hr />
@@ -2510,7 +2510,7 @@
 <h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.1/docs/release-notes/v2.3.0.en.md">v2.3.0 Release Notes</a></li>
-<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.1/docs/hardware/README.md#보드-리비전-비교">Board Revision Comparison</a></li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.1/docs/hardware/README.en.md#board-revision-comparison">Board Revision Comparison</a></li>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/v2.3.1/docs/api-reference/07-memory-management.en.md">07. Memory Regions</a></li>
 </ul>
 

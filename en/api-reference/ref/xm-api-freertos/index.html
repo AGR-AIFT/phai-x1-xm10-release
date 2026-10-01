@@ -3168,7 +3168,7 @@
 <tr>
 <td><code>name</code></td>
 <td><code>const char*</code></td>
-<td>Task name (10 characters or fewer recommended). <code>NULL</code>, an empty string, or a name already in use is rejected.</td>
+<td>Task name (10 characters or fewer recommended). <code>NULL</code> or an empty string is rejected. Duplicate names are not checked, so give each task its own name.</td>
 </tr>
 <tr>
 <td><code>func</code></td>
@@ -3187,9 +3187,9 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Return value</strong>: a valid <code>XmTaskHandle_t</code> on success, <code>NULL</code> if rejected (plus a <code>[XM-WARN]</code> message over USB-CDC).</p>
+<p><strong>Return value</strong>: a valid <code>XmTaskHandle_t</code> on success, <code>NULL</code> if rejected. No message is printed when it is rejected, so always check the return value.</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately — do not call from an ISR). At most <a href="#macros"><code>XM_TASK_MAX_INSTANCES</code></a> (4) tasks can exist at the same time, and a completed task still counts toward this limit until you call <a href="#xm_task_delete"><code>XM_Task_Delete</code></a>.</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. At most <a href="#macros"><code>XM_TASK_MAX_INSTANCES</code></a> (4) tasks can exist at the same time, and a completed task still counts toward this limit until you call <a href="#xm_task_delete"><code>XM_Task_Delete</code></a>.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XmTaskHandle_t</span><span class="w"> </span><span class="n">s_heavy</span><span class="p">;</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
@@ -3221,7 +3221,7 @@
 </table>
 <p><strong>Return value</strong>: <code>true</code> — the function returned and the task is complete / <code>false</code> — still running, or the handle is invalid (or already deleted).</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately).</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_heavy</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">XM_Task_IsComplete</span><span class="p">(</span><span class="n">s_heavy</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="n">XM_Task_Delete</span><span class="p">(</span><span class="n">s_heavy</span><span class="p">);</span>
@@ -3271,7 +3271,7 @@
 </table>
 <p><strong>Return value</strong>: a valid handle on success, <code>NULL</code> if rejected.</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately).</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XmMutexHandle_t</span><span class="w"> </span><span class="n">s_buf_mutex</span><span class="p">;</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">static</span><span class="w"> </span><span class="n">XmTaskHandle_t</span><span class="w">  </span><span class="n">s_summary_task</span><span class="p">;</span>
@@ -3308,7 +3308,7 @@
 </table>
 <p><strong>Return value</strong>: none (<code>void</code>).</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). Passing an invalid handle is ignored without crashing (the same defensive pattern used by the other APIs).</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. Passing an invalid handle is ignored without crashing (the same defensive pattern used by the other APIs).</p>
 </blockquote>
 <p><strong>See also</strong>: <a href="#xm_task_resume"><code>XM_Task_Resume</code></a></p>
 <hr />
@@ -3334,7 +3334,7 @@
 </table>
 <p><strong>Return value</strong>: none (<code>void</code>).</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately).</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR.</p>
 </blockquote>
 <p><strong>See also</strong>: <a href="#xm_task_suspend"><code>XM_Task_Suspend</code></a></p>
 <hr />
@@ -3365,7 +3365,7 @@
 <li><strong>No self-deletion</strong>: an attempt by a task to <code>Delete</code> itself (from inside its own currently-running context) is rejected (stated in the header — do not call <code>XM_Task_Delete(own_handle)</code> from inside the task function itself).</li>
 </ul>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately).</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_heavy</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">XM_Task_IsComplete</span><span class="p">(</span><span class="n">s_heavy</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="n">XM_Task_Delete</span><span class="p">(</span><span class="n">s_heavy</span><span class="p">);</span>
@@ -3382,7 +3382,7 @@
 <p><strong>Parameters</strong>: none.</p>
 <p><strong>Return value</strong>: a valid <code>XmMutexHandle_t</code> on success, <code>NULL</code> on failure.</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). Typically created once in <code>Control_Setup()</code> and reused from then on.</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. Typically created once in <code>Control_Setup()</code> and reused from then on.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XmMutexHandle_t</span><span class="w"> </span><span class="n">s_buf_mutex</span><span class="p">;</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
@@ -3419,7 +3419,7 @@
 </table>
 <p><strong>Return value</strong>: <code>true</code> — lock acquired / <code>false</code> — timed out, or the handle is invalid.</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). Using <code>timeout_ms &gt; 0</code> inside Control_Loop can, in the worst case, delay the 1 kHz period by that much — always use <code>0</code> together with a skip-on-failure pattern.</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. Using <code>timeout_ms &gt; 0</code> inside Control_Loop can, in the worst case, delay the 1 kHz period by that much — always use <code>0</code> together with a skip-on-failure pattern.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="cm">/* Control_Loop — 1 kHz writer, always timeout=0 */</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_Mutex_Lock</span><span class="p">(</span><span class="n">s_buf_mutex</span><span class="p">,</span><span class="w"> </span><span class="mi">0U</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
@@ -3453,7 +3453,7 @@
 </table>
 <p><strong>Return value</strong>: none (<code>void</code>).</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). After a successful <code>XM_Mutex_Lock()</code>, be sure to call <code>Unlock</code> before any early return — omitting it leaves that mutex permanently locked.</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. After a successful <code>XM_Mutex_Lock()</code>, be sure to call <code>Unlock</code> before any early return — omitting it leaves that mutex permanently locked.</p>
 </blockquote>
 <p><strong>See also</strong>: <a href="#xm_mutex_lock"><code>XM_Mutex_Lock</code></a></p>
 <hr />
@@ -3479,7 +3479,7 @@
 </table>
 <p><strong>Return value</strong>: none (<code>void</code>).</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). Do not delete a mutex while a task that still uses it is alive — delete the related task(s) with <a href="#xm_task_delete"><code>XM_Task_Delete</code></a> first, then delete the mutex.</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. Do not delete a mutex while a task that still uses it is alive — delete the related task(s) with <a href="#xm_task_delete"><code>XM_Task_Delete</code></a> first, then delete the mutex.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">XM_Task_Delete</span><span class="p">(</span><span class="n">s_summary_task</span><span class="p">);</span>
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">XM_Mutex_Delete</span><span class="p">(</span><span class="n">s_buf_mutex</span><span class="p">);</span>
@@ -3487,14 +3487,14 @@
 <p><strong>See also</strong>: <a href="#xm_mutex_create"><code>XM_Mutex_Create</code></a>, <a href="#xm_task_delete"><code>XM_Task_Delete</code></a></p>
 <hr />
 <h3 id="hw-constraint-diagnostic-api">HW-constraint Diagnostic API<a class="headerlink" href="#hw-constraint-diagnostic-api" title="Permanent link">&para;</a></h3>
-<p>These four functions all take no parameters and immediately return the current state as a single number — simple getters. Use them when you want to check in code the HW constraints described in <a href="../../09-task-creation/">09. Helper Tasks &amp; Data Sharing §4</a> (max 4 tasks, 32 KB heap budget).</p>
+<p>These four functions all take no parameters and immediately return the current state as a single number — simple getters. Use them when you want to check in code the user task limits described in <a href="../../09-task-creation/">09. Helper Tasks &amp; Data Sharing §4</a> (max 4 tasks, 32 KB heap budget).</p>
 <h4 id="xm_task_getheapfreebytes"><code>XM_Task_GetHeapFreeBytes</code><a class="headerlink" href="#xm_task_getheapfreebytes" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_Task_GetHeapFreeBytes</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>
 <p>Returns the current system heap's free byte count.</p>
 <p><strong>Return value</strong>: free heap (bytes).</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately).</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR.</p>
 </blockquote>
 <hr />
 <h4 id="xm_task_getheapmineverbytes"><code>XM_Task_GetHeapMinEverBytes</code><a class="headerlink" href="#xm_task_getheapmineverbytes" title="Permanent link">&para;</a></h4>
@@ -3503,7 +3503,7 @@
 <p>Returns the lowest the system heap has ever dropped to. If this value keeps shrinking across repeated task create/delete cycles, suspect a heap leak (e.g. a missing <code>XM_Task_Delete</code> call).</p>
 <p><strong>Return value</strong>: all-time-lowest heap free level (bytes).</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). Ex.39 verifies there is no leak by pressing a button 3 times to repeat OneShot task create/delete cycles and confirming this value does not keep dropping.</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. Ex.39 verifies there is no leak by pressing a button 3 times to repeat OneShot task create/delete cycles and confirming this value does not keep dropping.</p>
 </blockquote>
 <p><strong>See also</strong>: Ex.39 <code>README.md</code> (heap-leak verification scenario)</p>
 <hr />
@@ -3513,7 +3513,7 @@
 <p>Returns the number of user tasks created so far that have not yet been <code>Delete</code>d (including OneShot tasks that completed but were not yet deleted).</p>
 <p><strong>Return value</strong>: current user-task count (0 to <a href="#macros"><code>XM_TASK_MAX_INSTANCES</code></a>).</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). Once this reaches 4, every subsequent <code>XM_Task_CreateOneShot</code>/<code>CreatePeriodic</code> call returns <code>NULL</code> — checking this value before creating a new task helps diagnose why.</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. Once this reaches 4, every subsequent <code>XM_Task_CreateOneShot</code>/<code>CreatePeriodic</code> call returns <code>NULL</code> — checking this value before creating a new task helps diagnose why.</p>
 </blockquote>
 <hr />
 <h4 id="xm_task_getbudgetremainingbytes"><code>XM_Task_GetBudgetRemainingBytes</code><a class="headerlink" href="#xm_task_getbudgetremainingbytes" title="Permanent link">&para;</a></h4>
@@ -3522,7 +3522,7 @@
 <p>Returns how much of the user-task-only heap budget (total <a href="#macros"><code>XM_TASK_HEAP_BUDGET_BYTES</code></a>, 32 KB) remains.</p>
 <p><strong>Return value</strong>: remaining budget (bytes).</p>
 <blockquote>
-<p>⚠️ <strong>Calling context</strong>: Based on the Control_Setup()/Control_Loop() context (the header does not state ISR-safety separately). If this value is too low, creating a task with a large stack (e.g. the 8 KB default for <code>XM_PRIO_BACKGROUND</code>) may be rejected.</p>
+<p>⚠️ <strong>Calling context</strong>: Call it from Control_Setup()/Control_Loop(), not from an ISR. If this value is too low, creating a task with a large stack (e.g. the 8 KB default for <code>XM_PRIO_BACKGROUND</code>) may be rejected.</p>
 </blockquote>
 <hr />
 <h3 id="diagnostic-api">Diagnostic API<a class="headerlink" href="#diagnostic-api" title="Permanent link">&para;</a></h3>
@@ -3532,12 +3532,12 @@
 <p>Prints the list of currently running tasks (on-demand diagnostics).</p>
 <p><strong>Parameters</strong>: none. <strong>Return value</strong>: none (<code>void</code>).</p>
 <blockquote>
-<p>⚠️ <strong>Current status (Phase 1)</strong>: in this SDK version, the diagnostic output channel is not yet wired up, so calling this is a <strong>no-op stub that does nothing</strong> (stated in the header). It is planned to connect to the PhAI Studio diagnostic channel in Phase 2.</p>
-<p>⚠️ <strong>Calling context (get ahead of it)</strong>: right now it is a stub, so calling it anywhere is safe, but the internal implementation this function wraps already documents the constraint "<strong>do not call inside the 1 kHz Control_Loop</strong> (accumulated string formatting can take 100 µs or more)." To stay safe once Phase 2 lands, it's worth building the habit now of only calling this from somewhere that does <strong>not</strong> run at 1 kHz, such as <code>Control_Setup()</code> or a button-event handler.</p>
+<p>⚠️ <strong>Current status</strong>: in this SDK version, the diagnostic output channel is not wired up, so calling this is a <strong>no-op stub that does nothing</strong> (stated in the header).</p>
+<p>⚠️ <strong>Calling context (get ahead of it)</strong>: right now it is a stub, so calling it anywhere is safe, but the function carries the constraint "<strong>do not call inside the 1 kHz Control_Loop</strong> (accumulated string formatting can take 100 µs or more)." So it's worth building the habit of only calling this from somewhere that does <strong>not</strong> run at 1 kHz, such as <code>Control_Setup()</code> or a button-event handler.</p>
 </blockquote>
 <hr />
 <h2 id="deprecated-api-avoid-in-new-code">Deprecated API (avoid in new code)<a class="headerlink" href="#deprecated-api-avoid-in-new-code" title="Permanent link">&para;</a></h2>
-<p>These APIs remain for v1.0 compatibility. <strong>They are scheduled for removal in the next major release</strong>, so do not use them in new code. Only the table is kept below — full function-detail blocks are omitted.</p>
+<p>These APIs remain for v1.0 compatibility. Do not use them in new code. Only the table is kept below — full function-detail blocks are omitted.</p>
 <table>
 <thead>
 <tr>
@@ -3567,11 +3567,11 @@
 <h3 id="xmtaskprio_t"><code>XmTaskPrio_t</code><a class="headerlink" href="#xmtaskprio_t" title="Permanent link">&para;</a></h3>
 <p>The task-priority-hint enum. Instead of exposing CMSIS-OS2's raw numeric priority values, it wraps them into named, meaningful levels. The numeric range already occupied by system tasks (51–55) does not exist in this enum at all — so a user task can never accidentally collide with a system task's priority.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="n">XM_PRIO_IDLE</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">   </span><span class="cm">/* osPriorityLow      — same tier as DefaultTask */</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="n">XM_PRIO_IDLE</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">   </span><span class="cm">/* osPriorityLow      — the lowest priority */</span>
 <a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="n">XM_PRIO_BACKGROUND</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityNormal   — recommended default */</span>
 <a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">    </span><span class="n">XM_PRIO_BELOW_CONTROL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityAboveNormal — below Control_Loop */</span>
-<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">    </span><span class="n">XM_PRIO_ABOVE_CONTROL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityHigh     — same tier as USBH, still below Control_Loop */</span>
-<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">    </span><span class="n">XM_PRIO_NEAR_REALTIME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">48</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityRealtime — caution: may contend with PnP traffic */</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">    </span><span class="n">XM_PRIO_ABOVE_CONTROL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityHigh     — below Control_Loop */</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">    </span><span class="n">XM_PRIO_NEAR_REALTIME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">48</span><span class="p">,</span><span class="w">  </span><span class="cm">/* osPriorityRealtime — caution: can clash with module connection handling */</span>
 <a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="p">}</span><span class="w"> </span><span class="n">XmTaskPrio_t</span><span class="p">;</span>
 </code></pre></div>
 <table>
@@ -3588,7 +3588,7 @@
 <td><code>XM_PRIO_IDLE</code></td>
 <td>8</td>
 <td>1 KB</td>
-<td>The lowest priority, same tier as <code>DefaultTask</code></td>
+<td>The lowest priority</td>
 </tr>
 <tr>
 <td><code>XM_PRIO_BACKGROUND</code></td>
@@ -3606,13 +3606,13 @@
 <td><code>XM_PRIO_ABOVE_CONTROL</code></td>
 <td>40</td>
 <td>2 KB</td>
-<td>Same tier as USBH — still below Control_Loop</td>
+<td>Below Control_Loop</td>
 </tr>
 <tr>
 <td><code>XM_PRIO_NEAR_REALTIME</code></td>
 <td>48</td>
 <td>2 KB</td>
-<td>⚠️ Does not contend with PnP traffic (<code>PnP_Task</code>, 25) directly, but sits close to the system tasks above it — don't overuse it.</td>
+<td>⚠️ Caution: can clash with module connection handling — don't overuse it.</td>
 </tr>
 </tbody>
 </table>
@@ -3785,7 +3785,7 @@
 <hr />
 <h2 id="related-documents">Related Documents<a class="headerlink" href="#related-documents" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../../09-task-creation/">09. Helper Tasks &amp; Data Sharing</a> — system task inventory, priority zones, data flow, shared-variable patterns</li>
+<li><a href="../../09-task-creation/">09. Helper Tasks &amp; Data Sharing</a> — priority zones, data flow, shared-variable patterns</li>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/38_Periodic_Background_Task/">Ex.38 Periodic_Background_Task</a></li>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/39_Task_Lifecycle/">Ex.39 Task_Lifecycle</a></li>
 <li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/">Ex.36 OnDevice_Kinesthetic_Learning</a></li>
