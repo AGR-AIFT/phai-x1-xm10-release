@@ -3,17 +3,19 @@
 > 🎯 **학습 목표**:
 > - **IMU Hub Module**에서 최대 **6개 IMU**의 방위(쿼터니언)를 받아온다.
 > - 쿼터니언을 사람이 읽는 **오일러 각(roll/pitch/yaw)**으로 on-device 변환한다.
-> - 연결 개수 자동 감지 + **PhAI Studio 18채널 실시간 스트리밍**까지 한 흐름.
+> - 연결 개수 자동 감지 + **0xF0 18채널 실시간 스트리밍(`xm10` 도구)**까지 한 흐름.
 >
-> ⏱️ 권장 시간: 40분 | 🔧 난이도: ⭐⭐⭐ | 🟢 **Rev 2.0 전용** (FDCAN2 센서허브 버스)
+> ⏱️ 권장 시간: 40분 | 🔧 난이도: ⭐⭐⭐ | 🟢 **Rev 2.0 전용** (CAN-FD 센서 허브)
 > 🧰 사전 예제: [Ex.09 CDC Stream](../09_CDC_Stream/) · [Ex.16 TinyAI Sensor Fusion](../16_TinyAI_Sensor_Fusion/)
-> 📚 관련 docs: [USB 연결성 (0xF0 스트리밍)](../../docs/api-reference/05-usb-connectivity.md) · [LED/BTN 제어](../../docs/api-reference/03-led-btn-control.md)
+> 📚 관련 docs: [USB 연결성 (0xF0 스트리밍)](../../docs/api-reference/05-usb-connectivity.md) · [xm10 도구](../../docs/getting-started/04-pc-data-tool.md) · [LED/BTN 제어](../../docs/api-reference/03-led-btn-control.md)
+>
+> IMU Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
 
 ---
 
 ## 1️⃣ 목표 — 이 예제로 무엇이 동작하나
 
-IMU Hub Module에 연결된 IMU들의 **자세(기울기·방향)**를 실시간으로 읽어, 전신 자세 대시보드처럼 PhAI Studio에 뿌립니다. 모터를 쓰지 않는 **순수 관찰형** 예제라 안전하게 IMU 데이터 파이프라인을 익힐 수 있습니다.
+IMU Hub Module에 연결된 IMU들의 **자세(기울기·방향)**를 실시간으로 읽어, 전신 자세 대시보드처럼 PC(`xm10` 도구)에 뿌립니다. 모터를 쓰지 않는 **순수 관찰형** 예제라 안전하게 IMU 데이터 파이프라인을 익힐 수 있습니다.
 
 | 요소 | 동작 |
 |---|---|
@@ -24,12 +26,12 @@ IMU Hub Module에 연결된 IMU들의 **자세(기울기·방향)**를 실시간
 
 신호 흐름:
 ```
-IMU Hub (FDCAN2) → XM.status.imu_hub.sensor[i].q_*  (core 가 자동 갱신)
+IMU Hub (CAN-FD) → XM.status.imu_hub.sensor[i].q_*  (시스템이 자동 갱신)
                  → 쿼터니언→오일러 변환 (_QuatToEulerDeg)
-                 → 50Hz 스로틀 → PhAI Studio 0xF0
+                 → 50Hz 스로틀 → USB 0xF0 (xm10 도구)
 ```
 
-> 🟢 **Rev 2.0 전용**: IMU Hub Module은 **FDCAN2 센서허브 버스**로 연결되며, 이 버스는 Rev 2.0 보드에만 있습니다. Rev 1.1에서는 `XM.status.imu_hub.is_connected`가 항상 `false`입니다.
+> 🟢 **Rev 2.0 전용**: IMU Hub Module은 **CAN-FD 센서 허브 포트**로 연결되며, 이 포트는 Rev 2.0 보드에만 있습니다. Rev 1.1에서는 `XM.status.imu_hub.is_connected`가 항상 `false`입니다.
 
 ---
 
@@ -43,17 +45,11 @@ IMU Hub (FDCAN2) → XM.status.imu_hub.sensor[i].q_*  (core 가 자동 갱신)
 | **지원 센서** | **EBIMU**(EBIMU-9DOFV6) · **Xsens MTi-630** — 서로 다른 두 종류를 **섞어서** 연결 가능 |
 | **Auto-sense** | 연결된 IMU를 **자동 감지** — 몇 번 슬롯에 무엇을 꽂았는지 일일이 설정할 필요 없음 |
 | **출력** | 각 IMU의 방위(쿼터니언) + 가속도 + 각속도 |
-| **연결** | XM10과 **FDCAN2**(DOP V3) 센서허브 버스로 통신 |
+| **연결** | XM10과 **CAN-FD** 센서 허브 포트로 통신 |
 
 ### 🔌 연결만 하면 끝 — 자동 데이터 수신
 
 IMU를 허브에 꽂고, 허브를 XM10에 연결하기만 하면 됩니다. 별도 설정 없이 **XM10이 자동으로 자세 데이터를 받기 시작**합니다(Auto-sense로 센서 인식 + 자동 연결). 사용자 코드는 그저 `XM.status.imu_hub`를 읽으면 됩니다.
-
-### 🛠️ PhEEL Studio 연동 (공개 예정)
-
-IMU의 **캘리브레이션**과 **센서 설정 변경**은 Angel Robotics 자체 개발 도구인 **PhEEL Studio**로 합니다. PhEEL Studio는 IMU Hub에 직접 붙어, 각 채널의 자세를 실시간으로 보면서 영점·축 방향·출력 설정 등을 조정할 수 있습니다. *(PhEEL Studio는 공개 예정입니다.)*
-
-> 📸 **PhEEL Studio — IMU Hub 6채널 자세 모니터링** — 사진·영상 준비 중
 
 > 💡 이 예제는 "IMU 데이터로 **무엇을 할 수 있는가**"의 가장 기본 — **자세 시각화** — 를 보여줍니다. 쿼터니언→오일러 변환은 모든 자세 표시의 출발점입니다.
 
@@ -62,7 +58,7 @@ IMU의 **캘리브레이션**과 **센서 설정 변경**은 Angel Robotics 자�
 ## 3️⃣ 사전 지식 — 시작 전 알아둘 것
 
 - **쿼터니언 vs 오일러** — IMU Hub가 XM으로 보내는 방위는 **쿼터니언**(q_w,q_x,q_y,q_z, 4개 값)입니다. roll/pitch/yaw 형태로는 오지 않으므로, 이 예제가 직접 변환합니다. 쿼터니언은 짐벌락이 없어 IMU가 방위를 안정적으로 표현하는 표준 방식입니다.
-- **데이터는 읽기만** — `core_process`가 FDCAN2 수신을 받아 `XM.status.imu_hub`를 자동 갱신합니다. 사용자 코드는 `XM.status.imu_hub.sensor[i]`를 **읽기만** 하면 됩니다(드라이버 직접 호출 불필요).
+- **데이터는 읽기만** — 시스템이 CAN-FD 로 받은 데이터로 `XM.status.imu_hub`를 자동 갱신합니다. 사용자 코드는 `XM.status.imu_hub.sensor[i]`를 **읽기만** 하면 됩니다(드라이버 직접 호출 불필요).
 - **connected_mask** — `bit0`=IMU0 … `bit5`=IMU5. 연결된 슬롯만 1. 미연결 슬롯의 데이터는 신뢰하지 말 것(이 예제는 0으로 채웁니다).
 - **0xF0 User Custom 스트리밍** — `XM_SetUsbCustomMeta()`로 채널 라벨을 등록하고 `XM_SendUsbDataWithId()`로 float 배열을 보냅니다. ([Ex.09](../09_CDC_Stream/))
   - ⚠️ `XM_SetUsbCustomMeta`는 **USB 연결당 Module ID 1개**만 라벨링됩니다. 그래서 6개 IMU를 **하나의 0xF0 채널 그룹(18채널)**으로 묶어 보냅니다.
@@ -103,16 +99,16 @@ XM_SendUsbDataWithId(s_posture, sizeof(s_posture), 0xF0);
 
 ## 5️⃣ 실험 — 절차
 
-1. **HW**: IMU Hub Module을 XM10의 FDCAN2 센서허브 포트에 연결. IMU를 1~6개 허브에 연결.
+1. **HW**: IMU Hub Module을 XM10의 CAN-FD 센서 허브 포트에 연결. IMU를 1~6개 허브에 연결.
 2. **빌드 + 플래시** → 부팅. 허브 미연결이면 LED1이 느리게(1초) 점멸.
 3. **연결 확인** — IMU를 꽂으면 Auto-sense로 인식됩니다. 연결 개수가 늘수록 LED1 점멸이 빨라집니다.
-4. **PhAI Studio** — USB Connect → `0xF0` 채널 선택. `IMU0 Roll/Pitch/Yaw … IMU5 …` 18채널이 뜹니다.
+4. **`xm10` 도구**([안내](../../docs/getting-started/04-pc-data-tool.md)) → Connect. `0xF0` 탭에 18채널이 뜹니다 (IMU0~IMU5 × roll/pitch/yaw 순서).
 5. **자세 확인** — IMU를 손으로 기울여 보며 roll/pitch/yaw가 실제 움직임과 맞는지 확인. 미연결 슬롯은 평평한 0.
 6. **혼합 사용 테스트** — EBIMU와 Xsens를 섞어 꽂아도 동일하게 표시되는지 확인(허브가 종류를 흡수).
 
 > 🔧 변형: `IMU_STREAM_PERIOD_MS`를 바꿔 스트리밍 주기를 조절(10ms=100Hz ~ 50ms=20Hz)하며 부드러움 비교.
 
-> 📸 **PhAI Studio — 0xF0 18채널 자세 그래프** — 사진·영상 준비 중
+> 📸 **xm10 도구 — 0xF0 18채널 자세 그래프** — 사진·영상 준비 중
 
 ---
 
@@ -143,11 +139,11 @@ XM_SendUsbDataWithId(s_posture, sizeof(s_posture), 0xF0);
 
 | 증상 | 원인 | 해결 |
 |---|---|---|
-| 데이터가 전부 0 / 그래프 평평 | Rev 1.1 보드 (FDCAN2 센서허브 없음) | **Rev 2.0** 보드에서 실행 |
-| `is_connected`가 false | 허브 미연결 / 케이블 / 전원 | FDCAN2 포트·허브 전원 확인 |
+| 데이터가 전부 0 / 그래프 평평 | Rev 1.1 보드 (CAN-FD 센서 허브 포트 없음) | **Rev 2.0** 보드에서 실행 |
+| `is_connected`가 false | 허브 미연결 / 케이블 / 전원 | CAN-FD 센서 허브 포트·허브 전원 확인 |
 | 특정 슬롯만 0 | 그 슬롯 IMU 미연결/미인식 | `connected_mask` 확인, IMU 재연결(Auto-sense 재감지) |
-| roll/pitch/yaw가 움직임과 안 맞음 | IMU 장착 축 방향 문제 | **PhEEL Studio**로 축·영점 캘리브 |
-| PhAI Studio에 채널 없음 | Connect 안 함 / 라벨 미등록 | 포트 선택 → **Connect**, 0xF0 채널 선택 |
+| roll/pitch/yaw가 움직임과 안 맞음 | IMU 장착 축 방향 문제 | IMU 의 장착 방향(축)을 확인하고 다시 장착 |
+| `xm10` 에 0xF0 탭이 없음 | Connect 안 함 | `xm10` 도구에서 포트 선택 → **Connect**. 그래도 탭이 없으면 보드가 0xF0 을 보내고 있는지 확인 (`XM_SendUsbDataWithId` 호출 — [Ex.09](../09_CDC_Stream/) 참조) |
 | 값이 튀거나 지연 | 스트리밍 주기 부적절 | `IMU_STREAM_PERIOD_MS` 조정 |
 
 막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)

@@ -23,7 +23,7 @@ The XM10 and KIT H10 communicate with each other, so both sides must be running 
 
 | XM FW | Required KIT H10 FW |
 |:---:|:---:|
-| v2.6.0 (latest) | CM v2.4.0 / SAM10 v2.4.0 / ESP32 v2.3.0 |
+| v2.6.0 – v2.8.0 (latest) | CM v2.4.0 / SAM10 v2.4.0 / ESP32 v2.3.0 |
 | v2.0.x – v2.5.1 | CM v2.3.0 / SAM10 v2.3.0 / ESP32 v2.3.0 |
 | v1.0.x | Factory-shipped version (no update needed) |
 
@@ -72,6 +72,8 @@ Required for firmware uploads and live debugging. You only need to flash via SWD
 ### 3. Sensor Hub (Optional)
 
 To use sensors such as EMG, ground reaction force (GRF), or FSR, connect the Sensor Hub board to the expansion port on the XM10. This is not required until Ex.07 or later.
+
+> The EMG Hub is a module under internal development. To use it, please contact us at https://huphailab.com/contact.
 
 ### 4. USB-C Data Cable (Optional)
 

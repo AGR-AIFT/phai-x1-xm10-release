@@ -11,7 +11,7 @@
 
 ## ⚠️ USB-CDC 단일 점유 (Ex.07 과 동일 룰)
 
-PhAI Studio 와 시리얼 터미널 (PuTTY 등) 을 같은 COM 포트로 **동시에 열지 마세요** — 충돌로 데이터 손실. 실시간 그래프가 필요하면 [Ex.09 CDC Stream](../09_CDC_Stream/) + PhAI 단독.
+**PC 프로그램은 한 번에 하나만 연결하세요.** PhAI Studio 와 시리얼 터미널 (PuTTY 등) 을 같은 COM 포트로 동시에 열면 충돌로 데이터가 손실됩니다. 실시간 그래프가 필요하면 [Ex.09 CDC Stream](../09_CDC_Stream/) + PhAI Studio 또는 `xm10` 도구 단독.
 
 ---
 
@@ -34,7 +34,7 @@ Hip Angles -> RH: 13.45, LH: -7.92
 - **`sprintf(buf, "fmt %f", val)`** — C 표준 라이브러리. 문자열에 변수 값을 포맷팅. `%f` 는 float, `%d` 는 int.
 - **`%.2f`** — 소수점 둘째 자리까지. 콘솔 가독성을 위해 자주 사용.
 - **논블로킹 타이머 (Non-blocking timer)** — `osDelay()` 같은 blocking 호출 대신 `XM_GetTick()` 으로 경과 시간 측정. 1 kHz 사용자 루프를 막지 않음.
-- **`XM.status.h10.*`** — System 이 자동으로 PDO 에서 읽어 채워주는 H10 데이터 ([api-ref](../../docs/api-reference/02-h10-control-n-data.md)). 사용자 코드가 직접 접근 가능.
+- **`XM.status.h10.*`** — System 이 자동으로 읽어 채워주는 H10 데이터 ([api-ref](../../docs/api-reference/02-h10-control-n-data.md)). 사용자 코드가 직접 접근 가능.
 - **`XM_GetTick()`** — 부팅 이후 경과 ms (32-bit, ~49.7일 wrap).
 
 ---
@@ -52,7 +52,7 @@ static void Run_Loop(void)
     if (now - last_print_time >= 500) {                              // ② 논블로킹 500ms 타이머
         last_print_time = now;
 
-        float angle_rh = XM.status.h10.rightHipAngle;                 // ③ H10 PDO 읽기
+        float angle_rh = XM.status.h10.rightHipAngle;                 // ③ H10 데이터 읽기
         float angle_lh = XM.status.h10.leftHipAngle;
 
         char buf[64];                                                  // ④ 출력 버퍼
@@ -67,6 +67,8 @@ static void Run_Loop(void)
 전체 코드: [`cdc_sensor_print.c`](cdc_sensor_print.c)
 
 > 🧒 ②의 `now - last_print_time >= 500` 은 wrap (49.7일) 안전. 단순 `now > last + 500` 은 wrap 시 버그.
+>
+> 🧒 `Control_Setup()` 은 [Ex.07](../07_CDC_Basic_Print/) 과 같습니다 — 맨 위에 `XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL);` (Rev2.0. Rev1.1 은 `XM_SetUsbAutoStream(false);`) 를 두어야 터미널에 텍스트만 깨끗하게 나옵니다.
 
 ---
 
@@ -86,7 +88,7 @@ static void Run_Loop(void)
 ## 5️⃣ 다음 단계
 
 - 고속 바이너리 (텍스트 → 그래프): [Ex.09 CDC Stream](../09_CDC_Stream/)
-- 스트리밍 데이터를 PhAI Studio 로 실시간 확인·녹화: [Ex.09 CDC Stream](../09_CDC_Stream/)
+- 스트리밍 데이터를 PC 에서 실시간 확인·저장: [Ex.09 CDC Stream](../09_CDC_Stream/) (Total Data 는 PhAI Studio, 사용자 채널은 `xm10` 도구)
 - 실시간 H10 제어와 결합: [Ex.14 PD Realtime Control](../14_PD_Realtime_Control/)
 
 ---
@@ -99,6 +101,6 @@ static void Run_Loop(void)
 | sprintf 결과가 `Hip Angles -> RH: 0.00, LH: 0.00` | H10 미연결 또는 CAN-FD 통신 X | KIT H10 본체 + CAN-FD 케이블 확인 |
 | float 출력이 정수처럼 보임 | newlib-nano (기본) 가 `%f` 미지원 | `Project Properties > Tool Settings > MCU Settings` 에서 `Use float with printf` 체크 |
 | 버퍼 오버플로 (UTF-8 한글 + 긴 메시지) | `buf[64]` 부족 | 버퍼 크기 늘리거나 `snprintf` 사용 |
-| 출력 주기 가변 (500 → 600 ms) | UserTask jitter (다른 무거운 작업) | 정상. 정밀 타이밍은 [Ex.18 Debug Monitor](../18_Debug_Monitor/) 참조 |
+| 출력 주기 가변 (500 → 600 ms) | 제어 루프 지연 (다른 무거운 작업) | 정상. 정밀 타이밍은 [Ex.18 Debug Monitor](../18_Debug_Monitor/) 참조 |
 
 막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)

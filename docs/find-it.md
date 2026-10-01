@@ -25,7 +25,7 @@
 | 버튼 / LED 제어 | [api-reference/03-led-btn-control.md](api-reference/03-led-btn-control.md) + Ex.01~03 |
 | 외부 GPIO / ADC | [api-reference/04-external-io.md](api-reference/04-external-io.md) + Ex.04~06 |
 | USB 시리얼로 PC 에 데이터 보내기 | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.07~09 |
-| USB 로 데이터 내보내기 (실시간) | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.09 CDC Stream · PhAI Studio |
+| USB 로 데이터 내보내기 (실시간) | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.09 CDC Stream · [xm10 도구](getting-started/04-pc-data-tool.md) (내 구조체) · PhAI Studio (Total Data) |
 | 메모리 영역 (PSRAM, Workspace) | [api-reference/07-memory-management.md](api-reference/07-memory-management.md) + Ex.19 |
 | 날짜·시간 (RTC) | [api-reference/08-rtc-clock.md](api-reference/08-rtc-clock.md) |
 | KIT H10 외골격 제어 | [api-reference/02-h10-control-n-data.md](api-reference/02-h10-control-n-data.md) + Ex.11~13 |
@@ -35,7 +35,7 @@
 
 | 상황 | 어디로 |
 |------|--------|
-| 46 개 예제 전체 인덱스 | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
+| 45 개 예제 전체 인덱스 | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
 | 난이도별·트랙별 학습 경로 | [docs/tutorials/README.md](tutorials/README.md) |
 | 한 학기 수업 진도표 (16 주) | [tutorials/README.md - 한 학기 진도표 섹션](tutorials/README.md#한-학기-16-주-수업-진도표-예시) |
 | Ex.XX 예제가 잘 안 됩니다 | 해당 `examples/XX_*/README.md` 의 "⚠️ 흔한 실수" 섹션 |
@@ -50,7 +50,7 @@
 | 외부 GPIO 핀맵 (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | 외부 GPIO 핀맵 (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | 내 보드가 Rev 1.1 인지 Rev 2.0 인지 | [hardware/README.md - 보드 리비전 비교](hardware/README.md#보드-리비전-비교) |
-| 46 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (42 개는 양쪽 모두 동작·외부 GPIO 핀맵만 다름, Ex.40/41/42/43 은 Rev 2.0 전용) |
+| 45 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (40 개는 양쪽 모두 동작·외부 GPIO 핀맵만 다름, Ex.36 과 Ex.40/41/42/43 은 Rev 2.0 전용) |
 
 ## 📥 펌웨어 업로드
 
@@ -71,7 +71,7 @@
 | PC 에서 데이터 받기 / 저장 / CSV 뽑기 (Python, exe) | [getting-started/04-pc-data-tool.md](getting-started/04-pc-data-tool.md) |
 | 보드 없이 도구 먼저 써 보기 | `python xm10.py demo` — [04-pc-data-tool.md](getting-started/04-pc-data-tool.md) 첫 절 |
 | 프레임이 빠지는지 판정 | `python xm10.py soak` — [04-pc-data-tool.md](getting-started/04-pc-data-tool.md#손실-없이-받고-있나-확인하기--soak) |
-| PhAI Studio 사용법 | 각 예제 README 의 4 단계 실험 부분 + [studio.onephai.com](https://studio.onephai.com) |
+| PhAI Studio 사용법 | [studio.onephai.com](https://studio.onephai.com) + Ex.09 README (Studio 는 Total Data(0x20)를 보여 줍니다 — 내 구조체는 [xm10 도구](getting-started/04-pc-data-tool.md)) |
 | 내 알고리즘을 1 ms 안에 끝내고 싶음 | Ex.18 Debug Monitor + Ex.19 Memory Aware Design |
 | 자기주도 학습 트랙 (관심 분야별) | [advanced/README.md - 자기주도 학습 경로](advanced/README.md#자기주도-학습-권장-경로) |
 

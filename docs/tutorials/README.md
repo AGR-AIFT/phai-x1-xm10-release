@@ -1,6 +1,6 @@
-# Tutorials — 46 개 예제로 배우기
+# Tutorials — 45 개 예제로 배우기
 
-XM10 기능을 단계적으로 익힐 수 있도록 46 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.09 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.
+XM10 기능을 단계적으로 익힐 수 있도록 45 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.09 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.
 
 예제 전체 카탈로그는 [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) 에 있고, 막히면 각 README 맨 아래의 "흔한 실수" 섹션을 먼저 보세요. Claude Code 사용자라면 `"Ex.XX 가 안 돼"` 라고만 말해도 `example-helper` 가 해당 예제의 흔한 실수 + 트러블슈팅 문서를 인용해 답해줍니다.
 
@@ -32,7 +32,7 @@ XM10 기능을 단계적으로 익힐 수 있도록 46 개 예제를 준비했�
 | 3 | 외부 GPIO + ADC | Ex.04 → 05 → 05a | 외부 스위치로 LED 4 개 제어 |
 | 4 | 다채널 ADC + 안전 스위치 | Ex.05b → 05c → 06 | FSR 8 채널 동시 측정 시연 |
 | 5 | USB 시리얼 통신 | Ex.07 → 08 | PC 터미널로 센서값 실시간 모니터링 |
-| 6 | 바이너리 스트리밍 + PhAI Studio | Ex.09 | 4 채널 그래프 캡처 + 분석 보고서 |
+| 6 | 바이너리 스트리밍 + xm10 도구 | Ex.09 | 4 채널 그래프 캡처 + 분석 보고서 |
 | 7 | USB-CDC 데이터 수집 + 저장 | Ex.09 + [xm10 도구](../getting-started/04-pc-data-tool.md) | 10 분 데이터 스트리밍 → .xmlog 저장 → CSV 로 뽑아 분석 |
 | 8 | **중간고사 / 프로젝트 1** | (자유) | "내 보드, 내 데이터" 미니 프로젝트 발표 |
 | 9 | KIT H10 외골격 기본 모드 | Ex.11 → 12 → 13 | 3 가지 모드 비교 영상 |
@@ -49,7 +49,7 @@ XM10 기능을 단계적으로 익힐 수 있도록 46 개 예제를 준비했�
 - 8 주차 미니 프로젝트는 사용자의 동기 유지에 효과적입니다. "Ex.05~09 까지 익힌 걸로 무엇이든" 같은 열린 주제로 운영하세요.
 - 16 주차 기말은 팀 단위 (3~4 명) 권장합니다. Physical AI 응용 트랙 (Ex.21, 31, 32, 33) 을 마지막에 깊이 다루는 팀이 보통 나옵니다.
 
-진도표에 빠진 예제 (Ex.05d, 15, 22, 24, 28~42) 는 자기주도 학습 또는 다음 학기 후속 과목용으로 남겨두는 것이 분량 면에서 자연스럽습니다.
+진도표에 빠진 예제 (Ex.05d, 15, 22, 24, 28~36, 38~43) 는 자기주도 학습 또는 다음 학기 후속 과목용으로 남겨두는 것이 분량 면에서 자연스럽습니다.
 
 ---
 
@@ -93,7 +93,7 @@ XM10 기능을 단계적으로 익힐 수 있도록 46 개 예제를 준비했�
 
 PC 와 실시간으로 메시지를 주고받고 데이터를 스트리밍합니다. 디버깅과 데이터 수집의 핵심.
 
-> **주의**: USB 시리얼 (CDC) 포트는 한 번에 한 프로그램만 점유 가능. Ex.07~09 는 시리얼 터미널 또는 PhAI Studio 중 하나만 열어둔 상태에서 실행하세요. 동시에 켜면 충돌합니다.
+> **주의**: USB 시리얼 (CDC) 포트는 한 번에 한 프로그램만 점유 가능. Ex.07~09 는 시리얼 터미널, PhAI Studio, `xm10` 도구 중 하나만 열어둔 상태에서 실행하세요. 동시에 켜면 충돌합니다.
 
 ### USB 시리얼 통신 — Ex.07 ~ 09
 
@@ -101,9 +101,9 @@ PC 와 실시간으로 메시지를 주고받고 데이터를 스트리밍합니
 | :---: | :--- | :---: | :--- |
 | [07](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/07_CDC_Basic_Print/) | USB 시리얼 기초 | ⭐⭐ | PC 터미널로 텍스트 메시지 |
 | [08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | 센서 데이터 모니터링 | ⭐⭐ | 실시간 데이터 sprintf 출력 |
-| [09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | 고속 바이너리 스트리밍 | ⭐⭐⭐ | PhAI Studio 호환 프로토콜, 1 kHz 전송 |
+| [09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | 고속 바이너리 스트리밍 | ⭐⭐⭐ | PhAI V2.2 프로토콜, 1 kHz 전송 (사용자 채널은 `xm10` 도구로 확인) |
 
-> 수집한 스트림을 PC 에 저장·분석하려면 PhAI Studio 녹화 또는 레포 내 `xm10` 도구를 사용하세요 — `python PythonDecoder/xm10.py recv` 로 그래프를 보면서 원본이 `.xmlog` 로 저장되고, `export` 로 CSV 를 뽑습니다 ([안내](../getting-started/04-pc-data-tool.md)). (온보드 파일 저장은 v2.5.0 에서 제거 — 향후 HW 리비전에서 SD카드로 지원 예정)
+> 수집한 스트림을 PC 에 저장·분석하려면 PhAI Studio 녹화 또는 레포 내 `xm10` 도구를 사용하세요 — `python PythonDecoder/xm10.py recv` 로 그래프를 보면서 원본이 `.xmlog` 로 저장되고, `export` 로 CSV 를 뽑습니다 ([안내](../getting-started/04-pc-data-tool.md)). PhAI Studio 는 아직 개발 중이라, `XM_SendUsbDataWithId` 로 보내는 직접 정의한 데이터 구조체(커스텀 구조체)는 우선 `xm10` 도구로 보고 저장하세요. (온보드 파일 저장은 v2.5.0 에서 제거되어 현재 지원하지 않습니다)
 
 ---
 
@@ -174,12 +174,14 @@ PC 와 실시간으로 메시지를 주고받고 데이터를 스트리밍합니
 | [33](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/33_Kinesthetic_Teaching/) | 직접 가르치기 + 재생 | ⭐⭐⭐ | 사람이 손으로 시연 → 보드가 그대로 재생 |
 | [35](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/35_MultiLayer_Transparent_Control/) | 다층 투명 제어 | ⭐⭐⭐ | 투명/벽/좌우 커플링 세 모드 실시간 전환 |
 | [36](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) | 보드 안에서 직접 학습 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 작은 신경망을 보드 위에서 학습 → LQR 재생 — Internal Flash UserNV API 가 Rev 2.0 만 지원 |
-| [37](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/37_FES_Hub_Module_Ctrl/) | FES Hub 모듈 제어 | ⭐⭐⭐ | CAN-FD 로 FES Hub 연결, 채널별 전기 자극 파라미터 제어 |
 | [38](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/38_Periodic_Background_Task/) | 주기적 백그라운드 태스크 | ⭐⭐ | 저주기 보조 작업 분리, 제어 루프 지터 최소화 |
 | [39](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/39_Task_Lifecycle/) | 태스크 생명주기 관리 | ⭐⭐⭐ | 태스크 생성·일시정지·종료, RTOS 태스크 상태 머신 패턴 |
-| [40](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/) | EMG 비례 보조 토크 🛑 **Rev 2.0 전용** | ⭐⭐⭐⭐ | 외부 ADC 4채널 EMG → envelope → 비례 토크, BTN 캘리브 + PhAI Studio 0xF0 스트리밍 (EMG 경진대회 토대) |
-| [41](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/) | IMU Hub 자세 대시보드 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 최대 6개 IMU 쿼터니언→오일러(r/p/y) 변환, 연결 자동감지 + PhAI Studio 0xF0 18채널(50Hz) 스트리밍 (FDCAN2 센서허브) |
-| [42](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/) | EMG Hub 바이오피드백 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 허브 처리 근활성도(envelope/MVC%) 수신, BTN 캘리브 + LED/PhAI Studio 0xF0 4채널(50Hz) 실시간 피드백 (FDCAN2 센서허브, 모터 미구동) |
+| [40](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/) | EMG 비례 보조 토크 🛑 **Rev 2.0 전용** | ⭐⭐⭐⭐ | 외부 ADC 4채널 EMG → envelope → 비례 토크, BTN 캘리브 + xm10 도구로 0xF0 스트리밍 (EMG 경진대회 토대) |
+| [41](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/) | IMU Hub 자세 대시보드 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 최대 6개 IMU 쿼터니언→오일러(r/p/y) 변환, 연결 자동감지 + xm10 도구로 0xF0 18채널(50Hz) 스트리밍 (CAN-FD 센서 허브) |
+| [42](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/) | EMG Hub 바이오피드백 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 허브 처리 근활성도(envelope/MVC%) 수신, BTN 캘리브 + LED 및 xm10 도구(0xF0 4채널, 50Hz)로 실시간 피드백 (CAN-FD 센서 허브, 모터 미구동) |
+| [43](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/) | 보드끼리 시리얼로 대화하기 🛑 **Rev 2.0 전용** | ⭐⭐ | External UART(PD5/PD6)로 XM10 2대를 직결해 통신 — 콜백은 복사만, 프레임 경계는 바이트 상태기계로 |
+
+> IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
 
 ---
 

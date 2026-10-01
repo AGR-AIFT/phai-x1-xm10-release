@@ -84,7 +84,7 @@ TSM에 새로운 상태의 동작을 등록합니다.
 
 ### `XM_TSM_Run`
 
-TSM을 실행합니다. **User Task의 무한 루프 내에서 반드시 호출**되어야 합니다.
+TSM을 실행합니다. **제어 루프 task (Control_Loop) 안에서 매 주기 반드시 호출**되어야 합니다.
 
   * **Parameters**
       * `XmTsmHandle_t handle`: 실행할 TSM 핸들

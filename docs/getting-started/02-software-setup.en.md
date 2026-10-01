@@ -85,8 +85,8 @@ After extraction, the following items should all be present:
 | `.project`, `.cproject`, `*.ld`, `startup_*.s` | CubeIDE project and build configuration |
 | `CLAUDE.md` | AI tool auto-guide entry point (revision-specific) |
 | `.claude/skills/` | Claude Code student onboarding and example troubleshooting skills |
-| `docs/`, `Examples/` | Learning documentation + hands-on examples (Rev 2.0: 50 / Rev 1.1: 47, excludes Ex.40–42) |
-| `Drivers/`, `XM_Apps/`, `XM_FW/` (includes `XM_API/`, `libXM_Lib.a`, `System/`, `Devices/`, `IOIF/`, `AGR_MW/`, `Services/`), `Core/` | SDK source code |
+| `docs/`, `Examples/` | Learning documentation + hands-on examples (Rev 2.0: 45 / Rev 1.1: 41, excludes Ex.40–43) |
+| `Drivers/`, `XM_Apps/`, `XM_FW/` (includes `XM_API/`, `libXM_Lib.a`), `Core/` | SDK source code — the other folders under `XM_FW/` are SDK libraries; do not modify them |
 | `Middlewares/`, `FATFS/`, `LWIP/` (Rev 2.0 only) | HAL / CMSIS / STM32 middleware |
 
 > 💡 If the top-level folder name inside the ZIP differs (e.g., `Extension_Module-Rev2.0/`), run `Get-ChildItem C:\dev\` to find the actual name and adjust subsequent paths accordingly. You can also rename it to `Extension_Module` with `Rename-Item` if needed.

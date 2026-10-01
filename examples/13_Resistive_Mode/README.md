@@ -105,7 +105,7 @@ static void Active_Exit(void)
 6. **슈트 AssistLevel 다이얼** 1 → 9 변경 → ✅ USB 로그에 `Level Changed: ... Gain: ...`
 7. **변형 1 — 게인 절대값 변경**: `RESISTIVE_GAIN` -6.0 → -3.0 (약함) 또는 -10.0 (강함).
 8. **변형 2 — 비선형 매핑**: `gain = -RESISTIVE_GAIN * sqrtf(current_level)` (Level 차이가 큰 구간에서 더 부드러움).
-9. **변형 3 — 최대 토크 제한 추가**: `XM_SetResistiveCompGain` 후 최대 토크 clipping 필요한 경우 H10 PDO 의 `leftHipTorque` 모니터링.
+9. **변형 3 — 최대 토크 제한 추가**: `XM_SetResistiveCompGain` 후 최대 토크 clipping 필요한 경우 H10 데이터의 `leftHipTorque` 모니터링.
 
 ---
 
@@ -113,7 +113,7 @@ static void Active_Exit(void)
 
 - 능동 의도 보조: [Ex.12 Active Assist](../12_Active_Assist_Mode/)
 - PD 토크 직접 제어 (사용자 알고리즘): [Ex.14 PD Realtime](../14_PD_Realtime_Control/)
-- 어드미턴스 제어 (힘 → 위치): [Ex.28 Admittance](../28_Admittance_Control/) (Phase 2D)
+- 어드미턴스 제어 (힘 → 위치): [Ex.28 Admittance](../28_Admittance_Control/)
 
 ---
 
@@ -125,7 +125,7 @@ static void Active_Exit(void)
 | 슈트 레벨 변경했는데 게인 미반영 | `s_prev_assist_level` 초기화 255 아님 (실제 레벨로 시작) | Active_Entry 에서 `s_prev_assist_level = 255` 호출 |
 | ACTIVE 나갈 때 저항 잔존 | `Active_Exit` 에서 게인 0 reset 누락 | Exit 호출 확인 (안전 핵심) |
 | 매 cycle USB 메시지 폭주 | 매 cycle 전송 (Event-driven X) | `if (current_level != prev)` 조건 확인 |
-| AssistLevel 가 항상 0 | H10 슈트 미연결 또는 PDO 읽기 실패 | CAN-FD 케이블 + 슈트 전원 |
+| AssistLevel 가 항상 0 | H10 슈트 미연결 또는 데이터 수신 실패 | CAN-FD 케이블 + 슈트 전원 |
 | 게인이 너무 강해 모터 진동 | `RESISTIVE_GAIN` 절대값 < -8 권장 | 사용자 안전 위해 절대값 작게 시작 |
 | 다리 정지 시에도 미세 진동 | `VELOCITY_THRESHOLD` 데드존 무시 (H10 내부 처리 의존) | H10 내장 deadzone 설정 확인 |
 

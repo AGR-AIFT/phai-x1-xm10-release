@@ -6,7 +6,7 @@
 > - 보행 속도 변화에 **자동 적응** — 위상 기반이므로 시간 무관.
 >
 > ⏱️ 권장 시간: 45분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.17 FSM Gait Intent](../17_FSM_Gait_Intent/) (FSM 단계 vs 연속 정현파) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)
+> 🧰 사전 예제: [Ex.17 FSM Gait Intent](../17_FSM_Gait_Intent/) (FSM 단계 vs 연속 정현파) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 > 📄 논문: Quinlivan, B. T., et al. (2017). *Assistance magnitude versus metabolic cost reductions.* Science Robotics, 2(2), eaah4416.
 
 ---
@@ -20,7 +20,7 @@ uint32_t bodyData[8] = { 700, 1750, 0, 0, 0, 0, 0, 0 };  // 70.0 kg, 175.0 cm
 XM_SendUserBodyData(bodyData);
 ```
 
-> [examples/README.md — Body Data 안내](../README.md#part-5)
+> [examples/README.md — Body Data 안내](../README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세)
 
 ---
 
@@ -35,7 +35,7 @@ XM_SendUserBodyData(bodyData);
 | 60~80% | 전·초기 유각기 | **−A·sin(π·(φ−0.6)/0.2)** | **굴곡 보조** (다리 들어올림) |
 | 80~100% | 말기 유각기 | 0 | 착지 준비 |
 
-USB CDC `GAIT | φ:0.45 A:2.0 τR:1.85 τL:-0.62` + PhAI 0xF0 5축.
+USB CDC `GAIT | φ:0.45 A:2.0 τR:1.85 τL:-0.62` + `xm10` 도구의 0xF0 4축 (Gait Phase / RH Torque / LH Torque / Fwd Velocity).
 
 > 📸 **보행 위상 토크 프로파일** — 사진·영상 준비 중
 
@@ -121,6 +121,8 @@ static void Active_Loop(void)
 ---
 
 ## 4️⃣ 실험 — 직접 해보기 (체크포인트)
+
+> 💡 PC 프로그램은 한 번에 하나만 연결하세요. 텍스트는 시리얼 터미널로, 0xF0 그래프는 `xm10` 도구로 보되 하나를 닫고 다음 것을 여세요. (터미널에 알 수 없는 글자가 섞여 보여도 정상입니다.) 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
 
 1. **Body Data 설정 확인** + 빌드/플래시 + ASSIST 진입
 2. **정지 상태** → ✅ τ = 0, `forwardVelocity < 0.1` 표시

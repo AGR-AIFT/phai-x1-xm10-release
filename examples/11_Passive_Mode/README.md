@@ -22,7 +22,7 @@ KIT H10 의 좌·우 고관절을 **±25.0 도 사이로 부드럽게 왕복** �
 | ACTIVE (Passive Cycle) | 0도 → +25° → −25° → +25° ... 무한 왕복 (속도 250 deg/s) |
 | ACTIVE Exit | H10 STANDBY 요청 시 모터 정지 → STANDBY 복귀 |
 
-PhAI Studio 로 H10 각도/토크/IMU 9-축 등 30+ 필드를 1 kHz 실시간 스트리밍 확인 가능.
+H10 각도/토크/IMU 9-축 등 30+ 필드를 자동 전송되는 Total Data (0x20) 로 PhAI Studio 에서 1 kHz 실시간 확인할 수 있습니다.
 
 > 📸 **H10 왕복 운동** — 사진·영상 준비 중
 
@@ -118,7 +118,7 @@ static void UpdatePassiveMode(void)
 3. **CM 연결 확인** → ✅ OFF → STANDBY 자동 전환 (LED 변화 없음)
 4. **H10 슈트 버튼** 으로 ASSIST 모드 진입 → ✅ Homing 시작 (0도로 정렬)
 5. **Homing 완료** → ✅ Passive 왕복 운동 시작 (±25도, 1초당 한쪽 운동)
-6. **PhAI Studio 로 실시간 데이터 확인** (또는 Ex.09 CDC 방식으로 PC 수신)
+6. **PhAI Studio 로 실시간 데이터 확인** (직접 정의한 구조체를 따로 보내 보려면 [Ex.09](../09_CDC_Stream/) 방식 + `xm10` 도구)
 7. **H10 STANDBY 복귀** → ✅ 부드럽게 정지 + STANDBY 상태 복귀
 8. **변형 1 — ROM 변경**: `JOINT_ANGLE_MAX/MIN_ANGLE_INT16` 값 (250 = 25.0°) 을 100 (10°) 또는 400 (40°) 로 변경.
 9. **변형 2 — 속도 변경**: `PM_SPEED_RH/LH` 250 → 100 (느림) 또는 400 (빠름).
@@ -143,7 +143,7 @@ static void UpdatePassiveMode(void)
 | 왕복이 끊김 (도착점에서 멈춤) | Pre-queue 패턴 누락 — 다음 PVector 송신 안 됨 | `START_MOTION` 에서 [1]+[2] 둘 다 송신 |
 | H10 가 안 움직임 | `XM_SetControlMode(XM_CTRL_MONITOR)` 만 호출됨 | Active 진입 시 별도 모드 설정 X — H10 슈트가 ASSIST 모드 요청해야 함 |
 | 모터가 ROM 끝에서 충돌음 | 가속도 `s0/sd` 너무 큼 | 1~2 권장. 큰 값은 도착 시 급정지 |
-| PhAI Studio 데이터 안 보임 | USB-C 미연결 또는 스트림 소스 미등록 | `XM_SetUsbStreamSource` 확인 |
+| PhAI Studio 데이터 안 보임 | USB-C 미연결 / 다른 프로그램이 COM 포트 점유 / Studio 에서 Connect 안 함 | 포트 선택 → **Connect** (Total Data 0x20 은 포트를 열면 자동으로 흐릅니다) |
 | CM 연결 끊김 → 폭주 우려 | OFF 강제 전환으로 안전 | `XM_IsCmConnected()` 가 false 일 때 모든 cycle 첫 줄에서 OFF 전환 |
 | 슈트 STANDBY 복귀 시 H10 잔진동 | `MODE_TRANSITION_*` FSM 미동작 | STOP_PENDING → STOP_COMPLETED → DELAYING 단계 진행 확인 |
 

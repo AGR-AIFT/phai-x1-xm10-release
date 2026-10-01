@@ -84,7 +84,7 @@ Registers a new state and its behavior with the TSM.
 
 ### `XM_TSM_Run`
 
-Runs the TSM. **Must be called inside the infinite loop of your User Task every cycle.**
+Runs the TSM. **Must be called every cycle inside the control-loop task (Control_Loop).**
 
   * **Parameters**
       * `XmTsmHandle_t handle`: TSM handle to run

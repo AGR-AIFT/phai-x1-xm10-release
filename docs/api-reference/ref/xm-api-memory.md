@@ -54,7 +54,7 @@ RAM_D1 영역에 마련된 사용자 워크스페이스의 시작 주소를 반�
 |--------|------|
 | `void*` | 연속 메모리 블록의 시작 주소 |
 
-**⚠️ 호출 컨텍스트**: 헤더에 별도 제약이 명시되어 있지 않습니다. `Control_Setup()`/`Control_Loop()` 컨텍스트 기준으로 작성되었으며, 보통 `Control_Setup()`에서 포인터를 한 번 받아 전역/정적 포인터에 저장해두고 이후 `Control_Loop()`에서 재사용하는 방식을 권장합니다.
+**⚠️ 호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 보통 `Control_Setup()`에서 포인터를 한 번 받아 전역/정적 포인터에 저장해두고 이후 `Control_Loop()`에서 재사용하는 방식을 권장합니다.
 
 ```c
 static float* s_work_buf;
@@ -96,7 +96,7 @@ DTCMRAM 안의 사용자 변수 영역 시작 주소를 반환합니다. 480MHz�
 |--------|------|
 | `void*` | DTCM 연속 메모리 블록의 시작 주소 |
 
-**⚠️ 호출 컨텍스트**: 헤더에 별도 제약이 명시되어 있지 않습니다. `Control_Setup()`/`Control_Loop()` 컨텍스트 기준으로 작성되었습니다. 이 블록에 DMA 버퍼를 두지 마세요 — DMA 컨트롤러가 DTCM 주소 공간에 접근할 수 없습니다.
+**⚠️ 호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 이 블록에 DMA 버퍼를 두지 마세요 — DMA 컨트롤러가 DTCM 주소 공간에 접근할 수 없습니다.
 
 **참고**: [07. 메모리 영역 — DTCM API](../07-memory-management.md#dtcm-api)
 
@@ -149,7 +149,7 @@ Flash User NV 영역에서 데이터를 읽어 `data` 버퍼에 채웁니다.
 | `0` | 성공 |
 | `-1` | 파라미터 오류 (`offset + size` > NV 크기) |
 
-**⚠️ 호출 컨텍스트**: 헤더에 별도 제약이 명시되어 있지 않습니다. `Control_Setup()`/`Control_Loop()` 컨텍스트 기준으로 작성되었으며, 보통 부팅 시 `Control_Setup()`에서 1회 호출하는 패턴을 권장합니다.
+**⚠️ 호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 보통 부팅 시 `Control_Setup()`에서 1회 호출하는 패턴을 권장합니다.
 
 **참고**: [`XM_UserNV_IsErased()`](#xm_usernv_iserased)로 유효한 데이터가 있는지 먼저 확인하는 것이 안전합니다 — Erase 직후에는 전체가 `0xFF`입니다.
 
@@ -177,7 +177,7 @@ Flash User NV 영역에 데이터를 기록합니다.
 | `-1` | 파라미터 오류 |
 | `-2` | Flash 프로그래밍 실패 |
 
-**⚠️ 호출 컨텍스트**: 헤더에 별도 제약이 명시되어 있지 않습니다. `Control_Setup()`/`Control_Loop()` 컨텍스트 기준으로 작성되었습니다. 다만 아래 두 가지는 헤더에 명시된 제약이므로 반드시 지켜야 합니다.
+**⚠️ 호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 다만 아래 두 가지 제약은 반드시 지켜야 합니다.
 
 - Flash는 **Erase 후에만 Write 가능**합니다 (1→0만 가능, 0→1 불가). 새 데이터를 쓰기 전 [`XM_UserNV_Erase()`](#xm_usernv_erase)를 먼저 호출하세요.
 - STM32H7 Flash는 32바이트(256-bit) 단위로 기록되며, `offset`이 정렬되지 않으면 자동으로 정렬 후 기록합니다.
@@ -232,7 +232,7 @@ Flash User NV 영역 전체가 비어있는 상태(전체 `0xFF`, Erase 직후)�
 | `true` | 전체 영역이 `0xFF` (Erase 직후 상태) |
 | `false` | 데이터가 존재하거나 부분적으로 기록됨 |
 
-**⚠️ 호출 컨텍스트**: 헤더에 별도 제약이 명시되어 있지 않습니다. `Control_Setup()`/`Control_Loop()` 컨텍스트 기준으로 작성되었습니다. 보통 `XM_UserNV_Read()`로 값을 불러오기 전에, 유효한 데이터가 저장되어 있는지 미리 확인하는 가드로 사용합니다 (또는 읽은 뒤 magic number 필드로 검증하는 방식도 가능).
+**⚠️ 호출 컨텍스트**: Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요. 보통 `XM_UserNV_Read()`로 값을 불러오기 전에, 유효한 데이터가 저장되어 있는지 미리 확인하는 가드로 사용합니다 (또는 읽은 뒤 magic number 필드로 검증하는 방식도 가능).
 
 ---
 

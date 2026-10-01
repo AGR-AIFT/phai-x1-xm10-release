@@ -68,13 +68,13 @@ New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name
 
 ---
 
-### IOIF 매크로 재정의 경고
+### `redefined` 경고 (Rev 1.1 SDK, CMake 빌드)
 
-**증상:** `warning: "AGRB_IOIF_FDCAN_ENABLE" redefined` 등의 경고 (Rev 1.1 SDK 를 CMake 로 빌드할 때 발생 — STM32CubeIDE 빌드나 Rev 2.0 SDK 에서는 나타나지 않습니다)
+**증상:** `warning: "AGRB_IOIF_FDCAN_ENABLE" redefined` 처럼 `..._ENABLE` 이름의 값이 다시 정의되었다는 경고 (Rev 1.1 SDK 를 CMake 로 빌드할 때만 나타납니다 — STM32CubeIDE 빌드나 Rev 2.0 SDK 에서는 나타나지 않습니다)
 
-**원인:** `AGRB_IOIF_*_ENABLE` 매크로가 `CMakeLists.txt` 의 매크로 정의 블록(`target_compile_definitions`)과 `ioif_conf.h` 양쪽에서 중복 정의
+**원인:** SDK 안에서 같은 설정 값이 두 군데에 정의되어 있어서 나오는 경고입니다.
 
-**해결:** `CMakeLists.txt` 의 `target_compile_definitions` 블록에서 `AGRB_IOIF_*` 관련 정의를 제거하고, `ioif_conf.h`에서만 관리하세요. 경고 자체는 동작에 영향을 주지 않지만, 제거하는 것이 깔끔합니다.
+**해결:** 동작에는 영향이 없으니 **무시해도 됩니다.** STM32CubeIDE 로 빌드하면 나타나지 않습니다.
 
 ---
 
@@ -128,7 +128,7 @@ control_task.c:(.text.Active_Loop+0x292): undefined reference to `XM_UserNV_Writ
 collect2.exe: error: ld returned 1 exit status
 ```
 
-**원인:** Ex.36 은 학습된 NN 가중치를 전원 OFF/ON 사이에 보존하기 위해 Internal Flash UserNV API (`XM_UserNV_Read/Write/Erase`) 를 사용합니다. 이 API 는 **Rev 2.0 SDK 의 `libXM_Lib.a` 에만 포함**되어 있고 Rev 1.1 lib 에는 아직 이식되지 않았습니다.
+**원인:** Ex.36 은 학습된 NN 가중치를 전원 OFF/ON 사이에 보존하기 위해 Internal Flash UserNV API (`XM_UserNV_Read/Write/Erase`) 를 사용합니다. 이 API 는 **Rev 2.0 SDK 의 `libXM_Lib.a` 에만 포함**되어 있고 Rev 1.1 lib 에는 없습니다.
 
 **해결:**
 - **본인 보드가 Rev 2.0** → Rev 2.0 SDK ZIP 으로 다시 import 후 빌드.
@@ -163,9 +163,11 @@ collect2.exe: error: ld returned 1 exit status
 ### 센서 허브 모듈 연동 오류
 
 **체크리스트:**
-1. 센서 허브 모듈의 CAN 주소(Node ID)가 충돌하지 않는지 확인
-2. AGR PnP V2를 통한 디바이스 검색이 정상 수행되는지 확인
+1. 센서 허브 모듈의 전원과 CAN-FD 케이블이 제대로 연결되었는지 확인
+2. 센서 허브가 XM10 에 자동으로 인식(연결)되는지 확인
 3. 센서 허브 모듈의 펌웨어 버전이 XM10 SDK와 호환되는지 확인
+
+> IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
 
 ---
 
@@ -259,9 +261,11 @@ if (pressed) { /* 1회만 실행 */ }
 
 ### USB / 통신 함정
 
-#### USB-CDC 메시지가 PhAI Studio 또는 터미널에 안 보임
+#### USB-CDC 텍스트 메시지가 터미널에 안 보임
 
-**원인 1:** 다른 시리얼 클라이언트가 동일 COM 포트 점유 (PhAI Studio + PuTTY 동시 실행)
+`XM_SendUsbDebugMessage` 로 보낸 텍스트는 일반 시리얼 터미널에서 읽는 용도입니다.
+
+**원인 1:** 다른 PC 프로그램이 동일 COM 포트 점유 (PhAI Studio · `xm10` 도구 · 다른 터미널 — PC 프로그램은 한 번에 하나만 연결하세요)
 
 **원인 2:** USB-C 케이블이 데이터 전송 불가 (충전 전용)
 
@@ -284,7 +288,7 @@ if (pressed) { /* 1회만 실행 */ }
 
 **원인:** Body Data 전제조건 미충족 — `XM_SendUserBodyData()` 미호출
 
-**해결:** [examples/README.md — Body Data 안내](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5) 참조.
+**해결:** [examples/README.md — Body Data 안내](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세) 참조.
 
 #### `SetAssistTorque` 호출했는데 H10 안 움직임
 

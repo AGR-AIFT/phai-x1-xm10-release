@@ -68,13 +68,13 @@ Or via Group Policy:
 
 ---
 
-### IOIF Macro Redefinition Warnings
+### `redefined` Warnings (Rev 1.1 SDK, CMake build)
 
-**Symptom:** Warnings such as `warning: "AGRB_IOIF_FDCAN_ENABLE" redefined` (occurs when building the Rev 1.1 SDK with CMake — it does not appear with STM32CubeIDE builds or with the Rev 2.0 SDK)
+**Symptom:** Warnings such as `warning: "AGRB_IOIF_FDCAN_ENABLE" redefined`, saying a `..._ENABLE` value was defined again (appears only when building the Rev 1.1 SDK with CMake — it does not appear with STM32CubeIDE builds or with the Rev 2.0 SDK)
 
-**Cause:** `AGRB_IOIF_*_ENABLE` macros are defined in both the macro-definitions block (`target_compile_definitions`) in `CMakeLists.txt` and in `ioif_conf.h`.
+**Cause:** The same setting is defined in two places inside the SDK, which triggers the warning.
 
-**Resolution:** Remove the `AGRB_IOIF_*` definitions from the `target_compile_definitions` block in `CMakeLists.txt` and manage them exclusively in `ioif_conf.h`. These warnings do not affect behavior, but eliminating them keeps the build output clean.
+**Resolution:** It does not affect behavior, so you can **safely ignore it.** It does not appear when you build with STM32CubeIDE.
 
 ---
 
@@ -128,7 +128,7 @@ control_task.c:(.text.Active_Loop+0x292): undefined reference to `XM_UserNV_Writ
 collect2.exe: error: ld returned 1 exit status
 ```
 
-**Cause:** Ex.36 uses the Internal Flash UserNV API (`XM_UserNV_Read/Write/Erase`) to persist trained NN weights across power cycles. This API is **only included in the Rev 2.0 SDK's `libXM_Lib.a`** and has not yet been backported to the Rev 1.1 library.
+**Cause:** Ex.36 uses the Internal Flash UserNV API (`XM_UserNV_Read/Write/Erase`) to persist trained NN weights across power cycles. This API is **only included in the Rev 2.0 SDK's `libXM_Lib.a`** and is not in the Rev 1.1 library.
 
 **Resolution:**
 - **If your board is Rev 2.0** → Re-import the Rev 2.0 SDK ZIP and rebuild.
@@ -163,9 +163,11 @@ collect2.exe: error: ld returned 1 exit status
 ### Sensor Hub Module Integration Error
 
 **Checklist:**
-1. Verify there are no Node ID conflicts among sensor hub modules
-2. Confirm device discovery via AGR PnP V2 completes successfully
+1. Verify the sensor hub module is powered and its CAN-FD cable is firmly connected
+2. Confirm the sensor hub is detected (connected) by the XM10 automatically
 3. Check that the sensor hub module firmware version is compatible with the XM10 SDK
+
+> The IMU Hub and EMG Hub are modules under internal development. To use them, please contact us at https://huphailab.com/contact.
 
 ---
 
@@ -259,9 +261,11 @@ Alternatively, use the read-clear behavior of `XM_GetButtonEvent()` (see Ex.02).
 
 ### USB / Communication Pitfalls
 
-#### USB-CDC Messages Not Visible in PhAI Studio or a Terminal
+#### USB-CDC Text Messages Not Visible in a Terminal
 
-**Cause 1:** Another serial client is holding the same COM port open (e.g., PhAI Studio and PuTTY running simultaneously)
+Text sent with `XM_SendUsbDebugMessage` is meant to be read in a plain serial terminal.
+
+**Cause 1:** Another PC program is holding the same COM port open (PhAI Studio, the `xm10` tool, another terminal — connect only one PC program at a time)
 
 **Cause 2:** The USB-C cable is charge-only and cannot transfer data
 
@@ -284,7 +288,7 @@ Alternatively, use the read-clear behavior of `XM_GetButtonEvent()` (see Ex.02).
 
 **Cause:** The prerequisite body parameters have not been provided — `XM_SendUserBodyData()` has not been called.
 
-**Resolution:** See [examples/README.md — Body Data guide](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5).
+**Resolution:** See [examples/README.md — Body Data guide](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세).
 
 #### Called `SetAssistTorque` but KIT H10 Does Not Move
 

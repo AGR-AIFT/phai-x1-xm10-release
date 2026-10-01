@@ -156,7 +156,7 @@ Reads an ADC pin's voltage as a normalized integer value. The function automatic
 
 **Returns**: Normalized ADC value (0~65535 by default, range depends on the configured output resolution). `0` on an invalid pin.
 
-> `XM_EXT_ADC_5` ~ `_12` (the ADC3 group) only return valid values after being switched via [`XM_SwitchDioToAdc()`](#xm_switchdiotoadc). Reading before the switch returns `0` (indistinguishable from a genuine 0V reading); on Rev2.0 this condition can be checked via the [`g_xm_adc_read_before_switch`](#diagnostic-global-variable-🟢-rev-20-only) diagnostic variable.
+> `XM_EXT_ADC_5` ~ `_12` (the ADC3 group) only return valid values after being switched via [`XM_SwitchDioToAdc()`](#xm_switchdiotoadc). Reading before the switch returns `0` (indistinguishable from a genuine 0V reading); on Rev2.0 this condition can be checked via the [`g_xm_adc_read_before_switch`](#diagnostic-global-variable--rev-20-only) diagnostic variable.
 
 **⚠️ Calling context**: Assume `Control_Setup()` / `Control_Loop()` context. This is a read-only query, so it is safe to call repeatedly inside the 1ms loop.
 
@@ -222,7 +222,7 @@ Sets the output resolution of `XM_AnalogRead()`'s return value (compatible with 
 
 **Returns**: None (`void`). Default is 16.
 
-**⚠️ Calling context**: The header does not state any real-time restriction. The setting applies globally to every subsequent `XM_AnalogRead()` call, so it's generally recommended to call this once in `Control_Setup()`.
+**⚠️ Calling context**: Call it once in `Control_Setup()`, not from an ISR. The setting applies globally to every subsequent `XM_AnalogRead()` call.
 
 **Example**
 
@@ -441,7 +441,7 @@ void Control_Setup(void) {
 }
 ```
 
-**See also**: [`XmExtPwrVoltage_t`](#xmextpwrvoltage_t-🟢-rev-20-only), [40_EMG_Proportional_Assist example](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/)
+**See also**: [`XmExtPwrVoltage_t`](#xmextpwrvoltage_t--rev-20-only), [40_EMG_Proportional_Assist example](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/)
 
 ---
 
@@ -471,7 +471,7 @@ Attaches an external Xsens MTi-630 IMU sensor to the External UART port. Call it
 
 > ⚠️ **Revision-specific behavior** — the function signature and user code are identical across both revisions, but the underlying hardware port they attach to differs.
 > - **Rev 2.0**: Attaches to a dedicated USART2 port (PD5=TX, PD6=RX, 921600bps). No resource conflict with any ADC/DIO pin currently in use.
-> - **Rev 1.1**: Attaches by dynamically switching PA0/PA1 to UART4 (internally calls `ExternalIO_SwitchToUartMode`). After this call, `XM_EXT_ADC_1`/`XM_EXT_ADC_3` (PA0/PA1) can no longer be used as ADC — use `XM_EXT_ADC_2`/`XM_EXT_ADC_4` (PA0_C/PA1_C) instead. If not called, PA0/PA1 remain available as ADC.
+> - **Rev 1.1**: Attaches by switching PA0/PA1 to UART4 internally and dynamically. After this call, `XM_EXT_ADC_1`/`XM_EXT_ADC_3` (PA0/PA1) can no longer be used as ADC — use `XM_EXT_ADC_2`/`XM_EXT_ADC_4` (PA0_C/PA1_C) instead. If not called, PA0/PA1 remain available as ADC.
 
 **Parameters**: None
 

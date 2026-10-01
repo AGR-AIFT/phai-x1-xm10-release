@@ -13,7 +13,7 @@ Claude Code 에 다음 중 하나를 입력하세요:
 - `"XM10 시작하려고 해"`
 - `"/student-onboard"`
 
-→ AI 가 **STM32CubeIDE 설치 확인 → 프로젝트 Import → 빌드 → 플래시 → LED 점등** 까지 6 단계로 자동 안내합니다 (Phase 1 은 Studio 안내로 이미 완료된 경우 건너뜀).
+→ AI 가 **STM32CubeIDE 설치 확인 → 프로젝트 Import → 빌드 → 플래시 → LED 점등** 까지 6 단계로 자동 안내합니다 (CubeIDE 가 이미 설치되어 있으면 Phase 1 은 건너뜁니다).
 
 Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](docs/getting-started/00-claude-code-quickstart.md) 의 수동 절차를 따라가세요.
 
@@ -37,25 +37,28 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 | 항목 | Rev 1.1 (이 SDK) | Rev 2.0 (참고) |
 |------|-----------------|---------------|
-| **CAN-FD** | ✅ FDCAN1 / FDCAN2 | ✅ |
+| **CAN-FD** | ✅ 2 채널 | ✅ |
 | **Ethernet (RJ45)** | ❌ **미탑재** | ✅ LWIP 미들웨어 포함 |
 | **PSRAM** | ❌ 없음 | ✅ 외부 PSRAM |
 | **RTC** | ❌ 배터리 백업 없음 | ✅ 내장 RTC + 배터리 백업 |
 | **USB Type-C** | A-to-C 케이블 필요 (C-to-C 직결 **미지원**) | ✅ C-to-C 직결 지원 |
 | **RAM_D2 여유** | **99.21% 사용 — 위험** | 충분 |
-| **FDCAN2 센서허브 (IMU/EMG Hub)** | ❌ 미지원 | ✅ Ex.41/42 지원 |
+| **CAN-FD 센서 허브 (IMU/EMG Hub)** | ❌ 미지원 | ✅ Ex.41/42 지원 |
+
+> IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
 
 **Rev 1.1 의 비활성 영역**:
 - `LWIP/` 미들웨어 → 본 SDK 에는 **포함되지 않음** (Rev 2.0 전용)
 - PSRAM / RTC 페리페럴 코드 → 본 SDK 에는 **없음**
-- FDCAN2 센서허브 버스 (IMU/EMG Hub, Ex.41/42) 미지원
+- CAN-FD 센서 허브 (IMU/EMG Hub, Ex.41/42) 미지원
 
 코드 작성 시 Ethernet/PSRAM/RTC 관련 함수를 호출하면 빌드 실패 또는 링크 에러가 납니다.
 
 예제 관련:
-- **Ex.40 · 41 · 42** — Rev 2.0 전용이라 본 SDK 에 아예 들어 있지 않습니다.
+- 이 SDK 에는 예제 41 개가 들어 있습니다.
+- **Ex.40 · 41 · 42 · 43** — Rev 2.0 전용이라 본 SDK 에 아예 들어 있지 않습니다.
 - **Ex.36** — 파일은 들어 있지만 Rev 2.0 전용입니다. 빌드하면 link 실패하므로 Ex.35 까지 진행하세요 (예제 헤더에도 같은 안내가 있습니다).
-- 그 외 39 개는 Rev 1.1 에서 정상 동작합니다.
+- 그 외 40 개는 Rev 1.1 에서 정상 동작합니다.
 
 ### ⚠️ Rev 1.1 특히 주의할 점
 
@@ -72,7 +75,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 **3. 온보드 저장장치 없음**
 - SD카드 슬롯이 없습니다.
 - 데이터 수집은 **USB-CDC 실시간 스트리밍**으로 합니다 (PhAI Studio 녹화 또는
-  `PythonDecoder/CDC` 파이썬 샘플). 배우는 순서는 Ex.07 → 08 → 09.
+  `xm10` 도구 — `PythonDecoder/`). 배우는 순서는 Ex.07 → 08 → 09.
 
 ---
 
@@ -121,13 +124,13 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
    - 권장: `C:\dev\Extension_Module\`. 비권장: `C:\Users\홍길동\내 폴더\Extension_Module\`.
 
 2. **USB-CDC 포트 단일 점유**
-   - PhAI Studio 와 시리얼 터미널 (PuTTY, RealTerm 등) 을 같은 COM 포트로 **동시에 열지 마세요**.
-   - 같은 COM 포트 충돌 → 접속 실패 / 데이터 손실. (`examples/07~09` 헤더 `@warning` 참조)
+   - **PC 프로그램(PhAI Studio · xm10 도구 · 시리얼 터미널)은 한 번에 하나만 연결하세요.** 같이 열면 접속 실패나 데이터 손실이 납니다. (`examples/07~09` 헤더 `@warning` 참조)
 
 3. **사용자 코드 영역**
    - 사용자가 수정하는 곳: `XM_Apps/Control_Task/` 또는 `examples/<번호>_<이름>/*.c`
    - 라이브러리 (`XM_FW`, `XM_FW/libXM_Lib.a`, `Drivers/`, `Middlewares/`, `Compatible/`) 는 **봉인** — 수정 시 SDK 일관성 깨짐.
-   - 알고리즘 출력을 PhAI Studio 에서 실시간으로 보고 싶다면 `xm_api_user_custom.h` 의 `XM_UserCustom_SetFloat/SetI16/SetFlag` 로 1kHz 스트리밍 + 녹화용 커스텀 슬롯에 값을 쓸 수 있습니다.
+   - 알고리즘 값 몇 개는 `xm_api_user_custom.h` 의 `XM_UserCustom_SetFloat/SetI16/SetFlag` 로 쓰면 Total Data 에 실려 1kHz 로 자동 전송됩니다 (PhAI Studio 에서 그래프·녹화, `xm10` 도구에서 표·CSV).
+   - 직접 정의한 데이터 구조체(커스텀 구조체)는 `XM_SendUsbDataWithId` 로 보냅니다. PhAI Studio 는 아직 개발 중이라, 우선 `xm10` 도구로 보고 저장하세요.
 
 4. **HW Rev 호환**
    - 본 SDK 는 **Rev 1.1 전용** 입니다. Rev 2.0 보드에 본 SDK 빌드 결과물을 플래시하지 마세요 (페리페럴 동작 안 함).
@@ -147,9 +150,8 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 | 도구 | 역할 | XM10 과의 관계 |
 |------|------|---------------|
-| **PhAI Studio** | 실시간 데이터 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
-| **angel Sensor Studio** | 진단/검증 GUI (Python/PySide6, 별도 배포) | FES/EMG/IMU Hub 등 — XM10 과 CAN-FD 로 연계 가능 |
-| **PythonDecoder** | USB-CDC 실시간 수신 파이썬 샘플 | 본 ZIP 에는 포함되지 않음 — [GitHub 레포](https://github.com/AGR-AIFT/phai-x1-xm10-release) 의 `PythonDecoder/CDC/` 에서 별도로 받으세요 |
+| **PhAI Studio** | Total Data(시스템 데이터) 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
+| **xm10 PC 도구** (`PythonDecoder/xm10.py`) | 실시간 그래프 + 무손실 저장(.xmlog) + CSV 내보내기. `demo` 로 보드 없이 체험, `build_exe.py` 로 실행파일 | 본 ZIP 에 들어 있음 — [안내](docs/getting-started/04-pc-data-tool.md) |
 
 ---
 

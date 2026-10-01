@@ -29,9 +29,7 @@ Use the photo above to locate the external GPIO header (DIO 8 + ADC 4) on the Re
 
 **Electrical specifications**:
 - Input / Output: 3.3 V logic
-- Output current: <!-- fill in from board spec -->
 - Internal pull-up / pull-down resistors: supported (select via `XM_SetPinMode`)
-- 5 V tolerant: <!-- verify from board spec and fill in -->
 
 ---
 
@@ -73,8 +71,6 @@ Switching a DIO pin to ADC mode at runtime gives you up to 12 ADC channels. Call
 ## Notes on External IMU Usage
 
 Activating an external IMU (e.g., XSENS MTi) via `XM_AttachXsensMTi630()` reassigns some pins to UART.
-
-<!-- fill in the exact pins occupied when the IMU is activated on Rev 1.1 -->
 
 > For activation details, see [External IO API — External IMU Control](../api-reference/04-external-io.md#35-외부-imu-제어)
 

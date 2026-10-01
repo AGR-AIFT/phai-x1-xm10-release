@@ -1,12 +1,12 @@
 # Advanced Topics
 
-A starting point for self-directed learning. This page gives you a bird's-eye view of which examples to tackle first based on your area of interest, and which topics are still on the roadmap. Skim Examples 16, 18, and 19 along with the API Reference before diving in — that will give you the right mental model.
+A starting point for self-directed learning. This page gives you a bird's-eye view of which examples to tackle first based on your area of interest. Skim Examples 16, 18, and 19 along with the API Reference before diving in — that will give you the right mental model.
 
 ---
 
 ## Jump Right In with Examples
 
-The advanced topics below already have hands-on examples ready to run in the `examples/` folder.
+The advanced topics below have hands-on examples ready to run in the `examples/` folder.
 
 | Topic | Example | Description |
 | :--- | :--- | :--- |
@@ -16,43 +16,6 @@ The advanced topics below already have hands-on examples ready to run in the `ex
 | **PD Control Theory** | [Ex.14 — PD Realtime Control](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/14_PD_Realtime_Control/) | Discrete-time PD control implemented from first principles |
 | **System Debugging** | [Ex.18 — Debug Monitor](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/18_Debug_Monitor/) | Loop profiling + health dashboard |
 | **Memory Patterns** | [Ex.19 — Memory Aware Design](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/19_Memory_Aware_Design/) | Ring buffer, pool allocator, moving average |
-
----
-
-## Roadmap
-
-### Sensor Hub Integration
-
-| Topic | Description |
-| :--- | :--- |
-| Advanced DIO ↔ ADC Dynamic Switching | Internal mechanics and advanced patterns for runtime pin-mode switching |
-| Custom Sensor Hub Development | Designing and integrating a user-defined CAN-FD sensor hub module |
-| IMU Hub Module Usage | IMU Hub Module data structures, calibration, and filtering |
-
-### Communication Protocol Deep Dive
-
-| Topic | Description |
-| :--- | :--- |
-| USB Serial Protocol Specification | Packet header (SOF, CRC8, STATUS) and custom payload structure |
-| CAN-FD Data Objects | Standard data exchange rules between KIT H10 and XM10 |
-| Module Auto-Discovery | Automatic sensor hub / module detection and configuration flow |
-
-### Advanced Projects
-
-| Topic | Description | Status |
-| :--- | :--- | :---: |
-| TinyML on STM32 | Lightweight AI model training and inference pipeline on STM32H7 | ✅ [Ex.16](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) |
-| Paper-Based Gait Control | Inverted-pendulum model gait assist algorithm | ✅ [Ex.15](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/15_Inverted_Pendulum_Control/) |
-| Reinforcement Learning Control | RL pipeline integrating Jetson series with XM10 | Roadmap |
-| AI Training Data Pipeline | Board data collection → conversion → PyTorch training → deployment | ✅ [ai-data-pipeline.md](ai-data-pipeline.md) |
-
-### Python Tooling Deep Dive
-
-| Topic | Description |
-| :--- | :--- |
-| CDC Receiver Customization | Configuring custom sensor data visualization |
-| USB-CDC Stream Channel Design | Designing efficient user-defined data structures |
-| Data Post-Processing Pipeline | Analysis workflow using Python + MATLAB |
 
 ---
 

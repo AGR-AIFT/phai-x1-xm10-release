@@ -156,7 +156,7 @@ ADC 핀의 전압을 정규화된 정수 값으로 읽습니다. ADC1/2/3 중 �
 
 **반환값**: 정규화된 ADC 값 (기본 0~65535, 출력 해상도에 따라 범위 변경). 잘못된 핀이면 `0`.
 
-> `XM_EXT_ADC_5` ~ `_12` (ADC3 그룹) 은 [`XM_SwitchDioToAdc()`](#xm_switchdiotoadc) 로 먼저 전환해야 유효한 값을 반환합니다. 전환 전에 읽으면 `0`이 반환되며(유효한 0V 값과 구분 불가), Rev2.0 에서는 이 상황을 [`g_xm_adc_read_before_switch`](#진단용-전역-변수-🟢-rev-20-전용) 진단 변수로 확인할 수 있습니다.
+> `XM_EXT_ADC_5` ~ `_12` (ADC3 그룹) 은 [`XM_SwitchDioToAdc()`](#xm_switchdiotoadc) 로 먼저 전환해야 유효한 값을 반환합니다. 전환 전에 읽으면 `0`이 반환되며(유효한 0V 값과 구분 불가), Rev2.0 에서는 이 상황을 [`g_xm_adc_read_before_switch`](#진단용-전역-변수--rev-20-전용) 진단 변수로 확인할 수 있습니다.
 
 **⚠️ 호출 컨텍스트**: `Control_Setup()` / `Control_Loop()` 컨텍스트 기준. 읽기 전용 조회이므로 1ms 루프 안에서 반복 호출해도 무방합니다.
 
@@ -222,7 +222,7 @@ void XM_SetAnalogReadResolution(uint8_t bits);
 
 **반환값**: 없음 (`void`). 기본값 16.
 
-**⚠️ 호출 컨텍스트**: 헤더에 별도의 실시간 제약이 명시되어 있지 않습니다. 설정값이 이후의 모든 `XM_AnalogRead()` 호출에 전역으로 적용되므로, 일반적으로 `Control_Setup()` 에서 한 번만 호출하는 것을 권장합니다.
+**⚠️ 호출 컨텍스트**: `Control_Setup()` 에서 한 번만 호출하세요. ISR 에서는 호출하지 마세요. 설정값이 이후의 모든 `XM_AnalogRead()` 호출에 전역으로 적용됩니다.
 
 **예제**
 
@@ -441,7 +441,7 @@ void Control_Setup(void) {
 }
 ```
 
-**참고**: [`XmExtPwrVoltage_t`](#xmextpwrvoltage_t-🟢-rev-20-전용), [40_EMG_Proportional_Assist 예제](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/)
+**참고**: [`XmExtPwrVoltage_t`](#xmextpwrvoltage_t--rev-20-전용), [40_EMG_Proportional_Assist 예제](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/40_EMG_Proportional_Assist/)
 
 ---
 
@@ -470,7 +470,7 @@ void XM_AttachXsensMTi630(void);
 
 > ⚠️ **Rev 별 동작 차이** — 함수 시그니처·사용자 코드는 두 리비전에서 동일하지만, 내부적으로 결합되는 하드웨어 포트가 다릅니다.
 > - **Rev 2.0**: 전용 USART2 포트(PD5=TX, PD6=RX, 921600bps)에 결합됩니다. 기존에 쓰던 ADC/DIO 핀과 자원 충돌이 없습니다.
-> - **Rev 1.1**: PA0/PA1 을 UART4 로 동적 전환해 결합합니다(`ExternalIO_SwitchToUartMode` 내부 호출). 호출 후 `XM_EXT_ADC_1`/`XM_EXT_ADC_3`(PA0/PA1)는 ADC 로 사용할 수 없게 되며, 대신 `XM_EXT_ADC_2`/`XM_EXT_ADC_4`(PA0_C/PA1_C)를 사용해야 합니다. 미호출 시 PA0/PA1 은 그대로 ADC 로 유지됩니다.
+> - **Rev 1.1**: PA0/PA1 을 UART4 로 내부에서 동적 전환해 결합합니다. 호출 후 `XM_EXT_ADC_1`/`XM_EXT_ADC_3`(PA0/PA1)는 ADC 로 사용할 수 없게 되며, 대신 `XM_EXT_ADC_2`/`XM_EXT_ADC_4`(PA0_C/PA1_C)를 사용해야 합니다. 미호출 시 PA0/PA1 은 그대로 ADC 로 유지됩니다.
 
 **파라미터**: 없음
 

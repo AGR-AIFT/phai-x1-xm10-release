@@ -18,7 +18,7 @@ Ex.00 (Quick Start) 은 그 사이클을 가장 짧게 도는 예제입니다. �
 | `XM_Apps/Control_Task/control_task.c` | 메인 사용자 코드 (`Control_Setup()` + `Control_Loop()`) | ✅ 자유롭게 수정 |
 | `examples/<번호>_<이름>/*.c` | 학습용 예제 (40개+) | ✅ 복사해서 control_task.c 자리에 붙여넣기 |
 | `XM_FW/XM_API/` | 공개 API 헤더 (`xm_api.h` umbrella) | ❌ 봉인 (호출만) |
-| `XM_Lib/`, `Drivers/`, `Middlewares/` | 라이브러리 | ❌ 봉인 |
+| `XM_FW/`, `Drivers/`, `Middlewares/` | 라이브러리 | ❌ 봉인 |
 
 ## 🔧 HOW — 첫 실험
 
@@ -60,7 +60,7 @@ Ex.00 README 의 "4️⃣ 실험 — 직접 해보기" 변형 1, 2 를 따라 �
 ### 🛤️ 트랙 B — "센서 추가해서 보행 분석"
 1. Ex.00 → Ex.04 → Ex.05b (FSR 8ch)
 2. Ex.07 → Ex.08 (CDC 텍스트 디버깅)
-3. Ex.09 (CDC PhAI Studio 스트림)
+3. Ex.09 (CDC 스트림 — xm10 도구)
 4. Ex.17 (FSM Gait Intent) → Ex.32 (GRF)
 
 ### 🛤️ 트랙 C — "H10 로봇 제어 알고리즘"
@@ -72,7 +72,7 @@ Ex.00 README 의 "4️⃣ 실험 — 직접 해보기" 변형 1, 2 를 따라 �
 
 ## ⚠️ 막혔을 때 — 다음 도움말
 
-- **개별 예제 트러블슈팅**: AI 에게 `"Ex.07 에서 PhAI Studio 가 안 잡혀"` 처럼 질문 → `example-helper` skill 자동 호출
+- **개별 예제 트러블슈팅**: AI 에게 `"Ex.07 에서 터미널에 아무것도 안 보여"` 처럼 질문 → `example-helper` skill 자동 호출
 - **빌드/플래시 일반 에러**: [docs/troubleshooting.md](../../../docs/troubleshooting.md)
 - **API 사용법**: [docs/api-reference/](../../../docs/api-reference/)
 - **외골격/제어 이론**: [docs/architecture/](../../../docs/architecture/)

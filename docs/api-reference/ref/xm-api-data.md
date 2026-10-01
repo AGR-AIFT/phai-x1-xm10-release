@@ -2,17 +2,17 @@
 
 > **대상 헤더**: `XM_FW/XM_API/xm_api_data.h` (Rev1.1 / Rev2.0 공통 — GRF 확장 필드만 🟢 Rev 2.0 전용)
 > **관련 개념 문서**: [02. KIT H10 제어 + 데이터](../02-h10-control-n-data.md) (IPO 사이클, Body Data, 토크 부호 규약 설명)
-> **관련 예제**: [11 Passive Mode](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/) · [12 Active Assist](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/12_Active_Assist_Mode/) · [13 Resistive](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/13_Resistive_Mode/) · [14 PD Realtime](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/14_PD_Realtime_Control/) · [16 TinyAI Sensor Fusion](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) · [32 GRF Gait Intent](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/32_GRF_Gait_Intent/) · [37 FES Hub Ctrl](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/37_FES_Hub_Module_Ctrl/) 🛑 Rev 2.0 전용 · [41 IMU Hub Dashboard](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/) 🛑 Rev 2.0 전용 · [42 EMG Hub Biofeedback](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/) 🛑 Rev 2.0 전용
+> **관련 예제**: [11 Passive Mode](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/11_Passive_Mode/) · [12 Active Assist](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/12_Active_Assist_Mode/) · [13 Resistive](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/13_Resistive_Mode/) · [14 PD Realtime](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/14_PD_Realtime_Control/) · [16 TinyAI Sensor Fusion](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/16_TinyAI_Sensor_Fusion/) · [32 GRF Gait Intent](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/32_GRF_Gait_Intent/) · [41 IMU Hub Dashboard](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/) 🛑 Rev 2.0 전용 · [42 EMG Hub Biofeedback](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/) 🛑 Rev 2.0 전용
 
 ---
 
 ## 언제 사용하나
 
-`xm_api_data.h`는 XM10 펌웨어에서 **가장 자주 열어보게 되는 파사드**입니다. `Control_Loop()` 안에서 `KIT H10`과 각종 센서 허브(GRF, External IMU, IMU Hub, EMG Hub, FES Hub)의 최신 상태를 읽고(`XM.status`), 계산한 제어 명령을 내리는(`XM_Set*` / `XM_Send*`) 함수가 모두 여기 선언되어 있습니다.
+`xm_api_data.h`는 XM10 펌웨어에서 **가장 자주 열어보게 되는 파사드**입니다. `Control_Loop()` 안에서 `KIT H10`과 각종 센서 허브(GRF, External IMU, IMU Hub, EMG Hub)의 최신 상태를 읽고(`XM.status`), 계산한 제어 명령을 내리는(`XM_Set*` / `XM_Send*`) 함수가 모두 여기 선언되어 있습니다.
 
 전역 객체 `XM`이 채워지고 비워지는 **IPO(Input-Process-Output) 사이클** 자체의 동작 원리, 토크 부호 규약, Body Data 전제조건 같은 배경 지식은 이 페이지에서 다시 설명하지 않습니다. 처음이라면 [02. KIT H10 제어 + 데이터](../02-h10-control-n-data.md)를 먼저 읽고, 이 페이지는 함수 시그니처·파라미터·구조체 필드를 빠르게 찾아보는 용도로 사용하세요.
 
-> ℹ️ **`nodeId` 파라미터 공통 안내**: 이 헤더의 관절 제어 함수 대부분은 `SystemNodeID_t nodeId`를 받습니다. 실제 사용 값은 `SYS_NODE_ID_RH`(오른쪽 고관절) / `SYS_NODE_ID_LH`(왼쪽 고관절) 두 가지이며, `data_object_dictionaries.h`(다른 헤더)에 정의되어 있습니다. 본 페이지는 `xm_api_data.h` 범위만 다루므로 `SystemNodeID_t` 자체의 전체 열거값 목록은 다루지 않습니다.
+> ℹ️ **`nodeId` 파라미터 공통 안내**: 이 헤더의 관절 제어 함수 대부분은 `SystemNodeID_t nodeId`를 받습니다. 실제 사용 값은 `SYS_NODE_ID_RH`(오른쪽 고관절) / `SYS_NODE_ID_LH`(왼쪽 고관절) 두 가지입니다. `xm_api.h` 하나만 include 하면 함께 쓸 수 있습니다.
 
 ---
 
@@ -31,7 +31,7 @@
 | 함수 | 한 줄 설명 |
 |---|---|
 | [`XM_IsCmConnected()`](#xm_iscmconnected) | CM과의 통신이 정상(Operational) 상태인지 확인합니다 |
-| [`XM_GetXMNmtState()`](#xm_getxmnmtstate) | CM과의 PnP(NMT) 상태를 세부 값으로 가져옵니다 |
+| [`XM_GetXMNmtState()`](#xm_getxmnmtstate) | CM과의 연결 상태를 세부 값으로 가져옵니다 |
 
 ### 데이터 송신 (Body Data · PIF-Vector)
 
@@ -83,7 +83,7 @@ void XM_SetControlMode(XmControlMode_t mode);
 
 **안전 로직**: 모드가 바뀌는 순간(특히 MONITOR → TORQUE) 급발진 방지를 위해 **모든 토크 명령이 내부적으로 0으로 초기화**됩니다.
 
-⚠️ **호출 컨텍스트**: `Control_Setup()`/`Control_Loop()` 컨텍스트 기준 (헤더에 별도 ISR 안전성 명시 없음). 알고리즘 진입(Entry) 시 `XM_CTRL_CONTROL`, 종료(Exit) 시 `XM_CTRL_MONITOR`로 되돌리는 것이 일반적인 패턴입니다.
+⚠️ **호출 컨텍스트**: `Control_Setup()`/`Control_Loop()` 에서 호출하세요. ISR 에서는 호출하지 마세요. 알고리즘 진입(Entry) 시 `XM_CTRL_CONTROL`, 종료(Exit) 시 `XM_CTRL_MONITOR`로 되돌리는 것이 일반적인 패턴입니다.
 
 **예제**
 ```c
@@ -190,14 +190,14 @@ if (XM_IsCmConnected()) {
 CM_NmtState_t XM_GetXMNmtState(void);
 ```
 
-CM과의 DOP V3 PnP(NMT) 상태를 세부 값으로 반환합니다. `XM_IsCmConnected()`는 내부적으로 `XM_GetXMNmtState() == CM_NMT_OPERATIONAL`을 확인하는 것과 같습니다.
+CM과의 연결 상태를 세부 값으로 반환합니다. `XM_IsCmConnected()`는 내부적으로 `XM_GetXMNmtState() == CM_NMT_OPERATIONAL`을 확인하는 것과 같습니다.
 
-**반환값**: `CM_NmtState_t` (`cm_drv.h`에 정의 — 이 헤더가 include 하는 다른 헤더 소속)
+**반환값**: `CM_NmtState_t` (CM 연결 상태 열거형)
 
 | 상태 | 값 | 설명 |
 |---|---|---|
-| `CM_NMT_INITIALISING` | 0 | 부팅 중 (Boot-up 메시지 미수신) |
-| `CM_NMT_PRE_OPERATIONAL` | 1 | SDO 통신 가능, PDO 비활성 |
+| `CM_NMT_INITIALISING` | 0 | 부팅 중 (CM 의 시작 알림을 아직 받지 못함) |
+| `CM_NMT_PRE_OPERATIONAL` | 1 | 설정 메시지만 주고받음, 데이터 전송은 꺼짐 |
 | `CM_NMT_OPERATIONAL` | 2 | 모든 통신 활성 (정상 상태) |
 | `CM_NMT_STOPPED` | 3 | 통신 중단됨 |
 
@@ -557,8 +557,8 @@ void Active_Loop(void) {
 |---|---|---|
 | `XM_GRF_CHANNEL_SIZE` | `14` | 레거시 GRF(FSR) 슈즈 센서의 채널 수 |
 | `XM_IMU_HUB_SENSOR_COUNT` | `6` | IMU Hub Module의 센서(포트) 개수 |
-| `XM_FES_HUB_CH_COUNT` | `2` | FES Hub Module의 채널 수 |
-| `XM_GRF_FSR_CH_TOTAL` 🟢 Rev 2.0 전용 | `24` | SM-GRF 고정프레임 모듈의 FSR 채널 수(ADC1 15ch + ADC3 9ch). `module.h`에 정의되며 `xm_api_data.h`가 include — Rev1.1에는 해당 include 자체가 없음 |
+| `XM_FES_HUB_CH_COUNT` | `2` | FES Hub 는 현재 XM10 연결을 지원하지 않습니다. |
+| `XM_GRF_FSR_CH_TOTAL` 🟢 Rev 2.0 전용 | `24` | 발바닥 센서(GRF) 한쪽의 FSR 채널 수. `xm_api.h` 를 include 하면 함께 쓸 수 있습니다 — Rev1.1 에서는 이 값이 없습니다 |
 
 ---
 
@@ -668,7 +668,7 @@ typedef struct {
 
 ### `XmH10Data_t`
 
-`XM.status.h10`으로 접근하는 **KIT H10 로봇 본체 데이터**(DOP V1)입니다. 엔코더, 관절 각도, 보행 상태 등을 포함합니다.
+`XM.status.h10`으로 접근하는 **KIT H10 로봇 본체 데이터**입니다. 엔코더, 관절 각도, 보행 상태 등을 포함합니다.
 
 | 필드 | 타입 | 단위 | 설명 |
 |---|---|---|---|
@@ -748,7 +748,9 @@ typedef enum {
 
 ### `XmImuHubSensor_t` / `XmImuHubData_t`
 
-`XM.status.imu_hub`로 접근하는 **IMU Hub Module**(EBIMU-9DOFV6 × 6, DOP V3) 데이터입니다.
+`XM.status.imu_hub`로 접근하는 **IMU Hub Module**(EBIMU-9DOFV6 × 6) 데이터입니다.
+
+> IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
 
 ```c
 typedef struct {
@@ -790,12 +792,12 @@ if (hub->is_connected) {
 
 ### `XmEmgHubData_t`
 
-`XM.status.emg_hub`로 접근하는 **EMG Hub Module**(sEMG 센서 허브, DOP V3) 데이터입니다. 원본은 EMG Hub TPDO1(CAN ID `0x18F`), 1kHz 샘플링에 HPF 20Hz → 정류 → RMS 200ms → Envelope 8Hz → MVC → Activation 파이프라인 결과가 포함됩니다.
+`XM.status.emg_hub`로 접근하는 **EMG Hub Module**(sEMG 센서 허브) 데이터입니다. 1kHz 샘플링에 HPF 20Hz → 정류 → RMS 200ms → Envelope 8Hz → MVC → Activation 파이프라인을 거친 결과가 들어 있습니다.
 
 | 필드 | 타입 | 단위 | 설명 |
 |---|---|---|---|
 | `is_connected` | `bool` | - | EMG Hub Module 연결 상태 |
-| `lastUpdateTick` | `uint32_t` | ms | Slave 제어 틱(OD `0x6050 ctrl_tick_ms`, 32-bit, 약 49.7일 wrap). 연속 수신 간 delta가 1이 아니면 gap. 구 14B TPDO 수신 시 24-bit Metadata timestamp로 fallback |
+| `lastUpdateTick` | `uint32_t` | ms | 허브의 제어 틱(32-bit, 약 49.7일마다 0 으로 돌아감). 연속 수신 간 차이가 1이 아니면 중간에 빠진 것입니다. 구형 허브 펌웨어에서는 24-bit 시각 값으로 대체됩니다 |
 | `raw_adc` | `uint16_t` | 12-bit (HW OVS 16×) | ADC 원시값 |
 | `voltage_uv` | `float` | µV | EMG 전압 (AFE 환산) |
 | `rms_uv` | `float` | µV | RMS 값 (200ms 슬라이딩 윈도우) |
@@ -826,28 +828,7 @@ if (emg->is_connected) {
 
 ### `XmFesHubData_t`
 
-`XM.status.fes_hub`로 접근하는 **FES Hub Module**(기능적 전기 자극, DOP V3 ES-vector, Node `0x0C`) 피드백 데이터입니다. 원본은 FES Hub TPDO1(CAN ID `0x18C`, 37B, 10ms 주기) — Legacy 16B(채널 상태/전류/HV 등) + KHJ 확장 21B(FSM/ISI/타깃 진폭 등)로 구성됩니다. 명령은 이 구조체가 아니라 SDO(`0x6300` ES-vector, `0x6310` Master Command)로 전송합니다.
-
-| 필드 | 타입 | 단위 | 설명 |
-|---|---|---|---|
-| `is_connected` | `bool` | - | FES Hub Module 연결 상태 |
-| `lastUpdateTick` | `uint32_t` | ms | 데이터 수신 시각 (FES Slave 24-bit timestamp, LE) |
-| `ch_state[2]` | `uint8_t[XM_FES_HUB_CH_COUNT]` | 0~3 | 채널 상태: 0=IDLE, 1=READY, 2=STIMULATING, 3=FAULT |
-| `ch_current_mA[2]` | `float[2]` | mA | 전류 피드백 (PID output) |
-| `ch_fault_code[2]` | `uint8_t[2]` | - | 채널별 Fault 코드 |
-| `hv_voltage_V` | `float` | V | HV 부스트 컨버터 출력 전압 |
-| `digipot_pos` | `uint8_t` | 0~127 | Digipot 위치 (진폭 제어) |
-| `es_state_packed` | `uint8_t` | bitfield | `[3:0]`=CH0 ESState, `[7:4]`=CH1 ESState |
-| `error_register` | `uint8_t` | - | Error Register |
-| `fsm_state` / `fsm_state_prev` | `uint8_t` | - | 현재/직전 FSM state (KHJ Control Task) |
-| `isi_packed` | `uint8_t` | bitmap | `bit[N]`=ISI[N]. EXT7(bit7)/EXT8(bit8)=Master Command 동작 증적 |
-| `ch_es_error_lo[2]` | `uint8_t[2]` | - | ES-vector error code low byte (채널별, CiA 301 Abort와 별개) |
-| `ch_target_amplitude_mA[2]` | `float[2]` | mA | Master가 지시한 목표 진폭 (setpoint) |
-| `ch_impedance[2]` | `float[2]` | ohm | 필터링된 임피던스 — 전극 접촉 판단 지표 |
-| `ch_pulse_cnt[2]` | `uint16_t[2]` | - | 누적 자극 펄스 카운터 |
-| `ch_voltage_diff_V[2]` | `float[2]` | V | 실제 자극 차동 전압 |
-
-**참고**: 채널 인덱스(0/1)와 배열 크기는 [`XM_FES_HUB_CH_COUNT`](#매크로)로 정의됩니다.
+`XM.status.fes_hub` — FES Hub 는 현재 XM10 연결을 지원하지 않습니다.
 
 ---
 
@@ -860,9 +841,9 @@ typedef struct {
     XmH10Data_t     h10;      // H10 로봇 본체 데이터
     XmGrfData_t     grf;      // GRF 족압 센서 데이터
     XmExtImuData_t  ext_imu;  // External UART IMU (Xsens MTi-630)
-    XmImuHubData_t  imu_hub;  // IMU Hub 센서 데이터 (DOP V3)
-    XmEmgHubData_t  emg_hub;  // EMG Hub 센서 데이터 (DOP V3)
-    XmFesHubData_t  fes_hub;  // FES Hub 자극 피드백 (DOP V3)
+    XmImuHubData_t  imu_hub;  // IMU Hub 센서 데이터
+    XmEmgHubData_t  emg_hub;  // EMG Hub 센서 데이터
+    XmFesHubData_t  fes_hub;  // FES Hub (현재 XM10 연결 미지원)
 } XmInput_t;
 ```
 
@@ -907,7 +888,7 @@ extern XmRobot_t XM;
 
 | 필드 | 타입 | 설명 |
 |---|---|---|
-| `status` | `XmInput_t` | 읽기 전용 센서 데이터 (H10/GRF/ExtIMU/IMU Hub/EMG Hub/FES Hub) |
+| `status` | `XmInput_t` | 읽기 전용 센서 데이터 (H10/GRF/ExtIMU/IMU Hub/EMG Hub) |
 | `command` | `XmOutput_t` | 쓰기 전용 제어 명령 Staging 영역 — 직접 쓰지 말고 `XM_Set*` 함수 사용 |
 
 **예제**

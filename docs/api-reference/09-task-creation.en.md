@@ -1,34 +1,23 @@
 # XM10 Task Topology — RTOS Task API User Guide
 
-> A guide to writing auxiliary tasks in the XM10 SDK. Covers the system task inventory,
-> priority levels, data flow, and four shared-variable patterns.
+> A guide to writing auxiliary tasks in the XM10 SDK. Covers priority levels, data flow,
+> and four shared-variable patterns.
 
 **Audience**: SDK users (researchers / students / general robotics developers)
 **Date**: 2026-05-15
 **Related**:
-- User API: [`XM_FW/XM_API/xm_api_freertos.h`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM_FW/XM_API/xm_api_freertos.h)
-- Task Manager: [`XM_FW/System/Task/xm_task_manager.{c,h}`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM_FW/System/Task/)
+- User API: [`XM_FW/XM_API/xm_api_freertos.h`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api_freertos.h)
 - Examples: [`Examples/38_Periodic_Background_Task/`](../../Examples/38_Periodic_Background_Task/) · [`Examples/39_Task_Lifecycle/`](../../Examples/39_Task_Lifecycle/)
 
 ---
 
-## 1. System Task Inventory
+## 1. System Tasks
 
-The tasks listed below are created automatically by the XM10 SDK at boot. **Do not modify
-them directly** — doing so will compromise system stability.
-
-| Priority | Number | Task Name | Stack | Period | Responsibility |
-|---|---|---|---|---|---|
-| Realtime7 | 55 | `StartupTask`     | 2 KB  | Once (self-deletes) | HW init / module enumeration |
-| Realtime7 | 55 | `IOIF_UartRx`     | 512 B | Event-driven  | UART receive (shared) |
-| **Realtime6** | **54** | **`UserTask`** | **32 KB** | **1 ms (1 kHz)** | **Calls Control_Setup + Control_Loop + PDO snapshot** |
-| Realtime3 | 51 | `NRT_Proc`        | 2 KB  | Semaphore     | SDO/NMT processing |
-| High      | 40 | `USBH_Queue`      | 2 KB  | Event         | USB Host events |
-| Normal1   | 25 | `PnP_Task`        | 2 KB  | 100 ms        | Plug & Play (automatic module registration) |
-| Normal    | 24 | `usbContolTask`   | 2 KB  | 10 ms         | USB mode switching / CDC |
-| Normal    | 24 | `DataLoggerTask`  | 8 KB  | Event         | internal, reserved (currently unused) |
-| **Normal** | **24** | **`XM_Task_*` (user)** | **Per prio_hint** | OneShot/Periodic | **Auxiliary tasks created by the user** |
-| Low       | 8  | `DefaultTask`     | 2 KB  | Suspended     | (Unused) |
+The XM10 SDK automatically creates the system tasks it needs at boot. **Do not modify
+them directly** — doing so will compromise system stability. `Control_Setup()` and
+`Control_Loop()` are called from one of them, the control-loop task (Control_Loop), on a
+1 ms (1 kHz) cycle (priority 53, 32 KB stack). Create your own auxiliary tasks only with
+`XM_Task_Create*()` and the `XM_PRIO_*` hints below.
 
 ---
 
@@ -38,19 +27,21 @@ When creating an auxiliary task with `XM_Task_CreateOneShot()` or
 `XM_Task_CreatePeriodic()`, choose a `prio_hint` from the zones below.
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│ System task zone — do not enter                              │
-│   55  Realtime7  StartupTask / IOIF_UartRx                   │
-│   54  Realtime6  UserTask (Control_Loop, 1 kHz control loop) │
-│   51  Realtime3  NRT_Proc (SDO/NMT)                          │
-├──────────────────────────────────────────────────────────────┤
-│ User-selectable zone                                         │
-│   48  Realtime  ← XM_PRIO_NEAR_REALTIME (caution: may contend with PnP) │
-│   40  High      ← XM_PRIO_ABOVE_CONTROL                      │
-│   32  AbvNormal ← XM_PRIO_BELOW_CONTROL                      │
-│   24  Normal    ← XM_PRIO_BACKGROUND ⭐ (recommended default) │
-│    8  Low       ← XM_PRIO_IDLE                               │
-└──────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ System tasks — you cannot create or change these                                                │
+│   55  Realtime7  System startup / CAN-FD receive  ← handles robot/sensor data on arrival        │
+│   54  Realtime6  UART receive                     ← sensor packet parsing                       │
+│   53  Realtime5  Control_Loop                     ← 1 kHz control loop                          │
+│   51  Realtime3  Module configuration messages                                                  │
+│   25  Normal1    Module connection management                                                   │
+├─────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Priorities you can choose (XM_PRIO_*)                                                           │
+│   48  Realtime     ← XM_PRIO_NEAR_REALTIME (caution: can clash with module connection handling) │
+│   40  High         ← XM_PRIO_ABOVE_CONTROL                                                      │
+│   32  AboveNormal  ← XM_PRIO_BELOW_CONTROL                                                      │
+│   24  Normal       ← XM_PRIO_BACKGROUND ⭐ (recommended default)                                │
+│    8  Low          ← XM_PRIO_IDLE                                                               │
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 | Priority hint | Number | Default stack | Use case |
@@ -69,24 +60,16 @@ When creating an auxiliary task with `XM_Task_CreateOneShot()` or
 ## 3. Data Flow — Control_Loop ↔ Auxiliary Tasks
 
 ```
-┌─ FDCAN ISR ──┐
-│  (PDO recv)  │
-└──────┬───────┘
-       │ seqlock
-       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ UserTask (1 kHz)                                            │
+│ control-loop task (Control_Loop, 1 kHz)                     │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │  _FetchAllInputs() ─▶ XM.status.*                   │    │
-│  │  SYNC broadcast      (CM/SM trigger)                │    │
-│  │  XM_TotalData_Snapshot()                            │    │
-│  │  Control_Loop() ◀── user algorithm                  │    │
-│  │  _FlushAllOutputs() ─▶ XM.command.* ─▶ CAN TX       │    │
-│  │  XM_USB_ProcessPeriodic()                           │    │
+│  │  gather inputs ─▶ XM.status.*                       │    │
+│  │  Control_Loop() ◀── your algorithm                  │    │
+│  │  XM.command.* ─▶ send outputs                       │    │
 │  └─────────────────────────────────────────────────────┘    │
-│         ↕ (single-word volatile / multi-word XM_Mutex)      │
+│         ↕ (single word: volatile / multi-word: XM_Mutex)    │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │  User auxiliary tasks (Normal=24, etc.) — XM_Task_* │    │
+│  │  user helper task (Normal=24 etc.) — XM_Task_*      │    │
 │  │  e.g. AdcSummary (100 Hz), HeavyCalc (OneShot)      │    │
 │  └─────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
@@ -99,11 +82,11 @@ When creating an auxiliary task with `XM_Task_CreateOneShot()` or
 | **A** Single-word flag | `volatile bool ready;` | `volatile` only | Ex.38 `s_adc_avg` |
 | **B** Multi-word data  | `float buf[10];` | `XM_Mutex_*` | Ex.38 `s_adc_buf` |
 | **C** ISR → Task       | ISR writes / Task reads | `volatile` + memory barrier | (System domain) |
-| **D** Snapshot         | `memcpy` inside Mutex → external read | Mutex + Snapshot | `CM_GetRxData` |
+| **D** Snapshot         | `memcpy` inside Mutex → external read | Mutex + Snapshot | `XM.status` snapshot |
 
 ---
 
-## 4. Hardware Constraints (Task Manager API Contract Guards)
+## 4. User Task Limits
 
 | Constant | Value | Meaning |
 |---|---|---|
@@ -119,7 +102,7 @@ Behavior on violation:
 
 > ⚠️ **Watchdog (v2.6.0+)**: the system watchdog (IWDG, about 8 seconds) is refreshed on the 1 kHz cycle that runs `Control_Loop`. So if **`Control_Setup` or `Control_Loop` takes more than 8 seconds, the board resets.** Split long work into steps.
 >
-> The user tasks created here cannot block that refresh: every `XM_PRIO_*` level sits below `Control_Loop` (the highest, `XM_PRIO_NEAR_REALTIME` = 48, is still under UserTask's 54). Heavy computation is in fact safer here — that is why the NN training in Ex.36 runs at `XM_PRIO_BACKGROUND`.
+> The user tasks created here cannot block that refresh: every `XM_PRIO_*` level sits below `Control_Loop` (the highest, `XM_PRIO_NEAR_REALTIME` = 48, is still under the control-loop task's 53). Heavy computation is in fact safer here — that is why the NN training in Ex.36 runs at `XM_PRIO_BACKGROUND`.
 
 ---
 
@@ -179,7 +162,7 @@ void Control_Loop(void) {
 | Forgetting to Unlock after locking | Mutex permanently held | Call Unlock before every early return |
 | Reusing a handle after Task Delete | API returns false | Set `handle = NULL` immediately after Delete |
 | Not deleting completed tasks | New task creation returns NULL once 4 tasks are reached | Use the IsComplete → Delete cycle |
-| Infinite loop at `XM_PRIO_NEAR_REALTIME` | Contention with PnP / system delays | Use `XM_PRIO_BACKGROUND` instead |
+| Infinite loop at `XM_PRIO_NEAR_REALTIME` | Clashes with module connection handling / system delays | Use `XM_PRIO_BACKGROUND` instead |
 | Misidentifying single-word vs. multi-word access | Data corruption | Use `volatile` for 32-bit variables; use Mutex for anything larger |
 | Outputting NaN/Inf values | Motor runaway on CAN-FD transmission | Check divisor != 0 and clamp before computation |
 
@@ -190,16 +173,14 @@ void Control_Loop(void) {
 1. **[Ex.00 ~ Ex.35](../../Examples/)** — Single-task algorithm fundamentals
 2. **[Ex.38 Periodic_Background_Task](../../Examples/38_Periodic_Background_Task/)** — Mutex + Snapshot pattern (see §3 of this document)
 3. **[Ex.39 Task_Lifecycle](../../Examples/39_Task_Lifecycle/)** — OneShot create/delete cycle
-4. **This document §4–6** — Hardware constraints and pitfalls
+4. **This document §4–6** — User task limits and pitfalls
 
 ---
 
-## 8. Risk Management Integration (Phase 2 Follow-up)
+## 8. What You Need to Check Yourself
 
-Runtime guards (Control_Loop overrun, mutex deadlock, periodic overrun, fault analysis,
-etc.) and debugging channels (PhAI Studio diagnostic integration) are planned for a
-separate introduction under the XM10-wide Risk Management roadmap. The Task API itself
-is stable within the Phase 1 scope (Task API contract guards only).
+The Task API works as long as you stay within the limits in §4 (number of tasks, stack,
+priority). It does not monitor for overruns or deadlocks automatically, so check those yourself.
 
 ---
 
@@ -207,4 +188,4 @@ is stable within the Phase 1 scope (Task API contract guards only).
 
 | Date       | Version | Change |
 |---|---|---|
-| 2026-05-15 | 1.0  | Initial draft — Task API essentials extracted after separating RM guards |
+| 2026-05-15 | 1.0  | Initial draft |

@@ -2,24 +2,21 @@
 
 > **대상 헤더**: `XM_FW/XM_API/xm_api_user_custom.h` (Rev1.1 · Rev2.0 헤더 동일 — 기능 차이 없음, 파일 상단 `@date` 주석만 하루 차이)
 > 📚 **관련 개념 문서**: [05. USB 시리얼 통신](../05-usb-connectivity.md) (Total Data Packet 0x20 / User Custom Channel 0xF0~0xFE 구분), [02. KIT H10 제어 + 데이터](../02-h10-control-n-data.md) (`Control_Setup`/`Control_Loop` IPO 주기)
-> 🧪 **관련 예제**: 이 API를 직접 호출하는 예제는 아직 없습니다 (v2.3.0 신규 API, SDK 전수 검색 결과 사용 사례 0건). 같은 Total Data Packet(0x20) 을 다루는 [Ex.09 CDC Stream](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) 을 먼저 읽으면 이 슬롯이 어떤 스트림에 실리는지 이해하기 쉽습니다.
+> 🧪 **관련 예제**: 이 API를 직접 호출하는 예제는 아직 없습니다 (v2.2.0 부터 들어 있는 API). 같은 Total Data Packet(0x20) 을 다루는 [Ex.09 CDC Stream](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) 을 먼저 읽으면 이 슬롯이 어떤 스트림에 실리는지 이해하기 쉽습니다.
 
 ---
 
 ## 언제 사용하나
 
-XM10 은 `Control_Loop()` 가 끝날 때마다 365바이트짜리 **Total Data Packet**(Module ID `0x20`)을 1kHz 로 USB 에 자동 전송합니다. 이 패킷의 마지막 28바이트는 `User_Custom` 영역으로, 필터링한 EMG 신호나 FSM 상태 같은 사용자 값을 그대로 실을 수 있게 비워 둔 슬롯입니다. 본 헤더의 함수로 이 28바이트를 채워 두기만 하면, 별도의 전송 코드 없이 PhAI Studio 실시간 그래프와 OPFS(브라우저 로컬 파일 시스템) 녹화 파일에 자동으로 함께 기록됩니다.
+XM10 은 `Control_Loop()` 가 끝날 때마다 365바이트짜리 **Total Data Packet**(Module ID `0x20`)을 1kHz 로 USB 에 자동 전송합니다. 이 패킷의 마지막 28바이트는 `User_Custom` 영역으로, 필터링한 EMG 신호나 FSM 상태 같은 사용자 값을 그대로 실을 수 있게 비워 둔 슬롯입니다. 본 헤더의 함수로 이 28바이트를 채워 두기만 하면, 별도의 전송 코드 없이 PhAI Studio 실시간 그래프와 녹화 파일에 자동으로 함께 기록됩니다.
 
-이름이 비슷한 [User Custom **Channel** (`0xF0~0xFE`, `XM_SetUsbCustomMeta`/`XM_SendUsbDataWithId`)](../05-usb-connectivity.md) 과는 다른 기능이니 주의하세요. 그쪽은 패킷 크기와 개수를 자유롭게 늘릴 수 있는 별도 채널이고, 본 API 는 이미 항상 전송되는 `0x20` 패킷 안의 **고정된 28바이트**에 값만 채워 넣는 훨씬 가벼운 방법입니다. 슬롯 4개(float) + 4개(int16) + 16비트(flags) + 2개(uint8) 만으로 충분하다면 이 API 를, 더 크거나 가변적인 데이터를 보내야 한다면 05번 문서의 커스텀 채널을 사용하세요.
+이름이 비슷한 [User Custom **Channel** (`0xF0~0xFE`, `XM_SetUsbCustomMeta`/`XM_SendUsbDataWithId`)](../05-usb-connectivity.md) 과는 다른 기능이니 주의하세요. 그쪽은 패킷 크기와 개수를 자유롭게 늘릴 수 있는 별도 채널이고, 본 API 는 이미 항상 전송되는 `0x20` 패킷 안의 **고정된 28바이트**에 값만 채워 넣는 훨씬 가벼운 방법입니다. 슬롯 4개(float) + 4개(int16) + 16비트(flags) + 2개(uint8) 만으로 충분하다면 이 API 를, 더 크거나 가변적인 데이터를 보내야 한다면 05번 문서의 커스텀 채널을 사용하세요. (PhAI Studio 는 아직 개발 중이라, `0xF0`~`0xFE` 채널은 우선 `xm10` 도구로 보고 저장하세요.)
 
 ### 기본 사용 흐름
 
 ```c
 void Control_Setup(void) {
-    /* (선택) PhAI Studio 채널 라벨 등록 — 미호출 시 기본 라벨(f0, i16_0, ...) 사용 */
-    XM_SetUsbCustomMeta(0xE0,
-        "[{\"slot\":\"f0\",\"name\":\"EMG_envelope\",\"unit\":\"uV\"},"
-         " {\"slot\":\"i16_0\",\"name\":\"PF3_raw\",\"unit\":\"LSB\"}]");
+    /* 따로 등록할 것이 없습니다 — 슬롯 이름은 정해져 있습니다 (아래 참고). */
 }
 
 void Control_Loop(void) {
@@ -29,7 +26,7 @@ void Control_Loop(void) {
 }
 ```
 
-`XM_SetUsbCustomMeta` 는 이 헤더가 아니라 `xm_api_usb.h` 소속 함수입니다 — 자세한 시그니처는 [05번 문서](../05-usb-connectivity.md)를 참고하세요.
+이 28바이트 슬롯의 이름은 정해져 있습니다 — `user_f[0]`~`user_f[3]`, `user_i16[0]`~`user_i16[3]`, `user_flags`, `user_u8[0]`~`user_u8[1]`. PhAI Studio 그래프에는 이 이름으로 나타납니다. `xm10` 도구는 0x20 을 그래프로 그리지 않고(**Show 0x20 tab** 을 켜면 이 이름이 5 Hz 표로 보입니다), 0x20 CSV 를 뽑을 때 열 이름으로 씁니다. 이름을 `XM_SetUsbCustomMeta` 로 바꿀 수는 없습니다.
 
 ---
 
@@ -45,7 +42,7 @@ void Control_Loop(void) {
 | [`XM_UserCustom_Reset`](#xm_usercustom_reset) | User_Custom 슬롯 전체를 0으로 초기화합니다 |
 | [`XM_UserCustom_GetBlock`](#xm_usercustom_getblock) | 현재 User_Custom 블록 값을 한 번에 스냅샷으로 읽어옵니다 |
 
-내부 전용(`[Internal]`) 함수는 없습니다 — 7개 함수 모두 공개 API 입니다. 다만 `XM_UserCustom_GetBlock` 은 System Layer 가 매 tick 자동으로 호출하므로 일반 사용자가 직접 호출할 일은 거의 없습니다 (아래 상세 참고).
+내부 전용(`[Internal]`) 함수는 없습니다 — 7개 함수 모두 공개 API 입니다. 다만 `XM_UserCustom_GetBlock` 은 시스템이 매 tick 자동으로 호출하므로 일반 사용자가 직접 호출할 일은 거의 없습니다 (아래 상세 참고).
 
 ---
 
@@ -66,7 +63,7 @@ void XM_UserCustom_SetFloat(uint8_t idx, float value);
 
 **반환값**: 없음 (`void`)
 
-⚠️ **호출 컨텍스트**: 헤더 주석에 non-blocking 이며 `Control_Loop()` 뿐 아니라 다른 곳에서도 호출 가능하다고 명시되어 있습니다. 다만 ISR 안전성을 명시적으로 보장하는 문구는 없으므로, `Control_Setup()`/`Control_Loop()` 컨텍스트에서 호출하는 것을 권장합니다.
+⚠️ **호출 컨텍스트**: 기다리지 않고 바로 돌아오는(non-blocking) 함수입니다. Control_Setup()/Control_Loop() 에서 호출하세요. ISR 에서는 호출하지 마세요.
 
 ```c
 void Control_Loop(void) {
@@ -214,13 +211,16 @@ void XM_UserCustom_GetBlock(XM_UserCustomBlock_t* out);
 
 **반환값**: 없음 (`void`) — 결과는 `out` 포인터를 통해 반환됩니다.
 
-⚠️ **호출 컨텍스트**: System Layer(`XM_TotalData_Snapshot`)가 매 tick 자동으로 호출해 Total Data Packet 을 채우는 함수이며, 일반 사용자 코드에서 직접 호출할 일은 거의 없습니다. 값을 직접 확인하고 싶을 때만 `Control_Setup()`/`Control_Loop()` 컨텍스트 기준으로 호출하세요.
-헤더는 `out` 에 NULL 을 전달하지 말라고만 명시할 뿐, NULL 전달 시 내부적으로 가드가 있는지는 문서화되어 있지 않습니다 — 항상 유효한 버퍼를 넘기세요.
+⚠️ **호출 컨텍스트**: 시스템이 매 tick 자동으로 호출해 Total Data Packet 을 채우는 함수이며, 일반 사용자 코드에서 직접 호출할 일은 거의 없습니다. 값을 직접 확인하고 싶을 때만 `Control_Setup()`/`Control_Loop()` 컨텍스트 기준으로 호출하세요.
+`out` 에는 NULL 이 아닌 유효한 버퍼를 항상 넘기세요.
 
 ```c
 XM_UserCustomBlock_t snapshot;
 XM_UserCustom_GetBlock(&snapshot);
-XM_SendUsbDebugMessage("f0=%.2f, flags=0x%04X\r\n", snapshot.f[0], snapshot.flags);
+
+char buf[64];
+snprintf(buf, sizeof(buf), "f0=%.2f, flags=0x%04X\r\n", snapshot.f[0], snapshot.flags);
+XM_SendUsbDebugMessage(buf);   /* 터미널로 볼 때만 쓰세요 — 스트림을 받는 중이면 패킷 1개가 함께 사라집니다 */
 ```
 
 **참고**: [`XM_UserCustomBlock_t`](#xm_usercustomblock_t) (필드 레이아웃)
@@ -249,7 +249,7 @@ typedef struct {
 | `flags` | `uint16_t` | 2B | 361 ~ 362 | `XM_UserCustom_SetFlags` / `XM_UserCustom_SetFlag` |
 | `u8[2]` | `uint8_t` | 2B | 363 ~ 364 | `XM_UserCustom_SetU8` |
 
-> 오프셋은 `XM_FW/System/Comm/USB/xm_total_data_packet.h` (자동 생성 파일)의 `user_f`/`user_i16`/`user_flags`/`user_u8` 필드 주석 기준입니다. 총 28바이트로, 365바이트 Total Data Packet 의 마지막 구간(offset 337~364)에 해당합니다.
+> 위 오프셋은 `user_f`/`user_i16`/`user_flags`/`user_u8` 순서대로 놓인 값입니다. 총 28바이트로, 365바이트 Total Data Packet 의 마지막 구간(offset 337~364)에 해당합니다.
 > `XM_UserCustomBlock_t` 자체에는 `packed` 속성이 없지만, 필드 순서(float→int16→uint16→uint8) 상 컴파일러의 자연 정렬만으로도 패딩 없이 정확히 28바이트가 됩니다.
 
 ### 매크로

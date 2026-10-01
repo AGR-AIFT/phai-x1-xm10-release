@@ -2,7 +2,7 @@
 
 XM10 보드에서 모은 외골격 데이터를 PyTorch / scikit-learn 같은 학습 프레임워크로 가져가는 흐름을 한 페이지에 정리했습니다. AI 모델 학습이 목표라면 이 페이지를 흐름표로 두고 작업하세요.
 
-> USB 메모리(MSC) 파일 로깅 기능은 v2.5.0 에서 제거되었습니다. 데이터 수집은 **USB-CDC 실시간 스트리밍**으로 하며, 아래 길 A 가 표준 경로입니다. 온보드 저장(SD카드)은 향후 HW 리비전에서 지원 예정입니다.
+> USB 메모리(MSC) 파일 로깅 기능은 v2.5.0 에서 제거되었습니다. 데이터 수집은 **USB-CDC 실시간 스트리밍**으로 하며, 아래 길 A 가 표준 경로입니다. 온보드 저장(SD카드)은 현재 지원하지 않습니다.
 
 ---
 
@@ -12,8 +12,7 @@ XM10 보드에서 모은 외골격 데이터를 PyTorch / scikit-learn 같은 �
 [보드 동작]              [수집]                      [변환]                 [학습]
   ↓                        ↓                          ↓                     ↓
 KIT H10 착용  →  USB-CDC 실시간 스트리밍   →   CSV / npy 출력   →  PyTorch DataLoader
-                 (PhAI Studio 또는                                    또는 sklearn
-                  xm10 도구 → .xmlog → export)
+                 (xm10 도구 → .xmlog → export)                        또는 sklearn
 ```
 
 두 가지 길이 있습니다. 목적에 따라 골라가세요.
@@ -45,10 +44,11 @@ void Control_Loop(void) {
 
 ### 2. PC 측 — 스트림 수신 + CSV 저장
 
-두 가지 방법이 있습니다.
+PC 측은 `xm10` 도구로 받습니다.
 
-- **PhAI Studio** — USB 연결 → 채널 `0xF0` 선택 → 실시간 그래프 확인 + 녹화 버튼 → export 로 `.csv` 저장. 가장 간단합니다.
 - **xm10 도구** (레포 내 `PythonDecoder/`) — 받은 바이트를 그대로 `.xmlog` 에 저장해 두고 CSV 는 나중에 뽑습니다. 채널 이름·구성을 바꿔도 예전 기록을 다시 뽑을 수 있어 학습 데이터셋 관리에 유리합니다. 실행파일로 만들면 파이썬 없는 PC 에서도 됩니다 ([안내](../getting-started/04-pc-data-tool.md)).
+
+> PhAI Studio 는 아직 개발 중이라, 직접 정의한 데이터 구조체(커스텀 구조체, `0xF0`~`0xFE`)는 우선 `xm10` 도구로 보고 저장하세요.
 
 ```bash
 python PythonDecoder/xm10.py recv --cli --port COM6 --log         # 콘솔 수신 + .xmlog 저장 (Ctrl+C)
@@ -156,4 +156,4 @@ void Control_Loop(void) {
 - `Ex.16 TinyAI Sensor Fusion` → `Ex.36 OnDevice Kinesthetic Learning` 으로 보드 내 추론 학습
 - 학습 모델을 보드에 올린 뒤에는 `Ex.33 Kinesthetic Teaching` 처럼 전문가 시연 → 모델 학습 → 재생 의 전체 사이클 시도
 
-PhAI Studio + Python 후처리에 대한 더 자세한 내용이 필요하면 GitHub Issues 에 요청해주세요.
+`xm10` 도구 + Python 후처리에 대한 더 자세한 내용이 필요하면 GitHub Issues 에 요청해주세요.

@@ -1,6 +1,6 @@
 # XM10 예제
 
-46 개의 실습 예제입니다. 각 폴더에 소스 코드 `.c` 와 그 예제만의 설명서 `README.md` 가 함께 들어있습니다.
+45 개의 실습 예제입니다. 각 폴더에 소스 코드 `.c` 와 그 예제만의 설명서 `README.md` 가 함께 들어있습니다.
 
 - API 함수 명세: [docs/api-reference/](../docs/api-reference/)
 - 단계별 학습 안내: [docs/tutorials/](../docs/tutorials/)
@@ -19,7 +19,7 @@
 
 여기까지 약 2 시간입니다. 외부 부품 없이 보드 하나로 다 됩니다. Ex.04 부터 외부 입출력과 센서로 넓혀갑니다.
 
-**보드 리비전 호환성** — 46 개 예제 중 42 개는 Rev 1.1 / Rev 2.0 양쪽 모두 빌드·실행됩니다. 나머지 4 개(Ex.40 EMG Proportional Assist, Ex.41 IMU Hub Dashboard, Ex.42 EMG Hub Biofeedback, Ex.43 External UART Ping-Pong)는 Rev 2.0 전용이라 **Rev 1.1 SDK 에는 포함되지 않습니다**(그래서 Rev 1.1 은 42 개). ⚠️ 특히 **Ex.43 은 Rev 1.1 보드에 그대로 배선하면 안 됩니다** — Rev 1.1 의 PD6 은 USB 전원을 켜고 끄는 출력 핀이라 상대 보드의 TX 와 맞부딪칩니다. 그 외 두 가지 주의 사항이 있습니다.
+**보드 리비전 호환성** — 45 개 예제 중 40 개는 Rev 1.1 / Rev 2.0 양쪽 모두 빌드·실행됩니다. 나머지 5 개는 Rev 2.0 전용입니다. Ex.40 EMG Proportional Assist, Ex.41 IMU Hub Dashboard, Ex.42 EMG Hub Biofeedback, Ex.43 External UART Ping-Pong 은 **Rev 1.1 SDK 에 포함되지 않고**(그래서 Rev 1.1 SDK 는 41 개), Ex.36 은 Rev 1.1 SDK 에 들어 있지만 Rev 1.1 에서는 link 에 실패하니 Ex.35 까지 진행하세요. ⚠️ 특히 **Ex.43 은 Rev 1.1 보드에 그대로 배선하면 안 됩니다** — Rev 1.1 의 PD6 은 USB 전원을 켜고 끄는 출력 핀이라 상대 보드의 TX 와 맞부딪칩니다. 그 외 두 가지 주의 사항이 있습니다.
 
 - ⚠️ **본인 보드와 같은 Rev 의 ZIP** 을 받아야 합니다. `Rev1.1.zip` 과 `Rev2.0.zip` 은 보드별 main.h (MCU 핀 매핑) 가 다른 독립 SDK 입니다. 보드는 Rev 2.0 인데 `Rev1.1.zip` 을 풀어 빌드하면 — 빌드는 통과하지만 — 내장 버튼/LED 의 핀이 한 칸씩 어긋나서 Ex.01~03 의 버튼이 안 눌리거나 엉뚱한 `XM_BTN_N` 으로 잡힙니다. 보드 라벨을 먼저 확인하세요 ([보드 리비전 비교](../docs/hardware/README.md#보드-리비전-비교)).
 - 외부 GPIO 를 직접 다루는 예제 (Ex.04~06, Ex.05a~05d, Ex.16 외부 IMU 모드) 는 커넥터 위치·핀 라벨이 리비전마다 다릅니다. 시작 전에 본인 보드의 핀맵을 펴두세요 — [Rev 1.1 핀맵](../docs/hardware/external-gpio-rev1.1.md) / [Rev 2.0 핀맵](../docs/hardware/external-gpio-rev2.0.md).
@@ -32,7 +32,7 @@
 
 ## 큰 그림 — 5 단계 학습 흐름
 
-기본기를 다진 다음, 46 개 예제는 다섯 단계의 흐름 + 외부 센서 허브 연동(Ex.37, 40~42) + 외부 장비 연동(Ex.43)을 따라갑니다. "로봇이 인간을 어떻게 이해하고, 함께 성장하는가" 라는 한 줄로 묶을 수 있습니다.
+기본기를 다진 다음, 45 개 예제는 다섯 단계의 흐름 + 외부 센서 허브 연동(Ex.40~42) + 외부 장비 연동(Ex.43)을 따라갑니다. "로봇이 인간을 어떻게 이해하고, 함께 성장하는가" 라는 한 줄로 묶을 수 있습니다.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -193,8 +193,8 @@ Stage 5      사람과 AI 가 함께
 
 ## Part 2: USB 통신 & 데이터 수집
 
-> **PhAI Studio 연결 모델**: USB-CDC를 통해 XM10 ↔ PhAI Studio 실시간 채널 연결.
-> Module ID `0x20` (Total Data)은 System 자동 스트리밍, `0xF0~0xFE`는 User Custom.
+> **USB-CDC 수신 모델**: Module ID `0x20` (Total Data)은 System 이 자동으로 스트리밍하며 PhAI Studio 가 그래프로 보여줍니다.
+> `0xF0~0xFE` (User Custom)는 예제가 보내는 사용자 채널로, PhAI Studio 는 아직 개발 중이라 우선 `xm10` 도구로 봅니다. [안내](../docs/getting-started/04-pc-data-tool.md)
 
 ### USB-CDC (07~09)
 
@@ -202,7 +202,7 @@ Stage 5      사람과 AI 가 함께
 | :---: | :--- | :---: | :--- |
 | [07](07_CDC_Basic_Print/) | 텍스트 메시지 전송 | 초급 | `XM_SendUsbDebugMessage` |
 | [08](08_CDC_Sensor_Print/) | sprintf 센서 모니터링 | 초급 | `sprintf` + 논블로킹 타이머 |
-| [09](09_CDC_Stream/) | **PhAI Studio 실시간 스트리밍** | 중급 | `XM_SetUsbCustomMeta`, `XM_SendUsbDataWithId` |
+| [09](09_CDC_Stream/) | **CDC 실시간 스트리밍 (Total Data + 사용자 채널)** | 중급 | `XM_SetUsbCustomMeta`, `XM_SendUsbDataWithId` |
 
 > **Ex.09 핵심**: Total Data(0x20) 365B 자동 스트리밍 구조 이해 + User Custom(0xF0) 추가 채널 등록 방법
 
@@ -249,9 +249,9 @@ Stage 5      사람과 AI 가 함께
 
 위 큰 그림을 단계별로 표로 풀어둔 것입니다. 논문 출처와 난이도가 필요할 때 참고하세요.
 
-**Body Data 전제** — `gaitCycle`, `footContact`, `forwardVelocity` 같은 H10 보행 분석 값을 쓰는 예제는 `XM_SendUserBodyData()` 호출이 먼저 필요합니다. 자세한 건 [API Reference — Body Data 전제조건](../docs/api-reference/README.md#-body-data-전제조건--반드시-읽으세요).
+**Body Data 전제** — `gaitCycle`, `footContact`, `forwardVelocity` 같은 H10 보행 분석 값을 쓰는 예제는 `XM_SendUserBodyData()` 호출이 먼저 필요합니다. 자세한 건 [API Reference — Body Data 전제조건](../docs/api-reference/README.md#body-data--보행-분석-데이터를-쓰려면-먼저-읽어주세요).
 
-**PhAI Studio 연동** — 모든 예제에 USB 실시간 스트리밍 코드가 들어있습니다. 보드 동작과 동시에 PhAI Studio 에서 그래프로 확인할 수 있습니다.
+**PC 로 보기** — 이 파트의 예제는 보드가 Total Data(`0x20`)를 자동으로 스트리밍하므로 PhAI Studio 에서 시스템 데이터를 그래프로 볼 수 있습니다. 예제 코드가 추가로 보내는 사용자 채널(`0xF0`~)은 `xm10` 도구로 봅니다 ([안내](../docs/getting-started/04-pc-data-tool.md)). 예제가 `XM_SendUsbDebugMessage` 로 내보내는 텍스트는 시리얼 터미널로 보며, 터미널과 위 도구들은 같은 USB 포트를 쓰므로 PC 프로그램은 한 번에 하나만 연결하세요.
 
 ---
 
@@ -327,7 +327,7 @@ Hogan(1985) 의 정의대로 임피던스를 0 에 가깝게. Ex.21 의 공칭 �
 
 ```
 [투명 교시] → [100 Hz 궤적 기록] → [PD 재생으로 검증]
-[PhAI Studio 라벨링] → [VLA 학습] → [배포]
+[xm10 도구로 수신 · .xmlog/CSV 저장] → [라벨링 · VLA 학습] → [배포]
 ```
 
 ---
@@ -337,7 +337,7 @@ Hogan(1985) 의 정의대로 임피던스를 0 에 가깝게. Ex.21 의 공칭 �
 
 ---
 
-## Part 6: Physical AI 응용 + 유틸리티 확장 (Ex.35~39)
+## Part 6: Physical AI 응용 + 유틸리티 확장 (Ex.35~36, 38~39)
 
 투명성 → 의도 감지 → 학습 → 자율 재생 파이프라인을 완성하는 응용 예제와, RTOS 실습에 유용한 시스템 유틸리티 예제입니다.
 
@@ -347,12 +347,6 @@ Hogan(1985) 의 정의대로 임피던스를 0 에 가깝게. Ex.21 의 공칭 �
 | :---: | :--- | :---: | :--- |
 | [35](35_MultiLayer_Transparent_Control/) | 다층 투명 제어 | 고급 | 투명/벽/좌우 커플링 세 모드 실시간 전환 |
 | [36](36_OnDevice_Kinesthetic_Learning/) | 보드 안에서 직접 학습 🛑 **Rev 2.0 전용** | 고급 | 작은 신경망을 보드 위에서 학습 → LQR 재생 — Internal Flash UserNV API 가 Rev 2.0 만 지원 |
-
-### 외부 모듈 연동 (37)
-
-| 예제 | 제목 | 난이도 | 핵심 개념 |
-| :---: | :--- | :---: | :--- |
-| [37](37_FES_Hub_Module_Ctrl/) | FES Hub 모듈 제어 | 고급 | CAN-FD 로 FES Hub 연결, 채널별 전기 자극 파라미터 제어 |
 
 ### RTOS 시스템 유틸리티 (38~39)
 
@@ -365,13 +359,15 @@ Hogan(1985) 의 정의대로 임피던스를 0 에 가깝게. Ex.21 의 공칭 �
 
 ## Part 7: 외부 센서 허브 · 외부 장비 연동 (Ex.40~43)
 
-> 🛑 **Rev 2.0 전용** — FDCAN2 외부 센서 허브 / 외부 전원 API 를 사용합니다. Rev 1.1 SDK 에는 포함되지 않습니다.
+> 🛑 **Rev 2.0 전용** — CAN-FD 외부 센서 허브 / 외부 전원 API 를 사용합니다. Rev 1.1 SDK 에는 포함되지 않습니다.
+>
+> IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
 
 | 예제 | 제목 | 난이도 | 핵심 개념 |
 | :---: | :--- | :---: | :--- |
-| [40](40_EMG_Proportional_Assist/) | EMG 비례 보조 토크 🛑 **Rev 2.0 전용** | 고급 | 외부 ADC 4채널 EMG → envelope → 비례 토크, BTN 캘리브 + PhAI Studio 0xF0 스트리밍 (EMG 경진대회 토대) |
-| [41](41_IMU_Hub_Dashboard/) | IMU Hub 자세 대시보드 🛑 **Rev 2.0 전용** | 고급 | 최대 6개 IMU 쿼터니언→오일러(r/p/y) 변환, 연결 자동감지 + PhAI Studio 0xF0 18채널 스트리밍 (FDCAN2 센서허브) |
-| [42](42_EMG_Hub_Biofeedback/) | EMG Hub 바이오피드백 🛑 **Rev 2.0 전용** | 고급 | 허브 처리 근활성도(envelope/MVC%) 수신, BTN 캘리브 + LED/PhAI Studio 0xF0 4채널 실시간 피드백 (FDCAN2 센서허브, 모터 미구동) |
+| [40](40_EMG_Proportional_Assist/) | EMG 비례 보조 토크 🛑 **Rev 2.0 전용** | 고급 | 외부 ADC 4채널 EMG → envelope → 비례 토크, BTN 캘리브 + 0xF0 스트리밍(xm10 도구) (EMG 경진대회 토대) |
+| [41](41_IMU_Hub_Dashboard/) | IMU Hub 자세 대시보드 🛑 **Rev 2.0 전용** | 고급 | 최대 6개 IMU 쿼터니언→오일러(r/p/y) 변환, 연결 자동감지 + 0xF0 18채널 스트리밍(xm10 도구) (CAN-FD 센서 허브) |
+| [42](42_EMG_Hub_Biofeedback/) | EMG Hub 바이오피드백 🛑 **Rev 2.0 전용** | 고급 | 허브 처리 근활성도(envelope/MVC%) 수신, BTN 캘리브 + LED/0xF0 4채널 실시간 피드백(xm10 도구) (CAN-FD 센서 허브, 모터 미구동) |
 | [43](43_External_UART_PingPong/) | 보드끼리 시리얼로 대화하기 🛑 **Rev 2.0 전용** | 중급 | External UART(PD5/PD6)로 XM10 2대 직결 통신 — 콜백은 복사만, 프레임 경계는 바이트 상태기계로 (외부 장비 연동의 토대) |
 
 ---
@@ -382,6 +378,6 @@ Hogan(1985) 의 정의대로 임피던스를 0 에 가깝게. Ex.21 의 공칭 �
 2. `.c` 코드를 `XM_Apps/Control_Task/control_task.c` 에 복사 후 빌드해서 보드에 업로드합니다.
 3. README 의 4 단계 "실험" 을 그대로 따라가며 동작을 확인합니다.
 4. 변형도 시도해보세요 — 값을 바꾸거나 LED 를 다른 핀으로 옮겨봅니다.
-5. PhAI Studio 를 연결하면 보드 데이터를 실시간 그래프로 볼 수 있습니다 (`0x20` 채널 기본, `0xF0~0xF3` 채널 커스텀).
+5. PhAI Studio 를 연결하면 보드의 Total Data(`0x20`)를 실시간 그래프로 볼 수 있습니다. 예제가 보내는 사용자 채널(`0xF0`~`0xFE`, 예제는 `0xF0`~`0xF3` 사용)은 `xm10` 도구로 봅니다.
 
 자세한 빌드·업로드 방법은 [Getting Started — 첫 빌드](../docs/getting-started/03-first-build.md).

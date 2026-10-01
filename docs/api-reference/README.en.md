@@ -4,6 +4,8 @@
 
 This is a function reference to keep open while writing your algorithm. You don't need to read it cover to cover — just look up the relevant group when you need it.
 
+> **Supported scope**: only the functions, types and macros declared in the `XM_FW/XM_API/` headers are supported for users.
+
 ---
 
 ## How to Read This — Two Layers
@@ -95,7 +97,7 @@ void Control_Setup(void)
 | 29 Bilateral Coordination | △ | Angle-based motion; accuracy improves with Body Data |
 | 30 FF+FB Combined | ✗ | Model parameters are set directly via macros |
 
-> If you need gait phase information without `gaitCycle` or `footContact`, you can use external sensors such as an IMU Hub or GRF shoes for independent measurement.
+> If you need gait phase information without `gaitCycle` or `footContact`, you can use external sensors such as GRF shoes for independent measurement.
 
 ---
 

@@ -22,7 +22,7 @@
 | [`XM_SetLedEffect`](#xm_setledeffect) | LED에 Blink/Heartbeat/Oneshot 효과 설정 |
 | [`XM_GetButtonState`](#xm_getbuttonstate) | 버튼의 현재 물리적 눌림 상태 조회 (폴링) |
 | [`XM_GetButtonEvent`](#xm_getbuttonevent) | 버튼의 최신 이벤트 조회 (Read-Clear) |
-| [`XM_SetChannelLedRGB`](#xm_setchannelledrgb) 🟢 Rev 2.0 전용 | 채널 RGB LED 색상 직접 설정 |
+| [`XM_SetChannelLedRGB`](#xm_setchannelledrgb--rev-20-전용) 🟢 Rev 2.0 전용 | 채널 RGB LED 색상 직접 설정 |
 | [`XM_IO_Update`](#xm_io_update) | LED/버튼 내부 상태 업데이트 (엔진) |
 
 ---
@@ -76,7 +76,7 @@ LED에 깜빡임(Blink), 심장박동(Heartbeat), 일회성 점등(Oneshot) 등�
 
 **반환값**: 없음 (`void`)
 
-**⚠️ 호출 컨텍스트**: `Control_Setup()` / `Control_Loop()` 컨텍스트 기준. 설정 직후 효과가 바로 보이지 않을 수 있으며, `XM_IO_Update()`가 주기적으로 호출되고 있어야 반영됩니다 (User Task 안에서 자동 호출되므로 일반적으로 별도 조치 불필요).
+**⚠️ 호출 컨텍스트**: `Control_Setup()` / `Control_Loop()` 컨텍스트 기준. 설정 직후 효과가 바로 보이지 않을 수 있으며, `XM_IO_Update()`가 주기적으로 호출되고 있어야 반영됩니다 (제어 루프 task (Control_Loop) 안에서 자동 호출되므로 일반적으로 별도 조치 불필요).
 
 **예제**
 
@@ -190,7 +190,7 @@ XM_SetChannelLedRGB(XM_CH_LED_IMU, 255, 0, 0);  // IMU 채널 LED를 빨간색�
 XM_SetChannelLedRGB(XM_CH_LED_IMU, 0, 0, 0);    // r=g=b=0 → 시스템 자동 제어로 복구
 ```
 
-**참고**: [`XmChannelLed_t`](#xmchannelled_t) 채널 목록. `r=0,g=0,b=0` 으로 호출하면 시스템 자동 상태 표시로 복구됩니다.
+**참고**: [`XmChannelLed_t`](#xmchannelled_t--rev-20-전용) 채널 목록. `r=0,g=0,b=0` 으로 호출하면 시스템 자동 상태 표시로 복구됩니다.
 
 ---
 
@@ -206,12 +206,12 @@ LED 깜빡임 타이밍 계산과 버튼 디바운싱/이벤트 판정을 수행
 
 **반환값**: 없음 (`void`)
 
-**⚠️ 호출 컨텍스트**: `Control_Setup()` / `Control_Loop()` 컨텍스트 기준. `core_process` 가 입력 수집 단계에서 1 ms(1 kHz) 주기로 자동 호출하므로, **일반적으로 사용자가 직접 호출할 필요는 없습니다.** 다만 이 함수가 주기적으로 실행되지 않으면(예: User Task가 무한 루프에 빠짐) Blink/Heartbeat/Oneshot 효과와 버튼 이벤트가 전혀 갱신되지 않습니다.
+**⚠️ 호출 컨텍스트**: `Control_Setup()` / `Control_Loop()` 컨텍스트 기준. 시스템이 입력 수집 단계에서 1 ms(1 kHz) 주기로 자동 호출하므로, **일반적으로 사용자가 직접 호출할 필요는 없습니다.** 다만 이 함수가 주기적으로 실행되지 않으면(예: 제어 루프 task (Control_Loop) 가 무한 루프에 빠짐) Blink/Heartbeat/Oneshot 효과와 버튼 이벤트가 전혀 갱신되지 않습니다.
 
 **예제**
 
 ```c
-// 일반적으로 직접 호출할 필요 없음 — core_process가 자동 호출
+// 일반적으로 직접 호출할 필요 없음 — 시스템이 자동 호출
 // 참고용: 개념상의 호출 위치
 void Control_Loop(void)
 {

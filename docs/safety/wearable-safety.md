@@ -15,7 +15,7 @@
 
 토크 출력을 끈 상태(`control_ON = 0` 또는 `XM_CTRL_MONITOR`)로 먼저 **신호·방향·크기**를 확인합니다.
 
-1. EMG 센서를 연결하고 PhAI Studio(또는 Live Expressions)로 **raw / envelope** 신호를 본다.
+1. EMG 센서를 연결하고 [`xm10` 도구](../getting-started/04-pc-data-tool.md) (Ex.40 의 `0xF0` 채널 Raw/Env/Tau) 또는 Live Expressions 로 **raw / envelope** 신호를 본다.
 2. 근육 이완 → 안정 캘리브(BTN1), 대표 수축 → 활성 캘리브(BTN2). **순서 반드시 BTN1 → BTN2.**
 3. 이완 시 envelope가 ~0, 수축 시 상승하는지 확인(노이즈가 크면 deadband 상향).
 4. **방향 확인**: 의도한 근육 수축이 의도한 관절 방향(굴곡/신전)으로 매핑되는지 — 부호 규약은 **양수(+) = Flexion(굴곡), 음수(−) = Extension(신전)**.
@@ -76,7 +76,7 @@ EMG 예제에서 알고리즘을 바꿔도 **다음은 그대로 둡니다**:
 
 ## 6. 착용 중 모니터링
 
-- PhAI Studio 로 **envelope · 출력 토크 · 관절각**을 실시간으로 보며 진행.
+- `xm10` 도구 하나로 **envelope · 출력 토크**(Ex.40 의 `0xF0` 탭)를 실시간으로 보며 진행하세요. 관절각은 같은 `xm10` 창의 **Show 0x20 tab**(5 Hz 표)에서 볼 수 있습니다. PC 프로그램은 한 번에 하나만 연결하세요.
 - 토크가 의도와 다르게 튀거나 이완 시 0 으로 안 떨어지면 **즉시 슈트 STANDBY**.
 
 ---

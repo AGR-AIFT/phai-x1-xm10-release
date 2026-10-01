@@ -17,7 +17,7 @@ XM10 펌웨어는 사용자가 복잡한 타이머 인터럽트나 디바운싱(
 ### The Core Engine: `XM_IO_Update()`
 
   * **역할:** LED의 깜빡임 타이밍을 계산하고, 버튼의 신호를 분석하여 노이즈를 제거(Debouncing)하고 이벤트를 생성하는 **엔진**입니다.
-  * **구동:** `core_process`에 의해 **1 ms(1 kHz) 주기**로 자동 호출되므로, 사용자가 직접 호출할 필요는 없으나 그 존재와 역할은 이해하고 있어야 합니다.
+  * **구동:** 시스템이 **1 ms(1 kHz) 주기**로 자동 호출하므로, 사용자가 직접 호출할 필요는 없으나 그 존재와 역할은 이해하고 있어야 합니다.
   * **흐름:**
     1.  사용자가 `XM_SetLedEffect` 호출 -\> 설정값 저장.
     2.  `XM_IO_Update` 주기적 실행 -\> 시간이 흐름에 따라 LED ON/OFF 토글.
@@ -244,13 +244,13 @@ PCA9957 기반의 채널별 RGB LED를 제어합니다. 센서 모듈 연결 상
 #### `XM_IO_Update`
 
 **[시스템 필수]** LED와 버튼의 상태를 업데이트하는 구동 함수입니다.
-User Task의 무한 루프(`Control_Loop` 또는 `TSM_Run` 내부)에서 주기적으로 호출되어야 `Blink`나 `Long Press` 기능이 정상 동작합니다.
+제어 루프 task (Control_Loop) 에서 주기적으로 호출되어야(`Control_Loop` 또는 `XM_TSM_Run` 내부) `Blink`나 `Long Press` 기능이 정상 동작합니다.
 
   * **Syntax**
     ```c
     void XM_IO_Update(void);
     ```
-  * **Note**: `core_process.c`가 `_FetchAllInputs` 과정에서 자동으로 호출해주므로, 일반적인 경우 **End User가 직접 호출할 필요는 없습니다.**
+  * **Note**: 시스템이 입력을 수집하는 단계에서 자동으로 호출해주므로, 일반적인 경우 **End User가 직접 호출할 필요는 없습니다.**
 
 ---
 
@@ -258,7 +258,7 @@ User Task의 무한 루프(`Control_Loop` 또는 `TSM_Run` 내부)에서 주기�
 
 | 증상 | 원인 | 해결 |
 |------|------|------|
-| LED 가 깜빡 모드 설정했는데 동작 안 함 | `XM_IO_Update` 가 호출 안 됨 (User Task 가 멈췄거나 `XM_TSM_Run` 누락) | `core_process` 가 자동 호출하므로 사용자 코드가 무한 루프에 빠지지 않았는지 확인 |
+| LED 가 깜빡 모드 설정했는데 동작 안 함 | `XM_IO_Update` 가 호출 안 됨 (제어 루프 task (Control_Loop) 가 멈췄거나 `XM_TSM_Run` 누락) | 시스템이 자동 호출하므로 사용자 코드가 무한 루프에 빠지지 않았는지 확인 |
 | `GetButtonEvent` 가 같은 이벤트를 여러 번 반환 | Run_Loop 안에서 다른 곳에서도 `GetButtonEvent` 호출 (Read-Clear 동시 소비) | 한 이벤트 채널 = 한 곳에서만 읽기 |
 | `XM_BTN_LONG_PRESS` 가 트리거 안 됨 | 누르고 있는 시간 < 1초 | 1초 이상 유지 필요 |
 | `SetLedEffect` 후에 `SetLedState` 가 안 먹힘 | 효과 모드가 우선 — `SetLedState` 가 무시되거나 덮어써짐 | `SetLedEffect(LED, XM_LED_OFF, 0)` 으로 효과 해제 후 사용 |

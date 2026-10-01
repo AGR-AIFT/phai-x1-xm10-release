@@ -6,7 +6,7 @@
 > - PD 추종 (`τ = Kp·(θ_d − θ) + Kd·(θ̇_d − θ̇)`) → 위상 기반 궤도 추종.
 >
 > ⏱️ 권장 시간: 55분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.23 Gait Phase Adaptive](../23_Gait_Phase_Adaptive_Torque/) (정현파 vs Bézier 비교) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)
+> 🧰 사전 예제: [Ex.23 Gait Phase Adaptive](../23_Gait_Phase_Adaptive_Torque/) (정현파 vs Bézier 비교) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 > 📄 논문: Westervelt, E. R., et al. (2003). *Hybrid zero dynamics of planar biped walkers.* IEEE TAC, 48(1), 42–56.
 
 ---
@@ -16,7 +16,7 @@
 `s = gaitCycle / 100` 이 Bézier 입력이므로 **gaitCycle 정확도가 모든 것**.
 `Control_Setup()` 에 반드시 `XM_SendUserBodyData(bodyData)` 호출.
 
-> [examples/README.md — Body Data 안내](../README.md#part-5)
+> [examples/README.md — Body Data 안내](../README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세)
 
 ---
 
@@ -30,7 +30,7 @@ H10 ASSIST 모드에서 보행 위상 s 에 따라 **목표 각도 θ_d(s)** 가
 | **Fast** | 빠른 swing 위상 | 빠른 보행 |
 | **Minimal** | 작은 진폭 | 최소 보조 |
 
-USB CDC `VC | s:0.45 θd:8.2 θ:7.5 τ:1.40` + PhAI 0xF0 5ch.
+USB CDC `VC | s:0.45 θd:8.2 θ:7.5 τ:1.40` + `xm10` 도구의 0xF0 4ch (s / θd / θ / τ).
 
 > 📸 **Bézier 곡선 + PD 추종** — 사진·영상 준비 중
 
@@ -134,10 +134,12 @@ static void Active_Loop(void)
 
 ## 4️⃣ 실험 — 직접 해보기 (체크포인트)
 
+> 💡 PC 프로그램은 한 번에 하나만 연결하세요. 텍스트는 시리얼 터미널로, 0xF0 그래프는 `xm10` 도구로 보되 하나를 닫고 다음 것을 여세요. (터미널에 알 수 없는 글자가 섞여 보여도 정상입니다.) 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
+
 1. **Body Data 설정** + 빌드/플래시 + ASSIST
 2. **정지 상태** → ✅ s=0 고정, 토크 0
 3. **보행 시작** → ✅ s 0~1 순환, θ_d 가 Bézier 곡선 그림
-4. **PhAI 0xF0 그래프** → ✅ θ_d 와 θ 가 비슷한 모양 (PD 가 추종)
+4. **`xm10` 도구의 0xF0 그래프** → ✅ θ_d 와 θ 가 비슷한 모양 (PD 가 추종)
 5. **BTN 1 클릭** → ✅ Kp 0.2 → 0.5 → 1.0 → 2.0 순환. 추종 강성 증가
 6. **BTN 2 클릭** → ✅ Kd 0.01 → 0.03 → 0.05. 댐핑 변화
 7. **BTN 3 클릭** → ✅ 프로파일 Natural / Fast / Minimal 순환

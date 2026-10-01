@@ -2,7 +2,7 @@
 
 This page maps the end-to-end flow from collecting exoskeleton data on the XM10 board to loading it into a training framework such as PyTorch or scikit-learn. Use it as a quick-reference map while you work.
 
-> USB memory (MSC) file logging was removed in v2.5.0. Data capture now uses **USB-CDC real-time streaming**, and Path A below is the standard route. On-board storage (SD card) is planned for a future HW revision.
+> USB memory (MSC) file logging was removed in v2.5.0. Data capture now uses **USB-CDC real-time streaming**, and Path A below is the standard route. On-board storage (SD card) is not supported at present.
 
 ---
 
@@ -12,8 +12,7 @@ This page maps the end-to-end flow from collecting exoskeleton data on the XM10 
 [Board operation]         [Collection]                  [Conversion]          [Training]
        ↓                       ↓                             ↓                    ↓
 KIT H10 worn  →  USB-CDC real-time streaming   →   CSV / npy output  →  PyTorch DataLoader
-                 (PhAI Studio or                                          or sklearn
-                  xm10 tool → .xmlog → export)
+                 (xm10 tool → .xmlog → export)                            or sklearn
 ```
 
 There are two paths. Choose based on your goal.
@@ -45,10 +44,11 @@ void Control_Loop(void) {
 
 ### 2. PC Side — Receive Stream + Save CSV
 
-Two options:
+On the PC side, receive the stream with the `xm10` tool.
 
-- **PhAI Studio** — connect via USB → select channel `0xF0` → watch the live graph and click the record button → export to `.csv`. Simplest.
 - **xm10 tool** (in the repo's `PythonDecoder/`) — saves the raw bytes as-is to `.xmlog` and lets you pull CSV out later. Since you can re-export old recordings even after changing channel names/layout, it's better suited for managing a training dataset. Build it as an executable and it works on PCs without Python too ([guide](../getting-started/04-pc-data-tool.en.md)).
+
+> PhAI Studio is still under development, so for now use the `xm10` tool to view and save your own (custom) data structs (`0xF0`–`0xFE`).
 
 ```bash
 python PythonDecoder/xm10.py recv --cli --port COM6 --log         # receive to console + save .xmlog (Ctrl+C to stop)
@@ -156,4 +156,4 @@ Measure inference time using the loop profiling pattern from `Ex.18 Debug Monito
 - Progress from `Ex.16 TinyAI Sensor Fusion` to `Ex.36 OnDevice Kinesthetic Learning` for on-device inference
 - After deploying a trained model to the board, try the full expert demonstration → model training → playback cycle as shown in `Ex.33 Kinesthetic Teaching`
 
-If you need more detail on PhAI Studio or Python post-processing, open a request on GitHub Issues.
+If you need more detail on the `xm10` tool or Python post-processing, open a request on GitHub Issues.

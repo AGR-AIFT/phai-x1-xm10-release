@@ -15,7 +15,7 @@
 
 With torque output disabled (`control_ON = 0` or `XM_CTRL_MONITOR`), verify the **signal, direction, and magnitude** first.
 
-1. Connect the EMG sensor and check the **raw / envelope** signal in PhAI Studio (or Live Expressions).
+1. Connect the EMG sensor and check the **raw / envelope** signal with the [`xm10` tool](../getting-started/04-pc-data-tool.en.md) (Ex.40's `0xF0` channels Raw/Env/Tau) or Live Expressions.
 2. Relax the muscle → resting calibration (BTN1); representative contraction → active calibration (BTN2). **Order must be BTN1 → BTN2.**
 3. Confirm envelope is ~0 at rest and rises on contraction (increase deadband if noise is high).
 4. **Direction check**: verify that the intended muscle contraction maps to the intended joint direction (Flexion / Extension) — sign convention is **positive(+) = Flexion, negative(−) = Extension**.
@@ -76,7 +76,7 @@ Even when modifying the algorithm in the EMG example, **keep the following in pl
 
 ## 6. Monitoring During Wear
 
-- Use PhAI Studio to monitor **envelope, output torque, and joint angle** in real time throughout the session.
+- Use the `xm10` tool alone to watch **envelope and output torque** (the `0xF0` tab for Ex.40) in real time throughout the session. Joint angle is in the same `xm10` window under **Show 0x20 tab** (a 5 Hz table). Connect only one PC program at a time.
 - If torque spikes unexpectedly or fails to return to 0 on relaxation, **immediately press suit STANDBY**.
 
 ---

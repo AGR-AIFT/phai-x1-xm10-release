@@ -22,7 +22,7 @@ Use this API when you want to start/stop actions with a button press, or show th
 | [`XM_SetLedEffect`](#xm_setledeffect) | Apply Blink/Heartbeat/Oneshot effect to an LED |
 | [`XM_GetButtonState`](#xm_getbuttonstate) | Read a button's current physical press state (polling) |
 | [`XM_GetButtonEvent`](#xm_getbuttonevent) | Read a button's latest event (Read-Clear) |
-| [`XM_SetChannelLedRGB`](#xm_setchannelledrgb) 🟢 Rev 2.0 Only | Set a channel RGB LED's color directly |
+| [`XM_SetChannelLedRGB`](#xm_setchannelledrgb--rev-20-only) 🟢 Rev 2.0 Only | Set a channel RGB LED's color directly |
 | [`XM_IO_Update`](#xm_io_update) | Update internal LED/button state (engine) |
 
 ---
@@ -76,7 +76,7 @@ Configures an effect — Blink, Heartbeat, or Oneshot — on an LED. This functi
 
 **Returns**: None (`void`)
 
-**⚠️ Calling context**: Assume `Control_Setup()` / `Control_Loop()` context. The effect may not appear immediately after this call; it is only reflected while [`XM_IO_Update()`](#xm_io_update) is being called periodically (this happens automatically inside the User Task, so no extra action is normally needed).
+**⚠️ Calling context**: Assume `Control_Setup()` / `Control_Loop()` context. The effect may not appear immediately after this call; it is only reflected while [`XM_IO_Update()`](#xm_io_update) is being called periodically (this happens automatically inside the control-loop task (Control_Loop), so no extra action is normally needed).
 
 **Example**
 
@@ -190,7 +190,7 @@ XM_SetChannelLedRGB(XM_CH_LED_IMU, 255, 0, 0);  // Set the IMU channel LED to re
 XM_SetChannelLedRGB(XM_CH_LED_IMU, 0, 0, 0);    // r=g=b=0 -> restore automatic system control
 ```
 
-**See also**: [`XmChannelLed_t`](#xmchannelled_t) for the channel list. Calling with `r=0,g=0,b=0` restores automatic system status display.
+**See also**: [`XmChannelLed_t`](#xmchannelled_t--rev-20-only) for the channel list. Calling with `r=0,g=0,b=0` restores automatic system status display.
 
 ---
 
@@ -206,12 +206,12 @@ The internal engine function that computes LED blink timing and performs button 
 
 **Returns**: None (`void`)
 
-**⚠️ Calling context**: Assume `Control_Setup()` / `Control_Loop()` context. `core_process` calls this automatically at a 1 ms (1 kHz) interval during its input-collection stage, so **you normally do not need to call it yourself.** However, if this function stops being called periodically (e.g., the User Task gets stuck in an infinite loop), Blink/Heartbeat/Oneshot effects and button events will stop updating entirely.
+**⚠️ Calling context**: Assume `Control_Setup()` / `Control_Loop()` context. The system calls this automatically at a 1 ms (1 kHz) interval during its input-collection stage, so **you normally do not need to call it yourself.** However, if this function stops being called periodically (e.g., the control-loop task (Control_Loop) gets stuck in an infinite loop), Blink/Heartbeat/Oneshot effects and button events will stop updating entirely.
 
 **Example**
 
 ```c
-// Normally you do not need to call this directly — core_process calls it automatically
+// Normally you do not need to call this directly — the system calls it automatically
 // For reference, a conceptual call site:
 void Control_Loop(void)
 {
