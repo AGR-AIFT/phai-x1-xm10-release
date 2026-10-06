@@ -103,7 +103,7 @@ Exchange real-time messages with a PC and stream data. Essential for debugging a
 | [08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | Sensor data monitoring | ⭐⭐ | Real-time `sprintf` output of sensor data |
 | [09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | High-speed binary streaming | ⭐⭐⭐ | PhAI V2.2 protocol, 1 kHz transmission (view the user channel with the `xm10` tool) |
 
-> To save and analyze a captured stream on the PC, use PhAI Studio recording or the `xm10` tool in the repo — `python PythonDecoder/xm10.py recv` shows a live graph while the raw stream is saved as `.xmlog`, then `export` pulls out CSV ([guide](../getting-started/04-pc-data-tool.en.md)). PhAI Studio is still under development, so for now use the `xm10` tool to view and save your own (custom) data structs, such as the ones you send with `XM_SendUsbDataWithId`. (On-board file storage was removed in v2.5.0 and is not supported at present.)
+> To save and analyze a captured stream on the PC, use PhAI Studio recording or the `xm10` tool in the repo — `python pc-data-tool/xm10.py recv` shows a live graph while the raw stream is saved as `.xmlog`, then `export` pulls out CSV ([guide](../getting-started/04-pc-data-tool.en.md)). PhAI Studio is still under development, so for now use the `xm10` tool to view and save your own (custom) data structs, such as the ones you send with `XM_SendUsbDataWithId`. (On-board file storage was removed in v2.5.0 and is not supported at present.)
 
 ---
 

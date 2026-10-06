@@ -28,8 +28,8 @@
 
 - **생성기** (여기, `gen_golden_vectors.py`) — PLAN 의 표를 보고 `struct` 로 직접 조립.
   릴리스 레포 코드를 import 하지 않는다.
-- **호스트 파서** — `phai-x1-xm10-release/PythonDecoder/CDC/`
-  (`schema_0xee.py`, `xmlog.py`). `python PythonDecoder/run_tests.py` 로 검증.
+- **호스트 파서** — `phai-x1-xm10-release/pc-data-tool/CDC/`
+  (`schema_0xee.py`, `xmlog.py`). `python pc-data-tool/run_tests.py` 로 검증.
 - **FW** — 아직 없다. `0xEE` 송신 구현 시 이 벡터를 재현해야 한다.
 
 ## 주의

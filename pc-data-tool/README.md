@@ -1,4 +1,4 @@
-# XM10 USB 데이터 다루기 — `xm10` 도구 (PythonDecoder 폴더)
+# XM10 USB 데이터 다루기 — `xm10` 도구 (pc-data-tool 폴더)
 
 이 폴더가 `xm10` 도구입니다 (사용법: [04. PC 에서 데이터 받기](../docs/getting-started/04-pc-data-tool.md)).
 XM10 보드가 USB-CDC 로 내보내는 데이터를 PC 에서 받아 그래프로 보고 저장하는 파이썬 도구이며,

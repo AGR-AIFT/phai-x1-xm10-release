@@ -75,7 +75,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 **3. 온보드 저장장치 없음**
 - SD카드 슬롯이 없습니다.
 - 데이터 수집은 **USB-CDC 실시간 스트리밍**으로 합니다 (PhAI Studio 녹화 또는
-  `xm10` 도구 — `PythonDecoder/`). 배우는 순서는 Ex.07 → 08 → 09.
+  `xm10` 도구 — `pc-data-tool/`). 배우는 순서는 Ex.07 → 08 → 09.
 
 ---
 
@@ -151,7 +151,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | 도구 | 역할 | XM10 과의 관계 |
 |------|------|---------------|
 | **PhAI Studio** | Total Data(시스템 데이터) 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
-| **xm10 PC 도구** (`PythonDecoder/xm10.py`) | 실시간 그래프 + 무손실 저장(.xmlog) + CSV 내보내기. `demo` 로 보드 없이 체험, `build_exe.py` 로 실행파일 | 본 ZIP 에 들어 있음 — [안내](docs/getting-started/04-pc-data-tool.md) |
+| **xm10 PC 도구** (`pc-data-tool/xm10.py`) | 실시간 그래프 + 무손실 저장(.xmlog) + CSV 내보내기. `demo` 로 보드 없이 체험, `build_exe.py` 로 실행파일 | 본 ZIP 에 들어 있음 — [안내](docs/getting-started/04-pc-data-tool.md) |
 
 ---
 

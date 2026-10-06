@@ -1,8 +1,8 @@
 # 04 — Receiving Data on Your PC — the `xm10` Tool
 
-A tool for **plotting as a live graph, saving raw, and exporting to CSV** the data your board streams out over USB. It lives in the `Extension_Module/PythonDecoder/` folder — run it directly with Python, or bundle it into a single executable for a PC that doesn't have Python installed.
+A tool for **plotting as a live graph, saving raw, and exporting to CSV** the data your board streams out over USB. It lives in the `Extension_Module/pc-data-tool/` folder — run it directly with Python, or bundle it into a single executable for a PC that doesn't have Python installed.
 
-> **Where is it?** When you unzip the SDK, `Extension_Module\PythonDecoder\` is included. If your ZIP doesn't have that folder (an older release), grab just the `PythonDecoder/` folder from the GitHub repo and put it anywhere — it's the same files regardless of board revision.
+> **Where is it?** When you unzip the SDK, `Extension_Module\pc-data-tool\` is included. If your ZIP doesn't have that folder (an older release), grab just the `pc-data-tool/` folder from the GitHub repo and put it anywhere — it's the same files regardless of board revision. In the v2.8.0 ZIP this folder was named `PythonDecoder` — it is the same tool.
 
 > **How is this different from PhAI Studio?** PhAI Studio is the official tool you use straight from the browser. This is an open-source, local tool. It **saves the raw bytes before interpreting them**, so you can re-export later even if the channel layout changes, and if you know Python you can modify it however you like. The two tools **can't have the same COM port open at the same time** — connect only one PC program at a time.
 
@@ -21,7 +21,7 @@ A tool for **plotting as a live graph, saving raw, and exporting to CSV** the da
 You can watch the whole flow once even without a board yet.
 
 ```bash
-cd Extension_Module/PythonDecoder   # inside the unzipped SDK folder
+cd Extension_Module/pc-data-tool   # inside the unzipped SDK folder
 pip install pyserial pyqt5 pyqtgraph numpy      # first time only
 python xm10.py demo
 ```
@@ -208,7 +208,7 @@ After building, it actually **runs** `demo` and the self-checks against that exe
 ## What's in the Folder
 
 ```
-PythonDecoder/
+pc-data-tool/
 ├── xm10.py          ← Start here. demo / ports / recv / soak / export / selftest
 ├── build_exe.py     ← Build the standalone executable
 ├── run_tests.py     ← Development-time verification (a bit more than selftest)
@@ -216,7 +216,7 @@ PythonDecoder/
 └── CDC/             ← The actual implementation, for when you want to modify it directly
 ```
 
-What each file under `CDC/` does is listed in the "파일 한눈에" (files at a glance) table in [PythonDecoder/README.md](../../PythonDecoder/README.md). Normally you only need `xm10.py`.
+What each file under `CDC/` does is listed in the "파일 한눈에" (files at a glance) table in [pc-data-tool/README.md](../../pc-data-tool/README.md). Normally you only need `xm10.py`.
 
 ---
 
