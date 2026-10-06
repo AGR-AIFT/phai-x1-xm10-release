@@ -2553,13 +2553,13 @@
 <h3 id="2-pc-side--receive-stream--save-csv">2. PC Side — Receive Stream + Save CSV<a class="headerlink" href="#2-pc-side--receive-stream--save-csv" title="Permanent link">&para;</a></h3>
 <p>On the PC side, receive the stream with the <code>xm10</code> tool.</p>
 <ul>
-<li><strong>xm10 tool</strong> (in the repo's <code>PythonDecoder/</code>) — saves the raw bytes as-is to <code>.xmlog</code> and lets you pull CSV out later. Since you can re-export old recordings even after changing channel names/layout, it's better suited for managing a training dataset. Build it as an executable and it works on PCs without Python too (<a href="../../getting-started/04-pc-data-tool/">guide</a>).</li>
+<li><strong>xm10 tool</strong> (in the repo's <code>pc-data-tool/</code>) — saves the raw bytes as-is to <code>.xmlog</code> and lets you pull CSV out later. Since you can re-export old recordings even after changing channel names/layout, it's better suited for managing a training dataset. Build it as an executable and it works on PCs without Python too (<a href="../../getting-started/04-pc-data-tool/">guide</a>).</li>
 </ul>
 <blockquote>
 <p>PhAI Studio is still under development, so for now use the <code>xm10</code> tool to view and save your own (custom) data structs (<code>0xF0</code>–<code>0xFE</code>).</p>
 </blockquote>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>PythonDecoder/xm10.py<span class="w"> </span>recv<span class="w"> </span>--cli<span class="w"> </span>--port<span class="w"> </span>COM6<span class="w"> </span>--log<span class="w">         </span><span class="c1"># receive to console + save .xmlog (Ctrl+C to stop)</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>PythonDecoder/xm10.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>data/cdc_&lt;timestamp&gt;.xmlog<span class="w"> </span>--csv<span class="w"> </span>out/<span class="w">   </span><span class="c1"># export per-channel CSV</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>pc-data-tool/xm10.py<span class="w"> </span>recv<span class="w"> </span>--cli<span class="w"> </span>--port<span class="w"> </span>COM6<span class="w"> </span>--log<span class="w">         </span><span class="c1"># receive to console + save .xmlog (Ctrl+C to stop)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>pc-data-tool/xm10.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>data/cdc_&lt;timestamp&gt;.xmlog<span class="w"> </span>--csv<span class="w"> </span>out/<span class="w">   </span><span class="c1"># export per-channel CSV</span>
 </code></pre></div>
 <p><code>out/</code> gets <code>..._user_0xF0.csv</code> (your channel) and <code>..._total_0x20.csv</code> (the 197 channels the board always sends — joint angle/torque, IMU, GRF). Both files carry <code>pc_time_us</code> (PC receive time) and <code>seq_id</code> (the board's send sequence, shared across all channels) columns up front so you can align the time axis.</p>
 <h3 id="3-loading-into-a-training-framework">3. Loading into a Training Framework<a class="headerlink" href="#3-loading-into-a-training-framework" title="Permanent link">&para;</a></h3>
@@ -2650,7 +2650,7 @@
 <h2 id="common-pitfalls">Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>CSV is too large / slow</strong> — For large datasets, convert to <code>.npy</code> or <code>.parquet</code> for loading. Keep CSV for human inspection only.</li>
-<li><strong>Packet loss while streaming</strong> — Run <code>python PythonDecoder/xm10.py soak --port COM6 --minutes 10</code> to check for dropped frames. If you captured via <code>.xmlog</code>, the missing ranges (GAP) show up right in the <code>export</code> summary. If there's loss, reduce the data volume or trim channels.</li>
+<li><strong>Packet loss while streaming</strong> — Run <code>python pc-data-tool/xm10.py soak --port COM6 --minutes 10</code> to check for dropped frames. If you captured via <code>.xmlog</code>, the missing ranges (GAP) show up right in the <code>export</code> summary. If there's loss, reduce the data volume or trim channels.</li>
 <li><strong>NaN / Inf values</strong> — Add <code>assert(isfinite(value))</code> on the board side. Filter with <code>np.isfinite()</code> just before training.</li>
 <li><strong>Class imbalance</strong> — Gait phases like Stance/Swing are naturally imbalanced (roughly 7:3). Use the <code>class_weight</code> option or SMOTE.</li>
 <li><strong>On-board inference exceeds 1 ms</strong> — Apply model quantization (int8) or reduce the number of layers. Verify that the STM32H7's FPU is being utilized.</li>

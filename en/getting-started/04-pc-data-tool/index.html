@@ -2476,9 +2476,9 @@
 
 
 <h1 id="04--receiving-data-on-your-pc--the-xm10-tool">04 — Receiving Data on Your PC — the <code>xm10</code> Tool<a class="headerlink" href="#04--receiving-data-on-your-pc--the-xm10-tool" title="Permanent link">&para;</a></h1>
-<p>A tool for <strong>plotting as a live graph, saving raw, and exporting to CSV</strong> the data your board streams out over USB. It lives in the <code>Extension_Module/PythonDecoder/</code> folder — run it directly with Python, or bundle it into a single executable for a PC that doesn't have Python installed.</p>
+<p>A tool for <strong>plotting as a live graph, saving raw, and exporting to CSV</strong> the data your board streams out over USB. It lives in the <code>Extension_Module/pc-data-tool/</code> folder — run it directly with Python, or bundle it into a single executable for a PC that doesn't have Python installed.</p>
 <blockquote>
-<p><strong>Where is it?</strong> When you unzip the SDK, <code>Extension_Module\PythonDecoder\</code> is included. If your ZIP doesn't have that folder (an older release), grab just the <code>PythonDecoder/</code> folder from the GitHub repo and put it anywhere — it's the same files regardless of board revision.</p>
+<p><strong>Where is it?</strong> When you unzip the SDK, <code>Extension_Module\pc-data-tool\</code> is included. If your ZIP doesn't have that folder (an older release), grab just the <code>pc-data-tool/</code> folder from the GitHub repo and put it anywhere — it's the same files regardless of board revision. In the v2.8.0 ZIP this folder was named <code>PythonDecoder</code> — it is the same tool.</p>
 <p><strong>How is this different from PhAI Studio?</strong> PhAI Studio is the official tool you use straight from the browser. This is an open-source, local tool. It <strong>saves the raw bytes before interpreting them</strong>, so you can re-export later even if the channel layout changes, and if you know Python you can modify it however you like. The two tools <strong>can't have the same COM port open at the same time</strong> — connect only one PC program at a time.</p>
 <p><strong>Use this tool to see your own structs.</strong> PhAI Studio shows the Total Data (0x20) the board sends automatically. PhAI Studio is still under development, so for now use the <code>xm10</code> tool to view and save your own (custom) data structs.</p>
 </blockquote>
@@ -2507,7 +2507,7 @@
 <hr />
 <h2 id="5-minute-demo--no-board-required">5-Minute Demo — No Board Required<a class="headerlink" href="#5-minute-demo--no-board-required" title="Permanent link">&para;</a></h2>
 <p>You can watch the whole flow once even without a board yet.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>Extension_Module/PythonDecoder<span class="w">   </span><span class="c1"># inside the unzipped SDK folder</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>Extension_Module/pc-data-tool<span class="w">   </span><span class="c1"># inside the unzipped SDK folder</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>pyserial<span class="w"> </span>pyqt5<span class="w"> </span>pyqtgraph<span class="w"> </span>numpy<span class="w">      </span><span class="c1"># first time only</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>python<span class="w"> </span>xm10.py<span class="w"> </span>demo
 </code></pre></div>
@@ -2707,14 +2707,14 @@
 </table>
 <hr />
 <h2 id="whats-in-the-folder">What's in the Folder<a class="headerlink" href="#whats-in-the-folder" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>PythonDecoder/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>pc-data-tool/
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>├── xm10.py          ← Start here. demo / ports / recv / soak / export / selftest
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>├── build_exe.py     ← Build the standalone executable
 <a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>├── run_tests.py     ← Development-time verification (a bit more than selftest)
 <a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>├── README.md        ← Internal structure, file-by-file notes
 <a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>└── CDC/             ← The actual implementation, for when you want to modify it directly
 </code></pre></div>
-<p>What each file under <code>CDC/</code> does is listed in the "파일 한눈에" (files at a glance) table in <a href="../../PythonDecoder/README.md">PythonDecoder/README.md</a>. Normally you only need <code>xm10.py</code>.</p>
+<p>What each file under <code>CDC/</code> does is listed in the "파일 한눈에" (files at a glance) table in <a href="../../pc-data-tool/README.md">pc-data-tool/README.md</a>. Normally you only need <code>xm10.py</code>.</p>
 <hr />
 <p><strong>Next:</strong> move on to Ex.07–09 (USB communication) in <a href="../../tutorials/">Tutorials</a>.</p>
 
