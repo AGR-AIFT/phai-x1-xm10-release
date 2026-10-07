@@ -26,7 +26,7 @@ python tools/package_release.py --version X.Y.Z --rev all --out-dir C:/releases
 Rev2.0.zip  →  Extension_Module/
 ├── XM_FW/            공개 헤더 + libXM_Lib.a + boot_fw_info.c
 ├── XM_Apps/          사용자 코드 자리 (Control_Task/)
-├── Examples/         예제 — Rev1.1 = 41개, Rev2.0 = 45개
+├── Examples/         예제 — Rev1.1 = 40개, Rev2.0 = 45개
 ├── Core/ Drivers/ Compatible/ FATFS/ Middlewares/ CMSIS/
 ├── tools/            빌드 보조 스크립트
 ├── .project .cproject *.ld startup_*.s CMakeLists.txt Extension_Module.launch

@@ -61,7 +61,7 @@
 
 - **MVC 정규화란** — Maximum Voluntary Contraction(최대 수의 수축). 사람마다 근력·전극 위치가 달라 절대 µV는 비교가 어렵습니다. 그래서 **개인의 최대 수축을 100%로 잡고** 상대값(%)으로 봅니다.
 - **2단계 캘리브** — ① **BTN1**(이완): 근육을 뺀 상태의 offset을 잡습니다(허브가 자동 누적). ② **BTN2**(최대수축): 있는 힘껏 수축한 상태의 RMS를 100% 기준으로 캡처합니다. 이후 `mvc_percent`가 유효(`CALIB_VALID`)해집니다.
-- **데이터는 읽기만** — 시스템이 CAN-FD 로 받은 데이터로 `XM.status.emg_hub`를 자동 갱신합니다. 캘리브 **명령만** `EmgHub_Drv_SendCalCommand()`로 허브에 보냅니다.
+- **데이터는 읽기만** — 시스템이 CAN-FD 로 받은 데이터로 `XM.status.emg_hub`를 자동 갱신합니다. 캘리브 **명령만** `XM_SendEmgHubCalCommand()`로 허브에 보냅니다 — 버튼을 눌렀을 때처럼 가끔 한 번씩만 부르세요. 허브가 연결되지 않았거나 보내지 못하면 `false` 를 돌려줍니다.
 - **0xF0 User Custom 스트리밍** — `XM_SetUsbCustomMeta()`로 라벨 등록 + `XM_SendUsbDataWithId()`로 전송. ([Ex.09](../09_CDC_Stream/))
 - **is_active** — 허브가 Schmitt 트리거로 판정한 "근수축 중" 플래그. 임계 히스테리시스로 채터링을 막습니다.
 
@@ -70,11 +70,11 @@
 ## 4️⃣ 핵심 코드 — 무엇이 어디서 일어나나
 
 ```c
-#include "emg_hub_drv.h"   // EmgHub_Drv_SendCalCommand, EMGHUB_CAL_CMD_*, EMGHUB_STATUS_CALIB_VALID
+#include "xm_api.h"   // XM_SendEmgHubCalCommand, XM_EMG_HUB_CAL_*, XM_EMG_HUB_STATUS_CALIB_VALID
 
-/* ① 캘리브 버튼: BTN1=이완 offset, BTN2=최대수축 MVC → 허브로 명령 전송 */
-if (XM_GetButtonEvent(XM_BTN_1) == XM_BTN_CLICK) EmgHub_Drv_SendCalCommand(EMGHUB_CAL_CMD_OFFSET);
-if (XM_GetButtonEvent(XM_BTN_2) == XM_BTN_CLICK) EmgHub_Drv_SendCalCommand(EMGHUB_CAL_CMD_MVC);
+/* ① 캘리브 버튼: BTN1=이완 offset, BTN2=최대수축 MVC → 허브로 명령 전송 (보내지 못하면 false) */
+if (XM_GetButtonEvent(XM_BTN_1) == XM_BTN_CLICK) XM_SendEmgHubCalCommand(XM_EMG_HUB_CAL_OFFSET);
+if (XM_GetButtonEvent(XM_BTN_2) == XM_BTN_CLICK) XM_SendEmgHubCalCommand(XM_EMG_HUB_CAL_MVC);
 
 /* ② 활성도 → LED 점멸 주기 (0% 느림 500ms ~ 100% 빠름 100ms). 100% 초과 포화 */
 static uint32_t _MvcToBlinkPeriod(uint8_t mvc_percent) {
@@ -83,7 +83,7 @@ static uint32_t _MvcToBlinkPeriod(uint8_t mvc_percent) {
 }
 
 /* ③ Control_Loop: 캘리브 유효하면 활성도 피드백, LED2=근수축, 0xF0 4채널 스트림 */
-bool calib_valid = (emg->status_flags & EMGHUB_STATUS_CALIB_VALID) != 0U;
+bool calib_valid = (emg->status_flags & XM_EMG_HUB_STATUS_CALIB_VALID) != 0U;
 if (calib_valid) XM_SetLedEffect(XM_LED_1, XM_LED_BLINK, _MvcToBlinkPeriod(emg->mvc_percent));
 else             XM_SetLedEffect(XM_LED_1, XM_LED_HEARTBEAT, 1000);   // 캘리브 전 = 기준 없음
 XM_SetLedState(XM_LED_2, emg->is_active ? XM_ON : XM_OFF);
@@ -139,6 +139,7 @@ XM_SetLedState(XM_LED_2, emg->is_active ? XM_ON : XM_OFF);
 |---|---|---|
 | 데이터 없음 / 반응 없음 | Rev 1.1 보드 (CAN-FD 센서 허브 포트 없음) | **Rev 2.0** 보드에서 실행 |
 | `is_connected` false | 허브 미연결 / 케이블 / 전원 | CAN-FD 센서 허브 포트·허브 전원 확인 |
+| "캘리브 명령을 보내지 못했습니다" | `XM_SendEmgHubCalCommand()` 가 `false` (허브 미연결 · 전송 실패) | 허브 연결(LED1 heartbeat)을 확인하고 버튼을 다시 클릭 |
 | `mvc_percent`가 항상 0 | MVC 캘리브(BTN2) 안 함 | 이완(BTN1) → 최대수축(BTN2) 순서로 캘리브 |
 | LED1이 heartbeat에서 안 바뀜 | `CALIB_VALID` 아님 | 캘리브 절차 완료 확인 |
 | 값이 튀거나 노이즈 | 전극 부착·피부 접촉 불량 | 전극 재부착 |

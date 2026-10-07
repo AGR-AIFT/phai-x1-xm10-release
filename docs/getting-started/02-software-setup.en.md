@@ -85,7 +85,7 @@ After extraction, the following items should all be present:
 | `.project`, `.cproject`, `*.ld`, `startup_*.s` | CubeIDE project and build configuration |
 | `CLAUDE.md` | AI tool auto-guide entry point (revision-specific) |
 | `.claude/skills/` | Claude Code student onboarding and example troubleshooting skills |
-| `docs/`, `Examples/` | Learning documentation + hands-on examples (Rev 2.0: 45 / Rev 1.1: 41, excludes Ex.40–43) |
+| `docs/`, `Examples/` | Learning documentation + hands-on examples (Rev 2.0: 45 / Rev 1.1: 40, excludes Ex.36 and Ex.40–43) |
 | `Drivers/`, `XM_Apps/`, `XM_FW/` (includes `XM_API/`, `libXM_Lib.a`), `Core/` | SDK source code — the other folders under `XM_FW/` are SDK libraries; do not modify them |
 | `Middlewares/`, `FATFS/`, `LWIP/` (Rev 2.0 only) | HAL / CMSIS / STM32 middleware |
 
