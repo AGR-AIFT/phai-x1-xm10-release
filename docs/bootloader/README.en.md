@@ -34,6 +34,7 @@ The XM10 Extension Module ships with the **AGR_BOOT V2** bootloader, which enabl
 - **Validates** the app firmware at power-on (signature + CRC-32 + HW revision check)
 - Receives app firmware uploads via the **USB CDC FTP** protocol
 - **Automatically rolls back** to the backup firmware if an update fails (after 3 consecutive failed boots)
+- **Stops starting the app and waits for an upload** if the board keeps resetting (from v1.1.0, with Rev 2.0 apps from v2.8.1 — see [Section 8](#8-troubleshooting))
 - Supports both Rev1.1 and Rev2.0 hardware from a **single bootloader binary** (GPIO auto-detection)
 
 ### Required tools
@@ -114,6 +115,13 @@ Follow these steps when the board has never had a bootloader installed, or when 
    - Because no valid app firmware exists, it enters **FTP mode**
    - A USB CDC port appears on the PC (COM port)
 3. Proceed to **Step 4 or Step 5** to upload the app firmware
+
+### Replacing only the bootloader (board that already has one)
+
+To update a board that already has a bootloader, **skip Step 1 (Full chip erase)** — it would erase the app firmware too.
+
+1. Write `AGR_Bootloader.bin` at `0x08000000` as in **Step 2** (only the bootloader area is erased and rewritten)
+2. Reset the board — if your existing app starts as before, you are done
 
 ---
 
@@ -242,6 +250,9 @@ When you run **Build** in STM32CubeIDE, the following post-build steps run autom
 ```
 Power ON → Bootloader starts (0x08000000)
     │
+    ├─ Repeated-reset check (v1.1.0, Rev 2.0 apps from v2.8.1)
+    │   └─ 10 boots in a row where the app did not run for 5 s: do not start the app, wait in FTP mode (all 3 LEDs blink together)
+    │
     ├─ Read boot settings (Bank2 S6)
     │   └─ First boot: auto-create settings with default values
     │
@@ -254,7 +265,8 @@ Power ON → Bootloader starts (0x08000000)
     │   └─ Check HW revision compatibility
     │
     ├─ Validation passed → jump to app (0x08040400)
-    │   └─ Once the app starts normally, the SDK notifies the bootloader → failed-boot count reset
+    │   ├─ Once the app starts normally, the SDK notifies the bootloader → failed-boot count reset
+    │   └─ Once the app has run normally for 5 s → repeated-reset count reset (v1.1.0, Rev 2.0)
     │
     └─ Validation failed → enter FTP wait mode
         └─ Wait to receive new firmware over USB CDC
@@ -273,6 +285,15 @@ FW Upload initiated from PhAI Studio
     ├─ [6] Update boot settings (waiting for the new firmware to confirm)
     └─ [7] Reset → new app starts → normal start confirmed → done
 ```
+
+### LED Indications
+
+| LEDs | Meaning |
+|------|------|
+| Light up one by one, then all off (once, briefly) | Bootloader starting |
+| One at a time, rotating | FTP wait — waiting for a firmware upload |
+| All three blink together | Stopped after repeated resets (v1.1.0) — waiting for an upload ([Section 8](#8-troubleshooting)) |
+| Fast alternating blink | Bootloader error; it cannot continue |
 
 ---
 
@@ -308,6 +329,13 @@ FW Upload initiated from PhAI Studio
 **Cause**: The new firmware never told the bootloader that it started normally, triggering an automatic rollback after 3 boot attempts.
 - The default SDK code sends this notification automatically right after boot
 - Verify that you have not modified the SDK startup code
+
+### "The app does not start and all three LEDs blink together"
+
+**Cause** (bootloader v1.1.0): the board restarted 10 times in a row without the app running for 5 seconds, so the bootloader stopped starting the app and is waiting for a firmware upload.
+1. First check why the board kept resetting (app code, power, etc.).
+2. **Upload the firmware again with PhAI Studio** to clear it (see Section 5). The board is already in FTP wait mode.
+- If a board that ran a v2.8.1 Rev 2.0 app gets an app built with SDK v2.8.0 or earlier through ST-LINK, it can end up in this state after 10 restarts (older apps do not do the 5-second check). Uploading once with PhAI Studio clears it here too.
 
 ### "The build succeeds but XM10_X_X_X_X.bin is not generated"
 
