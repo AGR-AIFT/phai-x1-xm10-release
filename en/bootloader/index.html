@@ -1627,6 +1627,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#replacing-only-the-bootloader-board-that-already-has-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replacing only the bootloader (board that already has one)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1794,6 +1805,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#led-indications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LED Indications
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1860,6 +1882,17 @@
     <span class="md-ellipsis">
       
         "After uploading firmware, the board keeps rebooting and reverts to the previous version"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-app-does-not-start-and-all-three-leds-blink-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "The app does not start and all three LEDs blink together"
       
     </span>
   </a>
@@ -2148,6 +2181,8 @@
       
         
       
+        
+      
     
     
     
@@ -2200,6 +2235,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.8.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2705,6 +2768,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#replacing-only-the-bootloader-board-that-already-has-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replacing only the bootloader (board that already has one)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2872,6 +2946,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#led-indications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LED Indications
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2938,6 +3023,17 @@
     <span class="md-ellipsis">
       
         "After uploading firmware, the board keeps rebooting and reverts to the previous version"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-app-does-not-start-and-all-three-leds-blink-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "The app does not start and all three LEDs blink together"
       
     </span>
   </a>
@@ -3072,6 +3168,7 @@
 <li><strong>Validates</strong> the app firmware at power-on (signature + CRC-32 + HW revision check)</li>
 <li>Receives app firmware uploads via the <strong>USB CDC FTP</strong> protocol</li>
 <li><strong>Automatically rolls back</strong> to the backup firmware if an update fails (after 3 consecutive failed boots)</li>
+<li><strong>Stops starting the app and waits for an upload</strong> if the board keeps resetting (from v1.1.0, with Rev 2.0 apps from v2.8.1 — see <a href="#8-troubleshooting">Section 8</a>)</li>
 <li>Supports both Rev1.1 and Rev2.0 hardware from a <strong>single bootloader binary</strong> (GPIO auto-detection)</li>
 </ul>
 <h3 id="required-tools">Required tools<a class="headerlink" href="#required-tools" title="Permanent link">&para;</a></h3>
@@ -3170,6 +3267,12 @@ Flashing the app over SWD does <strong>not</strong> damage the bootloader.</p>
 <li>Because no valid app firmware exists, it enters <strong>FTP mode</strong></li>
 <li>A USB CDC port appears on the PC (COM port)</li>
 <li>Proceed to <strong>Step 4 or Step 5</strong> to upload the app firmware</li>
+</ol>
+<h3 id="replacing-only-the-bootloader-board-that-already-has-one">Replacing only the bootloader (board that already has one)<a class="headerlink" href="#replacing-only-the-bootloader-board-that-already-has-one" title="Permanent link">&para;</a></h3>
+<p>To update a board that already has a bootloader, <strong>skip Step 1 (Full chip erase)</strong> — it would erase the app firmware too.</p>
+<ol>
+<li>Write <code>AGR_Bootloader.bin</code> at <code>0x08000000</code> as in <strong>Step 2</strong> (only the bootloader area is erased and rewritten)</li>
+<li>Reset the board — if your existing app starts as before, you are done</li>
 </ol>
 <hr />
 <h2 id="4-app-firmware-upload--stm32cubeide-swd-debugging">4. App Firmware Upload — STM32CubeIDE (SWD Debugging)<a class="headerlink" href="#4-app-firmware-upload--stm32cubeide-swd-debugging" title="Permanent link">&para;</a></h2>
@@ -3306,22 +3409,26 @@ Run <code>pip install pyyaml</code>.</p>
 <h3 id="boot-sequence">Boot Sequence<a class="headerlink" href="#boot-sequence" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Power ON → Bootloader starts (0x08000000)
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    │
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    ├─ Read boot settings (Bank2 S6)
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    │   └─ First boot: auto-create settings with default values
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    ├─ Repeated-reset check (v1.1.0, Rev 2.0 apps from v2.8.1)
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    │   └─ 10 boots in a row where the app did not run for 5 s: do not start the app, wait in FTP mode (all 3 LEDs blink together)
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    │
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    ├─ Rollback check (3 or more failed boots in a row?)
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    │   └─ Yes: restore from Backup Slot
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    ├─ Read boot settings (Bank2 S6)
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    │   └─ First boot: auto-create settings with default values
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    │
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    ├─ Validate app firmware
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    │   ├─ Check signature
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    │   ├─ Verify CRC-32 (FTP uploads only)
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    │   └─ Check HW revision compatibility
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    │
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    ├─ Validation passed → jump to app (0x08040400)
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    │   └─ Once the app starts normally, the SDK notifies the bootloader → failed-boot count reset
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    ├─ Rollback check (3 or more failed boots in a row?)
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    │   └─ Yes: restore from Backup Slot
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    │
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    ├─ Validate app firmware
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    │   ├─ Check signature
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    │   ├─ Verify CRC-32 (FTP uploads only)
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    │   └─ Check HW revision compatibility
 <a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    │
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    └─ Validation failed → enter FTP wait mode
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>        └─ Wait to receive new firmware over USB CDC
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    ├─ Validation passed → jump to app (0x08040400)
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    │   ├─ Once the app starts normally, the SDK notifies the bootloader → failed-boot count reset
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    │   └─ Once the app has run normally for 5 s → repeated-reset count reset (v1.1.0, Rev 2.0)
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>    │
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>    └─ Validation failed → enter FTP wait mode
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>        └─ Wait to receive new firmware over USB CDC
 </code></pre></div>
 <h3 id="ftp-update-sequence">FTP Update Sequence<a class="headerlink" href="#ftp-update-sequence" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>FW Upload initiated from PhAI Studio
@@ -3334,6 +3441,33 @@ Run <code>pip install pyyaml</code>.</p>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    ├─ [6] Update boot settings (waiting for the new firmware to confirm)
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    └─ [7] Reset → new app starts → normal start confirmed → done
 </code></pre></div>
+<h3 id="led-indications">LED Indications<a class="headerlink" href="#led-indications" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>LEDs</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Light up one by one, then all off (once, briefly)</td>
+<td>Bootloader starting</td>
+</tr>
+<tr>
+<td>One at a time, rotating</td>
+<td>FTP wait — waiting for a firmware upload</td>
+</tr>
+<tr>
+<td>All three blink together</td>
+<td>Stopped after repeated resets (v1.1.0) — waiting for an upload (<a href="#8-troubleshooting">Section 8</a>)</td>
+</tr>
+<tr>
+<td>Fast alternating blink</td>
+<td>Bootloader error; it cannot continue</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="8-troubleshooting">8. Troubleshooting<a class="headerlink" href="#8-troubleshooting" title="Permanent link">&para;</a></h2>
 <h3 id="i-installed-the-bootloader-but-the-app-wont-run">"I installed the bootloader but the app won't run"<a class="headerlink" href="#i-installed-the-bootloader-but-the-app-wont-run" title="Permanent link">&para;</a></h3>
@@ -3359,6 +3493,11 @@ Run <code>pip install pyyaml</code>.</p>
 <p><strong>Cause</strong>: The new firmware never told the bootloader that it started normally, triggering an automatic rollback after 3 boot attempts.
 - The default SDK code sends this notification automatically right after boot
 - Verify that you have not modified the SDK startup code</p>
+<h3 id="the-app-does-not-start-and-all-three-leds-blink-together">"The app does not start and all three LEDs blink together"<a class="headerlink" href="#the-app-does-not-start-and-all-three-leds-blink-together" title="Permanent link">&para;</a></h3>
+<p><strong>Cause</strong> (bootloader v1.1.0): the board restarted 10 times in a row without the app running for 5 seconds, so the bootloader stopped starting the app and is waiting for a firmware upload.
+1. First check why the board kept resetting (app code, power, etc.).
+2. <strong>Upload the firmware again with PhAI Studio</strong> to clear it (see Section 5). The board is already in FTP wait mode.
+- If a board that ran a v2.8.1 Rev 2.0 app gets an app built with SDK v2.8.0 or earlier through ST-LINK, it can end up in this state after 10 restarts (older apps do not do the 5-second check). Uploading once with PhAI Studio clears it here too.</p>
 <h3 id="the-build-succeeds-but-xm10_x_x_x_xbin-is-not-generated">"The build succeeds but XM10_X_X_X_X.bin is not generated"<a class="headerlink" href="#the-build-succeeds-but-xm10_x_x_x_xbin-is-not-generated" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Check Python 3.x installation: <code>python --version</code></li>

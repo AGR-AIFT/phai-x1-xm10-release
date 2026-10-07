@@ -2149,6 +2149,8 @@
       
         
       
+        
+      
     
     
     
@@ -2201,6 +2203,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.8.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -3161,7 +3191,7 @@
 </blockquote>
 <hr />
 <h2 id="ex36-ondevice-kinesthetic-learning--rev-11-build-failure">Ex.36 (OnDevice Kinesthetic Learning) — Rev 1.1 Build Failure<a class="headerlink" href="#ex36-ondevice-kinesthetic-learning--rev-11-build-failure" title="Permanent link">&para;</a></h2>
-<p><strong>Symptom:</strong> Building Ex.36 with the Rev 1.1 SDK produces the following linker errors:</p>
+<p><strong>Symptom:</strong> Building Ex.36 with the Rev 1.1 SDK produces the following linker errors (the current Rev 1.1 SDK no longer includes Ex.36 — this happens when you bring it in from an older SDK or another folder):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>control_task.c:(.text.Active_Entry+0x2a): undefined reference to `XM_UserNV_Read'
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>control_task.c:(.text.Active_Loop+0x284): undefined reference to `XM_UserNV_Erase'
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>control_task.c:(.text.Active_Loop+0x292): undefined reference to `XM_UserNV_Write'
