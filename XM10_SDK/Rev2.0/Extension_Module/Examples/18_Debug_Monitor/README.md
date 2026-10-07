@@ -3,14 +3,16 @@
 > 🎯 **학습 목표**:
 > - **루프 실행 시간 측정** (Min/Max/Avg + 오버런 감지) 으로 실시간성 검증.
 > - **USB CDC Health Dashboard** (1초 주기) + 진단 LED 패턴 + 데이터 신선도(Staleness) Watchdog.
-> - 양산 환경에서 쓸 수 있는 **비침습적 모니터링 패턴** — `printf` 디버깅의 한계 극복.
+> - 실제 장비에서도 쓸 수 있는 **비침습적 모니터링 패턴** — `printf` 디버깅의 한계 극복.
 >
 > ⏱️ 권장 시간: 30분 | 🔧 난이도: ⭐⭐
 > 🧰 사전 예제: [Ex.07 CDC Basic](../07_CDC_Basic_Print/) + [Ex.03 FSM](../03_Button_LED_FSM/) | 📚 관련 docs: [LED & Button](../../docs/api-reference/03-led-btn-control.md) · [USB](../../docs/api-reference/05-usb-connectivity.md)
 
 ---
 
-> ⚠️ **USB-CDC 단일 점유** — 본 예제 실행 중 PhAI Studio 를 동시에 열어두지 마세요 (같은 COM 포트 충돌 → 접속 실패). 실시간 그래프 필요 시 PhAI Studio 만 단독 실행하세요.
+> ⚠️ **USB-CDC 단일 점유** — PC 프로그램은 한 번에 하나만 연결하세요 (같은 COM 포트 충돌 → 접속 실패). `[HEALTH]` 텍스트를 시리얼 터미널로 보는 동안 PhAI Studio · `xm10` 도구는 닫아 두세요.
+>
+> 터미널의 `[HEALTH]` 텍스트 사이에 알 수 없는 글자(PC 도구용 바이너리)가 섞여 보이면 `Control_Setup()` 맨 위에 `XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL);` 를 추가하세요 ([Ex.07](../07_CDC_Basic_Print/) 방식 — Rev1.1 은 `XM_SetUsbAutoStream(false);`).
 
 ---
 
@@ -147,8 +149,8 @@ static void _UpdateDiagnosticLeds(void)                            // ⑥ LED = 
 ## 5️⃣ 다음 단계
 
 - 정적 메모리 패턴 (malloc 없는 설계): [Ex.19 Memory Aware Design](../19_Memory_Aware_Design/)
-- 양산 안전 (Safety Switch): [Ex.06 Safety Switch](../06_Ext_IO_Safety_Switch/)
-- 외란 관측기 (DOB): [Ex.31 Friction Comp DOB](../31_Friction_Comp_DOB/) (Phase 2D)
+- 안전 스위치 (Safety Switch): [Ex.06 Safety Switch](../06_Ext_IO_Safety_Switch/)
+- 외란 관측기 (DOB): [Ex.31 Friction Comp DOB](../31_Friction_Comp_DOB/)
 
 ---
 

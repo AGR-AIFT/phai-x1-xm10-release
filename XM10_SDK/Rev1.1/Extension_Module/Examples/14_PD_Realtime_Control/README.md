@@ -6,7 +6,7 @@
 > - 사용자가 처음 짜는 **사용자 정의 제어 알고리즘** — 이후 Ex.15/20+ 의 출발점.
 >
 > ⏱️ 권장 시간: 40분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.12 Active Assist](../12_Active_Assist_Mode/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)
+> 🧰 사전 예제: [Ex.12 Active Assist](../12_Active_Assist_Mode/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 
 ---
 
@@ -22,7 +22,7 @@ H10 가 ASSIST 모드일 때 우측 고관절을 **목표 각도** 로 PD 제어
 | **BTN 1** (ACTIVE 중) | 목표 각도 부호 반전 (+ ↔ −) |
 | **BTN 2** (ACTIVE 중) | 목표 각도 크기 5°↑ (5 → 10 → ... → 25 → 5 래핑) |
 
-USB CDC 500 ms 주기 디버그: `PD | Tgt:10.0 Cur:8.3 Err:1.7 Tau:0.86` + PhAI 0xF0 채널 4축 실시간 그래프.
+USB CDC 500 ms 주기 디버그: `PD | Tgt:10.0 Cur:8.3 Err:1.7 Tau:0.86` + `xm10` 도구의 0xF0 채널 4축 실시간 그래프.
 
 > 📸 **PD 응답 곡선** — 사진·영상 준비 중
 
@@ -105,6 +105,8 @@ static void Active_Exit(void)
 
 ## 4️⃣ 실험 — 직접 해보기 (체크포인트)
 
+> 💡 PC 프로그램은 한 번에 하나만 연결하세요. 텍스트는 시리얼 터미널로, 0xF0 그래프는 `xm10` 도구로 보되 하나를 닫고 다음 것을 여세요. (터미널에 알 수 없는 글자가 섞여 보여도 정상입니다.) 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
+
 1. **HW**: KIT H10 ↔ XM10 + 본체 전원
 2. **빌드 + 플래시 + CM 연결 + ASSIST 진입** → ✅ ACTIVE 진입 시 LED 1 빠른 깜빡 + USB `PD | Tgt:10.0 ...`
 3. **다리가 +10° 위치로 부드럽게 이동** → ✅ Tgt - Cur 가 점점 0 으로 수렴
@@ -112,7 +114,7 @@ static void Active_Exit(void)
 5. **BTN 2 클릭** → ✅ 목표 크기 15° → 20° → 25° → 5° 래핑
 6. **변형 1 — Kp 증가**: 0.5 → 2.0 → 빠른 복원, 오버슈트 관찰
 7. **변형 2 — Kd 변경**: 0.02 → 0.0 (Kd 없음, 진동) vs 0.1 (강한 댐핑, 느림)
-8. **변형 3 — Step response 측정**: BTN 2 로 갑작스러운 목표 변경 → PhAI 그래프로 응답 곡선 (Rise time / Overshoot / Settling time) 측정
+8. **변형 3 — Step response 측정**: BTN 2 로 갑작스러운 목표 변경 → `xm10` 도구 그래프로 응답 곡선 (Rise time / Overshoot / Settling time) 측정
 9. **변형 4 — 좌/우 비대칭**: `XM_SetAssistTorqueLH(0)` 으로 우측만 제어 → 좌/우 동작 차이 관찰
 
 ---
@@ -121,8 +123,8 @@ static void Active_Exit(void)
 
 - 모델 기반 + 중력 보상: [Ex.15 Inverted Pendulum](../15_Inverted_Pendulum_Control/)
 - 보행 단계별 차등 토크: [Ex.17 FSM Gait Intent](../17_FSM_Gait_Intent/)
-- 임피던스 제어 (Hogan): [Ex.20 Impedance](../20_Impedance_Control/) (Phase 2D)
-- 외란 관측기 (DOB): [Ex.31 Friction Comp DOB](../31_Friction_Comp_DOB/) (Phase 2D)
+- 임피던스 제어 (Hogan): [Ex.20 Impedance](../20_Impedance_Control/)
+- 외란 관측기 (DOB): [Ex.31 Friction Comp DOB](../31_Friction_Comp_DOB/)
 
 ---
 

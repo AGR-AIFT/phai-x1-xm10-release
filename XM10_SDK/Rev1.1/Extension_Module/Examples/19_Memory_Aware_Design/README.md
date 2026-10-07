@@ -1,16 +1,16 @@
 # Ex.19 — Memory Aware Design (malloc 없는 정적 설계 + Ring Buffer + Pool)
 
 > 🎯 **학습 목표**:
-> - 임베디드 양산 코드에서 **`malloc` 금지** 이유 + 정적 메모리 패턴 2종 직접 구현.
+> - 실시간 임베디드 코드에서 **`malloc` 을 보통 피하는** 이유 + 정적 메모리 패턴 2종 직접 구현.
 > - **Ring Buffer** (이동 평균 필터) + **Pool Allocator** (이벤트 로깅) — STL/heap 없이.
 > - `sizeof()` 실시간 메모리 리포트 + 컴파일러 패딩 체험.
 >
 > ⏱️ 권장 시간: 40분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.09 CDC Stream](../09_CDC_Stream/) + [Ex.18 Debug Monitor](../18_Debug_Monitor/) | 📚 관련 docs: [Memory Management](../../docs/api-reference/07-memory-management.md)
+> 🧰 사전 예제: [Ex.09 CDC Stream](../09_CDC_Stream/) + [Ex.18 Debug Monitor](../18_Debug_Monitor/) | 📚 관련 docs: [Memory Management](../../docs/api-reference/07-memory-management.md) · [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 
 ---
 
-> ⚠️ **USB-CDC 단일 점유** — 본 예제 실행 중 PhAI Studio 를 동시에 열어두지 마세요 (같은 COM 포트 충돌). 실시간 그래프 필요 시 PhAI Studio 만 단독 실행.
+> ⚠️ **USB-CDC 단일 점유** — PC 프로그램(PhAI Studio · `xm10` 도구 · 시리얼 터미널)은 한 번에 하나만 연결하세요 (같은 COM 포트 충돌). 0xF0 그래프는 우선 `xm10` 도구로 보세요.
 
 ---
 
@@ -28,7 +28,7 @@ USB CDC 이벤트: `[EVENT] Angle jump: 12.3 -> 18.7 (delta=6.40) at 5230ms [3/1
 
 버튼: **BTN 1** Memory Report / **BTN 2** Event Dump + Pool 해제 / **BTN 3** Ring Buffer 초기화.
 
-> 📸 **PhAI 4채널 그래프 — Raw vs Filtered** — 사진·영상 준비 중
+> 📸 **xm10 도구 4채널 그래프 — Raw vs Filtered** — 사진·영상 준비 중
 
 ---
 
@@ -43,7 +43,7 @@ USB CDC 이벤트: `[EVENT] Angle jump: 12.3 -> 18.7 (delta=6.40) at 5230ms [3/1
 | Heap overflow 시 silent fail | Compile-time 크기 확정 |
 | RTOS 사용 시 thread-safe heap 필요 | 정적 변수는 .bss 라 안전 |
 
-**규칙**: Angel Robotics 양산 코드는 `malloc/free` 호출 금지.
+**권장**: 실시간 임베디드 코드에서는 `malloc/free` 를 보통 피합니다.
 
 ### Ring Buffer 동작
 
@@ -165,8 +165,10 @@ static void Run_Loop(void)                                          // ⑥ 매 1
 
 ## 4️⃣ 실험 — 직접 해보기 (체크포인트)
 
+> 💡 PC 프로그램은 한 번에 하나만 연결하세요. 텍스트는 시리얼 터미널로, 0xF0 그래프는 `xm10` 도구로 보되 하나를 닫고 다음 것을 여세요. (터미널에 알 수 없는 글자가 섞여 보여도 정상입니다.) 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
+
 1. **빌드 + 플래시** → ✅ `[MEM] Memory-Aware Design example started.` USB 메시지
-2. **PhAI Studio 4채널 그래프** (0xF0): Raw / Filtered / Pool / Ring → ✅ 모든 채널 실시간 갱신
+2. **`xm10` 도구의 0xF0 탭 4채널 그래프**: Raw / Filtered / Pool / Ring → ✅ 모든 채널 실시간 갱신
 3. **다리 천천히 움직임** → ✅ Filtered 가 Raw 를 부드럽게 따라옴 (지연 ~25 ms)
 4. **다리 빠르게 흔들기 (>5°/ms)** → ✅ `[EVENT] Angle jump: ...` USB 메시지 + Pool used 증가
 5. **이벤트 10개 누적 후 추가 시도** → ✅ LED 3 빠른 Blink (풀 가득 참)
@@ -200,7 +202,7 @@ static void Run_Loop(void)                                          // ⑥ 매 1
 | Free 후에도 슬롯 사용 중으로 표시 | `_Pool_Free` 호출 시 잘못된 포인터 | 풀 범위 검사 (`>= pool[0] && <= pool[POOL_SIZE-1]`) 확인 |
 | MemoryReport sizeof 가 예상보다 큼 | 컴파일러 alignment 패딩 (`uint8_t` + `float` → 3 B 패딩) | 정상. 큰 필드를 먼저 선언하면 줄어듦 |
 | 이동 평균이 너무 느림 (지연 큼) | 윈도우 50 = 50 ms 지연 | `RING_BUF_SIZE` 10 으로 줄임 (트레이드오프) |
-| `XM_SendUsbDataWithId` 가 데이터 안 보냄 | `XM_SetUsbCustomMeta(0xF0, ...)` 누락 | `Control_Setup` 에서 메타 등록 필수 |
-| `malloc` 쓰면 안 되나? | XM 양산 규칙 — heap fragmentation 위험 | 항상 정적 배열 + flag 패턴 사용 |
+| `xm10` 에서 채널 이름이 `ch0, ch1…` | `XM_SetUsbCustomMeta(0xF0, ...)` 누락 (데이터 전송 자체는 메타와 무관), 또는 연결할 때 이름을 받지 못함 | `Control_Setup` 에서 메타 등록 + USB 케이블을 다시 꽂고 다시 연결 |
+| `malloc` 쓰면 안 되나? | 실시간 임베디드 코드에서는 보통 피합니다 — heap fragmentation 위험 | 정적 배열 + flag 패턴 사용 |
 
 막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)

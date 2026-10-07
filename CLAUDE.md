@@ -28,7 +28,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **OS** | FreeRTOS + CMSIS-OS2 |
 | **레포 역할** | 사용자 (개발자/연구자/수강생) 대상 **공개 릴리즈** (SDK + 예제 + 문서) |
 | **License** | MIT |
-| **Latest** | [`v2.8.0`](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.8.0) (Releases → `Rev2.0.zip` / `Rev1.1.zip` 다운로드) |
+| **Latest** | [`v2.8.1`](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.8.1) (Releases → `Rev2.0.zip` / `Rev1.1.zip` 다운로드) |
 
 ---
 

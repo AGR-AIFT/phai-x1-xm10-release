@@ -6,7 +6,7 @@
 > - 4-state TSM (OFF/STANDBY/ACTIVE/ERROR) + Homing → Control 2단계 + 안전 한계 비상 정지.
 >
 > ⏱️ 권장 시간: 50분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.14 PD Realtime](../14_PD_Realtime_Control/) + [Ex.11 Passive (Homing 패턴)](../11_Passive_Mode/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)
+> 🧰 사전 예제: [Ex.14 PD Realtime](../14_PD_Realtime_Control/) + [Ex.11 Passive (Homing 패턴)](../11_Passive_Mode/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 
 ---
 
@@ -21,7 +21,7 @@ H10 가 ASSIST 모드일 때 골반 기울기를 **기준 자세 부근** 으로
 | ACTIVE Control | 역진자 제어 시작 (BTN 1: 보조 레벨 0/0.3/0.6/1.0, BTN 2: 기준 각도 reset) |
 | ERROR | 골반 ±30° 초과 → 즉시 토크 0 + LED 3-색 깜빡 |
 
-USB CDC `IP | th:0.05 tg:1.23 tp:0.45 tau:1.68` + PhAI 0xF0 채널 5축 (theta, theta_dot, tau_gravity, tau_pd, tau_total).
+USB CDC `IP | th:0.05 tg:1.23 tp:0.45 tau:1.68` + `xm10` 도구의 0xF0 채널 5축 (theta, theta_dot, tau_gravity, tau_pd, tau_total).
 
 > 📸 **역진자 모델 + 토크 분해** — 사진·영상 준비 중
 
@@ -119,6 +119,8 @@ static void Error_Entry(void)
 
 ## 4️⃣ 실험 — 직접 해보기 (체크포인트)
 
+> 💡 PC 프로그램은 한 번에 하나만 연결하세요. 텍스트는 시리얼 터미널로, 0xF0 그래프는 `xm10` 도구로 보되 하나를 닫고 다음 것을 여세요. (터미널에 알 수 없는 글자가 섞여 보여도 정상입니다.) 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
+
 1. **HW + 빌드/플래시** → CM 연결 후 ASSIST 진입
 2. **Homing 완료** → ✅ 0° 위치 + Control 단계 진입 (LED 1 빠른 깜빡)
 3. **BTN 1 클릭** → ✅ Gain 0 → 0.3 → 0.6 → 1.0 → 0 순환, LED 2/3 표시 변화
@@ -135,9 +137,9 @@ static void Error_Entry(void)
 ## 5️⃣ 다음 단계
 
 - 보행 단계별 차등 제어: [Ex.17 FSM Gait Intent](../17_FSM_Gait_Intent/)
-- Hogan 임피던스 제어: [Ex.20 Impedance Control](../20_Impedance_Control/) (Phase 2D)
-- DOB (외란 관측기) 투명 모드: [Ex.31 Friction Comp DOB](../31_Friction_Comp_DOB/) (Phase 2D)
-- HZD 가상 구속: [Ex.24 Virtual Constraint](../24_Virtual_Constraint/) (Phase 2D)
+- Hogan 임피던스 제어: [Ex.20 Impedance Control](../20_Impedance_Control/)
+- DOB (외란 관측기) 투명 모드: [Ex.31 Friction Comp DOB](../31_Friction_Comp_DOB/)
+- HZD 가상 구속: [Ex.24 Virtual Constraint](../24_Virtual_Constraint/)
 
 ---
 

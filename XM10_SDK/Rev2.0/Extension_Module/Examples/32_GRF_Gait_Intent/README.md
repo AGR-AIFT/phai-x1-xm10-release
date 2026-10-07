@@ -4,7 +4,7 @@
 보행 위상(Gait Phase)을 실시간 추정하고, 이에 동기화된 **보조 토크**를 생성합니다.
 원시(raw) 센서 신호가 어떻게 "**인간 의도(intent)**"로 변환되는지를 보여주는 Stage 2의 핵심 예제입니다.
 
-> 📖 API 레퍼런스: [H10 Control & Data](../../docs/api-reference/02-h10-control-n-data.md)
+> 📖 API 레퍼런스: [H10 Control & Data](../../docs/api-reference/02-h10-control-n-data.md) · PC 에서 0xF2 채널 보기: [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 >
 > 📄 전제 예제: [Ex.31 DOB 투명 모드](../31_Friction_Comp_DOB/) (Stage 1 완성)
 
@@ -164,7 +164,7 @@ if (phase >= 1.0f) phase -= 1.0f;   // 래핑
 ### ② Body Data 통신 지연
 
 ```
-H10 CM 내부에서 보행 분석 → DOP V1 PDO로 XM10 전송 (~1ms 주기)
+H10 CM 내부에서 보행 분석 → XM10 으로 전송 (~1ms 주기)
 ```
 
 이 지연으로 인해 실제 Heel Strike 발생과 XM10이 감지하는 시점 사이에 **1~2ms 지연**이 있습니다. 보행 속도가 빠를수록 위상 오차로 이어집니다.
@@ -193,7 +193,7 @@ H10 CM 내부에서 보행 분석 → DOP V1 PDO로 XM10 전송 (~1ms 주기)
 
 ### ⑤ 디버그 확인 포인트
 
-PhAI Studio에서 다음을 확인하세요:
+`xm10` 도구의 0xF2 탭에서 다음을 확인하세요:
 
 ```
 정상: Phase RH/LH가 규칙적인 톱니파 (0→1→0→1...)
@@ -206,19 +206,21 @@ PhAI Studio에서 다음을 확인하세요:
 
 ## 실행 방법
 
+> 💡 PC 프로그램은 한 번에 하나만 연결하세요. 텍스트는 시리얼 터미널로, 0xF2 그래프는 `xm10` 도구로 보되 하나를 닫고 다음 것을 여세요. (터미널에 알 수 없는 글자가 섞여 보여도 정상입니다.) 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
+
 1. **H10 설정 확인 필수**: H10 소프트웨어에서 **Body Data 전송 활성화**. 비활성화 시 `isRightFootContact`/`isLeftFootContact`가 항상 `false`.
 2. `grf_gait_intent.c`를 `control_task.c`로 복사 후 빌드하여 XM10에 플래시합니다.
 3. H10 전원 ON → ASSIST MODE 전환.
 4. USB CDC 터미널에서 `[GRF] ACTIVE 진입` 메시지 확인.
 5. 걷기 시작 → Heel Strike 이벤트 감지 후 보행 위상 추정 시작.
-6. PhAI Studio에서 Module ID `0xF2` 채널로 위상 곡선과 토크 파형을 실시간 확인합니다.
+6. `xm10` 도구에서 Module ID `0xF2` 탭으로 위상 곡선과 토크 파형을 실시간 확인합니다.
 
 ---
 
 ## 직접 해보기
 
 - **PUSH vs PULL 비교**: BTN2로 모드를 전환하며 체감하는 보조 패턴의 차이를 느껴보세요.
-- **위상 시각화**: PhAI Studio에서 Phase RH/LH가 규칙적인 톱니파를 그리는지 확인하세요.
+- **위상 시각화**: `xm10` 도구에서 Phase RH/LH가 규칙적인 톱니파를 그리는지 확인하세요.
 - **토크 진폭 실험**: BTN1로 0.5Nm에서 시작하여 착용자 피드백에 따라 점진적으로 증가합니다.
 - **GRF 고도화 실험**: `XM.status.grf.rightSensorData`의 14채널 값을 USB에 출력하여 아날로그 족압 분포를 관찰해보세요. 연속 GRF 신호로 위상 추정기를 개선할 수 있습니다.
 

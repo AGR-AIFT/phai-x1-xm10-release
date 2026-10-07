@@ -55,10 +55,8 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 코드 작성 시 Ethernet/PSRAM/RTC 관련 함수를 호출하면 빌드 실패 또는 링크 에러가 납니다.
 
 예제 관련:
-- 이 SDK 에는 예제 41 개가 들어 있습니다.
-- **Ex.40 · 41 · 42 · 43** — Rev 2.0 전용이라 본 SDK 에 아예 들어 있지 않습니다.
-- **Ex.36** — 파일은 들어 있지만 Rev 2.0 전용입니다. 빌드하면 link 실패하므로 Ex.35 까지 진행하세요 (예제 헤더에도 같은 안내가 있습니다).
-- 그 외 40 개는 Rev 1.1 에서 정상 동작합니다.
+- 이 SDK 에는 예제 40 개가 들어 있고, 모두 Rev 1.1 에서 정상 동작합니다.
+- **Ex.36 · 40 · 41 · 42 · 43** — Rev 2.0 전용이라 본 SDK 에 들어 있지 않습니다.
 
 ### ⚠️ Rev 1.1 특히 주의할 점
 
@@ -85,7 +83,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 2. **[Ex.00 Quick Start](examples/00_Quick_Start/)** — 보드 smoke test (⭐)
 3. **[Ex.01~03 Button & LED](examples/01_Button_LED_Basic/)** — 디지털 IO 기본 (⭐~⭐⭐)
 4. **[전체 학습 로드맵](docs/tutorials/README.md)** — Rev 1.1 에서 동작하는 예제만 시도
-5. **Ex.36 은 Rev 2.0 전용** — 본 SDK 에서 link 실패합니다. Ex.35 까지 진행하세요
+5. **Ex.36 · Ex.40~43 은 Rev 2.0 전용** — 본 SDK 에는 들어 있지 않습니다
 
 ---
 

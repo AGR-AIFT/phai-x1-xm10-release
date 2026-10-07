@@ -72,7 +72,7 @@ void Control_Setup(void)
 {
     // 핀 설정
     XM_SetPinMode(XM_EXT_DIO_3, XM_EXT_DIO_MODE_INPUT_PULLUP); // 시작 버튼 (Active-Low, 눌림=LOW)
-    /* [W-P2-18] 리미트 스위치는 NC(Normally-Closed) 배선 + 내부 Pull-UP 을 사용합니다:
+    /* 리미트 스위치는 NC(Normally-Closed) 배선 + 내부 Pull-UP 을 사용합니다:
      *   배선: NC 스위치 한쪽 = GND, 반대쪽 = XM_EXT_DIO_4
      *     평상시(스위치 닫힘)   = GND 도통 → LOW  = 정상
      *     트립(스위치 열림)     = Pull-UP  → HIGH = 정지
@@ -150,7 +150,7 @@ static void Active_Loop(void)
 static void Error_Entry(void)
 {
     XM_SetLedEffect(XM_LED_1, XM_LED_BLINK, 100); // 빨간불 빠르게 깜빡임
-    /* [P1-03] 안전 스위치 트립 = 비상 정지. XM_SetControlMode(MONITOR)의
+    /* 안전 스위치 트립 = 비상 정지. XM_SetControlMode(MONITOR)의
      * 지수 램프다운(0.3~0.5초간 감쇠 토크 계속 전송)이 아니라, 즉시 0 토크
      * 확정 + 벡터 해제로 끊는 전용 API 를 사용합니다. */
     XM_EmergencyDisengage();

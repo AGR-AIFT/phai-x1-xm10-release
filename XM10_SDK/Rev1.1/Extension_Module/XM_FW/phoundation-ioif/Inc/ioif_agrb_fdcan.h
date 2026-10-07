@@ -71,6 +71,31 @@ typedef enum {
     IOIF_FDCAN_STATUS_ERROR,
 } IOIF_FDCANState_t;
 
+/** @brief RX FIFO 인덱스 (IOIF_FDCAN_ConfigRxFifoMode 인자) */
+#define IOIF_FDCAN_RX_FIFO0     (0U)
+#define IOIF_FDCAN_RX_FIFO1     (1U)
+
+/**
+ * @brief RX FIFO 운용 모드 — FIFO 가 가득 찬 순간의 동작 (그 전에는 두 모드가 동일).
+ * @details 어떤 트래픽을 어느 FIFO 로 받을지는 System Layer 가 필터로 정하므로,
+ *          그 FIFO 의 full 정책도 System Layer 가 선언한다 (IOIF 는 정책을 고르지 않는다 —
+ *          IOIF_FDCAN_ConfigFilter 와 동일 원칙).
+ */
+typedef enum {
+    /** full 시 **새로 온** 프레임을 버리고 RF0L/RF1L(유실 카운터)을 세운다.
+     *  줄 서 있던 프레임이 보존되므로 트랜잭션 트래픽(NMT/SDO/HB/EMCY)에 맞다.
+     *  HW 리셋값이자 IOIF 기본값 — 미선언 시 이 모드. */
+    IOIF_FDCAN_RXFIFO_BLOCKING  = 0,
+    /** full 시 **가장 오래된** 프레임을 덮어쓴다. "최신 하나만 의미 있는" 스트림
+     *  (TPDO 텔레메트리, SYNC)에 맞다.
+     *  - ST HAL 의 overwrite+full 읽기 경로(인덱스를 모듈로가 아닌 마스크로 계산 —
+     *    G4 v1.2.6 hal_fdcan.c:2254 / H7 v1.11.6 :2994)는 **호출하지 않는다** — OVERWRITE 로
+     *    선언된 FIFO 는 IOIF 가 Message RAM element 를 직접 읽고 RXFxA 로 ack 한다
+     *    (등호 wrap 이라 인덱스가 항상 [0, 크기) 안에 있다). BLOCKING FIFO 는 HAL 경로 그대로.
+     *  - RFxL 이 서지 않으므로 유실은 IOIF_FDCAN_GetRxFifoDiscardCounts() 로 본다. */
+    IOIF_FDCAN_RXFIFO_OVERWRITE = 1,
+} IOIF_FDCAN_RxFifoMode_t;
+
 // FDCAN 수신 콜백 함수의 타입 정의
 typedef void (*IOIF_FDCAN_RxCallback_t)(IOIF_FDCAN_Msg_t* msg);
 
@@ -148,6 +173,105 @@ AGRBStatusDef IOIF_FDCAN_TransmitTry(IOIF_FDCANx_t id, uint32_t can_id, const ui
 AGRBStatusDef IOIF_FDCAN_TransmitClassic(IOIF_FDCANx_t id, uint32_t can_id, const uint8_t* txData, uint8_t len);
 
 /**
+ *-----------------------------------------------------------
+ *   송신 영수증 (Tx Event FIFO) — AGRB_IOIF_FDCAN_TX_RECEIPT_ENABLE 에서만
+ *-----------------------------------------------------------
+ * 기존 송신 API 는 "큐에 넣었다"까지만 알려준다. 발행 세대를 실제 프레임 완료와
+ * 묶어야 하는 소비자(pcm RPDO 릴레이)를 위한 **별도 opt-in 창구**다.
+ * 기존 `IOIF_FDCAN_Transmit*`·`AGR_TxFunc_t` 경로는 이 게이트를 몰라도 된다.
+ *
+ * 설계·검증 근거 → `docs/plans/PLAN-20260921-fdcan-tx-receipt.md`
+ */
+#if defined(AGRB_IOIF_FDCAN_TX_RECEIPT_ENABLE)
+
+/** @brief 실체 구현 조건 — 그 밖의 조합은 AGRBStatus_NOT_SUPPORTED 스텁
+ *  @details G4 HAL 에는 `Init.TxEventsNbr` 가 없고(Message RAM 고정), BareMetal 은
+ *           TX 락이 no-op 이라 토큰 비트맵이 ISR·main 경합에 노출된다. */
+#if defined(IOIF_MCU_SERIES_H7) && defined(USE_FREERTOS)
+#define IOIF_FDCAN_TX_RECEIPT_IMPL      1
+#else
+#define IOIF_FDCAN_TX_RECEIPT_IMPL      0
+#endif
+
+/** @brief 한 번의 drain 이 돌려줄 수 있는 영수증 상한 (HW TEF 최대 깊이) */
+#define IOIF_FDCAN_TX_RECEIPT_MAX_DRAIN 32U
+
+/** @brief 발급 티켓 — 호출자가 보관했다가 영수증·세대와 대조한다 */
+typedef struct {
+    uint8_t token;      /**< Tx Event marker (0~255) */
+    uint8_t epoch;      /**< 발급 시점 채널 세대 — 현재 세대와 다르면 그 송신은 취소된 것 */
+} IOIF_FDCAN_TxTicket_t;
+
+/** @brief 영수증의 송신 종류 (HAL `FDCAN_event_type` 을 IOIF 값으로 축약) */
+typedef enum {
+    IOIF_FDCAN_TXEVT_TRANSMITTED = 0,   /**< 정상 송신 완료 (FDCAN_TX_EVENT) */
+    IOIF_FDCAN_TXEVT_IN_SPITE_OF_ABORT, /**< 취소 요청했으나 이미 나간 프레임
+                                             (FDCAN_TX_IN_SPITE_OF_ABORT) — 버스에는 나갔다 */
+} IOIF_FDCAN_TxEventType_t;
+
+/** @brief drain 이 돌려주는 영수증 = "이 토큰의 프레임이 실제로 버스에 나갔다" */
+typedef struct {
+    uint8_t  token;
+    uint8_t  epoch;
+    uint8_t  event_type;    /**< IOIF_FDCAN_TxEventType_t */
+    uint8_t  reserved;      /**< 정렬 패딩 (0) */
+    uint16_t tx_timestamp;  /**< TEF TXTS (16-bit HW 타임스탬프 — 미구성이면 0) */
+} IOIF_FDCAN_TxReceipt_t;
+
+/** @brief 영수증 경로 진단 */
+typedef struct {
+    uint8_t  epoch;                 /**< 현재 세대 */
+    uint8_t  outstanding;           /**< 예약 중 토큰 수 */
+    bool     settle_pending;        /**< abort 뒤 TXBRP 미정착 — 토큰 동결 중 */
+    uint32_t exhausted_cnt;         /**< 토큰 고갈로 거절한 횟수 */
+    uint32_t tef_lost_cnt;          /**< TEFL(이벤트 유실) 관측 — 그 세대 전체 무효화 */
+    uint32_t epoch_invalidate_cnt;  /**< 세대 무효화 횟수 */
+    uint32_t orphan_cnt;            /**< 세대 불일치·미예약 마커 이벤트 — 영수증으로 올리지 않고 버린 수 */
+} IOIF_FDCAN_TxReceiptStats_t;
+
+/**
+ * @brief 영수증 토큰을 붙여 논블로킹 송신 (`IOIF_FDCAN_TransmitTry` 의 opt-in 변형)
+ * @details TX try-lock 안에서 u8 토큰을 발급하고 `FDCAN_STORE_TX_EVENTS` + `MessageMarker`
+ *          로 보낸다. 완료 확인은 `IOIF_FDCAN_DrainTxReceipts()` — 새 ISR 은 없다.
+ * @param[out] out_ticket 발급된 토큰·세대 (OK 일 때만 유효)
+ * @return AGRBStatus_OK / AGRBStatus_BUSY (TX 락 경합 — 미송신) /
+ *         AGRBStatus_NO_RESOURCE (토큰 고갈 또는 abort 미정착으로 동결 중) /
+ *         AGRBStatus_NOT_INITIALIZED (미할당 · `Init.TxEventsNbr == 0`) /
+ *         AGRBStatus_PARAM_ERROR / AGRBStatus_ERROR (HAL 거절) /
+ *         AGRBStatus_NOT_SUPPORTED (게이트는 켰으나 H7+FreeRTOS 가 아님)
+ * @note `Init.TxEventsNbr` 를 0 이 아닌 값으로 두는 것은 **소비 프로젝트(CubeMX) 책임**이다.
+ *       0 이면 이 함수는 조용히 실패하지 않고 NOT_INITIALIZED 를 돌려준다.
+ */
+AGRBStatusDef IOIF_FDCAN_TransmitTryEx(IOIF_FDCANx_t id, uint32_t can_id,
+                                       const uint8_t* txData, uint8_t len,
+                                       IOIF_FDCAN_TxTicket_t* out_ticket);
+
+/**
+ * @brief Tx Event FIFO 를 비우며 완료 영수증을 수거 (task 컨텍스트 폴링 전용)
+ * @param[out] out 영수증 배열, @param max 최대 수거 수(≤ 32 로 잘림)
+ * @param[out] out_count 실제 수거 수 (0 도 정상)
+ * @return AGRBStatus_OK / AGRBStatus_BUSY (TX 락 경합) / AGRBStatus_PARAM_ERROR /
+ *         AGRBStatus_NOT_SUPPORTED
+ * @note TEFL(이벤트 유실)을 관측하면 그 세대를 통째로 무효화하고 영수증 0개로 반환한다 —
+ *       유실된 마커는 영영 오지 않으므로 세대를 접는 것이 유일한 정합 복구다.
+ * @note Thread-Safe: TX try-lock 아래에서만 비트맵·세대를 만진다. ISR 무관.
+ */
+AGRBStatusDef IOIF_FDCAN_DrainTxReceipts(IOIF_FDCANx_t id, IOIF_FDCAN_TxReceipt_t* out,
+                                         uint8_t max, uint8_t* out_count);
+
+/**
+ * @brief 영수증 경로 상태 조회 — 취소 집합 판정은 `epoch` 비교로 한다
+ * @details 보관한 티켓의 `epoch` 이 현재 `epoch` 과 다르면 그 송신은 **완료되지 못한 채
+ *          취소**된 것이다(bus-off flush·abort·TEFL). 같은 세대인데 영수증이 오지 않았다면
+ *          아직 진행 중이다.
+ * @return AGRBStatus_OK / AGRBStatus_BUSY (TX 락 경합 — 값이 섞이지 않도록 읽지 않았다) /
+ *         AGRBStatus_NOT_INITIALIZED / AGRBStatus_PARAM_ERROR / AGRBStatus_NOT_SUPPORTED
+ */
+AGRBStatusDef IOIF_FDCAN_GetTxReceiptStats(IOIF_FDCANx_t id, IOIF_FDCAN_TxReceiptStats_t* stats);
+
+#endif /* AGRB_IOIF_FDCAN_TX_RECEIPT_ENABLE */
+
+/**
  * @brief Tx FIFO 여유 공간 확인 (HW 레지스터 Read-Only)
  * @param id IOIF_FDCANx_t 핸들
  * @return 여유 공간 (0=Full, max=TxFifoQueueElmtsNbr)
@@ -175,6 +299,36 @@ uint32_t IOIF_FDCAN_GetTxInFlightCount(IOIF_FDCANx_t id);
 uint32_t IOIF_FDCAN_GetRxFifo0FillLevel(IOIF_FDCANx_t id);
 
 /**
+ * @brief RX FIFO0/FIFO1 유실(RF0L/RF1L) 누적 카운터 조회
+ * @details IOIF_FDCAN_Start() 는 양쪽 FIFO 의 NEW_MESSAGE/LOST IT 를 켜고, full 정책은
+ *          System Layer 가 IOIF_FDCAN_ConfigRxFifoMode() 로 선언한 값을 적용한다(미선언=BLOCKING).
+ *          System Layer 가 IOIF_FDCAN_ConfigFilter() 에서 FDCAN_FILTER_TO_RXFIFO1 로 라우팅하면
+ *          FIFO1 이 활성화된다 (예: SM 의 SYNC 전용 FIFO — 1kHz SYNC 가 PnP/SDO 프레임을 밀어내지
+ *          못하게 격리). 두 FIFO 모두 동일 rx_callback 으로 전달된다.
+ * @param id IOIF_FDCANx_t 핸들
+ * @param[out] fifo0_lost RF0L 누적 (NULL 허용)
+ * @param[out] fifo1_lost RF1L 누적 (NULL 허용)
+ * @return AGRBStatus_OK / AGRBStatus_NOT_INITIALIZED
+ * @note Thread-Safe: volatile 32-bit 단일 read
+ */
+AGRBStatusDef IOIF_FDCAN_GetRxFifoLostCounts(IOIF_FDCANx_t id, uint32_t* fifo0_lost, uint32_t* fifo1_lost);
+
+/**
+ * @brief OVERWRITE FIFO 에서 full 상태로 버린 oldest 프레임 수 조회
+ * @details overwrite 모드는 RFxL(유실 IT)을 세우지 않아 GetRxFifoLostCounts 가 0 을 유지한다.
+ *          IOIF 는 OVERWRITE FIFO 를 직접 읽으면서 ① full 이라 건너뛴 oldest ② 읽는 도중
+ *          HW 가 덮어써 폐기한 프레임을 셀 때마다 이 값을 올린다 (BLOCKING FIFO 는 항상 0).
+ * @warning **하한(lower bound)이다** — HW 가 우리 관측 밖에서 덮어쓴 프레임은 세지 못한다.
+ *          0 을 '무손실' 의 증거로 쓰지 말 것(생산자 시퀀스 번호와 함께 볼 것).
+ * @param id IOIF_FDCANx_t 핸들
+ * @param[out] fifo0_discard FIFO0 누적 (NULL 허용)
+ * @param[out] fifo1_discard FIFO1 누적 (NULL 허용)
+ * @return AGRBStatus_OK / AGRBStatus_NOT_INITIALIZED
+ * @note Thread-Safe: volatile 32-bit 단일 read
+ */
+AGRBStatusDef IOIF_FDCAN_GetRxFifoDiscardCounts(IOIF_FDCANx_t id, uint32_t* fifo0_discard, uint32_t* fifo1_discard);
+
+/**
  * @brief FDCAN 에러 카운터 조회 (HW 레지스터 Read-Only)
  * @param id IOIF_FDCANx_t 핸들
  * @param[out] tec Transmit Error Counter (0~255)
@@ -193,7 +347,12 @@ AGRBStatusDef IOIF_FDCAN_GetErrorCounters(IOIF_FDCANx_t id, uint8_t* tec, uint8_
 typedef struct {
     uint32_t bus_off_count;              /**< Bus Off 이벤트 누적 횟수 */
     uint32_t error_passive_count;        /**< Error Passive 이벤트 누적 횟수 */
-    uint32_t rx_fifo0_lost_count;        /**< RxFIFO0 overflow(RF0L) 프레임 유실 누적 (2026-07-13) */
+    uint32_t rx_fifo0_lost_count;        /**< RxFIFO0 overflow(RF0L) **관측 손실의 하한** (2026-07-13,
+                                          *   주석 정정 2026-09-16). RF0L 은 HW 의 W1C sticky 플래그라
+                                          *   한 IRQ 안에서 몇 프레임을 잃었든 콜백당 +1 만 오른다 —
+                                          *   유실 "프레임 수" 가 아니라 "유실이 있었던 IRQ 수" 다.
+                                          *   증가분 ≥ 1 이면 유실 발생은 확정, 절대량은 과소계상.
+                                          *   근거: Codex v1.16 C18 / v1.17 C14 */
     uint8_t  last_tec_at_error_passive;  /**< 가장 최근 Error Passive 발생 시 TEC 값 */
 } IOIF_FDCAN_ErrorStats_t;
 
@@ -327,6 +486,21 @@ void IOIF_FDCAN_RegisterRxCallback(IOIF_FDCANx_t id, IOIF_FDCAN_RxCallback_t cal
  */
 AGRBStatusDef IOIF_FDCAN_ConfigFilter(IOIF_FDCANx_t id, FDCAN_FilterTypeDef* filter_config);
 
+/**
+ * @brief RX FIFO0/FIFO1 의 full 정책 선언 (System Layer 소유)
+ * @details 필터로 트래픽을 FIFO 에 배분한 쪽이 그 FIFO 의 full 정책도 정한다.
+ *          예) XM: FIFO0=TPDO 텔레메트리(OVERWRITE) / FIFO1=NMT·SDO·HB(BLOCKING)
+ *              SM: FIFO0=NMT·SDO·HB(BLOCKING)      / FIFO1=SYNC(OVERWRITE)
+ * @param id    IOIF_FDCANx_t 핸들
+ * @param fifo  IOIF_FDCAN_RX_FIFO0 | IOIF_FDCAN_RX_FIFO1
+ * @param mode  IOIF_FDCAN_RXFIFO_BLOCKING(기본) | IOIF_FDCAN_RXFIFO_OVERWRITE
+ * @return AGRBStatus_OK / NOT_INITIALIZED / PARAM_ERROR / BUSY(Start 이후 호출 — 아래 note)
+ * @note **IOIF_FDCAN_Start() 이전에 호출**해야 한다 — HAL 이 STATE_READY 에서만
+ *       RXFxC.FxOM 을 받는다. Start 시점에 필터/TDC 와 함께 HW 에 적용된다.
+ *       (미호출 = BLOCKING. AssignInstance 의 memset 0 이 기본값을 보장)
+ */
+AGRBStatusDef IOIF_FDCAN_ConfigRxFifoMode(IOIF_FDCANx_t id, uint8_t fifo, IOIF_FDCAN_RxFifoMode_t mode);
+
 #if defined(USE_FREERTOS)
 /**
  * @brief [RTOS Only] FDCAN 메시지 수신 (Non-Blocking)
@@ -343,6 +517,67 @@ AGRBStatusDef IOIF_FDCAN_ConfigFilter(IOIF_FDCANx_t id, FDCAN_FilterTypeDef* fil
  */
 AGRBStatusDef IOIF_FDCAN_Receive(IOIF_FDCANx_t id, IOIF_FDCAN_Msg_t* msg);
 #endif /* USE_FREERTOS */
+
+
+/**
+ *-----------------------------------------------------------
+ *            TIMING PROBE (W0) — IOIF_TIMING_PROBE=1 에서만
+ *-----------------------------------------------------------
+ */
+#if IOIF_TIMING_PROBE
+
+/**
+ * @brief RX 경로 1회 drain 의 타이밍 집계 (RxTask 가 drain 마다 publish)
+ * @details ISR 은 워드 스토어만 하고(도착 DWT·IRQ epoch), 아래 값의 계산·공개는
+ *          전부 RxTask(단일 writer) 가 한다. 소비자는 3-slot publish-last 를 통해
+ *          락 없이 최신 집계를 읽는다.
+ *
+ * @note `isr_to_drain_us` 는 **하한**이다 — ISR 진입 시각을 기준으로 하므로 실제
+ *       프레임 도착(HW 수신 완료)~ISR 진입 지연은 포함하지 않는다.
+ * @note `valid=false` 인 스냅숏의 `isr_to_drain_us` 는 의미 없다(0 으로 채운다).
+ *       무효 사유 = 이번 세대에 ISR 도착 스탬프가 없었음(= 세대 불일치).
+ *       overflow(`rf0l`/`discard` 증가) 나 `late_attr` > 0 은 무효화 사유가 아니라
+ *       **귀속 신뢰도 저하 신호**이므로 값을 그대로 싣고 소비자가 판정한다.
+ */
+typedef struct {
+    uint32_t epoch;             /**< drain 종료 시점의 ISR IRQ epoch (batch 수 누적) */
+    uint32_t isr_to_drain_us;   /**< 가장 오래된 미처리 IRQ 진입 → drain 시작 (µs, 하한) */
+    uint32_t drain_us;          /**< drain 시작 → 종료 (µs, FIFO0+FIFO1 합산) */
+    uint32_t coalesced;         /**< 직전 drain 종료(epoch 읽기) ~ 이번 wake 스냅숏 사이 IRQ batch 수
+                                 — 이번 wake 가 한꺼번에 떠맡은 도착 수 (binary 세마포어가 give 를 합친다) */
+    uint32_t latest_to_drain_us;/**< 가장 최근 IRQ 진입 → drain 시작 (µs) — oldest 와 쌍으로
+                                 보면 이번 wake 가 얼마나 긴 도착 구간을 합류시켰는지 보인다 */
+    uint32_t frames;            /**< 이번 drain 이 읽어낸 프레임 수 (단일 consumer 계수) */
+    uint32_t fill_at_start;     /**< drain 시작 시 RX FIFO0 fill level */
+    uint32_t rf0l;              /**< 누적 RF0L (관측 손실 하한 — 소비자가 delta 로 본다) */
+    uint32_t discard;           /**< 누적 OVERWRITE discard (FIFO0) */
+    uint32_t late_attr;         /**< 누적 — wake 스냅숏 ~ drain 종료 사이 도착한 IRQ batch 수. 그 도착은
+                                 이번 drain 이 이미 프레임을 읽었을 수 있어 지연 귀속이 불가하다.
+                                 연속 수신에서 증가하는 것이 정상(coalescing) — 손실 아님 */
+    uint32_t snap_fail;         /**< 누적 스냅숏 재시도 실패 횟수 */
+    bool     valid;             /**< 이번 세대(직전 drain 종료 이후)에 ISR 이 도착 스탬프를 남겼는가.
+                                 false 는 **손실이 아니다** — 이번 wake 에 새 IRQ 가 없었다는 뜻.
+                                 손실 판정은 `rf0l`·`discard` delta 로만 한다 */
+    uint32_t orphan_skip;       /**< 누적 — 게시하지 않은 빈 고아 wake 수 (2026-09-17 추가, 구조체 끝).
+                                 직전 drain 도중 도착한 IRQ 의 세마포어 token 으로 깨어났지만 새 IRQ·
+                                 프레임·drain 중 도착이 모두 없던 wake. 게시하면 직전 스냅숏을 수 µs
+                                 만에 덮어 주기 독자가 경합 drain 을 거의 못 보는 표본 편향이 생긴다 */
+} IOIF_FDCAN_ProbeSnapshot_t;
+
+/**
+ * @brief RX drain 타이밍 집계 스냅숏 조회 (3-slot publish-last reader)
+ * @param id  FDCAN 인스턴스 ID
+ * @param[out] out 스냅숏 수신 구조체
+ * @return AGRBStatus_OK / AGRBStatus_EMPTY (아직 publish 0회) / AGRBStatus_BUSY (3회 모두
+ *         경합 — 찢어진 값을 반환하느니 실패로 알린다, `*out` 신뢰 불가) / AGRBStatus_ERROR (인자 오류)
+ * @note Thread-Safe: 락 없음. 읽는 도중 writer(RxTask) 가 publish 하면 최대 3회 재시도한다.
+ *       OK 일 때만 `*out` 을 쓸 것 — BUSY 표본은 버리고 필요하면 호출자가 횟수를 센다.
+ * @note `IOIF_DWT_Init()` 선행 필수 — 미호출 시 모든 시간 필드가 0.
+ * @note BareMetal 빌드에는 publisher(RxTask)가 없어 항상 AGRBStatus_EMPTY.
+ */
+AGRBStatusDef IOIF_FDCAN_ProbeSnapshot(IOIF_FDCANx_t id, IOIF_FDCAN_ProbeSnapshot_t* out);
+
+#endif /* IOIF_TIMING_PROBE */
 
 #endif /* IOIF_FDCAN_INC_IOIF_AGRB_FDCAN_H_ */
 

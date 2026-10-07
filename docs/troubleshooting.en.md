@@ -119,7 +119,7 @@ uint8_t pc13 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
 
 ## Ex.36 (OnDevice Kinesthetic Learning) — Rev 1.1 Build Failure
 
-**Symptom:** Building Ex.36 with the Rev 1.1 SDK produces the following linker errors:
+**Symptom:** Building Ex.36 with the Rev 1.1 SDK produces the following linker errors (the current Rev 1.1 SDK no longer includes Ex.36 — this happens when you bring it in from an older SDK or another folder):
 
 ```
 control_task.c:(.text.Active_Entry+0x2a): undefined reference to `XM_UserNV_Read'

@@ -48,7 +48,7 @@
  *          ASME J. Dynamic Systems, Measurement, and Control, 107(1), 1-24.
  * @see     Keemink, A.Q.L. et al. (2018) "Admittance control for physical
  *          human-robot interaction" IJRR, 37(11), 1421-1444.
- * @see     docs/api-reference/XM_Control.md
+ * @see     docs/api-reference/02-h10-control-n-data.md
  * @version 1.0
  * @date    Mar 10, 2026
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
@@ -111,7 +111,7 @@ typedef enum {
 /**
  * @brief USB 스트리밍용 데이터 구조체
  * @details 임피던스 제어 핵심 변수 4개를 실시간 스트리밍합니다.
- *          PhAI Studio User Custom 모드에서 4채널 float로 표시됩니다.
+ *          xm10 도구에서 4채널 float로 표시됩니다.
  */
 typedef struct {
     float equilibrium;      // 평형 위치 θ_d (deg)

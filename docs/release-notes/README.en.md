@@ -4,6 +4,7 @@ This page lists release attachments, compatibility matrices, and known issues fo
 
 | Version | Date | Notes |
 |---------|------|-------|
+| [v2.8.1](v2.8.1.en.md) | 2026-10-07 | PC tool tabs per module · CAN-FD receive fix · PC tool folder renamed `pc-data-tool` · EMG Hub calibration API · Rev 1.1: 40 examples · bootloader v1.1.0 |
 | [v2.8.0](v2.8.0.en.md) | 2026-09-10 | New PC data tool `xm10` — graphs, lossless saving (`.xmlog`), CSV export + user channel names shown |
 | [v2.7.0](v2.7.0.en.md) | 2026-09-08 | General-purpose Serial API — External UART (PD5/PD6) opened through XM_API + Ex.43 (two XM10s talking) + improved sensor hub connection stability |
 | [v2.6.0](v2.6.0.en.md) | 2026-08-20 | Safety release — safe CONTROL→MONITOR transition + watchdog (8 s) & no-reboot-loop + 15 hardened examples + `forwardVelocity` 60× fix + Ext_Sync |

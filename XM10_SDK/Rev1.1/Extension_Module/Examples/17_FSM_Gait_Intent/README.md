@@ -7,7 +7,7 @@
 > - **Body Data 전제조건** — `XM_SendUserBodyData` 필수 (보행 분석 추정치 정확도).
 >
 > ⏱️ 권장 시간: 50분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.14 PD](../14_PD_Realtime_Control/) + [Ex.09 CDC Stream](../09_CDC_Stream/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [TSM](../../docs/api-reference/01-task-state-machine.md)
+> 🧰 사전 예제: [Ex.14 PD](../14_PD_Realtime_Control/) + [Ex.09 CDC Stream](../09_CDC_Stream/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [TSM](../../docs/api-reference/01-task-state-machine.md) · [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 
 ---
 
@@ -24,7 +24,7 @@ XM_SendUserBodyData(bodyData);
 
 신체 정보 미설정 시 → 무릎 각도, 발 접지 감지 부정확 → FSM 오작동.
 
-> [examples/README.md — Body Data 안내](../README.md#part-5)
+> [examples/README.md — Body Data 안내](../README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세)
 
 ---
 
@@ -42,7 +42,7 @@ XM_SendUserBodyData(bodyData);
 | 6 Mid-Swing | 무릎 최대 굴곡 | 0 Nm |
 | 7 Terminal Swing | 착지 준비 | 0 Nm |
 
-모든 토크에 **LPF 스무딩** (시상수 ~100 ms) + AssistLevel × 비례 스케일 + USB-CDC 실시간 스트리밍 (상시) + PhAI 0xF0 6축.
+모든 토크에 **LPF 스무딩** (시상수 ~100 ms) + AssistLevel × 비례 스케일 + USB-CDC 실시간 스트리밍 (상시) + `xm10` 도구의 0xF0 6축.
 
 > 📸 **7-phase Gait Cycle** — 사진·영상 준비 중
 
@@ -173,11 +173,13 @@ static void Active_Loop(void)
 
 ## 4️⃣ 실험 — 직접 해보기 (체크포인트)
 
+> 💡 PC 프로그램은 한 번에 하나만 연결하세요. 텍스트는 시리얼 터미널로, 0xF0 그래프는 `xm10` 도구로 보되 하나를 닫고 다음 것을 여세요. (터미널에 알 수 없는 글자가 섞여 보여도 정상입니다.) 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
+
 1. **HW + 빌드 + 플래시** → CM 연결 + ASSIST 진입 + 슈트 AssistLevel 5 정도
 2. **실제 보행** → ✅ LED 1 (Stance) / LED 2 (Swing) 가 우측 다리 보행 주기에 맞춰 토글
 3. **USB CDC** → `Gait | RH:TERMINAL LH:INI_SWNG Tau_R:1.42 Tau_L:-0.85` 매 200 ms
-4. **PhAI 0xF0** → 좌·우 phase + torque + thigh angle 6축 실시간 그래프
-5. **PhAI Studio** → 실시간 데이터 스트리밍으로 확인
+4. **`xm10` 도구의 0xF0 탭** → 좌·우 phase + torque + thigh angle 6축 실시간 그래프
+5. **PhAI Studio** → Total Data (0x20) 실시간 스트리밍으로 확인
 6. **변형 1 — 임계치 조정**: `MIDSTANCE_ANGLE_THRESHOLD` 5° → 3° (조기 전환) or 8° (지연 전환)
 7. **변형 2 — 토크 크기**: `TERMINAL_STANCE_ASSIST_NM` 1.5 → 3.0 (강한 추진) 또는 0.5 (약함)
 8. **변형 3 — LPF 시상수**: `TORQUE_LPF_FACTOR` 0.01 → 0.1 (10배 빠른 반응, 덜 부드러움)
@@ -188,10 +190,10 @@ static void Active_Loop(void)
 
 ## 5️⃣ 다음 단계
 
-- 보행 위상 적응 토크 (연속 위상): [Ex.23 Gait Phase Adaptive](../23_Gait_Phase_Adaptive_Torque/) (Phase 2D)
-- GRF 기반 위상 추정: [Ex.32 GRF Gait Intent](../32_GRF_Gait_Intent/) (Phase 2D)
-- CPG 진동자 (리드믹 동기): [Ex.22 CPG](../22_CPG_Oscillator/) (Phase 2D)
-- ILC (반복 학습 제어): [Ex.26 ILC](../26_Iterative_Learning_Control/) (Phase 2D)
+- 보행 위상 적응 토크 (연속 위상): [Ex.23 Gait Phase Adaptive](../23_Gait_Phase_Adaptive_Torque/)
+- GRF 기반 위상 추정: [Ex.32 GRF Gait Intent](../32_GRF_Gait_Intent/)
+- CPG 진동자 (리드믹 동기): [Ex.22 CPG](../22_CPG_Oscillator/)
+- ILC (반복 학습 제어): [Ex.26 ILC](../26_Iterative_Learning_Control/)
 
 ---
 
@@ -206,6 +208,6 @@ static void Active_Loop(void)
 | LPF 가 너무 느려 transition 놓침 | factor 0.01 = 100 ms 시상수 | 0.05~0.1 로 ↑ |
 | `H10 AssistLevel=0` 이라 모든 토크 0 | 정상 동작 (사용자가 보조 끔) | 슈트 다이얼 1~9 조정 |
 | FSM 가 자주 한 단계 건너뜀 | 보행이 매우 빠르거나 임계치 가까이 노이즈 | 임계치 hysteresis 추가 |
-| PhAI Studio 데이터 안 보임 | 스트림 소스 미등록 | `XM_SetUsbStreamSource` 확인 |
+| PhAI Studio 데이터 안 보임 | Connect 안 함 / 다른 프로그램이 COM 포트 점유 | 포트 선택 → **Connect** (Total Data 는 자동). 0xF0 채널은 `xm10` 도구로 확인 |
 
 막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)

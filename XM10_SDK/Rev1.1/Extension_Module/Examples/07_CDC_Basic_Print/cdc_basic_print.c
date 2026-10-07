@@ -4,12 +4,11 @@
  * @author  HyundoKim
  * @brief   [초급] 버튼 이벤트 발생 시 텍스트 메시지 전송
  * @note    텍스트 디버깅 전용 예제입니다.
- *          실시간 구조체 데이터 모니터링은 09_CDC_Stream 예제를 참조하세요.
- *          Total Data Packet(0x20)은 System이 자동 전송하므로 별도 코드 불필요.
- * @warning USB-CDC 포트는 단일 점유 자원입니다. 다른 시리얼 클라이언트
- *          (PhAI Studio, PuTTY, RealTerm 등)와 동시에 열지 마십시오 —
- *          같은 COM 포트 충돌로 접속 실패 또는 데이터 손실이 발생합니다.
- *          실시간 그래프 모니터링이 필요하면 PhAI Studio 만 단독 실행하세요.
+ *          기본 설정에서는 PC 프로그램이 포트를 열면 센서 데이터(Total Data)도 자동으로
+ *          함께 전송되어, 일반 시리얼 터미널에 알아볼 수 없는 글자가 섞여 보입니다.
+ *          텍스트만 보려면 Control_Setup 에서 XM_SetUsbAutoStream(false) 를 호출하세요.
+ *          실시간 구조체 그래프 모니터링은 09_CDC_Stream(xm10 도구)을 참조하세요.
+ * @warning PC 프로그램(PhAI Studio, xm10 도구, PuTTY 등)은 한 번에 하나만 연결하세요.
  * @version 1.2
  * @date    Mar 10, 2026
  *

@@ -34,7 +34,7 @@ typedef int (*AGR_PnP_TxFunc_t)(uint32_t can_id, const uint8_t* data, uint8_t le
 /**
  * @brief Tick 함수 타입 (시간 소스)
  * @return 현재 시간 (ms)
- * @note HAL_GetTick() 또는 IOIF_TIM_GetTick() 사용
+ * @note HAL_GetTick 또는 IOIF_TIM_GetTick 사용
  */
 typedef uint32_t (*AGR_PnP_GetTickFunc_t)(void);
 

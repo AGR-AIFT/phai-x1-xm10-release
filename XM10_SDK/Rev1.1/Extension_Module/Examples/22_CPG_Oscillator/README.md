@@ -6,7 +6,7 @@
 > - **컴파일 타임 피드백 소스 전환** — `gaitCycle` (Body Data 필요) vs `motorAngle` (불필요).
 >
 > ⏱️ 권장 시간: 50분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.17 FSM Gait Intent](../17_FSM_Gait_Intent/) (단계별 vs 연속 위상 비교) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)
+> 🧰 사전 예제: [Ex.17 FSM Gait Intent](../17_FSM_Gait_Intent/) (단계별 vs 연속 위상 비교) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 > 📄 논문: Ronsse, R., et al. (2011). *Oscillator-based assistance of cyclical movements.* Med. Biol. Eng. Comput., 49(10).
 
 ---
@@ -21,7 +21,7 @@
 #define USE_MOTOR_ANGLE_FEEDBACK         // Body Data 불필요 (각도 직접 사용)
 ```
 
-> [examples/README.md — Body Data 안내](../README.md#part-5)
+> [examples/README.md — Body Data 안내](../README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세)
 
 ---
 
@@ -39,7 +39,7 @@
 | 보행 시작 | ω 가 사용자 보행 주파수로 수렴 (5~10초) |
 | 정상 보행 | τ = A·sin(φ) 출력, 자연스러운 리듬 보조 |
 
-USB CDC `CPG | φ:1.57 ω:6.28 F:-0.32 τ:0.95` + PhAI 0xF0 4ch.
+USB CDC `CPG | φ:1.57 ω:6.28 F:-0.32 τ:0.95` + `xm10` 도구의 0xF0 4ch.
 
 > 📸 **AFO 위상 락온 곡선** — 사진·영상 준비 중
 
@@ -137,11 +137,13 @@ static void Active_Loop(void)
 
 ## 4️⃣ 실험 — 직접 해보기 (체크포인트)
 
+> 💡 PC 프로그램은 한 번에 하나만 연결하세요. 텍스트는 시리얼 터미널로, 0xF0 그래프는 `xm10` 도구로 보되 하나를 닫고 다음 것을 여세요. (터미널에 알 수 없는 글자가 섞여 보여도 정상입니다.) 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
+
 1. **Body Data 설정** + 빌드/플래시 (default 모드)
 2. **CM ASSIST 진입 + 정지 상태** → ✅ τ = 0, USB `φ:0.00 ω:6.28`
 3. **보행 시작 (5~10 초)** → ✅ ω 가 사용자 보행 주파수로 수렴 (약 5~7 rad/s = 0.8~1.1 Hz)
 4. **USB CDC 출력** → `CPG | φ:1.57 ω:5.95 F:-0.21 τ:1.00` 매 200 ms
-5. **PhAI 0xF0** → φ 톱니파, ω 곡선 (락온 후 평탄), τ 정현파
+5. **`xm10` 도구의 0xF0** → φ 톱니파, ω 곡선 (락온 후 평탄), τ 정현파
 6. **BTN 1 클릭** → ✅ 진폭 A 0.5 → 1.0 → ... → 4.0 → 0.0 순환. 보조감 증감
 7. **BTN 2 클릭** → ✅ ε 0.1 → 0.2 → 0.3 → 0.5 순환. 큰 ε = 빠른 락온 (불안정 가능)
 8. **BTN 3 클릭** → ✅ φ=0, ω=초기값 리셋. 동기 실패 시 재시작

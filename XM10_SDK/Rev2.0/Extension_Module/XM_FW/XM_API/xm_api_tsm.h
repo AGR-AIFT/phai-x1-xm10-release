@@ -131,7 +131,7 @@ void XM_TSM_AddState(XmTsmHandle_t handle, const XmStateConfig_t* config);
 
 /**
  * @brief  TSM을 실행합니다.
- * @note   User Task의 메인 루프(while문) 안에서 주기적으로 호출해야 합니다.
+ * @note   Control_Loop() 안에서 매 주기 호출하세요.
  * @param  handle : TSM 핸들
  */
 void XM_TSM_Run(XmTsmHandle_t handle);

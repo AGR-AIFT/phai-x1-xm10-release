@@ -52,7 +52,7 @@
  * @see     Sariyildiz, E. & Ohnishi, K. (2015) "Stability and robustness of
  *          disturbance-observer-based motion control systems" IEEE Trans. IE, 62(1)
  * @see     Ex.21 gravity_compensation.c (공칭 모델 기반)
- * @see     docs/api-reference/XM_Control.md
+ * @see     docs/api-reference/02-h10-control-n-data.md
  * @version 1.0
  * @date    Mar 10, 2026
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
@@ -124,7 +124,7 @@
 /**
  * @brief USB 스트리밍용 데이터 구조체
  * @details DOB 제어 핵심 변수 4개를 실시간 스트리밍합니다.
- *          PhAI Studio에서 실시간 시각화 가능.
+ *          xm10 도구에서 실시간 시각화 가능.
  */
 typedef struct {
     float tau_model;    // 공칭 모델 토크 (중력+마찰 합산) [Nm]
@@ -241,7 +241,7 @@ void Control_Setup(void)
     XM_TSM_AddState(s_tsm, &act_conf);
 
     // USB 스트리밍 설정 (User Custom 모드 0xF1)
-    // PhAI Studio에서 채널별 이름과 단위를 표시합니다
+    // xm10 도구에 채널별 이름이 표시됩니다
     XM_SetUsbCustomMeta(0xF1,
         "[{\"name\":\"Model Torque\",\"unit\":\"Nm\"},"
         "{\"name\":\"DOB Torque\",\"unit\":\"Nm\"},"

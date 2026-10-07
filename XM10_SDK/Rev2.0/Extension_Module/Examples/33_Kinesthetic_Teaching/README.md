@@ -5,7 +5,7 @@
 이것이 **장인 스킬 데이터 캡처(Expert Skill Capture)**의 핵심 원시(primitive)이며,
 Physical AI 데이터 파이프라인의 출발점입니다.
 
-> 📖 API 레퍼런스: [H10 Control & Data](../../docs/api-reference/02-h10-control-n-data.md) · [Task State Machine](../../docs/api-reference/01-task-state-machine.md)
+> 📖 API 레퍼런스: [H10 Control & Data](../../docs/api-reference/02-h10-control-n-data.md) · [Task State Machine](../../docs/api-reference/01-task-state-machine.md) · PC 에서 0xF3 채널 보기: [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 >
 > 📄 전제 예제: [Ex.21 중력+마찰 보상](../21_Gravity_Compensation/) · [Ex.31 DOB 투명 모드](../31_Friction_Comp_DOB/)
 
@@ -85,7 +85,7 @@ H10의 MD는 이 토크 명령을 전류로 변환하여 모터를 구동합니�
   투명 모드 → 인간이 컨트롤러 → 궤적 기록 → AI 학습 데이터
 - **Physical AI 데이터 파이프라인**의 첫 단계를 직접 구현합니다.
 - **PD 위치 추적**으로 기록된 궤적을 재연하는 방법을 학습합니다.
-- 교시 데이터를 PhAI Studio 및 π0 VLA 모델 학습에 연결하는 워크플로우를 이해합니다.
+- 교시 데이터를 `xm10` 도구로 저장하고 π0 VLA 모델 학습에 연결하는 워크플로우를 이해합니다.
 
 ---
 
@@ -222,6 +222,8 @@ target = prev_target + delta;
 
 ## 실행 방법
 
+> 💡 PC 프로그램은 한 번에 하나만 연결하세요. 텍스트는 시리얼 터미널로, 0xF3 그래프는 `xm10` 도구로 보되 하나를 닫고 다음 것을 여세요. (터미널에 알 수 없는 글자가 섞여 보여도 정상입니다.) 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
+
 1. `kinesthetic_teaching.c`를 `control_task.c`로 복사 후 빌드하여 XM10에 플래시합니다.
 2. H10 전원 ON → ASSIST MODE 전환.
 3. USB CDC 터미널에서 `[KT] 운동감각 교시 시스템 준비 완료` 메시지 확인.
@@ -229,7 +231,7 @@ target = prev_target + delta;
 5. 로봇 외골격을 자유롭게 움직여 동작을 교시합니다. (Human IS the Controller)
 6. **BTN1** — 교시 완료. `[KT] N포인트 기록됨` 메시지 확인.
 7. **BTN2** — 재생 시작. LED3 점등과 함께 PD 추적 재생.
-8. PhAI Studio에서 Module ID `0xF3`으로 `Theta Target` vs `Theta Actual`의 추적 오차를 확인합니다.
+8. `xm10` 도구에서 Module ID `0xF3` 탭으로 `Theta Target` vs `Theta Actual`의 추적 오차를 확인합니다.
 
 ---
 
@@ -238,7 +240,7 @@ target = prev_target + delta;
 ```
 [이 예제] 교시 → RAM 버퍼 (16KB, 최대 20초)
       ↓ XM_SendUsbDataWithId 로 PC 스트리밍 (Ex.09 참조)
-[PhAI Studio] 데이터 라벨링 · 품질 검증 · 시각화
+[xm10 도구] 수신 · .xmlog/CSV 저장 → 데이터 라벨링 · 품질 검증 · 시각화
       ↓ Cloud GPU 전송
 [AI 학습] π0 스타일 VLA 모델 (State: 각도+토크, Action: 다음 각도)
       ↓ 학습된 정책 배포
@@ -250,8 +252,8 @@ target = prev_target + delta;
 ## 직접 해보기
 
 - **투명성 품질 비교**: 투명 모드 없이 교시 → 로봇 무게 저항 느낌. 투명 모드로 교시 → 차이를 직접 체감하세요.
-- **재생 PD 게인 튜닝**: `KP_REPLAY = 0.5 Nm/deg`부터 시작하여 1.0, 1.5로 늘리며 추적 오차와 진동을 PhAI Studio에서 관찰하세요.
-- **데이터 스트리밍**: Ex.09 CDC 패턴(`XM_SendUsbDataWithId`)으로 교시 데이터를 PC(PhAI Studio)로 실시간 전송하세요. 온보드 저장(SD카드)은 향후 HW 리비전에서 지원 예정입니다.
+- **재생 PD 게인 튜닝**: `KP_REPLAY = 0.5 Nm/deg`부터 시작하여 1.0, 1.5로 늘리며 추적 오차와 진동을 `xm10` 도구에서 관찰하세요.
+- **데이터 스트리밍**: Ex.09 CDC 패턴(`XM_SendUsbDataWithId`)으로 교시 데이터를 PC(`xm10` 도구)로 실시간 전송·저장하세요. 온보드 파일 저장(SD카드 등)은 현재 지원하지 않습니다.
 - **DOB 교시 업그레이드**: `_ComputeTransparentTorque()`를 Ex.31의 DOB 로직으로 교체하면 잔류 마찰이 더 줄어 데이터 품질이 향상됩니다.
 
 ---

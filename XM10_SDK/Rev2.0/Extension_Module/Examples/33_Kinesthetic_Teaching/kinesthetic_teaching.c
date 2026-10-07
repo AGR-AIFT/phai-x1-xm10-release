@@ -22,9 +22,10 @@
  * 이 예제가 수집하는 데이터:
  *   (θ_rh[t], θ_lh[t]) — 전문가의 운동 궤적
  *
- * 다음 단계 (PhAI Studio 연동):
- *   1. XM_SetUsbStreamSource로 phai-studio에 실시간 스트리밍
- *   2. PhAI Studio로 데이터 전송 및 라벨링
+ * 다음 단계 (PC 로 데이터 받기):
+ *   1. XM_SetUsbCustomMeta + XM_SendUsbDataWithId 로 PC 에 실시간 스트리밍 (Ex.09 참고)
+ *   2. xm10 도구로 데이터 확인 및 저장
+ *      (PhAI Studio 는 아직 개발 중이라 직접 정의한 구조체는 우선 xm10 도구로 봅니다)
  *   3. π0 스타일 VLA(Vision-Language-Action) 모델 학습
  *   → 이 데이터가 π0 스타일 VLA 모델의 학습 데이터가 됩니다
  *
@@ -51,7 +52,7 @@
  *          via Action Diffusion" RSS 2023 (π0의 전신 개념)
  * @see     Ex.21 gravity_compensation.c (교시 중 투명 모드 기반)
  * @see     Ex.09 cdc_stream.c (PC 실시간 스트리밍 연동)
- * @see     docs/api-reference/XM_Control.md
+ * @see     docs/api-reference/02-h10-control-n-data.md
  * @version 1.0
  * @date    Mar 10, 2026
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
@@ -560,10 +561,8 @@ static void _RunRecordMode(void)
             s_teach_state = TEACH_STATE_RECORDED;
 
             // 전문가 데이터 캡처 완료 메시지
-            // XM_SetUsbStreamSource로 phai-studio에 실시간 스트리밍 가능
-            XM_SendUsbDebugMessage(
-                "[KT] 전문가 데이터 캡처 완료 — "
-                "PhAI Studio로 전송하여 AI 학습에 활용 가능\r\n");
+            // 교시 상태는 XM_SendUsbDataWithId(0xF3) 로 PC(xm10 도구)에 실시간 스트리밍됩니다 (_UpdateStreamData 참고)
+            XM_SendUsbDebugMessage("[KT] 전문가 데이터 캡처 완료\r\n");
 
             char buf[80];
             snprintf(buf, sizeof(buf),
@@ -736,10 +735,8 @@ static void _HandleButtonInput(void)
             XM_SendUsbDebugMessage(buf);
 
             // 전문가 데이터 캡처 완료
-            // XM_SetUsbStreamSource로 phai-studio에 실시간 스트리밍 가능
-            XM_SendUsbDebugMessage(
-                "[KT] 전문가 데이터 캡처 완료 — "
-                "PhAI Studio로 전송하여 AI 학습에 활용 가능\r\n");
+            // 교시 상태는 XM_SendUsbDataWithId(0xF3) 로 PC(xm10 도구)에 실시간 스트리밍됩니다 (_UpdateStreamData 참고)
+            XM_SendUsbDebugMessage("[KT] 전문가 데이터 캡처 완료\r\n");
 
             _UpdateLedIndicators();
         }

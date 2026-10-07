@@ -1,6 +1,6 @@
 # XM10 예제
 
-41 개의 실습 예제입니다(Rev 1.1 SDK 기준 — 전체 카탈로그는 45 개). 각 폴더에 소스 코드 `.c` 와 그 예제만의 설명서 `README.md` 가 함께 들어있습니다.
+40 개의 실습 예제입니다(Rev 1.1 SDK 기준 — 전체 카탈로그는 45 개). 각 폴더에 소스 코드 `.c` 와 그 예제만의 설명서 `README.md` 가 함께 들어있습니다.
 
 - API 함수 명세: [docs/api-reference/](../docs/api-reference/)
 - 단계별 학습 안내: [docs/tutorials/](../docs/tutorials/)
@@ -19,7 +19,7 @@
 
 여기까지 약 2 시간입니다. 외부 부품 없이 보드 하나로 다 됩니다. Ex.04 부터 외부 입출력과 센서로 넓혀갑니다.
 
-**보드 리비전 호환성** — 전체 45 개 예제 중 40 개는 Rev 1.1 / Rev 2.0 양쪽 모두 빌드·실행됩니다. 나머지 5 개는 Rev 2.0 전용입니다. Ex.40 EMG Proportional Assist, Ex.41 IMU Hub Dashboard, Ex.42 EMG Hub Biofeedback, Ex.43 External UART Ping-Pong 은 **이 Rev 1.1 SDK 에 포함되지 않았고**(그래서 41 개), Ex.36 은 들어 있지만 Rev 1.1 에서는 link 에 실패하니 Ex.35 까지 진행하세요. 그 외 두 가지 주의 사항이 있습니다.
+**보드 리비전 호환성** — 전체 45 개 예제 중 40 개는 Rev 1.1 / Rev 2.0 양쪽 모두 빌드·실행됩니다. 나머지 5 개는 Rev 2.0 전용입니다. Ex.36 OnDevice Kinesthetic Learning, Ex.40 EMG Proportional Assist, Ex.41 IMU Hub Dashboard, Ex.42 EMG Hub Biofeedback, Ex.43 External UART Ping-Pong 은 **이 Rev 1.1 SDK 에 포함되지 않았습니다**(그래서 40 개). 그 외 두 가지 주의 사항이 있습니다.
 
 - ⚠️ **본인 보드와 같은 Rev 의 ZIP** 을 받아야 합니다. `Rev1.1.zip` 과 `Rev2.0.zip` 은 보드별 main.h (MCU 핀 매핑) 가 다른 독립 SDK 입니다. 보드는 Rev 2.0 인데 `Rev1.1.zip` 을 풀어 빌드하면 — 빌드는 통과하지만 — 내장 버튼/LED 의 핀이 한 칸씩 어긋나서 Ex.01~03 의 버튼이 안 눌리거나 엉뚱한 `XM_BTN_N` 으로 잡힙니다. 보드 라벨을 먼저 확인하세요 ([보드 리비전 비교](../docs/hardware/README.md#보드-리비전-비교)).
 - 외부 GPIO 를 직접 다루는 예제 (Ex.04~06, Ex.05a~05d, Ex.16 외부 IMU 모드) 는 커넥터 위치·핀 라벨이 리비전마다 다릅니다. 시작 전에 본인 보드의 핀맵을 펴두세요 — [Rev 1.1 핀맵](../docs/hardware/external-gpio-rev1.1.md) / [Rev 2.0 핀맵](../docs/hardware/external-gpio-rev2.0.md).
@@ -337,16 +337,15 @@ Hogan(1985) 의 정의대로 임피던스를 0 에 가깝게. Ex.21 의 공칭 �
 
 ---
 
-## Part 6: Physical AI 응용 + 유틸리티 확장 (Ex.35~36, 38~39)
+## Part 6: Physical AI 응용 + 유틸리티 확장 (Ex.35, 38~39)
 
 투명성 → 의도 감지 → 학습 → 자율 재생 파이프라인을 완성하는 응용 예제와, RTOS 실습에 유용한 시스템 유틸리티 예제입니다.
 
-### Physical AI 응용 (35~36)
+### Physical AI 응용 (35)
 
 | 예제 | 제목 | 난이도 | 핵심 개념 |
 | :---: | :--- | :---: | :--- |
 | [35](35_MultiLayer_Transparent_Control/) | 다층 투명 제어 | 고급 | 투명/벽/좌우 커플링 세 모드 실시간 전환 |
-| [36](36_OnDevice_Kinesthetic_Learning/) | 보드 안에서 직접 학습 🛑 **Rev 2.0 전용** | 고급 | 작은 신경망을 보드 위에서 학습 → LQR 재생 — Internal Flash UserNV API 가 Rev 2.0 만 지원 |
 
 ### RTOS 시스템 유틸리티 (38~39)
 

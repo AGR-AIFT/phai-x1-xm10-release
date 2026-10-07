@@ -45,7 +45,7 @@
  *   착용자의 신체 정보(몸무게, 키, 분절 길이 등)를 설정해야 합니다.
  *   신체 정보가 미설정이면 무릎 각도, 허벅지 각도, 발 접지 감지가 부정확합니다.
  *
- * @see     docs/api-reference/gait_intent.md
+ * @see     docs/api-reference/02-h10-control-n-data.md  (H10 제어 & Data API)
  * @version 1.0
  * @date    Mar 09, 2026
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
@@ -272,7 +272,7 @@ void Control_Setup(void)
         "{\"name\":\"Thigh Angle R\",\"unit\":\"deg\"},"
         "{\"name\":\"Thigh Angle L\",\"unit\":\"deg\"}]");
 
-    /* USB-CDC 스트리밍 소스 등록 (s_log 구조체 — 연결 시 연속 전송) */
+    /* USB-CDC 스트리밍 소스 등록 (s_log 구조체 — 구 방식, PC 프로그램이 포트를 열면 연속 전송) */
     XM_SetUsbStreamSource(&s_log, sizeof(LogData_t));
     XM_SetUsbAutoStream(true);
 }
@@ -370,10 +370,10 @@ static void Active_Loop(void)
 
     /* ------------------------------------------------
      * BTN 1: (구) USB MSC 로깅 시작/정지 토글 — 제거됨
-     * USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신
+     * USB-CDC 스트리밍은 PC 프로그램이 포트를 열어 두는 동안 계속됩니다
      * ------------------------------------------------ */
     if (XM_GetButtonEvent(XM_BTN_1) == XM_BTN_CLICK) {
-        // USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신 (start/stop 불필요)
+        // USB-CDC 스트리밍은 PC 프로그램이 포트를 열어 두는 동안 계속됩니다 (start/stop 불필요)
     }
 
     /* ------------------------------------------------
@@ -418,7 +418,7 @@ static void Active_Loop(void)
     _UpdateStreamData();
 
     /* ------------------------------------------------
-     * USB-CDC 스트리밍 데이터 갱신 (s_log — 연결 시 연속 전송)
+     * USB-CDC 스트리밍 데이터 갱신 (s_log — PC 프로그램이 포트를 열면 연속 전송)
      * ------------------------------------------------ */
     _UpdateLogData();
 
@@ -439,7 +439,7 @@ static void Active_Exit(void)
     XM_SetAssistTorqueLH(0.0f);
     XM_SetControlMode(XM_CTRL_MONITOR);
 
-    /* USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신 (세션 종료 처리 불필요) */
+    /* USB-CDC 스트리밍은 PC 프로그램이 포트를 열어 두는 동안 계속됩니다 (세션 종료 처리 불필요) */
 
     /* LED 끄기 */
     XM_SetLedState(XM_LED_1, XM_OFF);

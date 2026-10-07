@@ -14,7 +14,7 @@
   <img width="332" height="231" alt="XM10 Board" src="https://github.com/user-attachments/assets/871dc578-57ab-41ed-8d39-76a43e65f24d" />
 </p>
 <p align="center">
-  <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.8.0"><img src="https://img.shields.io/badge/Release-v2.8.0-brightgreen.svg" alt="Release"></a>
+  <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.8.1"><img src="https://img.shields.io/badge/Release-v2.8.1-brightgreen.svg" alt="Release"></a>
   <a href="#"><img src="https://img.shields.io/badge/Platform-STM32H7-blue.svg" alt="Platform"></a>
   <a href="#"><img src="https://img.shields.io/badge/OS-FreeRTOS-orange.svg" alt="OS"></a>
   <a href="#"><img src="https://img.shields.io/badge/Comm-CAN--FD-red.svg" alt="CAN-FD"></a>
@@ -50,7 +50,7 @@
 > 두 리비전 폴더의 CubeIDE 프로젝트명이 둘 다 `Extension_Module` 이라, clone 한 경우
 > **같은 워크스페이스에 Rev1.1 과 Rev2.0 을 동시에 Import 하지 마세요**(프로젝트명 충돌).
 
-📦 **다운로드**: [Releases v2.8.0](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.8.0) → Assets 섹션
+📦 **다운로드**: [Releases v2.8.1](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.8.1) → Assets 섹션
 - **Rev2.0 보드** → `Rev2.0.zip` (대부분 여기)
 - **Rev1.1 보드** → `Rev1.1.zip`
 - 보드 라벨로 본인 리비전 확인 후 선택. 모호하면 → [docs/hardware/README.md - 보드 리비전 비교](docs/hardware/README.md#보드-리비전-비교)
@@ -91,7 +91,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 단계별 상세: [docs/getting-started/](docs/getting-started/) (하드웨어 → 환경 구축 → 첫 빌드)
 
-> **H10 펌웨어 버전 확인**: XM v2.6.0 ~ v2.8.0 은 **KIT H10 v2.4.0** 과 짝입니다. 구버전이면 먼저 → [KIT H10 Firmware 가이드](docs/kit-h10-firmware/)
+> **H10 펌웨어 버전 확인**: XM v2.6.0 ~ v2.8.1 은 **KIT H10 v2.4.0** 과 짝입니다. 구버전이면 먼저 → [KIT H10 Firmware 가이드](docs/kit-h10-firmware/)
 
 ---
 

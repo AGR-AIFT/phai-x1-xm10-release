@@ -132,7 +132,8 @@ static void Run_Entry(void)
     s_boot_step  = BOOT_STEP_LED1;
     s_boot_timer = XM_GetTick();
 
-    /* 부팅 완료 메시지 (PC 터미널에서 확인) */
+    /* 부팅 완료 메시지 (PC 터미널에서 확인 — 기본 프로파일에서는 Total Data 바이너리가 함께 섞여 보입니다.
+     * 텍스트만 보려면 Ex.07 처럼 XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL) 을 먼저 호출하세요) */
     XM_SendUsbDebugMessage("[QuickStart] XM10 보드 준비 완료!\r\n");
 }
 

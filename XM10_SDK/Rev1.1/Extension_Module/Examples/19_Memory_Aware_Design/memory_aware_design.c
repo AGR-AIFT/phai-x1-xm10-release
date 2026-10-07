@@ -29,14 +29,13 @@
  *     + 필요할 때만 메모리 사용
  *     - 파편화로 인한 할당 실패 위험
  *     - 할당 시간 비결정론적
- *     - 임베디드 양산 코드에서는 금지 (이 프로젝트 규칙)
+ *     - 실시간 임베디드 코드에서는 보통 피합니다
  *
  * [D-Cache 정렬]
  *   STM32H7의 D-Cache 라인 크기는 32바이트입니다.
  *   DMA와 공유하는 버퍼는 32바이트 정렬이 필요하지만,
  *   이 예제의 데이터는 CPU 전용이므로 정렬 제약이 없습니다.
  *
- * @see     docs/api-reference/system.md
  * @version 1.0
  * @date    Mar 09, 2026
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
@@ -119,7 +118,7 @@ typedef struct {
 } PoolAlloc_t;
 
 /**
- * USB 스트리밍 데이터 — PhAI Studio로 실시간 전송
+ * USB 스트리밍 데이터 — PC(xm10 도구)로 실시간 전송
  */
 typedef struct {
     float raw_angle;                /**< 원본 각도 (필터 전) */

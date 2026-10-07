@@ -341,13 +341,20 @@ int main(void)
 
   /* RCC->RSR snapshot + RMVF clear — 직전 boot 의 reset 원인을 정확히 분리.
    * STM32H7 RSR 은 software clear 안 하면 모든 boot 의 flag 누적. CubeProgrammer
-   * 로 g_last_rcc_rsr (.noinit) read 시 직전 reset 만 set 된 깨끗한 값 확인. */
+   * 로 g_last_rcc_rsr (.noinit) read 시 직전 reset 만 set 된 깨끗한 값 확인.
+   *
+   * [BL v1.1.0, 2026-10-07] 부트로더의 HAL_RCC_DeInit() 이 RSR 을 지우므로 BL 경유 시
+   * 여기서 읽는 RSR 은 항상 0 이었다(무한부팅 RCA). BL v1.1.0 은 진입 직후 RSR 원본을
+   * RTC->BKP4R 에 보관한다 — BL 이 방금 돌았으면(BKP6R 단계 = JUMP) 그 값을, 아니면
+   * (구 BL·디버거 직접 기동) 지금 RSR 을 쓴다. 이어서 BKP6R 에 "App main 도달" 을 남긴다
+   * — 리셋 루프 중 SWD 로 읽으면 App 이 main 까지 왔는지가 한 자리로 보인다. */
   {
       extern volatile uint32_t g_last_rcc_rsr;
-      g_last_rcc_rsr = RCC->RSR;
+      g_last_rcc_rsr = AGR_Boot_GetResetCause(RCC->RSR);
       g_xm_boot_diag.reset_flags = g_last_rcc_rsr;
       ResetCause_Record(g_last_rcc_rsr);   /* [진단] 리셋원인 이력 누적 (D-Cache enable 이전) */
       __HAL_RCC_CLEAR_RESET_FLAGS();
+      AGR_Boot_MarkAppStage((uint8_t)AGR_BOOT_STAGE_APP_MAIN);
   }
   XM_BOOT_DIAG_MARK(0x1003u);
 
@@ -427,6 +434,13 @@ int main(void)
    *         Safe no-op if Boot Config is absent or not in PENDING state.
    */
   AGR_Boot_ConfirmBoot();
+
+  /* [BL v1.1.0] 연속 부팅 시도 가드(RTC->BKP5R) 무장 — "이 App 은 안정 도달 시 횟수를 0 으로
+   * 되돌릴 줄 안다" 고 BL 에 알린다. 미무장일 때만 쓰고 횟수는 건드리지 않는다(매 부팅 0 으로
+   * 쓰면 가드가 무력해진다). 안정 도달(UserTask 1 kHz 루프 5 s 생존)에서
+   * AGR_Boot_ClearAttemptCount() 가 0 으로 되돌린다(core_process.c). 거기 못 가고 리셋이
+   * 반복되면 BL 이 10회에서 App 점프를 멈춘다(세 LED 동시 점멸, FTP 대기). */
+  AGR_Boot_ArmAttemptGuard();
   XM_BOOT_DIAG_MARK(0x2002u);
 
   /* USER CODE END 2 */
@@ -466,7 +480,7 @@ int main(void)
   /* add threads, ... */
   
   /* [CRITICAL] UserTask Priority Override
-   * - IOC 설정값(Realtime4)을 Realtime5(53)로 상향
+   * - IOC 설정값(Realtime6, 54)을 Realtime5(53)로 하향 — UART RxTask(54)·FDCAN RxTask(55)가 UserTask 를 선점하도록
    * - [2026-07-14] 55(FDCAN RxTask) > 54(UART RxTask) > 53(UserTask) 재배치.
    *   두 RxTask 모두 UserTask 위 → PDO/GRF 도착 즉시 선점 처리 → stale data 방지 유지.
    * - RxTask 선점 ~10-50µs/회 → UserTask 지터 무시 가능
