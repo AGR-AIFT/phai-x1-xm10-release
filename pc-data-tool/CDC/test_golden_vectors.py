@@ -8,12 +8,9 @@
 같은 폴더의 다른 시험들은 우리 코드가 만든 것을 우리 코드가 검사한다. 손으로 적은
 골든 바이트를 섞어 그 위험을 줄였지만, 바이트를 적은 사람도 결국 같은 사람이다.
 
-이 시험이 먹는 바이트는 **개발 레포의 독립 생성기**(`Extension_Module/tools/spec/
-gen_golden_vectors.py`)가 만든 것이다. 그 생성기는 이 폴더의 코드를 import 하지 않고
-설계 문서(PLAN §4.1 / §4.6)의 표를 보고 `struct` 로 직접 조립한다. 두 구현이 서로 모르는
+이 시험이 먹는 바이트(`spec/golden/`)는 **이 폴더의 코드를 쓰지 않고** 따로 만든 것이다 —
+형식 표(0xEE 스키마 · .xmlog)를 보고 `struct` 로 직접 조립했다. 두 구현이 서로 모르는
 채 같은 바이트에 도달하면, 둘 다 표를 제대로 읽었다는 뜻이다.
-
-FW 가 세 번째 구현이 된다 — `0xEE` 송신을 만들 때 같은 벡터를 재현해야 한다.
 
 벡터를 못 찾으면
 ----------------
@@ -31,9 +28,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 # 배달된 사본이 먼저. 두 번째는 PyInstaller 번들 안 — 그때는 `_HERE` 가 추출 디렉토리라서
 # `..` 로 올라가면 번들 밖으로 나가 버린다. 벡터를 번들 루트에 같이 넣고 여기서 찾는다.
 #
-# 벡터를 만드는 원본 트리에서 바로 대조하고 싶으면 `XM10_SPEC_GOLDEN_DIR` 로 그 경로를
-# 넘긴다. 예전에는 옆 디렉토리 이름을 코드에 그대로 적어 뒀는데, 그러면 이 파일이 공개
-# 배포물에 들어갈 때 그 이름이 같이 나간다 — 릴리즈 검증기가 잡아냈다(2026-09-10).
+# 다른 위치의 벡터와 대조하고 싶으면 `XM10_SPEC_GOLDEN_DIR` 로 그 경로를 넘긴다.
 _CANDIDATES = [
     os.path.normpath(os.path.join(_HERE, "..", "spec", "golden")),
     os.path.join(_HERE, "spec", "golden"),
@@ -178,7 +173,7 @@ def main():
         print("  SKIP  골든 벡터를 찾지 못했다. 찾아본 곳:")
         for c in _CANDIDATES:
             print("        " + c)
-        print("        생성: python Extension_Module/tools/spec/gen_golden_vectors.py")
+        print("        pc-data-tool/spec/golden/ 이 있는지 확인하거나 XM10_SPEC_GOLDEN_DIR 로 벡터 폴더를 지정")
         print("        ⚠ 이 시험 없이는 '우리 구현끼리만 맞는' 상태를 구별할 수 없다")
         return 0
 

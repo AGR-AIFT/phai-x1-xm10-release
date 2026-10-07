@@ -12,7 +12,7 @@
   * 프레임 헤더·CRC·LEN 단위를 이 파일이 **직접** 뜯어 본다 (파서를 안 믿는다),
   * `0xEE` 스키마의 오프셋이 C 정렬 규칙과 맞는지 손으로 계산해 대조한다.
 
-PLAN P2-2 가 말하는 독립 오라클이 이것이다.
+독립 오라클이 이것이다.
 """
 import struct
 import sys
@@ -201,7 +201,7 @@ def test_session_counts_match_expectation():
 
 
 def test_data_really_precedes_schema():
-    """데이터가 스키마보다 먼저 나가야 PLAN 4.1 경로가 시험된다."""
+    """데이터가 스키마보다 먼저 나가야 사후 해석 경로가 시험된다."""
     stream, _exp = DS.build_demo_session(cycles=10)
     order = []
     buf = bytearray(stream)

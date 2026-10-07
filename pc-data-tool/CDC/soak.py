@@ -7,7 +7,7 @@
 
 무엇을 재는가
 -------------
-설계 문서(PLAN §5)가 요구하는 **선행 실측**이다. 두 가지를 동시에 본다.
+**선행 실측**이다. 두 가지를 동시에 본다.
 
 1. **드롭이 0인가** — 펌웨어의 Tx 드롭은 **이미 와이어에 실려 있다.** 모든 PhAI 프레임의
    STATUS 바이트 하위 7비트가 그 tick 의 드롭 delta 다. 그래서 코드 변경도 디버거도
@@ -41,7 +41,7 @@ import xmlog as X
 from xmlog_capture import XmLogCapture
 
 DEFAULT_BAUD = 921600
-LIVENESS_MIN_FPS = 950.0          # 1 kHz 스트림 기준. rev4.1 자체 감사에서 추가된 조건.
+LIVENESS_MIN_FPS = 950.0          # 1 kHz 스트림 기준.
 
 
 class SoakLedger:
@@ -110,7 +110,7 @@ class SoakLedger:
                        self.fps >= LIVENESS_MIN_FPS, "%.1f fps" % self.fps))
         # seq 가 뒤로 가는 것은 원장이 "손실" 로 세지 않는다(재부팅/재연결이므로).
         # 그래서 seq_lost 만 보면 **soak 도중 보드가 재부팅해도 통과**한다 — 그건
-        # 무손실 실증이 아니다. 별도 조건으로 세운다 (감사 #6).
+        # 무손실 실증이 아니다. 별도 조건으로 세운다.
         checks.append(("장치 재시작/재연결 (resync)", self.resyncs == 0, str(self.resyncs)))
 
         if durable_records is not None:
@@ -136,7 +136,7 @@ class SoakLedger:
 
 # COBS 구분자(0x00)가 안 나올 때 버퍼가 무한히 자라는 것을 막는 상한.
 # 정상 최대 프레임은 1030 B 남짓이라 이 값은 넉넉하다. 넘으면 스트림이 PhAI 가
-# 아니거나 심하게 깨진 것이므로, 버리고 다시 동기를 잡는 편이 낫다 (감사 #12).
+# 아니거나 심하게 깨진 것이므로, 버리고 다시 동기를 잡는 편이 낫다.
 MAX_RESYNC_BUFFER = 64 * 1024
 
 

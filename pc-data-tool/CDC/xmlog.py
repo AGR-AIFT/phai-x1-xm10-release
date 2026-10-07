@@ -13,13 +13,13 @@ CSV 는 해석의 결과물이라, 스키마를 모르면 아무것도 못 적�
   * 해석은 나중에 소급해서 한다. CSV 는 이 파일에서 뽑는다.
   * 손실은 숨기지 않고 GAP 레코드로 **파일 안에** 남긴다.
 
-바이트 ABI 는 PLAN-20260908-usb-cdc-schema-logging.md 4.6 이 SSOT 다.
-이 파일은 그 표를 코드로 옮긴 것이고, `test_xmlog.py` 의 **손으로 적은 골든 바이트**가
+바이트 형식의 기준은 골든 벡터(spec/golden/)다.
+이 파일은 그 형식을 코드로 옮긴 것이고, `test_xmlog.py` 의 **손으로 적은 골든 바이트**가
 양쪽이 일치하는지 감시한다 (구현이 만든 것끼리 비교하면 같이 틀린다).
 
 왜 append-only 인가
 -------------------
-rev1 은 "사전할당 + footerless 선형 복구" 였는데 둘이 양립하지 않았다. 사전할당이
+처음 설계는 "사전할당 + footerless 선형 복구" 였는데 둘이 양립하지 않았다. 사전할당이
 EOF 를 늘리면 아직 안 쓴 zero tail 이 `rec_type=0, len=0` 인 정상 레코드처럼 보여서,
 "마지막 유효 레코드가 어디까지인가" 를 증명할 방법이 없어진다.
 모든 섹션을 타입드 레코드로 통일하고 앞에서부터 순차 검증한다 — 첫 실패에서 멈추면
@@ -40,7 +40,7 @@ import zlib
 from typing import BinaryIO, Iterator, NamedTuple, Optional
 
 # =============================================================================
-# 상수 — PLAN 4.6 표 그대로
+# 상수 — .xmlog 형식 표 그대로
 # =============================================================================
 
 FILE_MAGIC = b"XMLOG\x00\x00\x00"        # 8 B, 디스크 바이트 그대로
@@ -94,14 +94,14 @@ for _s, _n, _want in ((_FILE_HDR, "FileHeader", 32),
                       (_DATA_HDR, "DATA", 16),
                       (_GAP_HDR, "GAP", 16)):
     if _s.size != _want:
-        raise RuntimeError("%s struct size %d != %d (PLAN 4.6 표와 어긋남)"
+        raise RuntimeError("%s struct size %d != %d (.xmlog 형식 표와 어긋남)"
                            % (_n, _s.size, _want))
 
 
 def _fixed(text, width: int) -> bytes:
     """ASCII 고정폭, NUL 패딩. 넘치면 자르되 **NUL 종료를 보장**한다.
 
-    PLAN 4.0: NUL 이 없으면 무효로 간주한다 — 그래서 잘라낼 때 마지막 한 칸을 비운다.
+    .xmlog 형식: NUL 이 없으면 무효로 간주한다 — 그래서 잘라낼 때 마지막 한 칸을 비운다.
     """
     if text is None:
         return b"\x00" * width
@@ -321,7 +321,7 @@ def scan(buf: bytes, stop_on_error: bool = True) -> ScanResult:
         if not first_checked:
             first_checked = True
             if rec.rec_type != REC_SESSION:
-                # PLAN 4.6 "SESSION-first 문법": 첫 유효 레코드가 SESSION 이 아니면
+                # "SESSION-first 문법": 첫 유효 레코드가 SESSION 이 아니면
                 # 파일 전체를 거부한다 — 잘린 파일의 중간을 시작점으로 오인하지 않기 위해서다.
                 raise LogError(
                     "첫 레코드가 SESSION 이 아니다 (%s) — 파일 중간을 가리키고 있을 수 있다"
@@ -367,7 +367,7 @@ class XmLogWriter:
     * **전원 차단 · OS 크래시는 주장하지 않는다.** 그 보장은 `sync()`(fsync)를 부른 지점까지만이고
       평소에는 부르지 않는다.
 
-    activation 재사용 (PLAN 4.6 "중복 억제")
+    activation 재사용 ("중복 억제")
     ----------------------------------------
     재연결 등으로 같은 스키마가 다시 오면 SCHEMA_ACTIVATION 을 다시 쓰지 않고 기존
     `activation_id` 를 돌려준다. 재사용 판정은 CRC 하나가 아니다:
@@ -397,19 +397,19 @@ class XmLogWriter:
         self._since_flush = 0
         self._next_activation_id = 1
         # (module_id, proto_ver, struct_size, schema_crc32) -> [(activation_id, 0xEE 바이트), ...]
-        # PLAN 4.6 "중복 억제" — 같은 키에 바이트가 다른 스키마가 여럿 있을 수 있어 목록이다.
+        # "중복 억제" — 같은 키에 바이트가 다른 스키마가 여럿 있을 수 있어 목록이다.
         self._acts_by_key = {}
         self._session_written = False
 
     # -- 저수준 ----------------------------------------------------------
     def write_raw(self, record_bytes: bytes) -> int:
-        # PLAN 4.6 SESSION-first: 파일의 첫 레코드는 반드시 SESSION 이다.
+        # SESSION-first: 파일의 첫 레코드는 반드시 SESSION 이다.
         # reader 가 그걸 전제로 거부 판정을 하므로 writer 쪽에서도 막는다 —
         # 안 그러면 아무도 못 읽는 파일이 조용히 만들어진다.
         if not self._session_written:
             if record_bytes[4:5] != bytes([REC_SESSION]):
                 raise ValueError(
-                    "첫 레코드는 SESSION 이어야 한다 (PLAN 4.6 SESSION-first). "
+                    "첫 레코드는 SESSION 이어야 한다 (SESSION-first). "
                     "XmLogWriter 를 연 직후 .session(...) 을 먼저 부를 것.")
             self._session_written = True
         self._f.write(record_bytes)

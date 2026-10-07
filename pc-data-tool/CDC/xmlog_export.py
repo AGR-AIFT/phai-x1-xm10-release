@@ -96,7 +96,7 @@ def build_registry(records) -> R.SchemaRegistry:
     행마다 그 시점의 스키마로 푸는 것은 `resolve_rows` 다.
 
     실제 수신 순서를 그대로 재생하므로, 스키마가 데이터보다 늦게 온 캡처도
-    (사후에는) 전부 풀린다 — PLAN 4.1 의 data-before-schema 규약이 노린 것이다.
+    (사후에는) 전부 풀린다 — data-before-schema 규약이 노린 것이다.
     """
     reg = R.SchemaRegistry()
     records = list(records)
@@ -106,7 +106,7 @@ def build_registry(records) -> R.SchemaRegistry:
                       if rec.rec_type == X.REC_SCHEMA_ACTIVATION}
     # 재조립 타임아웃(3초)의 기준 시계. DATA 레코드의 pc_time_us 를 쓰되, 그런 레코드가
     # 아직 없거나 SCHEMA_ACTIVATION 이 앞에 몰려 있으면 0 이 반복돼 타임아웃 판정이
-    # 왜곡된다 — **단조 증가**를 강제한다 (감사 #11).
+    # 왜곡된다 — **단조 증가**를 강제한다.
     t = 0.0
     for rec in records:
         if rec.rec_type == X.REC_DATA:

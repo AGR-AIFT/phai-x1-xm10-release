@@ -40,7 +40,7 @@ except ImportError:                     # pragma: no cover
 
 # 실시간 경로는 수신기 것을 **그대로** 쓴다. 여기 복사본을 두면 수신기가 바뀌었을 때
 # 데모만 옳게 도는 상태가 되고, 그건 데모가 아무것도 증명하지 못한다는 뜻이다.
-# (실제로 실시간 경로가 as_float32 하드코딩이던 것을 데모가 못 잡은 전례가 있다 — 감사 #7)
+# (실제로 실시간 경로가 as_float32 하드코딩이던 것을 데모가 못 잡은 전례가 있다)
 try:
     import cdc_phai_receiver as RX
     LIVE_PATH = "cdc_phai_receiver.decode_user_values"
@@ -208,7 +208,7 @@ def run_demo(out_dir: str, cycles: int = 25, chunk: int = 61,
     say("5) CSV 내보내기  ->  %s" % csv_dir)
     written = EXP.export_csv(res, csv_dir, "demo", want_raw_hex=False)
 
-    # 스키마보다 먼저 온 행까지 **전부** 타입으로 풀렸는가 (PLAN 4.1 사후 해석)
+    # 스키마보다 먼저 온 행까지 **전부** 타입으로 풀렸는가 (사후 해석)
     typed_csv = os.path.join(csv_dir, "demo_user_0x%02X.csv" % DS.MODULE_TYPED)
     if os.path.exists(typed_csv):
         with open(typed_csv, encoding="utf-8") as f:

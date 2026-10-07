@@ -2,8 +2,8 @@
 """`0xEE` SCHEMA_DESC — FW 가 보내는 이진 스키마의 파서/재조립기.
 
 **FW 는 아직 이걸 보내지 않는다** (`0xEE` 송신 코드 0건, 2026-09-10 실측).
-그런데도 지금 쓰는 이유는, 바이트 문법이 설계 문서에 이미 동결돼 있고
-(PLAN-20260908-usb-cdc-schema-logging.md §4.0~4.1), **호스트 쪽이 먼저 준비돼 있어야**
+그런데도 지금 쓰는 이유는, 바이트 문법이 이미 동결돼 있고
+(골든 벡터: `spec/golden/`), **호스트 쪽이 먼저 준비돼 있어야**
 FW 가 보내기 시작할 때 아무것도 안 고치고 붙기 때문이다.
 골든 벡터로 검증해 두면 FW 구현자가 맞춰야 할 대상이 생긴다는 이점도 있다.
 
@@ -13,7 +13,7 @@ FW 가 보내기 시작할 때 아무것도 안 고치고 붙기 때문이다.
 필드 이름·단위·타입·배열길이·구조체 내 offset·스케일. 지금의 `0xEF` JSON 은
 이름/단위만 있어서 혼합 타입 struct 를 기술하지 못한다. 그 차이가 이 포맷의 존재 이유다.
 
-바이트 문법 (PLAN §4.1, 리틀엔디안 · 필드 단위 인코딩)
+바이트 문법 (리틀엔디안 · 필드 단위 인코딩)
 ------------------------------------------------------
     Header 24 B
       u8   schema_proto_ver     (=1)
@@ -51,7 +51,7 @@ SCHEMA_PROTO_VER = 1
 HEADER_SIZE = 24
 FIELD_RECORD_SIZE = 32
 MAX_FIELDS_PER_FRAME = 31          # (1020 - 24) // 32
-MAX_FRAME_COUNT = 3                # PLAN rev3: 슬롯 4개 × 프래그 3개 = 모듈당 93 필드
+MAX_FRAME_COUNT = 3                # 모듈당 프래그 3개 → 31 × 3 = 93 필드
 MAX_FIELDS_TOTAL = 93
 REASSEMBLY_TIMEOUT_S = 3.0
 
@@ -102,11 +102,11 @@ def _fixed(text: str, width: int) -> bytes:
 def _unfixed(raw: bytes) -> str:
     """NUL 종료 고정폭 **ASCII**. 어기면 SchemaError.
 
-    PLAN §4.0 이 ASCII 라고 못박았다. 예전에는 비-ASCII 바이트를 U+FFFD 로 **조용히
+    0xEE 스키마 형식이 ASCII 라고 못박았다. 예전에는 비-ASCII 바이트를 U+FFFD 로 **조용히
     치환**했는데, 그러면 나중에 CRC 재계산을 위해 다시 ASCII 로 인코딩할 때
     UnicodeEncodeError 가 나고 그건 SchemaError 가 아니라서 아무도 잡지 않는다 —
-    수신 스레드가 죽고, 그런 프레임이 하나 섞인 `.xmlog` 는 영영 못 읽게 된다
-    (2026-09-10 적대 감사 P0). 파싱 단계에서 거부하면 그 경로 자체가 사라진다.
+    수신 스레드가 죽고, 그런 프레임이 하나 섞인 `.xmlog` 는 영영 못 읽게 된다.
+    파싱 단계에서 거부하면 그 경로 자체가 사라진다.
     """
     i = raw.find(b"\x00")
     if i < 0:
@@ -156,7 +156,7 @@ class Fragment(NamedTuple):
 
     @property
     def key(self):
-        """재조립 키 (PLAN §4.1). 네 값이 모두 같아야 같은 스키마다."""
+        """재조립 키. 네 값이 모두 같아야 같은 스키마다."""
         return (self.module_id, self.proto_ver, self.struct_size, self.schema_crc32)
 
 
@@ -292,7 +292,7 @@ def validate(schema: Schema) -> None:
 
 
 class Reassembler:
-    """프래그먼트를 모아 스키마를 완성한다 (PLAN §4.1 재조립 규약).
+    """프래그먼트를 모아 스키마를 완성한다 (재조립 규약).
 
     * 키 = (module_id, proto_ver, struct_size, schema_crc32)
     * `frame_count` 비트맵을 유지하고 **전부 모인 뒤에만** CRC 를 검증한다
@@ -340,7 +340,7 @@ class Reassembler:
             self._pending[mid] = st
 
         # 재조립 키에 frame_count / field_count_total 이 없다. 같은 키인데 그 둘이
-        # 다르면 완료 판정과 필드 수집이 어긋난다 — 여기서 따로 본다 (감사 #10).
+        # 다르면 완료 판정과 필드 수집이 어긋난다 — 여기서 따로 본다.
         first = st["frag"]
         if (frag.frame_count != first.frame_count
                 or frag.field_count_total != first.field_count_total):

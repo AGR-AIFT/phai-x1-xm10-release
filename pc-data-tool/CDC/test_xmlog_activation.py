@@ -12,14 +12,14 @@ DATA 를 `activation_id=0` 으로 적었고, 내보내기는 파일 끝에 남�
 `1065353216` 이 된다 — 이름은 맞고 값이 조용히 틀린다.
 
 이 파일의 시험은 그 수명을 캡처(발급 · 참조) → 파일(SESSION 경계) → 내보내기(시점별 스키마)
-전 구간에서 지킨다. 번호는 PLAN §4.6 의 fixture 번호다.
+전 구간에서 지킨다.
 
   (i)   필드가 같은 두 모듈        -> activation 2개, DATA 마다 자기 id
   (ii)  같은 모듈이 다시 연결해 같은 스키마를 보냄 -> activation 1개
   (iii) struct_name 만 다르고 CRC 는 같음 -> activation 2개
   (iv)  손상 파일: DATA.module_id 와 activation.module_id 가 다름 -> 0 으로 강등, 행 수 보존
   (v)   같은 module · 같은 크기 · 다른 type_tag 로 세션 도중 교체 -> 앞은 A 로, 뒤는 B 로
-  D-H   장치를 식별할 수 없는 재연결 -> 새 SESSION, 유효하던 스키마 무효화, 그 뒤 스키마 전의
+  장치를 식별할 수 없는 재연결 -> 새 SESSION, 유효하던 스키마 무효화, 그 뒤 스키마 전의
         DATA 는 activation_id=0 원시 바이트로 보존
 
 그 밖에 이 파일이 지키는 것: 캡처가 적은 스키마는 읽는 쪽이 항상 되읽는다(프래그먼트마다 이름이 달라도) ·
@@ -438,7 +438,7 @@ def test_final_registry_would_misdecode_the_swap(tmp):
 
 
 # =============================================================================
-# D-H — 장치를 식별할 수 없는 재연결의 최소 계약
+# 장치를 식별할 수 없는 재연결의 최소 계약
 # =============================================================================
 
 def test_dh_reconnect_ends_the_live_schema(tmp):
@@ -1243,10 +1243,13 @@ def main():
         ("fixture (v)   legacy file (no activation records)",
          test_fixture_v_legacy_file_without_activation_records),
         ("fixture (v)   control: final registry misdecodes", test_final_registry_would_misdecode_the_swap),
-        ("D-H reconnect ends the live schema", test_dh_reconnect_ends_the_live_schema),
-        ("D-H early rows stay inside their session", test_dh_early_rows_never_cross_a_session_boundary),
-        ("D-H fw_build_id explicit, epoch from 1", test_dh_fw_build_id_is_explicit_and_epoch_starts_at_one),
-        ("D-H durability: flushed boundaries", test_flushed_boundaries_survive_a_process_kill),
+        ("unidentified reconnect ends the live schema", test_dh_reconnect_ends_the_live_schema),
+        ("unidentified reconnect: early rows stay inside their session",
+         test_dh_early_rows_never_cross_a_session_boundary),
+        ("unidentified reconnect: fw_build_id explicit, epoch from 1",
+         test_dh_fw_build_id_is_explicit_and_epoch_starts_at_one),
+        ("unidentified reconnect durability: flushed boundaries",
+         test_flushed_boundaries_survive_a_process_kill),
         ("unique_path never overwrites", test_unique_path_never_overwrites),
         ("capture survives broken schema frames", test_capture_survives_broken_schema_frames),
         ("multi-fragment schema = one activation", test_multi_fragment_schema_is_one_activation),

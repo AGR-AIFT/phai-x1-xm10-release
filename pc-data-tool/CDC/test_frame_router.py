@@ -397,7 +397,7 @@ def test_multi_module_routing():
 
     # 예전 _on_poll/FrameRouter 는 처음 본 사용자 module 하나만 'primary' 로 잠그고
     # 나머지는 'user_other' 로 세기만 했다 — 그래프·CSV 에서 두 번째 이후 사용자 module
-    # 값이 통째로 버려졌다. 2026-09-15 설계(PLAN rev4.2 §4.11)로 사용자 module 은 전부
+    # 값이 통째로 버려졌다. 이제 사용자 module 은 전부
     # 'user' 로 라우팅되고 module_id 별 관측 상태가 FrameRouter.user_modules 에 쌓인다.
     import demo_stream as DS
 

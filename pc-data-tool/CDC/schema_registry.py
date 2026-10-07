@@ -166,7 +166,7 @@ class SchemaRegistry:
         # 길이와 무관한 출처(0xEE — 자기 struct_size 를 안다)
         self._by_module: Dict[int, ChannelSet] = {}
         # 길이에 **의존하는** 출처(0xEF · fallback · 생성맵). module_id 만으로 캐시하면
-        # 같은 모듈이 다른 길이로 올 때 첫 길이로 굳어 채널이 조용히 잘린다 (감사 #4).
+        # 같은 모듈이 다른 길이로 올 때 첫 길이로 굳어 채널이 조용히 잘린다.
         self._by_module_len: Dict[tuple, ChannelSet] = {}
         self._ef_raw: Dict[int, list] = {}          # module_id -> JSON entries
         self.reasm = EE.Reassembler(reassembly_timeout_s)
@@ -190,7 +190,7 @@ class SchemaRegistry:
         except Exception as e:  # noqa: BLE001
             # docstring 이 "실패는 삼키고 기록한다" 고 약속한다. SchemaError 만 잡으면
             # 예상 못한 예외가 수신 스레드를 죽이고, 그런 프레임이 든 로그는 영영
-            # 못 읽게 된다 (2026-09-10 감사 P0). 약속대로 전부 삼킨다.
+            # 못 읽게 된다. 약속대로 전부 삼킨다.
             self.ee_errors.append("예상 못한 예외 %s: %s" % (type(e).__name__, e))
             return None
         if schema is None:
