@@ -7,7 +7,7 @@
 ----------------------------------
 writer 가 만든 것을 reader 로 읽어 같으면 통과 — 이건 시험이 아니다. 필드 순서를
 뒤집어도, 엔디안을 반대로 해도, 폭을 잘못 잡아도 **둘이 사이좋게 같이 틀린다.**
-그래서 설계 문서(PLAN 4.6)의 표를 보고 **바이트를 직접 타이핑**했다. 구현은 이걸
+그래서 .xmlog 형식 표를 보고 **바이트를 직접 타이핑**했다. 구현은 이걸
 재현해야 하고, 못 하면 구현이 틀린 것이다.
 
 CRC 만은 손으로 못 적는다. 대신 **구현의 헬퍼를 부르지 않고** 시험 안에서
@@ -24,7 +24,7 @@ import xmlog as X
 
 
 # =============================================================================
-# 손으로 적은 골든 바이트 — PLAN 4.6 표에서 직접 옮김
+# 손으로 적은 골든 바이트 — .xmlog 형식 표에서 직접 옮김
 # =============================================================================
 
 # create_unix_ns = 0x0123456789ABCDEF
@@ -134,7 +134,7 @@ def test_golden_activation():
 
 
 # SESSION — 필드가 가장 많고 고정폭 문자열 인코딩이 관여한다. 골든 바이트가 없으면
-# _fixed() 의 NUL 패딩/절단 규칙이 표와 어긋나도 round-trip 시험은 통과한다 (감사 #9).
+# _fixed() 의 NUL 패딩/절단 규칙이 표와 어긋나도 round-trip 시험은 통과한다.
 GOLDEN_SESSION_NO_CRC = (
     b"XMR1"                        # off  0..3
     b"\x01"                        # off  4      rec_type = 1 (SESSION)
@@ -162,7 +162,7 @@ def test_golden_session():
 
 
 def test_session_first_is_enforced():
-    """PLAN 4.6 SESSION-first — reader 는 거부하고 writer 는 못 쓰게 막아야 한다."""
+    """SESSION-first — reader 는 거부하고 writer 는 못 쓰게 막아야 한다."""
     buf = bytearray(X.encode_file_header(0))
     buf += X.encode_data(0, 0x20, 1, 1, b"\x01\x02\x03\x04")
     try:
@@ -191,7 +191,7 @@ def test_session_first_is_enforced():
 
 
 def test_schema_activation_dedup():
-    """PLAN 4.6 중복 억제 — 같은 (module, crc) 는 레코드를 다시 쓰지 않는다."""
+    """중복 억제 — 같은 (module, crc) 는 레코드를 다시 쓰지 않는다."""
     import tempfile
     import os as _os
     import shutil
@@ -216,7 +216,7 @@ def test_schema_activation_dedup():
 
 
 def test_magic_is_bytes_not_int():
-    """rev2 가 틀렸던 자리 — 0x584D5231 을 LE 로 쓰면 디스크엔 '1RMX' 가 찍힌다."""
+    """예전 설계가 틀렸던 자리 — 0x584D5231 을 LE 로 쓰면 디스크엔 '1RMX' 가 찍힌다."""
     rec = X.encode_gap(1, 0, 0, 0)
     assert rec[:4] == b"XMR1", "디스크 바이트가 %r" % (rec[:4],)
     assert rec[:4] != struct.pack("<I", 0x584D5231), "정수+LE 로 쓰면 이렇게 뒤집힌다"
@@ -249,7 +249,7 @@ def test_crc_range_is_skip_not_zerofill():
 
 
 def test_fixed_string_nul_termination():
-    """PLAN 4.0: NUL 이 없으면 무효. 잘릴 때도 종료를 보장해야 한다."""
+    """.xmlog 형식: NUL 이 없으면 무효. 잘릴 때도 종료를 보장해야 한다."""
     rec = X.encode_session(device_usb_serial="A" * 40, fw_build_id="build-xyz",
                            total_data_map_version="2.8")
     got = X.decode_record(rec, 0)
@@ -295,7 +295,7 @@ def test_truncation_sweep():
     """마지막 레코드를 **바이트 단위로** 잘라 가며 — 완전한 것은 전부 살고,
     부분 레코드 하나만 거부되어야 한다. 크래시 복구의 핵심 계약이다."""
     buf = bytearray(X.encode_file_header(0))
-    buf += X.encode_session(fw_build_id="fw")      # SESSION-first (PLAN 4.6)
+    buf += X.encode_session(fw_build_id="fw")      # SESSION-first
     complete = []
     for i in range(4):
         rec = X.encode_data(0, 0x20, i, i * 1000, bytes([i]) * 8)
@@ -320,9 +320,9 @@ def test_truncation_sweep():
 
 
 def test_zero_tail_is_rejected():
-    """rev1 의 사전할당이 왜 안 되는지 — zero tail 이 정상 레코드로 보이면 안 된다."""
+    """처음 설계의 사전할당이 왜 안 되는지 — zero tail 이 정상 레코드로 보이면 안 된다."""
     buf = bytearray(X.encode_file_header(0))
-    buf += X.encode_session(fw_build_id="fw")      # SESSION-first (PLAN 4.6)
+    buf += X.encode_session(fw_build_id="fw")      # SESSION-first
     buf += X.encode_data(0, 0x20, 1, 1, b"\x01\x02\x03\x04")
     good = len(buf)
     buf += b"\x00" * 4096                     # 사전할당이 남길 미기록 영역
@@ -369,7 +369,7 @@ def test_writer_and_crash_recovery():
 
 
 def test_record_size_budget():
-    """PLAN Phase D 수용 기준: Combined 10ch DATA 레코드 <= 72 B."""
+    """수용 기준: Combined 10ch DATA 레코드 <= 72 B."""
     rec = X.encode_data(1, 0x10, 1, 1, b"\x00" * 40)   # 10ch × float32
     assert len(rec) == 72, "10ch DATA 레코드 %d B (16 + 16 + 40)" % len(rec)
     assert len(rec) <= 72
@@ -444,7 +444,7 @@ def main():
     if failed:
         print("%d/%d FAILED" % (failed, len(tests)))
         return 1
-    print("%d/%d passed — .xmlog v1 바이트 ABI 가 PLAN 4.6 표와 일치" % (len(tests), len(tests)))
+    print("%d/%d passed — .xmlog v1 바이트 ABI 가 형식 표와 일치" % (len(tests), len(tests)))
     return 0
 
 

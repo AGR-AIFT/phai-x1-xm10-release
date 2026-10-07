@@ -87,7 +87,7 @@ def main():
 
     wire, raw_len = build_total_data_wire(7, payload)
 
-    # 와이어 산수 — 설계 문서(PLAN 4.2)의 0x20 원시값과 대조한다.
+    # 와이어 산수 — 0x20 원시값과 대조한다.
     #   raw  = 6(헤더) + roundup4(365) + 2(CRC) = 376  ... 항등식
     #   wire = raw + floor(raw/254) + 2 = 379        ... **상한**이지 항등식이 아니다
     #

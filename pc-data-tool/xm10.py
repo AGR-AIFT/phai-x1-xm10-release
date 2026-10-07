@@ -158,7 +158,7 @@ def cmd_selftest(argv) -> int:
     print("  (창·CSV·0x20 표를 실제로 띄워 보는 test_gui_tabs 도 소스에서만 돈다: python run_tests.py)")
 
     # GUI 없이 만든 빌드에서는 **실시간 디코딩 경로가 검사되지 않는다.** 그 경로는
-    # 한때 0xEE 스키마를 받고도 값을 float32 로 뭉개고 있었고(감사 #7), 그걸 잡는
+    # 한때 0xEE 스키마를 받고도 값을 float32 로 뭉개고 있었고, 그걸 잡는
     # 시험은 수신기 모듈을 import 해야 돈다. 통과 개수만 보고 다 됐다고 읽으면 안 되니
     # 여기서 분명히 적는다.
     try:

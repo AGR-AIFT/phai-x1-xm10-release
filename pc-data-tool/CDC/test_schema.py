@@ -5,8 +5,8 @@
 
 오라클
 ------
-`0xEE` 는 **FW 가 아직 보내지 않는** 포맷이라, 대조할 실물이 없다. 그래서 설계 문서
-(PLAN §4.1)의 표를 보고 **바이트를 직접 타이핑**했다. 구현이 이걸 재현하지 못하면
+`0xEE` 는 **FW 가 아직 보내지 않는** 포맷이라, 대조할 실물이 없다. 그래서
+0xEE 스키마 형식 표를 보고 **바이트를 직접 타이핑**했다. 구현이 이걸 재현하지 못하면
 구현이 틀린 것이고, 나중에 FW 가 다른 바이트를 보내면 그때 **FW 가 이 벡터와 다르다**고
 말할 수 있다. 골든 벡터의 값은 거기에 있다 — 한쪽이 다른 쪽을 검사할 수 있게 만드는 것.
 
@@ -25,7 +25,7 @@ import schema_registry as R
 
 
 # =============================================================================
-# 손으로 적은 골든 바이트 — PLAN 4.1 표에서 직접 옮김
+# 손으로 적은 골든 바이트 — 0xEE 스키마 형식 표에서 직접 옮김
 # =============================================================================
 
 # FieldRecord 32 B: name[16] unit[8] type_tag u8 array_len u8 struct_offset u16 scale f32
@@ -92,7 +92,7 @@ def test_golden_fragment_parses():
 
 
 def test_header_and_record_sizes():
-    """PLAN 이 24 / 32 라고 못박은 값. 여기가 흔들리면 FW 와 어긋난다."""
+    """0xEE 스키마 형식이 24 / 32 라고 못박은 값. 여기가 흔들리면 FW 와 어긋난다."""
     assert EE.HEADER_SIZE == 24
     assert EE.FIELD_RECORD_SIZE == 32
     assert EE.MAX_FIELDS_PER_FRAME == 31, "(1020-24)//32 = 31"
@@ -120,7 +120,7 @@ def test_rejects_bad_headers():
 
 
 def test_rejects_missing_nul_termination():
-    """PLAN 4.0: NUL 이 없는 고정폭 문자열은 무효."""
+    """0xEE 스키마 형식: NUL 이 없는 고정폭 문자열은 무효."""
     bad = bytearray(GOLDEN_FRAGMENT)
     bad[24:40] = b"A" * 16                      # name[16] 전부 채워 NUL 제거
     try:
@@ -427,7 +427,7 @@ def test_live_channel_naming():
         RX.get_channel_names(0xF0, 2)
 
     # 개수가 안 맞으면 아는 이름은 지키고 나머지는 ch* 로 채운다.
-    # (예전에는 캐시가 module_id 만으로 굳어 5채널 요청이 조용히 2채널로 잘렸다 — 감사 #4)
+    # (예전에는 캐시가 module_id 만으로 굳어 5채널 요청이 조용히 2채널로 잘렸다)
     got = RX.get_channel_names(0xF0, 5)
     assert got == ['Target', 'Actual', 'ch2', 'ch3', 'ch4'], got
 
@@ -436,11 +436,11 @@ def test_live_channel_naming():
 
 
 # =============================================================================
-# 감사에서 나온 결함의 회귀 시험 (2026-09-10)
+# 찾아낸 결함의 회귀 시험
 # =============================================================================
 
 def test_non_ascii_never_escapes_as_unexpected_exception():
-    """P0 회귀 — 비-ASCII 이름/단위가 SchemaError 밖으로 새면 수신 스레드가 죽는다.
+    """회귀 — 비-ASCII 이름/단위가 SchemaError 밖으로 새면 수신 스레드가 죽는다.
 
     예전에는 `_unfixed` 가 U+FFFD 로 조용히 치환하고, 나중에 CRC 재계산에서
     `UnicodeEncodeError` 가 났다. 그건 SchemaError 가 아니라 아무도 안 잡았고,
@@ -551,7 +551,7 @@ def test_live_path_uses_typed_schema_values():
 
 
 def test_registry_is_thread_safe():
-    """수신 스레드가 스키마를 먹이는 동안 화면 스레드가 조회해도 예외가 없다 (2026-09-29 감사).
+    """수신 스레드가 스키마를 먹이는 동안 화면 스레드가 조회해도 예외가 없다.
 
     실시간 GUI 가 정확히 이 모양이다 — 수신 스레드는 `feed_0xEF`/`feed_0xEE` 로 채우고,
     화면 스레드는 프레임마다 `get()` 으로 조회하면서 캐시에 **새 항목을 넣는다**. 락이 없던
@@ -625,7 +625,7 @@ def main():
     tests = [
         ("golden 0xEE fragment bytes", test_golden_fragment_bytes),
         ("golden fragment parses back", test_golden_fragment_parses),
-        ("header/record sizes match PLAN", test_header_and_record_sizes),
+        ("header/record sizes match spec", test_header_and_record_sizes),
         ("bad headers rejected", test_rejects_bad_headers),
         ("missing NUL rejected", test_rejects_missing_nul_termination),
         ("multi-fragment reassembly", test_reassembly_multi_fragment),
@@ -646,7 +646,7 @@ def main():
         ("fallback when nothing known", test_fallback_when_nothing_known),
         ("0x20 uses generated map", test_total_data_uses_generated_map),
         ("live channel naming (receiver)", test_live_channel_naming),
-        ("non-ASCII never escapes (P0)", test_non_ascii_never_escapes_as_unexpected_exception),
+        ("non-ASCII never escapes", test_non_ascii_never_escapes_as_unexpected_exception),
         ("registry cache respects length", test_registry_cache_respects_payload_length),
         ("fragment count consistency", test_fragment_count_consistency),
         ("live path uses typed values", test_live_path_uses_typed_schema_values),

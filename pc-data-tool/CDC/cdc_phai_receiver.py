@@ -110,7 +110,7 @@ MAX_CHANNELS = 64
 
 # _on_poll() 은 30ms 마다 워커 큐를 비운다. 예전엔 큐를 통째로 비웠고, 프레임이 밀리면 그
 # 한 번이 창을 멈춰 세웠다(밀린 4만 프레임 -> 0.3초, module 15개의 탭을 한 번에 만들 때는
-# 첫 틱이 거의 1초 — 2026-09-29 감사). 그 한 틱이 GUI 스레드를 붙잡는 시간을 아래 세 값으로
+# 첫 틱이 거의 1초). 그 한 틱이 GUI 스레드를 붙잡는 시간을 아래 세 값으로
 # 묶는다. 넘치는 프레임은 버리지 않고 큐에 남겨 다음 틱이 이어받는다.
 # (아래 시간은 이 개발 PC 에서 잰 것이다: 프레임 하나를 탭에 반영하는 데 채널 6개 기준 약 7µs,
 #  64개면 약 40µs. 느린 PC 에서는 비례해서 길어진다.)
@@ -174,7 +174,7 @@ def decode_user_frame(pkt):
 
     이 함수가 없던 동안 화면·CSV 는 언제나 `pkt.as_float32()` 만 썼다. 그래서 `0xEE` 가
     도착해도 **이름만 맞고 값은 틀리는** 상태가 됐다 — 정수 필드가 float 로 재해석되니
-    숫자는 엉망인데 열 제목이 그럴듯해서 오히려 더 속기 쉽다 (2026-09-10 적대 감사 #7).
+    숫자는 엉망인데 열 제목이 그럴듯해서 오히려 더 속기 쉽다.
 
     해석 지문은 "이 값들을 어떤 규칙으로 풀었나" 다. `0xEE` 스키마로 풀었으면 그 스키마를
     식별하는 문자열(struct 이름 · 크기 · CRC32), float32 로 가정해서 풀었으면 `None`. 같은
@@ -206,7 +206,7 @@ def decode_system_values(pkt):
     맞는다는 뜻이다. `TotalDataDecoder.accepts()` 가 크기를 엄격하게 보는 이유가
     "느슨하게 받으면 맵이 바뀐 보드를 조용히 잘못 풀게 된다" 이므로, 여기서 float32 로
     받아 주면 이름은 `ch0..chN`, 값은 그럴듯한데 전부 틀린 표가 화면에 뜬다. CLI 의
-    `--total-data` 도 못 풀면 그 행을 건너뛴다(2026-09-29 감사).
+    `--total-data` 도 못 풀면 그 행을 건너뛴다.
 
     호출부는 `None` 을 받으면 `TotalDataTab.show_mismatch()` 로 그 사실을 보여 준다.
     """
@@ -232,7 +232,7 @@ def _format_user_csv_row(n_channels: int, header_key, floats, decode_key, payloa
     그래서 `xmlog_export.export_csv()` 와 같은 규약을 따른다: 채널 수(`n_channels`)나
     해석 지문(`decode_key`, `decode_user_frame` 참조)이 첫 프레임과 다른 행은 값 대신
     원본 payload 를 hex 로 마지막 열에 적고, 열 수는 헤더와 같게 유지한다. 그런 행은
-    `.xmlog` 를 `xm10 export` 로 다시 뽑으면 제대로 풀린다(2026-09-29 감사).
+    `.xmlog` 를 `xm10 export` 로 다시 뽑으면 제대로 풀린다.
     """
     if len(floats) != n_channels or decode_key != header_key:
         pad = [""] * max(0, n_channels - 1)
@@ -465,7 +465,7 @@ def apply_theme(app, theme: dict):
 # Module Tab — 사용자 module 하나의 화면 (버퍼 · 6-plot · 사이드바 · CSV)
 # ============================================================================
 #
-# 2026-09-15 "Phase E-live" 다중 module 실시간 뷰 (PLAN rev4.2 §4.11, 사용자 승인).
+# 다중 module 실시간 뷰.
 # 예전엔 MainWindow 가 이 상태(버퍼·플롯·사이드바·CSV)를 전부 직접 들고 있었고,
 # 그 전제가 "화면에 사용자 module 은 하나뿐" 이었다. FrameRouter 가 이제 사용자
 # module 을 전부 'user' 로 라우팅하므로, module_id 하나가 관측될 때마다 이 위젯을
@@ -482,7 +482,7 @@ class ModuleTab(QtWidgets.QWidget):
 
         # 링 버퍼는 하나다. 예전엔 _buf_a/_buf_b 두 개를 만들었지만 서로 바꿔 끼우는
         # 코드가 없어 하나는 늘 빈 채였다 — 탭이 module 마다 생기니 그 낭비도 module
-        # 수만큼 곱해졌다(2026-09-29 감사).
+        # 수만큼 곱해졌다.
         self._buf = np.full((window_size, 1 + MAX_CHANNELS), np.nan, dtype=np.float32)
         self._write_idx = 0
         self.frame_count = 0        # 상태 패널이 읽는다 (router.user_modules 와는 별개 카운터)
@@ -831,8 +831,8 @@ class TotalDataTab(QtWidgets.QWidget):
 
         True 를 돌려주는 순간 다음 주기가 시작된다(호출할 때마다 시계가 움직이는 게이트).
         스로틀이 표를 채우는 쪽에만 있으면 표는 5Hz 로 바뀌어도 그 앞의 197채널 unpack·
-        스케일링은 poll 틱마다(약 33Hz) 계속 돌기 때문에, 디코드 **앞**에서 물어야 한다
-        (2026-09-29 감사). `now_t` 는 단조 증가하는 아무 시계(perf_counter 등)다.
+        스케일링은 poll 틱마다(약 33Hz) 계속 돌기 때문에, 디코드 **앞**에서 물어야 한다.
+        `now_t` 는 단조 증가하는 아무 시계(perf_counter 등)다.
         """
         if now_t - self._last_update_t < TOTAL_DATA_TABLE_PERIOD_S:
             return False
@@ -1165,7 +1165,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # 넘긴다 — 이후 쓰기·닫기는 워커 스레드 몫이다 (PhAISerialWorker 주석 참조).
         #
         # 연결(재연결 포함)마다 **새 파일**이다. 다시 붙은 장치가 아까 그 장치인지 알 방법이 아직
-        # 없어서(PLAN §9 D-H), 한 파일에 이어 쓰지 않고 파일로 끊는다 — 새 파일은 스키마도 처음부터
+        # 없어서, 한 파일에 이어 쓰지 않고 파일로 끊는다 — 새 파일은 스키마도 처음부터
         # 다시 배운다. 이름이 초 단위 시각이라 1초 안에 다시 붙으면 같은 이름이 나오는데, 그때
         # 앞 파일을 덮어쓰지 않게 `unique_path` 로 피한다.
         # SESSION 의 total_data_map_version 은 비워 둔다 — CLI 는 --total-data 일 때만 적는다
