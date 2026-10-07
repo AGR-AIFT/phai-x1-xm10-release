@@ -28,7 +28,7 @@
  *     1ms 루프에서는 0 또는 1 중 하나의 값만 관측됩니다.
  *     us 정밀도가 필요하면 DWT Cycle Counter를 사용해야 합니다.
  *
- * @see     docs/api-reference/system.md
+ * @see     docs/api-reference/05-usb-connectivity.md  (USB CDC 출력)
  * @version 1.0
  * @date    Mar 09, 2026
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
@@ -268,7 +268,7 @@ static void _UpdateStats(uint32_t now)
  * @param now 현재 시각 (ms)
  *
  * [출력 형식]
- * 고정폭 정렬로 터미널에서 가독성을 확보합니다.
+ * 고정폭 정렬로 터미널에서 가독성을 확보합니다 (텍스트만 보려면 XM_SetUsbAutoStream(false) 호출).
  * sprintf를 사용하므로 실시간성에 영향을 줄 수 있으나,
  * 1초 주기이므로 허용 가능한 수준입니다.
  */

@@ -55,7 +55,7 @@
  * @see     Gervasi, A. et al. (2020) "Exoskeleton gait assistance based on
  *          continuous gait phase estimation" IROS 2020
  * @see     Ex.31 friction_comp_dob.c (Stage 1 — 투명 모드 기반)
- * @see     docs/api-reference/XM_Control.md
+ * @see     docs/api-reference/02-h10-control-n-data.md
  * @version 1.0
  * @date    Mar 10, 2026
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.

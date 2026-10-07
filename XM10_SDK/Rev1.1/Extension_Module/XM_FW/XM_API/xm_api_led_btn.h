@@ -35,7 +35,7 @@
 
 /**
  * @brief Function LED 식별자
- * @note  System Layer의 1-based index와 일치시킵니다.
+ * @note  1부터 시작합니다.
  */
 typedef enum {
     XM_LED_1 = 1, /**< 왼쪽 LED (ID: 1) */
@@ -45,7 +45,7 @@ typedef enum {
 
 /**
  * @brief Function Button 식별자
- * @note  System Layer의 1-based index와 일치시킵니다.
+ * @note  1부터 시작합니다.
  */
 typedef enum {
     XM_BTN_1 = 1, /**< 왼쪽 버튼 (ID: 1) */
@@ -63,8 +63,7 @@ typedef enum {
 
 /**
  * @brief 버튼 물리적 상태 (Pressed/Released)
- * @note  IOIF 계층의 GPIO_PIN_SET(1)/RESET(0)과 매핑됩니다.
- * 회로(Active High/Low)에 상관없이 '눌렸는지'를 명확히 표현합니다.
+ * @note  회로(Active High/Low)에 상관없이 '눌렸는지'를 명확히 표현합니다.
  */
 typedef enum {
     XM_RELEASED = 0, /**< 버튼이 떨어져 있음 */
@@ -74,7 +73,7 @@ typedef enum {
 /* ========================== LED SECTION ========================== */
 /**
  * @brief LED 동작 모드
- * @note  led_manager.h의 LedMode_t와 순서가 일치해야 합니다.
+ * @note  값(순서)을 바꾸지 마세요.
  */
 typedef enum {
     XM_LED_OFF       = 0, /**< LED를 끕니다. */
@@ -88,7 +87,7 @@ typedef enum {
 /**
  * @brief 버튼 이벤트 타입
  * @details 버튼의 상태 변화를 의미 있는 이벤트로 변환하여 제공합니다.
- * @note  button_manager.h의 ButtonEvent_t와 순서가 일치해야 합니다.
+ * @note  값(순서)을 바꾸지 마세요.
  */
 typedef enum {
     XM_BTN_NONE       = 0, /**< 발생한 이벤트 없음 */
@@ -167,16 +166,10 @@ XmBtnEvent_t XM_GetButtonEvent(XmBtnId_t btn_idx);
 
 /* ======================== SYSTEM UPDATE SECTION ======================== */
 /**
- * @brief  [필수] I/O 상태 업데이트 함수
+ * @brief  I/O 상태 업데이트 함수
  * @details LED의 깜빡임 타이밍 계산과 버튼의 디바운싱/롱프레스 처리를 수행합니다.
- * @warning User Task의 메인 루프 안에서 반드시 주기적으로 호출해야 합니다.
- * 호출하지 않으면 Blink나 Button Event가 동작하지 않습니다.
- * @code
- * RunUserTask() {
- * // 사용자 알고리즘 ...
- * * XM_IO_Update(); // 루프의 마지막에 호출 권장
- * }
- * @endcode
+ * @note   XM10 이 매 1ms 마다 자동으로 호출하므로 직접 호출하지 않아도 됩니다.
+ *         Control_Loop() 이 멈추면(무한 루프 등) LED 깜빡임과 버튼 이벤트도 멈춥니다.
  */
 void XM_IO_Update(void);
 

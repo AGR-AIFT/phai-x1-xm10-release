@@ -66,7 +66,7 @@ typedef enum {
 
 /**
  * @brief 확장 포트의 아날로그 핀 ID (ADC)
- * @details ✅ ADC1/2/3 통합: DIO 핀도 ADC로 사용 가능
+ * @details ADC1/2/3 통합: DIO 핀도 ADC로 사용 가능
  */
 typedef enum {
     /* ADC1/2 고정 핀 (항상 사용 가능) */
@@ -128,7 +128,7 @@ typedef enum {
 
 /**
  * @brief [비실시간] 디지털 핀의 모드(입력/출력/풀업/풀다운)를 설정합니다.
- * @warning 1ms 실시간 루프 안에서 호출하지 마십시오. (HAL_GPIO_Init 호출로 인한 지연)
+ * @warning 1ms 실시간 루프(Control_Loop) 안에서 호출하지 마십시오. (HAL_GPIO_Init 호출로 인한 지연)
  * @param[in] pin   설정할 핀 (D0 ~ D7)
  * @param[in] mode  설정할 모드 (XM_INPUT, XM_OUTPUT 등)
  */
@@ -267,8 +267,7 @@ bool XM_IsDioSwitchedToAdc(XmDioPin_t pin);
  * ============================================================================
  * [Rev1.1] External UART 디바이스 결합 API (PA0/PA1 → UART4 동적 전환)
  *  - 사용자가 Control_Setup()에서 명시적 opt-in 호출 → 미사용 시 PA0/PA1은 ADC 그대로.
- *  - 함수명에 모델/벤더 명시 (Rev2.0과 동일한 인터페이스, 내부 구현만 HW 매핑 다름).
- *  - Rev2.0(USART2 PD5/PD6 전용 포트)과 동일한 사용자 코드 호환.
+ *  - 함수명에 모델/벤더를 명시합니다.
  * ============================================================================
  */
 
@@ -276,12 +275,11 @@ bool XM_IsDioSwitchedToAdc(XmDioPin_t pin);
  * @brief Xsens MTi-630 IMU를 External UART(Rev1.1: PA0/PA1 → UART4)에 결합합니다.
  * @details
  *  - Control_Setup()에서 1회 호출. 호출 후 XM.status.ext_imu.* 로 데이터 접근.
- *  - **Rev1.1 동작**: 호출 시 ADC1에서 PA0/PA1 채널 제거 → UART4 InitManual →
- *    파서/콜백 결합까지 한 번에 수행 (ExternalIO_SwitchToUartMode 내부 호출).
+ *  - **Rev1.1 동작**: 호출 시 ADC1에서 PA0/PA1 채널 제거 → UART4 초기화 →
+ *    파서/콜백 결합까지 한 번에 수행.
  *  - 호출 후 PA0/PA1은 ADC로 사용 불가 (대신 PA0_C/PA1_C인 XM_EXT_ADC_2/_4 사용).
  *  - 미호출 시 PA0/PA1은 ADC로 유지 (XM_EXT_ADC_1/_3 사용 가능).
  *  - 센서 미연결 상태에서도 호출 안전. 케이블 결합 시 자동 OPERATIONAL 전환.
- *  - Rev2.0과 인터페이스 동일 (HW 매핑만 다름) → 사용자 코드는 양 Rev에서 그대로 동작.
  */
 void XM_AttachXsensMTi630(void);
 
@@ -296,7 +294,7 @@ void XM_ConfigureXsensMTi630(void);
 
 /**
  * ============================================================================
- * [신규] DIO → ADC3 동적 전환 API (10kHz 고속 아날로그 센서 지원)
+ * DIO → ADC3 동적 전환 API (10kHz 고속 아날로그 센서 지원)
  * ============================================================================
  */
 

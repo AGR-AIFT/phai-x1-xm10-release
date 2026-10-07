@@ -6,7 +6,7 @@
 > - **주기 완료 감지** (`prev > 80% && current < 20%`) + BTN3 학습 동결로 평가.
 >
 > ⏱️ 권장 시간: 50분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.23 Gait Phase Adaptive](../23_Gait_Phase_Adaptive_Torque/) + [Ex.14 PD](../14_PD_Realtime_Control/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)
+> 🧰 사전 예제: [Ex.23 Gait Phase Adaptive](../23_Gait_Phase_Adaptive_Torque/) + [Ex.14 PD](../14_PD_Realtime_Control/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 > 📄 논문: Emken, J. L., et al. (2007). *Robotic movement training as an optimization problem.* IEEE ICORR. Bristow, D. A. (2006). *A survey of iterative learning control.* IEEE Control Systems Mag.
 
 ---
@@ -15,7 +15,7 @@
 
 ILC 학습 인덱스 = gaitCycle/100. **gaitCycle 부정확 시 학습 붕괴**. `Control_Setup` 에서 `XM_SendUserBodyData(bodyData)` 필수.
 
-> [examples/README.md — Body Data 안내](../README.md#part-5)
+> [examples/README.md — Body Data 안내](../README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세)
 
 ---
 
@@ -146,12 +146,14 @@ static void _HandleButtons(void)
 
 ## 4️⃣ 실험 — 직접 해보기 (체크포인트)
 
+> 💡 PC 프로그램은 한 번에 하나만 연결하세요. 텍스트는 시리얼 터미널로, 0xF0 그래프는 `xm10` 도구로 보되 하나를 닫고 다음 것을 여세요. (터미널에 알 수 없는 글자가 섞여 보여도 정상입니다.) 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
+
 1. **Body Data 설정** + 빌드/플래시 + ASSIST + 보행 시작
 2. **첫 3 주기** → ✅ 토크 거의 0 (학습 초기)
 3. **5 주기 후** → ✅ 프로파일 형성 시작, USB `τ_ff:0.30`
 4. **10~15 주기** → ✅ 수렴, `τ_ff:0.85~1.20`
 5. **USB CDC** → `ILC | cyc:12 i:50 e:0.85 τ_ff:1.10 τ_cmd:1.10` 매 200 ms
-6. **PhAI 0xF0** → 100 슬롯 토크 배열의 evolution 관찰
+6. **`xm10` 도구의 0xF0 탭** → Gait Phase / Target Angle / Actual Angle / ILC Torque 4채널에서, 주기가 반복될수록 ILC Torque 가 수렴하는 모습 관찰
 7. **BTN 3 클릭 (동결)** → ✅ 학습 멈춤. 동일 프로파일 반복 적용
 8. **BTN 3 다시 (해제)** → ✅ 학습 재개. 다시 수렴 가속
 9. **BTN 2 클릭 (리셋)** → ✅ 모든 슬롯 0. 처음부터 재학습 시작

@@ -89,7 +89,7 @@ volatile uint16_t g_peer_seq;        /**< 마지막으로 받은 상대 카운�
  */
 
 /* 수신 링버퍼.
- * writer = 수신 콜백(공유 RxTask) / reader = Control_Loop(UserTask) 단 하나씩이라
+ * writer = 수신 콜백(공유 수신 태스크) / reader = Control_Loop 단 하나씩이라
  * 락 없는 SPSC 링으로 충분하다. head/tail 은 각자 한쪽만 쓴다. */
 static volatile uint8_t  s_rx_ring[RX_RING_SIZE];
 static volatile uint16_t s_rx_head;   /**< writer(콜백)만 증가 */
@@ -157,7 +157,7 @@ void Control_Loop(void)
  */
 
 /**
- * @brief [공유 RxTask 컨텍스트] 수신 콜백 — 복사만 하고 즉시 리턴한다.
+ * @brief [공유 수신 태스크 컨텍스트] 수신 콜백 — 복사만 하고 즉시 리턴한다.
  * @warning 여기에 파싱·printf·대기 를 넣지 말 것. GRF 1kHz 수신이 밀린다.
  */
 static void OnSerialRx(const uint8_t* data, uint32_t len)

@@ -18,7 +18,7 @@
 
 ## 학습 목표 (Objective)
 
-* `XM_BgTask_Create()` API를 사용하여 **백그라운드 태스크에서 NN 학습**을 수행하는 방법을 학습합니다.
+* `XM_Task_CreateOneShot()` API를 사용하여 **백그라운드 태스크에서 NN 학습**을 수행하는 방법을 학습합니다.
 * 실시간 제어 루프(1kHz)와 무거운 연산을 **RTOS 태스크 분리**로 공존시키는 아키텍처를 이해합니다.
 * **Phase Encoding** (sin/cos)을 사용한 Tiny NN으로 주기적 궤적을 효과적으로 학습하는 방법을 학습합니다.
 * **LQR 기반 최적 PD 게인**을 물리 모델로부터 유도하는 방법을 이해합니다.
@@ -47,7 +47,7 @@ IDLE → [BTN1] → TEACH (투명모드 + 궤적기록, 최대 20초)
 
 ### 2. LEARN — 백그라운드 NN 학습
 
-`XM_BgTask_Create()`로 별도 RTOS 태스크를 생성하여 학습을 수행합니다. **1kHz 제어 루프와 독립적**으로 실행되므로 PnP 통신에 영향을 주지 않습니다.
+`XM_Task_CreateOneShot()`(우선순위 힌트 `XM_PRIO_BACKGROUND`)로 별도 RTOS 태스크를 생성하여 학습을 수행합니다. **1kHz 제어 루프와 독립적**으로 실행되므로 시스템 통신에 영향을 주지 않습니다. 학습이 끝나면 `XM_Task_Delete()` 로 태스크를 정리합니다.
 
 * **NN 구조**: 3 input (phase, sin(2πφ), cos(2πφ)) → 16 hidden (ReLU) → 2 output (θ_R, θ_L)
 * **학습**: SGD with LR decay (0.001→0.0001), 5000 epoch, batch 20
@@ -95,7 +95,7 @@ IDLE → [BTN1] → TEACH (투명모드 + 궤적기록, 최대 20초)
 
 1. `STM32CubeIDE`에서 본 예제 소스파일을 빌드하고 `XM10`에 업로드합니다.
 2. `KIT H10`의 전원을 켜고 `XM10`과 연결합니다.
-3. **ASSIST 모드**로 진입합니다 (angel'a DEV 또는 전원 버튼 더블 클릭).
+3. **ASSIST 모드**로 진입합니다 (KIT H10 전원 버튼 더블 클릭).
 4. **BTN1 클릭** → TEACH 시작. 로봇 다리를 잡고 원하는 궤적으로 3~10초간 움직입니다.
 5. **BTN1 클릭** → LEARN 시작. LED1이 매우 빠르게 깜빡이며 수 초 내 학습 완료.
 6. 자동으로 **REPLAY** 진입. 로봇이 교시된 궤적을 왕복 재현합니다.

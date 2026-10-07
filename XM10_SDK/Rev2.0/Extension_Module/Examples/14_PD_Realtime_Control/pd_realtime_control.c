@@ -30,7 +30,7 @@
  * - BTN1 클릭: 목표 각도 부호 반전 (양 ↔ 음)
  * - BTN2 클릭: 목표 각도 5도씩 증가 (최대 25도, 이후 5도로 래핑)
  *
- * @see     docs/api-reference/XM_Control.md
+ * @see     docs/api-reference/02-h10-control-n-data.md
  * @version 1.0
  * @date    Mar 09, 2026
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
@@ -72,7 +72,7 @@
 /**
  * @brief USB 스트리밍용 데이터 구조체
  * @details PD 제어 핵심 변수 4개를 실시간 스트리밍합니다.
- *          PhAI Studio User Custom 모드에서 4채널 float로 표시됩니다.
+ *          xm10 도구에서 4채널 float로 표시됩니다.
  */
 typedef struct {
     float target_angle;     // 목표 각도 (deg)

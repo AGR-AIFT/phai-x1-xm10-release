@@ -91,7 +91,7 @@ typedef enum {
 /**
  * @brief Passive Mode 내부 동작 상태
  * FIFO 파이프라인: START에서 3개 선행 충전 후 REPEATING에서 done/타이머 기반 보충.
- * done SDO 유실 시에도 FIFO에 1~2개 잔여 → 모션 지속.
+ * done 신호가 빠져도 FIFO에 1~2개가 남아 있어 모션이 이어집니다.
  */
 typedef enum {
     PASSIVE_STATE_SET_IMPEDANCE,    // 진입 초기 상태 (DOB, Impedance 설정)
@@ -134,10 +134,12 @@ typedef struct __attribute__((packed)) {
 /*
  * 전송할 데이터 구조체 (User가 자유롭게 정의)
  *
- * PhAI Studio COMBINED 모드(MODULE_ID=0x10)와 호환하려면
+ * 구 방식(MODULE_ID=0x10 COMBINED)의 xm10 도구 Combined 보기와 호환하려면
  * 10개 float (Accel XYZ, Gyro XYZ, Motor Angle L/R, Motor Torque L/R) 순서로 배치.
  *
- * User Custom 모드(MODULE_ID=0xF0~0xFE)에서는 어떤 float 배열이든 가능.
+ * User Custom(MODULE_ID=0xF0~0xFE)에서는 어떤 float 배열이든 가능 — 새 코드는 이쪽을 쓰세요 (Ex.09).
+ *
+ * 참고: 이 예제가 실제로 전송하는 것은 myData(MyData_t) 입니다. 아래 구조체는 값만 채우고 전송하지 않습니다.
  */
 typedef struct {
     float accel[3];        /* Accelerometer X, Y, Z (m/s²)  */
@@ -254,19 +256,20 @@ void Control_Setup(void)
     /* ----------------------------------------------------------------
      * Total Data Packet (Module ID 0x20) 이 모든 H10 센서 데이터를 자동
      * 스트리밍하지만, 아래는 'myData' 구조체를 USB-CDC로 실시간
-     * 스트리밍하는 예시입니다. phai-studio 연결 시 자동 수신됩니다.
+     * 스트리밍하는 예시입니다 (구 방식 — 새 코드는 Ex.09 의 XM_SetUsbCustomMeta + XM_SendUsbDataWithId).
+     * PC 프로그램이 포트를 열면 전송되지만, 구 방식이라 xm10 도구에는 채널 이름 없이
+     * ch0, ch1 … 로 표시되고, 정수·bool 이 섞인 이 구조체는 앞쪽 값이 올바르게 보이지 않습니다.
+     * 구조체를 PC 에서 보려면 Ex.09 방식(float 배열)을 쓰세요.
      * ---------------------------------------------------------------- */
 
     // USB-CDC로 'myData' 구조체를 실시간 스트리밍하겠다!
     XM_SetUsbStreamSource(&myData, sizeof(MyData_t));
     XM_SetUsbAutoStream(true);
 
-    /* Module ID 설정 (COMBINED = PhAI Studio 기본 10ch 모드) */
-
     /* [v2.6 Control/Monitor 분리] P-Vector/I-Vector 전송도 로봇을 움직이는 '제어 출력'
      * 이므로 CONTROL 모드가 필요합니다 (MONITOR 에서는 벡터 전송이 차단됩니다).
      * 본 예제는 토크를 직접 쓰지 않고 P-Vector 위치 제어만 사용하므로, CONTROL 이어도
-     * 보조 토크 PDO 는 항상 0 으로 전송됩니다 (안전). */
+     * 보조 토크는 항상 0 으로 전송됩니다 (안전). */
     XM_SetControlMode(XM_CTRL_CONTROL);
 }
 
@@ -334,7 +337,7 @@ static void Active_Entry(void)
     s_previousSuitMode = XM.status.h10.h10Mode;
     EnterPassiveMode();
 
-    // USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신
+    // USB-CDC 스트리밍은 PC 프로그램이 포트를 열어 두는 동안 계속됩니다
 }
 
 /**
@@ -396,7 +399,7 @@ static void Active_Loop(void)
 
 static void Active_Exit(void)
 {
-    // USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신 (세션 종료 처리 불필요)
+    // USB-CDC 스트리밍은 PC 프로그램이 포트를 열어 두는 동안 계속됩니다 (세션 종료 처리 불필요)
 }
 
 // -------------------- Init Homing --------------------
@@ -676,7 +679,7 @@ static void UpdatePassiveMode(void)
             /*
              * FIFO 파이프라인 반복:
              * - done 도착 → 즉시 다음 궤적 큐잉 (정상 경로)
-             * - done 미도착 → 타이머 폴백으로 큐잉 (done SDO 유실 방어)
+             * - done 미도착 → 타이머 폴백으로 큐잉 (done 신호 유실 대비)
              * MD FIFO(20 slots)에 항상 1~2개 잔여 → 모션 끊김 없음
              */
             bool shouldQueue = false;

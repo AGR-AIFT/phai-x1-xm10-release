@@ -53,13 +53,16 @@ typedef enum {
 } IOIF_FileSystem_AccessMode_e;
 
 /**
- * @brief [유지] 파일 쓰기 시 생성 모드 (덮어쓰기/생성/증가)
+ * @brief 파일 쓰기 시 생성 모드 (생성/이어쓰기/덮어쓰기)
+ * @note  구 `IOIF_FileSystem_CreateMode_INCREMENT`(data(1).bin 자동 증가)는 2026-09-10 삭제됐다.
+ *        열거자만 있고 구현이 배선되지 않아 EXCLUSIVE 와 동일 동작(두 번째 호출 FR_EXIST)이었고,
+ *        소비 5모듈·공개 SDK 어디에도 호출자가 없었다. 세션별 파일 분리가 필요하면 호출자가
+ *        이름을 직접 만들어라 - XM data_logger 의 `data_%03lu_part_%03lu.bin` 이 그 예다.
  */
 typedef enum {
     IOIF_FileSystem_CreateMode_EXCLUSIVE, // 파일이 없으면 생성 (FA_CREATE_NEW)
     IOIF_FileSystem_CreateMode_APPEND,    // 파일 끝에 이어쓰기 (FA_OPEN_APPEND)
     IOIF_FileSystem_CreateMode_OVERWRITE, // 항상 덮어쓰기 (FA_CREATE_ALWAYS)
-    IOIF_FileSystem_CreateMode_INCREMENT, // data(1).bin, data(2).bin 자동 증가
 } IOIF_FileSystem_CreateMode_e;
 
 /**
@@ -241,6 +244,19 @@ AGRBFileSystemStatusDef ioif_filesystem_get_space_mb(uint32_t* free_mb, uint32_t
 AGRBFileSystemStatusDef ioif_filesystem_delete(const char* path, FRESULT* fresult);
 
 /**
+ * @brief [신규 2026-09-01, W1-ⓐ] 파일/디렉터리 이름을 바꿉니다 (f_rename 래퍼).
+ * @details 스레드 안전합니다 (내부 Mutex로 보호됨 — delete 와 동일 패턴).
+ * ⚠ FatFs f_rename 은 **대상이 이미 존재하면 FR_EXIST** 이고(덮어쓰기 아님),
+ *   디렉터리 엔트리 갱신 중 전원 단절 시 cross-link 가능 구간이 있다(ff.c 주석).
+ *   "원자적 교체"가 필요하면 호출자가 unlink→rename 순서와 복구 규약을 갖춰야
+ *   한다 — phorce-pcm docs/plans/PLAN-20260831-studio-cdc-only.md §5 참조.
+ * @param[in]  old_path 현재 경로
+ * @param[in]  new_path 새 경로 (존재하면 FR_EXIST)
+ * @param[out] fresult (Optional) FATFS FRESULT 반환값
+ */
+AGRBFileSystemStatusDef ioif_filesystem_rename(const char* old_path, const char* new_path, FRESULT* fresult);
+
+/**
  * @brief [신규] USB Host 이벤트 핸들러 (의존성 역전)
  * @details 3rd-party 미들웨어인 usb_host.c의 USER CODE 블록에서
  * 이 함수를 호출해야 합니다. (빌드 충돌 방지)
@@ -325,6 +341,7 @@ typedef struct {
     AGRBFileSystemStatusDef (*get_space_mb)(uint32_t* free_mb, uint32_t* total_mb);
     AGRBFileSystemStatusDef (*get_size_mb)(IOIF_FILEx_t id, uint32_t* size_mb);
     AGRBFileSystemStatusDef (*delete)(const char* path, FRESULT* fresult);
+    AGRBFileSystemStatusDef (*rename)(const char* old_path, const char* new_path, FRESULT* fresult);
     AGRBFileSystemStatusDef (*sync)(IOIF_FILEx_t id, FRESULT* fresult);
     AGRBFileSystemStatusDef (*seek)(IOIF_FILEx_t id, uint32_t offset, FRESULT* fresult);
     AGRBFileSystemStatusDef (*truncate)(IOIF_FILEx_t id, FRESULT* fresult);

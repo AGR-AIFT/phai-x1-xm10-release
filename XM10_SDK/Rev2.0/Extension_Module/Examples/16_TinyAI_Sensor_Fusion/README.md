@@ -6,7 +6,7 @@
 > - **Tiny ML 워크플로우** — Python 학습 → C 배열 export → MCU 추론.
 >
 > ⏱️ 권장 시간: 45분 | 🔧 난이도: ⭐⭐⭐
-> 🧰 사전 예제: [Ex.14 PD](../14_PD_Realtime_Control/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md)
+> 🧰 사전 예제: [Ex.14 PD](../14_PD_Realtime_Control/) | 📚 관련 docs: [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [xm10 도구](../../docs/getting-started/04-pc-data-tool.md)
 
 ---
 
@@ -20,7 +20,7 @@ H10 가 ASSIST 모드일 때 사용자의 자세를 **3개 클래스** 로 실�
 | 1 FORWARD_LEAN | 전방 경사 | LED 2 Blink (느림, 500 ms) |
 | 2 BACKWARD_LEAN | 후방 경사 | LED 3 Blink (빠름, 200 ms) |
 
-USB CDC 500 ms 주기: `AI | P:5.2 R:-1.3 Class:UPRIGHT Conf:78.4%` + PhAI 0xF0 5축 (pitch / roll / pitch_rate / class_id / confidence).
+USB CDC 500 ms 주기: `AI | P:5.2 R:-1.3 Class:UPRIGHT Conf:78.4%` + `xm10` 도구의 0xF0 5축 (pitch / roll / pitch_rate / class_id / confidence).
 
 > 📸 **NN 자세 분류 실시간** — 사진·영상 준비 중
 
@@ -34,6 +34,8 @@ USB CDC 500 ms 주기: `AI | P:5.2 R:-1.3 Class:UPRIGHT Conf:78.4%` + PhAI 0xF0 
 |--------|-----------|---------|------------|
 | `USE_H10_PRECOMPUTED` (default) | `XM.status.h10.leftHipImuSagittalPitch/FrontalRoll` (H10 내부 센서 퓨전 결과) | H10 만 | "이미 처리된 자세 + MCU NN 분류" |
 | `USE_IMU_HUB_FUSION` | IMU Hub body-frame raw → 상보 필터 | + IMU Hub 모듈 | "raw IMU 부터 센서 퓨전 + NN" |
+
+> IMU Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
 
 ### 상보 필터 (Mode 2 만)
 
@@ -58,7 +60,7 @@ Input(4) → Dense(8) ReLU → Dense(4) ReLU → Dense(3) argmax
 ### 본 예제의 한계
 
 - 가중치가 **하드코딩 임의 값** — 실제 학습 결과 X. Python 으로 학습 후 가중치 export 필요.
-- 양자화 (int8) 미적용 — 추후 메모리 75% 절감 가능.
+- 양자화 (int8) 는 적용하지 않았습니다 (적용하면 메모리를 75% 줄일 수 있습니다).
 
 ---
 
@@ -139,6 +141,8 @@ static void Active_Loop(void)
 
 ## 4️⃣ 실험 — 직접 해보기 (체크포인트)
 
+> 💡 PC 프로그램은 한 번에 하나만 연결하세요. 텍스트는 시리얼 터미널로, 0xF0 그래프는 `xm10` 도구로 보되 하나를 닫고 다음 것을 여세요. (터미널에 알 수 없는 글자가 섞여 보여도 정상입니다.) 채널 이름은 연결할 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
+
 1. **빌드 + 플래시** (Mode 1 default) → CM + ASSIST 진입
 2. **착용자 직립** → ✅ LED 1 Heartbeat (UPRIGHT)
 3. **앞으로 기울임** → ✅ 0.5 초 내 LED 2 깜빡 (FORWARD)
@@ -161,9 +165,9 @@ static void Active_Loop(void)
 ## 5️⃣ 다음 단계
 
 - Phase-Dependent 보조 (보행 단계별): [Ex.17 FSM Gait Intent](../17_FSM_Gait_Intent/)
-- CPG 진동자 + 자세 보조: [Ex.22 CPG](../22_CPG_Oscillator/) (Phase 2D)
-- GRF 기반 보행 위상 추정: [Ex.32 GRF Gait Intent](../32_GRF_Gait_Intent/) (Phase 2D)
-- Kinesthetic Teaching (전문가 스킬 데이터화): [Ex.33 Kinesthetic](../33_Kinesthetic_Teaching/) (Phase 2D)
+- CPG 진동자 + 자세 보조: [Ex.22 CPG](../22_CPG_Oscillator/)
+- GRF 기반 보행 위상 추정: [Ex.32 GRF Gait Intent](../32_GRF_Gait_Intent/)
+- Kinesthetic Teaching (전문가 스킬 데이터화): [Ex.33 Kinesthetic](../33_Kinesthetic_Teaching/)
 
 ---
 

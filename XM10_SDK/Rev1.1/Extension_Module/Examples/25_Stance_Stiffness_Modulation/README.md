@@ -16,7 +16,7 @@
 `isRightFootContact` / `isLeftFootContact` 는 H10 의 IMU + 역기구학 추정 결과.
 **Body Data 미설정 시 footContact 항상 false → 항시 유각 모드 → 보조 효과 0**.
 
-> [examples/README.md — Body Data 안내](../README.md#part-5)
+> [examples/README.md — Body Data 안내](../README.md#part-5-제어-알고리즘-심화--5-단계-흐름-상세)
 
 ---
 

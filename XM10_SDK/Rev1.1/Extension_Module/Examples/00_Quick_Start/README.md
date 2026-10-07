@@ -29,7 +29,7 @@ XM10 보드 단독으로 다음을 확인합니다 (외부 HW 불필요):
 - **TSM (Task State Machine)** — 상태 + 콜백 (`on_entry` / `on_loop`) 구조의 마이크로 FSM. 본 예제는 단일 상태만 사용. (참고: [Ex.03 FSM](../03_Button_LED_FSM/) 에서 멀티 상태로 확장)
 - **USB CDC** — XM10 ↔ PC 시리얼 가상 포트. 텍스트 또는 바이너리 전송.
 
-> ⚠️ USB-CDC 포트는 단일 점유 자원입니다. PhAI Studio 와 시리얼 터미널 (PuTTY · RealTerm 등) 을 동시에 열지 마세요 — COM 포트 충돌로 메시지가 보이지 않습니다.
+> ⚠️ PC 프로그램은 한 번에 하나만 연결하세요. USB-CDC 포트는 단일 점유 자원이라, PhAI Studio 와 시리얼 터미널 (PuTTY · RealTerm 등) 을 동시에 열면 COM 포트 충돌로 메시지가 보이지 않습니다.
 
 ---
 
@@ -79,7 +79,7 @@ static void Run_Loop(void)                                // ④의 본문
 1. **빌드** → ✅ Console 에 `Build Finished. 0 errors`
 2. **플래시** (Run → Debug) → ✅ 부팅 직후 LED 1 → 2 → 3 순차 점등 확인
 3. **부팅 완료** → ✅ LED 1 만 Heartbeat (1초 주기) 로 깜빡임
-4. **USB 연결** → 시리얼 터미널 (115200 8N1) 에서 `"[QuickStart] XM10 보드 준비 완료!"` 확인
+4. **USB 연결** → 시리얼 터미널 (115200 8N1) 에서 `"[QuickStart] XM10 보드 준비 완료!"` 확인 (알 수 없는 글자가 섞여 보이면 아래 "흔한 실수" 표를 보세요)
 5. **BTN 1 클릭** → ✅ 터미널에 `"Hello XM10!"` + LED 3 1회 깜빡
 6. **BTN 2 클릭** → ✅ LED 2 켜짐, 다시 누르면 꺼짐
 7. **변형 1** — `BOOT_LED_INTERVAL_MS` 를 `200` → `50` 으로 바꾸고 빌드/플래시 → 부팅 시퀀스가 얼마나 빨라지나?
@@ -102,6 +102,7 @@ static void Run_Loop(void)                                // ④의 본문
 |------|------|------|
 | 보드 부팅 시 LED 가 전혀 안 켜짐 | 펌웨어 미플래시 또는 전원 문제 | Debug 로그 확인 + 보드 전원 LED 점등 확인 |
 | 시리얼 터미널에 메시지 안 보임 | 다른 프로그램이 COM 포트 점유 (PhAI Studio 등) | 다른 시리얼 클라이언트 모두 종료 후 재시도 |
+| 터미널에 알 수 없는 글자가 섞여 보임 | 보드가 PC 도구용 바이너리도 함께 보내고 있음 | [Ex.07](../07_CDC_Basic_Print/) 처럼 `Control_Setup()` 맨 위에 `XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL);` 를 추가 (Rev1.1 은 `XM_SetUsbAutoStream(false);`) |
 | 부팅 시퀀스가 너무 빨라 못 봄 | `BOOT_LED_INTERVAL_MS` 가 짧음 | 값을 `500` ~ `1000` 으로 늘려 천천히 관찰 |
 | BTN 1 한 번 눌렀는데 메시지가 여러 번 출력 | `GetButtonEvent` 대신 `GetButtonState` 사용했을 가능성 | `GetButtonEvent` (read-clear) 사용 확인 |
 | LED 2 가 토글 안 되고 켜진 채 유지 | `s_is_led2_on` 변수가 `static` 이 아닐 가능성 | `static bool` 으로 선언되어 다음 호출까지 유지되어야 함 |

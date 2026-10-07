@@ -409,8 +409,8 @@ void Control_Loop(void)
 
     XM_TSM_Run(s_tsm);
 
-    /* [필수] 버튼 이벤트 디바운싱 + LED 효과 타이머 틱 (xm_api_led_btn.h).
-     * 호출하지 않으면 XM_GetButtonEvent() 가 항상 NONE → BTN1/2/3 캘리브레이션 동작 불가. */
+    /* 버튼 이벤트·LED 효과 갱신 (xm_api_led_btn.h). XM10 이 매 1 ms 자동으로 호출하므로
+     * 없어도 동작합니다. 시간 기준으로 처리되어 여기서 한 번 더 불러도 결과는 같습니다. */
     XM_IO_Update();
 }
 

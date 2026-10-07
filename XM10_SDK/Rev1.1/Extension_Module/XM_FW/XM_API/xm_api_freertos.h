@@ -10,22 +10,22 @@
  *   - XM_Task_CreateOneShot()  : 한 번 실행 후 자동 종료 (예: NN 학습)
  *   - XM_Task_CreatePeriodic() : 주기적 실행 (예: 100Hz 로깅)
  *   - XM_Mutex_*               : 공유 변수 보호 (멀티 워드 구조체)
- *   - XM_RTOS_PrintTaskList()  : 현재 동작 중 task 목록 출력 (디버깅, Phase 2)
+ *   - XM_RTOS_PrintTaskList()  : task 목록 출력 (현재 버전에서는 아무 동작도 하지 않음)
  *
  * 권장 사용 패턴:
  *   - 단일 워드 (int / float / bool) 공유 → volatile 으로 충분
  *   - 멀티 워드 구조체 공유 → XM_Mutex_* 필수
  *   - Control_Loop 안에서 mutex 는 항상 timeout=0 (절대 블로킹 금지)
  *
- * 시스템 task 우선순위 (module.h SSOT — 2026-07-14 재배치):
- *   55  Realtime7  StartupTask / FDCAN RxTask    ← PDO 수신 즉시 선점
- *   54  Realtime6  UART RxTask                   ← 센서 패킷 파싱 (DMA→파서)
- *   53  Realtime5  Control_Loop (UserTask)       ← 1kHz 제어 루프
- *   51  Realtime3  NRT_Proc (SDO/PnP 설정 처리)
+ * 시스템 task 우선순위:
+ *   55  Realtime7  시스템 시작 / CAN-FD 수신     ← 로봇·센서 데이터 수신 즉시 처리
+ *   54  Realtime6  UART 수신                     ← 센서 패킷 파싱
+ *   53  Realtime5  Control_Loop                  ← 1kHz 제어 루프
+ *   51  Realtime3  모듈 설정 메시지 처리
  *   48  Realtime   ← XM_PRIO_NEAR_REALTIME
  *   40  High       ← XM_PRIO_ABOVE_CONTROL
  *   32  AboveNormal← XM_PRIO_BELOW_CONTROL
- *   25  Normal1    PnP Manager
+ *   25  Normal1    모듈 연결 관리
  *   24  Normal     ← XM_PRIO_BACKGROUND (권장 기본값)
  *    8  Low        ← XM_PRIO_IDLE
  *
@@ -85,11 +85,11 @@ extern "C" {
  *          시스템 task 가 점유한 영역 (54/55) 은 enum 에서 제외.
  */
 typedef enum {
-    XM_PRIO_IDLE          = 8,   /**< osPriorityLow      — DefaultTask 와 동급 */
+    XM_PRIO_IDLE          = 8,   /**< osPriorityLow      — 가장 낮은 우선순위 */
     XM_PRIO_BACKGROUND    = 24,  /**< osPriorityNormal   — 권장 기본값 */
     XM_PRIO_BELOW_CONTROL = 32,  /**< osPriorityAboveNormal — Control_Loop 보다 낮음 */
-    XM_PRIO_ABOVE_CONTROL = 40,  /**< osPriorityHigh     — USBH 와 동급, Control_Loop 보다 낮음 */
-    XM_PRIO_NEAR_REALTIME = 48,  /**< osPriorityRealtime — 주의: PnP 통신과 경합 가능 */
+    XM_PRIO_ABOVE_CONTROL = 40,  /**< osPriorityHigh     — Control_Loop 보다 낮음 */
+    XM_PRIO_NEAR_REALTIME = 48,  /**< osPriorityRealtime — 주의: 모듈 연결 처리와 경합 가능 */
 } XmTaskPrio_t;
 
 /** @brief 통합 task 핸들 (NULL = 유효하지 않음) */
@@ -112,11 +112,12 @@ typedef void (*XmTaskPeriodicFunc_t)(void);
 
 /**
  * @brief 한 번 실행 후 자동 종료되는 task 생성 (예: NN 학습, FFT 등 무거운 계산)
- * @param[in] name       Task 이름 (10자 이내 권장, NULL/빈 문자열/중복 거부)
+ * @param[in] name       Task 이름 (10자 이내 권장, NULL/빈 문자열은 거부)
  * @param[in] func       Task 함수 (return 시 자동 완료)
  * @param[in] arg        함수 인자 (static/heap 만 — stack 변수 포인터 금지)
  * @param[in] prio_hint  우선순위 hint (XM_PRIO_BACKGROUND 권장)
- * @return 유효한 핸들 / 거부 시 NULL + [XM-WARN] CDC 메시지
+ * @return 유효한 핸들 / 거부 시 NULL (이름·함수 NULL, task 개수·heap 예산 초과, 생성 실패 —
+ *         메시지 없이 NULL 만 반환하니 반환값을 꼭 확인하세요)
  * @note  완료 후 반드시 XM_Task_Delete 호출하여 heap 회수 (예제 39 참고).
  */
 XmTaskHandle_t XM_Task_CreateOneShot(const char*         name,
@@ -218,14 +219,13 @@ uint32_t XM_Task_GetBudgetRemainingBytes(void);
 
 /**
  * @brief 현재 동작 중 task 목록 출력 (on-demand 진단)
- * @note  Phase 1: 진단 출력 채널 미연결 — no-op stub.
- *        Phase 2 (Risk Management 통합) 에서 PhAI Studio 진단 채널 연동 예정.
+ * @note  현재 버전에서는 아무 동작도 하지 않습니다 (no-op).
  */
 void XM_RTOS_PrintTaskList(void);
 
 /**
  *-----------------------------------------------------------
- * Deprecated API (v1.0 호환 — 다음 major 릴리즈에서 제거 예정)
+ * Deprecated API (v1.0 호환 — 새 코드에서는 사용하지 마세요)
  *-----------------------------------------------------------
  */
 

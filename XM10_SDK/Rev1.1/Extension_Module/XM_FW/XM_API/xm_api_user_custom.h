@@ -6,7 +6,7 @@
  * @details
  * 사용자가 알고리즘 출력(필터링된 EMG, 디버그 변수, 상태 플래그 등)을
  * 365B Total Data Packet(Module ID 0x20)의 User_Custom 영역(28B)에 직접 써
- * 1kHz로 PhAI Studio 에 스트리밍 + OPFS 녹화에 자동 포함되게 한다.
+ * 1kHz 로 PC 에 자동 전송되게 한다 (PhAI Studio 에서 그래프·녹화, xm10 도구에서 표·CSV 로 확인).
  *
  * Layout (28B at offset 337..364):
  *   - user_f[4]     float32 — 가공/필터링 신호
@@ -16,13 +16,6 @@
  *
  * 사용 예:
  * @code
- * void Control_Setup(void) {
- *     // (선택) PhAI Studio 측 라벨 — 미호출 시 기본 라벨 사용
- *     XM_SetUsbCustomMeta(0xE0,
- *         "[{\"slot\":\"f0\",\"name\":\"EMG_envelope\",\"unit\":\"uV\"},"
- *          " {\"slot\":\"i16_0\",\"name\":\"PF3_raw\",\"unit\":\"LSB\"}]");
- * }
- *
  * void Control_Loop(void) {
  *     XM_UserCustom_SetFloat(0, envelope_uV);
  *     XM_UserCustom_SetI16  (0, pf3_raw);
@@ -30,6 +23,7 @@
  * }
  * @endcode
  *
+ * @note   PhAI Studio 와 xm10 도구에는 user_f[0] 처럼 고정된 이름으로 표시됩니다.
  * @note   Setter 는 Non-blocking 이며 Control_Loop() 외 어디서든 호출 가능하다.
  *         out-of-range 인덱스는 silent ignore (fault 없음).
  *
@@ -131,7 +125,7 @@ void XM_UserCustom_Reset(void);
 /**
  * @brief 내부 User_Custom 블록의 현재 값을 스냅샷한다.
  * @param[out] out 28B 분량의 출력 버퍼 (NULL 금지)
- * @note  System Layer (XM_TotalData_Snapshot) 가 매 tick 호출한다.
+ * @note  XM10 시스템이 매 tick 내부적으로 호출한다.
  *        일반 사용자가 직접 호출할 일은 없다.
  */
 void XM_UserCustom_GetBlock(XM_UserCustomBlock_t* out);

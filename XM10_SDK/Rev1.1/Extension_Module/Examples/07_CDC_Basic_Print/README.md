@@ -16,7 +16,7 @@ USB-CDC 포트는 **한 번에 한 클라이언트만** 점유할 수 있습니�
 - ❌ PhAI Studio + PuTTY (또는 다른 시리얼 터미널) 동시 실행 → COM 포트 충돌 → 메시지 안 보임
 - ❌ 터미널 두 개 동시 실행 → 동일 문제
 - ✅ 본 예제는 **시리얼 터미널 단독** 사용 (PuTTY · TeraTerm · RealTerm 등)
-- ✅ 실시간 그래프가 필요하면 [Ex.09 CDC Stream](../09_CDC_Stream/) + **PhAI Studio 단독** 실행
+- ✅ 실시간 그래프가 필요하면 [Ex.09 CDC Stream](../09_CDC_Stream/) — 시스템 데이터(Total Data)는 **PhAI Studio**, 예제가 보내는 사용자 채널(`0xF0`)은 **`xm10` 도구**로 봅니다 (둘 중 하나만 단독 실행)
 
 ---
 
@@ -42,6 +42,7 @@ USB-CDC 포트는 **한 번에 한 클라이언트만** 점유할 수 있습니�
 ```c
 void Control_Setup(void)
 {
+    XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL);                     // ⓪ 터미널 전용 — Total Data 자동 전송 OFF (Rev2.0)
     s_tsm = XM_TSM_Create(XM_STATE_USER_START);
     XmStateConfig_t conf = { .id = XM_STATE_USER_START, .on_loop = Run_Loop };
     XM_TSM_AddState(s_tsm, &conf);
@@ -58,6 +59,8 @@ static void Run_Loop(void)
 
 전체 코드: [`cdc_basic_print.c`](cdc_basic_print.c)
 
+> 🧒 ⓪ 이 없으면(기본 설정) 터미널에 PC 도구용 바이너리가 텍스트와 섞여 보입니다. 이 함수는 Rev2.0 전용이라, Rev1.1 은 대신 `XM_SetUsbAutoStream(false);` 를 부르세요.
+>
 > 🧒 ② 는 가장 단순 형태. 다음 단계 ([Ex.08](../08_CDC_Sensor_Print/)) 에서 sprintf 로 변수 값을 끼워 넣는 방법 학습.
 
 ---
@@ -78,7 +81,7 @@ static void Run_Loop(void)
 ## 5️⃣ 다음 단계
 
 - 센서 값 출력 (sprintf): [Ex.08 CDC Sensor Print](../08_CDC_Sensor_Print/)
-- 고속 바이너리 스트리밍 (PhAI Studio): [Ex.09 CDC Stream](../09_CDC_Stream/)
+- 고속 바이너리 스트리밍 (PhAI Studio / `xm10` 도구): [Ex.09 CDC Stream](../09_CDC_Stream/)
 
 ---
 

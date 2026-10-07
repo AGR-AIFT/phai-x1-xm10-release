@@ -52,6 +52,36 @@
 
 /**
  *===========================================================================
+ * TIMING PROBE GATE (W0) — opt-in, 기본 0
+ *===========================================================================
+ * 소비 프로젝트가 `ioif_conf.h` 에 `#define IOIF_TIMING_PROBE 1` 을 두면
+ * FDCAN RX / SPI 경로에 DWT 타임스탬프 계측이 컴파일된다. 기본 0 에서는
+ * 필드·코드·RAM 비용이 전부 0 이며 공개 API 시그니처는 양쪽에서 동일하다.
+ *
+ * @note 프로브를 켠 프로젝트는 `IOIF_DWT_Init()` 을 startup 에서 1회 호출해야 한다.
+ *       CYCCNT 가 꺼져 있으면 모든 타임스탬프가 0 이 되어 스냅숏은 valid 인데
+ *       시간만 0 인 상태가 된다 (ISR 스토어 예산상 런타임 검사를 두지 않는다).
+ * @note ISR 측 계측은 "DWT 읽기 + u32 워드 스토어" 로만 제한한다 — 집계·연산·
+ *       링버퍼 기록은 전부 task 컨텍스트 몫이다.
+ */
+#ifndef IOIF_TIMING_PROBE
+#define IOIF_TIMING_PROBE  0
+#endif
+
+/**
+ * @brief SPI 트랜잭션 스탬프 하위 게이트 — 기본값은 IOIF_TIMING_PROBE 를 따른다
+ * @details SPI 스탬프는 트랜잭션마다 호출 task 경로에 DWT 읽기·워드 스토어를 얹는다.
+ *          트랜잭션이 많은 소비자는 FDCAN 스냅숏은 유지한 채 SPI 만 끄고 싶을 수 있어
+ *          분리한다(2026-09-17 pcm 요청 §2). `ioif_conf.h` 에서 0 으로 내리면 SPI 쪽
+ *          필드·훅·`ioif_spi.probe_*` 멤버가 전부 사라진다.
+ * @note 두 게이트는 독립이다 — IOIF_TIMING_PROBE=0 에 IOIF_TIMING_PROBE_SPI=1 조합도 유효.
+ */
+#ifndef IOIF_TIMING_PROBE_SPI
+#define IOIF_TIMING_PROBE_SPI  IOIF_TIMING_PROBE
+#endif
+
+/**
+ *===========================================================================
  * EXECUTION MODE AUTO-DETECTION (SMART)
  *===========================================================================
  * 

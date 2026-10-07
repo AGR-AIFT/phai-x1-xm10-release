@@ -3,11 +3,11 @@
 > 🎯 **학습 목표**:
 > - 외부 아날로그 **EMG 4채널**을 GPIO ADC로 읽고, envelope(근활성도)를 추출.
 > - envelope를 **비례 보조 토크**로 변환 → 좌/우 고관절에 인가.
-> - **캘리브레이션(BTN1/BTN2)** · **control_ON 게이트** · **PhAI Studio 실시간 스트리밍**까지 한 흐름.
+> - **캘리브레이션(BTN1/BTN2)** · **control_ON 게이트** · **0xF0 실시간 스트리밍(`xm10` 도구)**까지 한 흐름.
 >
 > ⏱️ 권장 시간: 60분 | 🔧 난이도: ⭐⭐⭐⭐ | 🟢 **Rev 2.0 전용** (외부 전원 5V 스위치 사용)
 > 🧰 사전 예제: [Ex.05a DIO→ADC](../05a_Ext_IO_DIO_to_ADC/) · [Ex.12 Active Assist](../12_Active_Assist_Mode/)
-> 📚 관련 docs: [외부 IO](../../docs/api-reference/04-external-io.md) · [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · ⚠️ [**착용 안전 1-페이지**](../../docs/safety/wearable-safety.md)
+> 📚 관련 docs: [외부 IO](../../docs/api-reference/04-external-io.md) · [H10 Control](../../docs/api-reference/02-h10-control-n-data.md) · [xm10 도구](../../docs/getting-started/04-pc-data-tool.md) · ⚠️ [**착용 안전 1-페이지**](../../docs/safety/wearable-safety.md)
 
 ---
 
@@ -71,7 +71,7 @@ static void Active_Loop(void) {
     _SelectTorquePair(&rh, &lh);
     if (control_ON == 1U) { XM_SetAssistTorqueRH(rh); XM_SetAssistTorqueLH(lh); }
     else                  { XM_SetAssistTorqueRH(0);  XM_SetAssistTorqueLH(0);  }
-    _UpdateStreamData(rh, lh);     // ③ PhAI Studio 0xF0 6채널 스트림
+    _UpdateStreamData(rh, lh);     // ③ 0xF0 6채널 스트림 (xm10 도구로 확인)
 }
 ```
 
@@ -90,7 +90,7 @@ static void Active_Loop(void) {
 3. **`torque_input_pair` 선택** (Live Expressions). 기본 0(PF3/PF4).
 4. **이완 캘리브** — 근육 이완 → **BTN1** → 3초 정지(LED1 빠른 점멸). bias 측정.
 5. **수축 캘리브** — 대표 수축 → **BTN2** → 3초 유지(LED2 빠른 점멸). full-scale 측정. *(BTN3 = 기본값 리셋)*
-6. **관찰** — `emg_pf*_raw_v / _envelope_v / _torque_nm`을 Live Expressions 또는 **PhAI Studio**(USB Connect → 0xF0 채널: Raw/Env/Tau RH·LH)로 확인. 이완 시 envelope≈0, 토크≈0인지 확인.
+6. **관찰** — `emg_pf*_raw_v / _envelope_v / _torque_nm`을 Live Expressions 또는 **`xm10` 도구**([안내](../../docs/getting-started/04-pc-data-tool.md))의 0xF0 탭(Connect 후 Raw/Env/Tau RH·LH)으로 확인. 이완 시 envelope≈0, 토크≈0인지 확인.
 7. **방향·크기 검증** — `control_ON`은 아직 0. 토크 값(관찰만)이 의도한 방향/크기인지 거치 상태에서 확인.
 8. **활성화** — 모든 확인 후에만 `control_ON = 1`. 작은 `emg_assist_scale`(예: 0.2)부터 천천히.
 
@@ -144,6 +144,6 @@ static void Active_Loop(void) {
 | 이완해도 토크가 남음 | deadband 부족 / bias 캘리브 안 함 | BTN1 이완 캘리브 + `EMG_ENVELOPE_DEADBAND_V` 상향 |
 | 좌우 반대로 보조 | `torque_input_pair`/센서 좌우 뒤바뀜 | 거치 상태에서 한쪽씩 확인 후 매핑 정정 |
 | 신호가 깨짐/포화 | EMG 출력이 3.3 V 초과 | 센서 출력 범위 확인(0~3.3 V) |
-| PhAI Studio에 데이터 없음 | Connect 안 함 | 포트 선택 → **Connect**, 0xF0 채널 선택 |
+| `xm10` 에 0xF0 탭이 없음 | Connect 안 함 | `xm10` 도구에서 포트 선택 → **Connect**. 그래도 탭이 없으면 보드가 0xF0 을 보내고 있는지 확인 (`XM_SendUsbDataWithId` 호출 — [Ex.09](../09_CDC_Stream/) 참조) |
 
 막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)

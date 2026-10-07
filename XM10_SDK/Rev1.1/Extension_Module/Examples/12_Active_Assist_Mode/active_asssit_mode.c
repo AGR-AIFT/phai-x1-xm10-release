@@ -263,7 +263,8 @@ void Control_Setup(void)
 
     /* Total Data Packet (Module ID 0x20)이 모든 H10 센서 데이터를
      * 자동 스트리밍합니다. 위 등록은 'myData' 를 추가로 스트리밍하는
-     * 예시입니다. */
+     * 예시입니다 (구 방식 — 새 코드는 Ex.09 의 XM_SetUsbCustomMeta +
+     * XM_SendUsbDataWithId). */
 }
 
 /*
@@ -319,7 +320,7 @@ static void Active_Entry(void)
     // 초기화(Enter) 함수를 호출합니다.
     EnterActiveAssistMode();
 
-    // USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신
+    // USB-CDC 스트리밍은 PC 프로그램이 포트를 열어 두는 동안 계속됩니다
 
     /* [v2.6] 토크 + P/I 벡터 모두 CONTROL 모드 필요 (구 XM_CTRL_CONTROL 와 동일 값) */
     XM_SetControlMode(XM_CTRL_CONTROL);
@@ -370,7 +371,7 @@ static void Active_Loop(void)
 
 static void Active_Exit(void)
 {
-    // USB-CDC 스트리밍은 연결 시 연속 — phai-studio 로 수신 (세션 종료 처리 불필요)
+    // USB-CDC 스트리밍은 PC 프로그램이 포트를 열어 두는 동안 계속됩니다 (세션 종료 처리 불필요)
 }
 
 // -------------------- Mode Management --------------------
@@ -554,7 +555,7 @@ static void InitializeFsm(ActiveAssistFsm_t* fsm)
  */
 static void UpdateActiveAssistMode(void)
 {
-    static uint32_t homingTimer = 0; // ✅ HOMING_FINALIZE_DELAY 전용 타이머
+    static uint32_t homingTimer = 0; // HOMING_FINALIZE_DELAY 전용 타이머
     switch (s_aaGlobalState) {
         case AA_STATE_HOMING:
             switch (s_homingState) {
@@ -615,7 +616,7 @@ static void UpdateActiveAssistMode(void)
                     if (XM.status.h10.isPVectorRHDone && XM.status.h10.isPVectorLHDone) {
                         XM_ClearPVectorDoneFlag(SYS_NODE_ID_RH);
                         XM_ClearPVectorDoneFlag(SYS_NODE_ID_LH);
-                        homingTimer = XM_GetTick(); // ✅ FINALIZE_DELAY 진입 시 타이머 시작
+                        homingTimer = XM_GetTick(); // FINALIZE_DELAY 진입 시 타이머 시작
                         s_homingState = HOMING_FINALIZE_DELAY;
                     }
                     // [fail-closed] Done 미수신 (MD 무응답 등) — 보조 단계로 진입하지 않고

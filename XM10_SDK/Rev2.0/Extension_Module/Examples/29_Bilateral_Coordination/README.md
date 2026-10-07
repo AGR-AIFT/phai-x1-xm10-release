@@ -147,7 +147,7 @@ static void _HandleButtons(void)
 ## 5️⃣ 다음 단계
 
 - 모방 학습 (한쪽 → 다른쪽): [Ex.33 Kinesthetic Teaching](../33_Kinesthetic_Teaching/)
-- Mirror Therapy 확장: [Ex.36 OnDevice Kinesthetic Learning](../36_OnDevice_Kinesthetic_Learning/)
+- Mirror Therapy 확장: [Ex.36 OnDevice Kinesthetic Learning](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/36_OnDevice_Kinesthetic_Learning/) 🛑 Rev 2.0 전용
 - ILC 반복 학습 (비대칭 보정): [Ex.26 ILC](../26_Iterative_Learning_Control/)
 
 ---

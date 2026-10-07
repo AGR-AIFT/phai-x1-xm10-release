@@ -167,7 +167,7 @@ static void Active_Loop(void)
     }
 
     // 2. [Input] 현재 H10 슈트의 보조 레벨 읽어오기 (0~10단계)
-    // (core_process가 수신하여 XM.status에 넣어둠)
+    // (XM10 이 자동으로 수신하여 XM.status 에 넣어둠)
     // 범위 밖 수신값 방어 — 0~10 으로 클램프
     uint8_t current_level = XM_SafeAssistLevel(XM.status.h10.h10AssistLevel);
 
@@ -180,7 +180,7 @@ static void Active_Loop(void)
         gain = fmaxf(-MAX_RESISTIVE_TORQUE, fminf(MAX_RESISTIVE_TORQUE, gain));
         
         // [Output] API를 통해 H10으로 게인 설정 명령 전송
-        // (변경된 경우에만 core_process가 Flush 수행)
+        // (레벨이 바뀐 경우에만 전송합니다)
         XM_SetResistiveCompGain(SYS_NODE_ID_LH, gain);
         XM_SetResistiveCompGain(SYS_NODE_ID_RH, gain);
         

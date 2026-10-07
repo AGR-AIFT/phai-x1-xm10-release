@@ -72,6 +72,23 @@ static inline uint32_t IOIF_DWT_GetCycles(void)
 }
 
 /**
+ * @brief DWT 사이클 카운터가 실제로 증가 중인가
+ * @return true: TRCENA(DEMCR bit24) 와 CYCCNTENA(DWT_CTRL bit0) 가 모두 켜져 있음
+ * @details CYCCNT 를 deadline 판정에 쓰는 코드는 이것부터 확인해야 한다. 꺼져 있으면
+ *          CYCCNT 가 멈춰 "경과 시간 0" 이 되고 deadline 이 영원히 오지 않는다
+ *          (HW stuck 시 무한 폴링). `IOIF_DWT_Init()` 이 두 비트를 켠다.
+ */
+static inline bool IOIF_DWT_IsRunning(void)
+{
+    const uint32_t demcr = *((volatile uint32_t*)0xE000EDFC);  /* CoreDebug->DEMCR */
+    const uint32_t ctrl  = *((volatile uint32_t*)0xE0001000);  /* DWT->CTRL */
+    const uint32_t trcena    = (1UL << 24);
+    const uint32_t cyccntena = (1UL << 0);
+
+    return ((demcr & trcena) != 0UL) && ((ctrl & cyccntena) != 0UL);
+}
+
+/**
  * @brief CPU 사이클을 마이크로초로 변환
  * @param cycles CPU 사이클 수
  * @return 마이크로초 (μs)

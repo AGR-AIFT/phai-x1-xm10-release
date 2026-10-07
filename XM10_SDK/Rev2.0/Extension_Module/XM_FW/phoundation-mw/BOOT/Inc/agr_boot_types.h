@@ -68,11 +68,76 @@ extern "C" {
 #define AGR_BOOT_RTC_BKP_MAGIC        (0xB00710ADU)
 #define AGR_BOOT_RTC_BKP_REG_INDEX    (0U)  /**< Uses RTC->BKP0R */
 
+/** @brief BL → App 리셋 원인 전달 (BL v1.1.0+).
+ *  BL 은 진입 직후 RCC->RSR 원본을 RTC->BKP4R 에 보관한다. BL 의 JumpToApp 이
+ *  호출하는 HAL_RCC_DeInit() 이 RSR 을 지우므로(RMVF), App 은 RSR 대신 이 값을
+ *  읽어야 직전 리셋 원인을 알 수 있다. 0 = 미기록(구 BL 또는 백업 도메인 리셋).
+ *  비트 배치는 RCC_RSR 그대로: 16 RMVF 17 CPURST 19 D1RST 20 D2RST 21 BORRST
+ *  22 PINRST 23 PORRST 24 SFTRST 26 IWDG1RST 28 WWDG1RST 30 LPWRRST. */
+#define AGR_BOOT_RSR_BKP_REG_INDEX    (4U)  /**< Uses RTC->BKP4R */
+
+/** @brief 연속 부팅 시도 가드 (BL v1.1.0+) — RTC->BKP5R = magic(31:8) | count(7:0).
+ *  BL: magic 이 있을 때만 진입마다 count++ 하고, count >= AGR_BOOT_ATTEMPT_MAX 면
+ *      App 으로 점프하지 않고 FTP 대기(복구 가능 상태)에 머문다.
+ *      Active FW 가 바뀌면(FTP COMMIT 완료, 롤백 성공) BKP5R 을 0 으로 지워 해제한다 —
+ *      무장은 지금 올라간 App 의 속성이다(가드를 모르는 구 App 으로 복귀해도 안전).
+ *  App: ① ConfirmBoot 시점에 미무장(magic 불일치)이면 (magic | 0) 을 써서 무장한다.
+ *         이미 무장돼 있으면 건드리지 않는다 — 매 부팅 0 으로 쓰면 가드가 무력해진다.
+ *       ② 안정 동작 확인 시점(권장: 스케줄러 시작 후 5 s 이상)에 (magic | 0) 으로
+ *         count 를 초기화한다.
+ *  magic 이 없으면(구 App, 또는 백업 도메인 리셋) BL 동작은 바뀌지 않는다. */
+#define AGR_BOOT_ATTEMPT_BKP_REG_INDEX (5U)  /**< Uses RTC->BKP5R */
+#define AGR_BOOT_ATTEMPT_MAGIC         (0xB007A000U)
+#define AGR_BOOT_ATTEMPT_MAGIC_MASK    (0xFFFFFF00U)
+#define AGR_BOOT_ATTEMPT_COUNT_MASK    (0x000000FFU)
+#define AGR_BOOT_ATTEMPT_MAX           (10U)
+
+/** @brief BL 진입 카운터 + 단계 마커 (BL v1.1.0+, 순수 계측 — 동작에 영향 없음).
+ *  RTC->BKP6R = magic(31:16) 0xB1E7 | stage(15:12) | entry_count(11:0, 4095 포화).
+ *  BL 진입마다 count++ 와 stage=ENTRY, 이후 단계를 지날 때마다 stage 만 갱신한다.
+ *  재현이 어려운 리셋 루프 중 Halt 해서 읽으면 "리셋이 BL 의 어느 단계에서 났는가"가
+ *  남는다: JUMP(0x7) 이면 BL 은 일을 끝내고 App 으로 넘어간 뒤 리셋된 것, 그 전 값이면
+ *  BL 안에서 리셋된 것. count 가 늘지 않고 1 에 머물면 매 사이클 백업 도메인이 지워지는
+ *  것(= 전원이 완전히 떨어짐). 0 = 미기록(구 BL 또는 백업 도메인 리셋). */
+#define AGR_BOOT_DIAG_BKP_REG_INDEX    (6U)  /**< Uses RTC->BKP6R */
+#define AGR_BOOT_DIAG_MAGIC            (0xB1E70000U)
+#define AGR_BOOT_DIAG_MAGIC_MASK       (0xFFFF0000U)
+#define AGR_BOOT_DIAG_STAGE_SHIFT      (12U)
+#define AGR_BOOT_DIAG_STAGE_MASK       (0x0000F000U)
+#define AGR_BOOT_DIAG_COUNT_MASK       (0x00000FFFU)
+
+typedef enum {
+    AGR_BOOT_STAGE_ENTRY        = 0x0, /**< Boot_Main 진입 (count++) */
+    AGR_BOOT_STAGE_FLASH_INIT   = 0x1, /**< Flash 콜백 등록 완료 */
+    AGR_BOOT_STAGE_CORE_RUN     = 0x2, /**< Core_Run 진입 */
+    AGR_BOOT_STAGE_CFG_READ     = 0x3, /**< BootConfig 읽기(또는 재생성) 완료 */
+    AGR_BOOT_STAGE_CFG_WRITE    = 0x4, /**< BootConfig erase+program 시작 — 여기서 멈추면 소거 중 리셋 */
+    AGR_BOOT_STAGE_CFG_WRITE_OK = 0x5, /**< BootConfig 기록 완료 */
+    AGR_BOOT_STAGE_VALIDATED    = 0x6, /**< Active FW 검증 통과 */
+    AGR_BOOT_STAGE_JUMP         = 0x7, /**< JumpToApp 직전 — 이후 리셋은 App 쪽(또는 App 기동 중 전원) */
+    AGR_BOOT_STAGE_FTP_WAIT     = 0x8, /**< FTP 대기 진입 */
+    AGR_BOOT_STAGE_FTP_DONE     = 0x9, /**< FTP 완료 → NVIC_SystemReset 직전 */
+    AGR_BOOT_STAGE_HOLD         = 0xA, /**< 부팅 시도 가드로 정지 */
+    AGR_BOOT_STAGE_ERROR        = 0xB, /**< 오류 LED 정지 */
+    AGR_BOOT_STAGE_T2_RECOVER   = 0xC, /**< T2 BootConfig 섹터 소거 → 리셋 직전 */
+    AGR_BOOT_STAGE_ROLLBACK     = 0xD, /**< 롤백(Backup→Active) 진행 중 */
+    /* 0xE/0xF 는 App 이 기록한다(agr_boot_core.c App 측 AGR_Boot_MarkAppStage) — BL 은 쓰지 않는다.
+     * 리셋 루프 중 이 값이면 App 은 main 에 도달했다는 뜻이고, JUMP(0x7)에 머물면 App pre-main 사망. */
+    AGR_BOOT_STAGE_APP_MAIN     = 0xE, /**< App main() 진입 직후 (리셋 원인 읽은 뒤) */
+    AGR_BOOT_STAGE_APP_STABLE   = 0xF, /**< App 안정 도달 (1 kHz 루프 5 s 생존, 가드 count 0 으로 되돌림) */
+} AGR_Boot_Stage_t;
+
+/** @brief 누적 리셋 원인 (BL v1.1.0+): RTC->BKP7R |= RCC->RSR, BL 진입마다 OR.
+ *  BKP4R 이 "마지막 한 번"이라면 이것은 "백업 도메인이 유지된 동안 본 모든 원인".
+ *  루프 중 SFT 와 POR 이 섞였는지 한 번에 보인다. 0 = 미기록. */
+#define AGR_BOOT_RSR_STICKY_BKP_REG_INDEX (7U)  /**< Uses RTC->BKP7R */
+
 /** @brief BL firmware version — recorded in AGR_BootConfig_t.bl_ver fields.
- *  BL writes these into Boot Config on every config update.
- *  App reads them to report BL version in QUERY_INFO response. */
+ *  BL writes these into Boot Config when the config content changes.
+ *  App reads them to report BL version in QUERY_INFO response.
+ *  1.1.0 (2026-10-06): RSR→BKP4R 보관, BKP5R 부팅 시도 가드, BootConfig 변경 시에만 기록. */
 #define AGR_BOOT_BL_VER_MAJOR          (1U)
-#define AGR_BOOT_BL_VER_MINOR          (0U)
+#define AGR_BOOT_BL_VER_MINOR          (1U)
 #define AGR_BOOT_BL_VER_PATCH          (0U)
 
 /** @brief App mode indicator for QUERY_INFO ftp_state field.

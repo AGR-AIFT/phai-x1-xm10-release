@@ -156,7 +156,7 @@ static const float k_epsilon_presets[EPSILON_PRESET_COUNT] = {0.1f, 0.2f, 0.3f, 
 
 /**
  * @brief USB 스트리밍 데이터 구조체
- * @details AFO 핵심 상태 4채널을 PhAI Studio에 실시간 전송합니다.
+ * @details AFO 핵심 상태 4채널을 PC(xm10 도구)로 실시간 전송합니다.
  */
 typedef struct {
     float phase_deg;    /* 진동자 위상 (deg, 0~360) */

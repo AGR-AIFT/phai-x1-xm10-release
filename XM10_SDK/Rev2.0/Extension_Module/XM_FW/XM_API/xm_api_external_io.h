@@ -68,7 +68,7 @@ typedef enum {
 
 /**
  * @brief 확장 포트의 아날로그 핀 ID (ADC)
- * @details ✅ ADC1/2/3 통합: DIO 핀도 ADC로 사용 가능
+ * @details ADC1/2/3 통합: DIO 핀도 ADC로 사용 가능
  */
 typedef enum {
     /* ADC1 고정 핀 (Rev2.0: 전부 ADC1 16-bit, 항상 사용 가능) */
@@ -159,7 +159,7 @@ extern volatile uint16_t g_xm_adc_read_before_switch;
 
 /**
  * @brief [비실시간] 디지털 핀의 모드(입력/출력/풀업/풀다운)를 설정합니다.
- * @warning 2ms 실시간 루프 안에서 호출하지 마십시오. (HAL_GPIO_Init 호출로 인한 지연)
+ * @warning 1ms 실시간 루프(Control_Loop) 안에서 호출하지 마십시오. (HAL_GPIO_Init 호출로 인한 지연)
  * @param[in] pin   설정할 핀 (D0 ~ D7)
  * @param[in] mode  설정할 모드 (XM_INPUT, XM_OUTPUT 등)
  */
@@ -328,7 +328,7 @@ void XM_SetExtPowerVoltage(XmExtPwrVoltage_t voltage);
  *   0 (기본) → 범용 Serial API. 아래 XM_AttachExternalUart() 등을 씁니다.
  *   1        → Xsens MTi-630 전용. 아래 XM_AttachXsensMTi630() 등을 씁니다.
  *
- * 두 그룹은 **동시에 선언되지 않습니다.** IOIF 가 포트당 RX 콜백을 1개만 갖고
+ * 두 그룹은 **동시에 선언되지 않습니다.** 포트당 수신 콜백은 1개만 둘 수 있고
  * 나중 등록이 앞의 것을 경고 없이 덮어쓰기 때문에, 빌드 타임에 하나만 고르게
  * 막아 둔 것입니다. 반대쪽 함수를 부르면 "선언되지 않은 함수" 컴파일 에러가
  * 납니다 — 그럴 때는 module.h 의 매크로 값을 확인하세요.
@@ -355,8 +355,7 @@ typedef enum {
 
 /**
  * @brief XM_SendExternalUartData() 1회 최대 바이트. 넘으면 나눠 보내세요.
- * @note 내부 송신 버퍼 크기와 같아야 하며, 어긋나면 xm_api_external_io.c 의
- *       컴파일 타임 검사(_Static_assert)에서 빌드가 멈춥니다.
+ * @note 내부 송신 버퍼 크기에 맞춘 고정값입니다. 바꾸지 마세요.
  */
 #define XM_EXT_UART_TX_MAX_BYTES   (128U)
 
@@ -462,7 +461,7 @@ void XM_ConfigureXsensMTi630(void);
 
 /**
  * ============================================================================
- * [신규] DIO → ADC3 동적 전환 API (10kHz 고속 아날로그 센서 지원)
+ * DIO → ADC3 동적 전환 API (10kHz 고속 아날로그 센서 지원)
  * ============================================================================
  */
 

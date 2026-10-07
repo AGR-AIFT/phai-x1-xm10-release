@@ -4,9 +4,12 @@
  * @author  HyundoKim
  * @brief   [고급] IMU Hub 6축 자세 대시보드 — 쿼터니언→오일러 변환 후 실시간 스트리밍
  * @details
- * IMU Hub Module(EBIMU-9DOFV6 × 6, FDCAN2 DOP V3)에서 최대 6개 IMU 의 방위(쿼터니언)를
+ * CAN-FD 로 연결된 IMU Hub Module(EBIMU-9DOFV6 × 6)에서 최대 6개 IMU 의 방위(쿼터니언)를
  * 받아, 사람이 직관적으로 읽는 **오일러 각(roll/pitch/yaw)** 으로 on-device 변환해
- * PhAI Studio User Custom(0xF0) 채널로 스트리밍합니다.
+ * Module ID 0xF0 사용자 채널로 스트리밍합니다.
+ * PhAI Studio 는 아직 개발 중이라, 직접 정의한 데이터 구조체(커스텀 구조체)는 우선
+ * xm10 도구로 보고 저장하세요.
+ * xm10 PC 도구 (docs/getting-started/04-pc-data-tool.md)
  *
  * ============================================================
  *  왜 쿼터니언에서 계산하는가 (0x20 Total Data 와의 차이)
@@ -21,13 +24,14 @@
  * ============================================================
  *  - connected_mask(bit0~5)로 0~6개 IMU 연결을 자동 감지. 미연결 슬롯은 0 으로 전송.
  *  - 0xF0 : IMU0~5 의 roll/pitch/yaw = 18채널 (센서 6 × 3축)
- *    ※ XM_SetUsbCustomMeta 는 USB 연결당 Module ID 1개만 라벨 등록 가능하므로
- *      6센서를 하나의 0xF0 채널 그룹으로 묶어 전송합니다.
+ *    ※ XM_SetUsbCustomMeta 는 슬롯이 하나뿐이라(마지막 호출이 앞선 호출을 덮어씀) Module ID 1개의
+ *      채널 이름만 등록할 수 있으므로 6센서를 하나의 0xF0 채널 그룹으로 묶어 전송합니다.
  *  - LED1 : 연결된 IMU 수가 많을수록 빠르게 점멸 (0개 = 느린 대기 점멸)
  *  - 스트리밍은 50Hz(20ms)로 스로틀 — 자세 관찰에 충분하고 USB 대역을 절약
  *
- * @note IMU Hub 데이터 원본은 FDCAN2 TPDO → core_process 가 XM.status.imu_hub 의 쿼터니언을
- *       자동 갱신하므로, 사용자 코드는 XM.status.imu_hub 를 읽기만 하면 됩니다 (드라이버 직접 호출 불필요).
+ * @note IMU Hub 데이터는 XM10 이 자동으로 받아 XM.status.imu_hub 의 쿼터니언을 갱신하므로,
+ *       사용자 코드는 XM.status.imu_hub 를 읽기만 하면 됩니다 (드라이버 직접 호출 불필요).
+ * @note IMU Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
  * @warning **본 예제는 XM10 Rev 2.0 전용입니다.** IMU Hub Module 은 FDCAN2 센서허브(Rev 2.0)로
  *          연결됩니다. Rev 1.1 은 FDCAN2 센서허브를 지원하지 않아 XM.status.imu_hub.is_connected 가
  *          항상 false 이며 데이터가 수신되지 않습니다. 참고: docs/hardware/README.md (보드 리비전 비교)
@@ -83,15 +87,17 @@ static void    _QuatToEulerDeg(const XmImuHubSensor_t* s, float* roll, float* pi
 
 void Control_Setup(void)
 {
-    /* PhAI Studio 그래프 라벨 등록 (18채널) — 문자열 리터럴이라 수명 내내 유효.
-     * XM_SetUsbCustomMeta 는 USB 연결당 1개 Module ID 만 등록되므로 6센서를 0xF0 하나로 묶는다. */
+    /* xm10 도구용 그래프 라벨 등록 (18채널) — 문자열 리터럴이라 수명 내내 유효.
+     * 단위는 이름 안에 "[deg]" 로 함께 적었습니다 — JSON 이 512바이트를 넘으면 통째로 전송되지 않으므로
+     * 짧게 유지합니다 (현재 487바이트).
+     * XM_SetUsbCustomMeta 는 슬롯이 하나뿐이라(마지막 호출이 앞선 호출을 덮어씀) 6센서를 0xF0 하나로 묶는다. */
     XM_SetUsbCustomMeta(IMU_MODULE_ID,
-        "[{\"name\":\"IMU0 Roll\",\"unit\":\"deg\"},{\"name\":\"IMU0 Pitch\",\"unit\":\"deg\"},{\"name\":\"IMU0 Yaw\",\"unit\":\"deg\"},"
-        "{\"name\":\"IMU1 Roll\",\"unit\":\"deg\"},{\"name\":\"IMU1 Pitch\",\"unit\":\"deg\"},{\"name\":\"IMU1 Yaw\",\"unit\":\"deg\"},"
-        "{\"name\":\"IMU2 Roll\",\"unit\":\"deg\"},{\"name\":\"IMU2 Pitch\",\"unit\":\"deg\"},{\"name\":\"IMU2 Yaw\",\"unit\":\"deg\"},"
-        "{\"name\":\"IMU3 Roll\",\"unit\":\"deg\"},{\"name\":\"IMU3 Pitch\",\"unit\":\"deg\"},{\"name\":\"IMU3 Yaw\",\"unit\":\"deg\"},"
-        "{\"name\":\"IMU4 Roll\",\"unit\":\"deg\"},{\"name\":\"IMU4 Pitch\",\"unit\":\"deg\"},{\"name\":\"IMU4 Yaw\",\"unit\":\"deg\"},"
-        "{\"name\":\"IMU5 Roll\",\"unit\":\"deg\"},{\"name\":\"IMU5 Pitch\",\"unit\":\"deg\"},{\"name\":\"IMU5 Yaw\",\"unit\":\"deg\"}]");
+        "[{\"name\":\"IMU0 Roll [deg]\"},{\"name\":\"IMU0 Pitch [deg]\"},{\"name\":\"IMU0 Yaw [deg]\"},"
+        "{\"name\":\"IMU1 Roll [deg]\"},{\"name\":\"IMU1 Pitch [deg]\"},{\"name\":\"IMU1 Yaw [deg]\"},"
+        "{\"name\":\"IMU2 Roll [deg]\"},{\"name\":\"IMU2 Pitch [deg]\"},{\"name\":\"IMU2 Yaw [deg]\"},"
+        "{\"name\":\"IMU3 Roll [deg]\"},{\"name\":\"IMU3 Pitch [deg]\"},{\"name\":\"IMU3 Yaw [deg]\"},"
+        "{\"name\":\"IMU4 Roll [deg]\"},{\"name\":\"IMU4 Pitch [deg]\"},{\"name\":\"IMU4 Yaw [deg]\"},"
+        "{\"name\":\"IMU5 Roll [deg]\"},{\"name\":\"IMU5 Pitch [deg]\"},{\"name\":\"IMU5 Yaw [deg]\"}]");
 
     s_last_stream_tick = XM_GetTick();
 }

@@ -42,7 +42,7 @@
  *          rehabilitation robotics" J. NeuroEngineering and Rehabilitation, 15(28)
  * @see     Vallery, H. et al. (2008) "Compliant actuation of rehabilitation
  *          robots" IEEE RAM, 15(3), 60-69
- * @see     docs/api-reference/XM_Control.md
+ * @see     docs/api-reference/02-h10-control-n-data.md
  * @version 1.0
  * @date    Mar 10, 2026
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.

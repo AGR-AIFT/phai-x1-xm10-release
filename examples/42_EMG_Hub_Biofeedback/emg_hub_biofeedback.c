@@ -4,9 +4,9 @@
  * @author  HyundoKim
  * @brief   [고급] EMG Hub 근활성도 바이오피드백 — MVC 캘리브 + 실시간 활성도 피드백
  * @details
- * EMG Hub Module(sEMG 1채널, FDCAN2 DOP V3)에서 **허브가 신호처리를 마친** 근활성도
+ * CAN-FD 로 연결된 EMG Hub Module(sEMG 1채널)에서 **허브가 신호처리를 마친** 근활성도
  * 데이터를 받아 실시간 바이오피드백을 제공합니다. "지금 근육을 내 최대 대비 얼마나 세게
- * 쓰고 있는가"를 LED 와 PhAI Studio 로 되먹임하는 재활/트레이닝용 예제입니다.
+ * 쓰고 있는가"를 LED 와 PC(xm10 도구)로 되먹임하는 재활/트레이닝용 예제입니다.
  *
  * ============================================================
  *  Ex.40 과의 차이 (역할 분리)
@@ -25,10 +25,11 @@
  *  4) 근육을 쓰면:
  *     - LED1 : mvc_percent 에 비례해 빠르게 점멸(셀수록 빠름). 캘리브 전엔 heartbeat.
  *     - LED2 : 근수축 감지(is_active, Schmitt) 시 점등.
- *     - PhAI Studio 0xF0 채널로 envelope/mvc%/활성/캘리브상태 스트리밍.
+ *     - Module ID 0xF0 채널로 envelope/mvc%/활성/캘리브상태 스트리밍 (xm10 도구로 확인).
  *
- * @note EMG Hub 데이터 원본은 FDCAN2 TPDO → core_process 가 XM.status.emg_hub 를 자동 갱신하므로
- *       읽기만 하면 됩니다. 캘리브 명령만 EmgHub_Drv_SendCalCommand() 로 허브에 전송합니다.
+ * @note EMG Hub 데이터는 XM10 이 자동으로 받아 XM.status.emg_hub 를 갱신하므로
+ *       읽기만 하면 됩니다. 캘리브 명령은 XM_SendEmgHubCalCommand() 로 보냅니다.
+ * @note EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
  * @warning **본 예제는 XM10 Rev 2.0 전용입니다.** EMG Hub Module 은 FDCAN2 센서허브(Rev 2.0)로
  *          연결됩니다. Rev 1.1 은 FDCAN2 센서허브를 지원하지 않아 데이터가 수신되지 않습니다.
  *          참고: docs/hardware/README.md (보드 리비전 비교)
@@ -42,7 +43,6 @@
  */
 
 #include "xm_api.h"
-#include "emg_hub_drv.h"   /* EmgHub_Drv_SendCalCommand, EMGHUB_CAL_CMD_*, EMGHUB_STATUS_CALIB_VALID */
 
 /**
  *-----------------------------------------------------------
@@ -112,7 +112,7 @@ void Control_Loop(void)
     /* --- 캘리브 버튼 (BTN1=offset, BTN2=MVC) --- */
     _HandleCalibrationButtons(connected);
 
-    bool calib_valid = (emg->status_flags & EMGHUB_STATUS_CALIB_VALID) != 0U;
+    bool calib_valid = (emg->status_flags & XM_EMG_HUB_STATUS_CALIB_VALID) != 0U;
 
     /* --- LED1: 근활성도 피드백 --- */
     if (calib_valid) {
@@ -153,14 +153,20 @@ static void _HandleCalibrationButtons(bool connected)
 
     if (XM_GetButtonEvent(XM_BTN_1) == XM_BTN_CLICK) {
         /* 근육 이완 상태에서 offset 캘리브 (허브가 4000샘플 누적 후 자동 완료) */
-        EmgHub_Drv_SendCalCommand(EMGHUB_CAL_CMD_OFFSET);
-        XM_SendUsbDebugMessage("[EMG] Offset 캘리브 시작 — 근육을 이완하세요\r\n");
+        if (XM_SendEmgHubCalCommand(XM_EMG_HUB_CAL_OFFSET)) {
+            XM_SendUsbDebugMessage("[EMG] Offset 캘리브 시작 — 근육을 이완하세요\r\n");
+        } else {
+            XM_SendUsbDebugMessage("[EMG] 캘리브 명령을 보내지 못했습니다 — 다시 눌러 주세요\r\n");
+        }
     }
 
     if (XM_GetButtonEvent(XM_BTN_2) == XM_BTN_CLICK) {
         /* 최대 수축(MVC) 유지 상태에서 현재 RMS 를 100% 기준으로 캡처 */
-        EmgHub_Drv_SendCalCommand(EMGHUB_CAL_CMD_MVC);
-        XM_SendUsbDebugMessage("[EMG] MVC 캡처 — 최대로 수축하세요\r\n");
+        if (XM_SendEmgHubCalCommand(XM_EMG_HUB_CAL_MVC)) {
+            XM_SendUsbDebugMessage("[EMG] MVC 캡처 — 최대로 수축하세요\r\n");
+        } else {
+            XM_SendUsbDebugMessage("[EMG] 캘리브 명령을 보내지 못했습니다 — 다시 눌러 주세요\r\n");
+        }
     }
 }
 

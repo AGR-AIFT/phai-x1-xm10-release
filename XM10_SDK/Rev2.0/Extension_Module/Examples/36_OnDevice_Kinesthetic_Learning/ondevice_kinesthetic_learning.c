@@ -28,7 +28,7 @@
  *
  * @warning **본 예제는 XM10 Rev 2.0 전용** — Rev 1.1 SDK 에서는 link 실패.
  *          XM_UserNV_Read/Write/Erase API 가 Rev 2.0 의 Internal Flash UserNV
- *          영역에서만 제공되며 (`XM_FW/XM_API/xm_api_memory.c`),
+ *          영역에서만 제공되며 (xm_api_memory.h),
  *          Rev 1.1 lib 에는 해당 심볼이 없어 BTN1 long-press 의 NV 저장 기능을
  *          포팅할 수 없습니다. 본인 보드가 Rev 1.1 이면 Ex.35 까지 진행하세요.
  *          참고: docs/hardware/README.md - 보드 리비전 비교
@@ -64,7 +64,7 @@
 #define NN_LR_INIT              0.001f
 #define NN_LR_END               0.0001f
 #define NN_EPOCHS               5000    /* batch 줄인 만큼 epoch 보상 (5초) */
-#define NN_BATCH_SIZE           20      /* 1tick에 20샘플만 — PnP heartbeat 보장 */
+#define NN_BATCH_SIZE           20      /* 1tick에 20샘플만 — 계산이 길어져 모듈 연결이 끊기지 않도록 */
 
 /* --- 물리 상수 (거치대 시연용) ---
  * NOTE: MGL_EFF_INIT는 초기값, TEACH 중 적응 추정으로 갱신됨
@@ -77,7 +77,8 @@
 #define MGL_ADAPT_RATE          0.001f  /* 적응 추정 학습률 */
 
 /* --- 구동기 사양 (Ex.35 기반) --- */
-/* @note XM.status.h10.hipTorque 는 이미 Nm (cm_drv 가 Kt×감속비 환산 완료).
+/* @note XM.status.h10.leftHipTorque / rightHipTorque 는 이미 Nm 입니다
+ *       (XM10 이 전류에 Kt×감속비를 곱해 환산 — xm_api_data.h 참고).
  *       예제 코드에서 아래 상수로 재환산하지 마세요 (이중 변환 금지).
  *       GEAR_RATIO 는 반사 관성 계산에, Kt 는 사양 참고용으로만 유지. */
 #define GEAR_RATIO              18.75f
@@ -463,9 +464,8 @@ static void _Learn_Loop(void)
         s_learn_loss  = 0.0f;
         s_learn_done  = false;
         _NN_Init();
-        /* [2026-05-13] XM_BgTask_Create → XM_Task_CreateOneShot 마이그레이션.
-         * prio_hint=XM_PRIO_BACKGROUND (default stack 8KB) 가 NN 학습 충분.
-         * 완료 후 _Task_Delete 호출하여 heap 누수 방지. */
+        /* prio_hint=XM_PRIO_BACKGROUND (기본 스택 8KB)가 NN 학습에 충분합니다.
+         * 완료 후 XM_Task_Delete 로 heap 을 회수하세요. */
         s_train_handle = XM_Task_CreateOneShot("NN_Train", _BgTrainFunc, NULL,
                                                 XM_PRIO_BACKGROUND);
     }
@@ -725,7 +725,7 @@ static void _ApplyTransparent(void)
     if (s_phase == PHASE_TEACH) {
         float sin_r = sinf(ang_r_rad);
         float sin_l = sinf(ang_l_rad);
-        /* [정정] hipTorque 는 이미 관절 토크 [Nm] — cm_drv 가 전류(A)에서
+        /* hipTorque 는 이미 관절 토크 [Nm] — XM10 이 전류(A)에서
          * Kt×감속비(≈1.594) 환산을 완료. 다시 Kt 를 곱하면 잔차가 ~1.594배
          * 부풀려져 적응 루프(s_mgl_eff)가 양의 되먹임으로 발산합니다. */
         float tau_r = XM.status.h10.rightHipTorque;

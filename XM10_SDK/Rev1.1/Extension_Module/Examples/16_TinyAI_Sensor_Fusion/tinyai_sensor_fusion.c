@@ -54,7 +54,7 @@
  *   분류 결과는 모니터링 전용이며 제어에 직접 영향을 주지 않습니다.
  *   XM_CTRL_MONITOR 모드를 유지합니다.
  *
- * @see     docs/api-reference/tinyai.md
+ * @see     docs/advanced/ai-data-pipeline.md  (Ex.16 TinyAI 설명 포함)
  * @version 2.0
  * @date    Mar 09, 2026
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.

@@ -21,7 +21,7 @@
 #ifndef XM_API_XM_API_DATA_H_
 #define XM_API_XM_API_DATA_H_
 
-#include "cm_drv.h"             /* CM Device Driver (PnP 통합 완료) */
+#include "cm_drv.h"             /* CM_NmtState_t 등 CM 연결 타입 */
 #include "data_object_dictionaries.h"
 #include "module.h"             /* XM_GRF_FIXED_FRAME_MODULE / XM_GRF_FSR_CH_TOTAL — 구조체 레이아웃 일관성 필수 */
 
@@ -123,7 +123,7 @@ typedef struct {
     uint8_t h10FSMcurrentState; // H10 현재 FSM 상태
     bool isPVectorRHDone;   // RH Pvector Complete Flag
     bool isPVectorLHDone;   // LH Pvector Complete Flag
-    bool h10IsNeutralPosSet;   // H10 중립각도 설정 완료 상태 (Core Process 끝단에서 초기화)
+    bool h10IsNeutralPosSet;   // H10 중립각도 설정 완료 상태 (H10 에서 받은 값)
 
     // --- Kinematics Data (운동학 정보) ---
     float leftHipAngle;     // 왼쪽 고관절 각도 (Degree)
@@ -143,7 +143,7 @@ typedef struct {
     // leftHipTorque / rightHipTorque : 관절 토크 추정값 [Nm].
     // 실제 토크 센서는 없으며, 모터 전류(A)에서 내부 환산한 추정값입니다:
     //   τ_joint [Nm] = Kt[Nm/A] × gear_ratio × I[A] = 0.085 × 18.75 × I ≈ 1.594 × I
-    // (환산은 cm_drv.c 에서 수행. USB Total Data 텔레메트리는 CM raw int16 = 전류(A) 원본을 별도 사용.)
+    // (USB Total Data(0x20)의 토크 칸은 이 환산값이 아니라 환산 전 전류(A) 원본입니다.)
     float leftHipTorque;      // 왼쪽 관절 토크 추정 [Nm]
     float rightHipTorque;     // 오른쪽 관절 토크 추정 [Nm]
     float leftHipMotorAngle;  // 왼쪽 모터 엔코더 각도 (Degree) — 고관절 각도와 다를 수 있음(감속기 비율)
@@ -151,10 +151,7 @@ typedef struct {
 
     // --- IMU Data (관성 센서 상세 정보) ---
     // Orientation
-    // @note [미배선 — 항상 0.0] 아래 Roll/Pitch/Yaw 6개 필드는 현재 실데이터가
-    //       채워지지 않습니다: Roll/Pitch 4개는 CM PDO 요청이 비활성(cm_drv.c 의
-    //       pdo_list 주석처리), Yaw 2개는 디코드 자체가 미구현입니다.
-    //       실데이터가 필요하면 cm_drv.c 의 PDO 요청/디코드 배선을 먼저 활성화하세요.
+    // @note [현재 항상 0.0] 아래 Roll/Pitch/Yaw 6개 필드는 이 버전에서 실제 값이 채워지지 않습니다.
     float leftHipImuFrontalRoll;    // 왼쪽 고관절 IMU Frontal Roll 각도 (Degree)
     float rightHipImuFrontalRoll;
     float leftHipImuSagittalPitch;  // 왼쪽 고관절 IMU Sagittal Pitch 각도 (Degree)
@@ -213,7 +210,7 @@ typedef struct {
 
 #if XM_GRF_FIXED_FRAME_MODULE
     /* === SM-GRF fixed UART 모듈 (24ch FSR + 6축 IMU raw, 포트=L/R) ===
-     * XM_GRF_FIXED_FRAME_MODULE=1 일 때 core_process 가 GrfModule_GetLatest 로 채움.
+     * XM_GRF_FIXED_FRAME_MODULE=1 일 때 XM10 이 자동으로 채웁니다.
      * L/R 은 물리 포트로 구분(오른발 GRF→XM 오른쪽 포트=UART8). */
     uint16_t leftFsr[XM_GRF_FSR_CH_TOTAL];   /**< 24ch FSR raw (ADC LSB) */
     int16_t  leftImu[7];                     /**< acc[3],gyr[3],temp raw */
@@ -246,7 +243,9 @@ typedef struct {
 
 /**
  * @brief [IMU Hub Module] 6축 IMU 센서 허브 (EBIMU-9DOFV6 × 6)
- * @details DOP V3 프로토콜로 연결된 IMU Hub Module 데이터
+ * @details CAN-FD 로 연결된 IMU Hub Module 데이터
+ * @note  IMU Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로
+ *        문의해 주세요.
  */
 #define XM_IMU_HUB_SENSOR_COUNT  6  /**< IMU Hub의 센서 개수 */
 
@@ -279,18 +278,20 @@ typedef struct {
 } XmImuHubData_t;
 
 /**
- * @brief [EMG Hub Module] sEMG 센서 허브 (DOP V3)
- * @details DOP V3 프로토콜로 연결된 EMG Hub Module 데이터
+ * @brief [EMG Hub Module] sEMG 센서 허브
+ * @details CAN-FD 로 연결된 EMG Hub Module 데이터
+ * @note  EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로
+ *        문의해 주세요.
  *
- * [데이터 원본] EMG Hub TPDO1 (CAN ID 0x18F)
+ * [데이터] EMG Hub 가 처리해서 보내는 값
  * - 1kHz 샘플링, 신호처리 파이프라인 결과 포함
  * - HPF 20Hz → Rectification → RMS 200ms → Envelope 8Hz → MVC → Activation
  */
 typedef struct {
     bool     is_connected;        /**< EMG Hub Module 연결 상태 */
-    uint32_t lastUpdateTick;      /**< Slave 제어 틱 (OD 0x6050 ctrl_tick_ms, 32-bit ms, wrap 49.7일).
-                                    *   연속 수신 간 delta 가 1 이 아니면 gap. 구 14B TPDO 포맷 수신 시
-                                    *   Metadata timestamp (24-bit) 로 fallback. */
+    uint32_t lastUpdateTick;      /**< EMG Hub 의 측정 시각 (ms, 32-bit, 약 49.7일마다 0 으로 돌아감).
+                                    *   연속으로 받은 두 값의 차이가 1 이 아니면 중간 데이터가 빠진 것입니다.
+                                    *   구형 EMG Hub 펌웨어에서는 24-bit 값입니다. */
 
     /* Raw & Processed EMG Data (float, 스케일링 복원 완료) */
     uint16_t raw_adc;             /**< ADC 원시값 (12-bit, HW OVS 16×) */
@@ -301,28 +302,35 @@ typedef struct {
     bool     is_active;           /**< 근수축 감지 (Schmitt trigger) */
 
     /* Status Flags (비트 필드) */
-    uint8_t  status_flags;        /**< bit0: ADC_OK, bit1: IS_ACTIVE, bit2: SATURATED, bit3: CALIB_VALID(MVC 유효) */
+    uint8_t  status_flags;        /**< bit0: ADC_OK, bit1: IS_ACTIVE, bit2: SATURATED, bit3: CALIB_VALID(MVC 유효)
+                                    *   — XM_EMG_HUB_STATUS_* 로 비트를 확인하세요. */
 } XmEmgHubData_t;
 
+/** @brief XM.status.emg_hub.status_flags 비트 */
+#define XM_EMG_HUB_STATUS_ADC_OK       (1U << 0)  /**< ADC 정상 */
+#define XM_EMG_HUB_STATUS_IS_ACTIVE    (1U << 1)  /**< 근수축 감지 (is_active 와 같음) */
+#define XM_EMG_HUB_STATUS_SATURATED    (1U << 2)  /**< 신호 포화 */
+#define XM_EMG_HUB_STATUS_CALIB_VALID  (1U << 3)  /**< MVC 보정 완료 — mvc_percent 를 쓸 수 있음 */
+
 /**
- * @brief [FES Hub Module] 기능적 전기 자극 모듈 (DOP V3 ES-vector)
- * @details DOP V3 ES-vector 프로토콜로 연결된 FES Hub Module 데이터 (Node 0x0C)
- *
- * [데이터 원본] FES Hub TPDO1 (CAN ID 0x18C, 37B, 10ms 주기)
- * - Legacy 16B: 2채널 ch_state/current/fault + HV 전압 + digipot + es_state_packed
- * - KHJ 21B: FSM state + ISI flags + target amplitude + impedance + pulse count
- *            + differential voltage (ES-vector 제어 상태 + 전극 접촉 판단)
- * [명령 경로] XM → FES Hub SDO Download
- * - 0x6300 (6B BLOB): ES-vector (ch_select, amplitude, duty, freq, burst)
- * - 0x6310 (1B)    : Master Command (가상 ISI EXT7/EXT8 트리거)
+ * @brief EMG Hub 캘리브레이션 명령 (XM_SendEmgHubCalCommand() 인자)
+ */
+typedef enum {
+    XM_EMG_HUB_CAL_OFFSET = 0,  /**< offset 보정 — 근육을 이완한 상태에서 보냄 (허브가 샘플을 모은 뒤 자동 완료) */
+    XM_EMG_HUB_CAL_MVC    = 1,  /**< MVC 기준 저장 — 최대로 힘을 준 상태에서 보냄 (현재 RMS 를 100% 로 저장) */
+} XmEmgHubCalCmd_t;
+
+/**
+ * @brief [FES Hub Module] 기능적 전기 자극 모듈
+ * @note  FES Hub 는 현재 XM10 연결을 지원하지 않습니다.
  */
 #define XM_FES_HUB_CH_COUNT     2  /**< FES Hub 채널 수 */
 
 typedef struct {
     bool     is_connected;        /**< FES Hub Module 연결 상태 */
-    uint32_t lastUpdateTick;      /**< 데이터 수신 시각 (ms, FES Slave 24-bit timestamp LE) */
+    uint32_t lastUpdateTick;      /**< 데이터 수신 시각 (ms, FES Hub 가 보낸 24-bit 값) */
 
-    /* ==== Legacy 16B (채널 상태 / 전류 / HV 등) ==== */
+    /* ==== 기본 상태 (채널 상태 / 전류 / HV 등) ==== */
 
     /* 채널 상태 (0=IDLE, 1=READY, 2=STIMULATING, 3=FAULT) */
     uint8_t  ch_state[XM_FES_HUB_CH_COUNT];
@@ -345,19 +353,19 @@ typedef struct {
     /* Error Register */
     uint8_t  error_register;
 
-    /* ==== KHJ telemetry 확장 (TPDO 37B 중 21B) ==== */
+    /* ==== 확장 상태 ==== */
 
-    /* FSM state (KHJ Control Task) */
+    /* FSM state (FES Hub 내부 제어 상태) */
     uint8_t  fsm_state;              /**< 현재 FSM state */
     uint8_t  fsm_state_prev;         /**< 직전 FSM state */
 
-    /* ISI flag bitmap — bit[N] = ISI[N]. EXT7(bit7)/EXT8(bit8) 로 Master Cmd 동작 증적. */
+    /* ISI flag bitmap — bit[N] = ISI[N] */
     uint8_t  isi_packed;
 
-    /* ES-vector error code low byte (채널별, CiA 301 Abort 와 별개) */
+    /* ES-vector error code low byte (채널별) */
     uint8_t  ch_es_error_lo[XM_FES_HUB_CH_COUNT];
 
-    /* Target amplitude (mA) — Master 가 지시한 setpoint */
+    /* Target amplitude (mA) — XM 이 지시한 목표값 */
     float    ch_target_amplitude_mA[XM_FES_HUB_CH_COUNT];
 
     /* Filtered impedance (ohm) — 전극 접촉 상태 판단 지표 */
@@ -379,12 +387,12 @@ typedef struct {
  * @note  End User는 XM.status를 통해 이 구조체에 접근합니다.
  */
 typedef struct {
-    XmH10Data_t     h10;      /**< H10 로봇 본체 데이터 (DOP V1) */
+    XmH10Data_t     h10;      /**< H10 로봇 본체 데이터 */
     XmGrfData_t     grf;      /**< GRF 족압 센서 데이터 */
     XmExtImuData_t  ext_imu;  /**< External UART IMU 데이터 (Xsens MTi-630) */
-    XmImuHubData_t  imu_hub;  /**< [신규] IMU Hub 센서 데이터 (DOP V3) ✅ */
-    XmEmgHubData_t  emg_hub;  /**< [신규] EMG Hub 센서 데이터 (DOP V3) */
-    XmFesHubData_t  fes_hub;  /**< [신규] FES Hub 자극 피드백 (DOP V3) */
+    XmImuHubData_t  imu_hub;  /**< IMU Hub 센서 데이터 (CAN-FD) */
+    XmEmgHubData_t  emg_hub;  /**< EMG Hub 센서 데이터 (CAN-FD) */
+    XmFesHubData_t  fes_hub;  /**< FES Hub (현재 XM10 연결 미지원) */
 } XmInput_t;
 
 /**
@@ -501,9 +509,8 @@ void XM_SetAssistTorqueLH(float lh);
 bool XM_IsCmConnected(void);
 
 /**
- * @brief 현재 CM과의 PnP(NMT) 상태를 가져옵니다.
+ * @brief 현재 CM 과의 연결 상태(CM_NmtState_t)를 가져옵니다.
  * @return CM_NmtState_t 열거형 값.
- * @details [변경] LinkNmtState_t → CM_NmtState_t (Phase 5)
  */
 CM_NmtState_t XM_GetXMNmtState(void);
 
@@ -645,5 +652,17 @@ void XM_CaptureLoopCountBase(void);
  * @return h10AssistModeLoopCnt - 기준점 (XM_CaptureLoopCountBase 미호출 시 절대값 반환)
  */
 uint32_t XM_GetRelativeLoopCount(void);
+
+/**
+ * @brief EMG Hub 에 캘리브레이션 명령을 보냅니다. (Ex.42 참고)
+ * @param[in] cmd  XM_EMG_HUB_CAL_OFFSET 또는 XM_EMG_HUB_CAL_MVC
+ * @return 명령을 보냈으면 true. EMG Hub 가 연결되지 않았거나(XM.status.emg_hub.is_connected
+ *         == false) cmd 가 잘못됐거나 전송하지 못했으면 false.
+ * @note  허브가 처리한 결과는 XM.status.emg_hub.status_flags 로 확인합니다. MVC 보정이 끝나면
+ *        XM_EMG_HUB_STATUS_CALIB_VALID 비트가 켜지고 mvc_percent 를 쓸 수 있습니다.
+ * @note  버튼 이벤트처럼 가끔 한 번씩 호출하세요. 매 tick 반복 호출하지 마세요
+ *        (호출할 때마다 CAN-FD 로 명령이 나가고, 드물게 1ms 루프가 잠시 늦어질 수 있습니다).
+ */
+bool XM_SendEmgHubCalCommand(XmEmgHubCalCmd_t cmd);
 
 #endif /* XM_API_XM_API_DATA_H_ */

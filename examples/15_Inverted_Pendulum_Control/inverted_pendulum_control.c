@@ -38,7 +38,7 @@
  * PD 항의 Kd 성분이 운동 에너지(kinetic energy)를 소산(dissipate)합니다.
  * 이를 통해 리아프노프(Lyapunov) 안정성을 확보합니다.
  *
- * @see     docs/api-reference/XM_Control.md
+ * @see     docs/api-reference/02-h10-control-n-data.md
  * @version 1.0
  * @date    Mar 09, 2026
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.

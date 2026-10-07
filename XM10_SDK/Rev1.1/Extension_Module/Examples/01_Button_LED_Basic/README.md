@@ -88,7 +88,7 @@ static void Run_Loop(void)
 |------|------|------|
 | LED 가 항상 꺼져있음 | 펌웨어 빌드 후 플래시 안 함 | Console 에 `Download verified successfully` 확인 |
 | LED 가 항상 켜져있음 | `XM_RELEASED` 대신 `XM_PRESSED` 양쪽 모두 ON 처리 | `if/else` 분기 정확히 확인 |
-| 버튼 짧게 눌렀다 떼면 LED 가 깜빡 안 보임 | 너무 짧은 누름 + 폴링 주기 (2 ms) | 정상 동작. 길게 눌러서 확인하거나 [Ex.02 이벤트](../02_Button_LED_Event/) 로 진행 |
-| LED 가 미세하게 흔들림 (반딧불처럼) | LED 효과 (`XM_LED_BLINK` 등) 가 남아있음 | `XM_SetLedState` 호출 전에 `XM_SetLedEffect(LED, XM_LED_NONE, 0)` 호출 |
+| 버튼 짧게 눌렀다 떼면 LED 가 깜빡 안 보임 | 너무 짧은 누름 + 폴링 주기 (1 ms) | 정상 동작. 길게 눌러서 확인하거나 [Ex.02 이벤트](../02_Button_LED_Event/) 로 진행 |
+| LED 가 미세하게 흔들림 (반딧불처럼) | LED 효과 (`XM_LED_BLINK` 등) 가 남아있음 | `XM_SetLedState` 호출 전에 `XM_SetLedEffect(LED, XM_LED_OFF, 0)` 호출 |
 
 막혔다면 → [docs/troubleshooting.md](../../docs/troubleshooting.md)

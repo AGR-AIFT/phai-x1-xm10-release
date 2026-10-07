@@ -401,7 +401,7 @@ int main(void)
   /* add threads, ... */
   
   /* [CRITICAL] UserTask Priority Override
-   * - IOC 설정값(Realtime4)을 Realtime5(53)로 상향
+   * - IOC 설정값(Realtime6, 54)을 Realtime5(53)로 하향 — UART RxTask(54)·FDCAN RxTask(55)가 UserTask 를 선점하도록
    * - [2026-07-14] 55(FDCAN RxTask) > 54(UART RxTask) > 53(UserTask) 재배치.
    *   두 RxTask 모두 UserTask 위 → PDO/GRF 도착 즉시 선점 처리 → stale data 방지 유지.
    * - RxTask 선점 ~10-50µs/회 → UserTask 지터 무시 가능

@@ -62,9 +62,9 @@
  * SAM10: 감속비 18.75:1, Kt=0.085 Nm/A
  * 관절 토크 = Kt × 감속비 × 전류 ≈ 1.594 × i [Nm]
  * 역구동성 < 0.3 Nm, 최대 18.3 Nm, 정격 10 Nm, 85 RPM */
-/* @note XM.status.h10.hipTorque 는 이미 Nm (cm_drv 가 Kt×감속비 환산 완료).
- *       예제 코드에서 아래 상수로 재환산하지 마세요 (이중 변환 금지).
- *       아래 값은 사양 참고용입니다. */
+/* @note Rev1.1 에서 XM.status.h10.leftHipTorque / rightHipTorque 는 모터 전류(A)입니다
+ *       (xm_api_data.h 참고). 관절 토크[Nm] ≈ 1.594(=Kt×감속비) × 전류[A].
+ *       아래 상수는 사양 참고용입니다. */
 #define GEAR_RATIO              18.75f
 #define KT_MOTOR_NM_PER_A      0.085f
 
@@ -332,8 +332,7 @@ void Control_Loop(void)
     g_ml_dbg.loop_cnt++;
 
     /* --- USB-CDC 스트리밍 (0xF0) ---
-     * Control_Setup 이 메타 7채널을 등록만 하고 정작 보내지는 않아서, PC 에는
-     * 이름만 있고 값이 영영 오지 않는 채널로 보였다(2026-09-10 예제 전수조사).
+     * Control_Setup 의 XM_SetUsbCustomMeta 로 등록한 7채널과 같은 순서·개수의 float 를 보냅니다.
      * XM_SendUsbDataWithId 는 non-blocking 이고 버퍼가 차면 그 tick 만 버린다. */
     s_stream_data.gravity_nm   = s_tau_grav_r;
     s_stream_data.dob_nm       = s_tau_dob_r;
@@ -574,9 +573,8 @@ static void _RunControl(void)
     float ang_r_rad = DEG_TO_RAD(ang_r_deg);
     float ang_l_rad = DEG_TO_RAD(ang_l_deg);
 
-    /* [정정] hipTorque 는 이미 관절 토크 추정값 [Nm] — cm_drv 가 전류(A)에서
-     * Kt×감속비(≈1.594) 환산을 완료해 줍니다. 여기서 다시 Kt 를 곱하면
-     * 이중 변환(×1.594)으로 DOB 잔차가 왜곡되므로 재환산 금지. */
+    /* 참고: leftHipTorque / rightHipTorque 는 모터 전류(A)입니다 (Rev1.1).
+     * 토크(Nm)로 쓰려면 Kt×감속비(≈1.594)를 곱하세요 (Ex.31 참고). */
     float tau_meas_r_nm = XM.status.h10.rightHipTorque;
     float tau_meas_l_nm = XM.status.h10.leftHipTorque;
 
