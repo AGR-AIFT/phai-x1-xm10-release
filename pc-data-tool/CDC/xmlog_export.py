@@ -235,7 +235,7 @@ def resolve_rows(records) -> Resolution:
                     # 모르는 activation 이거나 다른 모듈의 것 — 틀린 스키마로 풀지 않고, 행도 버리지
                     # 않는다. 미상으로 내려 원본 바이트로 남긴다.
                     # 이 대조 · 강등은 내보내기 층(이 함수)이 한다. xmlog.py 는 레코드를 파일에 적힌
-                    # 그대로 돌려주는 파서로 두었다 — wire 계약 §3 의 'reader' 규칙이 사는 곳이 여기다.
+                    # 그대로 돌려주는 파서로 두었다 — spec/xmlog.md '스키마 번호' 의 이 규칙이 사는 곳이 여기다.
                     eff, down = 0, True
                     downgraded += 1
                     if downgraded <= 5:

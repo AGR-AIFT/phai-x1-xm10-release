@@ -1615,6 +1615,15 @@ def test_xmlog_gui_cli_parity_and_reconnect_new_file(RX, DS, tmp):
     ok("CLI(run_cli --log)와 GUI 워커가 레코드 %d개를 똑같이 적었다 — 스키마 %d개 발급, 0xF0 은 %d행 중 %d행이 그 번호를 단다"
        % (len(a), kinds.count("ACT"), len(typed), sum(1 for t in typed if t)))
 
+    # 두 경로 모두 DATA 의 pc_time_us 는 1970-01-01 UTC 부터의 µs 다(수신 시작부터 흐른 시간이 아니다)
+    now_us = time.time_ns() // 1000
+    for label, res in (("CLI", cli), ("GUI", gui)):
+        ts = [r.fields["pc_time_us"] for r in res.records if r.rec_type == X.REC_DATA]
+        assert ts and abs(ts[0] - now_us) <= 300 * 1_000_000, \
+            "%s 의 pc_time_us 가 UTC µs 가 아니다: %r (지금 %d)" % (label, ts[:3], now_us)
+        assert ts == sorted(ts), "%s 의 pc_time_us 가 뒤로 갔다" % label
+    ok("CLI · GUI 워커의 .xmlog pc_time_us 는 UTC µs (지금 PC 시계와 같은 크기, 뒤로 가지 않음)")
+
     # ---- (c) GUI 재연결은 새 파일 — 1초 안에 다시 붙어 이름이 같아도 앞 파일을 덮어쓰지 않는다 ----
     sub = os.path.join(tmp, "reconnect")
     os.makedirs(sub)

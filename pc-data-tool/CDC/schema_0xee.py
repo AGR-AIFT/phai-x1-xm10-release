@@ -304,7 +304,7 @@ class Reassembler:
     스키마가 완성되면 `last_canonical` 에 **받은 바이트 그대로**(프래그먼트를 frame_index 순으로
     이어붙인 것)가 남는다. `.xmlog` 의 SCHEMA_ACTIVATION payload 가 이것이고, 다시 해석해서
     적지 않는 이유는 `xmlog.encode_schema_activation` 에 적혀 있다. 여러 프래그먼트를 이렇게
-    이어붙이는 규칙은 wire 계약에 아직 없는 이 도구의 약속이다(`split_canonical` 참조).
+    이어붙이는 규칙은 spec/xmlog.md 의 '구조 정보 이어붙이기'에 있다(다시 나누기는 `split_canonical`).
     """
 
     __slots__ = ("_pending", "timeout", "completed", "discarded_timeout",
@@ -419,9 +419,8 @@ def split_canonical(payload: bytes) -> List[bytes]:
     풀리는 스키마를 파일에서는 못 되읽게 된다.
 
     이어붙이는 규칙(여러 프래그먼트 스키마의 SCHEMA_ACTIVATION payload = 프래그먼트를 각자의 24 B
-    헤더째 frame_index 순으로, 와이어 꼬리는 뗀 채 이어붙인 것)은 **이 도구의 약속**이다. 동결된 wire
-    계약(§3)은 payload 를 "canonical 바이트 전체" 라고만 적고 프래그먼트 경계는 정하지 않았다. 다른
-    쪽(펌웨어 · 가져오기 도구)이 이 레코드를 쓰거나 읽기 전에 계약에 적어야 한다.
+    헤더째 frame_index 순으로, 와이어 꼬리는 뗀 채 이어붙인 것)은 `.xmlog` 형식의 일부다 —
+    spec/xmlog.md 의 '구조 정보 이어붙이기'.
     """
     if len(payload) < HEADER_SIZE:
         raise SchemaError("payload %d B < 헤더 %d B" % (len(payload), HEADER_SIZE))

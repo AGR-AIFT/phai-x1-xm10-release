@@ -48,8 +48,8 @@ CSV 로 뽑은 뒤 17개 항목을 스스로 확인합니다. 끝에 이렇게 �
    ...
 ```
 
-`demo_out\csv\demo_user_0xF0.csv` 를 열어 보세요. 앞의 세 열(`pc_time_us` 받은 시각,
-`seq_id` 받은 순서 번호, `activation_id` 그 행을 받을 때 유효했던 구조체 설명의 번호 — 0 은
+`demo_out\csv\demo_user_0xF0.csv` 를 열어 보세요. 앞의 세 열(`pc_time_us` 받은 시각 — 1970-01-01 UTC
+부터의 µs, `seq_id` 받은 순서 번호, `activation_id` 그 행을 받을 때 유효했던 구조체 설명의 번호 — 0 은
 "아직 설명을 받기 전"이라는 뜻이고 첫 몇 행이 그렇습니다. 그런 행도 뒤에 도착한 설명으로 풀려
 있습니다)은 PC 가 붙인 수신 정보이고, 그 뒤가 `state, contact, emg_rms, angle_x10,
 tick, torque[0], torque[1]` — 보드 쪽에서 C 구조체로 정의한 필드 이름이 그대로 CSV 열이

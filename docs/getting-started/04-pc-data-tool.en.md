@@ -37,7 +37,7 @@ This feeds data made to look like it came from a real board into the actual rece
 ```
 *(Real console output, in Korean: "Demo passed — 17/17 items. Artifacts:" followed by the file list.)*
 
-Open `demo_out\csv\demo_user_0xF0.csv`. The first three columns (`pc_time_us` receive time, `seq_id` receive sequence number, `activation_id` the number of the struct description that was valid when the row was received — 0 means "the description hadn't arrived yet", as in the first few rows, which are still decoded with the description that arrived right after) are receive metadata added by the PC; after those come `state, contact, emg_rms, angle_x10, tick, torque[0], torque[1]` — the field names defined in the board-side C struct became the CSV columns, unchanged. That's exactly what this tool is for.
+Open `demo_out\csv\demo_user_0xF0.csv`. The first three columns (`pc_time_us` receive time in µs since 1970-01-01 UTC, `seq_id` receive sequence number, `activation_id` the number of the struct description that was valid when the row was received — 0 means "the description hadn't arrived yet", as in the first few rows, which are still decoded with the description that arrived right after) are receive metadata added by the PC; after those come `state, contact, emg_rms, angle_x10, tick, torque[0], torque[1]` — the field names defined in the board-side C struct became the CSV columns, unchanged. That's exactly what this tool is for.
 
 ---
 

@@ -38,7 +38,7 @@ from frame_router import (
     PHAI_SOF, crc16_ccitt, cobs_decode, parse_phai_frame, FrameRouter,
 )
 import xmlog as X
-from xmlog_capture import XmLogCapture
+from xmlog_capture import XmLogCapture, PcClock
 
 DEFAULT_BAUD = 921600
 LIVENESS_MIN_FPS = 950.0          # 1 kHz 스트림 기준.
@@ -141,8 +141,14 @@ MAX_RESYNC_BUFFER = 64 * 1024
 
 
 def feed_stream(ledger: SoakLedger, chunk: bytes, buf: bytearray,
-                now: float, cap=None) -> None:
-    """수신 바이트 한 덩어리를 프레임으로 쪼개 회계에 넣는다. 수신 루프와 공유."""
+                now: float, cap=None, pc_clock=None) -> None:
+    """수신 바이트 한 덩어리를 프레임으로 쪼개 회계에 넣는다. 수신 루프와 공유.
+
+    `now` 는 수신을 시작한 뒤 흐른 초다. `cap`(.xmlog)을 주면 `pc_clock`(같은 기준점의 `PcClock`)도
+    줘야 한다 — DATA 의 `pc_time_us` 는 UTC µs 다.
+    """
+    if cap is not None and pc_clock is None:
+        raise ValueError("cap 을 주면 pc_clock 도 줘야 한다 (pc_time_us = UTC µs)")
     ledger.bytes_in += len(chunk)
     buf.extend(chunk)
     if len(buf) > MAX_RESYNC_BUFFER and buf.find(0) < 0:
@@ -163,7 +169,7 @@ def feed_stream(ledger: SoakLedger, chunk: bytes, buf: bytearray,
             else:
                 ledger.on_frame(pkt)
                 if cap is not None:
-                    cap.on_frame(pkt, int(now * 1e6))
+                    cap.on_frame(pkt, pc_clock.us(now))
         del buf[:d + 1]
 
 
@@ -222,6 +228,7 @@ def run_soak(port, baud, minutes, out_dir, quiet=False) -> int:
     cap = XmLogCapture(log_path, fw_build_id="", total_data_map_version="")
     buf = bytearray()
     ledger.t_start = time.perf_counter()
+    pc_clock = PcClock(ledger.t_start)
     deadline = ledger.t_start + minutes * 60.0
     last_print = ledger.t_start
 
@@ -230,7 +237,7 @@ def run_soak(port, baud, minutes, out_dir, quiet=False) -> int:
             chunk = ser.read(4096)
             now = time.perf_counter()
             if chunk:
-                feed_stream(ledger, chunk, buf, now - ledger.t_start, cap)
+                feed_stream(ledger, chunk, buf, now - ledger.t_start, cap, pc_clock)
             if not quiet and now - last_print >= 10.0:
                 print("  " + ledger.summary())
                 last_print = now

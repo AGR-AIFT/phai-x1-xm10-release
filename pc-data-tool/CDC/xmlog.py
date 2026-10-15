@@ -13,7 +13,8 @@ CSV 는 해석의 결과물이라, 스키마를 모르면 아무것도 못 적�
   * 해석은 나중에 소급해서 한다. CSV 는 이 파일에서 뽑는다.
   * 손실은 숨기지 않고 GAP 레코드로 **파일 안에** 남긴다.
 
-바이트 형식의 기준은 골든 벡터(spec/golden/)다.
+바이트 형식의 기준은 골든 벡터(spec/golden/)다. 필드의 뜻(PC 시각 · GAP 경계 · 스키마 바이트 이어붙이기)과
+읽기 규칙은 spec/xmlog.md 에 표로 있다.
 이 파일은 그 형식을 코드로 옮긴 것이고, `test_xmlog.py` 의 **손으로 적은 골든 바이트**가
 양쪽이 일치하는지 감시한다 (구현이 만든 것끼리 비교하면 같이 틀린다).
 
@@ -24,6 +25,7 @@ EOF 를 늘리면 아직 안 쓴 zero tail 이 `rec_type=0, len=0` 인 정상 �
 "마지막 유효 레코드가 어디까지인가" 를 증명할 방법이 없어진다.
 모든 섹션을 타입드 레코드로 통일하고 앞에서부터 순차 검증한다 — 첫 실패에서 멈추면
 그 앞은 전부 유효다. 그래서 CHECKPOINT 레코드도 필요 없다(파서가 스스로 안다).
+그 뒤는 정상 레코드가 남아 있어도 읽지 않는다 — 깨진 자리 너머에서 레코드 경계를 다시 찾지 않는다.
 
 CRC 규약 — skip 방식
 --------------------
@@ -68,6 +70,9 @@ HEADER_REST_LEN = {
     REC_DATA: 16,
     REC_GAP: 16,
 }
+
+# payload 가 없는 타입 — payload_len 이 0 이 아니면 그 레코드는 무효(길이 칸이 깨졌거나 다른 형식이다).
+EMPTY_PAYLOAD_TYPES = (REC_SESSION, REC_GAP)
 
 GAP_SEQ = 1          # 와이어에서 seq 가 건너뛰었다
 GAP_QUEUE_OVERFLOW = 2   # PC 가 못 따라가 버렸다 — 케이블이 아니라 로컬 지연
@@ -148,6 +153,9 @@ def encode_record(rec_type: int, type_header: bytes, payload: bytes = b"",
     if len(type_header) != want:
         raise ValueError("rec_type %d: type_header %d B != %d B"
                          % (rec_type, len(type_header), want))
+    if rec_type in EMPTY_PAYLOAD_TYPES and payload:
+        # 읽는 쪽이 거부하는 레코드를 쓰지 않는다.
+        raise ValueError("rec_type %d: payload 가 없어야 한다 (%d B)" % (rec_type, len(payload)))
     buf = bytearray(_REC_HDR.pack(REC_MAGIC, rec_type, flags,
                                   len(type_header), len(payload), 0))
     buf += type_header
@@ -177,8 +185,9 @@ def encode_schema_activation(activation_id, module_id, schema_proto_ver,
     """SCHEMA_ACTIVATION — payload 는 `0xEE` canonical 바이트 **그대로**.
 
     재해석해서 저장하지 않는다. 파서가 나중에 바뀌어도 원본이 남아 있어야
-    "그때 FW 가 뭐라고 했는지" 를 되짚을 수 있다. 프래그먼트가 여럿인 스키마를 이어붙이는 규칙은
-    `schema_0xee.split_canonical` 에 적혀 있다(이 도구의 약속이고 wire 계약에는 아직 없다).
+    "그때 FW 가 뭐라고 했는지" 를 되짚을 수 있다. 프래그먼트가 여럿인 스키마는 각 프래그먼트를
+    자기 24 B 헤더째 `frame_index` 순으로 이어붙인다 — 규칙은 spec/xmlog.md, 다시 나누는 코드는
+    `schema_0xee.split_canonical`.
     """
     return encode_record(REC_SCHEMA_ACTIVATION, _ACTIVATION_HDR.pack(
         activation_id & 0xFFFF, module_id & 0xFF, schema_proto_ver & 0xFF,
@@ -186,13 +195,23 @@ def encode_schema_activation(activation_id, module_id, schema_proto_ver,
 
 
 def encode_data(activation_id, module_id, seq_id, pc_time_us, payload) -> bytes:
-    """DATA — activation_id 0 은 "스키마 미상". 버리지 않고 그대로 적는다."""
+    """DATA — activation_id 0 은 "스키마 미상". 버리지 않고 그대로 적는다.
+
+    `pc_time_us` 는 PC 가 받은 시각, 1970-01-01 00:00:00 UTC 부터의 µs 다
+    (`xmlog_capture.PcClock` — 저장을 시작할 때 PC 시계로 기준을 잡고 그 뒤는 단조 시계로 센다).
+    """
     return encode_record(REC_DATA, _DATA_HDR.pack(
         activation_id & 0xFFFF, module_id & 0xFF, 0,
         seq_id & 0xFFFF, 0, pc_time_us & 0xFFFFFFFFFFFFFFFF), bytes(payload))
 
 
 def encode_gap(reason, from_seq, to_seq, lost_count) -> bytes:
+    """GAP — 잃은 구간. `from_seq` · `to_seq` 는 둘 다 **받은** 프레임의 번호다.
+
+    빠지기 직전에 받은 seq 와 빠진 뒤 처음 받은 seq 이고, 빠진 번호는 그 사이(`from_seq + 1` ~
+    `to_seq - 1`, 65535 다음은 0)다. 그 개수가 `lost_count` 다(reason 1 이면 `(to_seq - from_seq - 1) mod 65536`).
+    seq 가 뒤로 간 reason 3 은 두 번호를 그대로 적고 `lost_count` 는 0 이다.
+    """
     return encode_record(REC_GAP, _GAP_HDR.pack(
         reason & 0xFF, 0, from_seq & 0xFFFF, to_seq & 0xFFFF, 0,
         lost_count & 0xFFFFFFFF, 0))
@@ -276,6 +295,8 @@ def decode_record(buf: bytes, offset: int) -> Record:
     if hdr_rest != want:
         raise LogError("rec_type %d: header_rest_len %d != %d" % (rtype, hdr_rest, want),
                        offset)
+    if rtype in EMPTY_PAYLOAD_TYPES and plen != 0:
+        raise LogError("rec_type %d: payload_len %d != 0" % (rtype, plen), offset)
     total = REC_HEADER_SIZE + hdr_rest + plen
     if offset + total > len(buf):
         raise LogError("레코드가 잘렸다 (필요 %d B, 남은 %d B)"
@@ -300,6 +321,10 @@ def scan(buf: bytes, stop_on_error: bool = True) -> ScanResult:
 
     크래시 복구가 이 함수 하나로 끝난다. 마지막 쓰기가 중간에 끊겼으면 그 레코드
     하나만 거부되고 나머지는 살아난다. 별도 체크포인트가 필요 없는 이유다.
+
+    파일 **중간**이 깨졌으면(CRC · magic · 길이 칸) 그 레코드에서 멈추고, 그 뒤는 정상 레코드가 남아
+    있어도 읽지 않는다 — 깨진 자리 너머에서 레코드 경계를 다시 찾지 않는다. 그 뒤 바이트는 전부
+    `trailing_bytes` 로 센다.
 
     레코드의 `fields` 는 **파일에 적힌 그대로**다. DATA 의 activation_id 가 가리키는 activation
     의 module_id 와 DATA 의 module_id 가 어긋나는지 대조하는 일(어긋나면 0 으로 내려 읽는다)은 이

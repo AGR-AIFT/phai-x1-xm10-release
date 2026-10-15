@@ -28,3 +28,7 @@
 
 `0xEE_multi_fragment.hex` 는 프래그먼트 3개를 **이어붙인** 것이다.
 `frame_lengths` 로 잘라서 하나씩 먹여야 한다 — 통째로 파싱하면 안 된다.
+
+`xmlog_v1_minimal_file` 안의 값(시각 · seq · GAP 번호 등)은 바이트 자리를 확인하려고 고른 값이다.
+칸의 뜻을 보여 주는 예가 아니다 — 예를 들어 GAP 의 `lost_count` 12 는 4660 과 4672 사이에 빠진 수(11)와
+맞지 않는다. 각 칸의 뜻과 읽는 규칙은 [../xmlog.md](../xmlog.md) 에 있다.
