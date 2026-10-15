@@ -333,6 +333,88 @@ def test_zero_tail_is_rejected():
     assert res.stopped_reason is not None
 
 
+def _golden_minimal_file() -> bytes:
+    """동결된 골든 파일(spec/golden/xmlog_v1_minimal_file.hex)의 바이트."""
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        "..", "spec", "golden", "xmlog_v1_minimal_file.hex")
+    with open(path, encoding="utf-8") as f:
+        return bytes.fromhex(f.read().strip())
+
+
+def _assert_stops_at(buf: bytes, clean: X.ScanResult, k: int, what: str) -> None:
+    """레코드 k 에서 멈추고, 그 앞만 남고, 그 뒤의 온전한 레코드는 되살리지 않았는가."""
+    rec = clean.records[k]
+    res = X.scan(buf)
+    got = [r.offset for r in res.records]
+    want = [r.offset for r in clean.records[:k]]
+    assert got == want, "%s 레코드 %d: 남은 레코드 %r (앞의 %r 만 남아야)" % (what, k, got, want)
+    assert res.valid_bytes == rec.offset, "%s 레코드 %d: valid %d != %d" % (what, k, res.valid_bytes, rec.offset)
+    assert res.trailing_bytes == len(buf) - rec.offset, "%s 레코드 %d: trailing %d" % (what, k, res.trailing_bytes)
+    assert res.stopped_reason and ("@%d" % rec.offset) in res.stopped_reason, \
+        "%s 레코드 %d: 멈춘 자리 %r" % (what, k, res.stopped_reason)
+
+
+def test_middle_corruption_no_suffix_recovery():
+    """파일 **중간**의 레코드 하나가 깨지면 거기서 멈추고, 그 뒤의 정상 레코드는 읽지 않는다.
+
+    끝이 잘린 파일(위 truncation sweep)과 달리 뒤에 온전한 레코드가 남아 있어도 되살리지 않는다 —
+    깨진 자리 너머에서 레코드 경계를 다시 찾지 않는다. 바탕은 동결된 골든 파일이고, 레코드마다
+    CRC 범위의 마지막 바이트 · rec_magic · 길이 칸을 하나씩 깨 본다.
+    """
+    clean_buf = _golden_minimal_file()
+    clean = X.scan(clean_buf)
+    assert clean.stopped_reason is None and clean.trailing_bytes == 0, clean.stopped_reason
+    assert len(clean.records) >= 3, "골든 파일의 레코드가 %d 개" % len(clean.records)
+
+    for k, rec in enumerate(clean.records):
+        last = bytearray(clean_buf)
+        last[rec.offset + rec.total_len - 1] ^= 0xFF          # CRC 가 덮는 마지막 바이트
+        _assert_stops_at(bytes(last), clean, k, "마지막 바이트")
+
+        magic = bytearray(clean_buf)
+        magic[rec.offset] ^= 0xFF                              # rec_magic
+        _assert_stops_at(bytes(magic), clean, k, "rec_magic")
+
+        length = bytearray(clean_buf)
+        struct.pack_into("<I", length, rec.offset + 8, 0x7FFFFFFF)   # payload_len
+        _assert_stops_at(bytes(length), clean, k, "payload_len")
+
+        # 뒤의 레코드는 그대로 온전하다 — 그래도 결과에 없다(위 _assert_stops_at)
+        for later in clean.records[k + 1:]:
+            X.decode_record(bytes(last), later.offset)
+
+
+def test_empty_payload_types():
+    """SESSION · GAP 은 payload 가 없다 — 쓰는 쪽은 못 쓰고, 읽는 쪽은 거기서 멈춘다."""
+    gap_hdr = X.encode_gap(1, 1, 3, 1)[16:]                   # 타입별 헤더 16 B
+    session_hdr = X.encode_session(fw_build_id="fw")[16:]     # 타입별 헤더 72 B
+    for rtype, hdr in ((X.REC_GAP, gap_hdr), (X.REC_SESSION, session_hdr)):
+        try:
+            X.encode_record(rtype, hdr, b"\x01\x02\x03\x04")
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("payload 가 있는 rec_type %d 를 썼다" % rtype)
+
+        # 손으로 만든 'payload 4 B 인 레코드' — CRC 는 맞다
+        no_crc = (b"XMR1" + bytes([rtype, 0]) + struct.pack("<HI", len(hdr), 4)
+                  + b"\x00\x00\x00\x00" + hdr + b"\x01\x02\x03\x04")
+        rec = _with_crc(no_crc)
+        try:
+            X.decode_record(rec, 0)
+        except X.LogError as e:
+            assert "payload_len" in str(e), e
+        else:
+            raise AssertionError("payload 가 있는 rec_type %d 를 읽었다" % rtype)
+
+    buf = (X.encode_file_header(0) + X.encode_session(fw_build_id="fw")
+           + _with_crc(b"XMR1" + bytes([X.REC_GAP, 0]) + struct.pack("<HI", 16, 4)
+                       + b"\x00\x00\x00\x00" + gap_hdr + b"\x01\x02\x03\x04")
+           + X.encode_data(0, 0x20, 4, 4, b"\x00" * 4))
+    res = X.scan(buf)
+    assert len(res.records) == 1 and res.stopped_reason, (len(res.records), res.stopped_reason)
+
+
 def test_writer_and_crash_recovery():
     tmp = tempfile.mkdtemp(prefix="xmlog_test_")
     path = os.path.join(tmp, "a.xmlog")
@@ -421,6 +503,8 @@ def main():
         ("roundtrip all record types", test_roundtrip_all_types),
         ("byte-wise truncation sweep", test_truncation_sweep),
         ("zero tail is rejected", test_zero_tail_is_rejected),
+        ("middle corruption: no suffix recovery", test_middle_corruption_no_suffix_recovery),
+        ("SESSION / GAP carry no payload", test_empty_payload_types),
         ("writer + crash recovery", test_writer_and_crash_recovery),
         ("10ch DATA record <= 72 B", test_record_size_budget),
         ("bad inputs rejected", test_bad_inputs_rejected),

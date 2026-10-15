@@ -29,7 +29,7 @@ import schema_registry as R
 import xmlog as X
 import xmlog_export as EXP
 from frame_router import cobs_decode, parse_phai_frame, FrameRouter
-from xmlog_capture import XmLogCapture
+from xmlog_capture import XmLogCapture, PcClock
 
 try:                                    # 생성된 0x20 맵 — 없으면 이름만 못 붙는다
     import xm_total_data_map as M
@@ -119,7 +119,8 @@ def run_demo(out_dir: str, cycles: int = 25, chunk: int = 61,
                        fw_build_id="demo", total_data_map_version=MAP_VERSION,
                        flush_every=64)
     live_rows = []          # (names, values) — 0xF0 을 실시간 경로로 푼 것
-    state = {"us": 0}
+    state = {"us": 0}       # 합성 스트림의 시각 — 프레임마다 1 ms
+    pc_clock = PcClock()    # .xmlog 의 pc_time_us 는 UTC µs — 지금을 기준점으로 합성 시각을 더한다
 
     def on_frame(pkt):
         state["us"] += 1000
@@ -138,7 +139,7 @@ def run_demo(out_dir: str, cycles: int = 25, chunk: int = 61,
                 cs = reg.get(pkt.module_id, len(pkt.payload))
                 live_rows.append((list(cs.names), cs.decode(pkt.payload))
                                  if cs is not None else ([], []))
-        cap.on_frame(pkt, state["us"])
+        cap.on_frame(pkt, pc_clock.us(state["us"] / 1e6))
 
     ok, crc_err, framing_err = _feed(stream, chunk, on_frame)
     cap.close()

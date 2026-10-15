@@ -35,6 +35,7 @@ GUI 워커와 CLI 가 **같은 파일을 만드는 이유**도 이것이다 — 
 from __future__ import annotations
 
 import os
+import time
 
 import schema_0xee as EE
 import schema_registry as R
@@ -43,6 +44,36 @@ import xmlog as X
 # 펌웨어가 어떤 빌드인지 알아낼 경로가 아직 없다(`0xED` 에 빌드 ID 가 없고 SDO 로 묻지도 않는다).
 # 값을 0 으로 비워 두면 "안 적었다" 와 "모른다" 가 구별되지 않는다 — 모른다고 **적는다**.
 FW_BUILD_ID_UNKNOWN = "unknown"
+
+
+class PcClock:
+    """DATA 의 `pc_time_us` 를 만드는 시계 — 1970-01-01 00:00:00 UTC 부터의 µs.
+
+    만들 때 PC 시계(`time.time_ns`)를 한 번 읽어 기준을 잡고, 그 뒤는 단조 시계(`time.perf_counter`)로
+    흐른 시간을 더한다. 그래서 저장하는 동안 PC 시계가 조정돼도 값이 튀거나 뒤로 가지 않는다. 대신 오래
+    저장하면 PC 시계와 조금씩 벌어질 수 있다(SESSION · 파일 머리의 시각은 그때그때 PC 시계를 읽은 값이다).
+
+    수신 루프는 자기가 잡은 `perf_counter()` 기준점을 넘겨 만들고, 그 기준부터 흐른 초를 `us()` 에 준다:
+
+        perf_start = time.perf_counter()
+        clock = PcClock(perf_start)
+        cap.on_frame(frame, clock.us(time.perf_counter() - perf_start))
+
+    `perf_origin` 을 안 주면 만든 순간이 기준점이다.
+    """
+
+    __slots__ = ("perf_origin", "unix_us_at_origin")
+
+    def __init__(self, perf_origin=None):
+        perf_now = time.perf_counter()
+        wall_now_us = time.time_ns() // 1000
+        self.perf_origin = perf_now if perf_origin is None else float(perf_origin)
+        # 기준점의 UTC µs — 지금 읽은 두 시계의 차이로 거꾸로 구한다.
+        self.unix_us_at_origin = wall_now_us - round((perf_now - self.perf_origin) * 1e6)
+
+    def us(self, seconds_since_origin: float) -> int:
+        """기준점부터 흐른 초 -> UTC µs (`pc_time_us`). 반올림한다 — 1.001 s 가 1000999 µs 가 되지 않게."""
+        return self.unix_us_at_origin + round(seconds_since_origin * 1e6)
 
 
 def unique_path(path: str) -> str:
@@ -65,7 +96,8 @@ class XmLogCapture:
     """PhAIFrame -> .xmlog. 상태는 카운터 · 직전 seq · 지금 유효한 스키마(activation)뿐이다.
 
         cap = XmLogCapture(path, total_data_map_version="2.8")
-        cap.on_frame(frame, pc_time_us)     # 매 프레임
+        clock = PcClock(perf_start)         # 수신 루프의 perf_counter() 기준점
+        cap.on_frame(frame, clock.us(t))    # 매 프레임 — t = 기준점부터 흐른 초
         cap.on_gap(X.GAP_QUEUE_OVERFLOW, ...)   # 큐를 버렸을 때
         cap.on_reconnect()                  # 연결이 끊겼다 같은 파일에서 다시 붙었을 때
         cap.close()
@@ -107,11 +139,15 @@ class XmLogCapture:
 
     # -----------------------------------------------------------------
     def on_frame(self, frame, pc_time_us: int) -> None:
-        """CRC 를 통과한 프레임 하나.
+        """CRC 를 통과한 프레임 하나. `pc_time_us` 는 1970-01-01 UTC 부터의 µs 다(`PcClock` 으로 만든다).
 
         seq 갭은 여기서 **직접** 센다. FrameRouter 의 원장을 다시 읽지 않는 이유는,
         원장이 화면 표시용으로 클램프·리싱크 규칙을 갖고 있어서 "파일에 남길 사실"
         과 "사람에게 보여줄 통계" 가 다를 수 있기 때문이다. 파일은 사실만 적는다.
+
+        GAP 의 `from_seq` · `to_seq` 는 둘 다 **받은** 프레임의 번호다 — 빠지기 직전에 받은 seq 와 빠진
+        뒤 처음 받은 seq. 빠진 번호는 그 사이(`from_seq + 1` ~ `to_seq - 1`, 65535 다음은 0)이고 그 개수가
+        `lost_count` 다. seq 가 뒤로 가면(reason 3) 같은 두 번호를 적고 `lost_count` 는 0 이다.
         """
         seq = frame.seq_id
         if self._started:
@@ -190,7 +226,11 @@ class XmLogCapture:
         self._live[mid] = act
 
     def on_gap(self, reason, from_seq=0, to_seq=0, lost_count=0) -> None:
-        """와이어가 아니라 **PC 쪽** 사정으로 잃은 것 (큐 오버플로 등)."""
+        """와이어가 아니라 **PC 쪽** 사정으로 잃은 것 (큐 오버플로 등).
+
+        `from_seq` · `to_seq` 는 `on_frame` 이 적는 GAP 과 같은 뜻이다(잃기 직전 · 잃은 뒤에 받은 번호).
+        모르면 0 이다.
+        """
         self.w.gap(reason, from_seq, to_seq, lost_count)
         self.gaps += 1
         self.lost_total += lost_count

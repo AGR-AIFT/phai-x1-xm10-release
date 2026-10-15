@@ -53,7 +53,7 @@ import numpy as np
 # 프레임 파싱·시퀀스 회계·module 라우팅은 frame_router.py 하나로 모았다.
 # GUI 워커와 CLI 가 같은 코드를 쓰게 하려는 것이다 (예전에는 각자 복사본을 갖고 있었다).
 # 무손실 저장(.xmlog). 표준 라이브러리만 쓰므로 항상 import 된다.
-from xmlog_capture import XmLogCapture, unique_path
+from xmlog_capture import XmLogCapture, PcClock, unique_path
 import schema_registry as _schema
 
 # 0x20 Total Data 디코더. 생성된 맵(xm_total_data_map.py)이 옆에 있어야 동작한다 —
@@ -299,6 +299,8 @@ class PhAISerialWorker(QtCore.QObject):
         # 라우터를 워커가 갖는다 — 시퀀스 회계를 큐에 넣기 '전에' 해야 하기 때문이다.
         # 큐 뒤에서 세면 PC 쪽 처리 지연(큐 오버플로)이 와이어 손실로 둔갑한다.
         self.router = FrameRouter()
+        # .xmlog 의 pc_time_us(UTC µs). run() 이 수신 시작 시점(perf_start)으로 다시 잡는다.
+        self._pc_clock = PcClock()
 
     @pyqtSlot()
     def run(self):
@@ -314,6 +316,7 @@ class PhAISerialWorker(QtCore.QObject):
 
             wire_buf = bytearray()
             perf_start = time.perf_counter()
+            self._pc_clock = PcClock(perf_start)
 
             while self._running:
                 try:
@@ -376,7 +379,7 @@ class PhAISerialWorker(QtCore.QObject):
         # CLI(run_cli)와 같은 자리다.
         if self.capture is not None:
             try:
-                self.capture.on_frame(pkt, int(recv_t * 1e6))
+                self.capture.on_frame(pkt, self._pc_clock.us(recv_t))
             except Exception as e:
                 # 디스크가 찼거나 파일이 잠긴 경우. 수신은 계속하되 저장은 여기서 끝낸다 —
                 # 조용히 계속 실패하면 사용자는 파일이 있는 줄 안다.
@@ -1755,6 +1758,7 @@ def run_cli(port, baud, output, total_data=False, log=False):
     good = 0
     errs = 0
     t0 = time.perf_counter()
+    pc_clock = PcClock(t0)          # .xmlog 의 pc_time_us(UTC µs) — GUI 워커와 같은 시계
     last_print = t0
     # GUI 와 똑같은 라우터를 쓴다. 예전에는 CLI 가 파싱을 따로 갖고 있어서
     # 같은 버그(시퀀스 클램프, module 미분리)를 두 번 고쳐야 했다.
@@ -1799,7 +1803,7 @@ def run_cli(port, baud, output, total_data=False, log=False):
                         if cap is not None:
                             # 라우팅 판정 전에 적는다 — 화면에 안 그리는
                             # 시스템 채널도 파일에는 남아야 한다.
-                            cap.on_frame(pkt, int(now * 1e6))
+                            cap.on_frame(pkt, pc_clock.us(now))
                         route_tag, _mid, _delta = router.route(pkt)
                         if (td_out is not None and route_tag == 'system'
                                 and pkt.module_id == PHAI_MODULE_TOTAL_DATA):
