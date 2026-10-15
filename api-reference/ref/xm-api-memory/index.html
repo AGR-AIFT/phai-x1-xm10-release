@@ -3014,7 +3014,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ 호출 컨텍스트</strong>: 128KB 전체 섹터를 지우는 데 약 1~2초가 걸립니다 — 헤더가 명시적으로 <strong>"실시간 제어 루프에서 호출하지 마세요"</strong>라고 경고합니다. 즉 1kHz <code>Control_Loop()</code> 안에서는 절대 호출하지 말고, 버튼 이벤트 처리·부팅 시 초기화처럼 1회성으로 실행되는 경로에서만 사용하세요.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 128KB 전체 섹터를 지우는 데 약 1~2초가 걸립니다 — 헤더가 명시적으로 **"실시간 제어 루프에서 호출하지 마세요"**라고 경고합니다. 즉 1kHz <code>Control_Loop()</code> 안에서는 절대 호출하지 말고, 버튼 이벤트 처리·부팅 시 초기화처럼 1회성으로 실행되는 경로에서만 사용하세요.</p>
 <h4 id="xm_usernv_iserased"><code>XM_UserNV_IsErased()</code><a class="headerlink" href="#xm_usernv_iserased" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_UserNV_IsErased</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 </code></pre></div>

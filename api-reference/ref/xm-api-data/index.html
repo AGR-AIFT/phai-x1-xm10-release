@@ -3640,7 +3640,7 @@
 <h3 id="xm_sendpvector"><code>XM_SendPVector()</code><a class="headerlink" href="#xm_sendpvector" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendPVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">PVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">pVector</span><span class="p">);</span>
 </code></pre></div>
-<p>지정된 관절에 <strong>위치 기반 궤적(P-Vector)</strong>을 전송합니다. 모터드라이버가 5차 다항식(polynomial) 궤적을 생성해 지정 시간(<code>L</code>) 안에 목표 위치(<code>yd</code>)까지 부드럽게 움직입니다.</p>
+<p>지정된 관절에 **위치 기반 궤적(P-Vector)**을 전송합니다. 모터드라이버가 5차 다항식(polynomial) 궤적을 생성해 지정 시간(<code>L</code>) 안에 목표 위치(<code>yd</code>)까지 부드럽게 움직입니다.</p>
 <table>
 <thead>
 <tr>
@@ -3721,7 +3721,7 @@
 <h3 id="xm_sendivector"><code>XM_SendIVector()</code><a class="headerlink" href="#xm_sendivector" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendIVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">IVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">iVector</span><span class="p">);</span>
 </code></pre></div>
-<p>지정된 관절에 <strong>임피던스 제어 파라미터(I-Vector)</strong>를 전송하여, 관절이 가상의 스프링-댐퍼처럼 동작하도록 설정합니다.</p>
+<p>지정된 관절에 **임피던스 제어 파라미터(I-Vector)**를 전송하여, 관절이 가상의 스프링-댐퍼처럼 동작하도록 설정합니다.</p>
 <table>
 <thead>
 <tr>
@@ -3754,7 +3754,7 @@
 <h3 id="xm_sendfvector"><code>XM_SendFVector()</code><a class="headerlink" href="#xm_sendfvector" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SendFVector</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">FVector_t</span><span class="o">*</span><span class="w"> </span><span class="n">fVector</span><span class="p">);</span>
 </code></pre></div>
-<p>지정된 관절에 <strong>힘 기반 궤적(F-Vector)</strong>을 전송하여, 사전 정의된 토크 프로파일을 생성하도록 명령합니다.</p>
+<p>지정된 관절에 **힘 기반 궤적(F-Vector)**을 전송하여, 사전 정의된 토크 프로파일을 생성하도록 명령합니다.</p>
 <table>
 <thead>
 <tr>
@@ -3939,7 +3939,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetNormalCompGain</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">gain</span><span class="p">);</span>
 <a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetResistiveCompGain</span><span class="p">(</span><span class="n">SystemNodeID_t</span><span class="w"> </span><span class="n">nodeId</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">gain</span><span class="p">);</span>
 </code></pre></div>
-<p>각각 <strong>일반 보상(중력 보상 등)</strong>과 <strong>저항 보상(저항 훈련 모드)</strong>의 강도를 조절합니다.</p>
+<p>각각 **일반 보상(중력 보상 등)**과 **저항 보상(저항 훈련 모드)**의 강도를 조절합니다.</p>
 <table>
 <thead>
 <tr>
@@ -4139,7 +4139,7 @@
 </tbody>
 </table>
 <blockquote>
-<p>⚠️ <strong>스케일 표기 차이 주의</strong>: <a href="../../02-h10-control-n-data/">02. KIT H10 제어 + 데이터</a> 문서의 예제 텍스트에는 <code>yd</code>가 "scaled by 100"으로 남아있는 곳이 있으나, 본 헤더(<code>xm_api_data.h</code>, ground truth)의 주석은 <strong>"scaled by 10 — 실동작 검증값"</strong>으로 명시합니다. 코드 작성 시 본 페이지(헤더 기준)를 따르세요.</p>
+<p>⚠️ <strong>스케일 표기 차이 주의</strong>: <a href="../../02-h10-control-n-data/">02. KIT H10 제어 + 데이터</a> 문서의 예제 텍스트에는 <code>yd</code>가 "scaled by 100"으로 남아있는 곳이 있으나, 본 헤더(<code>xm_api_data.h</code>, ground truth)의 주석은 **"scaled by 10 — 실동작 검증값"**으로 명시합니다. 코드 작성 시 본 페이지(헤더 기준)를 따르세요.</p>
 </blockquote>
 <hr />
 <h3 id="ivector_t"><code>IVector_t</code><a class="headerlink" href="#ivector_t" title="Permanent link">&para;</a></h3>
