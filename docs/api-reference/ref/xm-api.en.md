@@ -1,14 +1,14 @@
 # `xm_api.h` — XM10 SDK Entry Point (Umbrella API Header)
 
 > **Target header**: [`XM_FW/XM_API/xm_api.h`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api.h) (Rev2.0 baseline — the same file also exists in Rev1.1; differences are covered in [§2](#what-this-header-aggregates))
-> **Related concept docs**: [Full API reference index](../README.en.md) — all of docs 01–09 cover the sub-APIs this header aggregates
+> **Related concept docs**: [Full API reference index](../README.en.md) — all of docs 01–10 cover the sub-APIs this header aggregates
 > **Related examples**: virtually every example — almost none of the repository examples skip including `xm_api.h`. The flagship example that calls `XM_GetTick()` directly is [00_Quick_Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/)
 
 ---
 
 ## When to use this
 
-Add this single line at the top of any XM10 example (`.c`) file, and you get access to every user-facing SDK API at once: robot control, sensor reads, LED/button, extension IO, USB communication/logging, memory, RTC, and auxiliary tasks.
+Add this single line at the top of any XM10 example (`.c`) file, and you get access to every user-facing SDK API at once: robot control, sensor reads, LED/button, extension IO, USB communication/logging, memory, RTC, and auxiliary tasks. However, a `.c` file that uses the struct logging macros (`XM_LOG_*`) must also include `xm_api_logging_raw.h`.
 
 ```c
 #include "xm_api.h"
@@ -18,7 +18,7 @@ Add this single line at the top of any XM10 example (`.c`) file, and you get acc
 
 ## What this header aggregates
 
-`xm_api.h` includes the following sub-API headers. There are 9 on Rev2.0 and 8 on Rev1.1 (see the Notes column for the difference).
+`xm_api.h` includes the following sub-API headers. There are 12 on Rev2.0 and 9 on Rev1.1 (see the table below and "Revision differences at a glance" for the difference). A `.c` file that uses the struct logging macros (`XM_LOG_*`) must also include `xm_api_logging_raw.h` directly — `xm_api.h` does not include that header.
 
 | # | Included header | One-line description | Concept doc |
 |---|-----------|-----------|-----------|
@@ -27,17 +27,19 @@ Add this single line at the top of any XM10 example (`.c`) file, and you get acc
 | 3 | `xm_api_led_btn.h` | Onboard LED and button control | [03 LED & Button](../03-led-btn-control.en.md) |
 | 4 | `xm_api_external_io.h` | Extension port GPIO/ADC | [04 External IO](../04-external-io.en.md) |
 | 5 | `xm_api_usb.h` | USB serial communication (CDC) | [05 USB Serial Communication](../05-usb-connectivity.en.md) |
-| 6 | `xm_api_user_custom.h` | User custom slot (28B) inside the Total Data (0x20) packet — automatically included in PhAI Studio streaming/recording | No dedicated concept doc yet — see the Doxygen example (`@code` block) inside the header |
-| 7 | `xm_api_memory.h` | Memory region access (Workspace/PSRAM/DTCM/non-volatile storage) | [07 Memory Regions](../07-memory-management.en.md) — 🟢 **Rev 2.0 only** |
-| 8 | `xm_api_rtc.h` | RTC date/time management | [08 Real-Time Clock](../08-rtc-clock.en.md) — ⚠️ stub on Rev1.1 |
-| 9 | `xm_api_freertos.h` | Auxiliary task creation + Mutex (student-friendly FreeRTOS wrapper) | [09 Auxiliary Tasks & Data Sharing](../09-task-creation.en.md) |
-| 10 | `xm_api_safety.h` | Safe-torque helpers (new in v2.6.0) — `XM_SafeTorque_*` combines bad-value rejection, limit clamping, entry soft-start and slew limiting in one call; plus `XM_SafeAssistLevel()` and `XM_SafeIsFresh()` for sensor freshness. Implemented inside the header, so there is no separate `.c` | [02 KIT H10 Control & Data](../02-h10-control-n-data.en.md) |
+| 6 | `xm_api_logging.h` | Struct logging — sends a struct to the PC with field names, units and types (a `.c` file that uses the `XM_LOG_*` macros must also include `xm_api_logging_raw.h`) | [10 Struct Logging](../10-struct-logging.en.md) — 🟢 **Rev 2.0 only** |
+| 7 | `xm_api_usb_msc.h` | USB memory logging — saves one struct to a USB memory stick at a fixed rate | [06 USB Memory Logging](../06-usb-data-logging.en.md) — 🟢 **Rev 2.0 only** |
+| 8 | `xm_api_user_custom.h` | User custom slot (28B) inside the Total Data (0x20) packet — automatically included in PhAI Studio streaming/recording | No dedicated concept doc yet — see the Doxygen example (`@code` block) inside the header |
+| 9 | `xm_api_memory.h` | Memory region access (Workspace/PSRAM/DTCM/non-volatile storage) | [07 Memory Regions](../07-memory-management.en.md) — 🟢 **Rev 2.0 only** |
+| 10 | `xm_api_rtc.h` | RTC date/time management | [08 Real-Time Clock](../08-rtc-clock.en.md) — ⚠️ stub on Rev1.1 |
+| 11 | `xm_api_freertos.h` | Auxiliary task creation + Mutex (student-friendly FreeRTOS wrapper) | [09 Auxiliary Tasks & Data Sharing](../09-task-creation.en.md) |
+| 12 | `xm_api_safety.h` | Safe-torque helpers (new in v2.6.0) — `XM_SafeTorque_*` combines bad-value rejection, limit clamping, entry soft-start and slew limiting in one call; plus `XM_SafeAssistLevel()` and `XM_SafeIsFresh()` for sensor freshness. Implemented inside the header, so there is no separate `.c` | [02 KIT H10 Control & Data](../02-h10-control-n-data.en.md) |
 
 **Revision differences at a glance**:
 
-- 🟢 **Rev 2.0 only**: `xm_api_memory.h` — this header file does not exist at all in the Rev1.1 SDK (i.e. `xm_api.h` does not include it there). It reflects Rev2.0-only hardware such as the 8MB Workspace/PSRAM.
+- 🟢 **Rev 2.0 only**: `xm_api_memory.h` · `xm_api_logging.h` · `xm_api_usb_msc.h` — these header files do not exist at all in the Rev1.1 SDK (i.e. `xm_api.h` does not include them there). `xm_api_memory.h` reflects Rev2.0-only hardware such as the 8MB Workspace/PSRAM. `xm_api_logging_raw.h` also exists only in the Rev2.0 SDK.
 - ⚠️ **Rev1.1 limitation**: `xm_api_rtc.h` exists as a file in both revisions, but Rev1.1 boards do not carry the RTC chip (MCP79510), so every function compiles down to a stub (always returns `false` / no-op). If you need timekeeping on Rev1.1, fall back to elapsed time based on `XM_GetTick()`.
-- The other 7 headers (`xm_api_data/tsm/led_btn/external_io/usb/user_custom/freertos`) are identical in content across both revisions.
+- Among the other headers, `xm_api_data.h`, `xm_api_led_btn.h`, `xm_api_external_io.h` and `xm_api_usb.h` differ in content between the two revisions. For what differs, see each reference page (for example the "Rev1.1 / Rev2.0 Difference Summary" of [`xm_api_usb.h`](xm-api-usb.en.md)). `xm_api_tsm.h`, `xm_api_user_custom.h`, `xm_api_freertos.h` and `xm_api_safety.h` have no functional difference.
 
 ## Function list
 
@@ -103,4 +105,4 @@ void Control_Loop(void)
 ## See also
 
 - [API reference index](../README.en.md)
-- The 01–09 concept docs linked in the §2 table above
+- The 01–10 concept docs linked in the §2 table above

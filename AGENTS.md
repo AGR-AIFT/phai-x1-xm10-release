@@ -20,7 +20,7 @@
 
 1. [docs/getting-started/00-claude-code-quickstart.md](docs/getting-started/00-claude-code-quickstart.md) — AI 자동 안내
 2. [examples/00_Quick_Start/](examples/00_Quick_Start/) — Hello board
-3. [docs/tutorials/README.md](docs/tutorials/README.md) — 45 개 예제 전체 로드맵
+3. [docs/tutorials/README.md](docs/tutorials/README.md) — 48 개 예제 전체 로드맵
 
 ## 절대 룰
 

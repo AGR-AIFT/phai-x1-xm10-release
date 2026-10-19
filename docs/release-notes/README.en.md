@@ -4,6 +4,7 @@ This page lists release attachments, compatibility matrices, and known issues fo
 
 | Version | Date | Notes |
 |---------|------|-------|
+| [v2.9.0](v2.9.0.en.md) | 2026-10-19 | Struct logging + USB memory logging API (Rev 2.0 only) · new examples Ex.10 · 34 · 44 · USB-CDC function changes · 3 declarations removed · undeclared function calls are build errors · `.xmlog` receive time in UTC · Rev 2.0: 48 examples |
 | [v2.8.1](v2.8.1.en.md) | 2026-10-07 | PC tool tabs per module · CAN-FD receive fix · PC tool folder renamed `pc-data-tool` · EMG Hub calibration API · Rev 1.1: 40 examples · bootloader v1.1.0 |
 | [v2.8.0](v2.8.0.en.md) | 2026-09-10 | New PC data tool `xm10` — graphs, lossless saving (`.xmlog`), CSV export + user channel names shown |
 | [v2.7.0](v2.7.0.en.md) | 2026-09-08 | General-purpose Serial API — External UART (PD5/PD6) opened through XM_API + Ex.43 (two XM10s talking) + improved sensor hub connection stability |

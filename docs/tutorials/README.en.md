@@ -1,6 +1,6 @@
-# Tutorials — Learning Through 45 Examples
+# Tutorials — Learning Through 48 Examples
 
-XM10's features are covered through 45 progressively structured examples. Each folder contains source code and a README, and every README follows the same format: Goal → Prerequisites → Key Code → Experiments → Next Steps + Common Mistakes. The introductory examples (Ex.09 and below) are designed to complete in under 30 minutes. Control and advanced examples (Ex.11 and above) may take anywhere from 45 minutes to several weeks, depending on difficulty.
+XM10's features are covered through 48 progressively structured examples. Each folder contains source code and a README, and every README follows the same format: Goal → Prerequisites → Key Code → Experiments → Next Steps + Common Mistakes. The introductory examples (Ex.09 and below) are designed to complete in under 30 minutes. Control and advanced examples (Ex.11 and above) may take anywhere from 45 minutes to several weeks, depending on difficulty.
 
 The full example catalog is at [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md). If you get stuck, check the "Common Mistakes" section at the bottom of each README first. Claude Code users can simply say `"Ex.XX isn't working"` and the `example-helper` skill will respond with the relevant common mistakes and troubleshooting documentation.
 
@@ -49,7 +49,7 @@ Teaching tips:
 - The Week 8 mini project is effective for maintaining motivation. Run it as an open-ended prompt like "build anything using what you've learned from Ex.05–09."
 - For Week 16, teams of 3–4 are recommended. Teams that dive deep into the Physical AI application track (Ex.21, 31, 32, 33) at the end tend to produce the strongest final projects.
 
-Examples not in this schedule (Ex.05d, 15, 22, 24, 28–36, 38–43) are naturally left for self-directed study or a follow-on course in the next semester.
+Examples not in this schedule (Ex.05d, 10, 15, 22, 24, 28–36, 38–44) are naturally left for self-directed study or a follow-on course in the next semester.
 
 ---
 
@@ -91,9 +91,9 @@ From fundamental I/O to state-based programming (FSM) — the core of embedded c
 
 ## Part 2 — USB Communication
 
-Exchange real-time messages with a PC and stream data. Essential for debugging and data collection.
+Exchange real-time messages with a PC and stream data. Essential for debugging and data collection. On Rev 2.0 you can also send structs with field names and units, or save data to a USB memory stick.
 
-> **Note**: The USB serial (CDC) port can only be opened by one program at a time. For Ex.07–09, make sure only one of a serial terminal, PhAI Studio **or** the `xm10` tool is open. Running them simultaneously will cause a conflict.
+> **Note**: The USB serial (CDC) port can only be opened by one program at a time. For Ex.07–09 and Ex.44, make sure only one of a serial terminal, PhAI Studio **or** the `xm10` tool is open. Running them simultaneously will cause a conflict.
 
 ### USB Serial Communication — Ex.07 ~ 09
 
@@ -103,7 +103,22 @@ Exchange real-time messages with a PC and stream data. Essential for debugging a
 | [08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | Sensor data monitoring | ⭐⭐ | Real-time `sprintf` output of sensor data |
 | [09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | High-speed binary streaming | ⭐⭐⭐ | PhAI V2.2 protocol, 1 kHz transmission (view the user channel with the `xm10` tool) |
 
-> To save and analyze a captured stream on the PC, use PhAI Studio recording or the `xm10` tool in the repo — `python pc-data-tool/xm10.py recv` shows a live graph while the raw stream is saved as `.xmlog`, then `export` pulls out CSV ([guide](../getting-started/04-pc-data-tool.en.md)). PhAI Studio is still under development, so for now use the `xm10` tool to view and save your own (custom) data structs, such as the ones you send with `XM_SendUsbDataWithId`. (On-board file storage was removed in v2.5.0 and is not supported at present.)
+> To save and analyze a captured stream on the PC, use PhAI Studio recording or the `xm10` tool in the repo — `python pc-data-tool/xm10.py recv` shows a live graph while the raw stream is saved as `.xmlog`, then `export` pulls out CSV ([guide](../getting-started/04-pc-data-tool.en.md)). PhAI Studio is still under development, so for now use the `xm10` tool to view and save your own (custom) data structs, such as the ones you send with `XM_SendUsbDataWithId`. (On Rev 2.0 you can also save directly to a USB memory stick — see [Save Data to a USB Memory Stick](../getting-started/05-usb-memory-log.en.md). On Rev 1.1, on-board file storage was removed in v2.5.0 and is not supported.)
+
+### Struct Logging — Ex.44
+
+| Example | Title | Difficulty | What You Learn |
+| :---: | :--- | :---: | :--- |
+| [44](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/) | Send a struct to the PC with field names, units and types 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Register a struct once and its field names, units and types travel with the values — integers, `bool`, arrays, scale factors, and a different rate per struct (view it with the `xm10` tool) |
+
+### Saving to a USB Memory Stick — Ex.10 · 34
+
+> There is only one USB-C port. While a USB memory stick is plugged in, PhAI Studio, the `xm10` tool and firmware upload over USB are unavailable. Unplug the stick and connect the PC when the save is finished. (not yet confirmed on the board) <!-- board-check -->
+
+| Example | Title | Difficulty | What You Learn |
+| :---: | :--- | :---: | :--- |
+| [10](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/10_USB_Memory_Log/) | Save values to a USB memory stick 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Start and stop saving with a button, save one struct at 100 Hz, insert markers, check missing samples in the statistics |
+| [34](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/34_USB_Memory_Gait_Log/) | Save H10 gait data to a USB memory stick at 1 kHz 🛑 **Rev 2.0 only** | ⭐⭐⭐ | Save the H10 gait data (96 B) every 1 ms — body data, checking missing samples |
 
 ---
 

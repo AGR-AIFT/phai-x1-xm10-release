@@ -37,10 +37,11 @@ XM10 의 전체 문서 인덱스입니다. 처음 시작하는 분은 위에서 
 | 02 | [개발 환경 구축](getting-started/02-software-setup.md) | STM32CubeIDE 설치, 레포 clone |
 | 03 | [첫 빌드 & 실행](getting-started/03-first-build.md) | 프로젝트 import, 빌드, 펌웨어 업로드 |
 | 04 | [PC 에서 데이터 받기](getting-started/04-pc-data-tool.md) | `xm10` 도구 — 그래프, 무손실 저장, CSV. 보드 없이 `demo` 로 먼저 체험 |
+| 05 | [USB 메모리에 저장하기](getting-started/05-usb-memory-log.md) | 🟢 **Rev 2.0 전용** — 구조체를 USB 메모리에 저장하는 방법 |
 
 ---
 
-## 2. [Tutorials](tutorials/) — 45 개 예제로 단계 학습
+## 2. [Tutorials](tutorials/) — 48 개 예제로 단계 학습
 
 각 예제는 `목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계` 5 단계로 통일되어 있습니다. 기초 예제는 30 분 안에 끝나도록 설계했습니다.
 
@@ -48,12 +49,12 @@ XM10 의 전체 문서 인덱스입니다. 처음 시작하는 분은 위에서 
 | :---: | :--- | :--- |
 | 0 | 보드 동작 확인 | Ex.00 |
 | 1 | 기본 입출력 (LED·버튼·외부 IO) | Ex.01~06 |
-| 2 | USB 통신 | Ex.07~09 |
+| 2 | USB 통신 · USB 메모리 저장 (Ex.10 · 34 · 44 는 🟢 **Rev 2.0 전용**) | Ex.07~10, 34, 44 |
 | 3 | KIT H10 외골격 기본 모드 | Ex.11~13 |
 | 4 | 제어 알고리즘 기초 + 디버깅 | Ex.14~19 |
 | 5 | 제어 알고리즘 심화 (Hogan, HZD, CPG 등) | Ex.20~25 |
 | 6 | 학습 + 적응 제어 (ILC, MRAC 등) | Ex.26~30 |
-| 7 | Physical AI 응용 | Ex.31~36 |
+| 7 | Physical AI 응용 | Ex.31~33, 35~36 |
 | 8 | RTOS 유틸리티 + Sensor Hub + 외부 장비 시리얼 연결 | Ex.38~43 |
 
 > IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
@@ -73,8 +74,11 @@ XM10 의 전체 문서 인덱스입니다. 처음 시작하는 분은 위에서 
 | [LED & 버튼](api-reference/03-led-btn-control.md) | 보드 LED 제어, 버튼 입력 |
 | [외부 IO](api-reference/04-external-io.md) | GPIO, ADC 핀 제어 |
 | [USB 시리얼 통신](api-reference/05-usb-connectivity.md) | PC 로 메시지/데이터 보내기 |
+| [USB 메모리 저장](api-reference/06-usb-data-logging.md) | 구조체 하나를 USB 메모리에 저장 🟢 **Rev 2.0 전용** |
 | [메모리 영역](api-reference/07-memory-management.md) | 빠른 메모리, 비휘발성 저장소 |
 | [실시간 시계](api-reference/08-rtc-clock.md) | 날짜/시간 읽기·쓰기 |
+| [보조 task + 데이터 공유](api-reference/09-task-creation.md) | 1 kHz 제어 루프와 별도 작업 + 안전한 데이터 공유 |
+| [구조체 로깅](api-reference/10-struct-logging.md) | 구조체를 이름 · 단위 · 타입과 함께 PC 로 보내기 🟢 **Rev 2.0 전용** |
 
 ---
 
@@ -117,7 +121,7 @@ ST-Link SWD 직접 업로드 + PhAI Studio USB 업로드 두 가지 방법 + 부
 ## 추가 자료
 
 - [🧭 find-it.md](find-it.md) — 키워드 → 페이지 빠른 찾기
-- [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — 45 개 예제 소스 코드 (각 폴더에 5 단계 README 포함)
+- [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — 48 개 예제 소스 코드 (각 폴더에 5 단계 README 포함)
 - [PC 데이터 도구 xm10](getting-started/04-pc-data-tool.md) — 그래프·무손실 저장·CSV 내보내기 (코드는 [pc-data-tool/](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/pc-data-tool/))
 - [Release Notes](release-notes/) — 버전별 첨부 파일 + 호환성 매트릭스
 - [Changelog](https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md) — 버전별 변경 이력 요약

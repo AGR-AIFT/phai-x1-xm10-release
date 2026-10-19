@@ -2,7 +2,7 @@
 
 > Parent: [API Reference Overview](../README.en.md) · [Documentation Index](../../README.en.md)
 
-A per-header collection of pages documenting the **exact function signatures, parameters, return values, and types** declared by each header under `XM_FW/XM_API/`. For "why to use this API / how it fits your algorithm," check the [concept guides (01–09)](../README.en.md#function-groups) first. These pages are for looking up the **precise calling contract** while you write code.
+A per-header collection of pages documenting the **exact function signatures, parameters, return values, and types** declared by each header under `XM_FW/XM_API/`. For "why to use this API / how it fits your algorithm," check the [concept guides (01–10)](../README.en.md#function-groups) first. These pages are for looking up the **precise calling contract** while you write code.
 
 ---
 
@@ -36,6 +36,8 @@ A per-header collection of pages documenting the **exact function signatures, pa
 | Header | One-line purpose | Reference | Related concept doc | Representative example |
 |--------|-------------------|-----------|----------------------|-------------------------|
 | `xm_api_usb.h` | USB serial (CDC) real-time streaming | [xm-api-usb.en.md](xm-api-usb.en.md) | [05. USB Serial](../05-usb-connectivity.en.md) | [09_CDC_Stream](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) |
+| `xm_api_logging.h` | Struct logging — send a struct to the PC with field names, units and types (also covers `xm_api_logging_raw.h`) — 🟢 **Rev 2.0 only** | [xm-api-logging.en.md](xm-api-logging.en.md) | [10. Struct Logging](../10-struct-logging.en.md) | [44_CDC_Struct_Logging](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/) |
+| `xm_api_usb_msc.h` | USB memory logging — save one struct to a USB memory stick at a fixed rate — 🟢 **Rev 2.0 only**, 14 functions | [xm-api-usb-msc.en.md](xm-api-usb-msc.en.md) | [06. USB Memory Logging](../06-usb-data-logging.en.md) | [10_USB_Memory_Log](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/10_USB_Memory_Log/) · [34_USB_Memory_Gait_Log](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/34_USB_Memory_Gait_Log/) |
 
 ## Memory · RTC
 
@@ -60,5 +62,5 @@ A per-header collection of pages documenting the **exact function signatures, pa
 
 ## See Also
 
-- [API Reference Overview](../README.en.md) — index of the 01–09 concept guides
+- [API Reference Overview](../README.en.md) — index of the 01–10 concept guides
 - [Documentation Index](../../README.en.md)

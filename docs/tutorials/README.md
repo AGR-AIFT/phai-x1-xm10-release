@@ -1,6 +1,6 @@
-# Tutorials — 45 개 예제로 배우기
+# Tutorials — 48 개 예제로 배우기
 
-XM10 기능을 단계적으로 익힐 수 있도록 45 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.09 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.
+XM10 기능을 단계적으로 익힐 수 있도록 48 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.09 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.
 
 예제 전체 카탈로그는 [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) 에 있고, 막히면 각 README 맨 아래의 "흔한 실수" 섹션을 먼저 보세요. Claude Code 사용자라면 `"Ex.XX 가 안 돼"` 라고만 말해도 `example-helper` 가 해당 예제의 흔한 실수 + 트러블슈팅 문서를 인용해 답해줍니다.
 
@@ -49,7 +49,7 @@ XM10 기능을 단계적으로 익힐 수 있도록 45 개 예제를 준비했�
 - 8 주차 미니 프로젝트는 사용자의 동기 유지에 효과적입니다. "Ex.05~09 까지 익힌 걸로 무엇이든" 같은 열린 주제로 운영하세요.
 - 16 주차 기말은 팀 단위 (3~4 명) 권장합니다. Physical AI 응용 트랙 (Ex.21, 31, 32, 33) 을 마지막에 깊이 다루는 팀이 보통 나옵니다.
 
-진도표에 빠진 예제 (Ex.05d, 15, 22, 24, 28~36, 38~43) 는 자기주도 학습 또는 다음 학기 후속 과목용으로 남겨두는 것이 분량 면에서 자연스럽습니다.
+진도표에 빠진 예제 (Ex.05d, 10, 15, 22, 24, 28~36, 38~44) 는 자기주도 학습 또는 다음 학기 후속 과목용으로 남겨두는 것이 분량 면에서 자연스럽습니다.
 
 ---
 
@@ -91,9 +91,9 @@ XM10 기능을 단계적으로 익힐 수 있도록 45 개 예제를 준비했�
 
 ## Part 2 — USB 통신
 
-PC 와 실시간으로 메시지를 주고받고 데이터를 스트리밍합니다. 디버깅과 데이터 수집의 핵심.
+PC 와 실시간으로 메시지를 주고받고 데이터를 스트리밍합니다. 디버깅과 데이터 수집의 핵심. Rev 2.0 에서는 구조체에 이름 · 단위를 붙여 보내거나 USB 메모리에 저장할 수도 있습니다.
 
-> **주의**: USB 시리얼 (CDC) 포트는 한 번에 한 프로그램만 점유 가능. Ex.07~09 는 시리얼 터미널, PhAI Studio, `xm10` 도구 중 하나만 열어둔 상태에서 실행하세요. 동시에 켜면 충돌합니다.
+> **주의**: USB 시리얼 (CDC) 포트는 한 번에 한 프로그램만 점유 가능. Ex.07~09 · Ex.44 는 시리얼 터미널, PhAI Studio, `xm10` 도구 중 하나만 열어둔 상태에서 실행하세요. 동시에 켜면 충돌합니다.
 
 ### USB 시리얼 통신 — Ex.07 ~ 09
 
@@ -103,7 +103,22 @@ PC 와 실시간으로 메시지를 주고받고 데이터를 스트리밍합니
 | [08](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/08_CDC_Sensor_Print/) | 센서 데이터 모니터링 | ⭐⭐ | 실시간 데이터 sprintf 출력 |
 | [09](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) | 고속 바이너리 스트리밍 | ⭐⭐⭐ | PhAI V2.2 프로토콜, 1 kHz 전송 (사용자 채널은 `xm10` 도구로 확인) |
 
-> 수집한 스트림을 PC 에 저장·분석하려면 PhAI Studio 녹화 또는 레포 내 `xm10` 도구를 사용하세요 — `python pc-data-tool/xm10.py recv` 로 그래프를 보면서 원본이 `.xmlog` 로 저장되고, `export` 로 CSV 를 뽑습니다 ([안내](../getting-started/04-pc-data-tool.md)). PhAI Studio 는 아직 개발 중이라, `XM_SendUsbDataWithId` 로 보내는 직접 정의한 데이터 구조체(커스텀 구조체)는 우선 `xm10` 도구로 보고 저장하세요. (온보드 파일 저장은 v2.5.0 에서 제거되어 현재 지원하지 않습니다)
+> 수집한 스트림을 PC 에 저장·분석하려면 PhAI Studio 녹화 또는 레포 내 `xm10` 도구를 사용하세요 — `python pc-data-tool/xm10.py recv` 로 그래프를 보면서 원본이 `.xmlog` 로 저장되고, `export` 로 CSV 를 뽑습니다 ([안내](../getting-started/04-pc-data-tool.md)). PhAI Studio 는 아직 개발 중이라, `XM_SendUsbDataWithId` 로 보내는 직접 정의한 데이터 구조체(커스텀 구조체)는 우선 `xm10` 도구로 보고 저장하세요. (Rev 2.0 은 USB 메모리에 직접 저장할 수도 있습니다 — [USB 메모리에 저장하기](../getting-started/05-usb-memory-log.md). Rev 1.1 은 온보드 파일 저장이 v2.5.0 에서 제거되어 지원하지 않습니다.)
+
+### 구조체 로깅 — Ex.44
+
+| 예제 | 제목 | 난이도 | 학습 내용 |
+| :---: | :--- | :---: | :--- |
+| [44](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/) | 구조체를 이름 · 단위 · 타입과 함께 PC 로 보내기 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 구조체를 한 번 등록하면 필드 이름 · 단위 · 타입이 값과 함께 PC 로 갑니다 — 정수 · `bool` · 배열 · 배율, 구조체마다 다른 주기 (`xm10` 도구로 확인) |
+
+### USB 메모리 저장 — Ex.10 · 34
+
+> USB-C 포트는 하나입니다. USB 메모리를 꽂아 두는 동안에는 PhAI Studio · `xm10` 도구 · USB 로 하는 펌웨어 업로드를 쓸 수 없습니다. 저장이 끝나면 USB 메모리를 뽑고 PC 를 연결하세요. (보드 확인 전) <!-- board-check -->
+
+| 예제 | 제목 | 난이도 | 학습 내용 |
+| :---: | :--- | :---: | :--- |
+| [10](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/10_USB_Memory_Log/) | USB 메모리에 값 저장하기 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | 버튼으로 저장 시작 · 정지, 구조체 하나를 100 Hz 로 저장, 마커 넣기, 통계로 빠진 표본 확인 |
+| [34](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/34_USB_Memory_Gait_Log/) | H10 보행 데이터를 USB 메모리에 1 kHz 로 저장 🛑 **Rev 2.0 전용** | ⭐⭐⭐ | H10 보행 데이터(96 B)를 1 ms 마다 저장 — 신체 정보, 빠진 표본 확인 |
 
 ---
 

@@ -161,6 +161,14 @@
 #define XM_EXTERNAL_UART_XSENS_ENABLE   0
 #endif
 
+/* USB 포트 동작 (기본 0)
+ *  0: USB 메모리를 꽂으면 Host(MSC) — 보드가 USB 5 V 를 공급한다. PC 에 꽂으면 Device(CDC).
+ *  1: Device(CDC) 전용 — USB 메모리를 인식하지 않고 USB 5 V 도 공급하지 않는다.
+ *  이 값은 라이브러리를 빌드할 때 정해진다. 미리 빌드된 라이브러리는 0 이라, 다시 빌드하지 않으면 바꿔도 동작이 같다. */
+#ifndef XM_USB_DEVICE_ONLY
+#define XM_USB_DEVICE_ONLY   0
+#endif
+
 /**
  *===========================================================================
  * DIAGNOSTIC FEATURE FLAGS (Step 0 of USB TightSpin Investigation Plan v1.5)

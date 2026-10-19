@@ -15,7 +15,7 @@ This page is your single reference for all external interfaces on the XM10 board
 | **Buttons** | 3 | BTN 1 (left) · BTN 2 (center) · BTN 3 (right) |
 | **External GPIO** | DIO 8 + ADC 4 (+ dynamic ADC 8) | [See per-revision pinmap](#external-gpio-pinmap) |
 | **CAN-FD ports** | 2 | KIT H10 connection + sensor hub expansion |
-| **USB-C** | 1 | Serial communication (CDC) — PC connection |
+| **USB-C** | 1 | Serial communication (CDC) — PC connection. Rev 2.0 can also save to a USB memory stick (one at a time with a PC). (not yet confirmed on the board) <!-- board-check --> |
 | **External UART** | 1 (**Rev 2.0 only**) | Serial link to external devices — general-purpose Serial API. Rev 1.1 does not have this port |
 | **SWD debug** | 4-pin | ST-Link firmware upload and debugging |
 | **Main connector** | 1 | KIT H10 body connection (24 V power + CAN-FD) |
@@ -62,11 +62,12 @@ Two ports total. One communicates with KIT H10 through the main connector; the o
 
 ### USB-C Port
 
-Used for data exchange with a PC via USB serial communication (CDC) for real-time data streaming and debug messages.
+Used for data exchange with a PC via USB serial communication (CDC) for real-time data streaming and debug messages. On Rev 2.0 you can also plug a USB memory stick into the same port and save data to it. There is only one port, so you use either a PC or a USB memory stick at a time.
 
 | Mode | Purpose | Functions used |
 |------|---------|----------------|
 | Serial (CDC) | Text debug via a PC terminal / user structs via the `xm10` tool. PhAI Studio shows Total Data (0x20) | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
+| USB memory logging 🟢 **Rev 2.0 only** | Saves one struct at a fixed rate to a USB memory stick, and you decode the saved folder on a PC ([USB Memory Logging](../api-reference/06-usb-data-logging.en.md)). While the stick is plugged in, the board does not connect to a PC over USB. (not yet confirmed on the board) | `XM_SetUsbLogSource`, `XM_StartUsbDataLog`, `XM_StopUsbDataLog` <!-- board-check --> |
 
 ### External UART Port 🟢 **Rev 2.0 only**
 

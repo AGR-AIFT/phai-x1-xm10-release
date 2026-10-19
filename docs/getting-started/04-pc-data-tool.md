@@ -7,7 +7,7 @@
 > **어디에 있나요?** SDK ZIP 을 풀면 `Extension_Module\pc-data-tool\` 이 같이 들어 있습니다.
 > 받은 ZIP 에 이 폴더가 없다면(예전 버전) GitHub 레포에서 `pc-data-tool/` 폴더만 받아
 > 아무 데나 두고 쓰면 됩니다 — 보드 리비전과 무관하게 같은 파일입니다.
-> v2.8.0 ZIP 에서는 이 폴더 이름이 `PythonDecoder` 였습니다 — 같은 도구입니다.
+> v2.8.0 ZIP 에서는 이 폴더 이름이 `PythonDecoder` 였습니다 — 같은 도구의 예전 버전입니다.
 
 > **PhAI Studio 와 무엇이 다른가요?** PhAI Studio 는 웹에서 바로 쓰는 공식 도구이고, 이건
 > 코드가 열려 있는 로컬 도구입니다. 받은 바이트를 **해석하기 전에 그대로 저장**하기 때문에
@@ -22,8 +22,9 @@
 | 보고 싶은 것 | 쓰는 프로그램 |
 | :--- | :--- |
 | 보드가 자동으로 보내는 시스템 데이터 — 관절 각도·토크 등 (Total Data 0x20. 그 안의 28바이트 `User_Custom` 칸을 채우는 방법은 [`xm_api_user_custom`](../api-reference/ref/xm-api-user-custom.md)) | PhAI Studio |
-| `XM_SendUsbDataWithId` 로 직접 보낸 내 구조체 (`0xF0`~`0xFE`) | `xm10` 도구 (이 문서) |
+| `XM_SendUsbDataWithId` 로 직접 보낸 내 구조체 (`0xF0`~`0xFE`) — Rev 2.0 은 구조체 로깅 `XM_LOG_SEND` 로 보낸 구조체도 | `xm10` 도구 (이 문서) |
 | `XM_SendUsbDebugMessage` 로 보낸 텍스트 | 시리얼 터미널 |
+| 보드가 USB 메모리에 직접 저장한 파일 🟢 **Rev 2.0 전용** | XM10 Log Decoder 2.2.0 이상 ([USB 메모리에 저장하기](05-usb-memory-log.md)) |
 
 ---
 
@@ -85,8 +86,9 @@ python xm10.py recv
 채널이 그래프로 올라옵니다. 예제 09 처럼 `XM_SetUsbCustomMeta` 로 이름을 등록했다면 그
 이름이 그래프 제목에 붙습니다.
 
-> PC 프로그램은 한 번에 하나만 연결하세요. 채널 이름은 연결할 때 한 번 전달됩니다.
-> 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
+> PC 프로그램은 한 번에 하나만 연결하세요. Rev 2.0 (v2.9.0 이상)은 COM 포트를 열 때마다 채널 이름을 다시 보내므로, 이름이 안 보이면 **Disconnect** 뒤 다시 **Connect** 하세요. (보드 확인 전) <!-- board-check -->
+>
+> Rev 1.1 (v2.8.1)은 USB 를 연결할 때 채널 이름을 한 번만 보냅니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 다시 연결하세요.
 
 사용자 채널을 Module ID 여러 개(`0xF0`, `0xF1`, …)로 보내면 Module ID 마다 탭이 하나씩
 생깁니다. 탭마다 그래프와 저장 파일이 따로이고, 지금 보고 있지 않은 탭도 저장은 계속됩니다.
@@ -143,7 +145,8 @@ CSV:
 `1065353216`).
 
 **다시 연결하면** 그래프 창이 새 `.xmlog` 를 엽니다. (채널 이름 없이 받은 `.xmlog` 는 열
-이름이 `ch0, ch1, …` 이고 값은 `float` 로 가정합니다. 타입은 아직 보내지 않습니다.)
+이름이 `ch0, ch1, …` 이고 값은 `float` 로 가정합니다. 이름만 등록하는 방식(`XM_SetUsbCustomMeta`)은
+타입을 보내지 않습니다. 타입까지 보내는 방법은 아래 "내 데이터 보내기 (보드 쪽)" 을 보세요.)
 
 ---
 
@@ -210,13 +213,20 @@ XM_SendUsbDataWithId(&s_debug, sizeof(s_debug), 0xF0);
 4. **이름 등록은 연결당 하나만** — `XM_SetUsbCustomMeta` 를 두 번 부르면 마지막 것만
    남습니다. 채널 그룹이 여럿이면 하나의 Module ID 로 묶어 등록하세요 (Ex.41 은 IMU 6개를
    하나의 Module ID 로 묶어 보냅니다).
-5. **JSON 은 512바이트 이하** — 넘으면 이름이 전송되지 않아 열 이름이 `ch0, ch1, …` 로
-   나옵니다 (케이블을 다시 꽂아도 해결되지 않습니다).
+5. **JSON 은 1,007바이트 이하** (Rev 2.0, v2.9.0 이상) — 넘으면 `XM_SetUsbCustomMeta()` 가 `false` 를
+   돌려주고 이름이 등록되지 않아 열 이름이 `ch0, ch1, …` 로 나옵니다 (포트를 다시 열거나 케이블을
+   다시 꽂아도 해결되지 않습니다). Rev 1.1 (v2.8.1)은 **512바이트 이하**이고, 넘으면 알림 없이 이름이
+   전송되지 않습니다.
 
 SDK 예제 24개는 1~3 을 지키고 있습니다. 직접 만들 때도 같은 규칙을 따라 주세요.
 
-> 데모에서 본 "구조체 필드 이름이 타입까지 그대로 CSV 열이 되는" 방식(`state` 는 정수,
-> `contact` 는 bool …)은 PC 쪽에는 이미 준비돼 있지만, 지금 보드는 위처럼 **이름만** 보냅니다.
+> 🟢 **Rev 2.0 전용** — 데모에서 본 "구조체 필드 이름이 타입까지 그대로 CSV 열이 되는" 방식(`state` 는
+> 정수, `contact` 는 bool …)은 PC 쪽에는 이미 준비돼 있습니다. Rev 2.0 (v2.9.0 이상)은 구조체 로깅
+> (`XM_LOG_REGISTER` · `XM_LOG_SEND`)으로 이 방식을 쓸 수 있습니다.
+> 보드가 필드 이름 · 단위 · 타입을 함께 보내고, `xm10` 도구가 구조체마다 탭을 만들어 그 이름으로 그래프와 CSV 열을 만듭니다. (보드 확인 전) <!-- board-check -->
+> SDK 에 함께 들어 있는 `xm10` 도구(`pc-data-tool` 폴더)로 보세요. 예전 릴리스의 도구로는 일부 값이 보이지 않거나 틀리게 보일 수 있습니다.
+> 사용법은 [구조체 로깅](../api-reference/10-struct-logging.md) 과 [Ex.44 CDC Struct Logging](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/) 을 보세요.
+> 위의 `XM_SetUsbCustomMeta` 방식과 Rev 1.1 은 지금도 **이름만** 보냅니다.
 
 ---
 
@@ -238,10 +248,11 @@ python build_exe.py --no-gui   # 콘솔 전용 (약 23.0 MB)
 
 | 증상 | 확인할 것 |
 | :--- | :--- |
-| 포트 목록에 XM10 이 없다 | 창을 먼저 켰다면 **Refresh**. `xm10.py ports` 로 다시. 케이블·전원. 장치 관리자에서 COM 포트가 잡히는지 |
+| 포트 목록에 XM10 이 없다 | 창을 먼저 켰다면 **Refresh**. `xm10.py ports` 로 다시. 케이블·전원. 장치 관리자에서 COM 포트가 잡히는지. Rev 2.0 에서는 보드의 USB-C 포트에 USB 메모리가 꽂혀 있는 동안 PC 와 연결되지 않습니다. USB 메모리를 뽑고 PC 를 연결하세요. (보드 확인 전) | <!-- board-check -->
 | 이름을 두 개 등록했는데 하나만 보인다 | 등록은 연결당 하나만 남습니다 — 한 Module ID 로 묶으세요 |
 | Connect 가 실패한다 | PhAI Studio 나 시리얼 터미널이 같은 포트를 잡고 있지 않은지 |
-| 그래프 제목이 `ch0, ch1…` 이다 | `XM_SetUsbCustomMeta` 를 `Control_Setup` 에서 불렀는지. 항목 수가 구조체와 같은지. JSON 이 512바이트 이하인지. 연결할 때 이름을 못 받았을 수 있으니 USB 케이블을 다시 꽂고 다시 연결 (PC 프로그램은 한 번에 하나만) |
+| 그래프 제목이 `ch0, ch1…` 이다 | `XM_SetUsbCustomMeta` 를 `Control_Setup` 에서 불렀는지. 항목 수가 구조체와 같은지. JSON 이 1,007바이트 이하인지(Rev 1.1 은 512바이트) |
+| 이름을 등록했는데도 `ch0, ch1…` 이다 | 연결할 때 이름을 못 받았을 수 있습니다. Rev 2.0 (v2.9.0 이상)은 **Disconnect** 뒤 다시 **Connect** 하세요. (보드 확인 전) Rev 1.1 (v2.8.1)은 USB 케이블을 다시 꽂고 다시 연결하세요. PC 프로그램은 한 번에 하나만 연결하세요 | <!-- board-check -->
 | 값이 이상한 숫자다 | 구조체에 `float` 아닌 멤버가 있는지 |
 | 프레임이 빠지는 것 같다 | `xm10.py soak` 로 판정. 보내는 채널 수를 줄여 보기 |
 | 도구가 제대로 설치됐는지 모르겠다 | `python xm10.py selftest` — 보드 없이 자체 검증 |

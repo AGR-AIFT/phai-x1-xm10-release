@@ -5,7 +5,8 @@
  * @brief   XM10 통합 API 헤더 (Entry Point)
  * @details 
  * 이 파일은 XM10 펌웨어의 모든 사용자 API를 포함합니다.
- * 사용자는 이 파일 하나만 include하면 로봇 제어, 센서 수신, I/O 제어, USB 스트리밍 기능을 모두 사용할 수 있습니다.
+ * 사용자는 이 파일 하나만 include하면 로봇 제어, 센서 수신, I/O 제어, USB 스트리밍, USB 메모리 저장 기능을 모두 사용할 수 있습니다.
+ * 단, 구조체 로깅 매크로(XM_LOG_*)를 쓰는 .c 파일은 xm_api_logging_raw.h 도 include 하세요(xm_api_logging.h 참고).
  * @version 0.1
  * @date    Nov 17, 2025
  *
@@ -30,6 +31,8 @@
 #include "xm_api_led_btn.h"     // 내장 LED 및 버튼 제어
 #include "xm_api_external_io.h" // 외부 확장 IO (GPIO/ADC)
 #include "xm_api_usb.h"         // USB-CDC 스트리밍 및 디버그 메시지
+#include "xm_api_logging.h"     // USB-CDC 구조체 로깅 (XM_LOG_* 매크로를 쓰는 .c 는 xm_api_logging_raw.h 도 include)
+#include "xm_api_usb_msc.h"     // USB 메모리 저장 (구조체 주기 저장)
 #include "xm_api_user_custom.h" // Total Data 0x20 내 사용자 커스텀 슬롯
 #include "xm_api_memory.h"      // 메모리 영역 접근 (Workspace/PSRAM/DTCM/NV)
 #include "xm_api_rtc.h"         // RTC 날짜/시간 관리

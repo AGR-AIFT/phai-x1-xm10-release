@@ -10,6 +10,7 @@
  * xm10 도구로 보고 저장하세요.
  *   xm10 PC 도구 (docs/getting-started/04-pc-data-tool.md)
  * PC 프로그램은 한 번에 하나만 연결하세요.
+ * 구조체를 등록해 필드 이름 · 단위 · 타입과 함께 보내는 '구조체 로깅'은 xm_api_logging.h(XM_LOG_* 매크로)에 있습니다.
  *
  * @note    USB 케이블이 연결되어 있어야 동작합니다.
  * @version 2.0  (PhAI V2 프로토콜 적용)
@@ -41,22 +42,8 @@
  *-----------------------------------------------------------
  */
 
-/* USB-MSC 파일 로깅 API는 v2.5.0에서 제거되었습니다. 데이터 캡처는 USB-CDC 스트리밍
- * (XM_SetUsbCustomMeta + XM_SendUsbDataWithId -> PC 의 xm10 도구)을 사용하세요.
- * 단, XmLogStatus_e / XM_GetUsbLogStatus() 는 XM10 내부의 USB LED 상태 표시가
- * 계속 사용하므로 예외적으로 유지합니다 (사용자 API 아님). */
-
-/**
- * @brief 로거의 현재 상태
- * @note  사용자 API 가 아닙니다 — XM10 내부 USB LED 상태 표시 전용으로 유지됩니다.
- */
-typedef enum {
-    XM_LOG_STATUS_IDLE,              /**< 중지됨 (초기 상태) */
-    XM_LOG_STATUS_LOGGING,           /**< 정상 로깅 중 */
-    XM_LOG_STATUS_WARNING_QUEUE_FULL,/**< 버퍼 사용률 높음 (f_write 지연 발생 중) */
-    XM_LOG_STATUS_WARNING_DISK_LOW,  /**< USB 디스크 잔여 용량 50MB 미만 */
-    XM_LOG_STATUS_ERROR_STOPPED,     /**< 에러로 로깅이 강제 중지됨 */
-} XmLogStatus_e;
+/* 데이터를 PC 로 받으려면 USB-CDC 스트리밍(XM_SetUsbCustomMeta + XM_SendUsbDataWithId -> PC 의 xm10 도구)을,
+ * 구조체를 USB 메모리에 파일로 저장하려면 xm_api_usb_msc.h 를 사용하세요. */
 
 /**
  * @brief USB-CDC 호스트 프로파일 (사용자 선택 — 2가지).
@@ -93,13 +80,6 @@ typedef enum {
  * @param  size     : 구조체의 크기 (sizeof(myData))
  */
 void XM_SetUsbStreamSource(void* data_ptr, uint32_t size);
-
-/**
- * @brief [실시간] 현재 로거의 상태를 확인합니다.
- * @note  사용자 API 가 아닙니다 — XM10 내부 USB LED 상태 표시 전용으로 유지됩니다.
- * @return XmLogStatus_e 열거형 값
- */
-XmLogStatus_e XM_GetUsbLogStatus(void);
 
 /* ============================================================================
  * USB 모니터링 API (USB Monitoring API) - Device/CDC Mode
@@ -149,12 +129,14 @@ void XM_SetUsbAutoStream(bool enabled);
  *          setup 에서 XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL) 을 1회 호출하세요.
  *          1kHz Total Data 자동 전송과 채널 이름 전송이 꺼지고, 포트를 닫았다 다시 열어도
  *          유지됩니다.
- *          다만 TERMINAL 이어도 XM_SendUsbDataWithId() 로 직접 보낸 데이터 패킷은 그대로
- *          전송되어 터미널에 깨진 글자로 섞여 보입니다. 텍스트만 볼 때는
- *          XM_SendUsbDataWithId() 를 쓰지 마세요.
+ *          다만 TERMINAL 이어도 XM_SendUsbDataWithId() 로 직접 보낸 데이터 패킷과 구조체 로깅
+ *          (XM_LOG_REGISTER 로 등록한 구조체)의 데이터 · 필드 정보는 그대로 전송되어 터미널에 깨진 글자로
+ *          섞여 보입니다. 텍스트만 볼 때는 둘 다 쓰지 마세요.
  *          xm10 도구처럼 데이터 패킷을 해석하는 프로그램을 쓸 때는 기본값(PHAI_STUDIO)을
  *          그대로 두세요.
  * @param[in] profile XM_USB_HOST_PHAI_STUDIO(기본) 또는 XM_USB_HOST_TERMINAL.
+ * @note 구조체 로깅을 쓰면 첫 XM_LOG_REGISTER 보다 먼저 부르세요. 구조체를 하나라도 등록한 뒤에는
+ *       이 호출이 무시됩니다(프로파일이 바뀌지 않습니다).
  */
 void XM_USB_SetHostProfile(XM_USB_HostProfile_e profile);
 
@@ -166,7 +148,9 @@ void XM_USB_SetHostProfile(XM_USB_HostProfile_e profile);
  * @param[in] data  전송할 User 구조체 포인터 (float 배열 또는 4-byte 정렬 struct)
  * @param[in] len   데이터 바이트 수
  * @return true: 전송 버퍼에 적재됨 (받는 PC 프로그램이 없어도 true 일 수 있음),
- *         false: 버퍼 풀 또는 USB 장치 미준비
+ *         false: 버퍼 풀, USB 장치 미준비, 또는 인터럽트 안에서 부름(아무것도 하지 않습니다).
+ *         구조체 로깅을 쓰면 Module ID 가 등록한 구조체의 ID 일 때, 짧은 시간에 너무 많이 보낼 때, 한 번에 보내기에 너무 클 때도 false 입니다.
+ * @note Control_Loop() 안에서 부르세요(Non-blocking). 직접 만든 백그라운드 태스크(XM_Task_*)에서 부르면 보내는 데이터가 깨질 수 있습니다.
  */
 bool XM_SendUsbData(const void* data, uint32_t len);
 
@@ -174,6 +158,7 @@ bool XM_SendUsbData(const void* data, uint32_t len);
  * @brief 스트리밍 데이터의 Module ID를 설정합니다.
  * @deprecated XM_SendUsbDataWithId()로 대체됨. Module ID를 전송 시 직접 지정.
  * @param[in] module_id  Module ID (기본값 0x10 = COMBINED)
+ * @note 시스템이 쓰는 ID(0x20 · 0xB2 · 0xED · 0xEE · 0xEF · 0xFF)는 무시하고 이전 ID 를 그대로 씁니다.
  */
 void XM_SetUsbStreamModuleId(uint8_t module_id);
 
@@ -195,20 +180,24 @@ void XM_SetUsbStreamModuleId(uint8_t module_id);
  *      XM_SendUsbDataWithId(data, sizeof(data), 0xF0);
  * ========================================================================== */
 
+/** XM_SetUsbCustomMeta() 에 넣을 수 있는 JSON 최대 길이 (바이트, 끝의 '\0' 제외) */
+#define XM_USB_CUSTOM_META_MAX_LEN  (1007U)
+
 /**
  * @brief User Custom 채널 메타데이터를 등록합니다.
- * @details PC 프로그램이 포트를 열어 스트리밍이 시작되면 Module ID 0xEF로 한 번 자동 전송됩니다
- *          (기본 프로파일에서만). 채널 이름이 안 보이면 USB 케이블을 다시 꽂은 뒤 연결하세요.
+ * @details PC 프로그램이 포트를 열 때마다 Module ID 0xEF로 자동 전송됩니다 (기본 프로파일에서만).
  *          Control_Setup()에서 1회 호출하면 됩니다.
  * @param[in] module_id  대상 Module ID (0xF0~0xFE)
  * @param[in] json_str   채널 정의 JSON string (NULL-terminated, 문자열 리터럴 권장)
+ * @return true: 등록됨. false: json_str 이 NULL 이거나 XM_USB_CUSTOM_META_MAX_LEN(1,007바이트)보다 길다,
+ *         또는 구조체 로깅을 쓰면서 Control_Setup() 밖에서 불렀다 — 이때는 이전에 등록한 메타가 그대로 남습니다.
+ * @note 구조체 로깅을 쓰면 이 함수는 Control_Setup() 안에서만 유효합니다. 그 뒤에 부르면 false 를 돌려줍니다.
  * @note json_str 포인터는 프로그램 수명 동안 유효해야 합니다 (복사하지 않음).
- * @note **하나의 Module ID 메타만 유지됩니다** (단일 슬롯 — 마지막 호출이 이전 것을
+ * @note **하나의 Module ID 메타만 유지됩니다** (단일 슬롯 — 등록에 성공한 마지막 호출이 이전 것을
  *       덮어씀). 여러 채널 그룹을 라벨링하려면 채널을 하나의 Module ID 로 모아 등록하세요.
- * @note json_str 은 512바이트까지만 전송됩니다 (더 길면 아무 알림 없이 전송되지 않습니다).
- *       채널이 많으면 단위를 이름 안에 적어(예: "IMU0 Roll [deg]") 짧게 유지하세요.
+ * @note 채널이 많으면 단위를 이름 안에 적어(예: "IMU0 Roll [deg]") JSON 을 짧게 유지하세요.
  */
-void XM_SetUsbCustomMeta(uint8_t module_id, const char* json_str);
+bool XM_SetUsbCustomMeta(uint8_t module_id, const char* json_str);
 
 /**
  * @brief User Custom float[] 데이터를 지정된 Module ID로 전송합니다.
@@ -216,20 +205,32 @@ void XM_SetUsbCustomMeta(uint8_t module_id, const char* json_str);
  * @param[in] len        바이트 수 (sizeof(float) × 채널수)
  * @param[in] module_id  Module ID (0xF0~0xFE)
  * @return true: 전송 버퍼에 적재됨 (받는 PC 프로그램이 없어도 true 일 수 있음),
- *         false: 버퍼 풀 또는 USB 장치 미준비
- * @note Control_Loop() 내에서 호출. Non-blocking.
+ *         false: 버퍼 풀, USB 장치 미준비, module_id 가 시스템이 쓰는 ID(0x20 · 0xB2 · 0xED · 0xEE · 0xEF · 0xFF)일 때,
+ *         또는 인터럽트 안에서 불렀을 때(아무것도 하지 않습니다).
+ *         구조체 로깅을 쓰면 등록한 구조체의 Module ID 로 보낼 때, 이 함수 · XM_SendUsbDebugMessage() 로
+ *         짧은 시간에 너무 많이 보낼 때, 한 번에 보내기에 너무 클 때도 false 입니다 — 너무 큰 데이터는 기다려도 나가지 않으니
+ *         구조체 로깅으로 보내세요.
+ * @note Control_Loop() 안에서 부르세요(Non-blocking). 직접 만든 백그라운드 태스크(XM_Task_*)에서 부르면 보내는 데이터가 깨질 수 있습니다.
  */
 bool XM_SendUsbDataWithId(const void* data, uint32_t len, uint8_t module_id);
 
+/** XM_SendUsbDebugMessage() 로 한 번에 보낼 수 있는 최대 길이 (바이트, 끝의 '\0' 제외). 구조체 로깅을 쓰면 이보다 짧은 한도가 적용됩니다 */
+#define XM_USB_DEBUG_MESSAGE_MAX_LEN  (1021U)
+
 /**
  * @brief PC로 디버그 메시지를 전송합니다. (비차단, Raw 텍스트)
- * @details PhAI 패킷이 아닌 raw 텍스트로 전송됩니다 (패킷 구분 없음). PC 도구(PhAI Studio,
- *          xm10 도구)가 데이터 패킷을 해석하는 중에 보내면 메시지 1개마다 데이터 패킷 1개를
- *          잃습니다.
- *          텍스트만 쓰려면 Rev2.0 에서 XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL) 을 호출하고
- *          일반 시리얼 터미널로 연결하세요.
- * @param[in] message 전송할 문자열.
+ * @details PhAI 패킷이 아닌 raw 텍스트로 전송되고, 메시지 뒤에 0x00 1바이트가 붙습니다.
+ *          그래서 함께 보내는 데이터 패킷이 깨지지 않습니다.
+ *          텍스트만 쓰려면 XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL) 을 호출하고 일반 시리얼 터미널로 연결하세요.
+ * @param[in] message 전송할 문자열. 길이는 바이트 기준입니다(한글 등은 글자 수보다 바이트가 많습니다).
  * @return 전송 버퍼에 적재되면 true (받는 PC 프로그램이 없어도 true 일 수 있음).
+ *         false: message 가 NULL 이거나 XM_USB_DEBUG_MESSAGE_MAX_LEN(1,021바이트)보다 길 때,
+ *         전송 버퍼가 가득 찼을 때, USB 장치가 준비되지 않았을 때, 인터럽트 안에서 불렀을 때(아무것도 하지 않습니다).
+ *         구조체 로깅을 쓰면 짧은 시간에 너무 많이 보낼 때(XM_SendUsbDataWithId() 와 합쳐 셉니다)와
+ *         한 번에 보내기에 너무 긴 메시지일 때도 false 입니다 — 너무 긴 메시지는 기다려도 나가지 않으니 줄이거나,
+ *         시간 간격을 두고 여러 번에 나눠 보내세요(이어서 보내면 앞 조각이 쓴 몫 때문에 뒤 조각이 false 가 될 수 있습니다).
+ *         빈 문자열("")은 0x00 1바이트만 보내고 true 입니다.
+ * @note Control_Loop() 안에서 부르세요(Non-blocking). 직접 만든 백그라운드 태스크(XM_Task_*)에서 부르면 보내는 데이터가 깨질 수 있습니다.
  */
 bool XM_SendUsbDebugMessage(const char* message);
 
@@ -242,12 +243,5 @@ bool XM_SendUsbDebugMessage(const char* message);
  *          PC 에서 보낸 raw 데이터를 받으려면 이 제약을 전제로 설계하세요.
  */
 uint32_t XM_GetUsbData(void* buffer, uint32_t max_len);
-
-
-/* ==========================================================================
- * System Interface (XM10 내부용 — 사용자는 호출하지 않음)
- * ========================================================================== */
-
-void XM_USB_ProcessPeriodic(void);
 
 #endif /* XM_API_XM_API_USB_H_ */

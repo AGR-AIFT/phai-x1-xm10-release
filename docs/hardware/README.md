@@ -15,7 +15,7 @@ XM10 보드의 외부 인터페이스를 한 곳에 모았습니다. 보드에 �
 | **버튼** | 3 개 | BTN 1 (좌) · BTN 2 (중) · BTN 3 (우) |
 | **외부 GPIO** | DIO 8 + ADC 4 (+ 동적 ADC 8) | [Rev 별 핀맵 참조](#외부-gpio-핀맵) |
 | **CAN-FD 포트** | 2 개 | KIT H10 연결 + 센서 허브 확장 |
-| **USB-C** | 1 개 | 시리얼 통신 (CDC) — PC 실시간 연결 |
+| **USB-C** | 1 개 | 시리얼 통신 (CDC) — PC 실시간 연결. Rev 2.0 은 USB 메모리에 저장할 수도 있습니다 (PC 와는 한 번에 하나만). (보드 확인 전) <!-- board-check --> |
 | **외부 UART** | 1 개 (**Rev 2.0 만**) | 외부 장비와 직렬 통신 — 범용 Serial API. Rev 1.1 에는 이 포트가 없습니다 |
 | **SWD 디버그** | 4-pin | ST-Link 펌웨어 업로드·디버깅 |
 | **메인 커넥터** | 1 개 | KIT H10 본체 연결 (24V 전원 + CAN-FD) |
@@ -62,11 +62,12 @@ XM10 의 전원 + 통신을 한 가닥으로 받습니다. Molex 1053081206 6-pi
 
 ### USB-C 포트
 
-USB 시리얼 통신 (CDC) 로 실시간 데이터 스트리밍과 디버그 메시지를 주고받습니다.
+USB 시리얼 통신 (CDC) 로 실시간 데이터 스트리밍과 디버그 메시지를 주고받습니다. Rev 2.0 은 같은 포트에 USB 메모리를 꽂아 저장할 수도 있습니다. 포트가 하나라서 PC 와 USB 메모리는 한 번에 하나만 씁니다.
 
 | 모드 | 용도 | 사용하는 함수 |
 |------|------|--------------|
 | 시리얼 (CDC) | PC 터미널(텍스트 디버그) / `xm10` 도구(사용자 구조체)로 전송. PhAI Studio 는 Total Data(0x20)를 표시 | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId` |
+| USB 메모리 저장 🟢 **Rev 2.0 전용** | USB 메모리에 구조체 하나를 정한 주기로 저장하고, 저장한 폴더를 PC 에서 풂 ([USB 메모리 저장](../api-reference/06-usb-data-logging.md)). 꽂아 두는 동안에는 PC 와 USB 로 연결되지 않습니다. (보드 확인 전) | `XM_SetUsbLogSource`, `XM_StartUsbDataLog`, `XM_StopUsbDataLog` <!-- board-check --> |
 
 ### 외부 UART 포트 🟢 **Rev 2.0 전용**
 

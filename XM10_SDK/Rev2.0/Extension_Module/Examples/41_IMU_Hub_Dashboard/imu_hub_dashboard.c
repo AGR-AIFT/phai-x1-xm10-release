@@ -88,8 +88,7 @@ static void    _QuatToEulerDeg(const XmImuHubSensor_t* s, float* roll, float* pi
 void Control_Setup(void)
 {
     /* xm10 도구용 그래프 라벨 등록 (18채널) — 문자열 리터럴이라 수명 내내 유효.
-     * 단위는 이름 안에 "[deg]" 로 함께 적었습니다 — JSON 이 512바이트를 넘으면 통째로 전송되지 않으므로
-     * 짧게 유지합니다 (현재 487바이트).
+     * 단위는 이름 안에 "[deg]" 로 함께 적어 JSON 을 짧게 유지합니다 (현재 487바이트, 상한 1,007바이트).
      * XM_SetUsbCustomMeta 는 슬롯이 하나뿐이라(마지막 호출이 앞선 호출을 덮어씀) 6센서를 0xF0 하나로 묶는다. */
     XM_SetUsbCustomMeta(IMU_MODULE_ID,
         "[{\"name\":\"IMU0 Roll [deg]\"},{\"name\":\"IMU0 Pitch [deg]\"},{\"name\":\"IMU0 Yaw [deg]\"},"

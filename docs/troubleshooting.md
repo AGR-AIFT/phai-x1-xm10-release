@@ -78,6 +78,19 @@ New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name
 
 ---
 
+### `implicit declaration of function` 오류 (Rev 2.0 SDK)
+
+**증상:** 빌드가 `error: implicit declaration of function '함수 이름'` 으로 멈춤 (Rev 2.0 SDK, v2.9.0 이상)
+
+**원인:** v2.9.0 부터 Rev 2.0 SDK 는 헤더에 선언이 보이지 않는 함수를 부르면 경고가 아니라 오류로 처리합니다. 함수 이름의 오타, 빠진 `#include`, 헤더에서 없어진 선언이 원인입니다. Rev 1.1 SDK 는 이전과 같습니다.
+
+**해결:**
+1. 그 함수를 선언한 헤더를 `#include` 합니다. SDK 함수는 보통 `#include "xm_api.h"` 하나면 됩니다. `XM_LOG_*` 매크로를 쓰는 `.c` 파일은 `xm_api_logging_raw.h` 도 `#include` 합니다.
+2. 함수 이름이 맞는지 [API 레퍼런스](api-reference/ref/README.md)에서 확인합니다. 이전 버전에서 쓰던 이름이면 [v2.9.0 릴리스 노트](release-notes/v2.9.0.md)를 보세요.
+3. 직접 만든 함수라면 부르기 전에 원형(prototype)을 선언합니다.
+
+---
+
 ## 보드 리비전 / SDK ZIP 불일치
 
 ### 가운데·우측 버튼이 안 눌리거나, 누르지 않은 버튼이 항상 눌린 것으로 잡힘
@@ -147,6 +160,41 @@ collect2.exe: error: ld returned 1 exit status
 2. Windows 장치 관리자에서 `Ports (COM & LPT)` 아래에 `STMicroelectronics Virtual COM Port` 확인
 3. 드라이버가 없는 경우: [STM32 Virtual COM Port Driver](https://www.st.com/en/development-tools/stsw-stm32102.html) 설치
 4. XM10 펌웨어에서 USB CDC 초기화가 정상적으로 완료되었는지 확인
+5. (Rev 2.0) USB 메모리가 꽂혀 있으면 PC 와 연결되지 않습니다 — [아래](#usb-memory-pc) 참고
+
+<a id="usb-memory-pc"></a>
+### USB 메모리가 꽂혀 있으면 PC 와 연결되지 않음 (Rev 2.0)
+
+> 🟢 **Rev 2.0 전용** — Rev 1.1 에는 USB 메모리 저장이 없습니다.
+
+XM10 의 USB-C 포트는 하나입니다. USB 메모리를 꽂아 두는 동안에는 PC 와 USB 로 연결할 수 없습니다. PhAI Studio · `xm10` 도구 · USB 로 하는 펌웨어 업로드를 쓸 수 없습니다.
+
+**해결:** USB 메모리를 뽑고 PC 를 연결하세요. (보드 확인 전) <!-- board-check -->
+
+<a id="usb-memory-start"></a>
+### USB 메모리 저장이 시작되지 않음 (Rev 2.0)
+
+> 🟢 **Rev 2.0 전용** — 사용법은 [USB 메모리 저장](api-reference/06-usb-data-logging.md) 과 [USB 메모리에 저장하기](getting-started/05-usb-memory-log.md) 를 보세요.
+
+**체크리스트:**
+1. USB 메모리가 **FAT32** 인지 확인 (exFAT · NTFS 는 인식하지 않습니다). 할당 단위는 32 KB 를 권장합니다. 포맷하면 안의 파일이 모두 지워지니 필요한 파일은 먼저 옮기세요.
+2. USB 메모리의 빈 공간이 파일을 나누는 크기(기본 10 MB)보다 큰지 확인
+3. `XM_IsUsbLogReady()` 가 `true` 인지 확인 (Ex.10 · Ex.34 는 LED 1 이 켜집니다)
+4. `XM_StartUsbDataLog()` 가 `false` 를 돌려주면 `XM_GetUsbLogLastStartError()` 로 이유 확인 — [시작 실패 이유](api-reference/ref/xm-api-usb-msc.md#xmusblogstarterror_e)
+5. 시작은 됐는데 곧 끝나면(Ex.10 · Ex.34 는 LED 3 이 켜집니다) `XM_GetUsbLogLastStartError()` 를 읽어 보세요. 파일을 여는 중에 실패했거나(빈 공간 부족 · 같은 이름의 폴더가 다른 설정), 저장 중에 USB 메모리가 빠졌거나 내부 버퍼가 넘친 경우 등이 있습니다.
+6. 폴더 이름이 날짜가 아니거나 이전 저장과 같다면 시계를 맞추지 않아서일 수 있습니다. `XM_RTC_SetDateTime()` 으로 맞추거나 세션 이름을 직접 정하세요.
+
+### 디코더 판정이 `RE-COLLECT` 로 나옴 (Rev 2.0)
+
+> 🟢 **Rev 2.0 전용** — 판정 읽는 법은 [USB 메모리에 저장하기](getting-started/05-usb-memory-log.md) 에 있습니다.
+
+`RE-COLLECT` 는 표본이 많이 빠졌거나 공백이 길어서 다시 저장하기를 권한다는 뜻입니다.
+
+**해결 순서:**
+1. USB 메모리를 FAT32(할당 단위 32 KB)로 전체 포맷한 뒤 다시 저장
+2. 다른 USB 메모리로 바꿔 보기
+3. 저장 주기를 낮추거나 구조체를 줄이기
+4. 계속되면 Angel Robotics(엔젤로보틱스) CS팀에 문의
 
 ---
 
@@ -271,10 +319,13 @@ if (pressed) { /* 1회만 실행 */ }
 
 **원인 3:** Windows 장치 관리자에서 `STMicroelectronics Virtual COM Port` 미인식
 
+**원인 4 (Rev 2.0):** USB 메모리가 꽂혀 있음 — 꽂혀 있는 동안에는 PC 와 USB 로 연결되지 않습니다 ([설명](#usb-memory-pc))
+
 **해결 순서:**
 1. 모든 시리얼 클라이언트 종료 → 하나만 단독 실행
 2. 데이터 전송 가능 USB-C 케이블 (가능하면 PC 후면 USB-A 직결, 허브 X)
 3. [STM32 VCP 드라이버 설치](https://www.st.com/en/development-tools/stsw-stm32102.html)
+4. (Rev 2.0) USB 메모리가 꽂혀 있으면 뽑고 PC 를 연결합니다 ([설명](#usb-memory-pc)). (보드 확인 전) <!-- board-check -->
 
 ### KIT H10 / 로봇 제어 함정
 

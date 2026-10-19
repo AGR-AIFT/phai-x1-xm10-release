@@ -70,14 +70,14 @@ uint32_t CdcStream_Read(void* buf, uint32_t max_len);
 
 /**
  * @brief 스트리밍이 활성화되었는지 확인
- * @details Auto-Stream 모드에서는 USB CDC 연결 시 자동 true.
+ * @details Auto-Stream 모드에서는 PC 프로그램이 포트를 열면(케이블을 꽂는 것만으로는 아님) 자동 true.
  *          Legacy 모드에서는 "AGRB MON START" 수신 시 true.
  */
 bool CdcStream_IsStreamingActive(void);
 
 /**
  * @brief Auto-Stream 모드를 설정합니다.
- * @param[in] enabled  true: USB 연결 시 자동 스트리밍 (PhAI Studio 기본)
+ * @param[in] enabled  true: PC 프로그램이 포트를 열면 자동 스트리밍 (PhAI Studio 기본)
  *                     false: "AGRB MON START" 대기 (Legacy Python 호환)
  * @note 기본값은 true (PhAI Studio 기본 동작)
  */
@@ -88,7 +88,7 @@ void CdcStream_SetAutoStreamEnabled(bool enabled);
  * @details SetAutoStreamEnabled(false) 는 "이후 DTR re-trigger 차단" 게이트일 뿐
  *          이미 켜진 s_isStreamingActive 를 끄지 못합니다. PRODUCTION /
  *          TERMINAL 모드 진입 직후 진행 중인 PhAI auto-pump 를 끊어야 할 때
- *          이 함수를 호출. 호출 직후 다음 ProcessPeriodic tick 부터 PhAI
+ *          이 함수를 호출. 호출 직후 다음 USB 주기 처리(1ms)부터 PhAI
  *          PacketBuild 가 호출되지 않습니다.
  * @note 비차단. 진행 중인 USB Tx DMA 전송은 안전하게 완료됨 (중단되지 않음).
  */

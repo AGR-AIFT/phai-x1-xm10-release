@@ -14,11 +14,11 @@
   <img width="332" height="231" alt="XM10 Board" src="https://github.com/user-attachments/assets/871dc578-57ab-41ed-8d39-76a43e65f24d" />
 </p>
 <p align="center">
-  <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.8.1"><img src="https://img.shields.io/badge/Release-v2.8.1-brightgreen.svg" alt="Release"></a>
+  <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.9.0"><img src="https://img.shields.io/badge/Release-v2.9.0-brightgreen.svg" alt="Release"></a>
   <a href="#"><img src="https://img.shields.io/badge/Platform-STM32H7-blue.svg" alt="Platform"></a>
   <a href="#"><img src="https://img.shields.io/badge/OS-FreeRTOS-orange.svg" alt="OS"></a>
   <a href="#"><img src="https://img.shields.io/badge/Comm-CAN--FD-red.svg" alt="CAN-FD"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Examples-45-success.svg" alt="Examples"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Examples-48-success.svg" alt="Examples"></a>
   <a href="/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
 </p>
 
@@ -50,7 +50,7 @@
 > 두 리비전 폴더의 CubeIDE 프로젝트명이 둘 다 `Extension_Module` 이라, clone 한 경우
 > **같은 워크스페이스에 Rev1.1 과 Rev2.0 을 동시에 Import 하지 마세요**(프로젝트명 충돌).
 
-📦 **다운로드**: [Releases v2.8.1](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.8.1) → Assets 섹션
+📦 **다운로드**: [Releases v2.9.0](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.9.0) → Assets 섹션
 - **Rev2.0 보드** → `Rev2.0.zip` (대부분 여기)
 - **Rev1.1 보드** → `Rev1.1.zip`
 - 보드 라벨로 본인 리비전 확인 후 선택. 모호하면 → [docs/hardware/README.md - 보드 리비전 비교](docs/hardware/README.md#보드-리비전-비교)
@@ -91,7 +91,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 단계별 상세: [docs/getting-started/](docs/getting-started/) (하드웨어 → 환경 구축 → 첫 빌드)
 
-> **H10 펌웨어 버전 확인**: XM v2.6.0 ~ v2.8.1 은 **KIT H10 v2.4.0** 과 짝입니다. 구버전이면 먼저 → [KIT H10 Firmware 가이드](docs/kit-h10-firmware/)
+> **H10 펌웨어 버전 확인**: XM v2.6.0 ~ v2.9.0 은 **KIT H10 v2.4.0** 과 짝입니다. 구버전이면 먼저 → [KIT H10 Firmware 가이드](docs/kit-h10-firmware/)
 
 ---
 
@@ -118,7 +118,7 @@ STM32CubeIDE 도, 임베디드도 처음이어도 괜찮습니다. **Claude Code
 
 ## 학습 경로
 
-45 개의 예제 모두 같은 형식으로 정돈되어 있습니다 — 목표, 사전 지식, 핵심 코드, 실험, 흔한 실수. 기초 예제 (Ex.09 이하)는 30 분 안에 끝낼 수 있도록 설계했습니다.
+48 개의 예제 모두 같은 형식으로 정돈되어 있습니다 — 목표, 사전 지식, 핵심 코드, 실험, 흔한 실수. 기초 예제 (Ex.09 이하)는 30 분 안에 끝낼 수 있도록 설계했습니다.
 
 | 수준 | 추천 순서 | 시간 |
 | :--- | :--- | :--- |
@@ -142,7 +142,7 @@ Extension_Module/
 │   ├── find-it.md         ← 🧭 빠른 찾기 인덱스 (먼저 가보세요)
 │   ├── getting-started/   ← 환경 구축 + 첫 빌드
 │   ├── hardware/          ← 보드 외부 인터페이스 + GPIO 핀맵
-│   ├── tutorials/         ← 45 개 예제 학습 흐름 + 16 주 진도표
+│   ├── tutorials/         ← 48 개 예제 학습 흐름 + 16 주 진도표
 │   ├── api-reference/     ← XM 함수 전체 명세
 │   ├── architecture/      ← 내 코드가 언제·어디서 동작하는지
 │   ├── advanced/          ← AI 데이터 파이프라인 + 심화 트랙
@@ -150,7 +150,7 @@ Extension_Module/
 │   ├── kit-h10-firmware/  ← H10 외골격 펌웨어 호환성
 │   ├── release-notes/     ← 버전별 첨부 파일 + 호환성 매트릭스
 │   └── troubleshooting.md ← 자주 마주치는 문제 모음
-├── examples/              ← 45 개 실습 예제 (각 폴더에 README, SDK ZIP 배포판에서는 `Examples/` 대문자로 포함)
+├── examples/              ← 48 개 실습 예제 (각 폴더에 README, SDK ZIP 배포판에서는 `Examples/` 대문자로 포함)
 ├── XM10_SDK/              ← STM32CubeIDE 프로젝트
 │   ├── Rev1.1/Extension_Module/  ← PCB Rev 1.1 용
 │   └── Rev2.0/Extension_Module/  ← PCB Rev 2.0 용 (대부분 여기)
@@ -171,14 +171,14 @@ Extension_Module/
 | **[🧭 빠른 찾기](docs/find-it.md)** | **"어디 가야 하지" 막힐 때 첫 번째 출구** |
 | [Getting Started](docs/getting-started/) | 하드웨어 연결, 환경 구축, 첫 빌드 — 3 단계 |
 | [Hardware](docs/hardware/) | 보드 외부 인터페이스 + 외부 GPIO 핀맵 (Rev 별) |
-| [Tutorials](docs/tutorials/) | 45 개 예제 학습 로드맵 + 한 학기 진도표 |
+| [Tutorials](docs/tutorials/) | 48 개 예제 학습 로드맵 + 한 학기 진도표 |
 | [API Reference](docs/api-reference/) | XM 함수 전체 명세 + 흔한 실수 |
 | [Architecture](docs/architecture/) | 내 코드가 어디서 어떻게 동작하는지 |
 | [KIT H10 Firmware](docs/kit-h10-firmware/) | H10 펌웨어/컨텐츠 호환성 + 업데이트 |
 | [Bootloader](docs/bootloader/) | 펌웨어 업로드 방법 (SWD 직접 / USB) |
 | [Advanced Topics](docs/advanced/) | AI 데이터 파이프라인 + 관심 분야별 자기주도 학습 |
 | [Troubleshooting](docs/troubleshooting.md) | 자주 마주치는 문제 정리 |
-| [Examples](examples/) | 45 개 예제 (각 폴더에 5 단계 README) |
+| [Examples](examples/) | 48 개 예제 (각 폴더에 5 단계 README) |
 | [PC 데이터 도구](docs/getting-started/04-pc-data-tool.md) | `xm10` — 그래프로 보고, 원본 그대로 저장하고, CSV 로 뽑기. 보드 없이 `demo` 로 체험 |
 | [Release Notes](docs/release-notes/) | 버전별 첨부 파일 + 호환성 매트릭스 |
 | [Changelog](CHANGELOG.md) | 버전별 변경 이력 요약 |

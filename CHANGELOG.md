@@ -4,6 +4,39 @@
 
 ---
 
+## [v2.9.0] — 2026-10-19
+
+> **Rev 2.0 전용 릴리즈 — 구조체 로깅과 USB 메모리 저장이 새로 생겼습니다.** 구조체를 등록하면 필드 이름 · 단위 · 타입을 함께 PC 로 보내도록 했고, v2.5.0 에서 뺐던 USB 메모리 저장을 새 API 로 다시 제공합니다. 새 예제 3 개(Ex.10 · Ex.34 · Ex.44)가 들어가 Rev 2.0 예제는 48 개가 됩니다. **USB-CDC 함수 몇 곳의 동작이 바뀌었고, 헤더에서 선언 3 개가 빠졌고, Rev 2.0 SDK 의 빌드 설정이 선언 없는 함수 호출을 오류로 처리합니다(아래 Changed · Removed).** Rev 1.1 은 v2.8.1 그대로입니다. 새로 생긴 동작은 아직 보드로 확인하지 않았습니다. (보드 확인 전) <!-- board-check -->
+
+### Added
+* **구조체 로깅 (Rev 2.0)** — `xm_api_logging.h`. 구조체를 `XM_LOG_DECLARE` · `XM_LOG_FIELDS` · `XM_LOG_REGISTER` 로 등록하고 `XM_LOG_SEND` 로 보내면 필드 이름 · 단위 · 타입이 함께 PC 로 전달됩니다. 구조체는 4 개까지(크기는 4 의 배수, 1,008 B 이하), 모듈 ID 는 `0xF0` ~ `0xFE` 입니다. `xm_api.h` 가 이 헤더를 가져오고, 매크로를 쓰는 `.c` 파일은 `xm_api_logging_raw.h` 도 include 합니다. 보내지 못한 이유는 `XM_Log_GetStats()` 의 카운터로 봅니다. (보드 확인 전) <!-- board-check -->
+* **USB 메모리 저장 (Rev 2.0)** — `xm_api_usb_msc.h`, 함수 14 개(`XM_SetUsbLogSource()` · `XM_StartUsbDataLog()` · `XM_StopUsbDataLog()` …). v2.5.0 에서 뺐던 기능을 새 API 로 다시 제공합니다. 구조체 하나를 정한 주기(1000 의 약수, 기본 1000 Hz)마다 FAT32 USB 메모리의 `/LOGS/<세션 이름>/` 에 기록하고, 빠진 표본 수와 가장 긴 공백은 `XM_GetUsbLogStats()` · `summary.txt` · XM10 Log Decoder 로 확인합니다. USB-C 포트가 하나라서 USB 메모리를 꽂아 두는 동안에는 PhAI Studio · `xm10` 도구 · USB 로 하는 펌웨어 업로드를 쓸 수 없습니다. (보드 확인 전) <!-- board-check -->
+* **새 예제 3 개 (모두 Rev 2.0 전용)** — Ex.10 USB Memory Log(100 Hz) · Ex.34 USB Memory Gait Log(H10 보행 데이터를 1 kHz 로) · Ex.44 CDC Struct Logging. (보드 확인 전) <!-- board-check -->
+* **상수 2 개** — `XM_USB_CUSTOM_META_MAX_LEN`(1,007) · `XM_USB_DEBUG_MESSAGE_MAX_LEN`(1,021).
+* **`.xmlog` 형식 문서** — `pc-data-tool/spec/xmlog.md` 에 칸마다 뜻과 읽는 규칙을 정리했습니다.
+
+### Changed
+* **`XM_SetUsbCustomMeta()` (Rev 2.0)** — 반환형이 `void` 에서 `bool` 로 바뀌고, JSON 은 512 B 에서 1,007 B 까지 받습니다. `NULL` 이거나 너무 길면 `false` 이고 이전에 등록한 이름이 남습니다(예전에는 `NULL` 로 이름을 지울 수 있었습니다). `XM_USB_HOST_TERMINAL` 프로파일이 아니면 PC 프로그램이 COM 포트를 열 때마다 이름을 다시 보내, 케이블을 다시 꽂지 않아도 됩니다. (보드 확인 전) <!-- board-check -->
+* **`XM_SendUsbDebugMessage()` (Rev 2.0)** — 문자열 뒤에 0x00 한 바이트를 붙여 보내고(`XM_USB_HOST_TERMINAL` 프로파일에서도 같습니다), 1,021 B 를 넘거나 `NULL` 이면 `false`, 빈 문자열은 0x00 만 보내고 `true` 입니다. 스트림을 받는 중에 보내도 데이터 패킷이 손실되지 않도록 바꿨습니다. (보드 확인 전) <!-- board-check -->
+* **시스템이 쓰는 모듈 ID 6 개 거절 (Rev 2.0)** — `XM_SendUsbDataWithId()` 로 `0x20` · `0xB2` · `0xED` · `0xEE` · `0xEF` · `0xFF` 에 보내면 `false` 이고, `XM_SetUsbStreamModuleId()` 는 이 값을 무시합니다. 사용자 데이터는 `0xF0` ~ `0xFE` 를 씁니다.
+* **인터럽트 안의 송신 함수 (Rev 2.0)** — `XM_SendUsbData()` · `XM_SendUsbDataWithId()` · `XM_SendUsbDebugMessage()` 를 인터럽트 안에서 부르면 아무것도 보내지 않고 `false` 입니다. `Control_Loop()` 안에서 부르세요.
+* **Rev 2.0 SDK 빌드 설정** — C 컴파일러 설정(STM32CubeIDE 의 Debug · Release 와 CMake)에 `-Werror=implicit-function-declaration` 을 넣었습니다. 선언 없는 함수 호출이 경고가 아니라 오류(`implicit declaration of function`)입니다. 그 함수의 헤더를 include 하거나 원형을 선언하세요.
+* **`.xmlog` 의 PC 받은 시각** — `xm10` 도구가 `pc_time_us` 를 1970-01-01 UTC 부터의 µs 로 적습니다(전에는 수신을 시작한 뒤 흐른 µs). v2.8.0 · v2.8.1 도구가 만든 `.xmlog` 는 예전 값 그대로이고, 실시간 CSV 의 `pc_time_s` 는 그대로입니다.
+* **예제 개수** — Rev 2.0 45 개에서 48 개로, Rev 1.1 은 40 개 그대로입니다.
+* **펌웨어 버전 (Rev 2.0)** — SDK 에 적힌 버전이 2.9.0 입니다.
+
+### Removed
+* **헤더에서 선언 3 개 삭제 (Rev 2.0)** — `XM_USB_ProcessPeriodic()` · `XM_GetUsbLogStatus()` · `XmLogStatus_e`(`XM_LOG_STATUS_*`). 시스템이 자동으로 쓰는 함수 · 타입이라 직접 쓸 필요가 없습니다. 쓰던 코드는 그 줄을 지우세요 — 함수 호출은 위 빌드 설정에서 오류가 나고, 타입은 어느 설정에서나 `unknown type name` 오류가 납니다. Rev 1.1 은 선언이 그대로 있습니다.
+
+### Notes
+* **보드로 아직 확인하지 못한 것** — USB 메모리 저장 전체(저장 · 정지 · 뽑기)와 Ex.10 · Ex.34, USB 메모리를 뽑은 뒤 PC 를 다시 연결하는 동작, 구조체 로깅 전체(`xm10` 도구의 탭 · 열 이름 표시 포함)와 Ex.44, 채널 이름 다시 보내기, 디버그 메시지를 보내는 중에 데이터 패킷이 손실되지 않는지, 펌웨어 버전 번호 보고. 빌드와 PC 쪽 시험으로 확인했습니다. (보드 확인 전) <!-- board-check -->
+* **측정하지 않은 것** — USB 메모리 종류에 따라 빠지는 표본 수와 저장이 `Control_Loop()` 주기에 주는 영향. 구조체 로깅의 "PC 프로그램이 잠시(기본 50 ms) 멈춰도 데이터를 빠뜨리지 않는다" 와 Total Data 를 1 ms 마다 최대 한 번만 보내는 것은 설계 목표입니다. (설계 목표, 보드 확인 전) <!-- board-check -->
+* **XM10 Log Decoder** — USB 메모리에 저장한 로그를 푸는 Windows 용 프로그램입니다. XM10 Log Decoder 2.2.1 을 릴리즈 첨부 파일로 올립니다.
+* **Rev 1.1** 은 v2.8.1 그대로입니다(SDK · 예제 40 개 · USB-CDC 함수 동작). 새 헤더가 없어 구조체 로깅 · USB 메모리 저장은 Rev 1.1 에서 쓸 수 없습니다.
+* 부트로더는 v1.1.0 그대로입니다.
+
+---
+
 ## [v2.8.1] — 2026-10-07
 
 > **PC 도구가 여러 구조체를 한 번에 다루고, CAN-FD 로 받는 데이터의 결함을 고친 릴리즈.** 실시간 화면이 모듈별 탭으로 바뀌어 여러 구조체를 함께 보고 저장할 수 있습니다. 펌웨어는 CAN-FD 로 받는 데이터에 빈 메시지가 끼어들 수 있던 문제를 고쳤습니다. **PC 도구 폴더 이름이 `pc-data-tool` 로 바뀌었고, Rev 1.1 SDK 의 예제는 40 개가 됩니다.** 함께 올리는 부트로더는 v1.1.0 으로 바뀌었습니다(보드 확인 전).

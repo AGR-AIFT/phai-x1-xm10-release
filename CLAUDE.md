@@ -28,7 +28,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **OS** | FreeRTOS + CMSIS-OS2 |
 | **레포 역할** | 사용자 (개발자/연구자/수강생) 대상 **공개 릴리즈** (SDK + 예제 + 문서) |
 | **License** | MIT |
-| **Latest** | [`v2.8.1`](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.8.1) (Releases → `Rev2.0.zip` / `Rev1.1.zip` 다운로드) |
+| **Latest** | [`v2.9.0`](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.9.0) (Releases → `Rev2.0.zip` / `Rev1.1.zip` 다운로드) |
 
 ---
 
@@ -40,7 +40,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 2. **[하드웨어 셋업](docs/getting-started/01-hardware-setup.md)** → **[소프트웨어 셋업](docs/getting-started/02-software-setup.md)** → **[첫 빌드](docs/getting-started/03-first-build.md)** — 수동 절차
 3. **[Ex.00 Quick Start](examples/00_Quick_Start/)** — 보드 smoke test (⭐)
 4. **[Ex.01~03 Button & LED](examples/01_Button_LED_Basic/)** — 디지털 IO 기본 (⭐~⭐⭐)
-5. **[전체 학습 로드맵](docs/tutorials/README.md)** — 45 개 예제 (난이도 별 표시)
+5. **[전체 학습 로드맵](docs/tutorials/README.md)** — 48 개 예제 (난이도 별 표시)
 
 ---
 

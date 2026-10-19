@@ -8,7 +8,7 @@
  * USB CDC Total Data Packet(Module ID 0x20)으로 자동 전송합니다.
  *
  * - 스냅샷 수집: _FetchAllInputs() 직후 호출
- * - 데이터 제공: XM_USB_ProcessPeriodic()에서 PhAI_PacketBuild()로 전송
+ * - 데이터 제공: USB 스트리밍 중 자동 전송 (Module ID 0x20)
  * - 사용자 코드 불필요 (System-Managed)
  *
  * @version 2.0

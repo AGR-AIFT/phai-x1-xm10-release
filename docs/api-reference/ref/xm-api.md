@@ -1,14 +1,14 @@
 # `xm_api.h` — XM10 SDK 진입점 (전체 API 통합 헤더)
 
 > **대상 헤더**: [`XM_FW/XM_API/xm_api.h`](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/XM10_SDK/Rev2.0/Extension_Module/XM_FW/XM_API/xm_api.h) (Rev2.0 기준 — Rev1.1 에도 동일 파일이 있으며 차이는 [§2](#이-헤더가-통합하는-api)에서 다룹니다)
-> **관련 개념 문서**: [API 참고서 전체 인덱스](../README.md) — 01~09 전 항목이 이 헤더가 통합하는 하위 API 입니다
+> **관련 개념 문서**: [API 참고서 전체 인덱스](../README.md) — 01~10 전 항목이 이 헤더가 통합하는 하위 API 입니다
 > **관련 예제**: 사실상 모든 예제 — 저장소 예제 중 `xm_api.h` 를 include 하지 않는 것이 거의 없습니다. `XM_GetTick()` 을 직접 쓰는 대표 예제는 [00_Quick_Start](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/00_Quick_Start/)
 
 ---
 
 ## 언제 사용하나
 
-XM10 예제(`.c`) 파일 맨 위에 아래 한 줄만 추가하면 로봇 제어, 센서 읽기, LED/버튼, 확장 IO, USB 통신·로깅, 메모리, RTC, 보조 task 까지 SDK 의 모든 사용자 API 를 한 번에 쓸 수 있습니다.
+XM10 예제(`.c`) 파일 맨 위에 아래 한 줄만 추가하면 로봇 제어, 센서 읽기, LED/버튼, 확장 IO, USB 통신·로깅, 메모리, RTC, 보조 task 까지 SDK 의 모든 사용자 API 를 한 번에 쓸 수 있습니다. 단, 구조체 로깅 매크로(`XM_LOG_*`)를 쓰는 `.c` 파일은 `xm_api_logging_raw.h` 도 include 하세요.
 
 ```c
 #include "xm_api.h"
@@ -18,7 +18,7 @@ XM10 예제(`.c`) 파일 맨 위에 아래 한 줄만 추가하면 로봇 제어
 
 ## 이 헤더가 통합하는 API
 
-`xm_api.h` 는 다음 하위 API 헤더들을 `#include` 합니다. Rev2.0 기준 9개, Rev1.1 기준 8개입니다(차이는 아래 표의 비고 참고).
+`xm_api.h` 는 다음 하위 API 헤더들을 `#include` 합니다. Rev2.0 기준 12개, Rev1.1 기준 9개입니다(차이는 아래 표와 "Rev 차이 요약" 참고). 구조체 로깅 매크로(`XM_LOG_*`)를 쓰는 `.c` 파일은 `xm_api_logging_raw.h` 도 직접 include 하세요 — `xm_api.h` 는 그 헤더를 포함하지 않습니다.
 
 | # | 포함 헤더 | 한 줄 설명 | 개념 문서 |
 |---|-----------|-----------|-----------|
@@ -27,17 +27,19 @@ XM10 예제(`.c`) 파일 맨 위에 아래 한 줄만 추가하면 로봇 제어
 | 3 | `xm_api_led_btn.h` | 내장 LED 및 버튼 제어 | [03 LED + 버튼](../03-led-btn-control.md) |
 | 4 | `xm_api_external_io.h` | 확장 포트 GPIO/ADC | [04 외부 IO](../04-external-io.md) |
 | 5 | `xm_api_usb.h` | USB 시리얼 통신 (CDC) | [05 USB 시리얼 통신](../05-usb-connectivity.md) |
-| 6 | `xm_api_user_custom.h` | Total Data(0x20) 패킷 내 사용자 커스텀 슬롯(28B) — PhAI Studio 스트리밍/녹화에 자동 포함 | 전용 개념 문서 없음 — 헤더 안 Doxygen 예제(`@code` 블록) 참고 |
-| 7 | `xm_api_memory.h` | 메모리 영역 접근 (Workspace/PSRAM/DTCM/비휘발성 저장소) | [07 메모리 영역](../07-memory-management.md) — 🟢 **Rev 2.0 전용** |
-| 8 | `xm_api_rtc.h` | RTC 날짜/시간 관리 | [08 실시간 시계](../08-rtc-clock.md) — ⚠️ Rev1.1 에서는 stub |
-| 9 | `xm_api_freertos.h` | 보조 task 생성 + Mutex (FreeRTOS 학생 친화 wrapper) | [09 보조 task + 데이터 공유](../09-task-creation.md) |
-| 10 | `xm_api_safety.h` | 안전 토크 헬퍼 (v2.6.0 신규) — 이상값 차단 + 한계 클램프 + 진입 소프트스타트 + 기울기 제한을 한 번에 처리하는 `XM_SafeTorque_*`, 보조 레벨 클램프 `XM_SafeAssistLevel()`, 센서 신선도 확인 `XM_SafeIsFresh()`. 헤더 안에 구현이 들어 있어 별도 `.c` 가 없습니다 | [02 KIT H10 제어 + 데이터](../02-h10-control-n-data.md) |
+| 6 | `xm_api_logging.h` | 구조체 로깅 — 구조체를 필드 이름 · 단위 · 타입과 함께 PC 로 전송 (`XM_LOG_*` 매크로를 쓰는 `.c` 파일은 `xm_api_logging_raw.h` 도 include) | [10 구조체 로깅](../10-struct-logging.md) — 🟢 **Rev 2.0 전용** |
+| 7 | `xm_api_usb_msc.h` | USB 메모리 저장 — 구조체 하나를 USB 메모리에 주기적으로 저장 | [06 USB 메모리 저장](../06-usb-data-logging.md) — 🟢 **Rev 2.0 전용** |
+| 8 | `xm_api_user_custom.h` | Total Data(0x20) 패킷 내 사용자 커스텀 슬롯(28B) — PhAI Studio 스트리밍/녹화에 자동 포함 | 전용 개념 문서 없음 — 헤더 안 Doxygen 예제(`@code` 블록) 참고 |
+| 9 | `xm_api_memory.h` | 메모리 영역 접근 (Workspace/PSRAM/DTCM/비휘발성 저장소) | [07 메모리 영역](../07-memory-management.md) — 🟢 **Rev 2.0 전용** |
+| 10 | `xm_api_rtc.h` | RTC 날짜/시간 관리 | [08 실시간 시계](../08-rtc-clock.md) — ⚠️ Rev1.1 에서는 stub |
+| 11 | `xm_api_freertos.h` | 보조 task 생성 + Mutex (FreeRTOS 학생 친화 wrapper) | [09 보조 task + 데이터 공유](../09-task-creation.md) |
+| 12 | `xm_api_safety.h` | 안전 토크 헬퍼 (v2.6.0 신규) — 이상값 차단 + 한계 클램프 + 진입 소프트스타트 + 기울기 제한을 한 번에 처리하는 `XM_SafeTorque_*`, 보조 레벨 클램프 `XM_SafeAssistLevel()`, 센서 신선도 확인 `XM_SafeIsFresh()`. 헤더 안에 구현이 들어 있어 별도 `.c` 가 없습니다 | [02 KIT H10 제어 + 데이터](../02-h10-control-n-data.md) |
 
 **Rev 차이 요약**:
 
-- 🟢 **Rev 2.0 전용**: `xm_api_memory.h` — Rev1.1 SDK 에는 이 헤더 파일 자체가 없습니다(즉 `xm_api.h` 가 이 헤더를 include 하지 않습니다). Workspace/PSRAM 8MB 등 Rev2.0 전용 하드웨어를 반영한 API 입니다.
+- 🟢 **Rev 2.0 전용**: `xm_api_memory.h` · `xm_api_logging.h` · `xm_api_usb_msc.h` — Rev1.1 SDK 에는 이 헤더 파일 자체가 없습니다(즉 `xm_api.h` 가 이 헤더들을 include 하지 않습니다). `xm_api_memory.h` 는 Workspace/PSRAM 8MB 등 Rev2.0 전용 하드웨어를 반영한 API 입니다. `xm_api_logging_raw.h` 도 Rev2.0 SDK 에만 있습니다.
 - ⚠️ **Rev1.1 제한**: `xm_api_rtc.h` 는 두 리비전 모두에 파일이 존재하지만, Rev1.1 보드에는 RTC 칩(MCP79510)이 실장되어 있지 않아 모든 함수가 stub(항상 `false` 반환/무동작)으로 컴파일됩니다. Rev1.1 에서 시간 기록이 필요하면 `XM_GetTick()` 기반 경과시간으로 대체하세요.
-- 그 외 7개 헤더(`xm_api_data/tsm/led_btn/external_io/usb/user_custom/freertos`)는 두 리비전에서 내용이 동일합니다.
+- 그 외 헤더 중 `xm_api_data.h` · `xm_api_led_btn.h` · `xm_api_external_io.h` · `xm_api_usb.h` 는 두 리비전의 내용이 다릅니다. 다른 점은 각 레퍼런스 페이지에서 확인하세요(예: [`xm_api_usb.h`](xm-api-usb.md) 의 "Rev1.1 / Rev2.0 차이 요약"). `xm_api_tsm.h` · `xm_api_user_custom.h` · `xm_api_freertos.h` · `xm_api_safety.h` 는 기능 차이가 없습니다.
 
 ## 함수 목록
 
@@ -103,4 +105,4 @@ void Control_Loop(void)
 ## 참고
 
 - [API 참고서 인덱스](../README.md)
-- 위 §2 표에 연결된 01~09 개념 문서
+- 위 §2 표에 연결된 01~10 개념 문서

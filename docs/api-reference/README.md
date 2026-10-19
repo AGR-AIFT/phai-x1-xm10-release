@@ -14,7 +14,7 @@ API 문서는 **역할이 다른 두 레이어**로 나뉘어 있습니다. 무�
 
 | 레이어 | 위치 | 다루는 것 | 이럴 때 펴보세요 |
 |--------|------|-----------|------------------|
-| **① 개념 가이드** | 본 문서 (01~09, 아래 [함수 그룹](#함수-그룹) 표) | **왜** 이 API 가 있고 **어떻게** 알고리즘에 녹이는지 — 배경 지식, 흔한 실수, 예제 코드 흐름 | 처음 써보는 API 를 어떻게 조합해야 할지 모를 때 |
+| **① 개념 가이드** | 본 문서 (01~10, 아래 [함수 그룹](#함수-그룹) 표) | **왜** 이 API 가 있고 **어떻게** 알고리즘에 녹이는지 — 배경 지식, 흔한 실수, 예제 코드 흐름 | 처음 써보는 API 를 어떻게 조합해야 할지 모를 때 |
 | **② 함수 레퍼런스** | [`ref/`](ref/README.md) — 헤더 1개당 페이지 1개 | **정확한** 함수 시그니처 · 파라미터 타입/범위 · 반환값 · 구조체 필드 | 함수 이름/파라미터 순서/반환값 의미를 정확히 확인해야 할 때 |
 
 두 레이어는 서로를 대체하지 않습니다. 개념 가이드 각 항목 끝에는 대응하는 `ref/` 페이지가 링크되어 있고, `ref/` 각 페이지 상단에도 대응하는 개념 가이드가 링크되어 있습니다 — 막히면 반대쪽으로 건너가세요.
@@ -32,9 +32,11 @@ API 문서는 **역할이 다른 두 레이어**로 나뉘어 있습니다. 무�
 | 03 | [LED + 버튼](03-led-btn-control.md) | 보드 LED 효과, 버튼 이벤트 | `XM_SetLedEffect`, `XM_SetLedState`, `XM_GetButtonEvent`, `XM_SetChannelLedRGB` |
 | 04 | [외부 IO](04-external-io.md) | 확장 포트 GPIO/ADC | `XM_SetPinMode`, `XM_DigitalRead/Write`, `XM_AnalogReadMillivolts` |
 | 05 | [USB 시리얼 통신](05-usb-connectivity.md) | PC 로 텍스트/바이너리 전송 | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId`, `XM_SetUsbCustomMeta` |
+| 06 | [USB 메모리 저장](06-usb-data-logging.md) | 구조체 하나를 USB 메모리에 주기적으로 저장 🟢 **Rev 2.0 전용** | `XM_SetUsbLogSource`, `XM_StartUsbDataLog`, `XM_StopUsbDataLog`, `XM_GetUsbLogStats` |
 | 07 | [메모리 영역](07-memory-management.md) | 빠른 메모리 + 비휘발성 저장소 | `XM_GetUserWorkspace`, `XM_UserNV_Read/Write` |
 | 08 | [실시간 시계](08-rtc-clock.md) | 날짜/시간 읽기·쓰기 | `XM_RTC_SetDateTime`, `XM_RTC_GetDateTime`, `XM_RTC_IsRunning` |
 | 09 | [보조 task + 데이터 공유](09-task-creation.md) | 1 kHz 제어 루프와 별도 작업 + 안전한 데이터 공유 | `XM_Task_CreateOneShot/Periodic`, `XM_Mutex_Lock/Unlock` |
+| 10 | [구조체 로깅](10-struct-logging.md) | 구조체를 이름 · 단위 · 타입과 함께 PC 로 전송 🟢 **Rev 2.0 전용** | `XM_LOG_DECLARE`, `XM_LOG_FIELDS`, `XM_LOG_REGISTER`, `XM_LOG_SEND` |
 
 ---
 
@@ -96,6 +98,7 @@ void Control_Setup(void)
 | 28 어드미턴스 | ✗ | 측정 토크 피드백만 사용 |
 | 29 좌우 협응 | △ | 각도 기반 동작, Body Data 로 정확도 향상 |
 | 30 FF+FB 혼합 | ✗ | 모델 파라미터 매크로로 직접 설정 |
+| 34 USB 메모리 보행 로그 🟢 **Rev 2.0 전용** | △ | 저장하는 무릎 · 허벅지 각도와 발 접지의 정확도에 영향. 예제가 직접 보내니 값만 착용자에 맞게 고치세요 |
 
 > `gaitCycle` 이나 `footContact` 없이 보행 위상이 필요하면 GRF 슈즈 같은 외부 센서로 독립 계측해서 쓸 수도 있습니다.
 
