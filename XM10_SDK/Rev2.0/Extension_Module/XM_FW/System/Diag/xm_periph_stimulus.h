@@ -77,7 +77,7 @@ void XM_Stimulus_OnUsbConnect(void);
  *
  *          stimulus task 안에서 갱신하던 v2 설계는 task suspend 시 update 가
  *          중단되는 모순이 있었음 (사용자 보고 2026-05-13: "USB stand-by 유지").
- *          이 함수로 분리 후 UserTask 의 XM_USB_ProcessPeriodic 이 직접 호출.
+ *          이 함수로 분리 후 UserTask 의 USB 주기 처리(1ms)가 직접 호출.
  */
 void XM_Stimulus_UpdateConnectedStatus(void);
 

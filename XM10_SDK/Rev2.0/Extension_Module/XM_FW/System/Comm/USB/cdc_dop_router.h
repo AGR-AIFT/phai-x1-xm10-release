@@ -17,7 +17,7 @@
  *
  *   FW 변경 흐름:
  *     - System_Startup() :  CdcStream_Init() 후 CdcDopRouter_Init()
- *     - core_process 1ms :  XM_USB_ProcessPeriodic() 내부에서 CdcDopRouter_Process()
+ *     - core_process 1ms :  USB 주기 처리 안에서 CdcDopRouter_Process()
  *     - Host DTR off    :  CdcStream 콜백이 호출되어 사이드이펙트 자동 정리
  *
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
@@ -42,7 +42,7 @@ bool CdcDopRouter_IsReady(void);
 
 /**
  * @brief CDC RX 버퍼를 비우면서 DOP 프레임 파서에 공급한다.
- *        1ms 주기로 XM_USB_ProcessPeriodic() 에서 호출.
+ *        1ms 주기로 USB 주기 처리에서 호출.
  *
  * @return 이번 호출에서 처리한 바이트 수
  */

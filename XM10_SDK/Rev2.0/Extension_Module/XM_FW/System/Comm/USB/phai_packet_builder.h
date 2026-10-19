@@ -52,10 +52,11 @@
 #define PHAI_MAX_PAYLOAD_BYTES  (PHAI_MAX_PAYLOAD_UNITS * 4)   /* 1020 bytes */
 #define PHAI_MAX_PACKET_SIZE    (PHAI_HEADER_SIZE + PHAI_MAX_PAYLOAD_BYTES + PHAI_CRC_SIZE) /* 1028 */
 
-/* COBS worst-case: data + ceil(data/254) + 1 (code byte) + 1 (0x00 delimiter) */
+/* COBS worst-case: data + floor(data/254) + 1 (code byte) + 1 (0x00 delimiter) */
 #define PHAI_MAX_COBS_SIZE      (PHAI_MAX_PACKET_SIZE + (PHAI_MAX_PACKET_SIZE / 254) + 2)
 
-/* Module ID 정의 (PhAI Studio types.ts MODULE_IDS와 일치) */
+/* Module ID — 패킷 종류. 0x20 · 0xB2 · 0xED · 0xEE · 0xEF · 0xFF 는 시스템 예약이다
+ * (XM_SendUsbDataWithId() 는 이 ID 를 거절하고 XM_SetUsbStreamModuleId() 는 무시한다) */
 #define PHAI_MODULE_IMU_ACCEL   0x01
 #define PHAI_MODULE_IMU_GYRO    0x02
 #define PHAI_MODULE_IMU_QUAT    0x03
@@ -65,12 +66,21 @@
 #define PHAI_MODULE_MOTOR_RIGHT 0x07
 #define PHAI_MODULE_COMBINED    0x10
 #define PHAI_MODULE_TOTAL_DATA  0x20    /* System-managed Total Data (자동 전송) */
-#define PHAI_MODULE_USER_META   0xEF    /* User Custom Metadata (JSON, 연결 시 1회) */
+#define PHAI_MODULE_BOOT_FTP_RESP 0xB2  /* 펌웨어 업로드 응답 (시스템) */
+#define PHAI_MODULE_LINK_HEALTH 0xED    /* 시스템 예약 */
+#define PHAI_MODULE_SCHEMA_DESC 0xEE    /* 시스템 예약 */
+#define PHAI_MODULE_USER_META   0xEF    /* User Custom Metadata (JSON, 포트를 열 때마다) */
 #define PHAI_MODULE_USER_BASE   0xF0    /* 0xF0~0xFE: User Custom */
 #define PHAI_MODULE_USER_CUSTOM_1  (PHAI_MODULE_USER_BASE + 1)  /* 0xF1 */
 #define PHAI_MODULE_USER_CUSTOM_2  (PHAI_MODULE_USER_BASE + 2)  /* 0xF2 */
 #define PHAI_MODULE_USER_CUSTOM_3  (PHAI_MODULE_USER_BASE + 3)  /* 0xF3 */
 #define PHAI_MODULE_DEBUG       0xFF
+
+/* 시스템 예약 ID 인가 — 정수 상수식이라 컴파일 시간 검사에도 쓸 수 있다. 인자는 여러 번 평가된다 */
+#define PHAI_MODULE_ID_IS_RESERVED(id)                                         \
+    (((id) == PHAI_MODULE_TOTAL_DATA)  || ((id) == PHAI_MODULE_BOOT_FTP_RESP) || \
+     ((id) == PHAI_MODULE_LINK_HEALTH) || ((id) == PHAI_MODULE_SCHEMA_DESC)   || \
+     ((id) == PHAI_MODULE_USER_META)   || ((id) == PHAI_MODULE_DEBUG))
 
 /**
  *-----------------------------------------------------------
@@ -103,7 +113,9 @@ void PhAI_PacketBuilder_Init(void);
  * @param[in] payload      User 정의 데이터 (4-byte 정렬 권장)
  * @param[in] payload_len  payload 바이트 수 (4의 배수 권장, 아니면 내부에서 패딩)
  * @param[in] module_id    Module ID (PHAI_MODULE_COMBINED 등)
- * @return true: Tx 링버퍼 적재 성공, false: 버퍼 풀 또는 payload 초과
+ * @return true: Tx 링버퍼 적재 성공, false: 버퍼 풀 · payload 초과 · 시스템 예약 ID
+ * @note   내부 builder — 지원 범위 밖이다(XM API 아님). 사용자 코드는 xm_api_usb.h 의
+ *         XM_SendUsbDataWithId() 를 쓴다.
  */
 bool PhAI_PacketBuild(const void* payload, uint32_t payload_len, uint8_t module_id);
 
