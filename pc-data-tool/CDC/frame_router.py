@@ -32,8 +32,8 @@ DEVICE_PERIOD_MS = 1   # XM 제어 주기 1ms
 # ----------------------------------------------------------------------------
 PHAI_MODULE_TOTAL_DATA  = 0x20   # Total Data 자동 스트림 (기본 ON)
 PHAI_MODULE_USER_META   = 0xEF   # 사용자 메타(JSON) — float 가 아니다
-PHAI_MODULE_LINK_HEALTH = 0xED   # 아직 FW 가 보내지 않는다. 자리만 예약
-PHAI_MODULE_SCHEMA_DESC = 0xEE   # 〃
+PHAI_MODULE_LINK_HEALTH = 0xED   # 링크 상태 — XM_Log_EnableLinkHealth() 를 켠 보드만 보낸다(v2.9.0~). 값은 풀지 않고 센다
+PHAI_MODULE_SCHEMA_DESC = 0xEE   # 구조체 필드 정보 — 구조체 로깅을 쓰는 보드가 보낸다(v2.9.0~, schema_0xee.py)
 
 SYSTEM_MODULE_IDS = frozenset({
     PHAI_MODULE_TOTAL_DATA,
