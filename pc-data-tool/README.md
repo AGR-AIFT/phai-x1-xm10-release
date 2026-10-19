@@ -87,7 +87,7 @@ Ctrl+C 로 끝낼 때의 요약에 있습니다.
 예전 버전은 이 패킷을 사용자 채널에 섞어 넣어 CSV 컬럼 수가 헤더와 어긋나곤 했습니다.
 
 링크 상태(`0xED`)는 값의 뜻을 풀지 않습니다. 프레임 수만 세고, 받은 바이트는 `.xmlog` 에 그대로 남습니다.
-`xm10 export` 가 만드는 `health_0xED.csv` 의 열은 float32 로 가정한 것이라 뜻이 없습니다.
+`xm10 export` 는 `health_0xED.csv` 에 받은 바이트를 16진수(`payload_hex` 열)로 적습니다.
 
 ## `CDC/cdc_phai_receiver.py` — 실시간 모니터링 GUI
 
