@@ -842,8 +842,8 @@ def test_reset_state_starts_a_new_session(RX, DS, tmp):
         ok("이전 세션의 module 탭 2개 · 0x20 탭 1개가 실제로 지워졌다")
 
         # _reset_state 는 탭만 치운다 — 채널 이름(0xEE 스키마 · 0xEF)은 건드리지 않는다. 같은
-        # 포트로 Disconnect -> Connect 하는 경로가 여기로 오는데, 그때 보드는 이름을 다시 보내지
-        # 않는다(USB 가 새로 잡힌 게 아니므로). 언제 잊는지는 [9b].
+        # 포트로 Disconnect -> Connect 하는 경로가 여기로 오는데, v2.8.1 이하 보드는 그때 이름을 다시
+        # 보내지 않는다(USB 가 새로 잡힌 게 아니므로). 언제 잊는지는 [9b].
         assert RX.SCHEMA_REG.struct_name(DS.MODULE_TYPED) == DS.DEMO_STRUCT_NAME, (
             "_reset_state 가 채널 이름까지 비웠다 — 같은 포트로 다시 Connect 하면 보드는 이름을 다시 "
             "보내지 않아서 이름이 영영 안 돌아온다")
@@ -934,7 +934,7 @@ def test_reconnect_keeps_channel_names_unless_usb_reenumerated(RX, DS, tmp):
             ok("(1) 첫 연결(COM_A): 0xEE 로 0xF0 = '%s'(%d채널), 0xEF 로 0xF1 = %s"
                % (DS.DEMO_STRUCT_NAME, len(typed_names), meta_names))
 
-            # (2) 같은 포트로 Disconnect -> Connect: 보드는 이름을 다시 보내지 않는다 — 이름이 남아야 한다
+            # (2) 같은 포트로 Disconnect -> Connect: v2.8.1 이하 보드는 이름을 다시 보내지 않는다 — 이름이 남아야 한다
             titles, names = session(win, "COM_A", bare, n_bare)
             assert titles[DS.MODULE_TYPED] == "0xF0 · %s" % DS.DEMO_STRUCT_NAME, titles
             assert names[DS.MODULE_TYPED] == typed_names, names[DS.MODULE_TYPED]
@@ -1548,7 +1548,7 @@ def _xmlog_shape(res):
 def _without_schema_frames(stream):
     """스트림에서 0xEE · 0xEF 프레임을 뺀다 -> (바이트, 남은 정상 프레임 수).
 
-    스키마를 이미 보낸 보드는 USB 가 그대로면 채널 설명을 다시 보내지 않는다 — 창에서
+    스키마를 이미 보낸 v2.8.1 이하 보드는 USB 가 그대로면 채널 설명을 다시 보내지 않는다 — 창에서
     Disconnect -> Connect 만 다시 한 경우를 흉내 낸다.
     """
     from frame_router import parse_phai_frame
@@ -1686,13 +1686,12 @@ def test_xmlog_gui_cli_parity_and_reconnect_new_file(RX, DS, tmp):
     ok("CLI 를 같은 초에 두 번 시작해도 파일이 둘이다: %s" % ", ".join(names))
 
     # ---- (e) 같은 포트로 Disconnect -> Connect 만 다시 한 경우 (문서가 말하는 그대로다) ----
-    # USB 는 그대로라 보드가 채널 설명을 다시 보내지 않는다: 새 .xmlog 에는 스키마가 없고, 그 파일을
+    # USB 는 그대로라 보드가 채널 설명을 다시 보내지 않는 경우다: 새 .xmlog 에는 스키마가 없고, 그 파일을
     # 뽑으면 이름이 없다. 화면과 실시간 CSV 는 이전 이름을 그대로 쓴다.
-    # 이건 지금 펌웨어의 동작이다 — 채널 이름(0xEF)을 USB 가 새로 잡힐 때(device-ready 상승 에지)
-    # 또는 XM_SetUsbCustomMeta() 를 다시 부를 때 한 번 보내고, 0xEE 는 아직 보내지 않는다. 이 시험은
-    # 도구 쪽 동작만 못박는다. 펌웨어가 0xEE 를 DTR 상승 · 주기로 다시 보내면
-    # 같은 포트 재연결에도 스키마가 들어와 이 시나리오가 달라지니, README 와 튜토리얼의
-    # '다시 연결하면' 문단과 함께 고칠 것.
+    # v2.8.1 이하 펌웨어(Rev 1.1 포함)의 동작이다 — 채널 이름(0xEF)을 USB 가 새로 잡힐 때(device-ready
+    # 상승 에지) 또는 XM_SetUsbCustomMeta() 를 다시 부를 때 한 번 보내고, 0xEE 는 보내지 않는다.
+    # Rev 2.0 v2.9.0 이상은 포트를 열 때마다 이름과 필드 정보를 다시 보내므로 같은 포트 재연결에도
+    # 스키마가 들어온다(보드 확인 전). 이 시험은 다시 보내지 않는 보드에서의 도구 쪽 동작만 못박는다.
     import xmlog_export as EXP
     sub2 = os.path.join(tmp, "same_port")
     os.makedirs(sub2)
