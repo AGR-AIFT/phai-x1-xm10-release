@@ -78,6 +78,7 @@ docs/api-reference/*
 !docs/api-reference/07-memory-management.md
 !docs/api-reference/08-rtc-clock.md
 !docs/api-reference/09-task-creation.md
+!docs/api-reference/10-struct-logging.md
 !docs/api-reference/README.md
 !docs/api-reference/ref/
 docs/api-reference/ref/*
@@ -88,6 +89,7 @@ docs/api-reference/ref/*
 !docs/api-reference/ref/xm-api-led-btn.md
 !docs/api-reference/ref/xm-api-external-io.md
 !docs/api-reference/ref/xm-api-usb.md
+!docs/api-reference/ref/xm-api-logging.md
 !docs/api-reference/ref/xm-api-memory.md
 !docs/api-reference/ref/xm-api-rtc.md
 !docs/api-reference/ref/xm-api-freertos.md
@@ -145,6 +147,7 @@ docs/stylesheets/*
 !docs/api-reference/07-memory-management.en.md
 !docs/api-reference/08-rtc-clock.en.md
 !docs/api-reference/09-task-creation.en.md
+!docs/api-reference/10-struct-logging.en.md
 !docs/api-reference/ref/README.en.md
 !docs/api-reference/ref/xm-api.en.md
 !docs/api-reference/ref/xm-api-data.en.md
@@ -152,6 +155,7 @@ docs/stylesheets/*
 !docs/api-reference/ref/xm-api-led-btn.en.md
 !docs/api-reference/ref/xm-api-external-io.en.md
 !docs/api-reference/ref/xm-api-usb.en.md
+!docs/api-reference/ref/xm-api-logging.en.md
 !docs/api-reference/ref/xm-api-memory.en.md
 !docs/api-reference/ref/xm-api-rtc.en.md
 !docs/api-reference/ref/xm-api-freertos.en.md
