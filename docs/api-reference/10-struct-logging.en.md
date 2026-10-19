@@ -196,7 +196,7 @@ The `xm10` tool shows a struct like this.
 - One tab opens per module ID, and the tab title is the module ID plus the struct name (token), such as `0xF0 · SensorLog`. (not yet confirmed on the board) <!-- board-check -->
 - The column names of the graph and the CSV are the field names you wrote in `XM_FIELD`. An array gets one column per element, such as `adc[0]`, `adc[1]` …. (not yet confirmed on the board) <!-- board-check -->
 - Values are shown as `stored value × scale`. In a CSV made by `xm10 export`, a `bool` is written as `1` / `0`, and an integer with scale 1 stays an integer. The CSV saved live writes every value with six decimals. (not yet confirmed on the board) <!-- board-check -->
-- Field information is delivered when a PC program opens the port, and is sent again every few seconds after that. You do not need to re-plug the USB cable, and for the first few seconds after the port opens the field names may not appear yet. (design goal, not yet confirmed on the board) <!-- board-check -->
+- The board keeps sending the field information again every few seconds. So when a PC program opens the port, it gets the field information within a few seconds, and you do not need to re-plug the USB cable. For the first few seconds after the port opens, the field names may not appear yet. (design goal, not yet confirmed on the board) <!-- board-check -->
 
 -----
 
