@@ -103,7 +103,7 @@ void Control_Loop(void)
 ```
 
 - ① The struct size must be a **multiple of 4** and at most 1,008 bytes. Fill the spare bytes with `uint8_t pad[]` and do not list them with `XM_FIELD`. Bytes you do not list as a field are still carried in the data.
-- ② `XM_LOG_DECLARE(token, struct)` gives the struct a short name (11 characters or fewer). This token becomes the struct name.
+- ② `XM_LOG_DECLARE(token, struct)` gives the struct a short name (letters, digits and `_`, 11 characters or fewer). This token becomes the struct name.
 - ③ One field is one line of `XM_FIELD(token, member, "field name", "unit", scale)`. Use `XM_FIELD_ARRAY` for an array member. The type, position and array length are decided from the member, so you do not write them.
 - ④ Call `XM_LOG_REGISTER(token, module ID, rate)` only inside `Control_Setup()`. The module ID (`0xF0` ~ `0xFE`) is a number you choose for each struct, and the rate is in Hz. Check the result (`true` / `false`). A message you send to the PC from `Control_Setup()` usually does not go out because USB is not ready yet, so report a failure with an LED.
 - ⑤ Call `XM_LOG_SEND(token, pointer)` inside `Control_Loop()`. You can call it every loop and it goes out only at the registered rate, so a `false` before the rate is due is normal. The struct is copied inside the call, so a local variable is fine.
@@ -149,7 +149,7 @@ You do not write the field type. `XM_FIELD` and `XM_FIELD_ARRAY` decide it autom
 | Item | Limit | If you exceed it |
 |------|------|--------|
 | Struct size | A multiple of 4, at most 1,008 B (`XM_LOG_MAX_STRUCT_SIZE`) | Compile error at the `XM_LOG_DECLARE` line |
-| Struct name (token) | At most 11 characters (`XM_LOG_MAX_TOKEN_LEN`) | Compile error at the `XM_LOG_DECLARE` line |
+| Struct name (token) | Letters, digits and `_`, at most 11 characters (`XM_LOG_MAX_TOKEN_LEN`) — non-ASCII characters such as Korean letters are not allowed | Over 11 characters: compile error at the `XM_LOG_DECLARE` line. Not ASCII: `XM_LOG_REGISTER` returns `false` |
 | Number of fields | 1 ~ 90 per struct (`XM_LOG_MAX_FIELDS`) — an array counts as one field per line | Compile error at the `XM_LOG_REGISTER` line |
 | Array elements | 1 ~ 255 per field (`XM_LOG_MAX_ARRAY_LEN`) | Compile error at the `XM_FIELD_ARRAY` line |
 | Field name | Up to 15 letters, digits and symbols (ASCII) — Korean letters and characters such as `°` are not allowed | `XM_LOG_REGISTER` returns `false` |
@@ -248,7 +248,7 @@ To save H10 gait data to a USB memory stick, see [Ex.34 USB Memory Gait Log](htt
 | Build error `implicit declaration of function` (at an `XM_LOG_REGISTER` or `XM_LOG_SEND` line) | `xm_api_logging_raw.h` is not included — `xm_api.h` does not include this header | Add `#include "xm_api_logging_raw.h"` at the top of the `.c` file |
 | Compile error `add padding` at the `XM_LOG_DECLARE` line | The struct size is not a multiple of 4 | Add `uint8_t pad[]` at the end to fix the size (do not list it with `XM_FIELD`) |
 | Compile error `unsupported member type` | A `char`, pointer or struct member was listed with `XM_FIELD` | Change it to a supported type (see section 3). Use `XM_FIELD_ARRAY` for arrays |
-| `XM_LOG_REGISTER` returns `false` (LED 3 blinks fast) | A name or unit is too long or not ASCII (Korean, `°`, etc.), rate is 0, same module ID or same token, 5 or more structs, scale is 0, duplicate field names, too much to send, or called outside `Control_Setup()` | Check them one by one. If the send volume is the problem, lower the rate or shrink the struct |
+| `XM_LOG_REGISTER` returns `false` (LED 3 blinks fast) | A name or unit is too long, or the token, a name or a unit is not ASCII (Korean, `°`, etc.), rate is 0, same module ID or same token, 5 or more structs, scale is 0, duplicate field names, too much to send, or called outside `Control_Setup()` | Check them one by one. If the send volume is the problem, lower the rate or shrink the struct |
 | `XM_LOG_SEND` often returns `false` | The registered period is not due yet (normal), USB is not ready, or the transmit buffer is briefly full | Do not try to resend the same value; send a new value on the next loop |
 | `XM_SendUsbDataWithId()` returns `false` with the same module ID | A registered module ID belongs only to that struct | Use another ID (the rest of `0xF0` ~ `0xFE`) |
 | `XM_USB_SetHostProfile()` or `XM_Log_SetMinStallMs()` has no effect | They no longer change after the first registration | Call them before the first `XM_LOG_REGISTER` |

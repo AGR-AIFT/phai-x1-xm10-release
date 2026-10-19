@@ -103,7 +103,7 @@ void Control_Loop(void)
 ```
 
 - ① 구조체 크기는 **4 의 배수**이고 1,008바이트 이하여야 합니다. 남는 자리는 `uint8_t pad[]` 로 채우고 `XM_FIELD` 로 적지 않습니다. 필드로 적지 않은 바이트도 데이터에는 실려 갑니다.
-- ② `XM_LOG_DECLARE(토큰, 구조체)` 로 구조체에 짧은 이름(11자 이하)을 붙입니다. 이 토큰이 구조체 이름이 됩니다.
+- ② `XM_LOG_DECLARE(토큰, 구조체)` 로 구조체에 짧은 이름(영문 · 숫자 · `_`, 11자 이하)을 붙입니다. 이 토큰이 구조체 이름이 됩니다.
 - ③ 필드 한 줄이 `XM_FIELD(토큰, 멤버, "필드 이름", "단위", 배율)` 입니다. 배열 멤버는 `XM_FIELD_ARRAY` 를 씁니다. 타입 · 위치 · 배열 길이는 멤버에서 자동으로 정해지므로 적지 않습니다.
 - ④ `XM_LOG_REGISTER(토큰, 모듈 ID, 주기)` 는 `Control_Setup()` 안에서만 부릅니다. 모듈 ID(`0xF0` ~ `0xFE`)는 구조체마다 하나씩 정하는 번호이고, 주기는 Hz 입니다. 결과(`true` / `false`)를 확인하세요. `Control_Setup()` 에서 PC 로 보낸 메시지는 USB 가 아직 준비되지 않아 보통 나가지 않으니, 실패는 LED 로 알립니다.
 - ⑤ `XM_LOG_SEND(토큰, 포인터)` 는 `Control_Loop()` 안에서 부릅니다. 매 루프 불러도 등록한 주기로만 나가므로, 주기가 되기 전의 `false` 는 정상입니다. 구조체는 호출 안에서 복사되므로 지역 변수여도 됩니다.
@@ -149,7 +149,7 @@ void Control_Loop(void)
 | 항목 | 한도 | 어기면 |
 |------|------|--------|
 | 구조체 크기 | 4 의 배수, 1,008 B 이하 (`XM_LOG_MAX_STRUCT_SIZE`) | `XM_LOG_DECLARE` 줄에서 컴파일 오류 |
-| 구조체 이름(토큰) | 11자 이하 (`XM_LOG_MAX_TOKEN_LEN`) | `XM_LOG_DECLARE` 줄에서 컴파일 오류 |
+| 구조체 이름(토큰) | 영문 · 숫자 · `_` 11자 이하 (`XM_LOG_MAX_TOKEN_LEN`) — 한글처럼 ASCII 가 아닌 글자는 불가 | 11자를 넘으면 `XM_LOG_DECLARE` 줄에서 컴파일 오류, ASCII 가 아니면 `XM_LOG_REGISTER` 가 `false` |
 | 필드 수 | 구조체 하나에 1 ~ 90개 (`XM_LOG_MAX_FIELDS`) — 배열은 한 줄이 한 필드 | `XM_LOG_REGISTER` 줄에서 컴파일 오류 |
 | 배열 원소 수 | 필드 하나에 1 ~ 255개 (`XM_LOG_MAX_ARRAY_LEN`) | `XM_FIELD_ARRAY` 줄에서 컴파일 오류 |
 | 필드 이름 | 영문 · 숫자 · 기호(ASCII) 15자까지 — 한글 · `°` 처럼 ASCII 가 아닌 글자는 불가 | `XM_LOG_REGISTER` 가 `false` |
@@ -248,7 +248,7 @@ H10 보행 데이터를 USB 메모리에 저장하려면 [Ex.34 USB Memory Gait 
 | 빌드 오류 `implicit declaration of function` (`XM_LOG_REGISTER` · `XM_LOG_SEND` 줄) | `xm_api_logging_raw.h` 를 include 하지 않음 — `xm_api.h` 는 이 헤더를 포함하지 않습니다 | `.c` 맨 위에 `#include "xm_api_logging_raw.h"` 를 더합니다 |
 | `XM_LOG_DECLARE` 줄에서 컴파일 오류 `add padding` | 구조체 크기가 4 의 배수가 아님 | 끝에 `uint8_t pad[]` 를 더해 크기를 맞춥니다 (`XM_FIELD` 로 적지 않음) |
 | 컴파일 오류 `unsupported member type` | `char` · 포인터 · 구조체 멤버를 `XM_FIELD` 에 적음 | 지원 타입(3장)으로 바꿉니다. 배열은 `XM_FIELD_ARRAY` |
-| `XM_LOG_REGISTER` 가 `false` (LED 3 이 빠르게 깜빡임) | 이름 · 단위가 길거나 ASCII 가 아님(한글 · `°` 등), 주기가 0, 같은 모듈 ID · 같은 토큰, 구조체 5개 이상, 배율이 0, 필드 이름 중복, 보내는 양이 너무 많음, `Control_Setup()` 밖에서 부름 | 하나씩 확인합니다. 보내는 양이 문제면 주기를 낮추거나 구조체를 줄입니다 |
+| `XM_LOG_REGISTER` 가 `false` (LED 3 이 빠르게 깜빡임) | 이름 · 단위가 길거나, 토큰 · 이름 · 단위가 ASCII 가 아님(한글 · `°` 등), 주기가 0, 같은 모듈 ID · 같은 토큰, 구조체 5개 이상, 배율이 0, 필드 이름 중복, 보내는 양이 너무 많음, `Control_Setup()` 밖에서 부름 | 하나씩 확인합니다. 보내는 양이 문제면 주기를 낮추거나 구조체를 줄입니다 |
 | `XM_LOG_SEND` 가 자주 `false` | 등록한 주기가 아직 안 됨(정상), USB 준비 전, 송신 버퍼가 잠시 가득 참 | 같은 값을 다시 보내려 하지 말고 다음 루프에서 새 값을 보냅니다 |
 | 같은 모듈 ID 로 `XM_SendUsbDataWithId()` 가 `false` | 등록한 모듈 ID 는 그 구조체 전용 | 남은 ID(`0xF0` ~ `0xFE`)를 씁니다 |
 | `XM_USB_SetHostProfile()` · `XM_Log_SetMinStallMs()` 가 먹히지 않음 | 첫 등록 뒤에는 바뀌지 않음 | 첫 `XM_LOG_REGISTER` 보다 먼저 부릅니다 |

@@ -258,7 +258,7 @@ The interval is rounded up to a 1 ms step, so if the rate is not a divisor of 1,
 | More than 4 registrations | Register up to 4 structs |
 | `nominal_rate_hz` is 0 | Set it to 1 or more |
 | Field names collide, or two fields point at the same bytes of the struct | Check the field names and members |
-| A field name or unit is too long, or contains a non-ASCII character (Korean, etc.) | Shorten to a name of 15 and a unit of 7 ASCII characters or fewer |
+| A field name or unit is too long, or the token, a field name or a unit contains a non-ASCII character (Korean, etc.) | Use letters, digits and `_` for the token, and at most 15 (name) or 7 (unit) ASCII characters |
 | `scale` is 0 or not a number (infinity, NaN) | Use a non-zero finite value |
 | The volume to send exceeds what USB can carry (counted together with structs registered earlier) | Lower the rate or shrink the struct |
 | Together with structs registered earlier, the volume exceeds what can be kept when the PC program pauses briefly (see [`XM_Log_SetMinStallMs`](#xm_log_setminstallms)) | Lower the rate or shrink the struct |
