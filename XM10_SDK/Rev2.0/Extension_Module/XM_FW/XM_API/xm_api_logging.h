@@ -194,7 +194,7 @@ _Static_assert(sizeof(int) == 4U, "XM_LOG: int must be 32-bit");
 
 /**
  * @brief 토큰과 구조체 타입을 묶습니다. .c 파일 위쪽에 한 번 씁니다.
- * @details 토큰은 영문 · 숫자 · _ 로 11자까지 씁니다. 한글 같은 글자가 있으면 컴파일은 되지만 XM_LOG_REGISTER 가 false 입니다.
+ * @details 토큰은 영문 · 숫자 · _ 로 11자까지 씁니다. 한글 같은 글자는 쓸 수 없습니다(컴파일 오류가 나거나 XM_LOG_REGISTER 가 false).
  *          구조체 크기가 4의 배수가 아니거나 1,008 B 를 넘거나, 토큰이 11자를 넘으면 컴파일 오류입니다.
  *          크기를 맞출 때는 끝에 uint8_t 배열을 더하세요.
  */
