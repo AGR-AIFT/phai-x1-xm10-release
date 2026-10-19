@@ -360,6 +360,8 @@
       
         
       
+        
+      
     
     
     
@@ -504,6 +506,34 @@
     
   
     PC 에서 데이터 받기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/05-usb-memory-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리에 저장하기
   
 
     
@@ -746,6 +776,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -947,6 +981,34 @@
   
   
     <li class="md-nav__item">
+      <a href="06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리 저장
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="07-memory-management/" class="md-nav__link">
         
   
@@ -1030,11 +1092,43 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="10-struct-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    구조체 로깅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
         
           
+        
+      
+        
+      
         
       
         
@@ -1067,7 +1161,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1089,14 +1183,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_10">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_12">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1263,6 +1357,62 @@
     
   
     xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ref/xm-api-usb-msc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb_msc.h (USB 메모리)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ref/xm-api-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (구조체 로깅)
   
 
     
@@ -1683,6 +1833,8 @@
       
         
       
+        
+      
     
     
     
@@ -1735,6 +1887,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.9.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2410,7 +2590,7 @@
 <tbody>
 <tr>
 <td><strong>① 개념 가이드</strong></td>
-<td>본 문서 (01~09, 아래 <a href="#함수-그룹">함수 그룹</a> 표)</td>
+<td>본 문서 (01~10, 아래 <a href="#함수-그룹">함수 그룹</a> 표)</td>
 <td><strong>왜</strong> 이 API 가 있고 <strong>어떻게</strong> 알고리즘에 녹이는지 — 배경 지식, 흔한 실수, 예제 코드 흐름</td>
 <td>처음 써보는 API 를 어떻게 조합해야 할지 모를 때</td>
 </tr>
@@ -2467,6 +2647,12 @@
 <td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code>, <code>XM_SetUsbCustomMeta</code></td>
 </tr>
 <tr>
+<td>06</td>
+<td><a href="06-usb-data-logging/">USB 메모리 저장</a></td>
+<td>구조체 하나를 USB 메모리에 주기적으로 저장 🟢 <strong>Rev 2.0 전용</strong></td>
+<td><code>XM_SetUsbLogSource</code>, <code>XM_StartUsbDataLog</code>, <code>XM_StopUsbDataLog</code>, <code>XM_GetUsbLogStats</code></td>
+</tr>
+<tr>
 <td>07</td>
 <td><a href="07-memory-management/">메모리 영역</a></td>
 <td>빠른 메모리 + 비휘발성 저장소</td>
@@ -2483,6 +2669,12 @@
 <td><a href="09-task-creation/">보조 task + 데이터 공유</a></td>
 <td>1 kHz 제어 루프와 별도 작업 + 안전한 데이터 공유</td>
 <td><code>XM_Task_CreateOneShot/Periodic</code>, <code>XM_Mutex_Lock/Unlock</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td><a href="10-struct-logging/">구조체 로깅</a></td>
+<td>구조체를 이름 · 단위 · 타입과 함께 PC 로 전송 🟢 <strong>Rev 2.0 전용</strong></td>
+<td><code>XM_LOG_DECLARE</code>, <code>XM_LOG_FIELDS</code>, <code>XM_LOG_REGISTER</code>, <code>XM_LOG_SEND</code></td>
 </tr>
 </tbody>
 </table>
@@ -2613,6 +2805,11 @@
 <td>30 FF+FB 혼합</td>
 <td style="text-align: center;">✗</td>
 <td>모델 파라미터 매크로로 직접 설정</td>
+</tr>
+<tr>
+<td>34 USB 메모리 보행 로그 🟢 <strong>Rev 2.0 전용</strong></td>
+<td style="text-align: center;">△</td>
+<td>저장하는 무릎 · 허벅지 각도와 발 접지의 정확도에 영향. 예제가 직접 보내니 값만 착용자에 맞게 고치세요</td>
 </tr>
 </tbody>
 </table>

@@ -360,6 +360,8 @@
       
         
       
+        
+      
     
     
     
@@ -504,6 +506,34 @@
     
   
     Get Data on PC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/05-usb-memory-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Save to USB Memory
   
 
     
@@ -746,6 +776,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -947,6 +981,34 @@
   
   
     <li class="md-nav__item">
+      <a href="06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Memory Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="07-memory-management/" class="md-nav__link">
         
   
@@ -1030,11 +1092,43 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="10-struct-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Struct Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
         
           
+        
+      
+        
+      
         
       
         
@@ -1067,7 +1161,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1089,14 +1183,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_10">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_12">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1263,6 +1357,62 @@
     
   
     xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ref/xm-api-usb-msc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb_msc.h (USB Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ref/xm-api-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (Struct Logging)
   
 
     
@@ -1683,6 +1833,8 @@
       
         
       
+        
+      
     
     
     
@@ -1735,6 +1887,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.9.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2410,7 +2590,7 @@
 <tbody>
 <tr>
 <td><strong>① Concept Guides</strong></td>
-<td>This document (01–09, the <a href="#function-groups">Function Groups</a> table below)</td>
+<td>This document (01–10, the <a href="#function-groups">Function Groups</a> table below)</td>
 <td><strong>Why</strong> the API exists and <strong>how</strong> to weave it into your algorithm — background, common pitfalls, example code flow</td>
 <td>You don't yet know how to combine an API you're using for the first time</td>
 </tr>
@@ -2467,6 +2647,12 @@
 <td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code>, <code>XM_SetUsbCustomMeta</code></td>
 </tr>
 <tr>
+<td>06</td>
+<td><a href="06-usb-data-logging/">USB Memory Logging</a></td>
+<td>Save one struct to a USB memory stick at a fixed rate 🟢 <strong>Rev 2.0 only</strong></td>
+<td><code>XM_SetUsbLogSource</code>, <code>XM_StartUsbDataLog</code>, <code>XM_StopUsbDataLog</code>, <code>XM_GetUsbLogStats</code></td>
+</tr>
+<tr>
 <td>07</td>
 <td><a href="07-memory-management/">Memory Regions</a></td>
 <td>Fast memory + non-volatile storage</td>
@@ -2483,6 +2669,12 @@
 <td><a href="09-task-creation/">Auxiliary Tasks + Data Sharing</a></td>
 <td>Tasks separate from the 1 kHz control loop + safe data sharing</td>
 <td><code>XM_Task_CreateOneShot/Periodic</code>, <code>XM_Mutex_Lock/Unlock</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td><a href="10-struct-logging/">Struct Logging</a></td>
+<td>Send a struct to the PC with field names, units and types 🟢 <strong>Rev 2.0 only</strong></td>
+<td><code>XM_LOG_DECLARE</code>, <code>XM_LOG_FIELDS</code>, <code>XM_LOG_REGISTER</code>, <code>XM_LOG_SEND</code></td>
 </tr>
 </tbody>
 </table>
@@ -2613,6 +2805,11 @@
 <td>30 FF+FB Combined</td>
 <td style="text-align: center;">✗</td>
 <td>Model parameters are set directly via macros</td>
+</tr>
+<tr>
+<td>34 USB Memory Gait Log 🟢 <strong>Rev 2.0 only</strong></td>
+<td style="text-align: center;">△</td>
+<td>Affects the accuracy of the saved knee/thigh angles and foot contact. The example sends it itself — just replace the values with the wearer's</td>
 </tr>
 </tbody>
 </table>

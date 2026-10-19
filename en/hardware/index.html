@@ -360,6 +360,8 @@
       
         
       
+        
+      
     
     
     
@@ -504,6 +506,34 @@
     
   
     Get Data on PC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/05-usb-memory-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Save to USB Memory
   
 
     
@@ -746,6 +776,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -947,6 +981,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api-reference/06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Memory Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api-reference/07-memory-management/" class="md-nav__link">
         
   
@@ -1030,11 +1092,43 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../api-reference/10-struct-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Struct Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
         
           
+        
+      
+        
+      
         
       
         
@@ -1067,7 +1161,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1089,14 +1183,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_10">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_12">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1263,6 +1357,62 @@
     
   
     xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/ref/xm-api-usb-msc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb_msc.h (USB Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/ref/xm-api-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (Struct Logging)
   
 
     
@@ -1683,6 +1833,8 @@
       
         
       
+        
+      
     
     
     
@@ -1735,6 +1887,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.9.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2403,7 +2583,7 @@
 <tr>
 <td><strong>USB-C</strong></td>
 <td>1</td>
-<td>Serial communication (CDC) — PC connection</td>
+<td>Serial communication (CDC) — PC connection. Rev 2.0 can also save to a USB memory stick (one at a time with a PC). (not yet confirmed on the board) <!-- board-check --></td>
 </tr>
 <tr>
 <td><strong>External UART</strong></td>
@@ -2494,7 +2674,7 @@
 <p>The EMG Hub is a module under internal development. To use it, please contact us at https://huphailab.com/contact.</p>
 </blockquote>
 <h3 id="usb-c-port">USB-C Port<a class="headerlink" href="#usb-c-port" title="Permanent link">&para;</a></h3>
-<p>Used for data exchange with a PC via USB serial communication (CDC) for real-time data streaming and debug messages.</p>
+<p>Used for data exchange with a PC via USB serial communication (CDC) for real-time data streaming and debug messages. On Rev 2.0 you can also plug a USB memory stick into the same port and save data to it. There is only one port, so you use either a PC or a USB memory stick at a time.</p>
 <table>
 <thead>
 <tr>
@@ -2508,6 +2688,11 @@
 <td>Serial (CDC)</td>
 <td>Text debug via a PC terminal / user structs via the <code>xm10</code> tool. PhAI Studio shows Total Data (0x20)</td>
 <td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code></td>
+</tr>
+<tr>
+<td>USB memory logging 🟢 <strong>Rev 2.0 only</strong></td>
+<td>Saves one struct at a fixed rate to a USB memory stick, and you decode the saved folder on a PC (<a href="../api-reference/06-usb-data-logging/">USB Memory Logging</a>). While the stick is plugged in, the board does not connect to a PC over USB. (not yet confirmed on the board)</td>
+<td><code>XM_SetUsbLogSource</code>, <code>XM_StartUsbDataLog</code>, <code>XM_StopUsbDataLog</code> <!-- board-check --></td>
 </tr>
 </tbody>
 </table>

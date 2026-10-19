@@ -360,6 +360,8 @@
       
         
       
+        
+      
     
     
     
@@ -504,6 +506,34 @@
     
   
     Get Data on PC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/05-usb-memory-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Save to USB Memory
   
 
     
@@ -744,6 +774,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -945,6 +979,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../api-reference/06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Memory Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api-reference/07-memory-management/" class="md-nav__link">
         
   
@@ -1028,11 +1090,43 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../api-reference/10-struct-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Struct Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
         
           
+        
+      
+        
+      
         
       
         
@@ -1065,7 +1159,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1087,14 +1181,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_10">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_12">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1261,6 +1355,62 @@
     
   
     xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/ref/xm-api-usb-msc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb_msc.h (USB Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/ref/xm-api-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (Struct Logging)
   
 
     
@@ -1880,6 +2030,8 @@
       
         
       
+        
+      
     
     
     
@@ -1932,6 +2084,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.9.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2532,7 +2712,9 @@
 <h1 id="ai-training-data-pipeline">AI Training Data Pipeline<a class="headerlink" href="#ai-training-data-pipeline" title="Permanent link">&para;</a></h1>
 <p>This page maps the end-to-end flow from collecting exoskeleton data on the XM10 board to loading it into a training framework such as PyTorch or scikit-learn. Use it as a quick-reference map while you work.</p>
 <blockquote>
-<p>USB memory (MSC) file logging was removed in v2.5.0. Data capture now uses <strong>USB-CDC real-time streaming</strong>, and Path A below is the standard route. On-board storage (SD card) is not supported at present.</p>
+<p>The Rev 2.0 SDK (v2.9.0) again includes the feature that lets the board save data directly to a USB memory stick (<a href="../../api-reference/06-usb-data-logging/">USB Memory Logging</a>). Rev 1.1 does not have it. This feature has not been tested on the board yet. (not yet confirmed on the board) <!-- board-check --></p>
+<p>You can decode the saved folder to CSV on a PC with XM10 Log Decoder (<a href="../../getting-started/05-usb-memory-log/">guide</a>). Rows where missing samples were filled in by interpolation are not measured values, so decide how to handle them before using them for training.</p>
+<p>The standard route on this page is Path A below (<strong>USB-CDC real-time streaming</strong>). On-board storage (SD card) is not supported at present.</p>
 </blockquote>
 <hr />
 <h2 id="big-picture">Big Picture<a class="headerlink" href="#big-picture" title="Permanent link">&para;</a></h2>

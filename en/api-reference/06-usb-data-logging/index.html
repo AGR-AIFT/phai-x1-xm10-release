@@ -1,0 +1,3178 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서">
+      
+      
+      
+        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/en/api-reference/06-usb-data-logging/">
+      
+      
+        <link rel="prev" href="../05-usb-connectivity/">
+      
+      
+        <link rel="next" href="../07-memory-management/">
+      
+      
+        
+          <link rel="alternate" href="../../../api-reference/06-usb-data-logging/" hreflang="ko">
+        
+          <link rel="alternate" href="./" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>USB Memory Logging - XM10 Extension Module</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-reference-usb-memory-logging" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../" title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XM10 Extension Module
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              USB Memory Logging
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../api-reference/06-usb-data-logging/" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-AIFT/phai-x1-xm10-release
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../" title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    XM10 Extension Module
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-AIFT/phai-x1-xm10-release
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../find-it/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Find
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/01-hardware-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/02-software-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/03-first-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    First Build
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/04-pc-data-tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Get Data on PC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/05-usb-memory-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Save to USB Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start with Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../hardware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hardware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/external-gpio-rev1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External GPIO (Rev 1.1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/external-gpio-rev2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External GPIO (Rev 2.0)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-task-state-machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State Machine (TSM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-h10-control-n-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 Control & Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-led-btn-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED & Button
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-usb-connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Serial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Memory Logging
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Memory Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Use It
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preparing-the-usb-memory-stick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preparing the USB Memory Stick
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#there-is-only-one-usb-c-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        There Is Only One USB-C Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#order-of-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Order of Use
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logging-rate-and-struct-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging Rate and Struct Size
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#meta-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Meta Line
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#removing-the-stick-safely" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removing the Stick Safely
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-the-result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checking the Result
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decoding-on-the-pc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decoding on the PC
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ Common Mistakes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-memory-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory Regions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-rtc-clock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Real-Time Clock (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-task-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Auxiliary Tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-struct-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Struct Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../ref/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Function Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api.h (Entry Point)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_data.h (Control & Data)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-tsm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_tsm.h (State Machine)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-led-btn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_led_btn.h (LED & Button)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_external_io.h (External IO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-usb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-usb-msc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb_msc.h (USB Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (Struct Logging)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_memory.h (Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-rtc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_rtc.h (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-freertos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_freertos.h (RTOS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-user-custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_user_custom.h (User Data)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kit-h10-firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 Firmware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../bootloader/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bootloader
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../release-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Release Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.9.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.8.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.8.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.7.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.7.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.5.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.5.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.5.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.5.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.4.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.4.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.3.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Use It
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preparing-the-usb-memory-stick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preparing the USB Memory Stick
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#there-is-only-one-usb-c-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        There Is Only One USB-C Port
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#order-of-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Order of Use
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logging-rate-and-struct-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging Rate and Struct Size
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#meta-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Meta Line
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#removing-the-stick-safely" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removing the Stick Safely
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-the-result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checking the Result
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decoding-on-the-pc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decoding on the PC
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ Common Mistakes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="api-reference-usb-memory-logging">API Reference: USB Memory Logging<a class="headerlink" href="#api-reference-usb-memory-logging" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>📌 <strong>After reading this page</strong> you will be able to save a struct to a USB memory stick at a fixed rate and decode the saved folder on a PC.
+⏱️ Estimated reading time: 20 minutes
+🧰 Prerequisites: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/01_Button_LED_Basic/">Ex.01–03</a> buttons · LEDs · state machine
+🎯 Key functions: <code>XM_SetUsbLogSource</code> / <code>XM_StartUsbDataLog</code> / <code>XM_StopUsbDataLog</code> / <code>XM_IsUsbLogSessionIdle</code></p>
+<p>🟢 <strong>Rev 2.0 only</strong>: This works only with the Rev 2.0 board and the Rev 2.0 SDK. Rev 1.1 (v2.8.1) has no USB memory logging. On Rev 1.1, receive your data with the real-time streaming in <a href="../05-usb-connectivity/">05. USB Connectivity</a>.</p>
+<p>⚠️ <strong>There is only one USB-C port</strong>: While a USB memory stick is plugged in, you cannot connect to a PC over USB. Please read <a href="#usb-c-port">the section below</a> first.</p>
+<p>⚠️ The whole USB memory logging flow (save · stop · remove) and Ex.10 · Ex.34 have not been tested on the board yet. (not yet confirmed on the board) <!-- board-check --></p>
+</blockquote>
+<p>This page explains the <strong>USB memory logging API</strong> defined in <code>xm_api_usb_msc.h</code>.
+Register one struct, and while logging is running the system writes that struct to the USB memory stick at the rate you choose.
+You do not call a write function. You only fill in the struct's values in <code>Control_Loop()</code>.</p>
+<p>Move the saved folder to a PC and decode it with XM10 Log Decoder to get a CSV. If any samples are missing, it tells you where and how long.</p>
+<blockquote>
+<p>v2.5.0 removed USB memory logging, and it is available again. This time, missing samples show up in the statistics, in <code>summary.txt</code>, and in the decoder's verdict.</p>
+</blockquote>
+<p>For the exact signature of each function, see the <a href="../ref/xm-api-usb-msc/"><code>xm_api_usb_msc.h</code> reference</a>. For a step-by-step walkthrough from the beginning, see <a href="../../getting-started/05-usb-memory-log/">Save Data to a USB Memory Stick</a>.</p>
+<hr />
+<h2 id="when-to-use-it">When to Use It<a class="headerlink" href="#when-to-use-it" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>What you want</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Watch and save in real time with the PC connected</td>
+<td><a href="../05-usb-connectivity/">05. USB Connectivity</a> — view your own struct with the <code>xm10</code> tool</td>
+</tr>
+<tr>
+<td>Save without a PC and decode later on a PC</td>
+<td>This page — USB memory logging</td>
+</tr>
+</tbody>
+</table>
+<p>You do not need a PC while saving. The board gets its power from the KIT H10 body, so keep the H10 body powered on.</p>
+<hr />
+<h2 id="preparing-the-usb-memory-stick">Preparing the USB Memory Stick<a class="headerlink" href="#preparing-the-usb-memory-stick" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File system</td>
+<td><strong>FAT32</strong>. exFAT and NTFS are not recognized</td>
+</tr>
+<tr>
+<td>Allocation unit</td>
+<td>32 KB is recommended</td>
+</tr>
+<tr>
+<td>Free space</td>
+<td>Must be larger than the file-split size (default 10 MB) for logging to start</td>
+</tr>
+<tr>
+<td>Session name</td>
+<td>Becomes the folder name. Use only letters, digits, <code>_</code> and <code>-</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Formatting erases every file on the stick. Move any files you need first.</li>
+<li>Windows' built-in format window cannot choose FAT32 for sticks larger than 32 GB. Use a stick of 32 GB or less.</li>
+<li>You can read the remaining space with <code>XM_GetUsbDiskFreeMB()</code>. It reads 0 for a moment right after you plug the stick in.</li>
+<li>Sticks differ in write speed, so the number of missing samples can differ from stick to stick. (not yet confirmed on the board) <!-- board-check --></li>
+</ul>
+<hr />
+<p><a id="usb-c-port"></a></p>
+<h2 id="there-is-only-one-usb-c-port">There Is Only One USB-C Port<a class="headerlink" href="#there-is-only-one-usb-c-port" title="Permanent link">&para;</a></h2>
+<p>The XM10 has a single USB-C port. You cannot use a PC and a USB memory stick at the same time.</p>
+<ul>
+<li>When you plug in a USB memory stick, the board powers it and reads and writes it.</li>
+<li>While a stick is plugged in, you cannot use PhAI Studio, the <code>xm10</code> tool, or firmware upload over USB.</li>
+<li>During that time <code>XM_IsUsbStreamConnected()</code> is <code>false</code>, and USB-CDC send functions such as <code>XM_SendUsbDebugMessage()</code> return <code>false</code>. You cannot send messages to the PC while logging.</li>
+<li>You check the logging state with the board's LEDs. The example status LEDs are LED 1 · 2 · 3.</li>
+<li>When logging is done, remove the USB memory stick and connect the PC. (not yet confirmed on the board) <!-- board-check --></li>
+</ul>
+<hr />
+<h2 id="order-of-use">Order of Use<a class="headerlink" href="#order-of-use" title="Permanent link">&para;</a></h2>
+<ol>
+<li>In <code>Control_Setup()</code>, register the struct and set the rate. The struct must be global or <code>static</code>. If you do not set a rate, it is 1000 Hz.</li>
+<li>In <code>Control_Loop()</code>, fill in the struct's values. The system does the saving after <code>Control_Loop()</code> finishes.</li>
+<li>When both <code>XM_IsUsbLogReady()</code> and <code>XM_IsUsbLogSessionIdle()</code> are <code>true</code>, start with <code>XM_StartUsbDataLog()</code>. If it returns <code>false</code>, read the reason with <code>XM_GetUsbLogLastStartError()</code>.</li>
+<li>Stop with <code>XM_StopUsbDataLog()</code> and wait until <code>XM_IsUsbLogSessionIdle()</code> becomes <code>true</code>.</li>
+<li>Once it is <code>true</code>, all files are closed, so you may remove the USB memory stick. (not yet confirmed on the board) <!-- board-check --></li>
+</ol>
+<p>This is a trimmed-down version of <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/10_USB_Memory_Log/">Ex.10</a>. The full code (state machine · LEDs · markers · statistics) is in the example. The example uses button 1 alone to alternate between start and stop, while the code below uses button 2 for stop.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cm">/* The struct to save — declared packed so no padding bytes appear between fields */</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">__attribute__</span><span class="p">((</span><span class="n">packed</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">loop_count</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="kt">float</span><span class="w">    </span><span class="n">sine</span><span class="p">;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="kt">float</span><span class="w">    </span><span class="n">ramp</span><span class="p">;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">btn1</span><span class="p">;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">btn2</span><span class="p">;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">btn3</span><span class="p">;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">h10_connected</span><span class="p">;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">}</span><span class="w"> </span><span class="n">LogRecord_t</span><span class="p">;</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="k">_Static_assert</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">LogRecord_t</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">16U</span><span class="p">,</span><span class="w"> </span><span class="s">"LogRecord_t size changed - update the meta line too"</span><span class="p">);</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="cm">/* Meta line — list the fields in declaration order as "name(type)", separated by commas */</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="cp">#define LOG_METADATA \</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="cp">    "loop_count(uint32_t), sine(float), ramp(float), " \</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="cp">    "btn1(uint8_t), btn2(uint8_t), btn3(uint8_t), h10_connected(uint8_t)"</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="k">static</span><span class="w"> </span><span class="n">LogRecord_t</span><span class="w"> </span><span class="n">s_log</span><span class="p">;</span><span class="w">                                    </span><span class="cm">/* global or static */</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="k">volatile</span><span class="w"> </span><span class="n">XmUsbLogStartError_e</span><span class="w"> </span><span class="n">g_last_start_error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_USB_LOG_START_OK</span><span class="p">;</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="p">{</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">    </span><span class="n">XM_SetUsbLogSource</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s_log</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">s_log</span><span class="p">));</span><span class="w">               </span><span class="cm">/* register the struct to save */</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="n">XM_SetUsbLogSampleRateHz</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span><span class="w">                           </span><span class="cm">/* 100 Hz — 1000 Hz if omitted */</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="p">}</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="p">{</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">    </span><span class="n">s_log</span><span class="p">.</span><span class="n">loop_count</span><span class="o">++</span><span class="p">;</span><span class="w">                                      </span><span class="cm">/* just fill in values; the system does the saving */</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_GetButtonEvent</span><span class="p">(</span><span class="n">XM_BTN_1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_BTN_CLICK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">       </span><span class="cm">/* button 1: start */</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_IsUsbLogReady</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">XM_IsUsbLogSessionIdle</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">XM_StartUsbDataLog</span><span class="p">(</span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="n">LOG_METADATA</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">     </span><span class="cm">/* "" makes the folder name from the clock */</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">                </span><span class="n">g_last_start_error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_GetUsbLogLastStartError</span><span class="p">();</span><span class="w">   </span><span class="cm">/* why it did not start */</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="w">            </span><span class="p">}</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_GetButtonEvent</span><span class="p">(</span><span class="n">XM_BTN_2</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_BTN_CLICK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">       </span><span class="cm">/* button 2: request stop */</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="w">        </span><span class="n">XM_StopUsbDataLog</span><span class="p">();</span><span class="w">                                 </span><span class="cm">/* the file is closed in the background */</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a><span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Call the setup · start · stop · marker · statistics functions only from <code>Control_Setup()</code> or <code>Control_Loop()</code>. Called from a background task or an interrupt, they do nothing and return <code>false</code>.</li>
+<li>The status-reading functions (<code>XM_IsUsbLog…</code> · <code>XM_GetUsbLogLastStartError</code> · <code>XM_GetUsbDisk…</code>) can be called from anywhere.</li>
+<li><code>XM_StartUsbDataLog()</code> returns immediately without waiting. <code>true</code> means "the start request was accepted". When the file opens, <code>XM_IsUsbLogRecording()</code> becomes <code>true</code>.</li>
+<li>If opening the file fails, <code>XM_IsUsbLogSessionIdle()</code> becomes <code>true</code> again and the reason is left in <code>XM_GetUsbLogLastStartError()</code>.</li>
+<li>If you stop right after starting, an empty folder with no records can be left behind.</li>
+<li>To leave a mark while logging, call <code>XM_InsertUsbLogMarker(type, value)</code>. Choose the meaning of <code>type</code> (1 – 254) yourself; <code>value</code> is an extra value to store with it. The decoder collects the marks separately in <code>events.csv</code>.</li>
+</ul>
+<hr />
+<h2 id="logging-rate-and-struct-size">Logging Rate and Struct Size<a class="headerlink" href="#logging-rate-and-struct-size" title="Permanent link">&para;</a></h2>
+<ul>
+<li>The logging rate is a divisor of 1000: 1000 · 500 · 250 · 200 · 125 · 100 · 50 · 40 · 25 · 20 · 10 · 8 · 5 · 4 · 2 · 1 Hz. If you do not set one, it is 1000 Hz.</li>
+<li>Below 1000 Hz, one sample is saved per period and the values in between are not saved. The timestamp must be on (it is by default).</li>
+<li>If the struct is too big for the rate, logging does not start and <code>XM_USB_LOG_START_TOO_BIG_FOR_RATE</code> is returned.</li>
+<li>A smaller struct gives the internal buffer more margin. Keep only the values you need.</li>
+<li>When you log at 1000 Hz, some samples may be missing. The number missing and the longest gap show up in <code>XM_GetUsbLogStats()</code> and in the decoder result.</li>
+<li>If the decoder report says "내부 버퍼 여유: 부족" (internal buffer margin: insufficient), make the struct smaller or lower the logging rate.</li>
+</ul>
+<p>The struct sizes that can start with the default settings (timestamp on):</p>
+<table>
+<thead>
+<tr>
+<th>Logging rate</th>
+<th>Struct size that can start</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1000 Hz (default)</td>
+<td>Up to 134 B</td>
+<td>Ex.34 (96 B)</td>
+</tr>
+<tr>
+<td>200 Hz or lower</td>
+<td>Up to 512 B</td>
+<td>Ex.10 (16 B, 100 Hz)</td>
+</tr>
+<tr>
+<td>500 Hz · 250 Hz</td>
+<td>Depends on the rate. Too big a struct does not start</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><a id="meta-line"></a></p>
+<h2 id="meta-line">Meta Line<a class="headerlink" href="#meta-line" title="Permanent link">&para;</a></h2>
+<p>The meta line is a single line that lists the struct's fields in declaration order as <code>name(type)</code>, separated by commas. The decoder uses this line to decode the data.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="s">"loop_count(uint32_t), hip_L(float), hip_R(float), contact(uint8_t), _pad(3bytes)"</span>
+</code></pre></div>
+<ul>
+<li>The types are <code>uint8_t</code> <code>int8_t</code> <code>uint16_t</code> <code>int16_t</code> <code>uint32_t</code> <code>int32_t</code> <code>float</code> <code>double</code> <code>bool</code>, written in lowercase exactly as shown.</li>
+<li>Write unused bytes as <code>_name(Nbytes)</code>, for example <code>_pad(3bytes)</code>. The name must start with <code>_</code> to count as padding.</li>
+<li>Use only letters, digits and <code>_</code> in names, put no spaces inside <code>name(type)</code>, and keep everything on one line.</li>
+<li>If the sum of the field sizes differs from the registered struct size, logging does not start and <code>XM_USB_LOG_START_METADATA_MISMATCH</code> is returned.</li>
+<li>The system checks only the sum of sizes. It does not check that names, types and order match the struct, so match them yourself.</li>
+<li>Declare the struct with <code>__attribute__((packed))</code> and fix its size with <code>_Static_assert</code>.</li>
+<li>Do not use the names the decoder uses (<code>tick_ms</code> · <code>t_grid_ms</code> · <code>row_origin</code> · <code>count</code> · <code>h10_loop_count</code>) as field names unless you mean that.</li>
+<li>The meta line can be up to 1700 characters (<code>XM_USB_LOG_MAX_METADATA_LEN</code>).</li>
+</ul>
+<hr />
+<h2 id="files">Files<a class="headerlink" href="#files" title="Permanent link">&para;</a></h2>
+<p>Saved files go in the <code>/LOGS/&lt;session name&gt;/</code> folder on the USB memory stick. If you leave the session name empty, <code>YYMMDD_HHMMSS</code> is made from the clock (RTC).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>/LOGS/&lt;session name&gt;/
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    metadata.txt             the meta line and logging settings
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    data_000_part_000.bin    the saved data
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    data_000_part_001.bin    the next part of the saved data
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    summary.txt              a summary written when logging ends
+</code></pre></div>
+<ul>
+<li>When a file passes the set size (default 10 MB), a new part starts. (not yet confirmed on the board) <!-- board-check --></li>
+<li>If you give the whole folder to the decoder, it joins the parts and decodes them.</li>
+<li>If a folder with the same name already exists, logging continues in it. The rate, struct size and timestamp setting must be the same. If they differ, <code>XM_USB_LOG_START_FOLDER_MISMATCH</code> is returned.</li>
+<li>When continuing, <code>metadata.txt</code> keeps what was written the first time. If you changed a field name or type, use a different name.</li>
+<li>If you do not set the clock with <a href="../08-rtc-clock/"><code>XM_RTC_SetDateTime()</code></a>, the folder name will not match the real date and can collide with an earlier recording. You can also choose the name yourself.</li>
+<li>If the name is empty and the clock cannot be read, logging does not start and <code>XM_USB_LOG_START_BAD_NAME</code> is returned.</li>
+<li><code>summary.txt</code> is written when logging ends. If you remove the USB memory stick while logging, it is not written. (not yet confirmed on the board) <!-- board-check --></li>
+<li>In <code>summary.txt</code>, look at <code>status</code> and <code>error_reason</code> first. If <code>error_reason</code> is <code>NORMAL</code>, logging ended normally. Judge the quality from <code>slots_empty</code>, <code>write_errors</code> and the decoder report. Do not use any other keys to judge the quality.</li>
+</ul>
+<hr />
+<h2 id="removing-the-stick-safely">Removing the Stick Safely<a class="headerlink" href="#removing-the-stick-safely" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Call <code>XM_StopUsbDataLog()</code>. If it returns <code>false</code>, call it again a moment later.</li>
+<li>Wait until <code>XM_IsUsbLogSessionIdle()</code> becomes <code>true</code>. Meanwhile the system writes the remaining data, closes the files and writes <code>summary.txt</code>.</li>
+<li>Once it is <code>true</code>, all files are closed, so you may remove the USB memory stick. (not yet confirmed on the board) <!-- board-check --></li>
+</ol>
+<p>The examples show this with LED 2. While it blinks fast, the files are being closed — do not remove the stick. When it stays on, logging is done. (not yet confirmed on the board) <!-- board-check --></p>
+<p>If <code>XM_IsUsbLogSessionIdle()</code> becomes <code>true</code> by itself while logging, logging has ended. Examples are the stick being pulled out or the internal buffer overflowing.</p>
+<ul>
+<li>If <code>overflow_records</code> is 1 or more, that logging run stops at that point.</li>
+<li>If the USB memory stick becomes full while logging, logging stops by itself. (not yet confirmed on the board) <!-- board-check --></li>
+<li>If you remove the USB memory stick while logging, the files cannot be closed properly. <code>summary.txt</code> is not written, and only the part written so far can be decoded. (not yet confirmed on the board) <!-- board-check --></li>
+<li>Do not remove the USB memory stick while logging.</li>
+</ul>
+<hr />
+<h2 id="checking-the-result">Checking the Result<a class="headerlink" href="#checking-the-result" title="Permanent link">&para;</a></h2>
+<p>Read the statistics with <code>XM_GetUsbLogStats()</code>. While logging they are the values so far; after logging ends, the last values of that run are kept.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What it tells you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>empty_slots</code></td>
+<td>Number of missing samples. 0 means none are missing</td>
+</tr>
+<tr>
+<td><code>longest_gap_ms</code></td>
+<td>The longest gap [ms]</td>
+</tr>
+<tr>
+<td><code>overflow_records</code></td>
+<td>Number of records that could not be saved because the internal buffer overflowed. 1 or more means that logging run stopped at that point</td>
+</tr>
+<tr>
+<td><code>write_errors</code></td>
+<td>Number of failed writes to the USB memory stick</td>
+</tr>
+</tbody>
+</table>
+<p>You cannot send statistics to the PC while logging. After logging ends, once you remove the stick and connect the PC, you can send them with <code>XM_SendUsbDebugMessage()</code> (button 3 in Ex.10). (not yet confirmed on the board) <!-- board-check --></p>
+<hr />
+<h2 id="decoding-on-the-pc">Decoding on the PC<a class="headerlink" href="#decoding-on-the-pc" title="Permanent link">&para;</a></h2>
+<p>Move the saved <code>LOGS</code> folder to a PC and decode it with <strong>XM10 Log Decoder</strong>. It is an installer-based Windows program, and Python is not required.</p>
+<ul>
+<li>Get the decoder from the files attached to the release page.</li>
+<li>The decoder produces the data table (<code>decoded_output.csv</code> for 1000 Hz; for other rates <code>decoded_output_&lt;rate&gt;hz.csv</code>, for example <code>decoded_output_100hz.csv</code> for 100 Hz), <code>events.csv</code> if you inserted markers, and <code>data_quality_report.txt</code>.</li>
+<li>Missing samples are filled in by interpolation and marked <code>1</code> in the <code>row_origin</code> column. Interpolated values are not measured values.</li>
+<li>If the verdict in <code>data_quality_report.txt</code> is <code>GOOD</code>, <code>USABLE</code> or <code>WARNING</code>, the recording is acceptable. If it is <code>RE-COLLECT</code>, <code>INVALID</code> or <code>UNVERIFIED</code>, record again.</li>
+<li>If <code>RE-COLLECT</code> keeps coming up, please contact the Angel Robotics(엔젤로보틱스) CS team.</li>
+</ul>
+<p>For how to get it, install it and read the verdict, see the step-by-step <a href="../../getting-started/05-usb-memory-log/">Save Data to a USB Memory Stick</a>.</p>
+<hr />
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Example</th>
+<th>Difficulty</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/10_USB_Memory_Log/">10_USB_Memory_Log</a> 🟢 <strong>Rev 2.0 only</strong></td>
+<td>Intermediate</td>
+<td>Button 1 starts and stops. Saves one struct (16 B) at 100 Hz</td>
+</tr>
+<tr>
+<td><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/34_USB_Memory_Gait_Log/">34_USB_Memory_Gait_Log</a> 🟢 <strong>Rev 2.0 only</strong></td>
+<td>Intermediate</td>
+<td>Saves H10 gait data at 1 kHz (96 B struct). If this is your first time, do Ex.10 first</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Examples 10 and 34 had the same numbers as USB memory examples in earlier versions, but the current examples are new.</li>
+<li>Ex.10 does not receive sensor values from the H10. The <code>h10_connected</code> field of the struct holds only whether the H10 is connected (0 or 1).</li>
+<li>In Ex.10, button 2 inserts a marker while logging. In Ex.34, button 2 is marker 1 (walking starts) and button 3 is marker 2 (event).</li>
+<li>After logging, remove the USB memory stick, connect the PC, open a serial terminal and press button 3 in Ex.10 to print the last run's statistics. (not yet confirmed on the board) <!-- board-check --></li>
+<li>While logging, neither example sends anything to the PC. Check the state with LEDs 1 · 2 · 3.</li>
+<li>Ex.10 uses the plain-terminal setting, so the PhAI Studio real-time view does not appear. For a real-time graph, see Ex.09.</li>
+<li>Start Ex.34 after you connect the H10 and the wearer puts it on. Before building, change the body information in <code>_SetupBodyData()</code> (weight · height · leg lengths) to the wearer's values. With the sample values, knee and thigh angles are inaccurate.</li>
+<li>Ex.34's default setting (<code>USE_H10_ASSIST 0</code>) only records. It sends no torque or control commands.</li>
+<li>In Ex.34, if the H10 values are not updating, the decoder builds the time base from the saved time (the time stored with every record). (not yet confirmed on the board) <!-- board-check --></li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>Safety</strong>: If you change <code>USE_H10_ASSIST</code> to 1 in Ex.34, the H10's existing assist algorithm turns on and assist torque is applied to the wearer. Turn it on only after checking the safety of the wearer and the surroundings.</p>
+</blockquote>
+<hr />
+<h2 id="-common-mistakes">⚠️ Common Mistakes<a class="headerlink" href="#-common-mistakes" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_IsUsbLogReady()</code> stays <code>false</code> (LED 1 in the examples does not turn on)</td>
+<td>The stick is not FAT32 (exFAT and NTFS are not recognized), or it is still getting ready just after plugging in</td>
+<td>Format it as FAT32 (32 KB allocation unit recommended) and plug it in again. Formatting erases all files</td>
+</tr>
+<tr>
+<td><code>XM_StartUsbDataLog()</code> returns <code>false</code></td>
+<td>The start conditions are not met</td>
+<td>Look up the value of <code>XM_GetUsbLogLastStartError()</code> in the <a href="../ref/xm-api-usb-msc/#xmusblogstarterror_e">start-failure reasons</a> table</td>
+</tr>
+<tr>
+<td>Start returned <code>true</code>, but soon <code>XM_IsUsbLogSessionIdle()</code> is <code>true</code> again</td>
+<td>Opening the file failed (for example, not enough free space <code>XM_USB_LOG_START_STORAGE</code>, or a folder with the same name and different settings <code>XM_USB_LOG_START_FOLDER_MISMATCH</code>)</td>
+<td>Read <code>XM_GetUsbLogLastStartError()</code> the same way. Read it before you call <code>XM_StartUsbDataLog()</code> again</td>
+</tr>
+<tr>
+<td><code>XM_USB_LOG_START_TOO_BIG_FOR_RATE</code></td>
+<td>The struct is too big for the rate</td>
+<td>Lower the logging rate or make the struct smaller</td>
+</tr>
+<tr>
+<td><code>XM_USB_LOG_START_METADATA_MISMATCH</code></td>
+<td>The meta line has a wrong format, an unknown type, or its field sizes do not add up to the struct size</td>
+<td>Write types in lowercase, write unused bytes like <code>_pad(3bytes)</code>, and fix the struct size with <code>_Static_assert</code></td>
+</tr>
+<tr>
+<td>A setup function such as <code>XM_SetUsbLogSampleRateHz()</code> returns <code>false</code></td>
+<td>A logging session exists, you called it outside <code>Control_Setup()</code> / <code>Control_Loop()</code>, or the value is out of range</td>
+<td>Call it from <code>Control_Setup()</code> / <code>Control_Loop()</code> when <code>XM_IsUsbLogSessionIdle()</code> is <code>true</code></td>
+</tr>
+<tr>
+<td>The folder name does not match the real date, or matches an earlier recording</td>
+<td>The clock may not have been set</td>
+<td>Set the clock with <code>XM_RTC_SetDateTime()</code> or choose the session name yourself</td>
+</tr>
+<tr>
+<td>PhAI Studio / the <code>xm10</code> tool cannot find the board</td>
+<td>A USB memory stick is plugged in</td>
+<td>See <a href="#usb-c-port">There Is Only One USB-C Port</a></td>
+</tr>
+<tr>
+<td>The decoder verdict is <code>RE-COLLECT</code></td>
+<td>Many samples are missing or the gaps are long</td>
+<td>Fully format the stick as FAT32 (32 KB allocation unit) and record again. If it is still the same, use a different stick, lower the logging rate, or make the struct smaller</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-documents">Related Documents<a class="headerlink" href="#related-documents" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../ref/xm-api-usb-msc/"><code>xm_api_usb_msc.h</code> reference</a> — exact descriptions of the functions, types and constants</li>
+<li><a href="../../getting-started/05-usb-memory-log/">Save Data to a USB Memory Stick</a> — step by step, from formatting to the decoder</li>
+<li><a href="../05-usb-connectivity/">05. USB Connectivity</a> — how to send data to a PC in real time</li>
+<li><a href="../10-struct-logging/">10. Struct Logging</a> — send a struct to the PC in real time</li>
+<li><a href="../08-rtc-clock/">08. Real-Time Clock (RTC)</a> — the clock used for folder names</li>
+<li><a href="../../troubleshooting/">Troubleshooting</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../05-usb-connectivity/" class="md-footer__link md-footer__link--prev" aria-label="Previous: USB Serial">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                USB Serial
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../07-memory-management/" class="md-footer__link md-footer__link--next" aria-label="Next: Memory Regions">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Memory Regions
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

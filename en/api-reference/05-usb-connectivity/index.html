@@ -16,7 +16,7 @@
         <link rel="prev" href="../04-external-io/">
       
       
-        <link rel="next" href="../07-memory-management/">
+        <link rel="next" href="../06-usb-data-logging/">
       
       
         
@@ -360,6 +360,8 @@
       
         
       
+        
+      
     
     
     
@@ -504,6 +506,34 @@
     
   
     Get Data on PC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/05-usb-memory-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Save to USB Memory
   
 
     
@@ -726,6 +756,10 @@
       
         
           
+        
+      
+        
+      
         
       
         
@@ -1174,17 +1208,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#xm_usb_processperiodic" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_USB_ProcessPeriodic
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1238,6 +1261,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Memory Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1333,11 +1384,43 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../10-struct-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Struct Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
         
           
+        
+      
+        
+      
         
       
         
@@ -1370,7 +1453,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1392,14 +1475,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_10">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_12">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1566,6 +1649,62 @@
     
   
     xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-usb-msc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb_msc.h (USB Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ref/xm-api-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (Struct Logging)
   
 
     
@@ -1986,6 +2125,8 @@
       
         
       
+        
+      
     
     
     
@@ -2038,6 +2179,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.9.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2661,17 +2830,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#xm_usb_processperiodic" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XM_USB_ProcessPeriodic
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -2752,9 +2910,14 @@
 <p>Detailed reference for the <strong>USB-CDC communication API</strong> defined in <code>xm_api_usb.h</code>.
 XM10 connects to a PC as a virtual serial port (CDC) for real-time data transfer and debugging.</p>
 <blockquote>
-<p><strong>USB memory (MSC) file logging was removed in v2.5.0.</strong> Data capture now uses USB-CDC real-time streaming — PhAI Studio, or the <code>xm10</code> tool in the repo (graphs + lossless <code>.xmlog</code> recording + CSV export, <a href="../../getting-started/04-pc-data-tool/">guide</a>). PhAI Studio shows the automatically sent Total Data (0x20). PhAI Studio is still under development, so for now use the <code>xm10</code> tool to view and save your own (custom) data structs (the 0xF0–0xFE channels you send with <code>XM_SendUsbDataWithId</code> are such structs). On-board storage (SD card) is not supported at present.</p>
+<p>🟢 <strong>Rev 2.0 only</strong>: The USB memory logging API exists only on Rev2.0 (v2.9.0 or later) — see <a href="../06-usb-data-logging/">06. USB Memory Logging</a>. Rev1.1 has no USB memory logging.</p>
+<p>⚠️ <strong>There is only one USB-C port.</strong> While a USB memory stick is plugged in, you cannot use PhAI Studio, the <code>xm10</code> tool, or firmware upload over USB. When logging is done, remove the stick and connect the PC. (not yet confirmed on the board) <!-- board-check --></p>
+<p>This page covers USB-CDC, which streams data to a PC in real time. To receive it on a PC, use PhAI Studio, or the <code>xm10</code> tool in the repo (graphs + lossless <code>.xmlog</code> recording + CSV export, <a href="../../getting-started/04-pc-data-tool/">guide</a>). PhAI Studio shows the automatically sent Total Data (0x20). PhAI Studio is still under development, so for now use the <code>xm10</code> tool to view and save your own (custom) data structs (the 0xF0–0xFE channels you send with <code>XM_SendUsbDataWithId</code> are such structs). On-board storage (SD card) is not supported at present.</p>
 </blockquote>
 <p>In this module, the system streams Total Data (0x20) to the PC automatically in the background, and you send any extra channels yourself with <code>XM_SendUsbDataWithId()</code>.</p>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 only</strong>: The API that sends a struct together with field names, units and types (<code>XM_LOG_REGISTER</code> · <code>XM_LOG_SEND</code>) is described in <a href="../10-struct-logging/">10. Struct Logging</a> (example <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/">44_CDC_Struct_Logging</a>).</p>
+</blockquote>
 <hr />
 <h2 id="1-operating-principle">1. Operating Principle<a class="headerlink" href="#1-operating-principle" title="Permanent link">&para;</a></h2>
 <p>The USB module follows a <strong>configure-once, run-automatically</strong> pattern to minimize user intervention.</p>
@@ -2762,6 +2925,13 @@ XM10 connects to a PC as a virtual serial port (CDC) for real-time data transfer
 <p>Total Data (0x20) is sent automatically every 1 ms once a PC program opens the COM port. To send more values, use <code>XM_SetUsbCustomMeta()</code> (in Setup) + <code>XM_SendUsbDataWithId()</code> (in the loop) — see <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/">Ex.09</a>.</p>
 <hr />
 <h2 id="2-function-reference">2. Function Reference<a class="headerlink" href="#2-function-reference" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>⚠️ <strong>Call the send functions from <code>Control_Loop()</code>.</strong> This applies to <code>XM_SendUsbData()</code>, <code>XM_SendUsbDataWithId()</code> and <code>XM_SendUsbDebugMessage()</code>.</p>
+<ul>
+<li>Rev2.0 (v2.9.0 or later): called inside an interrupt handler, they send nothing and return <code>false</code>. Do not call them from a background task you created with <code>XM_Task_*</code> (<a href="../09-task-creation/">09. Auxiliary Tasks + Data Sharing</a>) either — the data you send can get corrupted.</li>
+<li>Rev1.1 (v2.8.1): calling them inside an interrupt handler is not blocked. As before, call them from <code>Control_Loop()</code> only.</li>
+</ul>
+</blockquote>
 <h3 id="21-data-source-registration">2.1. Data Source Registration<a class="headerlink" href="#21-data-source-registration" title="Permanent link">&para;</a></h3>
 <p>(Deprecated) You don't need to call it. If you skip registration, nothing is sent on this path — the whole <code>XM</code> state is carried by the separate, automatic Total Data (0x20) stream.</p>
 <h4 id="xm_setusbstreamsource"><code>XM_SetUsbStreamSource</code><a class="headerlink" href="#xm_setusbstreamsource" title="Permanent link">&para;</a></h4>
@@ -2799,18 +2969,30 @@ XM10 connects to a PC as a virtual serial port (CDC) for real-time data transfer
 </li>
 </ul>
 <h4 id="xm_sendusbdebugmessage"><code>XM_SendUsbDebugMessage</code><a class="headerlink" href="#xm_sendusbdebugmessage" title="Permanent link">&para;</a></h4>
-<p>Sends a <strong>text string</strong> to a PC terminal (e.g., TeraTerm). Use this like <code>printf</code> for debugging purposes.</p>
+<p>Sends a <strong>text string</strong> to a PC terminal (e.g., TeraTerm). Use this like <code>printf</code> for debugging purposes. <code>Control_Setup()</code> runs before USB is ready, so a message you send from there usually does not go out — send it from <code>Control_Loop()</code>.</p>
 <blockquote>
-<p>⚠️ If you send text while PhAI Studio or the <code>xm10</code> tool is decoding the stream, one data packet is lost per message. Use it for text you read in a plain terminal. For text-only output, call <code>XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL)</code> once in <code>Control_Setup()</code> on Rev2.0 (or <code>XM_SetUsbAutoStream(false)</code> on Rev1.1); the output then stays clean.</p>
+<p>⚠️ Use it for text you read in a plain terminal. For text-only output, call <code>XM_USB_SetHostProfile(XM_USB_HOST_TERMINAL)</code> once in <code>Control_Setup()</code> on Rev2.0 (or <code>XM_SetUsbAutoStream(false)</code> on Rev1.1); the output then stays clean.</p>
+<ul>
+<li>Rev2.0 (v2.9.0 or later): one 0x00 byte (null character) is appended to the text. It is appended with the <code>XM_USB_HOST_TERMINAL</code> profile too.
+  This keeps the data packets sent along with it from being damaged, so sending text while PhAI Studio or the <code>xm10</code> tool is decoding the stream does not lose a data packet. (not yet confirmed on the board) <!-- board-check --></li>
+<li>Rev1.1 (v2.8.1): same as before. No 0x00 is appended, and if you send text while the stream is being decoded, one data packet is lost per message.</li>
+</ul>
 </blockquote>
 <ul>
 <li><strong>Syntax</strong>
     <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SendUsbDebugMessage</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
 </code></pre></div></li>
 <li><strong>Parameters</strong><ul>
-<li><code>message</code>: String to transmit (null-terminated)</li>
+<li><code>message</code>: String to transmit (null-terminated). The length is counted in <strong>bytes</strong>, up to <code>XM_USB_DEBUG_MESSAGE_MAX_LEN</code> (1,021 bytes) — Korean and other non-ASCII text takes more bytes than characters (Rev2.0)</li>
 </ul>
 </li>
+<li><strong>Returns</strong>: <code>true</code> = queued in the transmit buffer (says nothing about whether the PC received it). <code>false</code> =<ul>
+<li>Common: when the transmit buffer is full, or USB is not ready</li>
+<li>Rev2.0 (v2.9.0 or later): when <code>message</code> is <code>NULL</code> or longer than 1,021 bytes, or when called inside an interrupt handler (nothing is sent). An empty string (<code>""</code>) sends just the one 0x00 byte and returns <code>true</code></li>
+<li>Rev1.1 (v2.8.1): when the string is empty</li>
+</ul>
+</li>
+<li><strong>Note</strong>: With struct logging (<a href="../10-struct-logging/">10. Struct Logging</a>) the limit is shorter: <code>false</code> is also returned when you send too much in a short time (counted together with <code>XM_SendUsbDataWithId()</code>), or when one message is too long. A message that is too long never goes out however long you wait — shorten it, or split it and send the pieces with a pause between them (Rev2.0)</li>
 <li><strong>Example</strong>
     <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="s">"Current State: %d</span><span class="se">\r\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">current_state</span><span class="p">);</span>
@@ -2818,7 +3000,7 @@ XM10 connects to a PC as a virtual serial port (CDC) for real-time data transfer
 </code></pre></div></li>
 </ul>
 <h4 id="xm_isusbstreamconnected"><code>XM_IsUsbStreamConnected</code><a class="headerlink" href="#xm_isusbstreamconnected" title="Permanent link">&para;</a></h4>
-<p>Returns whether the USB device (CDC) is ready: <code>true</code> once the cable is plugged in and USB initialization has finished, regardless of whether a PC program has opened the port. To check that the port is open and streaming, use <code>XM_IsUsbStreamingActive()</code> (on Rev2.0 with the <code>XM_USB_HOST_TERMINAL</code> profile, <code>XM_IsUsbStreamingActive()</code> stays <code>false</code> even when a terminal has the port open, while <code>XM_IsUsbStreamConnected()</code> stays <code>true</code>).</p>
+<p>Returns whether the USB device (CDC) is ready: <code>true</code> once the cable is plugged in and USB initialization has finished, regardless of whether a PC program has opened the port. On Rev2.0 it is <code>false</code> while a USB memory stick is plugged in, and the send functions return <code>false</code> too. To check that the port is open and streaming, use <code>XM_IsUsbStreamingActive()</code> (on Rev2.0 with the <code>XM_USB_HOST_TERMINAL</code> profile, <code>XM_IsUsbStreamingActive()</code> stays <code>false</code> even when a terminal has the port open, while <code>XM_IsUsbStreamConnected()</code> stays <code>true</code>).</p>
 <ul>
 <li><strong>Syntax</strong>
     <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_IsUsbStreamConnected</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
@@ -2856,6 +3038,7 @@ XM10 connects to a PC as a virtual serial port (CDC) for real-time data transfer
 <li><code>module_id</code>: PhAI protocol module identifier</li>
 </ul>
 </li>
+<li><strong>Note</strong>: On Rev2.0 (v2.9.0 or later), a system ID (<code>0x20</code> · <code>0xB2</code> · <code>0xED</code> · <code>0xEE</code> · <code>0xEF</code> · <code>0xFF</code>) is ignored and the previous ID stays in use. Rev1.1 (v2.8.1) has no such rule.</li>
 </ul>
 <h4 id="xm_getusbdata"><code>XM_GetUsbData</code><a class="headerlink" href="#xm_getusbdata" title="Permanent link">&para;</a></h4>
 <p>Receives data from the PC (e.g., keyboard input).</p>
@@ -2869,10 +3052,15 @@ XM10 connects to a PC as a virtual serial port (CDC) for real-time data transfer
 <hr />
 <h3 id="23-system-interface">2.3. System Interface<a class="headerlink" href="#23-system-interface" title="Permanent link">&para;</a></h3>
 <h4 id="xm_setusbcustommeta"><code>XM_SetUsbCustomMeta</code><a class="headerlink" href="#xm_setusbcustommeta" title="Permanent link">&para;</a></h4>
-<p>Registers channel names and units (as JSON) for the User Custom channel (Module IDs <code>0xF0</code>–<code>0xFE</code>). The <code>xm10</code> tool uses them for graph titles and CSV column names. Channel names arrive once when you connect; if they are missing, re-plug the USB cable and connect again. The JSON string must be 512 bytes or less; if it is longer, the channel names are not sent (shorten it if you have many channels or long names). Only one registration is kept per connection (the last call overwrites the previous one). On Rev2.0, nothing is sent if you choose the <code>XM_USB_HOST_TERMINAL</code> profile.</p>
+<p>Registers channel names and units (as JSON) for the User Custom channel (Module IDs <code>0xF0</code>–<code>0xFE</code>). The <code>xm10</code> tool uses them for graph titles and CSV column names.
+On Rev2.0 (v2.9.0 or later), the channel names are sent again every time a PC program opens the COM port, so you do not need to re-plug the USB cable. (not yet confirmed on the board) <!-- board-check -->
+The JSON string must be <code>XM_USB_CUSTOM_META_MAX_LEN</code> (1,007 bytes) or less. If it is longer, the function returns <code>false</code> and the names you registered earlier stay in place (shorten it if you have many channels or long names). Only one registration is kept (the last successful call overwrites the previous one). On Rev2.0, nothing is sent if you choose the <code>XM_USB_HOST_TERMINAL</code> profile.</p>
+<blockquote>
+<p>Rev1.1 (v2.8.1) is the same as before. There is no return value (<code>void</code>), the JSON can be up to 512 bytes (if it is longer, it is silently not sent), and the channel names arrive once when you connect USB. If they are missing, re-plug the USB cable and connect again.</p>
+</blockquote>
 <ul>
 <li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">json_str</span><span class="p">);</span>
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_SetUsbCustomMeta</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">json_str</span><span class="p">);</span>
 </code></pre></div></li>
 <li>
 <p><strong>Parameters</strong></p>
@@ -2890,10 +3078,13 @@ XM10 connects to a PC as a virtual serial port (CDC) for real-time data transfer
 </tr>
 <tr>
 <td><code>json_str</code></td>
-<td>JSON array string defining the channels</td>
+<td>JSON array string defining the channels (<code>false</code> if <code>NULL</code>)</td>
 </tr>
 </tbody>
 </table>
+</li>
+<li>
+<p><strong>Returns</strong>: <code>true</code> = registered, <code>false</code> = <code>json_str</code> is <code>NULL</code> or longer than 1,007 bytes (the names registered earlier stay in place). If you use struct logging (<a href="../10-struct-logging/">10. Struct Logging</a>), calling it outside <code>Control_Setup()</code> also returns <code>false</code> (Rev2.0). Rev1.1 returns nothing (<code>void</code>)</p>
 </li>
 <li>
 <p><strong>Example</strong>
@@ -2936,20 +3127,18 @@ XM10 connects to a PC as a virtual serial port (CDC) for real-time data transfer
 </table>
 </li>
 <li>
-<p><strong>Returns</strong>: <code>true</code> = queued in the transmit buffer (says nothing about whether the PC received it), <code>false</code> = the buffer is full, USB is not ready, or the arguments are invalid (NULL pointer, length 0, or more than 1020 bytes)</p>
+<p><strong>Returns</strong>: <code>true</code> = queued in the transmit buffer (says nothing about whether the PC received it). <code>false</code> =</p>
+<ul>
+<li>Common: when the transmit buffer is full, USB is not ready, or the arguments are invalid (NULL pointer, length 0, or more than 1,020 bytes)</li>
+<li>Rev2.0 (v2.9.0 or later): when <code>module_id</code> is a system ID (<code>0x20</code> · <code>0xB2</code> · <code>0xED</code> · <code>0xEE</code> · <code>0xEF</code> · <code>0xFF</code>), or when called inside an interrupt handler (nothing is sent). Send your own data with <code>0xF0</code>–<code>0xFE</code></li>
+</ul>
 </li>
 </ul>
 <blockquote>
 <p><strong>Note</strong>: Replaces the deprecated <code>XM_SendUsbData()</code>. Explicitly specifying a Module ID enables multi-stream support.</p>
+<p>With struct logging (<a href="../10-struct-logging/">10. Struct Logging</a>) (Rev2.0): you cannot send with the Module ID of a registered struct using this function (<code>false</code>), and sending too much with this function and <code>XM_SendUsbDebugMessage()</code> in a short time (they are counted together), or too large a block at once, also returns <code>false</code>. Data that is too large never goes out however long you wait — send it with struct logging instead.</p>
+<p>Rev1.1 (v2.8.1): sending with a system ID is not blocked. Still, send your own data with <code>0xF0</code>–<code>0xFE</code>.</p>
 </blockquote>
-<h4 id="xm_usb_processperiodic"><code>XM_USB_ProcessPeriodic</code><a class="headerlink" href="#xm_usb_processperiodic" title="Permanent link">&para;</a></h4>
-<p><strong>[Internal — system use only]</strong> Handles the USB streaming logic.
-Called automatically by the system — <strong>end users do not need to call this directly.</strong></p>
-<ul>
-<li><strong>Syntax</strong>
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_USB_ProcessPeriodic</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-</code></pre></div></li>
-</ul>
 <hr />
 <h2 id="related-examples">Related Examples<a class="headerlink" href="#related-examples" title="Permanent link">&para;</a></h2>
 <h3 id="cdc-serial-communication">CDC (Serial Communication)<a class="headerlink" href="#cdc-serial-communication" title="Permanent link">&para;</a></h3>
@@ -2987,6 +3176,11 @@ Called automatically by the system — <strong>end users do not need to call thi
 <td>Intermediate</td>
 <td>Health dashboard</td>
 </tr>
+<tr>
+<td><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/">44_CDC_Struct_Logging</a> 🟢 <strong>Rev 2.0 only</strong></td>
+<td>Intermediate</td>
+<td>Struct logging</td>
+</tr>
 </tbody>
 </table>
 <hr />
@@ -3012,8 +3206,13 @@ Called automatically by the system — <strong>end users do not need to call thi
 </tr>
 <tr>
 <td><code>XM_SendUsbDataWithId</code> frequently returns <code>false</code></td>
-<td>Transmit buffer full (drops occurring) — it always returns <code>false</code> if the struct is larger than 1020 bytes</td>
-<td>Reduce send frequency (e.g., 1 kHz → 100 Hz) or reduce struct size (1020 bytes or less)</td>
+<td>Transmit buffer full (drops occurring) — it always returns <code>false</code> if the struct is larger than 1,020 bytes</td>
+<td>Reduce send frequency (e.g., 1 kHz → 100 Hz) or reduce struct size (1,020 bytes or less)</td>
+</tr>
+<tr>
+<td>The send functions (<code>XM_SendUsbDataWithId</code> · <code>XM_SendUsbDebugMessage</code> · <code>XM_SendUsbData</code>) always return <code>false</code> (Rev2.0)</td>
+<td>Called inside an interrupt handler, <code>module_id</code> is a system ID (<code>0x20</code> · <code>0xB2</code> · <code>0xED</code> · <code>0xEE</code> · <code>0xEF</code> · <code>0xFF</code>), or a debug message is longer than 1,021 bytes</td>
+<td>Call them from <code>Control_Loop()</code>, send your own data with <code>0xF0</code>–<code>0xFE</code>, and split long messages</td>
 </tr>
 <tr>
 <td>My struct (0xF0–0xFE) does not show up in PhAI Studio</td>
@@ -3022,13 +3221,13 @@ Called automatically by the system — <strong>end users do not need to call thi
 </tr>
 <tr>
 <td>Channel names show as <code>ch0, ch1…</code> in <code>xm10</code></td>
-<td><code>XM_SetUsbCustomMeta</code> not called, the JSON is not a valid array (including syntax errors), or the JSON is longer than 512 bytes</td>
-<td>Register a one-line JSON array in Setup (validate it with jsonlint, keep it to 512 bytes or less)</td>
+<td><code>XM_SetUsbCustomMeta</code> not called, the JSON is not a valid array (including syntax errors), or the JSON is longer than the limit (Rev2.0: 1,007 bytes, Rev1.1: 512 bytes)</td>
+<td>Register a one-line JSON array in Setup (validate it with jsonlint, keep it within the limit). On Rev2.0, if <code>XM_SetUsbCustomMeta()</code> returns <code>false</code>, the string was <code>NULL</code> or longer than 1,007 bytes</td>
 </tr>
 <tr>
 <td>Names are registered but <code>xm10</code> still shows <code>ch0, ch1…</code></td>
-<td>The channel names were not received when connecting</td>
-<td>Re-plug the USB cable and connect <code>xm10</code> again (connect only one PC program at a time)</td>
+<td>The channel names were not received — Rev2.0 sends them every time a PC program opens the COM port, Rev1.1 sends them once when USB connects</td>
+<td>Common: connect only one PC program at a time. Rev2.0: disconnect <code>xm10</code> and connect again. (not yet confirmed on the board) Rev1.1: re-plug the USB cable and connect <code>xm10</code> again.</td>
 </tr>
 <tr>
 <td><code>sprintf</code> with <code>%f</code> prints integers</td>
@@ -3094,13 +3293,13 @@ Called automatically by the system — <strong>end users do not need to call thi
         
         
           
-          <a href="../07-memory-management/" class="md-footer__link md-footer__link--next" aria-label="Next: Memory Regions">
+          <a href="../06-usb-data-logging/" class="md-footer__link md-footer__link--next" aria-label="Next: USB Memory Logging">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Memory Regions
+                USB Memory Logging
               </div>
             </div>
             <div class="md-footer__button md-icon">

@@ -1,0 +1,4087 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서">
+      
+      
+      
+        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/api-reference/ref/xm-api-logging/">
+      
+      
+        <link rel="prev" href="../xm-api-usb-msc/">
+      
+      
+        <link rel="next" href="../xm-api-memory/">
+      
+      
+        
+          <link rel="alternate" href="./" hreflang="ko">
+        
+          <link rel="alternate" href="../../../en/api-reference/ref/xm-api-logging/" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>xm_api_logging.h (구조체 로깅) - XM10 Extension Module</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#xm_api_loggingh--usb-cdc-구조체-로깅" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../../.." title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XM10 Extension Module
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              xm_api_logging.h (구조체 로깅)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="언어설정">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../../../en/api-reference/ref/xm-api-logging/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="저장소로 이동" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-AIFT/phai-x1-xm10-release
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    XM10 Extension Module
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="저장소로 이동" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-AIFT/phai-x1-xm10-release
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    홈
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../find-it/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠른 찾기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    시작하기
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    시작하기
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/01-hardware-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    하드웨어 연결
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/02-software-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    개발 환경 구축
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/03-first-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    첫 빌드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/04-pc-data-tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PC 에서 데이터 받기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/05-usb-memory-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리에 저장하기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code 와 함께 시작
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../hardware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    하드웨어
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    하드웨어
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 GPIO (Rev 1.1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 GPIO (Rev 2.0)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    튜토리얼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API 레퍼런스
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-task-state-machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    상태 머신 (TSM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-h10-control-n-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 제어·데이터
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-led-btn-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED·버튼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-usb-connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 시리얼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리 저장
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-memory-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리 영역
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-rtc-clock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실시간 시계 (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-task-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    보조 태스크
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-struct-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    구조체 로깅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    함수 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    함수 레퍼런스
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api.h (진입점)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_data.h (제어·데이터)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-tsm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_tsm.h (상태 머신)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-led-btn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_led_btn.h (LED·버튼)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_external_io.h (외부 IO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-usb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-usb-msc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb_msc.h (USB 메모리)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (구조체 로깅)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (구조체 로깅)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#언제-사용하나" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        언제 사용하나
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="언제 사용하나">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#include" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        include
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#기본-사용-흐름" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        기본 사용 흐름
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수--매크로-목록" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 · 매크로 목록
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수--매크로-상세" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 · 매크로 상세
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="함수 · 매크로 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_declare" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_DECLARE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_FIELDS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FIELD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_field_array" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FIELD_ARRAY
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_register" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_REGISTER
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_send" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_SEND
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_setminstallms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_SetMinStallMs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_getminstallms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_GetMinStallMs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_enablelinkhealth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_EnableLinkHealth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_getadmittedwirebps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_GetAdmittedWireBps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_getstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_GetStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#타입--상수" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        타입 / 상수
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="타입 / 상수">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_fieldtype_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FieldType_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_fielddesc_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FieldDesc_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_logstats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LogStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#한도-상수" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        한도 상수
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_type_tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_TYPE_TAG
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#지원-헤더--xm_api_logging_rawh-직접-호출-금지" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        지원 헤더 — xm_api_logging_raw.h (직접 호출 금지)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="지원 헤더 — xm_api_logging_raw.h (직접 호출 금지)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_registerschemaraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_RegisterSchemaRaw
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_sendraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_SendRaw
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#내부-전용-직접-쓰지-마세요" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        내부 전용 (직접 쓰지 마세요)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev11--rev20-차이-요약" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 차이 요약
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-문서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 문서
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_memory.h (메모리)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-rtc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_rtc.h (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-freertos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_freertos.h (RTOS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-user-custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_user_custom.h (사용자 데이터)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    아키텍처
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kit-h10-firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 펌웨어
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bootloader/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    부트로더
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    심화
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    심화
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 데이터 파이프라인
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    안전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    문제 해결
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../release-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    릴리스 노트
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    릴리스 노트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.9.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.8.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.8.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.7.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.7.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.5.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.5.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.5.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.5.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.4.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.4.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#언제-사용하나" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        언제 사용하나
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="언제 사용하나">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#include" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        include
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#기본-사용-흐름" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        기본 사용 흐름
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수--매크로-목록" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 · 매크로 목록
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수--매크로-상세" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 · 매크로 상세
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="함수 · 매크로 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_declare" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_DECLARE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_FIELDS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FIELD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_field_array" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FIELD_ARRAY
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_register" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_REGISTER
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_send" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_SEND
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_setminstallms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_SetMinStallMs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_getminstallms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_GetMinStallMs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_enablelinkhealth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_EnableLinkHealth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_getadmittedwirebps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_GetAdmittedWireBps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_getstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_GetStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#타입--상수" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        타입 / 상수
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="타입 / 상수">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_fieldtype_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FieldType_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_fielddesc_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FieldDesc_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_logstats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LogStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#한도-상수" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        한도 상수
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_type_tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_TYPE_TAG
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#지원-헤더--xm_api_logging_rawh-직접-호출-금지" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        지원 헤더 — xm_api_logging_raw.h (직접 호출 금지)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="지원 헤더 — xm_api_logging_raw.h (직접 호출 금지)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_registerschemaraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_RegisterSchemaRaw
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_sendraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_SendRaw
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#내부-전용-직접-쓰지-마세요" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        내부 전용 (직접 쓰지 마세요)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev11--rev20-차이-요약" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 차이 요약
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-문서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 문서
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="xm_api_loggingh--usb-cdc-구조체-로깅"><code>xm_api_logging.h</code> — USB-CDC 구조체 로깅<a class="headerlink" href="#xm_api_loggingh--usb-cdc-구조체-로깅" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 전용</strong> <em>(v2.9.0 신규)</em> — 본 헤더와 <code>xm_api_logging_raw.h</code> 는 XM10 Rev 2.0 SDK 에만 포함되어 있습니다. Rev 1.1 SDK (<code>XM10_SDK/Rev1.1/</code>) 에는 두 헤더가 모두 없으므로, Rev 1.1 프로젝트에서 include 하면 빌드가 실패합니다. 보드 리비전 확인은 <a href="../../../hardware/#보드-리비전-비교">보드 리비전 비교</a> 참고.</p>
+<ul>
+<li><strong>대상 헤더</strong>: <code>XM_FW/XM_API/xm_api_logging.h</code> · <code>XM_FW/XM_API/xm_api_logging_raw.h</code></li>
+<li><strong>관련 개념 문서</strong>: <a href="../../10-struct-logging/">10. 구조체 로깅</a></li>
+<li><strong>관련 예제</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/">Ex.44 CDC Struct Logging</a> — 구조체 둘을 이름 · 단위 · 타입과 함께 PC 로 보냅니다</li>
+</ul>
+</blockquote>
+<hr />
+<h2 id="언제-사용하나">언제 사용하나<a class="headerlink" href="#언제-사용하나" title="Permanent link">&para;</a></h2>
+<p>직접 만든 구조체를 필드 이름 · 단위 · 타입과 함께 PC 로 보낼 때 사용합니다. 기존 방식(<code>XM_SetUsbCustomMeta</code> + <code>XM_SendUsbDataWithId</code>)과의 차이, 한도, PC 에서 보이는 모습, 흔한 실수 같은 전체 그림은 <a href="../../10-struct-logging/">10. 구조체 로깅</a> 을 먼저 읽어 보세요 — 이 페이지는 헤더에 선언된 <strong>모든 매크로 · 함수 · 타입의 시그니처 · 파라미터 · 반환값</strong>만 다룹니다.</p>
+<p><code>xm_api.h</code> 가 이 헤더를 함께 불러오므로 <code>XM_LOG_*</code> · <code>XM_FIELD*</code> · <code>XM_Log_*</code> 이름은 SDK 가 씁니다. 같은 이름을 직접 만들지 마세요.</p>
+<h3 id="include">include<a class="headerlink" href="#include" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api.h"</span><span class="w">                </span><span class="c1">// xm_api_logging.h 를 함께 불러옵니다</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api_logging_raw.h"</span><span class="w">    </span><span class="c1">// XM_LOG_* 매크로를 쓰는 .c 파일은 꼭 include 하세요</span>
+</code></pre></div>
+<p><code>xm_api.h</code> 는 <code>xm_api_logging.h</code> 를 포함하지만 <code>xm_api_logging_raw.h</code> 는 포함하지 않습니다. <code>XM_LOG_REGISTER</code> · <code>XM_LOG_SEND</code> 매크로가 안에서 부르는 함수의 원형이 그 헤더에 있어서, 빠지면 매크로 줄에서 <code>implicit declaration of function</code> 빌드 오류가 납니다.</p>
+<h3 id="기본-사용-흐름">기본 사용 흐름<a class="headerlink" href="#기본-사용-흐름" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api.h"</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api_logging_raw.h"</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="kt">float</span><span class="w">    </span><span class="n">hip_angle</span><span class="p">;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="kt">int16_t</span><span class="w">  </span><span class="n">emg</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">}</span><span class="w"> </span><span class="n">MyLog_t</span><span class="p">;</span><span class="w">                                          </span><span class="c1">// 24 B — 크기는 4 의 배수</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">XM_LOG_DECLARE</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="n">MyLog_t</span><span class="p">);</span><span class="w">                     </span><span class="c1">// 토큰 MyLog ↔ 구조체 MyLog_t</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">XM_LOG_FIELDS</span><span class="p">(</span><span class="n">MyLog</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="n">XM_FIELD</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="n">hip_angle</span><span class="p">,</span><span class="w"> </span><span class="s">"hip_angle"</span><span class="p">,</span><span class="w"> </span><span class="s">"deg"</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">),</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="n">XM_FIELD_ARRAY</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="n">emg</span><span class="p">,</span><span class="w"> </span><span class="s">"emg"</span><span class="p">,</span><span class="w"> </span><span class="s">"mV"</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">),</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="n">XM_FIELD</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="p">,</span><span class="w"> </span><span class="s">"mode"</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">),</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="p">};</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="p">{</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">XM_LOG_REGISTER</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">        </span><span class="c1">// 등록 실패는 LED 로 알립니다 — Control_Setup() 에서는 보통 USB 가 아직 준비되지 않아 메시지가 나가지 않습니다</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">        </span><span class="n">XM_SetLedEffect</span><span class="p">(</span><span class="n">XM_LED_1</span><span class="p">,</span><span class="w"> </span><span class="n">XM_LED_BLINK</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">);</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="p">}</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="p">{</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">    </span><span class="n">MyLog_t</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">XM_LOG_SEND</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s</span><span class="p">);</span><span class="w">                   </span><span class="c1">// 등록한 주기보다 일찍 부르면 보내지 않고 false</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="p">}</span>
+</code></pre></div>
+<p>네 매크로(<code>XM_LOG_DECLARE</code> · <code>XM_LOG_FIELDS</code> · <code>XM_LOG_REGISTER</code> · <code>XM_LOG_SEND</code>)는 같은 <code>.c</code> 파일 안에서 씁니다. 매크로는 C 파일 전용입니다. 지원하지 않는 멤버 타입, 4 의 배수가 아닌 크기, 다른 구조체 포인터처럼 틀린 사용은 컴파일러가 그 줄을 가리킵니다.</p>
+<hr />
+<h2 id="함수--매크로-목록">함수 · 매크로 목록<a class="headerlink" href="#함수--매크로-목록" title="Permanent link">&para;</a></h2>
+<p><strong>구조체 정의 · 등록 · 전송 (매크로)</strong></p>
+<table>
+<thead>
+<tr>
+<th>매크로</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_log_declare"><code>XM_LOG_DECLARE</code></a></td>
+<td>토큰과 구조체 타입을 묶습니다 (<code>.c</code> 파일 위쪽)</td>
+</tr>
+<tr>
+<td><a href="#xm_log_fields"><code>XM_LOG_FIELDS</code></a></td>
+<td>필드 설명 배열을 정의합니다</td>
+</tr>
+<tr>
+<td><a href="#xm_field"><code>XM_FIELD</code></a></td>
+<td>스칼라 멤버 한 줄</td>
+</tr>
+<tr>
+<td><a href="#xm_field_array"><code>XM_FIELD_ARRAY</code></a></td>
+<td>배열 멤버 한 줄</td>
+</tr>
+<tr>
+<td><a href="#xm_log_register"><code>XM_LOG_REGISTER</code></a></td>
+<td>구조체를 등록합니다 (<code>Control_Setup()</code>)</td>
+</tr>
+<tr>
+<td><a href="#xm_log_send"><code>XM_LOG_SEND</code></a></td>
+<td>등록한 구조체 하나를 보냅니다 (<code>Control_Loop()</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>설정 · 진단 (함수)</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_log_setminstallms"><code>XM_Log_SetMinStallMs</code></a></td>
+<td>PC 프로그램이 잠시 멈춰도 데이터를 담아 두는 목표 시간(ms) 설정</td>
+</tr>
+<tr>
+<td><a href="#xm_log_getminstallms"><code>XM_Log_GetMinStallMs</code></a></td>
+<td>지금 쓰는 목표 시간(ms) — 진단용</td>
+</tr>
+<tr>
+<td><a href="#xm_log_enablelinkhealth"><code>XM_Log_EnableLinkHealth</code></a></td>
+<td>링크 상태 정보 전송 켜기 / 끄기</td>
+</tr>
+<tr>
+<td><a href="#xm_log_getadmittedwirebps"><code>XM_Log_GetAdmittedWireBps</code></a></td>
+<td>이미 정해진 송신 몫(바이트/초) — 진단용</td>
+</tr>
+<tr>
+<td><a href="#xm_log_getstats"><code>XM_Log_GetStats</code></a></td>
+<td>관측 카운터 복사</td>
+</tr>
+</tbody>
+</table>
+<p><strong>지원 헤더 <code>xm_api_logging_raw.h</code> — 직접 호출 금지</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_log_registerschemaraw"><code>XM_Log_RegisterSchemaRaw</code></a></td>
+<td><code>XM_LOG_REGISTER</code> 가 부르는 함수</td>
+</tr>
+<tr>
+<td><a href="#xm_log_sendraw"><code>XM_Log_SendRaw</code></a></td>
+<td><code>XM_LOG_SEND</code> 가 부르는 함수</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="함수--매크로-상세">함수 · 매크로 상세<a class="headerlink" href="#함수--매크로-상세" title="Permanent link">&para;</a></h2>
+<h3 id="xm_log_declare"><code>XM_LOG_DECLARE</code><a class="headerlink" href="#xm_log_declare" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">XM_LOG_DECLARE</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="p">);</span>
+</code></pre></div>
+<p>토큰과 구조체 타입을 묶습니다. <code>.c</code> 파일 위쪽에 한 번 씁니다. 토큰이 구조체 이름이 됩니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tok</code></td>
+<td>토큰(짧은 이름) — 11자 이하 (<code>XM_LOG_MAX_TOKEN_LEN</code>), 영문 · 숫자 · <code>_</code></td>
+</tr>
+<tr>
+<td><code>Type</code></td>
+<td>보낼 구조체 타입 — 크기는 4 의 배수, 1,008 B 이하</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (선언 매크로)</p>
+<p>아래 경우에는 이 줄에서 컴파일 오류가 납니다.</p>
+<table>
+<thead>
+<tr>
+<th>컴파일 오류</th>
+<th>원인</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>... must be a multiple of 4 - add padding</code></td>
+<td>구조체 크기가 4 의 배수가 아님</td>
+</tr>
+<tr>
+<td><code>... exceeds XM_LOG_MAX_STRUCT_SIZE</code></td>
+<td>구조체 크기가 1,008 B 를 넘음</td>
+</tr>
+<tr>
+<td><code>token ... longer than 11 chars</code></td>
+<td>토큰이 11자를 넘음</td>
+</tr>
+</tbody>
+</table>
+<p>크기를 맞출 때는 끝에 <code>uint8_t</code> 배열을 더하세요. 그 배열은 <code>XM_FIELD</code> 로 적지 않아도 됩니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 파일 범위(함수 밖)에 씁니다. 같은 <code>.c</code> 파일 안의 <code>XM_LOG_FIELDS</code> · <code>XM_LOG_REGISTER</code> · <code>XM_LOG_SEND</code> 와 같은 토큰을 씁니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">angle</span><span class="p">;</span><span class="w">      </span><span class="c1">// [deg]</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">torque</span><span class="p">;</span><span class="w">     </span><span class="c1">// [Nm]</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">}</span><span class="w"> </span><span class="n">JointLog_t</span><span class="p">;</span><span class="w">         </span><span class="c1">// 8 B</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">XM_LOG_DECLARE</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="n">JointLog_t</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_log_fields"><code>XM_LOG_FIELDS</code></a>, <a href="#xm_log_register"><code>XM_LOG_REGISTER</code></a></p>
+<hr />
+<h3 id="xm_log_fields"><code>XM_LOG_FIELDS</code><a class="headerlink" href="#xm_log_fields" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">XM_LOG_FIELDS</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* XM_FIELD(...), XM_FIELD_ARRAY(...) */</span><span class="w"> </span><span class="p">};</span>
+</code></pre></div>
+<p>필드 설명 배열을 정의합니다. 뒤에 <code>= { XM_FIELD(...), ... };</code> 를 씁니다. 중괄호 안에는 <strong>같은 토큰</strong>의 <code>XM_FIELD</code> · <code>XM_FIELD_ARRAY</code> 만 쓰세요. 컴파일러가 이 규칙은 검사하지 못합니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tok</code></td>
+<td><code>XM_LOG_DECLARE</code> 의 토큰</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (정의 매크로)</p>
+<p>필드는 1 ~ 90개입니다. 0개이거나 90개를 넘으면 <code>XM_LOG_REGISTER</code> 줄에서 컴파일 오류(<code>field count must be 1..90</code>)가 납니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 파일 범위(함수 밖)에 씁니다. <code>XM_LOG_REGISTER</code> 보다 앞에 있어야 합니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">XM_LOG_FIELDS</span><span class="p">(</span><span class="n">JointLog</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">XM_FIELD</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="n">angle</span><span class="p">,</span><span class="w">  </span><span class="s">"angle"</span><span class="p">,</span><span class="w">  </span><span class="s">"deg"</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">),</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="n">XM_FIELD</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="n">torque</span><span class="p">,</span><span class="w"> </span><span class="s">"torque"</span><span class="p">,</span><span class="w"> </span><span class="s">"Nm"</span><span class="p">,</span><span class="w">  </span><span class="mf">1.0f</span><span class="p">),</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">};</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_field"><code>XM_FIELD</code></a>, <a href="#xm_field_array"><code>XM_FIELD_ARRAY</code></a></p>
+<hr />
+<h3 id="xm_field"><code>XM_FIELD</code><a class="headerlink" href="#xm_field" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">XM_FIELD</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="w"> </span><span class="n">member</span><span class="p">,</span><span class="w"> </span><span class="n">nm</span><span class="p">,</span><span class="w"> </span><span class="n">un</span><span class="p">,</span><span class="w"> </span><span class="n">sc</span><span class="p">)</span>
+</code></pre></div>
+<p>스칼라 멤버 한 줄입니다. 타입과 위치는 멤버에서 정해집니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tok</code></td>
+<td><code>XM_LOG_DECLARE</code> 의 토큰</td>
+</tr>
+<tr>
+<td><code>member</code></td>
+<td>구조체 멤버 이름</td>
+</tr>
+<tr>
+<td><code>nm</code></td>
+<td>필드 이름 — 영문 · 숫자 · 기호(ASCII) 15자까지 (한글 · <code>°</code> 처럼 ASCII 가 아닌 글자는 등록이 <code>false</code>)</td>
+</tr>
+<tr>
+<td><code>un</code></td>
+<td>단위 — 영문 · 숫자 · 기호(ASCII) 7자까지, 없으면 <code>""</code> (예: <code>"deg"</code>)</td>
+</tr>
+<tr>
+<td><code>sc</code></td>
+<td>배율 — 물리값 = 저장값 × <code>sc</code> (보통 <code>1.0f</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (<code>XM_FieldDesc_t</code> 초기화 식)</p>
+<p>지원하는 멤버 타입은 <code>float</code> · <code>double</code> · <code>bool</code> · <code>int</code> · <code>unsigned</code> · <code>int8_t</code> ~ <code>uint64_t</code> 입니다. 열거형 멤버는 크기가 같은 정수 타입으로 받습니다. 그 밖의 타입(<code>char</code> · 포인터 · 구조체 · 배열 등)은 컴파일 오류(<code>unsupported member type</code>)입니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>XM_LOG_FIELDS</code> 의 중괄호 안에서만 씁니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">XM_FIELD</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="n">angle</span><span class="p">,</span><span class="w"> </span><span class="s">"angle"</span><span class="p">,</span><span class="w"> </span><span class="s">"deg"</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_field_array"><code>XM_FIELD_ARRAY</code></a>, <a href="#xm_fieldtype_e"><code>XM_FieldType_e</code></a></p>
+<hr />
+<h3 id="xm_field_array"><code>XM_FIELD_ARRAY</code><a class="headerlink" href="#xm_field_array" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">XM_FIELD_ARRAY</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="w"> </span><span class="n">member</span><span class="p">,</span><span class="w"> </span><span class="n">nm</span><span class="p">,</span><span class="w"> </span><span class="n">un</span><span class="p">,</span><span class="w"> </span><span class="n">sc</span><span class="p">)</span>
+</code></pre></div>
+<p>배열 멤버 한 줄입니다. 원소 타입과 개수(1 ~ 255)는 배열에서 정해집니다. 포인터 멤버나 256개 이상인 배열은 컴파일 오류입니다. 인자는 <a href="#xm_field"><code>XM_FIELD</code></a> 와 같습니다.</p>
+<p><strong>파라미터</strong>: <a href="#xm_field"><code>XM_FIELD</code></a> 와 같습니다.</p>
+<p><strong>반환값</strong>: 없음 (<code>XM_FieldDesc_t</code> 초기화 식)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>XM_LOG_FIELDS</code> 의 중괄호 안에서만 씁니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">XM_FIELD_ARRAY</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="n">emg</span><span class="p">,</span><span class="w"> </span><span class="s">"emg"</span><span class="p">,</span><span class="w"> </span><span class="s">"mV"</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">)</span><span class="w">     </span><span class="c1">// int16_t emg[8] → 원소 8개</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_field"><code>XM_FIELD</code></a></p>
+<hr />
+<h3 id="xm_log_register"><code>XM_LOG_REGISTER</code><a class="headerlink" href="#xm_log_register" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">XM_LOG_REGISTER</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="w"> </span><span class="n">module_id</span><span class="p">,</span><span class="w"> </span><span class="n">nominal_rate_hz</span><span class="p">)</span><span class="w">   </span><span class="c1">// → bool</span>
+</code></pre></div>
+<p>구조체를 등록합니다. <code>Control_Setup()</code> 안에서 부릅니다. 실제로 부르는 함수는 <a href="#xm_log_registerschemaraw"><code>XM_Log_RegisterSchemaRaw</code></a> 입니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tok</code></td>
+<td>토큰</td>
+<td><code>XM_LOG_DECLARE</code> 의 토큰 (<code>XM_LOG_FIELDS</code> 가 앞에 있어야 합니다)</td>
+</tr>
+<tr>
+<td><code>module_id</code></td>
+<td><code>uint8_t</code></td>
+<td>이 구조체를 보낼 모듈 ID — <code>0xF0</code> ~ <code>0xFE</code></td>
+</tr>
+<tr>
+<td><code>nominal_rate_hz</code></td>
+<td><code>uint16_t</code></td>
+<td>보낼 주기(Hz) — <code>XM_LOG_SEND</code> 를 더 자주 불러도 이보다 자주 나가지 않습니다</td>
+</tr>
+</tbody>
+</table>
+<p>간격을 1 ms 단위로 올려 잡아서 1,000 의 약수가 아니면 덜 자주 나갑니다 (예: 300 Hz → 250 Hz, 600 Hz → 500 Hz). 1,000 Hz 보다 자주는 나가지 않습니다.</p>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 등록됨. <code>false</code>: 아래 표 참고.</p>
+<table>
+<thead>
+<tr>
+<th><code>false</code> 가 되는 경우</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>이 토큰을 이미 등록함</td>
+<td>토큰마다 한 번만 등록합니다</td>
+</tr>
+<tr>
+<td>모듈 ID 가 <code>0xF0</code> ~ <code>0xFE</code> 밖이거나 이미 쓰임</td>
+<td>남은 ID 를 씁니다</td>
+</tr>
+<tr>
+<td>등록이 4개를 넘음</td>
+<td>구조체는 4개까지 등록합니다</td>
+</tr>
+<tr>
+<td><code>nominal_rate_hz</code> 가 0</td>
+<td>1 이상으로 정합니다</td>
+</tr>
+<tr>
+<td>필드 이름이 겹치거나 두 필드가 구조체의 같은 바이트를 가리킴</td>
+<td>필드 이름 · 멤버를 확인합니다</td>
+</tr>
+<tr>
+<td>필드 이름 · 단위가 너무 길거나, 토큰 · 필드 이름 · 단위에 ASCII 가 아닌 글자(한글 등)가 있음</td>
+<td>토큰은 영문 · 숫자 · <code>_</code> 로, 이름은 15자 · 단위는 7자 이하의 ASCII 문자로 고칩니다</td>
+</tr>
+<tr>
+<td><code>scale</code> 이 0 이거나 숫자가 아님 (무한대 · NaN)</td>
+<td>0 이 아닌 값으로 정합니다</td>
+</tr>
+<tr>
+<td>보낼 양이 USB 로 보낼 수 있는 양을 넘음 (먼저 등록한 구조체와 합쳐서 셉니다)</td>
+<td>주기를 낮추거나 구조체를 줄입니다</td>
+</tr>
+<tr>
+<td>먼저 등록한 구조체와 합친 양이 PC 프로그램이 잠시 멈춰도 담아 둘 수 있는 양을 넘음 (<a href="#xm_log_setminstallms"><code>XM_Log_SetMinStallMs</code></a> 참고)</td>
+<td>주기를 낮추거나 구조체를 줄입니다</td>
+</tr>
+<tr>
+<td><code>Control_Setup()</code> 밖(<code>Control_Setup()</code> 이 끝난 뒤 · 다른 태스크 · 인터럽트)에서 부름</td>
+<td><code>Control_Setup()</code> 안에서 부릅니다</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>false</code> 면 등록 상태는 바뀌지 않으니 <code>Control_Setup()</code> 안에서 고쳐 다시 부를 수 있습니다. <code>false</code> 여도 이미 등록된 같은 토큰은 그대로 보낼 수 있습니다.</li>
+<li>필드는 1 ~ 90개입니다. 0개이거나 90개를 넘으면 컴파일 오류입니다.</li>
+<li>등록한 모듈 ID 는 <code>XM_LOG_SEND</code> 전용입니다. 같은 ID 로 <code>XM_SendUsbDataWithId()</code> 를 부르면 <code>false</code> 입니다.</li>
+<li><code>Control_Setup()</code> 이 끝난 뒤 부르면 <code>seal_reject_count</code> 가, 다른 태스크 · 인터럽트에서 부르면 <code>owner_violation_count</code> 가 오릅니다 (<a href="#xm_logstats_t"><code>XM_LogStats_t</code></a>).</li>
+<li>어느 크기 · 주기까지 등록되는지는 보드에서 아직 확인하지 못했습니다. (보드 확인 전) <!-- board-check --></li>
+</ul>
+<p><strong>첫 등록에 성공하면</strong> 아래가 달라집니다 (자세한 내용은 <a href="../../10-struct-logging/">10. 구조체 로깅</a> 7장).</p>
+<ul>
+<li><code>XM_USB_SetHostProfile()</code> 호출이 무시됩니다.</li>
+<li><code>XM_Log_SetMinStallMs()</code> 가 <code>false</code> 를 돌려줍니다.</li>
+<li><code>XM_SetUsbCustomMeta()</code> 는 <code>Control_Setup()</code> 안에서만 쓸 수 있습니다. 그 뒤에 부르면 <code>false</code> 입니다.</li>
+<li>등록한 모듈 ID 는 이 구조체 전용이 됩니다.</li>
+<li><code>XM_SendUsbDataWithId()</code> · <code>XM_SendUsbDebugMessage()</code> 로 보내는 양에 한도가 생깁니다.</li>
+<li>보드가 필드 이름 · 단위 · 타입을 PC 로 보냅니다. PC 프로그램이 포트를 열 때 전달되고 그 뒤에도 몇 초 간격으로 다시 보냅니다. (설계 목표, 보드 확인 전) <!-- board-check --></li>
+</ul>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> 안에서만 부릅니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p">{</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">XM_LOG_REGISTER</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">      </span><span class="c1">// 500 Hz — 2 ms 마다</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">        </span><span class="n">XM_SetLedEffect</span><span class="p">(</span><span class="n">XM_LED_3</span><span class="p">,</span><span class="w"> </span><span class="n">XM_LED_BLINK</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">);</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_log_send"><code>XM_LOG_SEND</code></a>, <a href="#xm_log_setminstallms"><code>XM_Log_SetMinStallMs</code></a></p>
+<hr />
+<h3 id="xm_log_send"><code>XM_LOG_SEND</code><a class="headerlink" href="#xm_log_send" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">XM_LOG_SEND</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="w"> </span><span class="n">ptr</span><span class="p">)</span><span class="w">   </span><span class="c1">// → bool</span>
+</code></pre></div>
+<p>등록한 구조체 하나를 보냅니다. <code>Control_Loop()</code> 안에서 부릅니다. 실제로 부르는 함수는 <a href="#xm_log_sendraw"><code>XM_Log_SendRaw</code></a> 입니다. 구조체는 호출 안에서 복사되므로 지역 변수여도 됩니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tok</code></td>
+<td>토큰</td>
+<td><code>XM_LOG_DECLARE</code> 의 토큰</td>
+</tr>
+<tr>
+<td><code>ptr</code></td>
+<td>구조체 포인터</td>
+<td>그 구조체의 포인터 — 다른 타입의 포인터는 컴파일 오류입니다</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 보냄 (보낼 버퍼에 담았다는 뜻이며 PC 가 받았는지와는 무관합니다). <code>false</code>: 아래 중 하나.</p>
+<ul>
+<li>등록 안 됨 (<code>XM_LOG_REGISTER</code> 가 <code>false</code> 였던 토큰 포함)</li>
+<li><code>ptr</code> 가 <code>NULL</code></li>
+<li>등록 주기보다 일찍 부름</li>
+<li>USB 장치가 준비되지 않음</li>
+<li>송신 버퍼가 가득 참</li>
+<li><code>Control_Setup()</code> · <code>Control_Loop()</code> 밖(다른 태스크 · 인터럽트)에서 부름</li>
+</ul>
+<p>매 루프 불러도 등록한 주기로만 나가므로, 주기가 되기 전의 <code>false</code> 는 정상입니다. 송신 버퍼가 가득 차 <code>false</code> 가 나와도 다음 송신은 등록한 주기가 지난 뒤에 나갑니다 (바로 다시 불러도 보내지 않습니다). <code>Control_Setup()</code> · <code>Control_Loop()</code> 밖에서 부르면 <code>owner_violation_count</code> 가 오릅니다 (<a href="#xm_logstats_t"><code>XM_LogStats_t</code></a>).</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Loop()</code> 안에서 부릅니다. 인터럽트 · 직접 만든 백그라운드 태스크(<code>XM_Task_*</code>)에서는 부르지 마세요.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="p">{</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="n">JointLog_t</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">leftHipAngle</span><span class="p">,</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">leftHipTorque</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">XM_LOG_SEND</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s</span><span class="p">);</span><span class="w">      </span><span class="c1">// 매 루프 불러도 500 Hz 로만 나갑니다</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_log_register"><code>XM_LOG_REGISTER</code></a>, <a href="#xm_log_getstats"><code>XM_Log_GetStats</code></a></p>
+<hr />
+<h3 id="xm_log_setminstallms"><code>XM_Log_SetMinStallMs</code><a class="headerlink" href="#xm_log_setminstallms" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_Log_SetMinStallMs</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">ms</span><span class="p">);</span>
+</code></pre></div>
+<p>PC 프로그램이 잠시 멈춰도 보드가 데이터를 빠뜨리지 않고 담아 두는 목표 시간(ms)을 정합니다. 기본값은 50 ms 입니다. 이 목표를 지킬 수 없을 만큼 많이 보내는 구조체의 등록은 <code>false</code> 가 됩니다. 50 ms 는 아직 보드에서 재 보지 않은 초기값이라 보장이 아니라 목표입니다. (설계 목표) <!-- board-check --></p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ms</code></td>
+<td><code>uint16_t</code></td>
+<td>목표 시간(ms)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 바뀜. <code>false</code>: <code>Control_Setup()</code> 밖에서 부름, 또는 등록에 성공한 구조체가 이미 있음</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> 안에서, 첫 <code>XM_LOG_REGISTER</code> 보다 먼저 부릅니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="p">{</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">XM_Log_SetMinStallMs</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span><span class="w">                  </span><span class="c1">// 값은 예시입니다 — 기본 50 ms 로 충분하면 부르지 않아도 됩니다</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">XM_LOG_REGISTER</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">);</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_log_getminstallms"><code>XM_Log_GetMinStallMs</code></a>, <a href="#xm_log_register"><code>XM_LOG_REGISTER</code></a></p>
+<hr />
+<h3 id="xm_log_getminstallms"><code>XM_Log_GetMinStallMs</code><a class="headerlink" href="#xm_log_getminstallms" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kt">uint16_t</span><span class="w"> </span><span class="nf">XM_Log_GetMinStallMs</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>지금 쓰는 목표 시간(ms)을 돌려줍니다. 진단용입니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong>: <code>uint16_t</code> — 목표 시간(ms)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준.</p>
+<p><strong>참고</strong>: <a href="#xm_log_setminstallms"><code>XM_Log_SetMinStallMs</code></a></p>
+<hr />
+<h3 id="xm_log_enablelinkhealth"><code>XM_Log_EnableLinkHealth</code><a class="headerlink" href="#xm_log_enablelinkhealth" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_Log_EnableLinkHealth</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">enable</span><span class="p">);</span>
+</code></pre></div>
+<p>링크 상태 정보(송신 실패 수 · 버퍼 사용률 등)를 1초마다 보낼지 정합니다. 기본은 보내지 않습니다. 구조체를 하나 이상 등록했을 때만 보냅니다 — 등록하지 않으면 켜도 보내지 않습니다. (설계 목표, 보드 확인 전) <!-- board-check --></p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enable</code></td>
+<td><code>bool</code></td>
+<td><code>true</code>: 보냄, <code>false</code>: 보내지 않음</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 설정됨. <code>false</code>: <code>Control_Setup()</code> 밖에서 부름</p>
+<p><code>xm10</code> 도구는 이 값을 따로 풀어 보여 주지 않습니다. 보드 안에서 로깅 관련 카운터를 보려면 <a href="#xm_log_getstats"><code>XM_Log_GetStats</code></a> 를 쓰세요.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> 안에서 부릅니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="p">{</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">XM_LOG_REGISTER</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">);</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">XM_Log_EnableLinkHealth</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span><span class="w">              </span><span class="c1">// 링크 상태 전송 켜기</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_log_getstats"><code>XM_Log_GetStats</code></a></p>
+<hr />
+<h3 id="xm_log_getadmittedwirebps"><code>XM_Log_GetAdmittedWireBps</code><a class="headerlink" href="#xm_log_getadmittedwirebps" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_Log_GetAdmittedWireBps</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>USB 송신 예산 가운데 이미 정해진 몫(바이트/초)을 돌려줍니다. 등록한 구조체들의 몫과 보드가 미리 잡아 둔 몫의 합입니다.</p>
+<p>미리 잡아 둔 몫은 등록하지 않은 데이터 · 디버그 텍스트, 구조체 정보 · 링크 상태 전송, 그리고 기본 프로파일(<code>XM_USB_HOST_PHAI_STUDIO</code>)이면 Total Data 입니다. 구조체를 하나도 등록하지 않았으면 미리 잡아 둔 몫만 나옵니다. 진단용입니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong>: <code>uint32_t</code> — 이미 정해진 송신 몫 (바이트/초)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> / <code>Control_Loop()</code> 컨텍스트 기준.</p>
+<p><strong>참고</strong>: <a href="#xm_log_register"><code>XM_LOG_REGISTER</code></a></p>
+<hr />
+<h3 id="xm_log_getstats"><code>XM_Log_GetStats</code><a class="headerlink" href="#xm_log_getstats" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_Log_GetStats</span><span class="p">(</span><span class="n">XM_LogStats_t</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">);</span>
+</code></pre></div>
+<p>관측 카운터를 복사합니다. 칸마다 따로 읽으므로 여러 칸이 정확히 같은 순간의 값은 아닐 수 있습니다. 칸의 뜻은 <a href="#xm_logstats_t"><code>XM_LogStats_t</code></a> 를 보세요.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out</code></td>
+<td><code>XM_LogStats_t*</code></td>
+<td>받을 곳 — <code>NULL</code> 이면 아무것도 하지 않습니다</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음 (<code>void</code>) — 결과는 <code>out</code> 을 통해 돌아옵니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Loop()</code> 에서 부릅니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XM_LogStats_t</span><span class="w"> </span><span class="n">s_stats</span><span class="p">;</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="p">{</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">    </span><span class="n">XM_Log_GetStats</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s_stats</span><span class="p">);</span><span class="w">            </span><span class="c1">// 디버거 Live Expressions 에 s_stats 를 넣어 봅니다</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_logstats_t"><code>XM_LogStats_t</code></a></p>
+<hr />
+<h2 id="타입--상수">타입 / 상수<a class="headerlink" href="#타입--상수" title="Permanent link">&para;</a></h2>
+<h3 id="xm_fieldtype_e"><code>XM_FieldType_e</code><a class="headerlink" href="#xm_fieldtype_e" title="Permanent link">&para;</a></h3>
+<p>필드 타입입니다. <code>XM_FIELD</code> · <code>XM_FIELD_ARRAY</code> 가 멤버의 C 타입에서 정합니다 (직접 적지 않습니다).</p>
+<table>
+<thead>
+<tr>
+<th>값</th>
+<th>이름</th>
+<th>멤버의 C 타입</th>
+<th>크기</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>XM_FIELD_F32</code></td>
+<td><code>float</code></td>
+<td>4 B</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>XM_FIELD_F64</code></td>
+<td><code>double</code></td>
+<td>8 B</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>XM_FIELD_I8</code></td>
+<td><code>int8_t</code></td>
+<td>1 B</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>XM_FIELD_U8</code></td>
+<td><code>uint8_t</code></td>
+<td>1 B</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>XM_FIELD_I16</code></td>
+<td><code>int16_t</code></td>
+<td>2 B</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>XM_FIELD_U16</code></td>
+<td><code>uint16_t</code></td>
+<td>2 B</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>XM_FIELD_I32</code></td>
+<td><code>int32_t</code> · <code>int</code></td>
+<td>4 B</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>XM_FIELD_U32</code></td>
+<td><code>uint32_t</code> · <code>unsigned</code></td>
+<td>4 B</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>XM_FIELD_I64</code></td>
+<td><code>int64_t</code></td>
+<td>8 B</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>XM_FIELD_U64</code></td>
+<td><code>uint64_t</code></td>
+<td>8 B</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>XM_FIELD_BOOL</code></td>
+<td><code>bool</code></td>
+<td>1 B</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xm_fielddesc_t"><code>XM_FieldDesc_t</code><a class="headerlink" href="#xm_fielddesc_t" title="Permanent link">&para;</a></h3>
+<p>필드 설명 한 줄입니다. <code>XM_FIELD</code> · <code>XM_FIELD_ARRAY</code> 로 만드세요. 직접 채우면 컴파일러가 타입 · 위치를 검사하지 못합니다.</p>
+<table>
+<thead>
+<tr>
+<th>멤버</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>const char*</code></td>
+<td>필드 이름 (영문 · 숫자 · 기호 15자까지, ASCII 만)</td>
+</tr>
+<tr>
+<td><code>unit</code></td>
+<td><code>const char*</code></td>
+<td>단위 (영문 · 숫자 · 기호 7자까지, ASCII 만, 없으면 <code>""</code>)</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>uint8_t</code></td>
+<td>원소 타입 — <code>XM_FieldType_e</code> 값. 컴파일 옵션과 상관없이 1 바이트입니다</td>
+</tr>
+<tr>
+<td><code>offset</code></td>
+<td><code>uint16_t</code></td>
+<td>구조체 안 위치(바이트)</td>
+</tr>
+<tr>
+<td><code>array_len</code></td>
+<td><code>uint8_t</code></td>
+<td>원소 개수 (스칼라 = 1)</td>
+</tr>
+<tr>
+<td><code>scale</code></td>
+<td><code>float</code></td>
+<td>물리값 = 저장값 × <code>scale</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xm_logstats_t"><code>XM_LogStats_t</code><a class="headerlink" href="#xm_logstats_t" title="Permanent link">&para;</a></h3>
+<p>로깅 관측 카운터입니다. <a href="#xm_log_getstats"><code>XM_Log_GetStats()</code></a> 로 받습니다. 모두 부팅 뒤 누적값이고, 따로 적지 않은 칸은 구조체를 등록하지 않아도 셉니다.</p>
+<table>
+<thead>
+<tr>
+<th>멤버</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rate_gate_suppressed_calls</code></td>
+<td><code>uint32_t</code></td>
+<td><code>XM_LOG_SEND</code> 를 등록한 주기보다 자주 불러 보내지 않은 횟수 (등록한 구조체가 있을 때만 생깁니다)</td>
+</tr>
+<tr>
+<td><code>owner_violation_count</code></td>
+<td><code>uint32_t</code></td>
+<td><code>XM_LOG_REGISTER</code> · <code>XM_LOG_SEND</code> · 이 헤더의 설정 함수를 <code>Control_Setup()</code> · <code>Control_Loop()</code> 밖(다른 태스크 · 인터럽트)에서 부른 횟수 (구조체를 등록한 뒤라면 <code>XM_SetUsbCustomMeta()</code> 도 셉니다)</td>
+</tr>
+<tr>
+<td><code>profile_change_blocked_count</code></td>
+<td><code>uint32_t</code></td>
+<td>등록 뒤 <code>XM_USB_SetHostProfile()</code> 를 불러 무시된 횟수</td>
+</tr>
+<tr>
+<td><code>admission_reject_count</code></td>
+<td><code>uint32_t</code></td>
+<td><code>XM_SendUsbDataWithId()</code> · <code>XM_SendUsbDebugMessage()</code> 등이 송신량 한도(한 번에 보내기에 너무 큰 것 포함)로 거절된 횟수 (구조체를 등록했을 때만 셉니다. 인자가 함수의 최대 길이를 넘어 거절된 호출은 세지 않습니다)</td>
+</tr>
+<tr>
+<td><code>reserved_id_reject_count</code></td>
+<td><code>uint32_t</code></td>
+<td>시스템이 쓰는 모듈 ID 나 등록한 구조체의 모듈 ID 로 보내려다 거절된 횟수 + <code>XM_SetUsbStreamModuleId()</code> 에 시스템이 쓰는 ID 를 주어 무시된 횟수 (등록한 구조체의 ID 는 정할 때가 아니라 그 ID 로 보낼 때마다 셉니다)</td>
+</tr>
+<tr>
+<td><code>seal_reject_count</code></td>
+<td><code>uint32_t</code></td>
+<td><code>Control_Setup()</code> 이 끝난 뒤 <code>XM_LOG_REGISTER</code> 를 부른 횟수 (구조체를 등록한 뒤라면 <code>XM_SetUsbCustomMeta()</code> 도 셉니다)</td>
+</tr>
+<tr>
+<td><code>admission_attempt_calls</code></td>
+<td><code>uint32_t</code></td>
+<td>위 송신이 송신량 한도 검사를 받은 횟수 (허용 + 거절, 구조체를 등록했을 때만 셉니다)</td>
+</tr>
+<tr>
+<td><code>x20_same_tick_suppressed_calls</code></td>
+<td><code>uint32_t</code></td>
+<td>제어 루프가 같은 1 ms 안에 다시 돌아 Total Data 송신을 건너뛴 횟수 (구조체를 등록했을 때만 셉니다)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>rate_gate_suppressed_calls</code> 는 매 루프 <code>XM_LOG_SEND</code> 를 부르면 계속 늘어나는 것이 정상입니다.</li>
+<li>Total Data 를 1 ms 마다 최대 한 번만 보내고 건너뛰는 동작은 보드에서 아직 확인하지 못했습니다. (보드 확인 전) <!-- board-check --></li>
+</ul>
+<hr />
+<h3 id="한도-상수">한도 상수<a class="headerlink" href="#한도-상수" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>값</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_LOG_MAX_STRUCT_SIZE</code></td>
+<td><code>1008U</code></td>
+<td>등록할 수 있는 구조체 크기 상한(바이트)</td>
+</tr>
+<tr>
+<td><code>XM_LOG_MAX_FIELDS</code></td>
+<td><code>90U</code></td>
+<td>구조체 하나에 적을 수 있는 필드 수 상한</td>
+</tr>
+<tr>
+<td><code>XM_LOG_MAX_ARRAY_LEN</code></td>
+<td><code>255U</code></td>
+<td>배열 필드 하나의 원소 수 상한</td>
+</tr>
+<tr>
+<td><code>XM_LOG_MAX_TOKEN_LEN</code></td>
+<td><code>11U</code></td>
+<td>토큰 길이 상한(글자) — 토큰이 구조체 이름이 됩니다</td>
+</tr>
+<tr>
+<td><code>XM_LOG_SLOT_NONE</code></td>
+<td><code>0xFFU</code></td>
+<td>등록되지 않은 토큰의 슬롯 값</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xm_type_tag"><code>XM_TYPE_TAG</code><a class="headerlink" href="#xm_type_tag" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">XM_TYPE_TAG</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div>
+<p>멤버 식의 필드 타입입니다. <code>XM_FIELD</code> · <code>XM_FIELD_ARRAY</code> 가 안에서 쓰므로 직접 쓸 일은 거의 없습니다. 지원 타입은 <code>float</code> · <code>double</code> · <code>bool</code> · <code>int</code> · <code>unsigned</code> · <code>int8_t</code> ~ <code>uint64_t</code> 입니다. 열거형 멤버는 크기가 같은 정수 타입으로 받습니다. 그 밖의 타입(<code>char</code> · 포인터 · 구조체 · 배열 등)은 컴파일 오류입니다.</p>
+<hr />
+<h2 id="지원-헤더--xm_api_logging_rawh-직접-호출-금지">지원 헤더 — <code>xm_api_logging_raw.h</code> (직접 호출 금지)<a class="headerlink" href="#지원-헤더--xm_api_logging_rawh-직접-호출-금지" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>⚠️ <strong>지원 대상이 아닙니다.</strong> <code>XM_LOG_REGISTER</code> · <code>XM_LOG_SEND</code> 매크로가 안에서 부르는 함수의 원형입니다. 매크로를 쓰는 <code>.c</code> 파일은 이 헤더를 include 해야 컴파일됩니다. 아래 함수는 타입 · 크기 검사를 거치지 않아 다른 구조체를 보내도 컴파일러가 막지 못합니다. 직접 부르지 말고 항상 <code>XM_LOG_*</code> 매크로를 쓰세요.</p>
+</blockquote>
+<h3 id="xm_log_registerschemaraw"><code>XM_Log_RegisterSchemaRaw</code><a class="headerlink" href="#xm_log_registerschemaraw" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_Log_RegisterSchemaRaw</span><span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">slot_io</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">struct_name</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">struct_size</span><span class="p">,</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">                              </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">nominal_rate_hz</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XM_FieldDesc_t</span><span class="o">*</span><span class="w"> </span><span class="n">fields</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">field_count</span><span class="p">);</span>
+</code></pre></div>
+<p><code>XM_LOG_REGISTER</code> 가 부릅니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>slot_io</code></td>
+<td><code>uint8_t*</code></td>
+<td>토큰의 슬롯 변수 — <code>XM_LOG_SLOT_NONE</code> 일 때만 등록하고, 성공하면 슬롯 번호를 씁니다</td>
+</tr>
+<tr>
+<td><code>module_id</code></td>
+<td><code>uint8_t</code></td>
+<td>모듈 ID (<code>0xF0</code> ~ <code>0xFE</code>)</td>
+</tr>
+<tr>
+<td><code>struct_name</code></td>
+<td><code>const char*</code></td>
+<td>구조체 이름(토큰)</td>
+</tr>
+<tr>
+<td><code>struct_size</code></td>
+<td><code>uint16_t</code></td>
+<td>구조체 크기(바이트)</td>
+</tr>
+<tr>
+<td><code>nominal_rate_hz</code></td>
+<td><code>uint16_t</code></td>
+<td>보낼 주기(Hz)</td>
+</tr>
+<tr>
+<td><code>fields</code></td>
+<td><code>const XM_FieldDesc_t*</code></td>
+<td>필드 설명 배열</td>
+</tr>
+<tr>
+<td><code>field_count</code></td>
+<td><code>uint8_t</code></td>
+<td>필드 수</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 등록됨. <code>false</code>: 이미 등록된 슬롯이거나 등록 실패 — <code>*slot_io</code> 는 바뀌지 않습니다.</p>
+<hr />
+<h3 id="xm_log_sendraw"><code>XM_Log_SendRaw</code><a class="headerlink" href="#xm_log_sendraw" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_Log_SendRaw</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">slot</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+<p><code>XM_LOG_SEND</code> 가 부릅니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>slot</code></td>
+<td><code>uint8_t</code></td>
+<td>등록된 슬롯 번호</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>const void*</code></td>
+<td>보낼 구조체</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>uint16_t</code></td>
+<td>구조체 크기(바이트)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 보냄. <code>false</code>: 등록 안 된 슬롯, <code>size</code> 가 그 슬롯의 구조체 크기와 다름, <code>data</code> 가 <code>NULL</code>, 등록 주기보다 일찍 부름, USB 장치가 준비되지 않음, 송신 버퍼가 가득 참, <code>Control_Setup()</code> · <code>Control_Loop()</code> 밖(다른 태스크 · 인터럽트)에서 부름. 송신 버퍼가 가득 차 <code>false</code> 가 나와도 다음 송신은 등록한 주기가 지난 뒤에 나갑니다.</p>
+<hr />
+<h2 id="내부-전용-직접-쓰지-마세요">내부 전용 (직접 쓰지 마세요)<a class="headerlink" href="#내부-전용-직접-쓰지-마세요" title="Permanent link">&para;</a></h2>
+<p>이름 끝이 <code>_</code> 인 매크로(<code>XM_LOG_REQUIRE_</code> · <code>XM_FIELD_TYPE_NONE_</code> · <code>XM_TYPE_TAG_</code> · <code>XM_LOG_MEMBER_</code> · <code>XM_LOG_ARRLEN_</code> · <code>XM_LOG_IS_ARRAY_</code> · <code>XM_LOG_FIELD_COUNT_</code>)는 다른 매크로가 쓰는 보조 정의입니다. 사용자 코드에서 쓰지 마세요.</p>
+<hr />
+<h2 id="rev11--rev20-차이-요약">Rev1.1 / Rev2.0 차이 요약<a class="headerlink" href="#rev11--rev20-차이-요약" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Rev1.1</th>
+<th>Rev2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>구조체 로깅 (<code>xm_api_logging.h</code> · <code>xm_api_logging_raw.h</code>)</td>
+<td>❌ 없음</td>
+<td>🟢 전용</td>
+</tr>
+<tr>
+<td>기존 방식 (<code>XM_SetUsbCustomMeta</code> + <code>XM_SendUsbDataWithId</code>)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="관련-문서">관련 문서<a class="headerlink" href="#관련-문서" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../10-struct-logging/">10. 구조체 로깅 (개념)</a> — 동작 원리, 한도, 흔한 실수</li>
+<li><a href="../xm-api-usb/"><code>xm_api_usb.h</code> — USB-CDC 실시간 스트리밍</a> — <code>XM_SendUsbDataWithId</code> · <code>XM_SetUsbCustomMeta</code> 등 기존 USB-CDC 함수</li>
+<li><a href="../../../getting-started/04-pc-data-tool/">PC 에서 데이터 받기 — <code>xm10</code> 도구</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  맨위로
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../xm-api-usb-msc/" class="md-footer__link md-footer__link--prev" aria-label="이전: xm_api_usb_msc.h (USB 메모리)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                xm_api_usb_msc.h (USB 메모리)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../xm-api-memory/" class="md-footer__link md-footer__link--next" aria-label="다음: xm_api_memory.h (메모리)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                다음
+              </span>
+              <div class="md-ellipsis">
+                xm_api_memory.h (메모리)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

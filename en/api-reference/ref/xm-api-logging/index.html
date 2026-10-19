@@ -1,0 +1,4087 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서">
+      
+      
+      
+        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/en/api-reference/ref/xm-api-logging/">
+      
+      
+        <link rel="prev" href="../xm-api-usb-msc/">
+      
+      
+        <link rel="next" href="../xm-api-memory/">
+      
+      
+        
+          <link rel="alternate" href="../../../../api-reference/ref/xm-api-logging/" hreflang="ko">
+        
+          <link rel="alternate" href="./" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>xm_api_logging.h (Struct Logging) - XM10 Extension Module</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#xm_api_loggingh--usb-cdc-struct-logging" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../" title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XM10 Extension Module
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              xm_api_logging.h (Struct Logging)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../../api-reference/ref/xm-api-logging/" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-AIFT/phai-x1-xm10-release
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../" title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    XM10 Extension Module
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-AIFT/phai-x1-xm10-release
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../find-it/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Find
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/01-hardware-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/02-software-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/03-first-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    First Build
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/04-pc-data-tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Get Data on PC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/05-usb-memory-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Save to USB Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start with Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../hardware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hardware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External GPIO (Rev 1.1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External GPIO (Rev 2.0)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-task-state-machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State Machine (TSM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-h10-control-n-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 Control & Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-led-btn-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED & Button
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-usb-connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Serial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Memory Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-memory-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory Regions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-rtc-clock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Real-Time Clock (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-task-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Auxiliary Tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-struct-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Struct Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Function Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api.h (Entry Point)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_data.h (Control & Data)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-tsm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_tsm.h (State Machine)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-led-btn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_led_btn.h (LED & Button)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_external_io.h (External IO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-usb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-usb-msc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb_msc.h (USB Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (Struct Logging)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (Struct Logging)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use it
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="When to use it">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#include" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        include
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-and-macro-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function and macro list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-and-macro-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function and macro details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function and macro details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_declare" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_DECLARE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_FIELDS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FIELD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_field_array" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FIELD_ARRAY
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_register" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_REGISTER
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_send" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_SEND
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_setminstallms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_SetMinStallMs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_getminstallms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_GetMinStallMs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_enablelinkhealth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_EnableLinkHealth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_getadmittedwirebps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_GetAdmittedWireBps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_getstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_GetStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types--constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Types / constants
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Types / constants">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_fieldtype_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FieldType_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_fielddesc_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FieldDesc_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_logstats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LogStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limit-constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limit constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_type_tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_TYPE_TAG
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#support-header--xm_api_logging_rawh-do-not-call-directly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Support header — xm_api_logging_raw.h (do not call directly)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Support header — xm_api_logging_raw.h (do not call directly)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_registerschemaraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_RegisterSchemaRaw
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_sendraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_SendRaw
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#internal-only-do-not-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internal-only (do not use)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev11--rev20-difference-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 Difference Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_memory.h (Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-rtc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_rtc.h (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-freertos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_freertos.h (RTOS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-user-custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_user_custom.h (User Data)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kit-h10-firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 Firmware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bootloader/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bootloader
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../release-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Release Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.9.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.8.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.8.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.7.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.7.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.5.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.5.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.5.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.5.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.4.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.4.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use it
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="When to use it">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#include" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        include
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-and-macro-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function and macro list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-and-macro-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function and macro details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function and macro details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_declare" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_DECLARE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_FIELDS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FIELD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_field_array" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FIELD_ARRAY
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_register" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_REGISTER
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_send" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LOG_SEND
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_setminstallms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_SetMinStallMs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_getminstallms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_GetMinStallMs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_enablelinkhealth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_EnableLinkHealth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_getadmittedwirebps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_GetAdmittedWireBps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_getstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_GetStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types--constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Types / constants
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Types / constants">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_fieldtype_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FieldType_e
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_fielddesc_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_FieldDesc_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_logstats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_LogStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limit-constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limit constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_type_tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_TYPE_TAG
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#support-header--xm_api_logging_rawh-do-not-call-directly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Support header — xm_api_logging_raw.h (do not call directly)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Support header — xm_api_logging_raw.h (do not call directly)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_registerschemaraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_RegisterSchemaRaw
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_log_sendraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_Log_SendRaw
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#internal-only-do-not-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internal-only (do not use)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev11--rev20-difference-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 Difference Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="xm_api_loggingh--usb-cdc-struct-logging"><code>xm_api_logging.h</code> — USB-CDC Struct Logging<a class="headerlink" href="#xm_api_loggingh--usb-cdc-struct-logging" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 only</strong> <em>(new in v2.9.0)</em> — This header and <code>xm_api_logging_raw.h</code> ship only in the XM10 Rev 2.0 SDK. The Rev 1.1 SDK (<code>XM10_SDK/Rev1.1/</code>) has neither header, so including them in a Rev 1.1 project fails to build. To check your board revision, see the <a href="../../../hardware/#board-revision-comparison">board revision comparison</a>.</p>
+<ul>
+<li><strong>Target header</strong>: <code>XM_FW/XM_API/xm_api_logging.h</code> · <code>XM_FW/XM_API/xm_api_logging_raw.h</code></li>
+<li><strong>Related concept doc</strong>: <a href="../../10-struct-logging/">10. Struct Logging</a></li>
+<li><strong>Related example</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/">Ex.44 CDC Struct Logging</a> — sends two structs to the PC with names, units and types</li>
+</ul>
+</blockquote>
+<hr />
+<h2 id="when-to-use-it">When to use it<a class="headerlink" href="#when-to-use-it" title="Permanent link">&para;</a></h2>
+<p>Use this API when you send your own struct to the PC together with its field names, units and types. For the big picture — how it differs from the existing way (<code>XM_SetUsbCustomMeta</code> + <code>XM_SendUsbDataWithId</code>), the limits, what you see on the PC, and common mistakes — we recommend reading <a href="../../10-struct-logging/">10. Struct Logging</a> first. This page only covers the <strong>signatures, parameters and return values of every macro, function and type</strong> declared in the header.</p>
+<p><code>xm_api.h</code> pulls in this header, so the names <code>XM_LOG_*</code>, <code>XM_FIELD*</code> and <code>XM_Log_*</code> belong to the SDK. Do not create names of your own that match them.</p>
+<h3 id="include">include<a class="headerlink" href="#include" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api.h"</span><span class="w">                </span><span class="c1">// Also pulls in xm_api_logging.h</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api_logging_raw.h"</span><span class="w">    </span><span class="c1">// Always include this in a .c file that uses the XM_LOG_* macros</span>
+</code></pre></div>
+<p><code>xm_api.h</code> includes <code>xm_api_logging.h</code> but not <code>xm_api_logging_raw.h</code>. The prototypes of the functions that the <code>XM_LOG_REGISTER</code> and <code>XM_LOG_SEND</code> macros call are in that header, so if it is missing you get an <code>implicit declaration of function</code> build error at the macro line.</p>
+<h3 id="basic-usage-flow">Basic usage flow<a class="headerlink" href="#basic-usage-flow" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api.h"</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"xm_api_logging_raw.h"</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="kt">float</span><span class="w">    </span><span class="n">hip_angle</span><span class="p">;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="kt">int16_t</span><span class="w">  </span><span class="n">emg</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">}</span><span class="w"> </span><span class="n">MyLog_t</span><span class="p">;</span><span class="w">                                          </span><span class="c1">// 24 B — the size is a multiple of 4</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">XM_LOG_DECLARE</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="n">MyLog_t</span><span class="p">);</span><span class="w">                     </span><span class="c1">// Token MyLog ↔ struct MyLog_t</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">XM_LOG_FIELDS</span><span class="p">(</span><span class="n">MyLog</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="n">XM_FIELD</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="n">hip_angle</span><span class="p">,</span><span class="w"> </span><span class="s">"hip_angle"</span><span class="p">,</span><span class="w"> </span><span class="s">"deg"</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">),</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="n">XM_FIELD_ARRAY</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="n">emg</span><span class="p">,</span><span class="w"> </span><span class="s">"emg"</span><span class="p">,</span><span class="w"> </span><span class="s">"mV"</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">),</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="n">XM_FIELD</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="p">,</span><span class="w"> </span><span class="s">"mode"</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">),</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="p">};</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="p">{</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">XM_LOG_REGISTER</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">        </span><span class="c1">// Report a registration failure with an LED — in Control_Setup() the USB is usually not ready yet, so no message goes out</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">        </span><span class="n">XM_SetLedEffect</span><span class="p">(</span><span class="n">XM_LED_1</span><span class="p">,</span><span class="w"> </span><span class="n">XM_LED_BLINK</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">);</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="p">}</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="p">{</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">    </span><span class="n">MyLog_t</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">XM_LOG_SEND</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s</span><span class="p">);</span><span class="w">                   </span><span class="c1">// Calling earlier than the registered period sends nothing and returns false</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="p">}</span>
+</code></pre></div>
+<p>Use the four macros (<code>XM_LOG_DECLARE</code>, <code>XM_LOG_FIELDS</code>, <code>XM_LOG_REGISTER</code>, <code>XM_LOG_SEND</code>) in the same <code>.c</code> file. The macros are for C files only. For wrong usage — an unsupported member type, a size that is not a multiple of 4, a pointer to a different struct — the compiler points at that line.</p>
+<hr />
+<h2 id="function-and-macro-list">Function and macro list<a class="headerlink" href="#function-and-macro-list" title="Permanent link">&para;</a></h2>
+<p><strong>Struct definition · registration · sending (macros)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Macro</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_log_declare"><code>XM_LOG_DECLARE</code></a></td>
+<td>Ties a token to a struct type (near the top of the <code>.c</code> file)</td>
+</tr>
+<tr>
+<td><a href="#xm_log_fields"><code>XM_LOG_FIELDS</code></a></td>
+<td>Defines the field description array</td>
+</tr>
+<tr>
+<td><a href="#xm_field"><code>XM_FIELD</code></a></td>
+<td>One line for a scalar member</td>
+</tr>
+<tr>
+<td><a href="#xm_field_array"><code>XM_FIELD_ARRAY</code></a></td>
+<td>One line for an array member</td>
+</tr>
+<tr>
+<td><a href="#xm_log_register"><code>XM_LOG_REGISTER</code></a></td>
+<td>Registers a struct (<code>Control_Setup()</code>)</td>
+</tr>
+<tr>
+<td><a href="#xm_log_send"><code>XM_LOG_SEND</code></a></td>
+<td>Sends one registered struct (<code>Control_Loop()</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Settings · diagnostics (functions)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_log_setminstallms"><code>XM_Log_SetMinStallMs</code></a></td>
+<td>Sets the target time (ms) for which data is kept when the PC program pauses briefly</td>
+</tr>
+<tr>
+<td><a href="#xm_log_getminstallms"><code>XM_Log_GetMinStallMs</code></a></td>
+<td>The target time (ms) in use — for diagnostics</td>
+</tr>
+<tr>
+<td><a href="#xm_log_enablelinkhealth"><code>XM_Log_EnableLinkHealth</code></a></td>
+<td>Turns link status information on / off</td>
+</tr>
+<tr>
+<td><a href="#xm_log_getadmittedwirebps"><code>XM_Log_GetAdmittedWireBps</code></a></td>
+<td>The share of the send budget already committed (bytes/s) — for diagnostics</td>
+</tr>
+<tr>
+<td><a href="#xm_log_getstats"><code>XM_Log_GetStats</code></a></td>
+<td>Copies the observation counters</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Support header <code>xm_api_logging_raw.h</code> — do not call directly</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_log_registerschemaraw"><code>XM_Log_RegisterSchemaRaw</code></a></td>
+<td>The function <code>XM_LOG_REGISTER</code> calls</td>
+</tr>
+<tr>
+<td><a href="#xm_log_sendraw"><code>XM_Log_SendRaw</code></a></td>
+<td>The function <code>XM_LOG_SEND</code> calls</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="function-and-macro-details">Function and macro details<a class="headerlink" href="#function-and-macro-details" title="Permanent link">&para;</a></h2>
+<h3 id="xm_log_declare"><code>XM_LOG_DECLARE</code><a class="headerlink" href="#xm_log_declare" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">XM_LOG_DECLARE</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="p">);</span>
+</code></pre></div>
+<p>Ties a token to a struct type. Write it once near the top of the <code>.c</code> file. The token becomes the struct name.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tok</code></td>
+<td>Token (short name) — at most 11 characters (<code>XM_LOG_MAX_TOKEN_LEN</code>), letters, digits and <code>_</code></td>
+</tr>
+<tr>
+<td><code>Type</code></td>
+<td>The struct type to send — size is a multiple of 4 and at most 1,008 B</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (declaration macro)</p>
+<p>In the cases below, you get a compile error at this line.</p>
+<table>
+<thead>
+<tr>
+<th>Compile error</th>
+<th>Cause</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>... must be a multiple of 4 - add padding</code></td>
+<td>The struct size is not a multiple of 4</td>
+</tr>
+<tr>
+<td><code>... exceeds XM_LOG_MAX_STRUCT_SIZE</code></td>
+<td>The struct size exceeds 1,008 B</td>
+</tr>
+<tr>
+<td><code>token ... longer than 11 chars</code></td>
+<td>The token is longer than 11 characters</td>
+</tr>
+</tbody>
+</table>
+<p>To fix the size, add a <code>uint8_t</code> array at the end. You do not have to list that array with <code>XM_FIELD</code>.</p>
+<p><strong>⚠️ Call context</strong>: Write it at file scope (outside any function). Use the same token as the <code>XM_LOG_FIELDS</code>, <code>XM_LOG_REGISTER</code> and <code>XM_LOG_SEND</code> in the same <code>.c</code> file.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">angle</span><span class="p">;</span><span class="w">      </span><span class="c1">// [deg]</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">torque</span><span class="p">;</span><span class="w">     </span><span class="c1">// [Nm]</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">}</span><span class="w"> </span><span class="n">JointLog_t</span><span class="p">;</span><span class="w">         </span><span class="c1">// 8 B</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">XM_LOG_DECLARE</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="n">JointLog_t</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_log_fields"><code>XM_LOG_FIELDS</code></a>, <a href="#xm_log_register"><code>XM_LOG_REGISTER</code></a></p>
+<hr />
+<h3 id="xm_log_fields"><code>XM_LOG_FIELDS</code><a class="headerlink" href="#xm_log_fields" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">XM_LOG_FIELDS</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* XM_FIELD(...), XM_FIELD_ARRAY(...) */</span><span class="w"> </span><span class="p">};</span>
+</code></pre></div>
+<p>Defines the field description array. Follow it with <code>= { XM_FIELD(...), ... };</code>. Inside the braces, use only <code>XM_FIELD</code> and <code>XM_FIELD_ARRAY</code> of the <strong>same token</strong>. The compiler cannot check this rule.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tok</code></td>
+<td>The token from <code>XM_LOG_DECLARE</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (definition macro)</p>
+<p>There are 1 to 90 fields. With 0 fields, or more than 90, you get a compile error (<code>field count must be 1..90</code>) at the <code>XM_LOG_REGISTER</code> line.</p>
+<p><strong>⚠️ Call context</strong>: Write it at file scope (outside any function). It must come before <code>XM_LOG_REGISTER</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">XM_LOG_FIELDS</span><span class="p">(</span><span class="n">JointLog</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">XM_FIELD</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="n">angle</span><span class="p">,</span><span class="w">  </span><span class="s">"angle"</span><span class="p">,</span><span class="w">  </span><span class="s">"deg"</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">),</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="n">XM_FIELD</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="n">torque</span><span class="p">,</span><span class="w"> </span><span class="s">"torque"</span><span class="p">,</span><span class="w"> </span><span class="s">"Nm"</span><span class="p">,</span><span class="w">  </span><span class="mf">1.0f</span><span class="p">),</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">};</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_field"><code>XM_FIELD</code></a>, <a href="#xm_field_array"><code>XM_FIELD_ARRAY</code></a></p>
+<hr />
+<h3 id="xm_field"><code>XM_FIELD</code><a class="headerlink" href="#xm_field" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">XM_FIELD</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="w"> </span><span class="n">member</span><span class="p">,</span><span class="w"> </span><span class="n">nm</span><span class="p">,</span><span class="w"> </span><span class="n">un</span><span class="p">,</span><span class="w"> </span><span class="n">sc</span><span class="p">)</span>
+</code></pre></div>
+<p>One line for a scalar member. The type and position are decided from the member.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tok</code></td>
+<td>The token from <code>XM_LOG_DECLARE</code></td>
+</tr>
+<tr>
+<td><code>member</code></td>
+<td>The struct member name</td>
+</tr>
+<tr>
+<td><code>nm</code></td>
+<td>Field name — up to 15 letters, digits and symbols (ASCII) (Korean letters and characters such as <code>°</code> make the registration <code>false</code>)</td>
+</tr>
+<tr>
+<td><code>un</code></td>
+<td>Unit — up to 7 letters, digits and symbols (ASCII); <code>""</code> if none (e.g., <code>"deg"</code>)</td>
+</tr>
+<tr>
+<td><code>sc</code></td>
+<td>Scale — physical value = stored value × <code>sc</code> (usually <code>1.0f</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (an <code>XM_FieldDesc_t</code> initializer expression)</p>
+<p>The supported member types are <code>float</code>, <code>double</code>, <code>bool</code>, <code>int</code>, <code>unsigned</code> and <code>int8_t</code> ~ <code>uint64_t</code>. An enumeration member is accepted as the integer type of the same size. Any other type (<code>char</code>, pointer, struct, array, etc.) is a compile error (<code>unsupported member type</code>).</p>
+<p><strong>⚠️ Call context</strong>: Use it only inside the braces of <code>XM_LOG_FIELDS</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">XM_FIELD</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="n">angle</span><span class="p">,</span><span class="w"> </span><span class="s">"angle"</span><span class="p">,</span><span class="w"> </span><span class="s">"deg"</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_field_array"><code>XM_FIELD_ARRAY</code></a>, <a href="#xm_fieldtype_e"><code>XM_FieldType_e</code></a></p>
+<hr />
+<h3 id="xm_field_array"><code>XM_FIELD_ARRAY</code><a class="headerlink" href="#xm_field_array" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">XM_FIELD_ARRAY</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="w"> </span><span class="n">member</span><span class="p">,</span><span class="w"> </span><span class="n">nm</span><span class="p">,</span><span class="w"> </span><span class="n">un</span><span class="p">,</span><span class="w"> </span><span class="n">sc</span><span class="p">)</span>
+</code></pre></div>
+<p>One line for an array member. The element type and the count (1 ~ 255) are decided from the array. A pointer member or an array of 256 or more elements is a compile error. The arguments are the same as for <a href="#xm_field"><code>XM_FIELD</code></a>.</p>
+<p><strong>Parameters</strong>: Same as <a href="#xm_field"><code>XM_FIELD</code></a>.</p>
+<p><strong>Return value</strong>: none (an <code>XM_FieldDesc_t</code> initializer expression)</p>
+<p><strong>⚠️ Call context</strong>: Use it only inside the braces of <code>XM_LOG_FIELDS</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">XM_FIELD_ARRAY</span><span class="p">(</span><span class="n">MyLog</span><span class="p">,</span><span class="w"> </span><span class="n">emg</span><span class="p">,</span><span class="w"> </span><span class="s">"emg"</span><span class="p">,</span><span class="w"> </span><span class="s">"mV"</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">)</span><span class="w">     </span><span class="c1">// int16_t emg[8] → 8 elements</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_field"><code>XM_FIELD</code></a></p>
+<hr />
+<h3 id="xm_log_register"><code>XM_LOG_REGISTER</code><a class="headerlink" href="#xm_log_register" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">XM_LOG_REGISTER</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="w"> </span><span class="n">module_id</span><span class="p">,</span><span class="w"> </span><span class="n">nominal_rate_hz</span><span class="p">)</span><span class="w">   </span><span class="c1">// → bool</span>
+</code></pre></div>
+<p>Registers a struct. Call it inside <code>Control_Setup()</code>. The function it actually calls is <a href="#xm_log_registerschemaraw"><code>XM_Log_RegisterSchemaRaw</code></a>.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tok</code></td>
+<td>token</td>
+<td>The token from <code>XM_LOG_DECLARE</code> (<code>XM_LOG_FIELDS</code> must come before it)</td>
+</tr>
+<tr>
+<td><code>module_id</code></td>
+<td><code>uint8_t</code></td>
+<td>Module ID to send this struct with — <code>0xF0</code> ~ <code>0xFE</code></td>
+</tr>
+<tr>
+<td><code>nominal_rate_hz</code></td>
+<td><code>uint16_t</code></td>
+<td>Send rate (Hz) — even if you call <code>XM_LOG_SEND</code> more often, data does not go out faster than this</td>
+</tr>
+</tbody>
+</table>
+<p>The interval is rounded up to a 1 ms step, so if the rate is not a divisor of 1,000, data goes out less often (e.g., 300 Hz → 250 Hz, 600 Hz → 500 Hz). Data never goes out faster than 1,000 Hz.</p>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: registered. <code>false</code>: see the table below.</p>
+<table>
+<thead>
+<tr>
+<th><code>false</code> when</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>This token is already registered</td>
+<td>Register each token only once</td>
+</tr>
+<tr>
+<td>The module ID is outside <code>0xF0</code> ~ <code>0xFE</code> or already in use</td>
+<td>Use a free ID</td>
+</tr>
+<tr>
+<td>More than 4 registrations</td>
+<td>Register up to 4 structs</td>
+</tr>
+<tr>
+<td><code>nominal_rate_hz</code> is 0</td>
+<td>Set it to 1 or more</td>
+</tr>
+<tr>
+<td>Field names collide, or two fields point at the same bytes of the struct</td>
+<td>Check the field names and members</td>
+</tr>
+<tr>
+<td>A field name or unit is too long, or the token, a field name or a unit contains a non-ASCII character (Korean, etc.)</td>
+<td>Use letters, digits and <code>_</code> for the token, and at most 15 (name) or 7 (unit) ASCII characters</td>
+</tr>
+<tr>
+<td><code>scale</code> is 0 or not a number (infinity, NaN)</td>
+<td>Use a non-zero finite value</td>
+</tr>
+<tr>
+<td>The volume to send exceeds what USB can carry (counted together with structs registered earlier)</td>
+<td>Lower the rate or shrink the struct</td>
+</tr>
+<tr>
+<td>Together with structs registered earlier, the volume exceeds what can be kept when the PC program pauses briefly (see <a href="#xm_log_setminstallms"><code>XM_Log_SetMinStallMs</code></a>)</td>
+<td>Lower the rate or shrink the struct</td>
+</tr>
+<tr>
+<td>Called outside <code>Control_Setup()</code> (after <code>Control_Setup()</code> has finished, from another task, or from an interrupt)</td>
+<td>Call it inside <code>Control_Setup()</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>On <code>false</code> the registration state does not change, so you can fix it and call again inside <code>Control_Setup()</code>. Even on <code>false</code>, a token that is already registered can still be sent as before.</li>
+<li>There are 1 to 90 fields. With 0 fields, or more than 90, you get a compile error.</li>
+<li>A registered module ID belongs to <code>XM_LOG_SEND</code> only. Calling <code>XM_SendUsbDataWithId()</code> with the same ID returns <code>false</code>.</li>
+<li>Calling it after <code>Control_Setup()</code> has finished raises <code>seal_reject_count</code>; calling it from another task or an interrupt raises <code>owner_violation_count</code> (<a href="#xm_logstats_t"><code>XM_LogStats_t</code></a>).</li>
+<li>How large a struct and how high a rate still register has not yet been confirmed on the board. (not yet confirmed on the board) <!-- board-check --></li>
+</ul>
+<p><strong>Once the first registration succeeds</strong>, the following things change (details in section 7 of <a href="../../10-struct-logging/">10. Struct Logging</a>).</p>
+<ul>
+<li>Calls to <code>XM_USB_SetHostProfile()</code> are ignored.</li>
+<li><code>XM_Log_SetMinStallMs()</code> returns <code>false</code>.</li>
+<li><code>XM_SetUsbCustomMeta()</code> works only inside <code>Control_Setup()</code>. Calling it later returns <code>false</code>.</li>
+<li>The registered module ID belongs to that struct only.</li>
+<li>The send volume of <code>XM_SendUsbDataWithId()</code> and <code>XM_SendUsbDebugMessage()</code> becomes limited.</li>
+<li>The board sends the field names, units and types to the PC. They are delivered when a PC program opens the port, and sent again every few seconds after that. (design goal, not yet confirmed on the board) <!-- board-check --></li>
+</ul>
+<p><strong>⚠️ Call context</strong>: Call it only inside <code>Control_Setup()</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p">{</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">XM_LOG_REGISTER</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">      </span><span class="c1">// 500 Hz — every 2 ms</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">        </span><span class="n">XM_SetLedEffect</span><span class="p">(</span><span class="n">XM_LED_3</span><span class="p">,</span><span class="w"> </span><span class="n">XM_LED_BLINK</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">);</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_log_send"><code>XM_LOG_SEND</code></a>, <a href="#xm_log_setminstallms"><code>XM_Log_SetMinStallMs</code></a></p>
+<hr />
+<h3 id="xm_log_send"><code>XM_LOG_SEND</code><a class="headerlink" href="#xm_log_send" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">XM_LOG_SEND</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="w"> </span><span class="n">ptr</span><span class="p">)</span><span class="w">   </span><span class="c1">// → bool</span>
+</code></pre></div>
+<p>Sends one registered struct. Call it inside <code>Control_Loop()</code>. The function it actually calls is <a href="#xm_log_sendraw"><code>XM_Log_SendRaw</code></a>. The struct is copied inside the call, so a local variable is fine.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tok</code></td>
+<td>token</td>
+<td>The token from <code>XM_LOG_DECLARE</code></td>
+</tr>
+<tr>
+<td><code>ptr</code></td>
+<td>struct pointer</td>
+<td>A pointer to that struct — a pointer of another type is a compile error</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: sent (it means the struct was queued in the transmit buffer, and says nothing about whether the PC received it). <code>false</code>: one of the following.</p>
+<ul>
+<li>Not registered (including a token whose <code>XM_LOG_REGISTER</code> returned <code>false</code>)</li>
+<li><code>ptr</code> is <code>NULL</code></li>
+<li>Called earlier than the registered period</li>
+<li>The USB device is not ready</li>
+<li>The transmit buffer is full</li>
+<li>Called outside <code>Control_Setup()</code> and <code>Control_Loop()</code> (from another task or an interrupt)</li>
+</ul>
+<p>You can call it every loop and data goes out only at the registered rate, so a <code>false</code> before the period is due is normal. Even if <code>false</code> was returned because the transmit buffer was full, the next send goes out after the registered period has passed (calling it again right away does not send). Calling it outside <code>Control_Setup()</code> and <code>Control_Loop()</code> raises <code>owner_violation_count</code> (<a href="#xm_logstats_t"><code>XM_LogStats_t</code></a>).</p>
+<p><strong>⚠️ Call context</strong>: Call it inside <code>Control_Loop()</code>. Do not call it from an interrupt or from a background task you created yourself (<code>XM_Task_*</code>).</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="p">{</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="n">JointLog_t</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">leftHipAngle</span><span class="p">,</span><span class="w"> </span><span class="n">XM</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">h10</span><span class="p">.</span><span class="n">leftHipTorque</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">XM_LOG_SEND</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s</span><span class="p">);</span><span class="w">      </span><span class="c1">// You can call it every loop — data goes out at 500 Hz only</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_log_register"><code>XM_LOG_REGISTER</code></a>, <a href="#xm_log_getstats"><code>XM_Log_GetStats</code></a></p>
+<hr />
+<h3 id="xm_log_setminstallms"><code>XM_Log_SetMinStallMs</code><a class="headerlink" href="#xm_log_setminstallms" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_Log_SetMinStallMs</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">ms</span><span class="p">);</span>
+</code></pre></div>
+<p>Sets the target time (ms) for which the board keeps data without dropping it when the PC program pauses briefly. The default is 50 ms. Registering a struct that sends too much to meet this goal returns <code>false</code>. 50 ms is an initial value that has not yet been measured on the board, so it is a goal, not a guarantee. (design goal) <!-- board-check --></p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ms</code></td>
+<td><code>uint16_t</code></td>
+<td>Target time (ms)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: changed. <code>false</code>: called outside <code>Control_Setup()</code>, or a struct has already been registered successfully</p>
+<p><strong>⚠️ Call context</strong>: Call it inside <code>Control_Setup()</code>, before the first <code>XM_LOG_REGISTER</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="p">{</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">XM_Log_SetMinStallMs</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span><span class="w">                  </span><span class="c1">// The value is only an example — if the default 50 ms is enough, you do not have to call it</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">XM_LOG_REGISTER</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">);</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_log_getminstallms"><code>XM_Log_GetMinStallMs</code></a>, <a href="#xm_log_register"><code>XM_LOG_REGISTER</code></a></p>
+<hr />
+<h3 id="xm_log_getminstallms"><code>XM_Log_GetMinStallMs</code><a class="headerlink" href="#xm_log_getminstallms" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kt">uint16_t</span><span class="w"> </span><span class="nf">XM_Log_GetMinStallMs</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Returns the target time (ms) currently in use. For diagnostics.</p>
+<p><strong>Parameters</strong>: none</p>
+<p><strong>Return value</strong>: <code>uint16_t</code> — the target time (ms)</p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context.</p>
+<p><strong>See also</strong>: <a href="#xm_log_setminstallms"><code>XM_Log_SetMinStallMs</code></a></p>
+<hr />
+<h3 id="xm_log_enablelinkhealth"><code>XM_Log_EnableLinkHealth</code><a class="headerlink" href="#xm_log_enablelinkhealth" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_Log_EnableLinkHealth</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">enable</span><span class="p">);</span>
+</code></pre></div>
+<p>Sets whether link status information (number of failed sends, buffer usage, etc.) is sent every second. The default is not to send it. It is sent only when at least one struct is registered — if you register none, turning it on sends nothing. (design goal, not yet confirmed on the board) <!-- board-check --></p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enable</code></td>
+<td><code>bool</code></td>
+<td><code>true</code>: send, <code>false</code>: do not send</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: set. <code>false</code>: called outside <code>Control_Setup()</code></p>
+<p>The <code>xm10</code> tool does not decode and show this value separately. To look at the logging counters on the board, use <a href="#xm_log_getstats"><code>XM_Log_GetStats</code></a>.</p>
+<p><strong>⚠️ Call context</strong>: Call it inside <code>Control_Setup()</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="p">{</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">XM_LOG_REGISTER</span><span class="p">(</span><span class="n">JointLog</span><span class="p">,</span><span class="w"> </span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">);</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">XM_Log_EnableLinkHealth</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span><span class="w">              </span><span class="c1">// Turn link status sending on</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_log_getstats"><code>XM_Log_GetStats</code></a></p>
+<hr />
+<h3 id="xm_log_getadmittedwirebps"><code>XM_Log_GetAdmittedWireBps</code><a class="headerlink" href="#xm_log_getadmittedwirebps" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_Log_GetAdmittedWireBps</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>Returns the share of the USB send budget that is already committed (bytes/s). It is the sum of the shares of the registered structs and the share the board reserves in advance.</p>
+<p>The reserved share covers unregistered data and debug text, sending of struct information and link status, and — with the default profile (<code>XM_USB_HOST_PHAI_STUDIO</code>) — Total Data. If you registered no struct, only the reserved share is returned. For diagnostics.</p>
+<p><strong>Parameters</strong>: none</p>
+<p><strong>Return value</strong>: <code>uint32_t</code> — the committed send share (bytes/s)</p>
+<p><strong>⚠️ Call context</strong>: Assume <code>Control_Setup()</code> / <code>Control_Loop()</code> context.</p>
+<p><strong>See also</strong>: <a href="#xm_log_register"><code>XM_LOG_REGISTER</code></a></p>
+<hr />
+<h3 id="xm_log_getstats"><code>XM_Log_GetStats</code><a class="headerlink" href="#xm_log_getstats" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_Log_GetStats</span><span class="p">(</span><span class="n">XM_LogStats_t</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">);</span>
+</code></pre></div>
+<p>Copies the observation counters. Each field is read separately, so several fields may not be values from exactly the same instant. For what each field means, see <a href="#xm_logstats_t"><code>XM_LogStats_t</code></a>.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out</code></td>
+<td><code>XM_LogStats_t*</code></td>
+<td>Where to put the copy — if <code>NULL</code>, nothing happens</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: none (<code>void</code>) — the result comes back through <code>out</code>.</p>
+<p><strong>⚠️ Call context</strong>: Call it from <code>Control_Loop()</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="k">static</span><span class="w"> </span><span class="n">XM_LogStats_t</span><span class="w"> </span><span class="n">s_stats</span><span class="p">;</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="p">{</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">    </span><span class="n">XM_Log_GetStats</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s_stats</span><span class="p">);</span><span class="w">            </span><span class="c1">// Add s_stats to the debugger's Live Expressions to watch it</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_logstats_t"><code>XM_LogStats_t</code></a></p>
+<hr />
+<h2 id="types--constants">Types / constants<a class="headerlink" href="#types--constants" title="Permanent link">&para;</a></h2>
+<h3 id="xm_fieldtype_e"><code>XM_FieldType_e</code><a class="headerlink" href="#xm_fieldtype_e" title="Permanent link">&para;</a></h3>
+<p>The field type. <code>XM_FIELD</code> and <code>XM_FIELD_ARRAY</code> decide it from the C type of the member (you do not write it yourself).</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Name</th>
+<th>Member C type</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>XM_FIELD_F32</code></td>
+<td><code>float</code></td>
+<td>4 B</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>XM_FIELD_F64</code></td>
+<td><code>double</code></td>
+<td>8 B</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>XM_FIELD_I8</code></td>
+<td><code>int8_t</code></td>
+<td>1 B</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>XM_FIELD_U8</code></td>
+<td><code>uint8_t</code></td>
+<td>1 B</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>XM_FIELD_I16</code></td>
+<td><code>int16_t</code></td>
+<td>2 B</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>XM_FIELD_U16</code></td>
+<td><code>uint16_t</code></td>
+<td>2 B</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>XM_FIELD_I32</code></td>
+<td><code>int32_t</code> · <code>int</code></td>
+<td>4 B</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>XM_FIELD_U32</code></td>
+<td><code>uint32_t</code> · <code>unsigned</code></td>
+<td>4 B</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>XM_FIELD_I64</code></td>
+<td><code>int64_t</code></td>
+<td>8 B</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>XM_FIELD_U64</code></td>
+<td><code>uint64_t</code></td>
+<td>8 B</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>XM_FIELD_BOOL</code></td>
+<td><code>bool</code></td>
+<td>1 B</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xm_fielddesc_t"><code>XM_FieldDesc_t</code><a class="headerlink" href="#xm_fielddesc_t" title="Permanent link">&para;</a></h3>
+<p>One line of a field description. Build it with <code>XM_FIELD</code> or <code>XM_FIELD_ARRAY</code>. If you fill it in by hand, the compiler cannot check the type and position.</p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>const char*</code></td>
+<td>Field name (up to 15 letters, digits and symbols, ASCII only)</td>
+</tr>
+<tr>
+<td><code>unit</code></td>
+<td><code>const char*</code></td>
+<td>Unit (up to 7 letters, digits and symbols, ASCII only; <code>""</code> if none)</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>uint8_t</code></td>
+<td>Element type — an <code>XM_FieldType_e</code> value. It is 1 byte regardless of compiler options</td>
+</tr>
+<tr>
+<td><code>offset</code></td>
+<td><code>uint16_t</code></td>
+<td>Position inside the struct (bytes)</td>
+</tr>
+<tr>
+<td><code>array_len</code></td>
+<td><code>uint8_t</code></td>
+<td>Number of elements (scalar = 1)</td>
+</tr>
+<tr>
+<td><code>scale</code></td>
+<td><code>float</code></td>
+<td>Physical value = stored value × <code>scale</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xm_logstats_t"><code>XM_LogStats_t</code><a class="headerlink" href="#xm_logstats_t" title="Permanent link">&para;</a></h3>
+<p>The logging observation counters. You receive them with <a href="#xm_log_getstats"><code>XM_Log_GetStats()</code></a>. All are totals since boot, and a field with no special note is counted even if you registered no struct.</p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rate_gate_suppressed_calls</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of times <code>XM_LOG_SEND</code> was called more often than the registered period and nothing was sent (only occurs when a struct is registered)</td>
+</tr>
+<tr>
+<td><code>owner_violation_count</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of times <code>XM_LOG_REGISTER</code>, <code>XM_LOG_SEND</code> or a setting function of this header was called outside <code>Control_Setup()</code> and <code>Control_Loop()</code> (from another task or an interrupt) (once a struct is registered, <code>XM_SetUsbCustomMeta()</code> is counted too)</td>
+</tr>
+<tr>
+<td><code>profile_change_blocked_count</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of times <code>XM_USB_SetHostProfile()</code> was called after registration and ignored</td>
+</tr>
+<tr>
+<td><code>admission_reject_count</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of times <code>XM_SendUsbDataWithId()</code>, <code>XM_SendUsbDebugMessage()</code> and the like were rejected by the send-volume limit (including something too large to send at once) (counted only when a struct is registered. A call rejected because an argument exceeded the function's maximum length is not counted)</td>
+</tr>
+<tr>
+<td><code>reserved_id_reject_count</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of times a send was rejected for using a module ID the system uses or the module ID of a registered struct, plus the number of times a system ID passed to <code>XM_SetUsbStreamModuleId()</code> was ignored (the ID of a registered struct is counted every time you send with that ID, not when you set it)</td>
+</tr>
+<tr>
+<td><code>seal_reject_count</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of times <code>XM_LOG_REGISTER</code> was called after <code>Control_Setup()</code> had finished (once a struct is registered, <code>XM_SetUsbCustomMeta()</code> is counted too)</td>
+</tr>
+<tr>
+<td><code>admission_attempt_calls</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of times the sends above were checked against the send-volume limit (allowed + rejected, counted only when a struct is registered)</td>
+</tr>
+<tr>
+<td><code>x20_same_tick_suppressed_calls</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of times the control loop ran again within the same 1 ms and the Total Data send was skipped (counted only when a struct is registered)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>It is normal for <code>rate_gate_suppressed_calls</code> to keep growing when you call <code>XM_LOG_SEND</code> every loop.</li>
+<li>Sending Total Data at most once per 1 ms and skipping the rest has not yet been confirmed on the board. (not yet confirmed on the board) <!-- board-check --></li>
+</ul>
+<hr />
+<h3 id="limit-constants">Limit constants<a class="headerlink" href="#limit-constants" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_LOG_MAX_STRUCT_SIZE</code></td>
+<td><code>1008U</code></td>
+<td>Upper limit of the size of a struct you can register (bytes)</td>
+</tr>
+<tr>
+<td><code>XM_LOG_MAX_FIELDS</code></td>
+<td><code>90U</code></td>
+<td>Upper limit of the number of fields you can list for one struct</td>
+</tr>
+<tr>
+<td><code>XM_LOG_MAX_ARRAY_LEN</code></td>
+<td><code>255U</code></td>
+<td>Upper limit of the number of elements of one array field</td>
+</tr>
+<tr>
+<td><code>XM_LOG_MAX_TOKEN_LEN</code></td>
+<td><code>11U</code></td>
+<td>Upper limit of the token length (characters) — the token becomes the struct name</td>
+</tr>
+<tr>
+<td><code>XM_LOG_SLOT_NONE</code></td>
+<td><code>0xFFU</code></td>
+<td>The slot value of a token that is not registered</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xm_type_tag"><code>XM_TYPE_TAG</code><a class="headerlink" href="#xm_type_tag" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">XM_TYPE_TAG</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div>
+<p>The field type of a member expression. <code>XM_FIELD</code> and <code>XM_FIELD_ARRAY</code> use it internally, so you rarely need it yourself. The supported types are <code>float</code>, <code>double</code>, <code>bool</code>, <code>int</code>, <code>unsigned</code> and <code>int8_t</code> ~ <code>uint64_t</code>. An enumeration member is accepted as the integer type of the same size. Any other type (<code>char</code>, pointer, struct, array, etc.) is a compile error.</p>
+<hr />
+<h2 id="support-header--xm_api_logging_rawh-do-not-call-directly">Support header — <code>xm_api_logging_raw.h</code> (do not call directly)<a class="headerlink" href="#support-header--xm_api_logging_rawh-do-not-call-directly" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>⚠️ <strong>Not a supported interface.</strong> It holds the prototypes of the functions that the <code>XM_LOG_REGISTER</code> and <code>XM_LOG_SEND</code> macros call. A <code>.c</code> file that uses the macros must include this header to compile. The functions below skip type and size checks, so the compiler cannot stop you from sending a different struct. Do not call them directly; always use the <code>XM_LOG_*</code> macros.</p>
+</blockquote>
+<h3 id="xm_log_registerschemaraw"><code>XM_Log_RegisterSchemaRaw</code><a class="headerlink" href="#xm_log_registerschemaraw" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_Log_RegisterSchemaRaw</span><span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">slot_io</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">module_id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">struct_name</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">struct_size</span><span class="p">,</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">                              </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">nominal_rate_hz</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">XM_FieldDesc_t</span><span class="o">*</span><span class="w"> </span><span class="n">fields</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">field_count</span><span class="p">);</span>
+</code></pre></div>
+<p>Called by <code>XM_LOG_REGISTER</code>.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>slot_io</code></td>
+<td><code>uint8_t*</code></td>
+<td>The token's slot variable — it registers only when it is <code>XM_LOG_SLOT_NONE</code>, and writes the slot number on success</td>
+</tr>
+<tr>
+<td><code>module_id</code></td>
+<td><code>uint8_t</code></td>
+<td>Module ID (<code>0xF0</code> ~ <code>0xFE</code>)</td>
+</tr>
+<tr>
+<td><code>struct_name</code></td>
+<td><code>const char*</code></td>
+<td>Struct name (token)</td>
+</tr>
+<tr>
+<td><code>struct_size</code></td>
+<td><code>uint16_t</code></td>
+<td>Struct size (bytes)</td>
+</tr>
+<tr>
+<td><code>nominal_rate_hz</code></td>
+<td><code>uint16_t</code></td>
+<td>Send rate (Hz)</td>
+</tr>
+<tr>
+<td><code>fields</code></td>
+<td><code>const XM_FieldDesc_t*</code></td>
+<td>Field description array</td>
+</tr>
+<tr>
+<td><code>field_count</code></td>
+<td><code>uint8_t</code></td>
+<td>Number of fields</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: registered. <code>false</code>: the slot was already registered or registration failed — <code>*slot_io</code> does not change.</p>
+<hr />
+<h3 id="xm_log_sendraw"><code>XM_Log_SendRaw</code><a class="headerlink" href="#xm_log_sendraw" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_Log_SendRaw</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">slot</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+<p>Called by <code>XM_LOG_SEND</code>.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>slot</code></td>
+<td><code>uint8_t</code></td>
+<td>The registered slot number</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>const void*</code></td>
+<td>The struct to send</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>uint16_t</code></td>
+<td>Struct size (bytes)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: sent. <code>false</code>: the slot is not registered, <code>size</code> differs from the struct size of that slot, <code>data</code> is <code>NULL</code>, called earlier than the registered period, the USB device is not ready, the transmit buffer is full, or called outside <code>Control_Setup()</code> and <code>Control_Loop()</code> (from another task or an interrupt). Even if <code>false</code> was returned because the transmit buffer was full, the next send goes out after the registered period has passed.</p>
+<hr />
+<h2 id="internal-only-do-not-use">Internal-only (do not use)<a class="headerlink" href="#internal-only-do-not-use" title="Permanent link">&para;</a></h2>
+<p>The macros whose names end in <code>_</code> (<code>XM_LOG_REQUIRE_</code>, <code>XM_FIELD_TYPE_NONE_</code>, <code>XM_TYPE_TAG_</code>, <code>XM_LOG_MEMBER_</code>, <code>XM_LOG_ARRLEN_</code>, <code>XM_LOG_IS_ARRAY_</code>, <code>XM_LOG_FIELD_COUNT_</code>) are helper definitions that other macros use. Do not use them in your code.</p>
+<hr />
+<h2 id="rev11--rev20-difference-summary">Rev1.1 / Rev2.0 Difference Summary<a class="headerlink" href="#rev11--rev20-difference-summary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Rev1.1</th>
+<th>Rev2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Struct logging (<code>xm_api_logging.h</code> · <code>xm_api_logging_raw.h</code>)</td>
+<td>❌ Absent</td>
+<td>🟢 Exclusive</td>
+</tr>
+<tr>
+<td>Existing way (<code>XM_SetUsbCustomMeta</code> + <code>XM_SendUsbDataWithId</code>)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-documents">Related Documents<a class="headerlink" href="#related-documents" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../10-struct-logging/">10. Struct Logging (concept)</a> — operating principle, limits, common mistakes</li>
+<li><a href="../xm-api-usb/"><code>xm_api_usb.h</code> — USB-CDC Real-Time Streaming</a> — the existing USB-CDC functions such as <code>XM_SendUsbDataWithId</code> and <code>XM_SetUsbCustomMeta</code></li>
+<li><a href="../../../getting-started/04-pc-data-tool/">Get Data on PC — the <code>xm10</code> tool</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../xm-api-usb-msc/" class="md-footer__link md-footer__link--prev" aria-label="Previous: xm_api_usb_msc.h (USB Memory)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                xm_api_usb_msc.h (USB Memory)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../xm-api-memory/" class="md-footer__link md-footer__link--next" aria-label="Next: xm_api_memory.h (Memory)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                xm_api_memory.h (Memory)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

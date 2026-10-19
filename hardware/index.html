@@ -360,6 +360,8 @@
       
         
       
+        
+      
     
     
     
@@ -504,6 +506,34 @@
     
   
     PC 에서 데이터 받기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/05-usb-memory-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리에 저장하기
   
 
     
@@ -746,6 +776,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -947,6 +981,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api-reference/06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리 저장
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api-reference/07-memory-management/" class="md-nav__link">
         
   
@@ -1030,11 +1092,43 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../api-reference/10-struct-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    구조체 로깅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
         
           
+        
+      
+        
+      
         
       
         
@@ -1067,7 +1161,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1089,14 +1183,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_10">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_12">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1263,6 +1357,62 @@
     
   
     xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/ref/xm-api-usb-msc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb_msc.h (USB 메모리)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/ref/xm-api-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (구조체 로깅)
   
 
     
@@ -1683,6 +1833,8 @@
       
         
       
+        
+      
     
     
     
@@ -1735,6 +1887,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.9.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2403,7 +2583,7 @@
 <tr>
 <td><strong>USB-C</strong></td>
 <td>1 개</td>
-<td>시리얼 통신 (CDC) — PC 실시간 연결</td>
+<td>시리얼 통신 (CDC) — PC 실시간 연결. Rev 2.0 은 USB 메모리에 저장할 수도 있습니다 (PC 와는 한 번에 하나만). (보드 확인 전) <!-- board-check --></td>
 </tr>
 <tr>
 <td><strong>외부 UART</strong></td>
@@ -2494,7 +2674,7 @@
 <p>EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.</p>
 </blockquote>
 <h3 id="usb-c-포트">USB-C 포트<a class="headerlink" href="#usb-c-포트" title="Permanent link">&para;</a></h3>
-<p>USB 시리얼 통신 (CDC) 로 실시간 데이터 스트리밍과 디버그 메시지를 주고받습니다.</p>
+<p>USB 시리얼 통신 (CDC) 로 실시간 데이터 스트리밍과 디버그 메시지를 주고받습니다. Rev 2.0 은 같은 포트에 USB 메모리를 꽂아 저장할 수도 있습니다. 포트가 하나라서 PC 와 USB 메모리는 한 번에 하나만 씁니다.</p>
 <table>
 <thead>
 <tr>
@@ -2508,6 +2688,11 @@
 <td>시리얼 (CDC)</td>
 <td>PC 터미널(텍스트 디버그) / <code>xm10</code> 도구(사용자 구조체)로 전송. PhAI Studio 는 Total Data(0x20)를 표시</td>
 <td><code>XM_SendUsbDebugMessage</code>, <code>XM_SendUsbDataWithId</code></td>
+</tr>
+<tr>
+<td>USB 메모리 저장 🟢 <strong>Rev 2.0 전용</strong></td>
+<td>USB 메모리에 구조체 하나를 정한 주기로 저장하고, 저장한 폴더를 PC 에서 풂 (<a href="../api-reference/06-usb-data-logging/">USB 메모리 저장</a>). 꽂아 두는 동안에는 PC 와 USB 로 연결되지 않습니다. (보드 확인 전)</td>
+<td><code>XM_SetUsbLogSource</code>, <code>XM_StartUsbDataLog</code>, <code>XM_StopUsbDataLog</code> <!-- board-check --></td>
 </tr>
 </tbody>
 </table>

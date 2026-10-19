@@ -360,6 +360,8 @@
       
         
       
+        
+      
     
     
     
@@ -504,6 +506,34 @@
     
   
     PC 에서 데이터 받기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/05-usb-memory-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리에 저장하기
   
 
     
@@ -744,6 +774,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -945,6 +979,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../api-reference/06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리 저장
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api-reference/07-memory-management/" class="md-nav__link">
         
   
@@ -1028,11 +1090,43 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../api-reference/10-struct-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    구조체 로깅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
         
           
+        
+      
+        
+      
         
       
         
@@ -1065,7 +1159,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1087,14 +1181,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_10" id="__nav_6_10_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_10">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_12">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1261,6 +1355,62 @@
     
   
     xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/ref/xm-api-usb-msc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb_msc.h (USB 메모리)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/ref/xm-api-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (구조체 로깅)
   
 
     
@@ -1880,6 +2030,8 @@
       
         
       
+        
+      
     
     
     
@@ -1932,6 +2084,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.9.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2532,7 +2712,9 @@
 <h1 id="ai-학습-데이터-파이프라인">AI 학습 데이터 파이프라인<a class="headerlink" href="#ai-학습-데이터-파이프라인" title="Permanent link">&para;</a></h1>
 <p>XM10 보드에서 모은 외골격 데이터를 PyTorch / scikit-learn 같은 학습 프레임워크로 가져가는 흐름을 한 페이지에 정리했습니다. AI 모델 학습이 목표라면 이 페이지를 흐름표로 두고 작업하세요.</p>
 <blockquote>
-<p>USB 메모리(MSC) 파일 로깅 기능은 v2.5.0 에서 제거되었습니다. 데이터 수집은 <strong>USB-CDC 실시간 스트리밍</strong>으로 하며, 아래 길 A 가 표준 경로입니다. 온보드 저장(SD카드)은 현재 지원하지 않습니다.</p>
+<p>Rev 2.0 SDK(v2.9.0)에는 보드가 USB 메모리에 직접 저장하는 기능이 다시 들어 있습니다 (<a href="../../api-reference/06-usb-data-logging/">USB 메모리 저장</a>). Rev 1.1 에는 이 기능이 없습니다. 이 기능은 보드에서 시험하기 전입니다. (보드 확인 전) <!-- board-check --></p>
+<p>저장한 폴더는 PC 의 XM10 Log Decoder 로 CSV 로 풀 수 있습니다 (<a href="../../getting-started/05-usb-memory-log/">안내</a>). 빠진 표본을 보간으로 채운 행은 측정값이 아니니, 학습에 쓰기 전에 어떻게 다룰지 정하세요.</p>
+<p>이 페이지의 표준 경로는 아래 길 A(<strong>USB-CDC 실시간 스트리밍</strong>)입니다. 온보드 저장(SD카드)은 현재 지원하지 않습니다.</p>
 </blockquote>
 <hr />
 <h2 id="큰-그림">큰 그림<a class="headerlink" href="#큰-그림" title="Permanent link">&para;</a></h2>
