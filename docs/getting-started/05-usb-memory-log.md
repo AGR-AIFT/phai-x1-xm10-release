@@ -104,17 +104,17 @@ USB 메모리는 **FAT32** 여야 합니다. exFAT 과 NTFS 는 인식하지 않
 
 ## 5. PC 에서 풀기 — XM10 Log Decoder
 
-저장한 폴더는 **XM10 Log Decoder** 로 풉니다. Windows 에서 쓰는 설치형 프로그램이고, 파이썬은 필요 없습니다. <!-- release-check -->
+저장한 폴더는 **XM10 Log Decoder** 로 풉니다. Windows 에서 쓰는 설치형 프로그램이고, 파이썬은 필요 없습니다.
 
 이 문서는 XM10 Log Decoder 2.2.0 이상 기준입니다.
 
 ### 디코더 받기
 
-1. 릴리스 페이지의 첨부 파일(Assets)에서 설치 파일(`XM10LogDecoder_Setup_` 으로 시작하는 `.exe`)을 받습니다. <!-- release-check -->
-2. 브라우저가 `.exe` 다운로드를 막으면 같은 이름의 `.zip` 으로 받아 압축을 풉니다. <!-- release-check -->
-3. 받은 파일이 맞는지 확인하려면 첨부된 `SHA256SUMS.txt` 와 비교합니다. PowerShell 에서 `Get-FileHash <받은 파일>` 을 실행하면 값이 나옵니다. <!-- release-check -->
-4. 설치 파일을 실행합니다. 처음 실행할 때 Windows 가 "알 수 없는 게시자" 경고를 보여 줄 수 있습니다. **추가 정보** → **실행** 을 누르세요. <!-- release-check -->
-5. 설치가 끝나면 시작 메뉴에서 **XM10 Log Decoder** 를 실행합니다. <!-- release-check -->
+1. 릴리스 페이지의 첨부 파일(Assets)에서 설치 파일(`XM10LogDecoder_Setup_` 으로 시작하는 `.exe`)을 받습니다.
+2. 브라우저가 `.exe` 다운로드를 막으면 같은 이름의 `.zip` 으로 받아 압축을 풉니다.
+3. 받은 파일이 맞는지 확인하려면 첨부된 `SHA256SUMS.txt` 와 비교합니다. PowerShell 에서 `Get-FileHash <받은 파일>` 을 실행하면 값이 나옵니다.
+4. 설치 파일을 실행합니다. 처음 실행할 때 Windows 가 "알 수 없는 게시자" 경고를 보여 줄 수 있습니다. **추가 정보** → **실행** 을 누르세요.
+5. 설치가 끝나면 시작 메뉴에서 **XM10 Log Decoder** 를 실행합니다.
 
 ### 디코더로 풀기
 
