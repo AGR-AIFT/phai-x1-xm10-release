@@ -118,11 +118,6 @@ static void (* volatile s_tx_cplt_cb)(void) = NULL;
 static void (* volatile s_rx_cplt_cb)(uint8_t*, uint32_t) = NULL;
 static void (* volatile s_dtr_change_cb)(uint8_t) = NULL;
 
-/* [FTP] Deferred TX: CDC_Receive_FS(ISR)에서 TX BUSY 시 저장, TxComplete에서 우선 전송 */
-__attribute__((section(D3_NON_CACHE_SECTION))) IOIF_DMA_ALIGNED
-static uint8_t s_ftp_deferred_buf[64];
-static volatile uint32_t s_ftp_deferred_len = 0;
-
 /* USER CODE END PRIVATE_VARIABLES */
 
 /**
@@ -375,17 +370,6 @@ static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
   /* USER CODE BEGIN 13 */
   UNUSED(Buf); UNUSED(Len); UNUSED(epnum);
 
-  /* [FTP] Deferred FTP response — 스트리밍보다 우선 전송.
-   * CDC_Receive_FS(ISR)에서 TX BUSY로 실패한 FTP 응답을 여기서 재시도.
-   * 성공 시 이번 사이클은 스트리밍 TxComplete를 스킵하고,
-   * 다음 TxComplete에서 스트리밍이 재개됨 (최대 1ms 지연). */
-  if (s_ftp_deferred_len > 0) {
-      if (CDC_Transmit_FS(s_ftp_deferred_buf, (uint16_t)s_ftp_deferred_len) == USBD_OK) {
-          s_ftp_deferred_len = 0;
-          return USBD_OK;
-      }
-  }
-
   // 등록된 Tx 완료 콜백을 파라미터와 함께 호출합니다.
   /* 전송 완료 사실을 상위 계층(IOIF)에 알림 -> 다음 데이터 전송 트리거 */
   if (s_tx_cplt_cb != NULL) {
@@ -406,9 +390,8 @@ static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
  *        UserTask 에서의 직접 호출은 USB ISR 연쇄 전송(_TryTransmit)과 TxState
  *        check-and-set 이 경합해 EP 이중 arm 위험이 있었다. FTP 가 UserTask(=링의
  *        유일 producer)에서 실행되므로 링 경유가 단일 TX owner 원칙에 정합.
- *        (구 deferred-buf 재전송 경로는 휴면화 — CDC_TransmitCplt_FS 의 잔여
- *        로직은 무해하게 유지. 링 만석 시 응답 유실 가능하나 GUI 의 QUERY_INFO
- *        는 폴링형이라 재시도로 복구됨.)
+ *        (링 만석 시 응답 유실 가능하나 GUI 의 QUERY_INFO 는 폴링형이라
+ *        재시도로 복구됨.)
  */
 static int32_t _Boot_FTP_CdcTxWrapper(const uint8_t* data, uint32_t len)
 {

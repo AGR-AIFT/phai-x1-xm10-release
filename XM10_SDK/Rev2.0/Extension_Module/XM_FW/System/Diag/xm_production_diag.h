@@ -45,7 +45,7 @@ extern "C" {
 
 /**
  * @brief 1ms tick 갱신 — 버튼/CM Link/GRF Detail 미러 갱신 + LED ALL-ON 적용.
- * @details XM_USB_ProcessPeriodic() 안 XM_Stimulus_UpdateConnectedStatus()
+ * @details USB 주기 처리(1ms) 안 XM_Stimulus_UpdateConnectedStatus()
  *          직후 호출 (UserTask 1kHz 컨텍스트, core_process.c 참조). Control_Loop
  *          이 PRODUCTION 모드에서 스킵되는 것과 무관하게 항상 실행되어야
  *          검사 채널이 최신 상태를 본다.

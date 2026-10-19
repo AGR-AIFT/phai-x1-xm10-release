@@ -1,6 +1,6 @@
 # XM10 예제
 
-45 개의 실습 예제입니다. 각 폴더에 소스 코드 `.c` 와 그 예제만의 설명서 `README.md` 가 함께 들어있습니다.
+48 개의 실습 예제입니다. 각 폴더에 소스 코드 `.c` 와 그 예제만의 설명서 `README.md` 가 함께 들어있습니다.
 
 - API 함수 명세: [docs/api-reference/](../docs/api-reference/)
 - 단계별 학습 안내: [docs/tutorials/](../docs/tutorials/)
@@ -19,7 +19,7 @@
 
 여기까지 약 2 시간입니다. 외부 부품 없이 보드 하나로 다 됩니다. Ex.04 부터 외부 입출력과 센서로 넓혀갑니다.
 
-**보드 리비전 호환성** — 45 개 예제 중 40 개는 Rev 1.1 / Rev 2.0 양쪽 모두 빌드·실행됩니다. 나머지 5 개는 Rev 2.0 전용입니다. Ex.36 OnDevice Kinesthetic Learning, Ex.40 EMG Proportional Assist, Ex.41 IMU Hub Dashboard, Ex.42 EMG Hub Biofeedback, Ex.43 External UART Ping-Pong 은 **Rev 1.1 SDK 에 포함되지 않습니다**(그래서 Rev 1.1 SDK 는 40 개). ⚠️ 특히 **Ex.43 은 Rev 1.1 보드에 그대로 배선하면 안 됩니다** — Rev 1.1 의 PD6 은 USB 전원을 켜고 끄는 출력 핀이라 상대 보드의 TX 와 맞부딪칩니다. 그 외 두 가지 주의 사항이 있습니다.
+**보드 리비전 호환성** — 48 개 예제 중 40 개는 Rev 1.1 / Rev 2.0 양쪽 모두 빌드·실행됩니다. 나머지 8 개는 Rev 2.0 전용입니다. Ex.10 USB Memory Log, Ex.34 USB Memory Gait Log, Ex.36 OnDevice Kinesthetic Learning, Ex.40 EMG Proportional Assist, Ex.41 IMU Hub Dashboard, Ex.42 EMG Hub Biofeedback, Ex.43 External UART Ping-Pong, Ex.44 CDC Struct Logging 은 **Rev 1.1 SDK 에 포함되지 않습니다**(그래서 Rev 1.1 SDK 는 40 개). ⚠️ 특히 **Ex.43 은 Rev 1.1 보드에 그대로 배선하면 안 됩니다** — Rev 1.1 의 PD6 은 USB 전원을 켜고 끄는 출력 핀이라 상대 보드의 TX 와 맞부딪칩니다. 그 외 두 가지 주의 사항이 있습니다.
 
 - ⚠️ **본인 보드와 같은 Rev 의 ZIP** 을 받아야 합니다. `Rev1.1.zip` 과 `Rev2.0.zip` 은 보드별 main.h (MCU 핀 매핑) 가 다른 독립 SDK 입니다. 보드는 Rev 2.0 인데 `Rev1.1.zip` 을 풀어 빌드하면 — 빌드는 통과하지만 — 내장 버튼/LED 의 핀이 한 칸씩 어긋나서 Ex.01~03 의 버튼이 안 눌리거나 엉뚱한 `XM_BTN_N` 으로 잡힙니다. 보드 라벨을 먼저 확인하세요 ([보드 리비전 비교](../docs/hardware/README.md#보드-리비전-비교)).
 - 외부 GPIO 를 직접 다루는 예제 (Ex.04~06, Ex.05a~05d, Ex.16 외부 IMU 모드) 는 커넥터 위치·핀 라벨이 리비전마다 다릅니다. 시작 전에 본인 보드의 핀맵을 펴두세요 — [Rev 1.1 핀맵](../docs/hardware/external-gpio-rev1.1.md) / [Rev 2.0 핀맵](../docs/hardware/external-gpio-rev2.0.md).
@@ -32,12 +32,12 @@
 
 ## 큰 그림 — 5 단계 학습 흐름
 
-기본기를 다진 다음, 45 개 예제는 다섯 단계의 흐름 + 외부 센서 허브 연동(Ex.40~42) + 외부 장비 연동(Ex.43)을 따라갑니다. "로봇이 인간을 어떻게 이해하고, 함께 성장하는가" 라는 한 줄로 묶을 수 있습니다.
+기본기를 다진 다음, 48 개 예제는 다섯 단계의 흐름 + 외부 센서 허브 연동(Ex.40~42) + 외부 장비 연동(Ex.43)을 따라갑니다. "로봇이 인간을 어떻게 이해하고, 함께 성장하는가" 라는 한 줄로 묶을 수 있습니다.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Foundation   기본 입출력과 도구
-             (00~09, 18, 19 — 언제든 돌아와 참고)
+             (00~10, 18, 19, 34, 44 — 언제든 돌아와 참고)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Stage 1      투명한 로봇 만들기
              착용자가 로봇의 무게·저항을 못 느끼게
@@ -77,8 +77,11 @@ Stage 5      사람과 AI 가 함께
 01~03  Button & LED          ← 기본 UI 제어
 04~06  External I/O          ← GPIO, ADC, FSR 센서
 07~09  USB CDC               ← 텍스트 → Total Data → User Custom 스트리밍
+10  USB Memory Log           ← USB 메모리에 저장 (Rev 2.0 전용)
 18  Debug Monitor            ← 루프 타이밍, Health 대시보드
 19  Memory Aware Design      ← 링 버퍼, 풀 할당자
+34  USB Memory Gait Log      ← H10 보행 데이터를 1 kHz 로 저장 (Rev 2.0 전용)
+44  CDC Struct Logging       ← 구조체를 이름 · 단위 · 타입과 함께 PC 로 (Rev 2.0 전용)
 ```
 
 ---
@@ -206,7 +209,22 @@ Stage 5      사람과 AI 가 함께
 
 > **Ex.09 핵심**: Total Data(0x20) 365B 자동 스트리밍 구조 이해 + User Custom(0xF0) 추가 채널 등록 방법
 
-데이터 수집은 Ex.07~09 CDC 로 합니다.
+### 구조체 로깅 (44)
+
+| 예제 | 제목 | 난이도 | 핵심 API |
+| :---: | :--- | :---: | :--- |
+| [44](44_CDC_Struct_Logging/) | 구조체를 이름 · 단위 · 타입과 함께 PC 로 보내기 🛑 **Rev 2.0 전용** | 중급 | `XM_LOG_DECLARE`, `XM_LOG_FIELDS`, `XM_LOG_REGISTER`, `XM_LOG_SEND` |
+
+### USB 메모리 저장 (10, 34)
+
+> USB-C 포트는 하나입니다. USB 메모리를 꽂아 두는 동안에는 PhAI Studio · `xm10` 도구 · USB 로 하는 펌웨어 업로드를 쓸 수 없습니다. 저장이 끝나면 USB 메모리를 뽑고 PC 를 연결하세요. (보드 확인 전) <!-- board-check -->
+
+| 예제 | 제목 | 난이도 | 핵심 API |
+| :---: | :--- | :---: | :--- |
+| [10](10_USB_Memory_Log/) | USB 메모리에 값 저장하기 🛑 **Rev 2.0 전용** | 중급 | `XM_SetUsbLogSource`, `XM_StartUsbDataLog`, `XM_StopUsbDataLog` |
+| [34](34_USB_Memory_Gait_Log/) | H10 보행 데이터를 USB 메모리에 1 kHz 로 저장 🛑 **Rev 2.0 전용** | 중급 | `XM_SetUsbLogSampleRateHz`, `XM_InsertUsbLogMarker`, `XM_SendUserBodyData` |
+
+PC 로 보내 수집하려면 Ex.07~09 (USB-CDC) 와 Ex.44 를, USB 메모리에 저장하려면 Ex.10 · Ex.34 를 보세요. Ex.10 · 34 · 44 는 Rev 2.0 에서만 쓸 수 있습니다.
 
 ---
 

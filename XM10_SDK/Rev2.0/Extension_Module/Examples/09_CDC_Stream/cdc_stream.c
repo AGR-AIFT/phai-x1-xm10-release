@@ -11,7 +11,7 @@
  * [USB-CDC 스트림 구조]
  * ┌─────────────────────────────────────────────────────────────────┐
  * │  Module ID 0x20  │ Total Data Packet  │ XM10 자동 (1ms 주기)   │
- * │  Module ID 0xEF  │ User Meta (JSON)   │ XM10 — 접속 시 1회     │
+ * │  Module ID 0xEF  │ User Meta (JSON)   │ XM10 — 포트 열 때마다  │
  * │  Module ID 0xF0  │ User Custom Data   │ Control_Loop에서 호출  │
  * └─────────────────────────────────────────────────────────────────┘
  *
@@ -44,7 +44,7 @@
  *-----------------------------------------------------------
  */
 
-/* User Custom 채널 수 (float 기준, 권장 최대 10개) */
+/* User Custom 채널 수 (float 기준) */
 #define USER_CH_COUNT   4U
 
 /**
@@ -117,8 +117,8 @@ void Control_Setup(void)
      *
      * Total Data에 없는 알고리즘 변수를 추가로 전송할 때 사용합니다.
      * Control_Setup에서 채널 이름/단위를 JSON으로 등록하면 xm10 도구에 채널 이름으로 표시됩니다.
-     * 채널 이름은 프로그램이 연결될 때 한 번 전달됩니다. 이름이 안 보이면 USB 케이블을 다시 꽂고 연결하세요.
-     * (JSON 은 512바이트까지, 등록은 Module ID 1개만 가능)
+     * 채널 이름은 PC 프로그램이 포트를 열 때마다 전달됩니다.
+     * (JSON 은 1,007바이트까지 — 더 길면 XM_SetUsbCustomMeta 가 false. 등록은 Module ID 1개만 가능)
      * PhAI Studio 는 아직 개발 중이라, 직접 정의한 데이터 구조체(커스텀 구조체)는 우선 xm10 도구로 보고 저장하세요.
      */
     XM_SetUsbCustomMeta(0xF0,

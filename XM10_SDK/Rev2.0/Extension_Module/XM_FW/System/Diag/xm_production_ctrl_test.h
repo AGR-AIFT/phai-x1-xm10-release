@@ -91,7 +91,7 @@ void XM_ProductionCtrlTest_Init(void);
  * 스레드 안전 계약: xm_production_diag.h 와 동일 — 모든 mirror 변수는 volatile
  * 단일 word(uint8/uint16/int16). writer=UserTask(1kHz, Poll()/Step()),
  * reader=USB SDO 핸들러(동일 UserTask 컨텍스트, cdc_dop_router.c 참조,
- * XM_USB_ProcessPeriodic() 이 core_process.c Step4 에서 호출됨). 멀티워드
+ * USB 주기 처리는 core_process.c Step4 에서 호출됨). 멀티워드
  * 일관성이 필요한 구조는 두지 않는다.
  */
 
