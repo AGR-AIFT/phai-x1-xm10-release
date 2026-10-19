@@ -72,7 +72,8 @@ def _module_label(mid: int) -> str:
 
 
 # 값으로 풀지 않고 원본만 남길 채널 — 제어/메타라 열로 펴는 게 의미가 없다.
-_RAW_ONLY = frozenset({R.MODULE_ID_USER_META, R.MODULE_ID_SCHEMA_DESC})
+# 링크 상태(0xED)도 여기다: 이 도구는 그 값의 뜻을 풀지 않으므로, float32 로 가정해 열로 펴면 뜻 없는 값이 된다.
+_RAW_ONLY = frozenset({R.MODULE_ID_USER_META, R.MODULE_ID_SCHEMA_DESC, R.MODULE_ID_LINK_HEALTH})
 
 _USER_MODULES = range(0xF0, 0xFF)       # 0xF0~0xFE — 0xEE 스키마가 붙을 수 있는 대역
 

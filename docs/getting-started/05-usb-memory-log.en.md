@@ -104,17 +104,17 @@ This example uses the plain-terminal setting, so the PhAI Studio real-time view 
 
 ## 5. Decode on the PC — XM10 Log Decoder
 
-Decode the saved folder with **XM10 Log Decoder**. It is an installer-based Windows program, and Python is not required. <!-- release-check -->
+Decode the saved folder with **XM10 Log Decoder**. It is an installer-based Windows program, and Python is not required.
 
 This document is based on XM10 Log Decoder 2.2.0 or later.
 
 ### Get the Decoder
 
-1. From the files attached to the release page (Assets), download the installer (the `.exe` whose name starts with `XM10LogDecoder_Setup_`). <!-- release-check -->
-2. If your browser blocks the `.exe` download, download the `.zip` with the same name and extract it. <!-- release-check -->
-3. To check that the file is correct, compare it with the attached `SHA256SUMS.txt`. Run `Get-FileHash <downloaded file>` in PowerShell to get the value. <!-- release-check -->
-4. Run the installer. The first time, Windows may show an "unknown publisher" warning. Click **More info** → **Run anyway**. <!-- release-check -->
-5. When the installation finishes, start **XM10 Log Decoder** from the Start menu. <!-- release-check -->
+1. From the files attached to the release page (Assets), download the installer (the `.exe` whose name starts with `XM10LogDecoder_Setup_`).
+2. If your browser blocks the `.exe` download, download the `.zip` with the same name and extract it.
+3. To check that the file is correct, compare it with the attached `SHA256SUMS.txt`. Run `Get-FileHash <downloaded file>` in PowerShell to get the value.
+4. Run the installer. The first time, Windows may show an "unknown publisher" warning. Click **More info** → **Run anyway**.
+5. When the installation finishes, start **XM10 Log Decoder** from the Start menu.
 
 ### Decode
 

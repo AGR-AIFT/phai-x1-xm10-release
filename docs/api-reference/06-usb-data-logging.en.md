@@ -223,9 +223,9 @@ You cannot send statistics to the PC while logging. After logging ends, once you
 
 ## Decoding on the PC
 
-Move the saved `LOGS` folder to a PC and decode it with **XM10 Log Decoder**. It is an installer-based Windows program, and Python is not required. <!-- release-check -->
+Move the saved `LOGS` folder to a PC and decode it with **XM10 Log Decoder**. It is an installer-based Windows program, and Python is not required.
 
-- Get the decoder from the files attached to the release page. <!-- release-check -->
+- Get the decoder from the files attached to the release page.
 - The decoder produces the data table (`decoded_output.csv` for 1000 Hz; for other rates `decoded_output_<rate>hz.csv`, for example `decoded_output_100hz.csv` for 100 Hz), `events.csv` if you inserted markers, and `data_quality_report.txt`.
 - Missing samples are filled in by interpolation and marked `1` in the `row_origin` column. Interpolated values are not measured values.
 - If the verdict in `data_quality_report.txt` is `GOOD`, `USABLE` or `WARNING`, the recording is acceptable. If it is `RE-COLLECT`, `INVALID` or `UNVERIFIED`, record again.

@@ -223,9 +223,9 @@ void Control_Loop(void)
 
 ## PC 에서 풀기
 
-저장한 `LOGS` 폴더를 PC 로 옮겨 **XM10 Log Decoder** 로 풉니다. Windows 에서 쓰는 설치형 프로그램이고, 파이썬은 필요 없습니다. <!-- release-check -->
+저장한 `LOGS` 폴더를 PC 로 옮겨 **XM10 Log Decoder** 로 풉니다. Windows 에서 쓰는 설치형 프로그램이고, 파이썬은 필요 없습니다.
 
-- 디코더는 릴리스 페이지의 첨부 파일에서 받습니다. <!-- release-check -->
+- 디코더는 릴리스 페이지의 첨부 파일에서 받습니다.
 - 디코더는 데이터 표(1000 Hz 는 `decoded_output.csv`, 그 밖의 주기는 `decoded_output_<주기>hz.csv`. 예: 100 Hz 는 `decoded_output_100hz.csv`), 마커가 있으면 `events.csv`, 그리고 `data_quality_report.txt` 를 만듭니다.
 - 빠진 표본은 보간으로 메우고 `row_origin` 열에 `1` 로 표시합니다. 보간한 값은 측정값이 아닙니다.
 - `data_quality_report.txt` 의 판정이 `GOOD` · `USABLE` · `WARNING` 이면 받아들일 수 있는 저장입니다. `RE-COLLECT` · `INVALID` · `UNVERIFIED` 이면 다시 저장하세요.

@@ -1223,6 +1223,29 @@ def test_export_cli_reports_swaps_and_reconnects(tmp):
     assert "fw='unknown'" in text, "펌웨어 빌드는 모른다고 적는다"
 
 
+def test_link_health_0xed_exports_raw_hex(tmp):
+    """링크 상태(0xED)는 값으로 풀지 않는다 — CSV 에는 받은 바이트를 hex 로 적는다(0xEF · 0xEE 와 같다).
+
+    예전에는 0xED 가 '타입 모르는 채널' 로 내려가 float32 로 가정돼, 정수 카운터가 뜻 없는 소수로 찍혔다.
+    값의 뜻은 시험하지 않는다 — 20 B 아무 바이트면 된다.
+    """
+    health = struct.pack("<5I", 3, 0, 1, 12345, 0x07000042)
+    p = os.path.join(tmp, "h.xmlog")
+    cap = XmLogCapture(p, flush_every=1)
+    f = Feeder(cap)
+    f.send(F0, _xy(1.0, 1))
+    f.send(0xED, health)
+    f.send(0xED, health)
+    cap.close()
+
+    res = X.read_file(p)
+    assert res.stopped_reason is None, res.stopped_reason
+    out, _txt = _export(res, os.path.join(tmp, "csv"))
+    hdr, rows = out["t_health_0xED.csv"]
+    assert hdr[3:] == ["payload_hex"], "0xED 는 raw 로 남아야 한다: %r" % (hdr,)
+    assert [r[3] for r in rows] == [health.hex()] * 2, rows
+
+
 # =============================================================================
 # Runner
 # =============================================================================
@@ -1275,6 +1298,7 @@ def main():
         ("reader reports broken activation records", test_reader_reports_broken_activation_records),
         ("summary counts a schema once", test_summary_registry_counts_a_schema_once),
         ("export CLI reports swaps / reconnects", test_export_cli_reports_swaps_and_reconnects),
+        ("link health 0xED exports as raw hex", test_link_health_0xed_exports_raw_hex),
     ]
 
     failed = 0
