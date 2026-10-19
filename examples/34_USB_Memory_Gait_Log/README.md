@@ -43,7 +43,7 @@ H10 을 연결하고 착용자가 입은 뒤 버튼 1 을 누르면, H10 의 보
 | `fsm_state` | H10 의 FSM 상태 |
 | `h10_connected` | H10 연결 여부 (0 이면 H10 값을 믿지 마세요) |
 
-→ 저장한 폴더는 USB 메모리의 `/LOGS/<날짜_시각>/` 입니다. PC 로 옮겨 XM10 Log Decoder 로 풀면 CSV 가 나오고, 빠진 표본이 있으면 그 위치와 길이를 알려 줍니다. 사용법은 [USB 메모리에 저장하기](../../docs/getting-started/05-usb-memory-log.md) 에 있습니다. <!-- release-check -->
+→ 저장한 폴더는 USB 메모리의 `/LOGS/<날짜_시각>/` 입니다. PC 로 옮겨 XM10 Log Decoder 로 풀면 CSV 가 나오고, 빠진 표본이 있으면 그 위치와 길이를 알려 줍니다. 사용법은 [USB 메모리에 저장하기](../../docs/getting-started/05-usb-memory-log.md) 에 있습니다.
 
 | 버튼 | 동작 |
 |:---:|------|
@@ -136,7 +136,7 @@ void Control_Loop(void)
 6. **버튼 1 (짧게)** → ✅ LED 2 가 빠르게 깜빡이다가(파일을 여는 중) 천천히 깜빡입니다(저장 중)
 7. **걷기** — 출발하는 순간 버튼 2, 표시하고 싶은 순간 버튼 3 을 누릅니다 → ✅ 마커가 들어갑니다. LED 3 이 짧게 한 번 켜지면 마커를 넣지 못한 것입니다
 8. **버튼 1 다시** → ✅ LED 2 가 빠르게 깜빡이는 동안은 파일을 닫는 중이니 기다립니다. LED 2 가 켜진 채로 있으면 저장이 끝난 것이니 USB 메모리를 뽑아도 됩니다. (보드 확인 전) <!-- board-check -->
-9. **디코더로 풀기** — USB 메모리의 `/LOGS/<날짜_시각>/` 폴더를 PC 로 옮겨 XM10 Log Decoder 2.2.0 이상으로 풉니다 → ✅ `decoded_output.csv` (1 kHz) · `events.csv` · `data_quality_report.txt` 가 만들어집니다. 디코더는 릴리스 페이지의 첨부 파일에서 받습니다. <!-- release-check -->
+9. **디코더로 풀기** — USB 메모리의 `/LOGS/<날짜_시각>/` 폴더를 PC 로 옮겨 XM10 Log Decoder 2.2.0 이상으로 풉니다 → ✅ `decoded_output.csv` (1 kHz) · `events.csv` (마커를 넣었다면) · `data_quality_report.txt` 가 만들어집니다. 디코더는 릴리스 페이지의 첨부 파일에서 받습니다. <!-- release-check -->
 10. **변형 1 — 저장 주기 바꾸기**: `LOG_SAMPLE_RATE_HZ` 를 `100` 으로 바꿔 저장해 보고, 디코더가 만드는 파일 이름(`decoded_output_100hz.csv`)과 행 수가 1000 Hz 일 때와 어떻게 다른지 보세요. 저장 주기가 다른 로그의 판정은 그대로 비교하지 마세요.
 11. **변형 2 — 필드 빼기**: 필요 없는 필드를 빼서 구조체를 줄입니다. 구조체 · 메타 줄 · `_Static_assert` 의 크기를 함께 고칩니다.
 12. **변형 3 — 마커 종류 바꾸기**: `MARKER_WALK_START` · `MARKER_EVENT` 의 값(1 ~ 254, 뜻은 직접 정합니다)을 바꿔 봅니다.

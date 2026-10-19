@@ -188,7 +188,7 @@ The XM10 has a single USB-C port. While a USB memory stick is plugged in, you ca
 
 > 🟢 **Rev 2.0 only** — How to read the verdict is explained in [Save Data to a USB Memory Stick](getting-started/05-usb-memory-log.en.md).
 
-`RE-COLLECT` means many samples are missing or the gaps are long, so we recommend recording again. <!-- release-check -->
+`RE-COLLECT` means many samples are missing or the gaps are long, so we recommend recording again.
 
 **Resolution steps:**
 1. Fully format the stick as FAT32 (32 KB allocation unit) and record again

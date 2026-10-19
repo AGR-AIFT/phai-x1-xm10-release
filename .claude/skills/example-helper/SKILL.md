@@ -76,7 +76,7 @@ description: |
 | Ex.10/34 — "LED 1 이 안 켜짐" | USB 메모리가 FAT32 가 아님 (exFAT · NTFS 는 인식하지 않음) | FAT32 로 포맷 (할당 단위 32 KB 권장) — 포맷하면 파일이 모두 지워지니 먼저 옮기기 |
 | Ex.10/34 — "LED 3 이 켜지고 저장이 시작 안 됨" | 시작하지 못함 (빈 공간 부족, 같은 이름 폴더가 다른 설정으로 이미 있음 등) | 디버거 Live Expressions 로 `g_last_start_error` 확인 (`XmUsbLogStartError_e`) |
 | Ex.10/34 — "저장 중에 PhAI Studio · `xm10` 도구가 보드를 못 찾음" | USB-C 포트는 하나 — USB 메모리를 꽂아 둔 동안 PC 와 연결되지 않음 | 저장이 끝나면 USB 메모리를 뽑고 PC 를 연결 (보드 확인 전) <!-- board-check --> |
-| Ex.44 — "탭이 안 생김 / LED 3 이 빠르게 깜빡임" | 구조체 등록이 거절됨 (이름 · 단위 길이, 주기 0, 같은 모듈 ID 등) 또는 예전 릴리스의 `xm10` 도구 | 디버거로 `g_sensor_log_ok` · `g_status_log_ok` 확인, SDK 에 들어 있는 `xm10` 도구 사용 <!-- release-check --> |
+| Ex.44 — "탭이 안 생김 / LED 3 이 빠르게 깜빡임" | 구조체 등록이 거절됨 (이름 · 단위 길이, 주기 0, 같은 모듈 ID 등) 또는 예전 릴리스의 `xm10` 도구 | 디버거로 `g_sensor_log_ok` · `g_status_log_ok` 확인, SDK 에 들어 있는 `xm10` 도구 사용 |
 | Ex.14~17 — "제어 발산" | PD gain 너무 큼 | gain 절반으로 줄이고 재실험 |
 | `undefined reference` (라이브러리 심볼, Rev 2.0 전용 예제 제외) | SDK 폴더 손상 의심 | Phase 2 재실행 |
 | "LED 안 켜짐" | 플래시 실패 또는 hang | Phase 4/5 재진행 |

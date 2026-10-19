@@ -134,7 +134,7 @@ void Control_Loop(void)
 - 주기에 비해 구조체가 크면 시작하지 않고 `XM_USB_LOG_START_TOO_BIG_FOR_RATE` 를 돌려줍니다.
 - 구조체를 작게 만들면 내부 버퍼 여유가 늘어납니다. 꼭 필요한 값만 담으세요.
 - 1000 Hz 로 저장하면 표본이 일부 빠질 수 있습니다. 빠진 수와 가장 긴 공백은 `XM_GetUsbLogStats()` 와 디코더 결과에 나옵니다.
-- 디코더 보고서에 "내부 버퍼 여유: 부족" 이 나오면 구조체를 줄이거나 저장 주기를 낮춰 보세요. <!-- release-check -->
+- 디코더 보고서에 "내부 버퍼 여유: 부족" 이 나오면 구조체를 줄이거나 저장 주기를 낮춰 보세요.
 
 타임스탬프를 켠 기본 설정에서 시작할 수 있는 구조체 크기입니다.
 
@@ -226,7 +226,7 @@ void Control_Loop(void)
 저장한 `LOGS` 폴더를 PC 로 옮겨 **XM10 Log Decoder** 로 풉니다. Windows 에서 쓰는 설치형 프로그램이고, 파이썬은 필요 없습니다. <!-- release-check -->
 
 - 디코더는 릴리스 페이지의 첨부 파일에서 받습니다. <!-- release-check -->
-- 디코더는 데이터 표(1000 Hz 는 `decoded_output.csv`, 그 밖의 주기는 `decoded_output_<주기>hz.csv`. 예: 100 Hz 는 `decoded_output_100hz.csv`), 마커가 있으면 `events.csv`, 그리고 `data_quality_report.txt` 를 만듭니다. <!-- release-check -->
+- 디코더는 데이터 표(1000 Hz 는 `decoded_output.csv`, 그 밖의 주기는 `decoded_output_<주기>hz.csv`. 예: 100 Hz 는 `decoded_output_100hz.csv`), 마커가 있으면 `events.csv`, 그리고 `data_quality_report.txt` 를 만듭니다.
 - 빠진 표본은 보간으로 메우고 `row_origin` 열에 `1` 로 표시합니다. 보간한 값은 측정값이 아닙니다.
 - `data_quality_report.txt` 의 판정이 `GOOD` · `USABLE` · `WARNING` 이면 받아들일 수 있는 저장입니다. `RE-COLLECT` · `INVALID` · `UNVERIFIED` 이면 다시 저장하세요.
 - `RE-COLLECT` 가 계속되면 Angel Robotics(엔젤로보틱스) CS팀에 문의해 주세요.

@@ -134,7 +134,7 @@ void Control_Loop(void)
 - If the struct is too big for the rate, logging does not start and `XM_USB_LOG_START_TOO_BIG_FOR_RATE` is returned.
 - A smaller struct gives the internal buffer more margin. Keep only the values you need.
 - When you log at 1000 Hz, some samples may be missing. The number missing and the longest gap show up in `XM_GetUsbLogStats()` and in the decoder result.
-- If the decoder report says "내부 버퍼 여유: 부족" (internal buffer margin: insufficient), make the struct smaller or lower the logging rate. <!-- release-check -->
+- If the decoder report says "내부 버퍼 여유: 부족" (internal buffer margin: insufficient), make the struct smaller or lower the logging rate.
 
 The struct sizes that can start with the default settings (timestamp on):
 
@@ -226,7 +226,7 @@ You cannot send statistics to the PC while logging. After logging ends, once you
 Move the saved `LOGS` folder to a PC and decode it with **XM10 Log Decoder**. It is an installer-based Windows program, and Python is not required. <!-- release-check -->
 
 - Get the decoder from the files attached to the release page. <!-- release-check -->
-- The decoder produces the data table (`decoded_output.csv` for 1000 Hz; for other rates `decoded_output_<rate>hz.csv`, for example `decoded_output_100hz.csv` for 100 Hz), `events.csv` if you inserted markers, and `data_quality_report.txt`. <!-- release-check -->
+- The decoder produces the data table (`decoded_output.csv` for 1000 Hz; for other rates `decoded_output_<rate>hz.csv`, for example `decoded_output_100hz.csv` for 100 Hz), `events.csv` if you inserted markers, and `data_quality_report.txt`.
 - Missing samples are filled in by interpolation and marked `1` in the `row_origin` column. Interpolated values are not measured values.
 - If the verdict in `data_quality_report.txt` is `GOOD`, `USABLE` or `WARNING`, the recording is acceptable. If it is `RE-COLLECT`, `INVALID` or `UNVERIFIED`, record again.
 - If `RE-COLLECT` keeps coming up, please contact the Angel Robotics(엔젤로보틱스) CS team.

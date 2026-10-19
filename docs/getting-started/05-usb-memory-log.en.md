@@ -106,7 +106,7 @@ This example uses the plain-terminal setting, so the PhAI Studio real-time view 
 
 Decode the saved folder with **XM10 Log Decoder**. It is an installer-based Windows program, and Python is not required. <!-- release-check -->
 
-This document is based on XM10 Log Decoder 2.2.0 or later. <!-- release-check -->
+This document is based on XM10 Log Decoder 2.2.0 or later.
 
 ### Get the Decoder
 
@@ -118,14 +118,14 @@ This document is based on XM10 Log Decoder 2.2.0 or later. <!-- release-check --
 
 ### Decode
 
-1. Copy the stick's `LOGS` folder to the PC. You can also decode with the stick plugged into the PC. <!-- release-check -->
-2. In the decoder, click `USB 탐지` (detect USB) to find the `LOGS` folder on the stick plugged into the PC. For a folder you copied to the PC, choose it with `폴더 선택` (select folder). <!-- release-check -->
-3. Pick the session to decode in the session list, then click `전체 디코딩` (decode all) or `선택 디코딩` (decode selected). <!-- release-check -->
-4. The results are created in the session folder. You can also choose a separate output folder. <!-- release-check -->
+1. Copy the stick's `LOGS` folder to the PC. You can also decode with the stick plugged into the PC.
+2. In the decoder, click `USB 탐지` (detect USB) to find the `LOGS` folder on the stick plugged into the PC. For a folder you copied to the PC, choose it with `폴더 선택` (select folder).
+3. Pick the session to decode in the session list, then click `전체 디코딩` (decode all) or `선택 디코딩` (decode selected).
+4. The results are created in the session folder. You can also choose a separate output folder.
 
 ### Result Files
 
-These are the files XM10 Log Decoder 2.2.0 or later creates. <!-- release-check -->
+These are the files XM10 Log Decoder 2.2.0 or later creates.
 
 | File | Contents |
 | :--- | :--- |
@@ -139,9 +139,9 @@ These are the files XM10 Log Decoder 2.2.0 or later creates. <!-- release-check 
 
 ### Reading the Verdict
 
-Check the verdict in `data_quality_report.txt`. The decoder's log window also shows one line per session with the row count, the missing samples and the verdict. <!-- release-check -->
+Check the verdict in `data_quality_report.txt`. The decoder's log window also shows one line per session with the row count, the missing samples and the verdict.
 
-The table below is based on the report of XM10 Log Decoder 2.2.0 or later. <!-- release-check -->
+The table below is based on the report of XM10 Log Decoder 2.2.0 or later.
 
 | Verdict | Meaning | Accepted? |
 | :--- | :--- | :---: |

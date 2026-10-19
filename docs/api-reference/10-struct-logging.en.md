@@ -188,7 +188,7 @@ You do not write the field type. `XM_FIELD` and `XM_FIELD_ARRAY` decide it autom
 
 > PhAI Studio is still under development, so for now use the `xm10` tool to view and save your own (custom) data structs.
 
-Use the `xm10` tool that comes with the SDK (the `pc-data-tool` folder). With the tool from an earlier release, some values may not appear or may appear wrong. <!-- release-check -->
+Use the `xm10` tool that comes with the SDK (the `pc-data-tool` folder). With the tool from an earlier release, some values may not appear or may appear wrong.
 For how to use it, and for saving and CSV export, see [Get Data on PC](../getting-started/04-pc-data-tool.en.md).
 
 The `xm10` tool shows a struct like this.
@@ -254,7 +254,7 @@ To save H10 gait data to a USB memory stick, see [Ex.34 USB Memory Gait Log](htt
 | `XM_USB_SetHostProfile()` or `XM_Log_SetMinStallMs()` has no effect | They no longer change after the first registration | Call them before the first `XM_LOG_REGISTER` |
 | Field names or values look wrong | An `XM_FIELD` of another token was listed inside `XM_LOG_FIELDS` — the compiler cannot check this rule | Use only `XM_FIELD` and `XM_FIELD_ARRAY` of the same token |
 | Garbled characters in a serial terminal | Struct data is sent even with `XM_USB_HOST_TERMINAL` | Do not register a struct when you only want to read text |
-| No tab appears, or the values look wrong | Another PC program has the same port open, or the `xm10` tool is from an earlier release | Close every other program and reopen with the `xm10` tool that comes with the SDK <!-- release-check --> |
+| No tab appears, or the values look wrong | Another PC program has the same port open, or the `xm10` tool is from an earlier release | Close every other program and reopen with the `xm10` tool that comes with the SDK |
 | The CSV columns are named `ch0`, `ch1` … and from some row on the value cells are empty and the last cell holds hexadecimal | The field information arrived after the first data row — the live CSV fixes its columns on the first row, so once the field information arrives, later rows are written as the received bytes in hexadecimal instead of values | Export again from the `.xmlog`: `python xm10.py export <file>.xmlog --csv out/` |
 
 - How often the field information arrives later than the values right after the port opens has not yet been checked on a real board. (not yet confirmed on the board) <!-- board-check -->

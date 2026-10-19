@@ -35,7 +35,7 @@ FAT32 로 포맷한 USB 메모리를 보드에 꽂고 버튼 1 을 누르면, �
 | `btn1` · `btn2` · `btn3` | `uint8_t` | 버튼 상태 (0 = 뗌, 1 = 누름) |
 | `h10_connected` | `uint8_t` | H10 연결 여부 (H10 이 없으면 0) |
 
-→ 저장한 폴더는 USB 메모리의 `/LOGS/<날짜_시각>/` 입니다. PC 로 옮겨 XM10 Log Decoder 로 풀면 CSV 가 나오고, 빠진 표본이 있으면 그 위치와 길이를 알려 줍니다. 사용법은 [USB 메모리에 저장하기](../../docs/getting-started/05-usb-memory-log.md) 에 있습니다. <!-- release-check -->
+→ 저장한 폴더는 USB 메모리의 `/LOGS/<날짜_시각>/` 입니다. PC 로 옮겨 XM10 Log Decoder 로 풀면 CSV 가 나오고, 빠진 표본이 있으면 그 위치와 길이를 알려 줍니다. 사용법은 [USB 메모리에 저장하기](../../docs/getting-started/05-usb-memory-log.md) 에 있습니다.
 
 | 버튼 | 동작 |
 |:---:|------|

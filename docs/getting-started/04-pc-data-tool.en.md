@@ -13,7 +13,7 @@ A tool for **plotting as a live graph, saving raw, and exporting to CSV** the da
 | System data the board sends automatically — joint angles, torque, etc. (Total Data 0x20; to fill the 28-byte `User_Custom` block inside it, see [`xm_api_user_custom`](../api-reference/ref/xm-api-user-custom.en.md)) | PhAI Studio |
 | Your own struct sent with `XM_SendUsbDataWithId` (`0xF0`–`0xFE`) — on Rev 2.0, also structs sent with struct logging (`XM_LOG_SEND`) | the `xm10` tool (this page) |
 | Text sent with `XM_SendUsbDebugMessage` | a serial terminal |
-| Files the board saved by itself to a USB memory stick 🟢 **Rev 2.0 only** | XM10 Log Decoder 2.2.0 or later ([Save Data to a USB Memory Stick](05-usb-memory-log.en.md)) | <!-- release-check -->
+| Files the board saved by itself to a USB memory stick 🟢 **Rev 2.0 only** | XM10 Log Decoder 2.2.0 or later ([Save Data to a USB Memory Stick](05-usb-memory-log.en.md)) |
 
 ---
 
@@ -179,7 +179,7 @@ The 24 SDK examples follow rules 1–3. Follow the same rules when you write you
 
 > 🟢 **Rev 2.0 only** — The "struct field names *and types* become CSV columns" behavior you saw in the demo (`state` as an integer, `contact` as a bool, and so on) is already built on the PC side. Rev 2.0 (v2.9.0 or later) can use it through struct logging (`XM_LOG_REGISTER` · `XM_LOG_SEND`).
 > The board sends the field names, units and types together, and the `xm10` tool opens a tab per struct and builds the graph and CSV columns from those names. (not yet confirmed on the board) <!-- board-check -->
-> Use the `xm10` tool that comes with the SDK (the `pc-data-tool` folder). With the tool from an earlier release, some values may not appear or may appear wrong. <!-- release-check -->
+> Use the `xm10` tool that comes with the SDK (the `pc-data-tool` folder). With the tool from an earlier release, some values may not appear or may appear wrong.
 > See [Struct Logging](../api-reference/10-struct-logging.en.md) and [Ex.44 CDC Struct Logging](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/) for how to use it.
 > The method above (`XM_SetUsbCustomMeta`) and Rev 1.1 still send **names only**.
 

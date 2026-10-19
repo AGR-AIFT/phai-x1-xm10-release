@@ -24,7 +24,7 @@
 | 보드가 자동으로 보내는 시스템 데이터 — 관절 각도·토크 등 (Total Data 0x20. 그 안의 28바이트 `User_Custom` 칸을 채우는 방법은 [`xm_api_user_custom`](../api-reference/ref/xm-api-user-custom.md)) | PhAI Studio |
 | `XM_SendUsbDataWithId` 로 직접 보낸 내 구조체 (`0xF0`~`0xFE`) — Rev 2.0 은 구조체 로깅 `XM_LOG_SEND` 로 보낸 구조체도 | `xm10` 도구 (이 문서) |
 | `XM_SendUsbDebugMessage` 로 보낸 텍스트 | 시리얼 터미널 |
-| 보드가 USB 메모리에 직접 저장한 파일 🟢 **Rev 2.0 전용** | XM10 Log Decoder 2.2.0 이상 ([USB 메모리에 저장하기](05-usb-memory-log.md)) | <!-- release-check -->
+| 보드가 USB 메모리에 직접 저장한 파일 🟢 **Rev 2.0 전용** | XM10 Log Decoder 2.2.0 이상 ([USB 메모리에 저장하기](05-usb-memory-log.md)) |
 
 ---
 
@@ -224,7 +224,7 @@ SDK 예제 24개는 1~3 을 지키고 있습니다. 직접 만들 때도 같은 
 > 정수, `contact` 는 bool …)은 PC 쪽에는 이미 준비돼 있습니다. Rev 2.0 (v2.9.0 이상)은 구조체 로깅
 > (`XM_LOG_REGISTER` · `XM_LOG_SEND`)으로 이 방식을 쓸 수 있습니다.
 > 보드가 필드 이름 · 단위 · 타입을 함께 보내고, `xm10` 도구가 구조체마다 탭을 만들어 그 이름으로 그래프와 CSV 열을 만듭니다. (보드 확인 전) <!-- board-check -->
-> SDK 에 함께 들어 있는 `xm10` 도구(`pc-data-tool` 폴더)로 보세요. 예전 릴리스의 도구로는 일부 값이 보이지 않거나 틀리게 보일 수 있습니다. <!-- release-check -->
+> SDK 에 함께 들어 있는 `xm10` 도구(`pc-data-tool` 폴더)로 보세요. 예전 릴리스의 도구로는 일부 값이 보이지 않거나 틀리게 보일 수 있습니다.
 > 사용법은 [구조체 로깅](../api-reference/10-struct-logging.md) 과 [Ex.44 CDC Struct Logging](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/) 을 보세요.
 > 위의 `XM_SetUsbCustomMeta` 방식과 Rev 1.1 은 지금도 **이름만** 보냅니다.
 
