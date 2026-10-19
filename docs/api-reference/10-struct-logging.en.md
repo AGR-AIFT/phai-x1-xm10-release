@@ -149,7 +149,7 @@ You do not write the field type. `XM_FIELD` and `XM_FIELD_ARRAY` decide it autom
 | Item | Limit | If you exceed it |
 |------|------|--------|
 | Struct size | A multiple of 4, at most 1,008 B (`XM_LOG_MAX_STRUCT_SIZE`) | Compile error at the `XM_LOG_DECLARE` line |
-| Struct name (token) | Letters, digits and `_`, at most 11 characters (`XM_LOG_MAX_TOKEN_LEN`) — non-ASCII characters such as Korean letters are not allowed | Over 11 characters: compile error at the `XM_LOG_DECLARE` line. Not ASCII: `XM_LOG_REGISTER` returns `false` |
+| Struct name (token) | Letters, digits and `_`, at most 11 characters (`XM_LOG_MAX_TOKEN_LEN`) — non-ASCII characters such as Korean letters are not allowed | Over 11 characters: compile error at the `XM_LOG_DECLARE` line. Not ASCII: a compile error, or `XM_LOG_REGISTER` returns `false` |
 | Number of fields | 1 ~ 90 per struct (`XM_LOG_MAX_FIELDS`) — an array counts as one field per line | Compile error at the `XM_LOG_REGISTER` line |
 | Array elements | 1 ~ 255 per field (`XM_LOG_MAX_ARRAY_LEN`) | Compile error at the `XM_FIELD_ARRAY` line |
 | Field name | Up to 15 letters, digits and symbols (ASCII) — Korean letters and characters such as `°` are not allowed | `XM_LOG_REGISTER` returns `false` |

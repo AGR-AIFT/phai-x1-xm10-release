@@ -149,7 +149,7 @@ void Control_Loop(void)
 | 항목 | 한도 | 어기면 |
 |------|------|--------|
 | 구조체 크기 | 4 의 배수, 1,008 B 이하 (`XM_LOG_MAX_STRUCT_SIZE`) | `XM_LOG_DECLARE` 줄에서 컴파일 오류 |
-| 구조체 이름(토큰) | 영문 · 숫자 · `_` 11자 이하 (`XM_LOG_MAX_TOKEN_LEN`) — 한글처럼 ASCII 가 아닌 글자는 불가 | 11자를 넘으면 `XM_LOG_DECLARE` 줄에서 컴파일 오류, ASCII 가 아니면 `XM_LOG_REGISTER` 가 `false` |
+| 구조체 이름(토큰) | 영문 · 숫자 · `_` 11자 이하 (`XM_LOG_MAX_TOKEN_LEN`) — 한글처럼 ASCII 가 아닌 글자는 불가 | 11자를 넘으면 `XM_LOG_DECLARE` 줄에서 컴파일 오류, ASCII 가 아니면 컴파일 오류 또는 `XM_LOG_REGISTER` 가 `false` |
 | 필드 수 | 구조체 하나에 1 ~ 90개 (`XM_LOG_MAX_FIELDS`) — 배열은 한 줄이 한 필드 | `XM_LOG_REGISTER` 줄에서 컴파일 오류 |
 | 배열 원소 수 | 필드 하나에 1 ~ 255개 (`XM_LOG_MAX_ARRAY_LEN`) | `XM_FIELD_ARRAY` 줄에서 컴파일 오류 |
 | 필드 이름 | 영문 · 숫자 · 기호(ASCII) 15자까지 — 한글 · `°` 처럼 ASCII 가 아닌 글자는 불가 | `XM_LOG_REGISTER` 가 `false` |
