@@ -26,6 +26,8 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | External GPIO / ADC | [api-reference/04-external-io.md](api-reference/04-external-io.md) + Ex.04–06 |
 | Sending data to PC over USB serial | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.07–09 |
 | Exporting data over USB (real-time) | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.09 CDC Stream · [`xm10` tool](getting-started/04-pc-data-tool.en.md) (your own structs) · PhAI Studio (Total Data) |
+| Sending my own struct to the PC with field names, units and types (Rev 2.0 only) | [api-reference/10-struct-logging.md](api-reference/10-struct-logging.md) + Ex.44 CDC Struct Logging · [`xm10` tool](getting-started/04-pc-data-tool.en.md) |
+| Saving data to a USB memory stick (Rev 2.0 only) | [getting-started/05-usb-memory-log.en.md](getting-started/05-usb-memory-log.en.md) + [api-reference/06-usb-data-logging.md](api-reference/06-usb-data-logging.md) + Ex.10 · Ex.34 |
 | Memory regions (PSRAM, Workspace) | [api-reference/07-memory-management.md](api-reference/07-memory-management.md) + Ex.19 |
 | Date / time (RTC) | [api-reference/08-rtc-clock.md](api-reference/08-rtc-clock.md) |
 | KIT H10 exoskeleton control | [api-reference/02-h10-control-n-data.md](api-reference/02-h10-control-n-data.md) + Ex.11–13 |
@@ -35,7 +37,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 
 | Situation | Where to go |
 |-----------|-------------|
-| Full index of all 45 examples | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
+| Full index of all 48 examples | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
 | Learning paths by difficulty and track | [docs/tutorials/README.md](tutorials/README.md) |
 | 16-week semester schedule | [tutorials/README.md — Semester Schedule section](tutorials/README.md#한-학기-16-주-수업-진도표-예시) |
 | An example (Ex.XX) isn't working | See the "⚠️ Common Mistakes" section in `examples/XX_*/README.md` |
@@ -50,7 +52,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | External GPIO pinmap (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | External GPIO pinmap (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | Is my board Rev 1.1 or Rev 2.0? | [hardware/README.md — Board Revision Comparison](hardware/README.md#보드-리비전-비교) |
-| Which board revision do the 45 examples support? | [examples/README.md — Board Revision Compatibility](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (40 work on both; Ex.36 and Ex.40/41/42/43 are Rev 2.0-only) |
+| Which board revision do the 48 examples support? | [examples/README.md — Board Revision Compatibility](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (40 work on both; Ex.10, Ex.34, Ex.36 and Ex.40/41/42/43/44 are Rev 2.0-only) |
 
 ## 📥 Firmware Upload
 
@@ -81,6 +83,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 |-----------|-------------|
 | Build / clone / Korean-path errors | [docs/troubleshooting.md](troubleshooting.md) |
 | Serial communication / USB not connecting | [troubleshooting.md](troubleshooting.md) + the relevant example README |
+| The USB memory stick isn't recognized / the PC isn't detected while saving (Rev 2.0 only) | [getting-started/05-usb-memory-log.en.md](getting-started/05-usb-memory-log.en.md) + ⚠️ Common Mistakes in Ex.10 and Ex.34 |
 | PhAI Studio won't detect the board (CDC) | ⚠️ Common Mistakes in Ex.07–09 + the PhAI simultaneous-access warning in the `.c` file header |
 | Board stuck in an infinite reboot loop | [troubleshooting.md](troubleshooting.md) |
 | What is Body Data? (gaitCycle, etc.) | [api-reference/README.md — Body Data Prerequisites](api-reference/README.md) |

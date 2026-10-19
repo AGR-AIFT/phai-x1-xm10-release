@@ -14,7 +14,7 @@ The API documentation is split into **two layers with different jobs**. Open the
 
 | Layer | Location | Covers | Open this when |
 |-------|----------|--------|-----------------|
-| **① Concept Guides** | This document (01–09, the [Function Groups](#function-groups) table below) | **Why** the API exists and **how** to weave it into your algorithm — background, common pitfalls, example code flow | You don't yet know how to combine an API you're using for the first time |
+| **① Concept Guides** | This document (01–10, the [Function Groups](#function-groups) table below) | **Why** the API exists and **how** to weave it into your algorithm — background, common pitfalls, example code flow | You don't yet know how to combine an API you're using for the first time |
 | **② Function Reference** | [`ref/`](ref/README.en.md) — one page per header | **Exact** function signatures, parameter types/ranges, return values, struct fields | You need to double-check a function name, argument order, or exact return meaning |
 
 The two layers don't replace each other. Each concept-guide entry links to its matching `ref/` page, and every `ref/` page links back to its matching concept guide — if you get stuck, jump to the other side.
@@ -32,9 +32,11 @@ The two layers don't replace each other. Each concept-guide entry links to its m
 | 03 | [LED + Button](03-led-btn-control.md) | Board LED effects, button events | `XM_SetLedEffect`, `XM_SetLedState`, `XM_GetButtonEvent`, `XM_SetChannelLedRGB` |
 | 04 | [External IO](04-external-io.md) | Expansion port GPIO/ADC | `XM_SetPinMode`, `XM_DigitalRead/Write`, `XM_AnalogReadMillivolts` |
 | 05 | [USB Serial Communication](05-usb-connectivity.md) | Send text/binary data to a PC | `XM_SendUsbDebugMessage`, `XM_SendUsbDataWithId`, `XM_SetUsbCustomMeta` |
+| 06 | [USB Memory Logging](06-usb-data-logging.md) | Save one struct to a USB memory stick at a fixed rate 🟢 **Rev 2.0 only** | `XM_SetUsbLogSource`, `XM_StartUsbDataLog`, `XM_StopUsbDataLog`, `XM_GetUsbLogStats` |
 | 07 | [Memory Regions](07-memory-management.md) | Fast memory + non-volatile storage | `XM_GetUserWorkspace`, `XM_UserNV_Read/Write` |
 | 08 | [Real-Time Clock](08-rtc-clock.md) | Read and write date/time | `XM_RTC_SetDateTime`, `XM_RTC_GetDateTime`, `XM_RTC_IsRunning` |
 | 09 | [Auxiliary Tasks + Data Sharing](09-task-creation.md) | Tasks separate from the 1 kHz control loop + safe data sharing | `XM_Task_CreateOneShot/Periodic`, `XM_Mutex_Lock/Unlock` |
+| 10 | [Struct Logging](10-struct-logging.md) | Send a struct to the PC with field names, units and types 🟢 **Rev 2.0 only** | `XM_LOG_DECLARE`, `XM_LOG_FIELDS`, `XM_LOG_REGISTER`, `XM_LOG_SEND` |
 
 ---
 
@@ -96,6 +98,7 @@ void Control_Setup(void)
 | 28 Admittance | ✗ | Uses only measured torque feedback |
 | 29 Bilateral Coordination | △ | Angle-based motion; accuracy improves with Body Data |
 | 30 FF+FB Combined | ✗ | Model parameters are set directly via macros |
+| 34 USB Memory Gait Log 🟢 **Rev 2.0 only** | △ | Affects the accuracy of the saved knee/thigh angles and foot contact. The example sends it itself — just replace the values with the wearer's |
 
 > If you need gait phase information without `gaitCycle` or `footContact`, you can use external sensors such as GRF shoes for independent measurement.
 

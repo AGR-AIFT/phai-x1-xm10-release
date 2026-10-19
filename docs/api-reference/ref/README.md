@@ -2,7 +2,7 @@
 
 > 상위: [API 레퍼런스 개요](../README.md) · [문서 인덱스](../../README.md)
 
-`XM_FW/XM_API/` 의 각 헤더가 선언하는 **정확한 함수 시그니처 · 파라미터 · 반환값 · 타입**을 헤더 단위로 정리한 페이지 모음입니다. "왜 이 API 를 쓰는지 / 어떻게 알고리즘에 녹이는지"는 상위 [개념 가이드(01~09)](../README.md#함수-그룹)에서 먼저 확인하세요. 이 페이지들은 코드를 작성하며 **정확한 호출 규약**을 빠르게 찾아보는 용도입니다.
+`XM_FW/XM_API/` 의 각 헤더가 선언하는 **정확한 함수 시그니처 · 파라미터 · 반환값 · 타입**을 헤더 단위로 정리한 페이지 모음입니다. "왜 이 API 를 쓰는지 / 어떻게 알고리즘에 녹이는지"는 상위 [개념 가이드(01~10)](../README.md#함수-그룹)에서 먼저 확인하세요. 이 페이지들은 코드를 작성하며 **정확한 호출 규약**을 빠르게 찾아보는 용도입니다.
 
 ---
 
@@ -36,6 +36,8 @@
 | 헤더 | 한 줄 설명 | 레퍼런스 | 관련 개념 문서 | 대표 예제 |
 |------|-----------|----------|---------------|-----------|
 | `xm_api_usb.h` | USB 시리얼(CDC) 실시간 스트리밍 | [xm-api-usb.md](xm-api-usb.md) | [05. USB 시리얼](../05-usb-connectivity.md) | [09_CDC_Stream](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) |
+| `xm_api_logging.h` | 구조체 로깅 — 구조체를 이름 · 단위 · 타입과 함께 PC 로 전송 (`xm_api_logging_raw.h` 함께 설명) — 🟢 **Rev 2.0 전용** | [xm-api-logging.md](xm-api-logging.md) | [10. 구조체 로깅](../10-struct-logging.md) | [44_CDC_Struct_Logging](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/) |
+| `xm_api_usb_msc.h` | USB 메모리 저장 — 구조체 하나를 USB 메모리에 주기적으로 저장 — 🟢 **Rev 2.0 전용**, 14함수 | [xm-api-usb-msc.md](xm-api-usb-msc.md) | [06. USB 메모리 저장](../06-usb-data-logging.md) | [10_USB_Memory_Log](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/10_USB_Memory_Log/) · [34_USB_Memory_Gait_Log](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/34_USB_Memory_Gait_Log/) |
 
 ## 메모리 · RTC
 
@@ -60,5 +62,5 @@
 
 ## 참고
 
-- [API 레퍼런스 개요](../README.md) — 01~09 개념 가이드 인덱스
+- [API 레퍼런스 개요](../README.md) — 01~10 개념 가이드 인덱스
 - [문서 인덱스](../../README.md)

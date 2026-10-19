@@ -26,6 +26,8 @@
 | 외부 GPIO / ADC | [api-reference/04-external-io.md](api-reference/04-external-io.md) + Ex.04~06 |
 | USB 시리얼로 PC 에 데이터 보내기 | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.07~09 |
 | USB 로 데이터 내보내기 (실시간) | [api-reference/05-usb-connectivity.md](api-reference/05-usb-connectivity.md) + Ex.09 CDC Stream · [xm10 도구](getting-started/04-pc-data-tool.md) (내 구조체) · PhAI Studio (Total Data) |
+| 내 구조체를 이름 · 단위 · 타입과 함께 PC 로 보내기 (Rev 2.0 전용) | [api-reference/10-struct-logging.md](api-reference/10-struct-logging.md) + Ex.44 CDC Struct Logging · [xm10 도구](getting-started/04-pc-data-tool.md) |
+| USB 메모리에 저장하기 (Rev 2.0 전용) | [getting-started/05-usb-memory-log.md](getting-started/05-usb-memory-log.md) + [api-reference/06-usb-data-logging.md](api-reference/06-usb-data-logging.md) + Ex.10 · Ex.34 |
 | 메모리 영역 (PSRAM, Workspace) | [api-reference/07-memory-management.md](api-reference/07-memory-management.md) + Ex.19 |
 | 날짜·시간 (RTC) | [api-reference/08-rtc-clock.md](api-reference/08-rtc-clock.md) |
 | KIT H10 외골격 제어 | [api-reference/02-h10-control-n-data.md](api-reference/02-h10-control-n-data.md) + Ex.11~13 |
@@ -35,7 +37,7 @@
 
 | 상황 | 어디로 |
 |------|--------|
-| 45 개 예제 전체 인덱스 | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
+| 48 개 예제 전체 인덱스 | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
 | 난이도별·트랙별 학습 경로 | [docs/tutorials/README.md](tutorials/README.md) |
 | 한 학기 수업 진도표 (16 주) | [tutorials/README.md - 한 학기 진도표 섹션](tutorials/README.md#한-학기-16-주-수업-진도표-예시) |
 | Ex.XX 예제가 잘 안 됩니다 | 해당 `examples/XX_*/README.md` 의 "⚠️ 흔한 실수" 섹션 |
@@ -50,7 +52,7 @@
 | 외부 GPIO 핀맵 (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | 외부 GPIO 핀맵 (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | 내 보드가 Rev 1.1 인지 Rev 2.0 인지 | [hardware/README.md - 보드 리비전 비교](hardware/README.md#보드-리비전-비교) |
-| 45 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (40 개는 양쪽 모두 동작·외부 GPIO 핀맵만 다름, Ex.36 과 Ex.40/41/42/43 은 Rev 2.0 전용) |
+| 48 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (40 개는 양쪽 모두 동작·외부 GPIO 핀맵만 다름, Ex.10 · Ex.34 · Ex.36 과 Ex.40/41/42/43/44 는 Rev 2.0 전용) |
 
 ## 📥 펌웨어 업로드
 
@@ -81,6 +83,7 @@
 |------|--------|
 | 빌드 / clone / 한글 경로 에러 | [docs/troubleshooting.md](troubleshooting.md) |
 | 시리얼 통신 / USB 연결 안 됨 | [troubleshooting.md](troubleshooting.md) + 해당 예제 README |
+| USB 메모리가 안 잡힙니다 / 저장 중에 PC 가 안 잡힙니다 (Rev 2.0 전용) | [getting-started/05-usb-memory-log.md](getting-started/05-usb-memory-log.md) + Ex.10 · Ex.34 의 ⚠️ 흔한 실수 |
 | PhAI Studio 가 안 잡힙니다 (CDC) | Ex.07~09 의 ⚠️ 흔한 실수 + `.c` 파일 헤더의 PhAI 동시점유 경고 |
 | 보드가 무한 리부팅 | [troubleshooting.md](troubleshooting.md) |
 | Body Data 가 무엇입니까 (gaitCycle 등) | [api-reference/README.md - Body Data 전제조건](api-reference/README.md) |

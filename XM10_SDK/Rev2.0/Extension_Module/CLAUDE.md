@@ -62,8 +62,8 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 1. **[처음 시작 (AI 자동 안내)](docs/getting-started/00-claude-code-quickstart.md)** — Claude Code 가 환경 구축까지 동반
 2. **[Ex.00 Quick Start](examples/00_Quick_Start/)** — 보드 smoke test (⭐)
 3. **[Ex.01~03 Button & LED](examples/01_Button_LED_Basic/)** — 디지털 IO 기본 (⭐~⭐⭐)
-4. **[전체 학습 로드맵](docs/tutorials/README.md)** — 45 개 예제
-5. **Rev 2.0 전용 예제** — Ex.40 · 41 · 42 · 43 은 Rev 2.0 SDK 에만 들어 있습니다.
+4. **[전체 학습 로드맵](docs/tutorials/README.md)** — 48 개 예제
+5. **Rev 2.0 전용 예제** — Ex.10 · 34 · 36 · 40 · 41 · 42 · 43 · 44 는 Rev 2.0 SDK 에만 들어 있습니다.
 6. **[Ex.41 IMU Hub Dashboard](examples/41_IMU_Hub_Dashboard/) / [Ex.42 EMG Hub Biofeedback](examples/42_EMG_Hub_Biofeedback/)** — CAN-FD 센서 허브(IMU/EMG Hub Module) 연동 (⭐⭐⭐, Rev 2.0 전용)
 
 ---
