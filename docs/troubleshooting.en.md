@@ -78,6 +78,19 @@ Or via Group Policy:
 
 ---
 
+### `implicit declaration of function` Error (Rev 2.0 SDK)
+
+**Symptom:** The build stops with `error: implicit declaration of function 'function name'` (Rev 2.0 SDK, v2.9.0 or later)
+
+**Cause:** Since v2.9.0 the Rev 2.0 SDK treats a call to a function whose declaration is not visible as an error, not a warning. The cause is a misspelled function name, a missing `#include`, or a declaration that no longer exists in the headers. The Rev 1.1 SDK is unchanged.
+
+**Resolution:**
+1. `#include` the header that declares the function. For SDK functions, `#include "xm_api.h"` is usually enough. A `.c` file that uses the `XM_LOG_*` macros must also `#include "xm_api_logging_raw.h"`.
+2. Check the function name in the [API reference](api-reference/ref/README.en.md). If it is a name you used in an earlier version, see the [v2.9.0 release notes](release-notes/v2.9.0.en.md).
+3. For a function you wrote yourself, declare its prototype before the call.
+
+---
+
 ## Board Revision / SDK ZIP Mismatch
 
 ### Center or Right Button Not Responding, or an Unpressed Button Always Reads as Pressed
@@ -147,6 +160,41 @@ collect2.exe: error: ld returned 1 exit status
 2. In Windows Device Manager, check for `STMicroelectronics Virtual COM Port` under `Ports (COM & LPT)`
 3. If the driver is missing, install the [STM32 Virtual COM Port Driver](https://www.st.com/en/development-tools/stsw-stm32102.html)
 4. Verify that the USB CDC initialization in the XM10 firmware completed successfully
+5. (Rev 2.0) If a USB memory stick is plugged in, the board does not connect to a PC — see [below](#usb-memory-pc)
+
+<a id="usb-memory-pc"></a>
+### Board Does Not Connect to the PC While a USB Memory Stick Is Plugged In (Rev 2.0)
+
+> 🟢 **Rev 2.0 only** — Rev 1.1 has no USB memory logging.
+
+The XM10 has a single USB-C port. While a USB memory stick is plugged in, you cannot connect to a PC over USB. You cannot use PhAI Studio, the `xm10` tool, or firmware upload over USB.
+
+**Resolution:** Remove the USB memory stick and connect the PC. (not yet confirmed on the board) <!-- board-check -->
+
+<a id="usb-memory-start"></a>
+### USB Memory Logging Does Not Start (Rev 2.0)
+
+> 🟢 **Rev 2.0 only** — For how to use it, see [USB Memory Logging](api-reference/06-usb-data-logging.en.md) and [Save Data to a USB Memory Stick](getting-started/05-usb-memory-log.en.md).
+
+**Checklist:**
+1. Confirm the USB memory stick is **FAT32** (exFAT and NTFS are not recognized). A 32 KB allocation unit is recommended. Formatting erases every file on the stick, so move any files you need first.
+2. Check that the free space on the stick is larger than the file-split size (default 10 MB)
+3. Check that `XM_IsUsbLogReady()` is `true` (in Ex.10 and Ex.34, LED 1 turns on)
+4. If `XM_StartUsbDataLog()` returns `false`, find the reason with `XM_GetUsbLogLastStartError()` — [start-failure reasons](api-reference/ref/xm-api-usb-msc.en.md#xmusblogstarterror_e)
+5. If it started but ends soon after (in Ex.10 and Ex.34, LED 3 turns on), read `XM_GetUsbLogLastStartError()`. Possible causes include opening the file failing (not enough free space, or a folder with the same name and different settings), the stick being pulled out while logging, and the internal buffer overflowing.
+6. If the folder name is not a date or matches an earlier recording, the clock may not have been set. Set it with `XM_RTC_SetDateTime()` or choose the session name yourself.
+
+### Decoder Verdict Shows `RE-COLLECT` (Rev 2.0)
+
+> 🟢 **Rev 2.0 only** — How to read the verdict is explained in [Save Data to a USB Memory Stick](getting-started/05-usb-memory-log.en.md).
+
+`RE-COLLECT` means many samples are missing or the gaps are long, so we recommend recording again. <!-- release-check -->
+
+**Resolution steps:**
+1. Fully format the stick as FAT32 (32 KB allocation unit) and record again
+2. Try a different USB memory stick
+3. Lower the logging rate or make the struct smaller
+4. If it keeps happening, contact the Angel Robotics(엔젤로보틱스) CS team
 
 ---
 
@@ -271,10 +319,13 @@ Text sent with `XM_SendUsbDebugMessage` is meant to be read in a plain serial te
 
 **Cause 3:** `STMicroelectronics Virtual COM Port` is not recognized in Windows Device Manager
 
+**Cause 4 (Rev 2.0):** A USB memory stick is plugged in — while it is plugged in, the board does not connect to a PC over USB ([details](#usb-memory-pc))
+
 **Resolution steps:**
 1. Close all serial clients, then open only one at a time
 2. Use a data-capable USB-C cable (preferably connected directly to a rear USB-A port on the PC — avoid hubs)
 3. Install the [STM32 VCP driver](https://www.st.com/en/development-tools/stsw-stm32102.html)
+4. (Rev 2.0) If a USB memory stick is plugged in, remove it and connect the PC ([details](#usb-memory-pc)). (not yet confirmed on the board) <!-- board-check -->
 
 ### KIT H10 / Robot Control Pitfalls
 

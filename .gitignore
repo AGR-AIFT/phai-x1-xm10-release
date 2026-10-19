@@ -68,6 +68,7 @@ docs/getting-started/*
 !docs/getting-started/02-software-setup.md
 !docs/getting-started/03-first-build.md
 !docs/getting-started/04-pc-data-tool.md
+!docs/getting-started/05-usb-memory-log.md
 !docs/api-reference/
 docs/api-reference/*
 !docs/api-reference/01-task-state-machine.md
@@ -75,6 +76,7 @@ docs/api-reference/*
 !docs/api-reference/03-led-btn-control.md
 !docs/api-reference/04-external-io.md
 !docs/api-reference/05-usb-connectivity.md
+!docs/api-reference/06-usb-data-logging.md
 !docs/api-reference/07-memory-management.md
 !docs/api-reference/08-rtc-clock.md
 !docs/api-reference/09-task-creation.md
@@ -89,6 +91,7 @@ docs/api-reference/ref/*
 !docs/api-reference/ref/xm-api-led-btn.md
 !docs/api-reference/ref/xm-api-external-io.md
 !docs/api-reference/ref/xm-api-usb.md
+!docs/api-reference/ref/xm-api-usb-msc.md
 !docs/api-reference/ref/xm-api-logging.md
 !docs/api-reference/ref/xm-api-memory.md
 !docs/api-reference/ref/xm-api-rtc.md
@@ -134,6 +137,7 @@ docs/stylesheets/*
 !docs/getting-started/02-software-setup.en.md
 !docs/getting-started/03-first-build.en.md
 !docs/getting-started/04-pc-data-tool.en.md
+!docs/getting-started/05-usb-memory-log.en.md
 !docs/hardware/README.en.md
 !docs/hardware/external-gpio-rev1.1.en.md
 !docs/hardware/external-gpio-rev2.0.en.md
@@ -144,6 +148,7 @@ docs/stylesheets/*
 !docs/api-reference/03-led-btn-control.en.md
 !docs/api-reference/04-external-io.en.md
 !docs/api-reference/05-usb-connectivity.en.md
+!docs/api-reference/06-usb-data-logging.en.md
 !docs/api-reference/07-memory-management.en.md
 !docs/api-reference/08-rtc-clock.en.md
 !docs/api-reference/09-task-creation.en.md
@@ -155,6 +160,7 @@ docs/stylesheets/*
 !docs/api-reference/ref/xm-api-led-btn.en.md
 !docs/api-reference/ref/xm-api-external-io.en.md
 !docs/api-reference/ref/xm-api-usb.en.md
+!docs/api-reference/ref/xm-api-usb-msc.en.md
 !docs/api-reference/ref/xm-api-logging.en.md
 !docs/api-reference/ref/xm-api-memory.en.md
 !docs/api-reference/ref/xm-api-rtc.en.md

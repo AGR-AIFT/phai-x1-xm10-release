@@ -2,7 +2,11 @@
 
 This page maps the end-to-end flow from collecting exoskeleton data on the XM10 board to loading it into a training framework such as PyTorch or scikit-learn. Use it as a quick-reference map while you work.
 
-> USB memory (MSC) file logging was removed in v2.5.0. Data capture now uses **USB-CDC real-time streaming**, and Path A below is the standard route. On-board storage (SD card) is not supported at present.
+> The Rev 2.0 SDK (v2.9.0) again includes the feature that lets the board save data directly to a USB memory stick ([USB Memory Logging](../api-reference/06-usb-data-logging.en.md)). Rev 1.1 does not have it. This feature has not been tested on the board yet. (not yet confirmed on the board) <!-- board-check -->
+>
+> You can decode the saved folder to CSV on a PC with XM10 Log Decoder ([guide](../getting-started/05-usb-memory-log.en.md)). Rows where missing samples were filled in by interpolation are not measured values, so decide how to handle them before using them for training.
+>
+> The standard route on this page is Path A below (**USB-CDC real-time streaming**). On-board storage (SD card) is not supported at present.
 
 ---
 
