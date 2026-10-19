@@ -2,7 +2,7 @@
 
 A tool for **plotting as a live graph, saving raw, and exporting to CSV** the data your board streams out over USB. It lives in the `Extension_Module/pc-data-tool/` folder — run it directly with Python, or bundle it into a single executable for a PC that doesn't have Python installed.
 
-> **Where is it?** When you unzip the SDK, `Extension_Module\pc-data-tool\` is included. If your ZIP doesn't have that folder (an older release), grab just the `pc-data-tool/` folder from the GitHub repo and put it anywhere — it's the same files regardless of board revision. In the v2.8.0 ZIP this folder was named `PythonDecoder` — it is the same tool.
+> **Where is it?** When you unzip the SDK, `Extension_Module\pc-data-tool\` is included. If your ZIP doesn't have that folder (an older release), grab just the `pc-data-tool/` folder from the GitHub repo and put it anywhere — it's the same files regardless of board revision. In the v2.8.0 ZIP this folder was named `PythonDecoder` — it is an earlier version of the same tool.
 
 > **How is this different from PhAI Studio?** PhAI Studio is the official tool you use straight from the browser. This is an open-source, local tool. It **saves the raw bytes before interpreting them**, so you can re-export later even if the channel layout changes, and if you know Python you can modify it however you like. The two tools **can't have the same COM port open at the same time** — connect only one PC program at a time.
 
@@ -11,8 +11,9 @@ A tool for **plotting as a live graph, saving raw, and exporting to CSV** the da
 | What you want to see | Program to use |
 | :--- | :--- |
 | System data the board sends automatically — joint angles, torque, etc. (Total Data 0x20; to fill the 28-byte `User_Custom` block inside it, see [`xm_api_user_custom`](../api-reference/ref/xm-api-user-custom.en.md)) | PhAI Studio |
-| Your own struct sent with `XM_SendUsbDataWithId` (`0xF0`–`0xFE`) | the `xm10` tool (this page) |
+| Your own struct sent with `XM_SendUsbDataWithId` (`0xF0`–`0xFE`) — on Rev 2.0, also structs sent with struct logging (`XM_LOG_SEND`) | the `xm10` tool (this page) |
 | Text sent with `XM_SendUsbDebugMessage` | a serial terminal |
+| Files the board saved by itself to a USB memory stick 🟢 **Rev 2.0 only** | XM10 Log Decoder 2.2.0 or later ([Save Data to a USB Memory Stick](05-usb-memory-log.en.md)) | <!-- release-check -->
 
 ---
 
@@ -67,7 +68,9 @@ python xm10.py recv
 
 A window opens. Pick your **Port** in the top row and click **Connect** — the board's user channels start plotting live. If you registered names with `XM_SetUsbCustomMeta`, as in Example 09, those names show up in the graph titles.
 
-> Connect only one PC program at a time. Channel names arrive once when you connect; if they are missing, re-plug the USB cable and connect again.
+> Connect only one PC program at a time. Rev 2.0 (v2.9.0 or later) sends the channel names again every time the COM port is opened, so if they are missing, click **Disconnect** and then **Connect** again. (not yet confirmed on the board) <!-- board-check -->
+>
+> Rev 1.1 (v2.8.1) sends the channel names only once, when USB connects. If they are missing, re-plug the USB cable and connect again.
 
 If you send user channels under several Module IDs (`0xF0`, `0xF1`, …), each Module ID gets its own tab. Every tab has its own graphs and its own saved file, and a tab you aren't looking at keeps saving.
 
@@ -112,7 +115,7 @@ CSV:
 
 Each row is decoded with the **channel description that was valid when the row was received** (a row received before any description is decoded with the first one that arrives afterwards on the same connection). If the struct description for a Module ID changes partway through a single file (for example, a script that keeps writing into one file across a reconnect — the graph window opens a new file for every connection), the CSV for that Module ID is split per description — `..._user_0xF0.csv`, `..._user_0xF0_schema2.csv` — because the same column name can mean something different (the same four bytes are `1.0` as a `float` but `1065353216` as a `uint32_t`).
 
-**If you connect again**, the graph window opens a new `.xmlog`. (A `.xmlog` recorded without channel names exports as `ch0, ch1, …` with values assumed to be `float`; types are not sent yet.)
+**If you connect again**, the graph window opens a new `.xmlog`. (A `.xmlog` recorded without channel names exports as `ch0, ch1, …` with values assumed to be `float`. The name-only method (`XM_SetUsbCustomMeta`) does not send types. To send types as well, see "Sending Your Own Data (Board Side)" below.)
 
 ---
 
@@ -170,11 +173,15 @@ Five rules to follow:
 2. **JSON entry count = struct field count, in the same order** — even a mismatch of one shifts every column after it. The values still look like plausible numbers, so it's easy to miss.
 3. **Module ID is `0xF0`–`0xFE`** — the rest are reserved for the system.
 4. **Only one name registration per connection** — call `XM_SetUsbCustomMeta` twice and only the last one survives. If you have several channel groups, combine them under a single Module ID (Ex.41 sends its six IMUs under a single Module ID).
-5. **Keep the JSON at 512 bytes or less** — if it is longer, the names are not sent and the columns show up as `ch0, ch1, …` (re-plugging the cable does not fix this).
+5. **Keep the JSON at 1,007 bytes or less** (Rev 2.0, v2.9.0 or later) — if it is longer, `XM_SetUsbCustomMeta()` returns `false`, the names are not registered, and the columns show up as `ch0, ch1, …` (reopening the port or re-plugging the cable does not fix this). On Rev 1.1 (v2.8.1) the limit is **512 bytes**, and a longer string is silently not sent.
 
 The 24 SDK examples follow rules 1–3. Follow the same rules when you write your own.
 
-> The "struct field names *and types* become CSV columns" behavior you saw in the demo (`state` as an integer, `contact` as a bool, and so on) is already built on the PC side, but right now the board only sends **names**, as shown above.
+> 🟢 **Rev 2.0 only** — The "struct field names *and types* become CSV columns" behavior you saw in the demo (`state` as an integer, `contact` as a bool, and so on) is already built on the PC side. Rev 2.0 (v2.9.0 or later) can use it through struct logging (`XM_LOG_REGISTER` · `XM_LOG_SEND`).
+> The board sends the field names, units and types together, and the `xm10` tool opens a tab per struct and builds the graph and CSV columns from those names. (not yet confirmed on the board) <!-- board-check -->
+> Use the `xm10` tool that comes with the SDK (the `pc-data-tool` folder). With the tool from an earlier release, some values may not appear or may appear wrong. <!-- release-check -->
+> See [Struct Logging](../api-reference/10-struct-logging.en.md) and [Ex.44 CDC Struct Logging](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/) for how to use it.
+> The method above (`XM_SetUsbCustomMeta`) and Rev 1.1 still send **names only**.
 
 ---
 
@@ -195,10 +202,11 @@ After building, it actually **runs** `demo` and the self-checks against that exe
 
 | Symptom | What to check |
 | :--- | :--- |
-| XM10 doesn't show up in the port list | If the window was already open, click **Refresh**. Re-run `xm10.py ports`. Check the cable and power. See if a COM port appears in Device Manager |
+| XM10 doesn't show up in the port list | If the window was already open, click **Refresh**. Re-run `xm10.py ports`. Check the cable and power. See if a COM port appears in Device Manager. On Rev 2.0, the board does not connect to the PC while a USB memory stick is plugged into its USB-C port. Remove the stick, then connect the PC. (not yet confirmed on the board) | <!-- board-check -->
 | Registered two name sets but only one shows | Only one registration survives per connection — combine them under one Module ID |
 | Connect fails | Make sure PhAI Studio or a serial terminal isn't already holding the same port |
-| Graph titles show `ch0, ch1…` | Check that `XM_SetUsbCustomMeta` is called in `Control_Setup`, that the entry count matches the struct, and that the JSON is 512 bytes or less. The names may also have been missed when you connected — re-plug the USB cable and connect again (one PC program at a time) |
+| Graph titles show `ch0, ch1…` | Check that `XM_SetUsbCustomMeta` is called in `Control_Setup`, that the entry count matches the struct, and that the JSON is 1,007 bytes or less (512 on Rev 1.1) |
+| Names are registered but titles still show `ch0, ch1…` | The names may have been missed when you connected. On Rev 2.0 (v2.9.0 or later), click **Disconnect** and then **Connect** again. (not yet confirmed on the board) On Rev 1.1 (v2.8.1), re-plug the USB cable and connect again. Connect only one PC program at a time | <!-- board-check -->
 | Values come out as garbage numbers | Check for a non-`float` member in the struct |
 | Frames seem to be dropping | Judge it with `xm10.py soak`. Try sending fewer channels |
 | Not sure the tool is installed correctly | `python xm10.py selftest` — self-check, no board needed |
