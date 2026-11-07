@@ -3,6 +3,10 @@ Debug/
 Release/
 build/
 !**/tools/build/
+# 장치 예제 — STM32CubeIDE 가 가져올 때 만드는 설정(빌드마다 바뀜)
+device-examples/**/.settings/
+# 장치 예제 — PC 시뮬레이터 실행 산출물
+device-examples/**/__pycache__/
 
 # MkDocs 빌드 산출물 (gh-pages 는 CI 가 생성)
 site/
