@@ -21,8 +21,8 @@
 #ifndef XM_API_XM_API_DATA_H_
 #define XM_API_XM_API_DATA_H_
 
-#include "cm_drv.h"             /* CM_NmtState_t 등 CM 연결 타입 */
-#include "data_object_dictionaries.h"
+#include "cm_nmt_state.h"       /* CM_NmtState_t — XM_GetXMNmtState() 의 반환 타입 */
+#include "system_node_id.h"     /* SystemNodeID_t — 관절 번호(SYS_NODE_ID_RH 등) */
 #include "module.h"             /* XM_GRF_FIXED_FRAME_MODULE / XM_GRF_FSR_CH_TOTAL — 구조체 레이아웃 일관성 필수 */
 
 #include <stdint.h>

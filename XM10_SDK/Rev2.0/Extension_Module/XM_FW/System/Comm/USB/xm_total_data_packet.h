@@ -1,5 +1,5 @@
-/* AUTO-GENERATED from xm_total_data.yaml v2.8 — DO NOT EDIT MANUALLY */
-/* Layout fingerprint: ce1c6e3a5f3e1ba6 (sha256 of the canonical descriptor list) */
+/* AUTO-GENERATED from xm_total_data.yaml v2.9 — DO NOT EDIT MANUALLY */
+/* Layout fingerprint: 079b701404bb19f5 (sha256 of the canonical descriptor list) */
 
 #ifndef XM_TOTAL_DATA_PACKET_H
 #define XM_TOTAL_DATA_PACKET_H
@@ -144,21 +144,24 @@ typedef struct {
     uint16_t   user_flags;               /* offset: 361, unit: flags */
     uint8_t    user_u8[2];               /* offset: 363, unit: user */
 
+    /* === IMU_Hub_B (4B) === */
+    uint32_t   imu_hub_timestamp_b;      /* offset: 365, unit: ms */
+
 } XM_TotalDataPacket_t;
 #pragma pack(pop)
 
-_Static_assert(sizeof(XM_TotalDataPacket_t) == 365,
+_Static_assert(sizeof(XM_TotalDataPacket_t) == 369,
     "XM_TotalDataPacket_t size mismatch — update YAML and regenerate");
 
 #define XM_TOTAL_DATA_PAYLOAD_SIZE  sizeof(XM_TotalDataPacket_t)
 #define XM_TOTAL_DATA_MODULE_ID     0x20
-#define XM_TOTAL_DATA_NUM_CHANNELS  197   /* excluding reserved */
+#define XM_TOTAL_DATA_NUM_CHANNELS  198   /* excluding reserved */
 
 /* 맵 정체성 — PC 디코더 산출물(.ts/.py)과 같은 값이다.
  * 지금은 어떤 .c 도 참조하지 않으므로 코드/플래시 영향이 0 이다.
  * 와이어에 실어야 할 때(호스트가 FW 맵을 스스로 식별해야 할 때)
  * 그 자리에 넣을 값이 이미 여기 있다. */
-#define XM_TOTAL_DATA_MAP_VERSION      "2.8"
-#define XM_TOTAL_DATA_MAP_FINGERPRINT  "ce1c6e3a5f3e1ba6"
+#define XM_TOTAL_DATA_MAP_VERSION      "2.9"
+#define XM_TOTAL_DATA_MAP_FINGERPRINT  "079b701404bb19f5"
 
 #endif /* XM_TOTAL_DATA_PACKET_H */

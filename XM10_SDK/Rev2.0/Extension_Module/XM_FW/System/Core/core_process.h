@@ -77,6 +77,12 @@ void StartUserTask(void *argument);
  */
 void CoreProcess_OnControlModeRequest(XmControlMode_t mode);
 
+/**
+ * @brief [내부 — 시스템 주기 태스크 전용] 태스크 스택 최소 여유 표(g_task_watermarks)를 갱신합니다.
+ * @details 자주 불러도 되고, 측정은 5 s 에 한 번입니다. 사용자 코드에서는 부르지 않습니다.
+ */
+void CoreProcess_UpdateTaskWatermarks(void);
+
 #ifdef __cplusplus
 }
 #endif

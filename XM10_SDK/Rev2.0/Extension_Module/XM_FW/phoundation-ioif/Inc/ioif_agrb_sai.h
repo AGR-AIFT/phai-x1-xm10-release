@@ -95,7 +95,7 @@ AGRBStatusDef IOIF_SAI_WriteInactiveHalf(IOIF_SAIx_t id, IOIF_SAI_Event_e event,
                                           const void* buffer, size_t length);
 
 /**
- * @brief 외부 버퍼에서 DMA_NORMAL 모드로 직접 전송 (CM-H10 AudioPlayer 패턴)
+ * @brief 외부 버퍼에서 DMA_NORMAL 모드로 직접 전송
  * @param id      SAI 인스턴스 ID
  * @param buffer  전송할 버퍼 (Non-cacheable RAM_D2 권장, DMA 접근 가능해야 함)
  * @param length  바이트 수

@@ -72,7 +72,7 @@
  * @brief SPI 트랜잭션 스탬프 하위 게이트 — 기본값은 IOIF_TIMING_PROBE 를 따른다
  * @details SPI 스탬프는 트랜잭션마다 호출 task 경로에 DWT 읽기·워드 스토어를 얹는다.
  *          트랜잭션이 많은 소비자는 FDCAN 스냅숏은 유지한 채 SPI 만 끄고 싶을 수 있어
- *          분리한다(2026-09-17 pcm 요청 §2). `ioif_conf.h` 에서 0 으로 내리면 SPI 쪽
+ *          분리한다. `ioif_conf.h` 에서 0 으로 내리면 SPI 쪽
  *          필드·훅·`ioif_spi.probe_*` 멤버가 전부 사라진다.
  * @note 두 게이트는 독립이다 — IOIF_TIMING_PROBE=0 에 IOIF_TIMING_PROBE_SPI=1 조합도 유효.
  */

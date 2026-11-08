@@ -17,6 +17,18 @@
 #   - "divide":          physical = raw / scale            (IMU Hub)
 #   - "none":            physical = raw                    (기본값)
 #
+# Version: 2.9
+# Date:    2026-10-21
+# Changes:
+#   - IMU_Hub_B 섹션 신설: imu_hub_timestamp_b(u32@365) — IMU Hub TPDO2(IMU 3~5)
+#     프레임 시각. 지금까지 imu_hub_timestamp 는 TPDO1(IMU 0~2) 시각뿐이라
+#     TPDO2 가 빠졌는지, IMU 3~5 가 이전 프레임 값인지 알 수 없었다.
+#     IMU Hub 는 두 TPDO 에 같은 시각을 넣어 보내므로, 두 칸이 같을 때만
+#     IMU 0~5 가 같은 프레임이다. 패킷 끝에 붙여 기존 필드 offset 전부 불변.
+#     Total packet: 365B → 369B (와이어 payload 368 → 372 B, 0x20 와이어 379 → 383 B).
+#     ⚠ 수신 프로그램이 payload 길이를 365±3 으로 검사하면 새 FW 패킷을 버린다 —
+#     PLAN-20261021-imu-hub-tpdo2-timestamp.md §소비자.
+#
 # Version: 2.8
 # Date:    2026-08-20
 # Changes:
@@ -120,7 +132,7 @@
 #   - H10 PDO: line-by-line copy (memcpy 제거, 구조체 레이아웃 의존성 제거)
 # =============================================================================
 
-version: "2.8"
+version: "2.9"
 packet_name: XM_TotalDataPacket
 module_id: 0x20
 endian: little
@@ -282,7 +294,7 @@ groups:
     desc: "IMU Hub module (6x IMU sensors, raw int16)"
     scale_formula: divide
     fields:
-      - { name: imu_hub_timestamp,      type: uint32, unit: ms,    desc: "IMU Hub frame timestamp (24-bit, wraps at ~4.6hrs)" }
+      - { name: imu_hub_timestamp,      type: uint32, unit: ms,    desc: "IMU Hub TPDO1 (IMU 0~2) frame timestamp (24-bit, wraps at ~4.6hrs)" }
       - { name: imu_hub_connected_mask, type: uint8,  unit: flags, desc: "bit0~5: IMU 0~5 connected (1=yes)" }
       - name: imu_hub_sensor
         type: imu_hub_sensor_t
@@ -382,7 +394,7 @@ groups:
   # 16. User_Custom (28B) — In-packet user algorithm data slot
   # ===========================================================================
   #
-  # Replaces former Reserved_HMMG (28B). Lives inside the 365B Total Data
+  # Replaces former Reserved_HMMG (28B). Lives inside the Total Data
   # Packet (Module ID 0x20) so user-written values are automatically streamed
   # and recorded by PhAI Studio with zero extra plumbing.
   #
@@ -403,6 +415,21 @@ groups:
       - { name: user_i16,   type: int16,   count: 4, unit: user,  desc: "Int16 slots — raw counters / ADC values" }
       - { name: user_flags, type: uint16,            unit: flags, desc: "16 bit-flags for FSM/debug state" }
       - { name: user_u8,    type: uint8,   count: 2, unit: user,  desc: "Small enum/state bytes" }
+
+  # ===========================================================================
+  # 17. IMU_Hub_B (4B) — ImuHub_Drv_GetRxData().timestamp_b (v2.9)
+  # ===========================================================================
+  #
+  # IMU Hub 는 IMU 0~2 를 TPDO1, IMU 3~5 를 TPDO2 로 따로 보낸다. 두 프레임은 따로
+  # 도착·반영되므로, imu_hub_timestamp(TPDO1) 하나로는 IMU 3~5 가 같은 프레임인지
+  # 알 수 없다. imu_hub_timestamp_b == imu_hub_timestamp 이면 IMU 0~5 가 같은 프레임,
+  # 작으면 IMU 3~5 가 이전 프레임(TPDO2 가 아직 안 왔거나 빠짐)이다.
+  # IMU_Hub 섹션 안이 아니라 패킷 끝에 둔 이유: 기존 필드 offset 을 하나도 바꾸지 않으려고.
+  #
+  - name: IMU_Hub_B
+    desc: "IMU Hub TPDO2 (IMU 3~5) frame timestamp — compare with imu_hub_timestamp"
+    fields:
+      - { name: imu_hub_timestamp_b, type: uint32, unit: ms, desc: "IMU Hub TPDO2 (IMU 3~5) frame timestamp (24-bit, wraps at ~4.6hrs)" }
 
 # =============================================================================
 # Complex Types — 복합 타입 정의

@@ -79,12 +79,21 @@ void AGR_SDO_CreateAbortResponse(AGR_SDO_Msg_t* out_rsp,
  * @param od      Object Dictionary 테이블
  * @param req     수신한 SDO 요청
  * @param out_rsp 응답 SDO 메시지 (출력)
- * @return 0=성공, <0=에러
+ * @return 0=성공, <0=에러(이때 out_rsp 에는 abort 응답이 들어 있다 — 아래 참고)
  *
  * @details
  * CANopen Command Specifier에 따라 Upload(Read) / Download(Write)를 분류하고,
  * OD Entry를 조회하여 응답을 생성합니다.
  * DOP-level 콜백(on_sdo_request)은 상위 Facade에서 처리합니다.
+ *
+ * [응답 유무는 반환값이 아니라 `out_rsp->cs` 로 정한다 (2026-10-29)]
+ * - `out_rsp->cs != 0` → 그 응답을 **보낸다**. 정상 응답(0x41/0x60)뿐 아니라, OD 없음 ·
+ *   RO 쓰기 · WO 읽기 · OD 읽기/쓰기 실패 · 미지원 cs 에서 만든 **abort(0x80)도 보낸다**
+ *   (반환값은 <0 이지만 응답은 있다). 종전 전송 계층은 <0 이면 보내지 않아, 마스터가
+ *   ABORT 대신 TIMEOUT 으로 끝났다.
+ * - `out_rsp->cs == 0` → 보낼 응답이 **없다**. 마스터가 보낸 abort(0x80)를 받은 경우다
+ *   (abort 는 확인 응답이 없는 서비스, CiA 301) — 이때 out_rsp 를 0 으로 비운다.
+ * - 반환값 계약(0 / -1 / -2 / -3)은 종전 그대로다.
  */
 int32_t AGR_SDO_ProcessRequest(const AGR_OD_Table_t* od,
                            const AGR_SDO_Msg_t* req,

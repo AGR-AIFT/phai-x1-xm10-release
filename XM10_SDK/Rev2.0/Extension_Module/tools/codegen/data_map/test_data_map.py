@@ -5,14 +5,14 @@
 
 무엇을 지키려는 시험인가
 ------------------------
-생성기가 "111 descriptor / 197 scalar / 365 B" 라고 **스스로 말하는 것**은 증거가 아니다.
+생성기가 "112 descriptor / 198 scalar / 369 B" 라고 **스스로 말하는 것**은 증거가 아니다.
 같은 함수가 세 산출물을 다 만들기 때문에, 그 함수가 틀리면 셋이 사이좋게 같이 틀린다.
 
 그래서 이 시험은 가능한 한 **서로 다른 경로끼리** 맞춰 본다:
 
   * struct 포맷 문자열 ↔ descriptor 의 offset 필드
       → 포맷은 `build_struct_chunks()`, offset 은 `flatten_fields()` 가 따로 만든다.
-        `struct` 모듈이 계산한 크기와 손으로 누적한 offset 이 197개 전부 일치해야 한다.
+        `struct` 모듈이 계산한 크기와 손으로 누적한 offset 이 198개 전부 일치해야 한다.
   * C 헤더 ↔ Python 맵
       → 채널 수는 C 생성기가 `channel_count` 로 따로 세고, Python 은 `expand_scalars()`
         로 따로 센다. 두 값이 같아야 한다. 크기는 C 쪽 `_Static_assert` 리터럴이 근거다.
@@ -40,9 +40,9 @@ C_HDR = os.path.normpath(os.path.join(HERE, "..", "..", "..",
                                       "xm_total_data_packet.h"))
 
 # 계약 수치. 바뀌면 이 파일도 같이 고쳐야 한다 — 그게 이 상수들의 존재 이유다.
-EXPECT_DESCRIPTORS = 111
-EXPECT_SCALARS = 197
-EXPECT_SIZE = 365
+EXPECT_DESCRIPTORS = 112   # v2.9: imu_hub_timestamp_b 추가 (111 → 112)
+EXPECT_SCALARS = 198       # (197 → 198)
+EXPECT_SIZE = 369          # (365 → 369)
 
 
 def _load(path, name):
@@ -78,7 +78,7 @@ def test_generator_counts(gen, M):
 
 
 def test_no_gaps_or_overlaps(gen):
-    """365 B 를 111 descriptor 가 빈틈없이·겹침없이 덮는가."""
+    """369 B 를 112 descriptor 가 빈틈없이·겹침없이 덮는가."""
     data = gen.load_yaml(YAML)
     flat, size = gen.flatten_fields(data.get("groups", []), data.get("types", {}))
     cursor = 0

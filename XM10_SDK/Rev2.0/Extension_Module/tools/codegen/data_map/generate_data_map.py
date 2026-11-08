@@ -575,8 +575,8 @@ def _emit(path, content, label, args):
             return 1
         with open(path, "r", encoding="utf-8") as f:
             on_disk = f.read()
-        # 줄바꿈 정규화 후 비교. 워킹트리는 autocrlf 로 CRLF, git blob 과 리눅스 CI 는 LF —
-        # 바이트로 비교하면 플랫폼 때문에 거짓 실패한다. 검사 대상은 내용이지 EOL 이 아니다.
+        # 줄바꿈 정규화 후 비교. 워킹트리 · git blob · 리눅스 CI 모두 LF 가 기본이지만(.gitattributes eol=lf),
+        # 편집기 등이 CRLF 로 바꿔 놓을 수 있다 — 검사 대상은 내용이지 EOL 이 아니다.
         if on_disk.splitlines() != content.splitlines():
             print(f"[CHECK-FAIL] {label}: YAML 과 불일치 — {path}")
             print("             재생성 필요: --check 를 빼고 같은 명령을 다시 실행")
@@ -585,7 +585,9 @@ def _emit(path, content, label, args):
         return 0
 
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
+    # LF 로 쓴다(newline="\n"). 텍스트 모드 기본값은 Windows 에서 CRLF 라, 빌드가 이 명령을 다시 돌리면
+    # 내용은 같은데 git status 에 '수정됨'이 떴다(.gitattributes eol=lf 로 워킹트리는 LF).
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
         f.write(content)
     print(f"[OK] {label}: {path}")
     if args.dry_run:

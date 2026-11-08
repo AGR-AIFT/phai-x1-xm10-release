@@ -22,8 +22,12 @@
 /* --- Standard Libraries --- */
 #include <stdint.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <string.h>
 #include <math.h>
+#include <stdio.h>    /* snprintf 등 — 표준 함수도 이 파일 하나로 쓸 수 있습니다 */
+#include <stdlib.h>   /* abs 등 */
+#include <assert.h>
 
 /* --- XM10 Module APIs --- */
 #include "xm_api_data.h"        // 로봇 데이터 및 제어 명령
@@ -38,6 +42,9 @@
 #include "xm_api_rtc.h"         // RTC 날짜/시간 관리
 #include "xm_api_freertos.h"    // 백그라운드 태스크 (FreeRTOS 래퍼)
 #include "xm_api_safety.h"      // 공통 안전 헬퍼 (소프트스타트/slew/클램프)
+#include "xm_api_canbus.h"      // CAN-FD 로 연결한 내 장치와 주고받기 (Rev 2.0)
+#include "xm_api_canopen.h"     // CANopen 장치 도움 함수 (Rev 2.0 · 클래식 모드)
+#include "xm_api_imu_calib.h"   // IMU Hub 센서 제자리 보정 (Rev 2.0)
 
 /**
  *-----------------------------------------------------------

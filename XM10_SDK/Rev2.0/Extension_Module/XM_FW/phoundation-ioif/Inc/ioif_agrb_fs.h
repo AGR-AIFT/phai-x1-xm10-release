@@ -249,7 +249,7 @@ AGRBFileSystemStatusDef ioif_filesystem_delete(const char* path, FRESULT* fresul
  * ⚠ FatFs f_rename 은 **대상이 이미 존재하면 FR_EXIST** 이고(덮어쓰기 아님),
  *   디렉터리 엔트리 갱신 중 전원 단절 시 cross-link 가능 구간이 있다(ff.c 주석).
  *   "원자적 교체"가 필요하면 호출자가 unlink→rename 순서와 복구 규약을 갖춰야
- *   한다 — phorce-pcm docs/plans/PLAN-20260831-studio-cdc-only.md §5 참조.
+ *   한다.
  * @param[in]  old_path 현재 경로
  * @param[in]  new_path 새 경로 (존재하면 FR_EXIST)
  * @param[out] fresult (Optional) FATFS FRESULT 반환값

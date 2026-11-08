@@ -28,6 +28,7 @@
 #define DEVICES_CONTROL_MODULE_INC_CM_DRV_H_
 
 #include "data_object_interface.h"
+#include "cm_nmt_state.h"      /* CM_NmtState_t — 공개 API 도 쓰므로 따로 둔다 */
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -37,17 +38,6 @@
  *            PUBLIC DEFINITIONS AND ENUMERATIONS
  *-----------------------------------------------------------
  */
-
-/* ===== PnP NMT 상태 정의 (cm_xm_link.h에서 이동) =====
- * [변경 이유] Link → Device 병합 (Phase 5)
- * - 값은 CM의 ExtLinkNmtState_t와 동일 (SDO 통신 호환성)
- */
-typedef enum {
-    CM_NMT_INITIALISING = 0,
-    CM_NMT_PRE_OPERATIONAL,
-    CM_NMT_OPERATIONAL,
-    CM_NMT_STOPPED
-} CM_NmtState_t;
 
 // --- 1. 논리적 Dictionary ID (통신 방향) ---
 typedef enum {

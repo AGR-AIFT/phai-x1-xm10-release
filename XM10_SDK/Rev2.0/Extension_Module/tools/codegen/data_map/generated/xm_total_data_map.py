@@ -1,5 +1,5 @@
-# AUTO-GENERATED from xm_total_data.yaml v2.8 — DO NOT EDIT MANUALLY
-# Layout fingerprint: ce1c6e3a5f3e1ba6 (sha256 of the canonical descriptor list)
+# AUTO-GENERATED from xm_total_data.yaml v2.9 — DO NOT EDIT MANUALLY
+# Layout fingerprint: 079b701404bb19f5 (sha256 of the canonical descriptor list)
 # 생성기: Extension_Module/tools/codegen/data_map/generate_data_map.py --py-out
 """
 XM10 Total Data Packet (PhAI module_id 0x20) — 디코드 맵.
@@ -8,7 +8,7 @@ PhAI V2.2 프레임의 payload 를 이름 붙은 스칼라로 푸는 데 필요�
 표준 라이브러리만 쓴다 — 어디서든 import 된다.
 
     import xm_total_data_map as M
-    raw = M.PACKET_STRUCT.unpack(payload)      # 197 개 스칼라
+    raw = M.PACKET_STRUCT.unpack(payload)      # 198 개 스칼라
     for name, v, mul, div in zip(M.SCALAR_NAMES, raw, M.SCALAR_MUL, M.SCALAR_DIV):
         phys = v * mul if mul is not None else (v / div if div is not None else v)
 
@@ -27,12 +27,12 @@ from __future__ import annotations
 import struct
 from typing import NamedTuple, Optional, Tuple
 
-DATA_MAP_VERSION = '2.8'
-DATA_MAP_FINGERPRINT = 'ce1c6e3a5f3e1ba6'
-TOTAL_PACKET_SIZE = 365
+DATA_MAP_VERSION = '2.9'
+DATA_MAP_FINGERPRINT = '079b701404bb19f5'
+TOTAL_PACKET_SIZE = 369
 PACKET_ENDIAN = 'little'
-NUM_DESCRIPTORS = 111
-NUM_SCALARS = 197
+NUM_DESCRIPTORS = 112
+NUM_SCALARS = 198
 
 # `multiply_divide` 의 분모. YAML 주석(scale_formula 설명)이 정의하는 상수다 —
 # YAML 데이터에는 없으므로 생성기가 알고 있어야 한다.
@@ -78,7 +78,7 @@ class ScalarDef(NamedTuple):
     div: Optional[float]
 
 
-# --- descriptors (111) — C 구조체 필드와 1:1 ---
+# --- descriptors (112) — C 구조체 필드와 1:1 ---
 TOTAL_DATA_MAP: Tuple[ChannelDef, ...] = (
     ChannelDef(  0, 'xm_loop_count',             'uint32',   1, 1,         'none',            'count',     'Header'),
     ChannelDef(  4, 'device_online_mask',        'uint16',   1, 1,         'none',            'flags',     'Header'),
@@ -191,6 +191,7 @@ TOTAL_DATA_MAP: Tuple[ChannelDef, ...] = (
     ChannelDef(353, 'user_i16',                  'int16',    4, 1,         'none',            'user',      'User_Custom'),
     ChannelDef(361, 'user_flags',                'uint16',   1, 1,         'none',            'flags',     'User_Custom'),
     ChannelDef(363, 'user_u8',                   'uint8',    2, 1,         'none',            'user',      'User_Custom'),
+    ChannelDef(365, 'imu_hub_timestamp_b',       'uint32',   1, 1,         'none',            'ms',        'IMU_Hub_B'),
 )
 
 # --- struct 포맷 — 그룹 경계를 살려 둔다(사람이 대조할 수 있게) ---
@@ -213,10 +214,11 @@ PACKET_STRUCT_FORMAT = (
     'BBBBBB'         # FDCAN1_Diag
     'BBBBBB'         # FDCAN2_Diag
     '4f4hH2B'        # User_Custom
+    'I'              # IMU_Hub_B
 )
 PACKET_STRUCT = struct.Struct(PACKET_STRUCT_FORMAT)
 
-# --- scalars (197) — unpack() 순서 그대로 ---
+# --- scalars (198) — unpack() 순서 그대로 ---
 SCALARS: Tuple[ScalarDef, ...] = (
     ScalarDef('xm_loop_count',                   'Header',        'count',     'uint32',  None,                    None),
     ScalarDef('device_online_mask',              'Header',        'flags',     'uint16',  None,                    None),
@@ -415,6 +417,7 @@ SCALARS: Tuple[ScalarDef, ...] = (
     ScalarDef('user_flags',                      'User_Custom',   'flags',     'uint16',  None,                    None),
     ScalarDef('user_u8[0]',                      'User_Custom',   'user',      'uint8',   None,                    None),
     ScalarDef('user_u8[1]',                      'User_Custom',   'user',      'uint8',   None,                    None),
+    ScalarDef('imu_hub_timestamp_b',             'IMU_Hub_B',     'ms',        'uint32',  None,                    None),
 )
 
 SCALAR_NAMES: Tuple[str, ...] = tuple(s.name for s in SCALARS)

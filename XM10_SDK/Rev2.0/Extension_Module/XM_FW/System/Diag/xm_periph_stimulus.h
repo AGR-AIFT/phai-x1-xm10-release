@@ -142,6 +142,10 @@ typedef enum {
     XM_STIM_FDCAN2_REJECT_TEC_ACCUMULATED      = 2,  /**< @deprecated 2026-05-14 TEC pre-check 제거로
                                                       *   현재 unreachable — wire 호환 위해 값만 보존 */
     XM_STIM_FDCAN2_REJECT_RESTRICTED_MODE_FAIL = 3,  /**< Restricted Mode 진입 실패 (HAL Stop/Start) */
+    XM_STIM_FDCAN2_REJECT_USER_DEVICE_LIVE     = 4,  /**< 외부(3rd-party) 장치가 버스에 있음 —
+                                                      *   Restricted Mode 가 XM 송신을 멈춰 그 장치의 명령 · SYNC 가 끊긴다 */
+    XM_STIM_FDCAN2_REJECT_CLASSIC_MODE         = 5,  /**< [2026-10-29 §4.10.4] Ch2 가 클래식(또는 사용 불가) 모드 — 시험 프레임이
+                                                      *   CANopen 장치에 명령으로 읽힐 수 있다 */
 } XM_StimFdcan2RejectReason_e;
 
 /**

@@ -121,6 +121,7 @@ void AGR_CANFD_Reset(AGR_DOP_Ctx_t* ctx);
  * @param data   수신 데이터
  * @param len    데이터 길이
  * @return 0=처리 완료, 1=해당 없음, <0=에러
+ *         (SDO 요청: -2 = 디코드 실패, -3 = 처리 실패 — **둘 다 abort 응답을 보낸 뒤**의 값)
  *
  * @details
  * CAN-ID를 Function Code(상위 4bit)와 Node ID(하위 7bit)로 분리하여
@@ -141,8 +142,14 @@ int32_t AGR_CANFD_ProcessRxMessage(AGR_DOP_Ctx_t* ctx,
  * @brief SDO 요청 처리 (on_sdo_request 콜백 우선 + Core 위임)
  * @param ctx     DOP Context
  * @param req     수신한 SDO 요청
- * @param out_rsp 응답 SDO 메시지 (출력)
+ * @param out_rsp 응답 SDO 메시지 (출력) — **진입 시 0 으로 비운다**(2026-10-29)
  * @return 0=성공, <0=에러
+ *
+ * @details
+ * 콜백이 `out_rsp->cs` 를 0 이 아닌 값으로 채우면 그 응답을 쓰고 Core 를 건너뛴다.
+ * 응답을 보낼지는 반환값이 아니라 `out_rsp->cs` 로 정한다 — `!= 0` 이면 보내고
+ * (Core 가 만든 abort 포함, 이때 반환은 <0), `== 0` 이면 보낼 응답이 없다
+ * (받은 요청이 abort 였던 경우). 규칙은 `AGR_SDO_ProcessRequest` 문서와 같다.
  */
 int32_t AGR_CANFD_ProcessSDORequest(AGR_DOP_Ctx_t* ctx,
                                 const AGR_SDO_Msg_t* req,
@@ -151,9 +158,20 @@ int32_t AGR_CANFD_ProcessSDORequest(AGR_DOP_Ctx_t* ctx,
 /**
  * @brief SDO 메시지 전송 (CAN-ID 자동 결정)
  * @param ctx       DOP Context
- * @param target_id 대상 Node ID
+ * @param target_id 대상 Node ID — 요청일 때만 쓴다
  * @param msg       SDO 메시지
  * @return 0=성공, <0=에러
+ *
+ * @details
+ * CAN-ID 는 `msg->cs` 로 정한다 (2026-10-29 정정 — 종전에는 0x21 이 빠져 쓰기 요청이
+ * 응답 ID 로 나갔다).
+ * - 요청: Read Req 0x40(`AGR_SDO_CreateReadReq`) · Write Req 0x21(`AGR_SDO_CreateWriteReq`)
+ *   · 폐기된 0x20 → 대상의 요청 ID(0x600 + target_id)
+ * - 그 밖(Read Resp 0x41 · Download Rsp 0x60 · abort 0x80) → 자기 응답 ID
+ *   (0x580 + ctx->node_id). target_id 는 쓰지 않는다.
+ * abort 는 클라이언트·서버 양쪽이 보내는 메시지라 cs 만으로 방향을 알 수 없다 — 이 함수는
+ * 서버 쪽(응답 ID)으로 보낸다. 마스터가 슬레이브에 abort 를 보내려면 이 함수를 쓰지 말 것
+ * (MW 마스터에는 abort 를 보내는 경로가 없다).
  */
 int32_t AGR_CANFD_SendSDO(AGR_DOP_Ctx_t* ctx,
                       uint8_t target_id,

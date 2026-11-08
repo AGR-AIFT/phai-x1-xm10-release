@@ -150,17 +150,34 @@ int32_t AGR_PDO_Encode(const AGR_PDO_MapTable_t* map,
  * @param map    Mapping Table 포인터
  * @param od     Object Dictionary 테이블
  * @param in_buf 입력 버퍼
- * @param in_len 버퍼 길이
- * @return 디코딩된 바이트 수, <0=에러
+ * @param in_len 버퍼 길이 — `uint16_t`(2026-10-07 확장, 종전 `uint8_t`). Serial 프레임은
+ *               `AGR_COBS_MAX_FRAME_SIZE` 를 256 넘게 잡는 모듈이 있다(SM-IMU 448).
+ *               CAN-FD(최대 64 B) 호출부는 그대로 암묵 승격된다.
+ * @return 디코딩된 바이트 수(>=0), -1=인자 NULL, -3=매핑이 in_len 을 넘침(아무것도 적용 안 됨)
  *
  * @details
  * Mapping Table에 등록된 OD Entry들에 순서대로 값을 언패킹합니다.
  * 읽기 전용(RO) Entry는 건너뛰고, 쓰기 완료 콜백(on_write)을 호출합니다.
+ * OD 에 없거나 `data_ptr` 이 NULL 인 매핑 항목은 `length_bytes` 만큼 건너뜁니다
+ * (뒤 필드 정렬 유지).
+ *
+ * [프레임 정책 — validate-then-commit (2026-10-07, D-09)]
+ * 매핑 **전체**가 `in_len` 안에 들어갈 때만 적용합니다. 한 필드라도 넘치면
+ * **어떤 OD Entry 도 쓰지 않고** `-3` 을 돌려줍니다 — 부분 적용이 없습니다.
+ * 종전에는 들어가는 앞 필드를 적용한 뒤 중단하고 그때까지의 바이트 수를 돌려줬고,
+ * 커서가 `uint8_t` 라 결측 필드 길이를 더하다 넘치면 뒤 필드가 엉뚱한 바이트를
+ * 읽었습니다(예: 200+60 → 커서 4). 호출자가 `in_len` 보다 짧은 프레임을 넘기면
+ * 이제 전부 거부됩니다 — 반환값 `<0` 을 확인하세요.
+ *
+ * ⚠️ **적용 패스 자체는 원자적이지 않습니다.** "검증 뒤 적용" 은 *잘못된 프레임을
+ * 반영하지 않는다*는 보장일 뿐, 여러 Entry 쓰기가 한 번에 보이게 하지는 않습니다 —
+ * 다른 컨텍스트(태스크)가 중간 상태를 읽을 수 있습니다. 묶음 일관성이 필요하면
+ * 호출자가 Mutex+Snapshot 으로 감쌉니다(동기화 = 호출자 책임, Core 는 Non-Blocking).
  */
 int32_t AGR_PDO_Decode(const AGR_PDO_MapTable_t* map,
                    const AGR_OD_Table_t* od,
                    const uint8_t* in_buf,
-                   uint8_t in_len);
+                   uint16_t in_len);
 
 /**
  *-----------------------------------------------------------

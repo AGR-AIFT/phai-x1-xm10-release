@@ -16,7 +16,7 @@
  * └─────────────────────────────────────────────────────────────────┘
  *
  * [Total Data Packet (0x20)]
- * - 365B 구조체(H10 관절각/토크, GRF, IMU Hub, External IO 등)를 1kHz 자동 전송
+ * - 369B 구조체(H10 관절각/토크, GRF, IMU Hub, External IO 등)를 1kHz 자동 전송
  * - 사용자 코드 불필요 — PC 프로그램(PhAI Studio, xm10 도구)이 포트를 열면 자동 수신됨
  *
  * [User Custom (0xF0~0xFE)]
@@ -106,7 +106,7 @@ void Control_Setup(void)
      * [1] Total Data Packet (Module ID 0x20) — 사용자 코드 불필요
      *
      * XM10 이 H10 데이터(관절각/토크/IMU), GRF, IMU Hub, External IO 등
-     * 365B를 PC 프로그램이 포트를 열면 자동으로 1kHz 스트리밍합니다.
+     * 369B를 PC 프로그램이 포트를 열면 자동으로 1kHz 스트리밍합니다.
      * PhAI Studio에서 0x20 채널을 선택하면 즉시 모니터링 가능합니다.
      *
      * → 아무 코드도 필요 없음.

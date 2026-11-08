@@ -182,6 +182,13 @@ void LedManager_SetChannelPattern(ChannelLedId_t ch, LedMode_t green, LedMode_t 
 void LedManager_SetChannelRGB(ChannelLedId_t ch, uint8_t r, uint8_t g, uint8_t b);
 
 /**
+ * @brief 채널 LED의 RGB 직접 설정을 풀고 패턴(자동 상태 LED)으로 되돌립니다.
+ * @details 패턴 자체는 바꾸지 않습니다 — 디바이스 상태가 정한 패턴이 다음 갱신부터 다시 나옵니다.
+ * @param[in] ch 채널 LED ID
+ */
+void LedManager_ClearChannelRGB(ChannelLedId_t ch);
+
+/**
  * @brief 채널 LED의 Green/Red/Blue 패턴을 설정합니다.
  * @param[in] ch 채널 LED ID
  * @param[in] green Green LED 패턴
