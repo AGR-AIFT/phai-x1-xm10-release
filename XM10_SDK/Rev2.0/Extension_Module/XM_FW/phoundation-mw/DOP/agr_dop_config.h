@@ -43,7 +43,13 @@
  *  AGR 단일 포맷의 Write Req(0x21)·Read Resp(0x41)는 헤더가 6B(cs+index+sub 4B + 길이 2B)라
  *  CAN-FD 단일 프레임의 실효 데이터 상한은 64 - 6 = **58B** 다(`agr_sdo_protocol.c` SDO_EXPLICIT_OFFSET,
  *  `AGR_SDO_Encode` 가 초과 시 -2). 종전 주석 "페이로드 - 헤더 4바이트" 는 0x80·0x60 의 4B 헤더
- *  기준이라 60B 를 쓸 수 있는 것처럼 읽혔다. 같은 정의가 `agr_dop_types.h` 에도 있다(값 동일, #ifndef). */
+ *  기준이라 60B 를 쓸 수 있는 것처럼 읽혔다.
+ *  - Serial · UDP 처럼 큰 SDO 가 필요한 모듈은 agr_mw_conf.h 에서 올린다(예: 120 — USB 동적
+ *    TPDO 매핑). CAN-FD 실효 상한(58B)은 이 값과 상관없다. 상한 255(`agr_sdo_master.c` _Static_assert).
+ *  - 수신한 SDO 의 선언 길이가 이 값을 넘으면 `AGR_SDO_Decode` 가 -3 → 디스패처가 abort(DATA_LONG).
+ *  - 서버 읽기는 이 값보다 큰 OD 항목을 이 값까지만 담는다(`AGR_OD_ReadValue`, 오류 없음) — CAN-FD 는
+ *    그 응답이 프레임에 안 들어가 abort(DATA_LONG), Serial 은 앞부분만 간다.
+ *  정의는 이 파일 한 곳이다(`agr_dop_types.h` 의 사본은 2026-10-29 에 지웠다 — 위 AGR_CANFD_MAX_PAYLOAD 도). */
 #ifndef AGR_SDO_MAX_DATA_SIZE
 #define AGR_SDO_MAX_DATA_SIZE       60
 #endif
@@ -56,7 +62,7 @@
 
 /** @brief OD Entry 개수 참고 상한 (사이징 가이드 — 강제 아님)
  *  @note  현재 코드 어디에서도 버퍼 크기로 사용하지 않는다. 실제 entry_count/sort_buf
- *         는 각 모듈이 sizeof 기반으로 정의 (실측: EMG ~34, IMU 134, SAM3x 424+).
+ *         는 각 모듈이 sizeof 기반으로 정의 (실측: EMG ~34, IMU 134, 모터 드라이버 424+).
  *         고정 버퍼를 이 값으로 잡는 코드를 추가할 경우 RAM 영향 재검토 필수. */
 #ifndef AGR_OD_MAX_ENTRIES
 #define AGR_OD_MAX_ENTRIES          512
@@ -185,14 +191,14 @@ typedef enum {
  *-----------------------------------------------------------
  * "제어 입력" 클래스 메시지 (P/F/I trajectory, ES vector 등) 전용 채널.
  * SDO(main-loop deferred)와 달리 단일 atomic 프레임을 소비 모듈이 정한
- * 제어 tick 에서 결정적으로 처리한다. 설계 SSOT:
- * SAM3x_FW `MD_FW/Devices/AGR/Control_Module/Doc/md_command_vector_design.md`.
+ * 제어 tick 에서 결정적으로 처리한다.
+ *
  */
 
 /** @brief Command Vector 채널 컴파일 스위치 (기본 OFF — 모터/제어 모듈만 opt-in).
  *  @details 0 = CAN-FD RX 핸들러(VECTOR_REQ/ACK) pass-through + TX 함수(SendVector*)
  *           미컴파일 + agr_vector.c inert → 미사용 모듈은 소스를 빌드에서 제거 가능.
- *           1 = 소비 모듈(SAM3x slave / CM master 등)이 agr_mw_conf.h 에서 override +
+ *           1 = 소비 모듈(모터 드라이버 slave / master 등)이 agr_mw_conf.h 에서 override +
  *           agr_vector.c 를 빌드에 편입. **주의**: `AGR_Vector_Ctrl_t` 는 스위치와
  *           무관하게 AGR_DOP_Ctx_t 에 by-value 임베드 유지(모듈 간 ctx 레이아웃 동일).
  *           스위치가 없거나 0인데 소비 코드가 링크되면 agr_vector.c self-guard 로
@@ -273,7 +279,7 @@ typedef enum {
  * XM Rev2.0:              CANFD=1, UDP=1, COE=0, SERIAL=0  (CAN-FD + Ethernet)
  * IMU Hub:                CANFD=1, UDP=0, COE=0, SERIAL=0  (CAN-FD Slave)
  * CM (Central Module):    CANFD=1, UDP=0, COE=0, SERIAL=0  (EtherCAT=SOES; CAN-FD Bridge)
- * CM-WH:                  CANFD=1, UDP=0, COE=0, SERIAL=1  (EtherCAT=SOES; CAN-FD + Serial)
+ * CM (Serial/BLE):        CANFD=1, UDP=0, COE=0, SERIAL=1  (EtherCAT=SOES; CAN-FD + Serial)
  * MD (Motor Driver):      CANFD=1, UDP=0, COE=0, SERIAL=0  (EtherCAT=SOES; CAN-FD)
  * Jetson AM:              CANFD=0, UDP=0, COE=0, SERIAL=0  (EtherCAT Master=SOEM)
  */

@@ -35,8 +35,8 @@
 
 /* BOOT — App-side bootloader integration (ConfirmBoot, RequestUpdate)
  * H7 only: requires dual-bank flash + RTC BKP
- * Enable for: XM, CM-WH (H7 with bootloader)
- * Disable for: G4 modules (SM-IMU, SM-EMG, SM-FES) */
+ * Enable for: H7 modules with the bootloader (e.g. XM)
+ * Disable for: G4 modules */
 #if defined(AGR_MW_MCU_SERIES_H7)
     #define AGR_MW_BOOT_ENABLE
 #endif

@@ -110,7 +110,7 @@ int32_t AGR_OD_WriteValue(const AGR_OD_Entry_t* entry,
  *          2) 스칼라 type↔size 정합 → AGR_OD_OnSizeMismatch() weak hook.
  *             size 는 스칼라 원소 크기의 0 아닌 배수여야 함 — 배수 허용은
  *             "원소 타입 + 총 바이트"로 배열을 노출하는 관례(예: FLOAT32/12
- *             = float[3], SAM3x 생성 OD) 지원. FLOAT32/2 같은 절단 오기는 검출.
+ *             = float[3], 일부 모듈의 생성 OD) 지원. FLOAT32/2 같은 절단 오기는 검출.
  *             BLOB 은 가변이라 검사 제외.
  *          sort_buf 미제공(선형) slave 도 커버 → "정렬 인덱스 배선을 잊어도
  *          테이블 오류는 debug 서 드러난다"를 보장.

@@ -3,8 +3,8 @@
  * @file    agr_mw_version.h
  * @author  HyundoKim
  * @brief   AGR_MW 라이브러리 버전 번호 (표시용)
- * @version 0.2.0
- * @date    Oct 29, 2026
+ * @version 0.2.1
+ * @date    Nov 8, 2026
  *
  * @details
  * 이 레포의 릴리스 번호다. **정본은 git 어노테이트 태그 `mw-vX.Y.Z`** 이고,
@@ -17,7 +17,7 @@
  * [왜 DOP/ 에 두는가]
  * 소비 빌드 6곳 모두의 include 경로에 공통으로 들어 있는 MW 폴더가 `DOP/` 뿐이다.
  *
- * [올리는 기준] (하니스 `docs/plans/PLAN-20261007-phoundation.md` §4 "2-a 진행 방법")
+ * [올리는 기준]
  * - `0.y.z` 동안 **y** = 새 API · 공개 헤더 · 와이어(통신 형식)가 바뀔 때
  * - **z** = 그 밖의 코드 수정
  * - 문서 · `.claude/` 만 바뀌면 올리지 않는다
@@ -34,6 +34,6 @@
 
 #define AGR_MW_VERSION_MAJOR    0
 #define AGR_MW_VERSION_MINOR    2
-#define AGR_MW_VERSION_PATCH    0
+#define AGR_MW_VERSION_PATCH    1
 
 #endif /* AGR_MW_VERSION_H */

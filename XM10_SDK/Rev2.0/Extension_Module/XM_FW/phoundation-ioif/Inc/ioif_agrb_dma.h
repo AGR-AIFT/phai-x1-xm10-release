@@ -48,7 +48,7 @@
  * @return 매핑된 IRQn. 모르는 stream/channel 이면 (IRQn_Type)0 -
  *         호출자는 0 이면 NVIC 를 건드리지 않아야 한다(fail-safe).
  * @note ioif_agrb_uart.c / ioif_agrb_adc.c 의 Manual-Init NVIC 설정 공용 진입점.
- *       예전에는 두 파일이 같은 표를 각자 갖고 있었다(PLAN-20260907 E4-c 통합).
+ *       예전에는 두 파일이 같은 표를 각자 갖고 있었다.
  */
 IRQn_Type IOIF_DMA_GetIrqFromInstance(void* dma_instance);
 

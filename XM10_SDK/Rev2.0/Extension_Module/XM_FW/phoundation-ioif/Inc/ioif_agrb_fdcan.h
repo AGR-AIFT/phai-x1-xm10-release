@@ -187,7 +187,7 @@ AGRBStatusDef IOIF_FDCAN_TransmitClassic(IOIF_FDCANx_t id, uint32_t can_id, cons
  * 묶어야 하는 소비자를 위한 **별도 opt-in 창구**다.
  * 기존 `IOIF_FDCAN_Transmit*`·`AGR_TxFunc_t` 경로는 이 게이트를 몰라도 된다.
  *
- * 설계·검증 근거 → `docs/plans/PLAN-20260921-fdcan-tx-receipt.md`
+ *
  */
 #if defined(AGRB_IOIF_FDCAN_TX_RECEIPT_ENABLE)
 
@@ -469,7 +469,7 @@ IOIF_FDCAN_SvcResult_t IOIF_FDCAN_ServicePeriodic(IOIF_FDCANx_t id);
  *         IOIF_FDCAN_GetTxInFlightCount 로 본다).
  *         AGRBStatus_TIMEOUT — TX 락(5 ms) 실패, **아무것도 비우지 않았다** → flush 요청을 다시 세울 것.
  *         AGRBStatus_NOT_INITIALIZED — 미할당 id.
- * @note 2026-10-29 전에는 void 라 TIMEOUT 을 알 수 없었다(XM PLAN-20261029 §10 ⑮). 반환값을 쓰지 않는
+ * @note 2026-10-29 전에는 void 라 TIMEOUT 을 알 수 없었다. 반환값을 쓰지 않는
  *       기존 호출(문장 호출)은 그대로 컴파일되고 동작도 같다. BareMetal 은 TX 락이 없어 항상 OK.
  */
 AGRBStatusDef IOIF_FDCAN_AbortAllTx(IOIF_FDCANx_t id);

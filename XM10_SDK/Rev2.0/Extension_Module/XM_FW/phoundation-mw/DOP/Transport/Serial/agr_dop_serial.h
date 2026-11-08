@@ -36,7 +36,7 @@
  *
  * [사용 시나리오]
  *   SM ↔ Python GUI:   USB-CDC → DOP Serial (COBS) → 센서모듈 진단
- *   CM-WH ↔ ESP32 BLE: USART2 → DOP Serial (COBS) → ble_comm
+ *   CM ↔ ESP32 BLE:    USART2 → DOP Serial (COBS) → BLE 통신
  *   CM ↔ App:          BLE UART → DOP Serial (COBS) → 스마트폰 앱
  *
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.

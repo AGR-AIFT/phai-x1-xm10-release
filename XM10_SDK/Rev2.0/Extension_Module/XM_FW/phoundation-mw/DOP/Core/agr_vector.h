@@ -30,8 +30,8 @@
  *   mid-level 1kHz drain)은 소비 모듈 책임. Core 는 순수 C / Context 기반 /
  *   reentrant(per-ctx) / non-blocking / no HAL·RTOS.
  *
- * 설계 SSOT: SAM3x_FW
- * `MD_FW/Devices/AGR/Control_Module/Doc/md_command_vector_design.md`
+ *
+ *
  *
  * @copyright Copyright (c) 2026 Angel Robotics Co., Ltd. All rights reserved.
  ******************************************************************************

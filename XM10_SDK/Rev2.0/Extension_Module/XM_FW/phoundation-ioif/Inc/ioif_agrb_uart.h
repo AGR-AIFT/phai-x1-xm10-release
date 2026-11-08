@@ -149,7 +149,7 @@ AGRBStatusDef IOIF_UART_SetRxIdleCallback(IOIF_UARTx_t id, IOIF_UART_RxEventCall
  *   (RxState→READY). 에러콜백 경로가 놓친 침묵 정지까지, 앱 주기 태스크
  *   (권장 ~100ms)에서 호출하면 복구됨.
  * - single-writer 계약: RTOS 에서 실제 재무장은 공유 RxTask 단독 실행 (본 API 는
- *   pending 예약+알림만 — 락 없이 동시 재무장 레이스 원천 차단, Rule 01 §7.6 정합).
+ *   pending 예약+알림만 — 락 없이 동시 재무장 레이스 원천 차단).
  * - 정상 수신 중이면 상태 읽기 1회 비용의 no-op. POLLING_TASK 모드는 대상 아님(OK).
  * - Call context: Task 전용 (ISR 호출 금지). RTOS/BareMetal 공통.
  */
