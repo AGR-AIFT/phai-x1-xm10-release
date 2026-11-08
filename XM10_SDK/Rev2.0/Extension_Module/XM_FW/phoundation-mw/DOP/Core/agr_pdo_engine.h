@@ -11,9 +11,9 @@
  * AGR_PDO_MapTable_t, AGR_OD_Table_t, AGR_PDO_Inhibit_t를 직접 받아 처리합니다.
  *
  * [사용 주체]
- * - Slave 모듈 (SM-IMU, SM-EMG, SM-FES): TPDO Encode + RPDO Decode에 사용
+ * - Slave 모듈 (IMU Hub 등): TPDO Encode + RPDO Decode에 사용
  *   → AGR_CANFD_ProcessRxMessage() 내부에서 AGR_PDO_Decode() 호출
- * - Master 모듈 (XM, CM-WH): TPDO 수신에는 사용하지 않음
+ * - Master 모듈 (XM 등): TPDO 수신에는 사용하지 않음
  *   → Master는 각 Device Driver에서 raw CAN 데이터를 직접 디코딩
  *   → Master의 DOP Context는 SDO 전송(Pre-Op 설정)에만 사용
  *   → 이유: Master는 여러 Slave의 서로 다른 TPDO 레이아웃을 수신하며,
@@ -151,7 +151,7 @@ int32_t AGR_PDO_Encode(const AGR_PDO_MapTable_t* map,
  * @param od     Object Dictionary 테이블
  * @param in_buf 입력 버퍼
  * @param in_len 버퍼 길이 — `uint16_t`(2026-10-07 확장, 종전 `uint8_t`). Serial 프레임은
- *               `AGR_COBS_MAX_FRAME_SIZE` 를 256 넘게 잡는 모듈이 있다(SM-IMU 448).
+ *               `AGR_COBS_MAX_FRAME_SIZE` 를 256 넘게 잡는 모듈이 있다(예: 448).
  *               CAN-FD(최대 64 B) 호출부는 그대로 암묵 승격된다.
  * @return 디코딩된 바이트 수(>=0), -1=인자 NULL, -3=매핑이 in_len 을 넘침(아무것도 적용 안 됨)
  *

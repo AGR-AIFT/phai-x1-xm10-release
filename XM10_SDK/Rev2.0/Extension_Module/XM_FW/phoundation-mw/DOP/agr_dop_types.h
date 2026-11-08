@@ -41,19 +41,10 @@
  *-----------------------------------------------------------
  */
 
-/** @brief CANFD 최대 페이로드 크기 (64 bytes) */
-#define AGR_CANFD_MAX_PAYLOAD       64
-
-/**
- * @brief SDO 데이터 버퍼 크기 (RAM knob). 기본 60.
- * @note  와이어 size 필드는 uint16(≤65535) 이지만 실제 버퍼는 이 값으로 제한.
- *        UDP/Serial 대용량이 필요한 모듈은 agr_mw_conf.h 에서 override.
- *        수신 시 declared > 이 값 → abort + diag (oversize).
- *        주의: 0x21/0x41 헤더는 6B → CAN-FD 단일프레임 data 실효 상한 = 64-6 = 58B.
- */
-#ifndef AGR_SDO_MAX_DATA_SIZE
-#define AGR_SDO_MAX_DATA_SIZE       60
-#endif
+/* AGR_CANFD_MAX_PAYLOAD · AGR_SDO_MAX_DATA_SIZE 는 agr_dop_config.h 에서 정의한다(위 #include).
+ * 모듈별 값은 agr_mw_conf.h 에서 바꾼다(SDO 버퍼 override 경로 · 수신 초과 abort · 상한은 그 정의의 주석).
+ * 여기서 다시 정의하지 않는다 — 2026-10-29 까지 이 자리에 같은 값의 사본이 있었지만, 위 #include 가
+ * 먼저 정의하므로 한 번도 적용되지 않았다(사본만 고치면 "바꿨는데 안 바뀌는" 혼란만 남는다). */
 
 /**
  * @brief SDO Master 동시 in-flight transaction 풀 크기 (per context).
@@ -285,7 +276,7 @@ typedef struct {
     uint8_t       cs;                           /**< Command Specifier (CANopen 표준) */
     uint16_t      index;                        /**< Object Index */
     uint8_t       subindex;                     /**< Sub-Index */
-    uint8_t       data[AGR_SDO_MAX_DATA_SIZE];  /**< Data (CANFD: 최대 60바이트) */
+    uint8_t       data[AGR_SDO_MAX_DATA_SIZE];  /**< Data — 버퍼 AGR_SDO_MAX_DATA_SIZE(기본 60). CAN-FD 실효 58B */
     uint16_t      data_len;                     /**< 실제 데이터 길이 (uint16: UDP/Serial >255B 대비) */
 } AGR_SDO_Msg_t;
 
@@ -424,7 +415,7 @@ typedef struct {
  *        호출될 수 있고(예: IMU Hub G4 BareMetal — FDCAN Rx ISR 직접 호출), Risk
  *        Manager 는 main/task 에서 폴링한다. 따라서 카운터는 volatile — 가시성 보장용
  *        (증분 원자성은 보장 아님; 단일 ISR-writer + main-reader 전제, Cortex-M aligned
- *        16-bit 접근은 원자적). 소비 모듈이 SDO 를 main 으로 defer(R13: EMG/FES/SAM3x)
+ *        16-bit 접근은 원자적). 소비 모듈이 SDO 를 main 으로 defer
  *        하면 ISR-write 는 없으나, lib 은 소비자별 defer 를 가정할 수 없으므로 기본적으로
  *        ISR/main 안전을 보장한다. CMW-08 (2026-06-19 전 소비모듈 전수조사로 확정). */
 typedef struct {
@@ -527,8 +518,8 @@ typedef struct {
  *
  * SDO(main-loop deferred)와 달리 단일 atomic 프레임을 소비 모듈이 정한
  * 제어 tick 에서 결정적으로 처리한다 (Core 는 stage+검증만 — tick 소유 안 함).
- * Function API: Core/agr_vector.h. 설계 SSOT: SAM3x_FW
- * `MD_FW/Devices/AGR/Control_Module/Doc/md_command_vector_design.md`.
+ * Function API: Core/agr_vector.h.
+ *
  *
  * @note  타입을 (agr_vector.h 가 아니라) 여기 둔 이유: AGR_DOP_Ctx_t 가
  *        AGR_Vector_Ctrl_t 를 by-value 임베드하려면 완전 타입이 보여야 함

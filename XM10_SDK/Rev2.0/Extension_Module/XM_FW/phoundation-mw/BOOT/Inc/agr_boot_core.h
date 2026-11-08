@@ -14,8 +14,8 @@
  *   - AGR_Boot_ClearAttemptCount() : 안정 도달 시 가드 횟수 0 (BKP5R = magic|0)
  *
  *   BKP4R~7R 계약과 동작은 agr_boot_types.h 의 AGR_BOOT_RSR_BKP_REG_INDEX /
- *   AGR_BOOT_ATTEMPT_* / AGR_BOOT_DIAG_* 주석과 부트로더 레포
- *   `docs/plans/PLAN-20261006-bl-bootloop-guard.md` 를 따른다.
+ *   AGR_BOOT_ATTEMPT_* / AGR_BOOT_DIAG_* 주석을 따른다.
+ *
  *
  *   Module-specific boot triggers (CDC-FTP, UART-FTP, CAN-FD boot, etc.)
  *   live in each module's System/Boot/ directory.

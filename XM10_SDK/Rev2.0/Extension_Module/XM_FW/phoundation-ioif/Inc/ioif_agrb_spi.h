@@ -55,7 +55,7 @@
 #define IOIF_SPI_ISR_MQ_UNIT_SIZE           (16U) //ISR에서 관리하는 메시지 큐의 단위 크기 (바이트)
 
 #if defined(AGRB_IOIF_SPI_POLL_ENABLE)
-/** @brief set_poll_deadline 상한(µs) — 폴링은 짧은 전송 전용이라 API 가 길이를 강제한다 (PLAN-20260917 D5) */
+/** @brief set_poll_deadline 상한(µs) — 폴링은 짧은 전송 전용이라 API 가 길이를 강제한다 */
 #define IOIF_SPI_POLL_DEADLINE_MAX_US       (1000U)
 #endif
 
@@ -120,7 +120,7 @@ typedef struct {
 #if defined(AGRB_IOIF_SPI_POLL_ENABLE)
     /** 폴링 경로 트랜잭션인가. true 면 ⑤=④(ISR 없음), ⑥=task 가 올린 CS high,
      *  `complete` = 폴링 정상 완료. `complete` 뒤 패딩 자리(offset 25)라 기존 필드
-     *  오프셋·sizeof(28) 불변 (PLAN-20260917 D6). */
+     *  오프셋·sizeof(28) 불변. */
     bool     polled;
 #endif
 } IOIF_SPI_ProbeTxn_t;
@@ -178,7 +178,7 @@ typedef struct {
 #endif /* IOIF_TIMING_PROBE_SPI */
 
 #if defined(AGRB_IOIF_SPI_POLL_ENABLE)
-    /* ===== 소형 전송 폴링 경로 (F′, PLAN-20260917) — 게이트 AGRB_IOIF_SPI_POLL_ENABLE =====
+    /* ===== 소형 전송 폴링 경로 — 게이트 AGRB_IOIF_SPI_POLL_ENABLE =====
      * 기존 write/read 는 그대로 두고 **별도 진입점**으로 둔다. 시그니처가 write/read 와 같아
      * 호출자는 wire 길이로 함수 포인터만 고르면 된다. 경로 선택(DMA vs 폴링)은 호출자 몫. */
 

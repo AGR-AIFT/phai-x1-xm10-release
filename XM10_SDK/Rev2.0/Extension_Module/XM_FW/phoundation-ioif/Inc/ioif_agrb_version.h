@@ -3,8 +3,8 @@
  * @file    ioif_agrb_version.h
  * @author  HyundoKim
  * @brief   [IOIF] 라이브러리 버전 번호 (표시용)
- * @version 0.3.1
- * @date    Nov 6, 2026
+ * @version 0.3.2
+ * @date    Nov 8, 2026
  *
  * @details
  * 이 레포의 릴리스 번호다. **정본은 git 어노테이트 태그 `ioif-vX.Y.Z`** 이고,
@@ -31,6 +31,6 @@
 
 #define IOIF_VERSION_MAJOR      0
 #define IOIF_VERSION_MINOR      3
-#define IOIF_VERSION_PATCH      1
+#define IOIF_VERSION_PATCH      2
 
 #endif /* IOIF_AGRB_VERSION_H */
