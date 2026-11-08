@@ -55,7 +55,7 @@
 | 외부 GPIO 핀맵 (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | 외부 GPIO 핀맵 (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | 내 보드가 Rev 1.1 인지 Rev 2.0 인지 | [hardware/README.md - 보드 리비전 비교](hardware/README.md#보드-리비전-비교) |
-| 52 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (40 개는 양쪽 모두 동작·외부 GPIO 핀맵만 다름, Ex.10 · Ex.34 · Ex.36 과 Ex.40/41/42/43/44 는 Rev 2.0 전용) |
+| 52 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (40 개는 양쪽 모두 동작·외부 GPIO 핀맵만 다름, Ex.10 · Ex.34 · Ex.36 과 Ex.40 ~ 48 은 Rev 2.0 전용) |
 
 ## 📥 펌웨어 업로드
 

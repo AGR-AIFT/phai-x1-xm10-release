@@ -167,7 +167,7 @@ while (XM_CanReadFrame(&f)) {
 | `XM_CAN_NOT_OWNER` | `Control_Setup()` · `Control_Loop()` 밖에서 불렀습니다 | 호출 자리를 옮김 |
 
 - 모든 함수는 `Control_Setup()` · `Control_Loop()` 안에서만 부르세요(등록 함수는 `Control_Setup()` 안에서만). 어느 함수도 기다리지 않습니다.
-- `XM_CanIsIdAllowed` · `XM_CanIsDeviceIdAllowed` · `XM_CanFitLength` · `XM_CanSeqIsNewer` 는 어디서나 부를 수 있습니다.
+- `XM_CanGetBusMode` · `XM_CanIsIdAllowed` · `XM_CanIsDeviceIdAllowed` · `XM_CanFitLength` · `XM_CanSeqIsNewer` 는 어디서나 부를 수 있습니다.
 
 ---
 
