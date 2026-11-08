@@ -184,6 +184,7 @@ First, confirm which revision your board is. The board label reads either `Rev 1
 | Onboard button MCU pins | PC10 / PC11 / PC12 | PC11 / PC12 / PC13 (shifted by one pin) |
 | External GPIO connector location / label | [Rev 1.1 pinmap](external-gpio-rev1.1.md) | [Rev 2.0 pinmap](external-gpio-rev2.0.md) |
 | Distribution ZIP | `Rev1.1.zip` | `Rev2.0.zip` |
+| SDK updates | **Ended** — last version v2.8.1 | Ongoing |
 
 > Building with a ZIP from a different revision than your board — the build itself will succeed, but the onboard button and LED MCU pin mappings will be off by one position and the board will not behave correctly. Always check the board label first.
 

@@ -52,7 +52,7 @@
 
 📦 **다운로드**: [Releases v2.10.0](https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/tag/v2.10.0) → Assets 섹션
 - **Rev2.0 보드** → `Rev2.0.zip` (대부분 여기)
-- **Rev1.1 보드** → `Rev1.1.zip`
+- **Rev1.1 보드** → `Rev1.1.zip` — v2.8.1 이 마지막 판이며 더 이상 업데이트하지 않습니다
 - 보드 라벨로 본인 리비전 확인 후 선택. 모호하면 → [docs/hardware/README.md - 보드 리비전 비교](docs/hardware/README.md#보드-리비전-비교)
 
 ### AI 와 함께 (가장 빠릅니다)

@@ -55,7 +55,7 @@ Go to the GitHub Releases page and download only the ZIP for your board revision
 📦 https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/latest
 
 - **Rev 2.0 board** → `Rev2.0.zip` (most users)
-- **Rev 1.1 board** → `Rev1.1.zip`
+- **Rev 1.1 board** → `Rev1.1.zip` (v2.8.1 is the last version — it will not be updated any more)
 
 ```powershell
 # Recommended: a short path with no Korean characters

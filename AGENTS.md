@@ -27,7 +27,7 @@
 1. 한글·공백 경로 금지 (CubeIDE 설치 경로 + SDK ZIP 압축 해제 경로 모두)
 2. USB-CDC 단일 점유 — PC 프로그램(PhAI Studio · xm10 도구 · 시리얼 터미널)은 한 번에 하나만 연결하세요.
 3. 사용자 코드 영역: `XM_Apps/Control_Task/` 또는 `examples/*/` 만 수정. XM_API 밖의 라이브러리·시스템 폴더는 봉인.
-4. HW Rev 호환: `Rev1.1` vs `Rev2.0` 독립 SDK — 본인 보드 리비전 확인 필요
+4. HW Rev 호환: `Rev1.1` vs `Rev2.0` 독립 SDK — 본인 보드 리비전 확인 필요 · Rev 1.1 은 v2.8.1 이 마지막(더 이상 업데이트하지 않음)
 5. 부트로더 영역은 SWD 로 1회 flash 이후 사용자가 직접 건드리지 않음
 
 ## 문서 작성 원칙

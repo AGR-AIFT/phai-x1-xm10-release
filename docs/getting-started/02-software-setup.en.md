@@ -60,7 +60,7 @@ The SDK is distributed as **per-revision ZIPs from GitHub Releases**. Download o
 
 Under the Assets section, select your revision:
 - **Rev 2.0** → `Rev2.0.zip`
-- **Rev 1.1** → `Rev1.1.zip`
+- **Rev 1.1** → `Rev1.1.zip` (v2.8.1 is the last version — it will not be updated any more)
 
 **c. Extract (PowerShell)**:
 

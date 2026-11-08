@@ -55,7 +55,7 @@ GitHub Releases 페이지에서 본인 보드 리비전의 ZIP 만 받습니다:
 📦 https://github.com/AGR-AIFT/phai-x1-xm10-release/releases/latest
 
 - **Rev 2.0 보드** → `Rev2.0.zip` (대부분 여기)
-- **Rev 1.1 보드** → `Rev1.1.zip`
+- **Rev 1.1 보드** → `Rev1.1.zip` (v2.8.1 이 마지막 판 — 더 이상 업데이트하지 않습니다)
 
 ```powershell
 # 한글 없는 짧은 경로 권장

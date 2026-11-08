@@ -60,7 +60,7 @@ where STM32CubeIDE.exe
 
 Assets 섹션에서 본인 Rev 선택:
 - **Rev 2.0** → `Rev2.0.zip`
-- **Rev 1.1** → `Rev1.1.zip`
+- **Rev 1.1** → `Rev1.1.zip` (v2.8.1 이 마지막 판 — 더 이상 업데이트하지 않습니다)
 
 **c. 압축 해제 (PowerShell)**:
 

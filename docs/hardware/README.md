@@ -184,6 +184,7 @@ ST-Link V2/V3 디버거 연결용 4-pin 헤더. 펌웨어를 처음 올릴 때 +
 | 내장 버튼 MCU 핀 | PC10 / PC11 / PC12 | PC11 / PC12 / PC13 (한 핀 시프트) |
 | 외부 GPIO 커넥터 위치/라벨 | [Rev 1.1 핀맵](external-gpio-rev1.1.md) | [Rev 2.0 핀맵](external-gpio-rev2.0.md) |
 | 배포 ZIP | `Rev1.1.zip` | `Rev2.0.zip` |
+| SDK 업데이트 | **종료** — 마지막 v2.8.1 | 계속 |
 
 > 본인 보드의 Rev 와 다른 ZIP 을 풀어 빌드하면 — 빌드 자체는 통과하지만 — 내장 버튼/LED 의 MCU 핀 매핑이 한 칸씩 어긋나 동작하지 않습니다. 보드 라벨을 먼저 확인하세요.
 

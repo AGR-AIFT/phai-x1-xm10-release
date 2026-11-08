@@ -6,7 +6,7 @@
 
 ## [v2.10.0] — 2026-11-08
 
-> **Rev 2.0 전용 릴리즈 — CAN-FD #2 포트로 내 장치 · CANopen 드라이버와 주고받고, IMU Hub 센서를 장착한 채로 보정합니다.** 새 헤더 3 개(`xm_api_canbus.h` · `xm_api_canopen.h` · `xm_api_imu_calib.h`)와 새 예제 4 개(Ex.45 ~ 48), 상대 장치 예제(`device-examples/`)가 생겼습니다. Rev 1.1 은 v2.8.1 그대로입니다.
+> **Rev 2.0 전용 릴리즈 — CAN-FD #2 포트로 내 장치 · CANopen 드라이버와 주고받고, IMU Hub 센서를 장착한 채로 보정합니다.** 새 헤더 3 개(`xm_api_canbus.h` · `xm_api_canopen.h` · `xm_api_imu_calib.h`)와 새 예제 4 개(Ex.45 ~ 48), 상대 장치 예제(`device-examples/`)가 생겼습니다. **Rev 1.1 은 더 이상 업데이트하지 않습니다**(마지막 v2.8.1).
 
 ### Added
 * **CAN 통신 (Rev 2.0)** — `xm_api_canbus.h`. 장치 번호를 등록해 내 장치의 주기 데이터 · 살아있음을 받고 명령을 보냅니다(`XM_CanAttachDevice()` · `XM_CanReadLatest()` · `XM_CanSend()`). ID 와 데이터만으로 주고받는 자유 송수신(`XM_CanSendFrame()` · `XM_CanReadFrame()` · `XM_CanSubscribe()`), 클래식 CAN 모드(`XM_CanBusMode()`), 동기 신호 · XM10 하트비트(`XM_CanEnableSync()` · `XM_CanEnableHeartbeat()`)도 있습니다. (보드 확인 전) <!-- board-check -->
@@ -33,7 +33,7 @@
 ### Notes
 * **보드로 아직 확인하지 못한 것** — CAN 통신 · CANopen · IMU Hub 센서 보정 전체와 Ex.45 ~ 48, 장치 예제(G474 참조 장치는 빌드까지, PC 시뮬레이터는 PC 안의 가상 버스 시험까지), Total Data 의 새 칸과 흔들림 수정, 새 기능을 쓰지 않는 코드의 동작, 버전 번호 보고. (보드 확인 전) <!-- board-check -->
 * **PhAI Studio** — Total Data 가 4 B 커져 PhAI Studio 에서 Total Data 가 보이지 않을 수 있습니다. 그때는 `xm10` 도구로 보세요.
-* **Rev 1.1** 은 v2.8.1 그대로입니다(SDK · 예제 40 개). 새 헤더가 없어 CAN 통신 · CANopen · IMU Hub 센서 보정은 Rev 1.1 에서 쓸 수 없습니다.
+* **Rev 1.1 업데이트 종료** — 마지막 Rev 1.1 SDK 는 v2.8.1 입니다(예제 40 개). 다음 릴리즈부터는 Rev 2.0 만 냅니다. 새 헤더가 없어 CAN 통신 · CANopen · IMU Hub 센서 보정은 Rev 1.1 에서 쓸 수 없습니다.
 * 부트로더는 v1.1.0, KIT H10 펌웨어는 CM · SAM10 v2.4.0 그대로입니다.
 
 ---
