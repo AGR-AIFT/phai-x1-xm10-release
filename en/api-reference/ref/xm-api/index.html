@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -35,10 +35,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -780,6 +780,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1118,6 +1124,90 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CAN Communication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-canopen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with CANopen Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-imu-calibration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IMU Hub Sensor Calibration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1127,6 +1217,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1163,7 +1259,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_15" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -1185,14 +1281,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_15" id="__nav_6_15_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_6_12">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_15">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1670,6 +1766,90 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canbus.h (CAN Communication)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-canopen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canopen.h (CANopen)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-imu-calib/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_imu_calib.h (IMU Calibration)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1967,6 +2147,8 @@
       
         
       
+        
+      
     
     
     
@@ -2019,6 +2201,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.10.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.10.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2590,7 +2800,7 @@
 </code></pre></div>
 <p><code>xm_api.h</code> itself implements no functionality — it is a <strong>facade header</strong>. It only aggregates the sub-API headers via <code>#include</code>, and directly declares one system-wide timer utility function, <code>XM_GetTick()</code>. For the actual usage of each domain (function lists, examples, caveats), follow the concept docs linked in the table below — this page does not re-explain any of those domains.</p>
 <h2 id="what-this-header-aggregates">What this header aggregates<a class="headerlink" href="#what-this-header-aggregates" title="Permanent link">&para;</a></h2>
-<p><code>xm_api.h</code> includes the following sub-API headers. There are 12 on Rev2.0 and 9 on Rev1.1 (see the table below and "Revision differences at a glance" for the difference). A <code>.c</code> file that uses the struct logging macros (<code>XM_LOG_*</code>) must also include <code>xm_api_logging_raw.h</code> directly — <code>xm_api.h</code> does not include that header.</p>
+<p><code>xm_api.h</code> includes the following sub-API headers. There are 15 on Rev2.0 and 9 on Rev1.1 (see the table below and "Revision differences at a glance" for the difference). A <code>.c</code> file that uses the struct logging macros (<code>XM_LOG_*</code>) must also include <code>xm_api_logging_raw.h</code> directly — <code>xm_api.h</code> does not include that header.</p>
 <table>
 <thead>
 <tr>
@@ -2673,11 +2883,29 @@
 <td>Safe-torque helpers (new in v2.6.0) — <code>XM_SafeTorque_*</code> combines bad-value rejection, limit clamping, entry soft-start and slew limiting in one call; plus <code>XM_SafeAssistLevel()</code> and <code>XM_SafeIsFresh()</code> for sensor freshness. Implemented inside the header, so there is no separate <code>.c</code></td>
 <td><a href="../../02-h10-control-n-data/">02 KIT H10 Control &amp; Data</a></td>
 </tr>
+<tr>
+<td>13</td>
+<td><code>xm_api_canbus.h</code></td>
+<td>Send and receive with your own device connected over CAN-FD or classic CAN</td>
+<td><a href="../../11-canbus/">11 CAN Communication</a> — 🟢 <strong>Rev 2.0 only</strong></td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>xm_api_canopen.h</code></td>
+<td>CANopen device helper functions (classic mode only)</td>
+<td><a href="../../12-canopen/">12 Working with CANopen Devices</a> — 🟢 <strong>Rev 2.0 only</strong></td>
+</tr>
+<tr>
+<td>15</td>
+<td><code>xm_api_imu_calib.h</code></td>
+<td>In-place calibration of IMU Hub sensors</td>
+<td><a href="../../13-imu-calibration/">13 IMU Hub Sensor Calibration</a> — 🟢 <strong>Rev 2.0 only</strong></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Revision differences at a glance</strong>:</p>
 <ul>
-<li>🟢 <strong>Rev 2.0 only</strong>: <code>xm_api_memory.h</code> · <code>xm_api_logging.h</code> · <code>xm_api_usb_msc.h</code> — these header files do not exist at all in the Rev1.1 SDK (i.e. <code>xm_api.h</code> does not include them there). <code>xm_api_memory.h</code> reflects Rev2.0-only hardware such as the 8MB Workspace/PSRAM. <code>xm_api_logging_raw.h</code> also exists only in the Rev2.0 SDK.</li>
+<li>🟢 <strong>Rev 2.0 only</strong>: <code>xm_api_memory.h</code> · <code>xm_api_logging.h</code> · <code>xm_api_usb_msc.h</code> · <code>xm_api_canbus.h</code> · <code>xm_api_canopen.h</code> · <code>xm_api_imu_calib.h</code> — these header files do not exist at all in the Rev1.1 SDK (i.e. <code>xm_api.h</code> does not include them there). <code>xm_api_memory.h</code> reflects Rev2.0-only hardware such as the 8MB Workspace/PSRAM. <code>xm_api_logging_raw.h</code> also exists only in the Rev2.0 SDK.</li>
 <li>⚠️ <strong>Rev1.1 limitation</strong>: <code>xm_api_rtc.h</code> exists as a file in both revisions, but Rev1.1 boards do not carry the RTC chip (MCP79510), so every function compiles down to a stub (always returns <code>false</code> / no-op). If you need timekeeping on Rev1.1, fall back to elapsed time based on <code>XM_GetTick()</code>.</li>
 <li>Among the other headers, <code>xm_api_data.h</code>, <code>xm_api_led_btn.h</code>, <code>xm_api_external_io.h</code> and <code>xm_api_usb.h</code> differ in content between the two revisions. For what differs, see each reference page (for example the "Rev1.1 / Rev2.0 Difference Summary" of <a href="../xm-api-usb/"><code>xm_api_usb.h</code></a>). <code>xm_api_tsm.h</code>, <code>xm_api_user_custom.h</code>, <code>xm_api_freertos.h</code> and <code>xm_api_safety.h</code> have no functional difference.</li>
 </ul>
@@ -2845,10 +3073,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>

@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -35,10 +35,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#tutorials--48-개-예제로-배우기" class="md-skip">
+        <a href="#tutorials--52-개-예제로-배우기" class="md-skip">
           콘텐츠로 이동
         </a>
       
@@ -960,6 +960,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#part-8--can-장치-연동--센서-보정--rev-20-전용-v2100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 8 — CAN 장치 연동 · 센서 보정 🛑 Rev 2.0 전용 (v2.10.0)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#예제-시험해보기" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -989,6 +1000,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1353,11 +1370,101 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../api-reference/11-canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CAN 통신
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/12-canopen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CANopen 장치 다루기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/13-imu-calibration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IMU Hub 센서 보정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1394,7 +1501,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_15" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1416,14 +1523,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_15" id="__nav_6_15_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_12">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_15">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1771,6 +1878,90 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/ref/xm-api-canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canbus.h (CAN 통신)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/ref/xm-api-canopen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canopen.h (CANopen)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/ref/xm-api-imu-calib/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_imu_calib.h (IMU 보정)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2068,6 +2259,8 @@
       
         
       
+        
+      
     
     
     
@@ -2120,6 +2313,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/v2.10.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.10.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2753,6 +2974,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#part-8--can-장치-연동--센서-보정--rev-20-전용-v2100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 8 — CAN 장치 연동 · 센서 보정 🛑 Rev 2.0 전용 (v2.10.0)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#예제-시험해보기" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2783,8 +3015,8 @@
   
 
 
-<h1 id="tutorials--48-개-예제로-배우기">Tutorials — 48 개 예제로 배우기<a class="headerlink" href="#tutorials--48-개-예제로-배우기" title="Permanent link">&para;</a></h1>
-<p>XM10 기능을 단계적으로 익힐 수 있도록 48 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.09 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.</p>
+<h1 id="tutorials--52-개-예제로-배우기">Tutorials — 52 개 예제로 배우기<a class="headerlink" href="#tutorials--52-개-예제로-배우기" title="Permanent link">&para;</a></h1>
+<p>XM10 기능을 단계적으로 익힐 수 있도록 52 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.09 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.</p>
 <p>예제 전체 카탈로그는 <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md">examples/README.md</a> 에 있고, 막히면 각 README 맨 아래의 "흔한 실수" 섹션을 먼저 보세요. Claude Code 사용자라면 <code>"Ex.XX 가 안 돼"</code> 라고만 말해도 <code>example-helper</code> 가 해당 예제의 흔한 실수 + 트러블슈팅 문서를 인용해 답해줍니다.</p>
 <hr />
 <h2 id="추천-순서">추천 순서<a class="headerlink" href="#추천-순서" title="Permanent link">&para;</a></h2>
@@ -2941,7 +3173,7 @@
 - 첫 2 주는 사용자가 환경 구축에서 가장 많이 막힙니다. TA / 강사가 직접 점검 가능한 시간 배정을 권장합니다.
 - 8 주차 미니 프로젝트는 사용자의 동기 유지에 효과적입니다. "Ex.05~09 까지 익힌 걸로 무엇이든" 같은 열린 주제로 운영하세요.
 - 16 주차 기말은 팀 단위 (3~4 명) 권장합니다. Physical AI 응용 트랙 (Ex.21, 31, 32, 33) 을 마지막에 깊이 다루는 팀이 보통 나옵니다.</p>
-<p>진도표에 빠진 예제 (Ex.05d, 10, 15, 22, 24, 28~36, 38~44) 는 자기주도 학습 또는 다음 학기 후속 과목용으로 남겨두는 것이 분량 면에서 자연스럽습니다.</p>
+<p>진도표에 빠진 예제 (Ex.05d, 10, 15, 22, 24, 28~36, 38~48) 는 자기주도 학습 또는 다음 학기 후속 과목용으로 남겨두는 것이 분량 면에서 자연스럽습니다.</p>
 <hr />
 <h2 id="part-0--동작-확인">Part 0 — 동작 확인<a class="headerlink" href="#part-0--동작-확인" title="Permanent link">&para;</a></h2>
 <table>
@@ -3406,6 +3638,48 @@
 <p>IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.</p>
 </blockquote>
 <hr />
+<h2 id="part-8--can-장치-연동--센서-보정--rev-20-전용-v2100">Part 8 — CAN 장치 연동 · 센서 보정 🛑 <strong>Rev 2.0 전용</strong> <em>(v2.10.0)</em><a class="headerlink" href="#part-8--can-장치-연동--센서-보정--rev-20-전용-v2100" title="Permanent link">&para;</a></h2>
+<p>CAN-FD #2 포트에 직접 만든 장치나 CANopen 모터 드라이버를 연결하고, IMU Hub 센서를 장착한 채로 보정합니다. 상대 장치가 없으면 <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/">장치 예제</a> 의 PC 시뮬레이터로 먼저 해 보세요.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">예제</th>
+<th style="text-align: left;">제목</th>
+<th style="text-align: center;">난이도</th>
+<th style="text-align: left;">학습 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/45_CANFD_My_Sensor/">45</a></td>
+<td style="text-align: left;">CAN-FD 로 연결한 내 장치와 주고받기</td>
+<td style="text-align: center;">⭐⭐⭐</td>
+<td style="text-align: left;">장치 번호 등록 · 최신값 읽기 · 명령 · 통계 · 자유 송수신</td>
+</tr>
+<tr>
+<td style="text-align: center;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/46_CANopen_Drive/">46</a></td>
+<td style="text-align: left;">CANopen 드라이버를 SDO 로 설정하고 명령하기</td>
+<td style="text-align: center;">⭐⭐⭐⭐</td>
+<td style="text-align: left;">클래식 CAN · NMT · 하트비트 감시와 소비 · SDO 100 Hz</td>
+</tr>
+<tr>
+<td style="text-align: center;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/47_CANopen_Drive_PDO/">47</a></td>
+<td style="text-align: left;">CANopen 드라이버를 PDO + SYNC 로 1 kHz 명령하기</td>
+<td style="text-align: center;">⭐⭐⭐⭐</td>
+<td style="text-align: left;">PDO 매핑 절차 · SYNC · RPDO / TPDO</td>
+</tr>
+<tr>
+<td style="text-align: center;"><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/48_IMU_Hub_Calibration/">48</a></td>
+<td style="text-align: left;">IMU Hub 센서를 제자리에서 보정하기</td>
+<td style="text-align: center;">⭐⭐⭐</td>
+<td style="text-align: left;">자이로 영점 · 지자기 보정 · 중단, 기다리지 않는 요청</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>IMU Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.</p>
+</blockquote>
+<hr />
 <h2 id="예제-시험해보기">예제 시험해보기<a class="headerlink" href="#예제-시험해보기" title="Permanent link">&para;</a></h2>
 <ol>
 <li><code>examples/</code> 에서 원하는 예제의 <code>.c</code> 파일을 엽니다.</li>
@@ -3509,10 +3783,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>

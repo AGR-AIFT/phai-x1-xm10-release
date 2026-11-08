@@ -1,0 +1,4161 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서">
+      
+      
+      
+        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/en/api-reference/ref/xm-api-canopen/">
+      
+      
+        <link rel="prev" href="../xm-api-canbus/">
+      
+      
+        <link rel="next" href="../xm-api-imu-calib/">
+      
+      
+        
+          <link rel="alternate" href="../../../../api-reference/ref/xm-api-canopen/" hreflang="ko">
+        
+          <link rel="alternate" href="./" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>xm_api_canopen.h (CANopen) - XM10 Extension Module</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#xm_api_canopenh--canopen-device-helper-functions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../" title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XM10 Extension Module
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              xm_api_canopen.h (CANopen)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../../api-reference/ref/xm-api-canopen/" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-AIFT/phai-x1-xm10-release
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../" title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    XM10 Extension Module
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-AIFT/phai-x1-xm10-release
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../find-it/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Find
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/01-hardware-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/02-software-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/03-first-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    First Build
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/04-pc-data-tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Get Data on PC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/05-usb-memory-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Save to USB Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start with Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../hardware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hardware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External GPIO (Rev 1.1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External GPIO (Rev 2.0)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-task-state-machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State Machine (TSM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-h10-control-n-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 Control & Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-led-btn-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED & Button
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-usb-connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Serial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB Memory Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-memory-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory Regions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-rtc-clock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Real-Time Clock (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-task-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Auxiliary Tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-struct-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Struct Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CAN Communication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-canopen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with CANopen Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-imu-calibration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IMU Hub Sensor Calibration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_15" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_15" id="__nav_6_15_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Function Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api.h (Entry Point)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_data.h (Control & Data)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-tsm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_tsm.h (State Machine)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-led-btn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_led_btn.h (LED & Button)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_external_io.h (External IO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-usb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-usb-msc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb_msc.h (USB Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (Struct Logging)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_memory.h (Memory)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-rtc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_rtc.h (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-freertos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_freertos.h (RTOS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-user-custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_user_custom.h (User Data)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canbus.h (CAN Communication)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canopen.h (CANopen)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canopen.h (CANopen)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calling-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calling rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-sdo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to use SDO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to use SDO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quiet-period-after-a-timeout-or-a-split-transfer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quiet period after a timeout or a split transfer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nmt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NMT
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NMT">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopensendnmt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenSendNmt
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#heartbeat-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Heartbeat monitoring
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Heartbeat monitoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopenwatchnode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenWatchNode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopengetnodestate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenGetNodeState
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopengetbootupcount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenGetBootupCount
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sdo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SDO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopensdoread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenSdoRead
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopensdowrite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenSdoWrite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopensdogetresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenSdoGetResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statistics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Statistics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopengetstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenGetStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types--constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Types / constants
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Types / constants">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmcanopennodestate_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanOpenNodeState_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanopensdostatus_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanOpenSdoStatus_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanopensdoresult_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanOpenSdoResult_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanopenstats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanOpenStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev11--rev20-difference-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 Difference Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-imu-calib/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_imu_calib.h (IMU Calibration)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kit-h10-firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 Firmware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bootloader/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bootloader
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../release-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Release Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.10.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.10.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.9.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.8.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.8.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.7.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.7.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.5.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.5.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.5.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.5.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.4.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.4.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calling-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calling rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-sdo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to use SDO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to use SDO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quiet-period-after-a-timeout-or-a-split-transfer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quiet period after a timeout or a split transfer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nmt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NMT
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NMT">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopensendnmt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenSendNmt
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#heartbeat-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Heartbeat monitoring
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Heartbeat monitoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopenwatchnode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenWatchNode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopengetnodestate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenGetNodeState
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopengetbootupcount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenGetBootupCount
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sdo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SDO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopensdoread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenSdoRead
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopensdowrite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenSdoWrite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopensdogetresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenSdoGetResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statistics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Statistics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canopengetstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanOpenGetStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types--constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Types / constants
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Types / constants">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmcanopennodestate_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanOpenNodeState_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanopensdostatus_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanOpenSdoStatus_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanopensdoresult_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanOpenSdoResult_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanopenstats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanOpenStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev11--rev20-difference-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 Difference Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related documents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="xm_api_canopenh--canopen-device-helper-functions"><code>xm_api_canopen.h</code> — CANopen Device Helper Functions<a class="headerlink" href="#xm_api_canopenh--canopen-device-helper-functions" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 only</strong> — This header is for XM10 Rev 2.0, and it works only when the port is set to <strong>classic mode</strong>. You cannot use the functions below from a Rev 1.1 project (<code>XM10_SDK/Rev1.1/</code>). To check your board revision, see <a href="../../../hardware/#board-revision-comparison">Board Revision Comparison</a>.</p>
+<ul>
+<li><strong>Header</strong>: <code>XM_FW/XM_API/xm_api_canopen.h</code> (you get it together with <code>xm_api.h</code>. This header includes <code>xm_api_canbus.h</code>)</li>
+<li><strong>Related concept doc</strong>: <a href="../../12-canopen/">12. Working with CANopen Devices</a></li>
+<li><strong>Related examples</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/46_CANopen_Drive/">46_CANopen_Drive</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/47_CANopen_Drive_PDO/">47_CANopen_Drive_PDO</a></li>
+<li><strong>Partner device example</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/canopen-pc-sim/"><code>canopen-pc-sim/</code></a> — a PC simulator of a CANopen velocity-mode drive (<a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/">device-examples</a>)</li>
+<li><strong>Board check</strong>: The behavior below is what the API defines; it has not been confirmed on a board yet. (not yet confirmed on the board) <!-- board-check --></li>
+</ul>
+</blockquote>
+<p>This header defines the functions that help XM10 handle CANopen (CiA 301) motor drivers and similar devices directly — <strong>sending NMT · monitoring node heartbeats · SDO expedited read/write (4 B or less)</strong>. They work only when the port is set to classic mode (<code>XM_CanBusMode</code> in <code>xm_api_canbus.h</code>). In FD mode, sending returns <code>XM_CAN_REJECTED</code> and registering returns <code>false</code>.</p>
+<hr />
+<h2 id="when-to-use-it">When to use it<a class="headerlink" href="#when-to-use-it" title="Permanent link">&para;</a></h2>
+<p>Use it when you connect a device such as a CANopen motor driver to the XM10 classic CAN port, and you want to change its state (NMT), see whether it is alive (heartbeat monitoring), and read and write its settings (SDO). For the order of use, wiring and common mistakes, we recommend reading <a href="../../12-canopen/">12. Working with CANopen Devices</a> first. This page only covers the signatures and parameters of <strong>every function, type and constant</strong> declared in the header.</p>
+<p>What is not in this header is done with <code>xm_api_canbus.h</code>.</p>
+<table>
+<thead>
+<tr>
+<th>What you want to do</th>
+<th>What to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Send SYNC</td>
+<td><a href="../xm-api-canbus/#xm_canenablesync"><code>XM_CanEnableSync</code></a> (length 0 in classic mode)</td>
+</tr>
+<tr>
+<td>Other messages such as PDO</td>
+<td><a href="../xm-api-canbus/#xm_cansendframe"><code>XM_CanSendFrame</code></a> · <a href="../xm-api-canbus/#xm_canreadframe"><code>XM_CanReadFrame</code></a> · <a href="../xm-api-canbus/#xm_cansubscribe"><code>XM_CanSubscribe</code></a></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>Always check a send result with <code>== XM_CAN_OK</code>.</strong> <code>XM_CAN_OK</code> is 0, so <code>if (XM_CanOpenSendNmt(...))</code> reads a failure as a success.</p>
+</blockquote>
+<hr />
+<h2 id="calling-rules">Calling rules<a class="headerlink" href="#calling-rules" title="Permanent link">&para;</a></h2>
+<p>Where to call and how to check results are the same as in <a href="../xm-api-canbus/#calling-rules"><code>xm_api_canbus.h</code></a>. No function waits.</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Functions</th>
+<th>Where to call</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Registration (1)</td>
+<td><code>XM_CanOpenWatchNode</code></td>
+<td>Only in <code>Control_Setup()</code></td>
+</tr>
+<tr>
+<td>Other functions (7)</td>
+<td><code>XM_CanOpenSendNmt</code> · <code>XM_CanOpenGetNodeState</code> · <code>XM_CanOpenGetBootupCount</code> · <code>XM_CanOpenSdoRead</code> · <code>XM_CanOpenSdoWrite</code> · <code>XM_CanOpenSdoGetResult</code> · <code>XM_CanOpenGetStats</code></td>
+<td>Only in <code>Control_Setup()</code> and <code>Control_Loop()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Called from another task or an interrupt, a call is rejected.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>When called from outside</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_CanOpenSendNmt</code> · <code>XM_CanOpenSdoRead</code> · <code>XM_CanOpenSdoWrite</code></td>
+<td><code>XM_CAN_NOT_OWNER</code></td>
+</tr>
+<tr>
+<td><code>XM_CanOpenGetNodeState</code></td>
+<td><code>XM_CANOPEN_NODE_NOT_WATCHED</code></td>
+</tr>
+<tr>
+<td><code>XM_CanOpenSdoGetResult</code></td>
+<td><code>XM_CANOPEN_SDO_IDLE</code> (<code>out</code> unchanged)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="function-list">Function list<a class="headerlink" href="#function-list" title="Permanent link">&para;</a></h2>
+<p><strong>NMT</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_canopensendnmt"><code>XM_CanOpenSendNmt</code></a></td>
+<td>Sends an NMT command</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Heartbeat monitoring</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_canopenwatchnode"><code>XM_CanOpenWatchNode</code></a></td>
+<td>Registers a node for heartbeat monitoring (only in <code>Control_Setup()</code>)</td>
+</tr>
+<tr>
+<td><a href="#xm_canopengetnodestate"><code>XM_CanOpenGetNodeState</code></a></td>
+<td>The state of a monitored node</td>
+</tr>
+<tr>
+<td><a href="#xm_canopengetbootupcount"><code>XM_CanOpenGetBootupCount</code></a></td>
+<td>Number of boot-up notices received from a monitored node</td>
+</tr>
+</tbody>
+</table>
+<p><strong>SDO</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_canopensdoread"><code>XM_CanOpenSdoRead</code></a></td>
+<td>Starts an SDO expedited read</td>
+</tr>
+<tr>
+<td><a href="#xm_canopensdowrite"><code>XM_CanOpenSdoWrite</code></a></td>
+<td>Starts an SDO expedited write</td>
+</tr>
+<tr>
+<td><a href="#xm_canopensdogetresult"><code>XM_CanOpenSdoGetResult</code></a></td>
+<td>Looks at the SDO result</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Statistics</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_canopengetstats"><code>XM_CanOpenGetStats</code></a></td>
+<td>CANopen helper statistics</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Types · constants</strong>: <a href="#xmcanopennodestate_t"><code>XmCanOpenNodeState_t</code></a> · <a href="#xmcanopensdostatus_t"><code>XmCanOpenSdoStatus_t</code></a> · <a href="#xmcanopensdoresult_t"><code>XmCanOpenSdoResult_t</code></a> · <a href="#xmcanopenstats_t"><code>XmCanOpenStats_t</code></a> · <a href="#constants">8 constants</a></p>
+<hr />
+<h2 id="how-to-use-sdo">How to use SDO<a class="headerlink" href="#how-to-use-sdo" title="Permanent link">&para;</a></h2>
+<p>SDO takes <strong>two steps: start, then fetch the result</strong>. Neither function waits.</p>
+<ol>
+<li>Start with <code>XM_CanOpenSdoRead()</code> or <code>XM_CanOpenSdoWrite()</code>. <code>XM_CAN_OK</code> means the request was accepted.</li>
+<li>In <code>Control_Loop()</code>, look at the result with <code>XM_CanOpenSdoGetResult()</code>.</li>
+<li>A finished result (<code>DONE</code> · <code>ABORTED</code> · <code>TIMEOUT</code> · <code>UNSUPPORTED</code>) is returned <strong>once</strong>, and then the status becomes <code>IDLE</code>.</li>
+</ol>
+<p>Only one request runs at a time (shared by all nodes). A new request returns <code>XM_CAN_BUSY</code> while one is in progress, while a result has not been fetched yet, or during the quiet period below.</p>
+<table>
+<thead>
+<tr>
+<th>How it ended</th>
+<th><code>XM_CanOpenSdoGetResult()</code></th>
+<th style="text-align: center;">Quiet period before the next request</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Normally</td>
+<td><code>XM_CANOPEN_SDO_DONE</code></td>
+<td style="text-align: center;">none</td>
+</tr>
+<tr>
+<td>The device sent an abort</td>
+<td><code>XM_CANOPEN_SDO_ABORTED</code></td>
+<td style="text-align: center;">none</td>
+</tr>
+<tr>
+<td>No response within <code>XM_CANOPEN_SDO_TIMEOUT_MS</code> (500 ms)</td>
+<td><code>XM_CANOPEN_SDO_TIMEOUT</code></td>
+<td style="text-align: center;"><code>XM_CANOPEN_SDO_QUARANTINE_MS</code> (1500 ms)</td>
+</tr>
+<tr>
+<td>The device answered with a split transfer</td>
+<td><code>XM_CANOPEN_SDO_UNSUPPORTED</code></td>
+<td style="text-align: center;"><code>XM_CANOPEN_SDO_QUARANTINE_MS</code> (1500 ms)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="quiet-period-after-a-timeout-or-a-split-transfer">Quiet period after a timeout or a split transfer<a class="headerlink" href="#quiet-period-after-a-timeout-or-a-split-transfer" title="Permanent link">&para;</a></h3>
+<p>When a request ends in <code>TIMEOUT</code> or <code>UNSUPPORTED</code>, XM10 sends an abort frame once. After it confirms that the request has left the send queue, it accepts no new SDO request for 1.5 seconds (<code>XM_CAN_BUSY</code>).</p>
+<ul>
+<li>During that time, late responses from that node are dropped. This is so that they are not mistaken for the result of the next request.</li>
+<li>This promise holds only if the device sends its response within 1.4 seconds of receiving the request. Check the device manual.</li>
+<li>Until the send queue empties, new sends from this port are <code>XM_CAN_BUSY</code> for a moment and SYNC can be skipped. Under a light load it is a few ms. Even at worst, 80 ms after 20 ms in a row is normal.</li>
+<li>If another device keeps using the bus without a break, the next SDO request can stay <code>XM_CAN_BUSY</code> for a long time. Reducing the bus load clears it.</li>
+</ul>
+<hr />
+<h2 id="function-details">Function details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
+<h3 id="nmt">NMT<a class="headerlink" href="#nmt" title="Permanent link">&para;</a></h3>
+<h4 id="xm_canopensendnmt"><code>XM_CanOpenSendNmt</code><a class="headerlink" href="#xm_canopensendnmt" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">XmCanResult_t</span><span class="w"> </span><span class="nf">XM_CanOpenSendNmt</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">command</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">node_id</span><span class="p">);</span>
+</code></pre></div>
+<p>Sends an NMT command — ID <code>0x000</code>, data <code>[command, node_id]</code> (2 bytes).</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>command</code></td>
+<td><code>uint8_t</code></td>
+<td>One of the five <a href="#constants"><code>XM_CANOPEN_NMT_*</code></a> values. Any other value gives <code>XM_CAN_REJECTED</code></td>
+</tr>
+<tr>
+<td><code>node_id</code></td>
+<td><code>uint8_t</code></td>
+<td><code>0</code> = all nodes, <code>1</code> – <code>127</code> = that node</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <a href="../xm-api-canbus/#xmcanresult_t"><code>XmCanResult_t</code></a> — <code>XM_CAN_OK</code>: put in the send queue. It does not mean the other side received it. See the table for the other values.</p>
+<p><strong>⚠️ Call context</strong>: Call it in <code>Control_Setup()</code> or <code>Control_Loop()</code>. In FD mode it returns <code>XM_CAN_REJECTED</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_CanOpenSendNmt</span><span class="p">(</span><span class="n">XM_CANOPEN_NMT_START</span><span class="p">,</span><span class="w"> </span><span class="mi">1U</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_CAN_OK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="cm">/* Start was sent to node 1 */</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#xm_canopengetnodestate"><code>XM_CanOpenGetNodeState</code></a></p>
+<hr />
+<h3 id="heartbeat-monitoring">Heartbeat monitoring<a class="headerlink" href="#heartbeat-monitoring" title="Permanent link">&para;</a></h3>
+<h4 id="xm_canopenwatchnode"><code>XM_CanOpenWatchNode</code><a class="headerlink" href="#xm_canopenwatchnode" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanOpenWatchNode</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">node_id</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">timeout_ms</span><span class="p">);</span>
+</code></pre></div>
+<p>Monitors the heartbeat of a node (ID <code>0x700</code> + node ID). Up to <code>XM_CANOPEN_MAX_WATCH_NODES</code> (8) nodes.</p>
+<p>It is meaningful only if the device is set to send its heartbeat periodically. For the device's heartbeat period, check the device manual or SDO <code>0x1017</code>.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>node_id</code></td>
+<td><code>uint8_t</code></td>
+<td>The node number to monitor</td>
+</tr>
+<tr>
+<td><code>timeout_ms</code></td>
+<td><code>uint16_t</code></td>
+<td>If no heartbeat arrives for this long, the state becomes <code>XM_CANOPEN_NODE_LOST</code> [ms]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: registered. <code>false</code>: could not be registered (FD mode and so on).</p>
+<p><strong>⚠️ Call context</strong>: Call it only in <code>Control_Setup()</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="n">XM_CanOpenWatchNode</span><span class="p">(</span><span class="mi">1U</span><span class="p">,</span><span class="w"> </span><span class="mi">1500U</span><span class="p">);</span><span class="w">    </span><span class="cm">/* node 1 — LOST if no heartbeat for 1.5 seconds */</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: If you also use the same ID (<code>0x700</code> + node ID) with <code>XM_CanAttachDevice</code> · <code>XM_CanSubscribe</code> · <code>XM_CanEnableHeartbeat</code>, see <a href="../xm-api-canbus/#xm_canenableheartbeat"><code>XM_CanEnableHeartbeat</code></a>.</p>
+<hr />
+<h4 id="xm_canopengetnodestate"><code>XM_CanOpenGetNodeState</code><a class="headerlink" href="#xm_canopengetnodestate" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">XmCanOpenNodeState_t</span><span class="w"> </span><span class="nf">XM_CanOpenGetNodeState</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">node_id</span><span class="p">);</span>
+</code></pre></div>
+<p>Returns the state of a monitored node. <code>XM_CANOPEN_NODE_LOST</code> is XM10's own judgment, not a value sent by the device.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>node_id</code></td>
+<td><code>uint8_t</code></td>
+<td>A node number registered with <code>XM_CanOpenWatchNode</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <a href="#xmcanopennodestate_t"><code>XmCanOpenNodeState_t</code></a>. It is <code>XM_CANOPEN_NODE_NOT_WATCHED</code> if monitoring is not registered, the port is in FD mode, or it was called from another task.</p>
+<p><strong>⚠️ Call context</strong>: Call it in <code>Control_Setup()</code> or <code>Control_Loop()</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_CanOpenGetNodeState</span><span class="p">(</span><span class="mi">1U</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_CANOPEN_NODE_LOST</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="cm">/* the heartbeat is lost — it stays in this state until the next heartbeat arrives */</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">}</span>
+</code></pre></div>
+<hr />
+<h4 id="xm_canopengetbootupcount"><code>XM_CanOpenGetBootupCount</code><a class="headerlink" href="#xm_canopengetbootupcount" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_CanOpenGetBootupCount</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">node_id</span><span class="p">);</span>
+</code></pre></div>
+<p>Returns how many boot-up notices (<code>0x00</code>) were received from a monitored node. It goes up each time the device is powered on or reset.</p>
+<p>It is only a count of notices received, not the response to a particular NMT request. Use it to check that the device is there.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>node_id</code></td>
+<td><code>uint8_t</code></td>
+<td>A node number registered with <code>XM_CanOpenWatchNode</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>uint32_t</code> — number of boot-up notices received. 0 if the node is not monitored.</p>
+<p><strong>⚠️ Call context</strong>: Call it in <code>Control_Setup()</code> or <code>Control_Loop()</code>.</p>
+<hr />
+<h3 id="sdo">SDO<a class="headerlink" href="#sdo" title="Permanent link">&para;</a></h3>
+<h4 id="xm_canopensdoread"><code>XM_CanOpenSdoRead</code><a class="headerlink" href="#xm_canopensdoread" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">XmCanResult_t</span><span class="w"> </span><span class="nf">XM_CanOpenSdoRead</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">node_id</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">subindex</span><span class="p">);</span>
+</code></pre></div>
+<p>Starts an SDO expedited read. It does not wait. Look at the result in <code>Control_Loop()</code> with <a href="#xm_canopensdogetresult"><code>XM_CanOpenSdoGetResult</code></a>.</p>
+<p>Only one request runs at a time (shared by all nodes). It returns <code>XM_CAN_BUSY</code> while one is in progress, while a result has not been fetched yet, or during the <a href="#quiet-period-after-a-timeout-or-a-split-transfer">quiet period</a>. If you registered this node's response ID (<code>0x580</code> + node ID) with <code>XM_CanSubscribe</code>, it returns <code>XM_CAN_REJECTED</code>.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>node_id</code></td>
+<td><code>uint8_t</code></td>
+<td>The node number to read from</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td><code>uint16_t</code></td>
+<td>Object index</td>
+</tr>
+<tr>
+<td><code>subindex</code></td>
+<td><code>uint8_t</code></td>
+<td>Sub-index</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <a href="../xm-api-canbus/#xmcanresult_t"><code>XmCanResult_t</code></a></p>
+<ul>
+<li><code>XM_CAN_OK</code>: the request was accepted. Look at the result with <code>XM_CanOpenSdoGetResult()</code>.</li>
+<li><code>XM_CAN_BUSY</code>: a request is in progress, a result has not been fetched yet, or it is the quiet period.</li>
+<li><code>XM_CAN_REJECTED</code>: the response ID was registered with <code>XM_CanSubscribe</code>, the port is in FD mode, or an argument is invalid.</li>
+<li><code>XM_CAN_NOT_OWNER</code>: called outside <code>Control_Setup()</code> / <code>Control_Loop()</code>.</li>
+<li>For the other values, see the <a href="../xm-api-canbus/#xmcanresult_t"><code>XmCanResult_t</code></a> table.</li>
+</ul>
+<p><strong>⚠️ Call context</strong>: Call it in <code>Control_Setup()</code> or <code>Control_Loop()</code>. Start it from a place where it happens only once (for example, the moment a button is pressed), and check the result every <code>Control_Loop()</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">s_sdo_pending</span><span class="p">;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="cm">/* start it from a place where it happens only once */</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">s_sdo_pending</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">XM_CanOpenSdoRead</span><span class="p">(</span><span class="mi">1U</span><span class="p">,</span><span class="w"> </span><span class="mh">0x1017U</span><span class="p">,</span><span class="w"> </span><span class="mi">0U</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_CAN_OK</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="n">s_sdo_pending</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w">                       </span><span class="cm">/* 0x1017: the device's heartbeat period */</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">}</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="cm">/* check the result every Control_Loop() */</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_sdo_pending</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="n">XmCanOpenSdoResult_t</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="n">XmCanOpenSdoStatus_t</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_CanOpenSdoGetResult</span><span class="p">(</span><span class="o">&amp;</span><span class="n">r</span><span class="p">);</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">st</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_CANOPEN_SDO_DONE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">        </span><span class="cm">/* use r.value, r.size */</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">        </span><span class="n">s_sdo_pending</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">st</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">XM_CANOPEN_SDO_BUSY</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">st</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">XM_CANOPEN_SDO_IDLE</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">        </span><span class="n">s_sdo_pending</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w">                  </span><span class="cm">/* ABORTED · TIMEOUT · UNSUPPORTED */</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>See also</strong>: <a href="#how-to-use-sdo">How to use SDO</a>, <a href="#xmcanopensdoresult_t"><code>XmCanOpenSdoResult_t</code></a></p>
+<hr />
+<h4 id="xm_canopensdowrite"><code>XM_CanOpenSdoWrite</code><a class="headerlink" href="#xm_canopensdowrite" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">XmCanResult_t</span><span class="w"> </span><span class="nf">XM_CanOpenSdoWrite</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">node_id</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">subindex</span><span class="p">,</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">                                 </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+<p>Starts an SDO expedited write. The rules are the same as <a href="#xm_canopensdoread"><code>XM_CanOpenSdoRead</code></a>.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>node_id</code></td>
+<td><code>uint8_t</code></td>
+<td>The node number to write to</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td><code>uint16_t</code></td>
+<td>Object index</td>
+</tr>
+<tr>
+<td><code>subindex</code></td>
+<td><code>uint8_t</code></td>
+<td>Sub-index</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td><code>uint32_t</code></td>
+<td>The value to write (sent starting from the least significant byte)</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>uint8_t</code></td>
+<td>Number of bytes to write, 1 – 4</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <a href="../xm-api-canbus/#xmcanresult_t"><code>XmCanResult_t</code></a> — the meaning is the same as <a href="#xm_canopensdoread"><code>XM_CanOpenSdoRead</code></a>.</p>
+<p><strong>⚠️ Call context</strong>: Call it in <code>Control_Setup()</code> or <code>Control_Loop()</code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="cm">/* see the device manual for the index, sub-index and value */</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">XM_CanOpenSdoWrite</span><span class="p">(</span><span class="mi">1U</span><span class="p">,</span><span class="w"> </span><span class="n">MY_OD_INDEX</span><span class="p">,</span><span class="w"> </span><span class="n">MY_OD_SUBINDEX</span><span class="p">,</span><span class="w"> </span><span class="mi">100U</span><span class="p">,</span><span class="w"> </span><span class="mi">2U</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h4 id="xm_canopensdogetresult"><code>XM_CanOpenSdoGetResult</code><a class="headerlink" href="#xm_canopensdogetresult" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">XmCanOpenSdoStatus_t</span><span class="w"> </span><span class="nf">XM_CanOpenSdoGetResult</span><span class="p">(</span><span class="n">XmCanOpenSdoResult_t</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">);</span>
+</code></pre></div>
+<p>Looks at the SDO result. A finished result (<code>DONE</code> · <code>ABORTED</code> · <code>TIMEOUT</code> · <code>UNSUPPORTED</code>) is returned <strong>once</strong>, and then the status becomes <code>IDLE</code>.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out</code></td>
+<td><a href="#xmcanopensdoresult_t"><code>XmCanOpenSdoResult_t*</code></a></td>
+<td>Struct that receives the finished result</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <a href="#xmcanopensdostatus_t"><code>XmCanOpenSdoStatus_t</code></a>. With <code>IDLE</code> or <code>BUSY</code>, <code>out</code> is unchanged. In FD mode, or when called from another task, it returns <code>IDLE</code> (<code>out</code> unchanged).</p>
+<p><strong>⚠️ Call context</strong>: Call it in <code>Control_Setup()</code> or <code>Control_Loop()</code>.</p>
+<hr />
+<h3 id="statistics">Statistics<a class="headerlink" href="#statistics" title="Permanent link">&para;</a></h3>
+<h4 id="xm_canopengetstats"><code>XM_CanOpenGetStats</code><a class="headerlink" href="#xm_canopengetstats" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanOpenGetStats</span><span class="p">(</span><span class="n">XmCanOpenStats_t</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">);</span>
+</code></pre></div>
+<p>Reads the CANopen helper statistics.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out</code></td>
+<td><a href="#xmcanopenstats_t"><code>XmCanOpenStats_t*</code></a></td>
+<td>Struct that receives the statistics</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Return value</strong>: <code>bool</code> — <code>true</code>: filled. <code>false</code>: <code>out</code> is <code>NULL</code>.</p>
+<p><strong>⚠️ Call context</strong>: Call it in <code>Control_Setup()</code> or <code>Control_Loop()</code>.</p>
+<hr />
+<h2 id="types--constants">Types / constants<a class="headerlink" href="#types--constants" title="Permanent link">&para;</a></h2>
+<h3 id="xmcanopennodestate_t"><code>XmCanOpenNodeState_t</code><a class="headerlink" href="#xmcanopennodestate_t" title="Permanent link">&para;</a></h3>
+<p>The state of a monitored node. Read it with <a href="#xm_canopengetnodestate"><code>XM_CanOpenGetNodeState()</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>XM_CANOPEN_NODE_UNKNOWN</code></td>
+<td>No heartbeat received yet</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>XM_CANOPEN_NODE_BOOTUP</code></td>
+<td><code>0x00</code> — just powered on (boot-up notice)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>XM_CANOPEN_NODE_STOPPED</code></td>
+<td><code>0x04</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>XM_CANOPEN_NODE_OPERATIONAL</code></td>
+<td><code>0x05</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>XM_CANOPEN_NODE_PRE_OPERATIONAL</code></td>
+<td><code>0x7F</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>XM_CANOPEN_NODE_LOST</code></td>
+<td>Nothing received for <code>timeout_ms</code> — kept until the next heartbeat</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>XM_CANOPEN_NODE_NOT_WATCHED</code></td>
+<td>Monitoring not registered · FD mode · called from another task</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xmcanopensdostatus_t"><code>XmCanOpenSdoStatus_t</code><a class="headerlink" href="#xmcanopensdostatus_t" title="Permanent link">&para;</a></h3>
+<p>The SDO progress status. Returned by <a href="#xm_canopensdogetresult"><code>XM_CanOpenSdoGetResult()</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>XM_CANOPEN_SDO_IDLE</code></td>
+<td>No request in progress</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>XM_CANOPEN_SDO_BUSY</code></td>
+<td>Waiting for the response</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>XM_CANOPEN_SDO_DONE</code></td>
+<td>Finished — for a read, the value is in <code>value</code> · <code>size</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>XM_CANOPEN_SDO_ABORTED</code></td>
+<td>The device sent an abort (SDO abort) — its code is in <code>abort_code</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>XM_CANOPEN_SDO_TIMEOUT</code></td>
+<td>No response within <code>XM_CANOPEN_SDO_TIMEOUT_MS</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>XM_CANOPEN_SDO_UNSUPPORTED</code></td>
+<td>The device answered with a split transfer (more than 4 B and so on) — this API does not support it</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xmcanopensdoresult_t"><code>XmCanOpenSdoResult_t</code><a class="headerlink" href="#xmcanopensdoresult_t" title="Permanent link">&para;</a></h3>
+<p>The result of a finished SDO request. Read it with <a href="#xm_canopensdogetresult"><code>XM_CanOpenSdoGetResult()</code></a>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">node_id</span><span class="p">;</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">index</span><span class="p">;</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">subindex</span><span class="p">;</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">size</span><span class="p">;</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">abort_code</span><span class="p">;</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">    </span><span class="kt">bool</span><span class="w">     </span><span class="n">abort_queued</span><span class="p">;</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="p">}</span><span class="w"> </span><span class="n">XmCanOpenSdoResult_t</span><span class="p">;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>node_id</code></td>
+<td><code>uint8_t</code></td>
+<td>The node number of the request</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td><code>uint16_t</code></td>
+<td>The object index of the request</td>
+</tr>
+<tr>
+<td><code>subindex</code></td>
+<td><code>uint8_t</code></td>
+<td>The sub-index of the request</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td><code>uint32_t</code></td>
+<td>The read result (starting from the least significant byte)</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>uint8_t</code></td>
+<td>Number of bytes read, 1 – 4. 4 if the device does not tell the size</td>
+</tr>
+<tr>
+<td><code>abort_code</code></td>
+<td><code>uint32_t</code></td>
+<td>The abort code the device sent, when the status is <code>ABORTED</code></td>
+</tr>
+<tr>
+<td><code>abort_queued</code></td>
+<td><code>bool</code></td>
+<td>Whether the abort frame that XM10 sends on <code>TIMEOUT</code> · <code>UNSUPPORTED</code> was queued (tried only once)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xmcanopenstats_t"><code>XmCanOpenStats_t</code><a class="headerlink" href="#xmcanopenstats_t" title="Permanent link">&para;</a></h3>
+<p>CANopen helper statistics. Read them with <a href="#xm_canopengetstats"><code>XM_CanOpenGetStats()</code></a>. Each value is consistent on its own, but the values are not from the same instant.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sdo_late_response_count</code></td>
+<td><code>uint32_t</code></td>
+<td>Responses dropped because they came late after a timeout, plus responses that do not match the awaited request (a different kind or too short)</td>
+</tr>
+<tr>
+<td><code>sdo_rx_busy_drop_count</code></td>
+<td><code>uint32_t</code></td>
+<td>Responses missed because of an overlap while they were being stored (usually ends in <code>TIMEOUT</code>)</td>
+</tr>
+<tr>
+<td><code>sdo_clear_hold_count</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of ticks in which new sends were held back to empty the send queue after a timeout</td>
+</tr>
+<tr>
+<td><code>sdo_last_clear_wait_ticks</code></td>
+<td><code>uint32_t</code></td>
+<td>Number of ticks it took for the send queue to empty after the last timeout</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="constants">Constants<a class="headerlink" href="#constants" title="Permanent link">&para;</a></h3>
+<p><strong>NMT commands</strong> — ID <code>0x000</code>, data <code>[command, node ID]</code> (2 B)</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_CANOPEN_NMT_START</code></td>
+<td><code>0x01U</code></td>
+<td>Start</td>
+</tr>
+<tr>
+<td><code>XM_CANOPEN_NMT_STOP</code></td>
+<td><code>0x02U</code></td>
+<td>Stop</td>
+</tr>
+<tr>
+<td><code>XM_CANOPEN_NMT_PRE_OPERATIONAL</code></td>
+<td><code>0x80U</code></td>
+<td>Pre-operational</td>
+</tr>
+<tr>
+<td><code>XM_CANOPEN_NMT_RESET_NODE</code></td>
+<td><code>0x81U</code></td>
+<td>Reset node</td>
+</tr>
+<tr>
+<td><code>XM_CANOPEN_NMT_RESET_COMM</code></td>
+<td><code>0x82U</code></td>
+<td>Reset communication</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Other constants</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_CANOPEN_MAX_WATCH_NODES</code></td>
+<td><code>8U</code></td>
+<td>Number of nodes whose heartbeat can be monitored</td>
+</tr>
+<tr>
+<td><code>XM_CANOPEN_SDO_TIMEOUT_MS</code></td>
+<td><code>500U</code></td>
+<td>How long to wait for an SDO response [ms]. It is this API's policy, not a guarantee of the response time of every device</td>
+</tr>
+<tr>
+<td><code>XM_CANOPEN_SDO_QUARANTINE_MS</code></td>
+<td><code>1500U</code></td>
+<td>How long no new SDO request is accepted after a timeout [ms] (<a href="#quiet-period-after-a-timeout-or-a-split-transfer">quiet period</a>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="rev11--rev20-difference-summary">Rev1.1 / Rev2.0 Difference Summary<a class="headerlink" href="#rev11--rev20-difference-summary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Rev1.1</th>
+<th>Rev2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CANopen helper functions (<code>xm_api_canopen.h</code>)</td>
+<td>❌ Absent</td>
+<td>🟢 Exclusive (works in classic mode only)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-documents">Related documents<a class="headerlink" href="#related-documents" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../12-canopen/">12. Working with CANopen Devices (concept)</a> — order of use, wiring, common mistakes</li>
+<li><a href="../xm-api-canbus/"><code>xm_api_canbus.h</code> — Talk to Your Own Device over CAN-FD or Classic CAN</a> — port mode · classic speed · SYNC · free send and receive</li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/">device-examples</a> — with <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/canopen-pc-sim/"><code>canopen-pc-sim/</code></a> you can simulate a CANopen drive on a PC</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../xm-api-canbus/" class="md-footer__link md-footer__link--prev" aria-label="Previous: xm_api_canbus.h (CAN Communication)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                xm_api_canbus.h (CAN Communication)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../xm-api-imu-calib/" class="md-footer__link md-footer__link--next" aria-label="Next: xm_api_imu_calib.h (IMU Calibration)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                xm_api_imu_calib.h (IMU Calibration)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

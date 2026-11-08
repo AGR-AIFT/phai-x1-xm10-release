@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -35,10 +35,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -780,6 +780,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1118,6 +1124,90 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CAN 통신
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-canopen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CANopen 장치 다루기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-imu-calibration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IMU Hub 센서 보정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1127,6 +1217,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1163,7 +1259,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_15" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -1185,14 +1281,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_6_15" id="__nav_6_15_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_6_12">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_15">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1670,6 +1766,90 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canbus.h (CAN 통신)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-canopen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canopen.h (CANopen)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-imu-calib/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_imu_calib.h (IMU 보정)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1967,6 +2147,8 @@
       
         
       
+        
+      
     
     
     
@@ -2019,6 +2201,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.10.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.10.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2590,7 +2800,7 @@
 </code></pre></div>
 <p><code>xm_api.h</code> 자신은 실제 기능을 구현하지 않는 <strong>파사드(facade) 헤더</strong>입니다. 하위 API 헤더들을 한 번에 포함시켜 주는 역할과, 시스템 전역에서 자주 쓰는 타이머 유틸리티 함수 <code>XM_GetTick()</code> 하나만 직접 선언합니다. 각 도메인의 실제 사용법(함수 목록, 예제, 주의사항)은 아래 표에서 연결된 개념 문서를 참고하세요 — 이 문서는 각 도메인을 다시 설명하지 않습니다.</p>
 <h2 id="이-헤더가-통합하는-api">이 헤더가 통합하는 API<a class="headerlink" href="#이-헤더가-통합하는-api" title="Permanent link">&para;</a></h2>
-<p><code>xm_api.h</code> 는 다음 하위 API 헤더들을 <code>#include</code> 합니다. Rev2.0 기준 12개, Rev1.1 기준 9개입니다(차이는 아래 표와 "Rev 차이 요약" 참고). 구조체 로깅 매크로(<code>XM_LOG_*</code>)를 쓰는 <code>.c</code> 파일은 <code>xm_api_logging_raw.h</code> 도 직접 include 하세요 — <code>xm_api.h</code> 는 그 헤더를 포함하지 않습니다.</p>
+<p><code>xm_api.h</code> 는 다음 하위 API 헤더들을 <code>#include</code> 합니다. Rev2.0 기준 15개, Rev1.1 기준 9개입니다(차이는 아래 표와 "Rev 차이 요약" 참고). 구조체 로깅 매크로(<code>XM_LOG_*</code>)를 쓰는 <code>.c</code> 파일은 <code>xm_api_logging_raw.h</code> 도 직접 include 하세요 — <code>xm_api.h</code> 는 그 헤더를 포함하지 않습니다.</p>
 <table>
 <thead>
 <tr>
@@ -2673,11 +2883,29 @@
 <td>안전 토크 헬퍼 (v2.6.0 신규) — 이상값 차단 + 한계 클램프 + 진입 소프트스타트 + 기울기 제한을 한 번에 처리하는 <code>XM_SafeTorque_*</code>, 보조 레벨 클램프 <code>XM_SafeAssistLevel()</code>, 센서 신선도 확인 <code>XM_SafeIsFresh()</code>. 헤더 안에 구현이 들어 있어 별도 <code>.c</code> 가 없습니다</td>
 <td><a href="../../02-h10-control-n-data/">02 KIT H10 제어 + 데이터</a></td>
 </tr>
+<tr>
+<td>13</td>
+<td><code>xm_api_canbus.h</code></td>
+<td>CAN-FD · 클래식 CAN 으로 연결한 내 장치와 주고받기</td>
+<td><a href="../../11-canbus/">11 CAN 통신</a> — 🟢 <strong>Rev 2.0 전용</strong></td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>xm_api_canopen.h</code></td>
+<td>CANopen 장치 도움 함수(클래식 모드 전용)</td>
+<td><a href="../../12-canopen/">12 CANopen 장치 다루기</a> — 🟢 <strong>Rev 2.0 전용</strong></td>
+</tr>
+<tr>
+<td>15</td>
+<td><code>xm_api_imu_calib.h</code></td>
+<td>IMU Hub 센서 제자리 보정</td>
+<td><a href="../../13-imu-calibration/">13 IMU Hub 센서 보정</a> — 🟢 <strong>Rev 2.0 전용</strong></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Rev 차이 요약</strong>:</p>
 <ul>
-<li>🟢 <strong>Rev 2.0 전용</strong>: <code>xm_api_memory.h</code> · <code>xm_api_logging.h</code> · <code>xm_api_usb_msc.h</code> — Rev1.1 SDK 에는 이 헤더 파일 자체가 없습니다(즉 <code>xm_api.h</code> 가 이 헤더들을 include 하지 않습니다). <code>xm_api_memory.h</code> 는 Workspace/PSRAM 8MB 등 Rev2.0 전용 하드웨어를 반영한 API 입니다. <code>xm_api_logging_raw.h</code> 도 Rev2.0 SDK 에만 있습니다.</li>
+<li>🟢 <strong>Rev 2.0 전용</strong>: <code>xm_api_memory.h</code> · <code>xm_api_logging.h</code> · <code>xm_api_usb_msc.h</code> · <code>xm_api_canbus.h</code> · <code>xm_api_canopen.h</code> · <code>xm_api_imu_calib.h</code> — Rev1.1 SDK 에는 이 헤더 파일 자체가 없습니다(즉 <code>xm_api.h</code> 가 이 헤더들을 include 하지 않습니다). <code>xm_api_memory.h</code> 는 Workspace/PSRAM 8MB 등 Rev2.0 전용 하드웨어를 반영한 API 입니다. <code>xm_api_logging_raw.h</code> 도 Rev2.0 SDK 에만 있습니다.</li>
 <li>⚠️ <strong>Rev1.1 제한</strong>: <code>xm_api_rtc.h</code> 는 두 리비전 모두에 파일이 존재하지만, Rev1.1 보드에는 RTC 칩(MCP79510)이 실장되어 있지 않아 모든 함수가 stub(항상 <code>false</code> 반환/무동작)으로 컴파일됩니다. Rev1.1 에서 시간 기록이 필요하면 <code>XM_GetTick()</code> 기반 경과시간으로 대체하세요.</li>
 <li>그 외 헤더 중 <code>xm_api_data.h</code> · <code>xm_api_led_btn.h</code> · <code>xm_api_external_io.h</code> · <code>xm_api_usb.h</code> 는 두 리비전의 내용이 다릅니다. 다른 점은 각 레퍼런스 페이지에서 확인하세요(예: <a href="../xm-api-usb/"><code>xm_api_usb.h</code></a> 의 "Rev1.1 / Rev2.0 차이 요약"). <code>xm_api_tsm.h</code> · <code>xm_api_user_custom.h</code> · <code>xm_api_freertos.h</code> · <code>xm_api_safety.h</code> 는 기능 차이가 없습니다.</li>
 </ul>
@@ -2845,10 +3073,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>

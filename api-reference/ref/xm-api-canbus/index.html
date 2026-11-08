@@ -1,0 +1,5144 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="angel Robotics KIT H10 알고리즘 개발 플랫폼 — SDK 문서">
+      
+      
+      
+        <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/api-reference/ref/xm-api-canbus/">
+      
+      
+        <link rel="prev" href="../xm-api-user-custom/">
+      
+      
+        <link rel="next" href="../xm-api-canopen/">
+      
+      
+        
+          <link rel="alternate" href="./" hreflang="ko">
+        
+          <link rel="alternate" href="../../../en/api-reference/ref/xm-api-canbus/" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>xm_api_canbus.h (CAN 통신) - XM10 Extension Module</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#xm_api_canbush--can-fd--클래식-can-으로-연결한-내-장치와-주고받기" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../../.." title="XM10 Extension Module" class="md-header__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XM10 Extension Module
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              xm_api_canbus.h (CAN 통신)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="언어설정">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../../../en/api-reference/ref/xm-api-canbus/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="저장소로 이동" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-AIFT/phai-x1-xm10-release
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="XM10 Extension Module" class="md-nav__button md-logo" aria-label="XM10 Extension Module" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    XM10 Extension Module
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release" title="저장소로 이동" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AGR-AIFT/phai-x1-xm10-release
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    홈
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../find-it/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠른 찾기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    시작하기
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    시작하기
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/01-hardware-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    하드웨어 연결
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/02-software-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    개발 환경 구축
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/03-first-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    첫 빌드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/04-pc-data-tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PC 에서 데이터 받기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/05-usb-memory-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리에 저장하기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/00-claude-code-quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code 와 함께 시작
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../hardware/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    하드웨어
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    하드웨어
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 GPIO (Rev 1.1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/external-gpio-rev2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 GPIO (Rev 2.0)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    튜토리얼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API 레퍼런스
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-task-state-machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    상태 머신 (TSM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-h10-control-n-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 제어·데이터
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-led-btn-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LED·버튼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부 IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-usb-connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 시리얼
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-usb-data-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USB 메모리 저장
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-memory-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리 영역
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-rtc-clock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실시간 시계 (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-task-creation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    보조 태스크
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-struct-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    구조체 로깅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CAN 통신
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-canopen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CANopen 장치 다루기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-imu-calibration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IMU Hub 센서 보정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_15" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    함수 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_15" id="__nav_6_15_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    함수 레퍼런스
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api.h (진입점)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_data.h (제어·데이터)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-tsm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_tsm.h (상태 머신)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-led-btn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_led_btn.h (LED·버튼)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-external-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_external_io.h (외부 IO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-usb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb.h (USB)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-usb-msc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_usb_msc.h (USB 메모리)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_logging.h (구조체 로깅)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_memory.h (메모리)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-rtc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_rtc.h (RTC)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-freertos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_freertos.h (RTOS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-user-custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_user_custom.h (사용자 데이터)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canbus.h (CAN 통신)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canbus.h (CAN 통신)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#언제-사용하나" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        언제 사용하나
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#한-포트에서-지킬-것" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        한 포트에서 지킬 것
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#호출-규칙" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        호출 규칙
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수-목록" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 목록
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#장치-api-의-메시지-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        장치 API 의 메시지 ID
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수-상세" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 상세
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="함수 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#버스-모드" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        버스 모드
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="버스 모드">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canbusmode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanBusMode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cangetbusmode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanGetBusMode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canclassicbittiming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanClassicBitTiming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cansetclassicbittiming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanSetClassicBitTiming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cangetclassicbittiming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanGetClassicBitTiming
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#장치-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        장치 API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="장치 API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canattachdevice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanAttachDevice
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canisconnected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanIsConnected
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canreadlatest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanReadLatest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cansend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanSend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cangetstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanGetStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cangetbusstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanGetBusStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canenablesync" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanEnableSync
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canenableheartbeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanEnableHeartbeat
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#자유-송수신" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        자유 송수신
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="자유 송수신">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_cansendframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanSendFrame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canreadframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanReadFrame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cansubscribe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanSubscribe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canreadlatestbyid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanReadLatestById
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canagems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanAgeMs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#도움-함수-어디서나" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        도움 함수 (어디서나)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="도움 함수 (어디서나)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canisidallowed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanIsIdAllowed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canisdeviceidallowed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanIsDeviceIdAllowed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canfitlength" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanFitLength
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canseqisnewer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanSeqIsNewer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#타입--상수" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        타입 / 상수
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="타입 / 상수">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmcanresult_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanResult_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanbusmode_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanBusMode_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanbittiming_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanBitTiming_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanframe_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanFrame_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcandevicestats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanDeviceStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanbusstats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanBusStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#상수" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        상수
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev11--rev20-차이-요약" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 차이 요약
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-문서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 문서
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-canopen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canopen.h (CANopen)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xm-api-imu-calib/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_imu_calib.h (IMU 보정)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    아키텍처
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kit-h10-firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KIT H10 펌웨어
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bootloader/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    부트로더
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    심화
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    심화
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced/ai-data-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 데이터 파이프라인
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../safety/wearable-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    안전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    문제 해결
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../release-notes/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    릴리스 노트
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    릴리스 노트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.10.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.10.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.9.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.8.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.8.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.8.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.7.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.7.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.6.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.5.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.5.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.5.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.5.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.4.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.4.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.4.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.3.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/v2.1.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#언제-사용하나" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        언제 사용하나
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#한-포트에서-지킬-것" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        한 포트에서 지킬 것
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#호출-규칙" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        호출 규칙
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수-목록" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 목록
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#장치-api-의-메시지-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        장치 API 의 메시지 ID
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#함수-상세" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함수 상세
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="함수 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#버스-모드" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        버스 모드
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="버스 모드">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canbusmode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanBusMode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cangetbusmode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanGetBusMode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canclassicbittiming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanClassicBitTiming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cansetclassicbittiming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanSetClassicBitTiming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cangetclassicbittiming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanGetClassicBitTiming
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#장치-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        장치 API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="장치 API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canattachdevice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanAttachDevice
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canisconnected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanIsConnected
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canreadlatest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanReadLatest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cansend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanSend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cangetstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanGetStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cangetbusstats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanGetBusStats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canenablesync" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanEnableSync
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canenableheartbeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanEnableHeartbeat
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#자유-송수신" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        자유 송수신
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="자유 송수신">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_cansendframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanSendFrame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canreadframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanReadFrame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_cansubscribe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanSubscribe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canreadlatestbyid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanReadLatestById
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canagems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanAgeMs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#도움-함수-어디서나" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        도움 함수 (어디서나)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="도움 함수 (어디서나)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xm_canisidallowed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanIsIdAllowed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canisdeviceidallowed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanIsDeviceIdAllowed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canfitlength" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanFitLength
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xm_canseqisnewer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XM_CanSeqIsNewer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#타입--상수" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        타입 / 상수
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="타입 / 상수">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xmcanresult_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanResult_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanbusmode_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanBusMode_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanbittiming_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanBitTiming_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanframe_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanFrame_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcandevicestats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanDeviceStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmcanbusstats_t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XmCanBusStats_t
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#상수" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        상수
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev11--rev20-차이-요약" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev1.1 / Rev2.0 차이 요약
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#관련-문서" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        관련 문서
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="xm_api_canbush--can-fd--클래식-can-으로-연결한-내-장치와-주고받기"><code>xm_api_canbus.h</code> — CAN-FD · 클래식 CAN 으로 연결한 내 장치와 주고받기<a class="headerlink" href="#xm_api_canbush--can-fd--클래식-can-으로-연결한-내-장치와-주고받기" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>🟢 <strong>Rev 2.0 전용</strong> — 본 헤더는 XM10 Rev 2.0 용입니다. Rev 1.1 프로젝트(<code>XM10_SDK/Rev1.1/</code>)에서는 아래 함수를 쓸 수 없습니다. 보드 리비전 확인은 <a href="../../../hardware/#보드-리비전-비교">보드 리비전 비교</a> 참고.</p>
+<ul>
+<li><strong>대상 헤더</strong>: <code>XM_FW/XM_API/xm_api_canbus.h</code> (<code>xm_api.h</code> 를 include 하면 함께 쓸 수 있습니다)</li>
+<li><strong>관련 개념 문서</strong>: <a href="../../11-canbus/">11. CAN 통신</a></li>
+<li><strong>관련 예제</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/45_CANFD_My_Sensor/">45_CANFD_My_Sensor</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/46_CANopen_Drive/">46_CANopen_Drive</a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/47_CANopen_Drive_PDO/">47_CANopen_Drive_PDO</a></li>
+<li><strong>상대 장치 예제</strong>: <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/">device-examples</a> — CAN-FD 내 장치 참조 펌웨어 <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/canfd-sensor-stm32g474/"><code>canfd-sensor-stm32g474/</code></a> · PC 모의 장치 <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/canfd-sensor-pc-sim/"><code>canfd-sensor-pc-sim/</code></a> · <a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/canopen-pc-sim/"><code>canopen-pc-sim/</code></a></li>
+<li><strong>보드 확인</strong>: 아래 동작은 API 가 정한 것이며, 보드에서는 아직 확인하지 못했습니다. (보드 확인 전) <!-- board-check --></li>
+</ul>
+</blockquote>
+<p>이 헤더는 <strong>CAN-FD 또는 클래식 CAN 으로 연결한 내 장치와 메시지를 주고받는</strong> API 를 정의합니다. 두 가지 방법이 있고, 함께 써도 됩니다.</p>
+<ul>
+<li><strong>① 장치 API</strong> — 장치 번호를 등록해 두면 장치가 보내는 주기 데이터 1 · 2 와 살아있음을 XM10 이 알아서 나눠 담습니다(최신값). 장치에 명령도 보낼 수 있습니다.</li>
+<li><strong>② 자유 송수신</strong> — 프로토콜 없이 ID 와 데이터만으로 보내고 받습니다(받은 순서 큐 · ID 별 최신값 우편함).</li>
+</ul>
+<p>클래식 CAN 전용 장치(모터 드라이버 등)는 <code>XM_CanBusMode()</code> 로 포트를 클래식 모드로 정해서 씁니다. 프로토콜 · 장치 설정 · 기동 순서는 내 코드에서 정합니다. XM10 은 막을 이유가 있는 ID 만 막습니다.</p>
+<hr />
+<h2 id="언제-사용하나">언제 사용하나<a class="headerlink" href="#언제-사용하나" title="Permanent link">&para;</a></h2>
+<p>직접 만든 센서나 구동기를 XM10 의 CAN 포트에 연결해 값을 읽고 명령을 보내고 싶을 때 사용합니다. 쓰는 순서 · 배선 · 장치 쪽 메시지 약속 같은 전체 그림은 <a href="../../11-canbus/">11. CAN 통신</a> 을 먼저 읽어 보는 것을 권장합니다 — 이 페이지는 헤더에 선언된 <strong>모든 함수 · 타입 · 상수의 시그니처와 파라미터 상세</strong>만 다룹니다.</p>
+<p>CANopen(CiA 301) 장치의 NMT · 하트비트 감시 · SDO 는 <a href="../xm-api-canopen/"><code>xm_api_canopen.h</code></a> 를 함께 쓰세요.</p>
+<blockquote>
+<p>⚠️ <strong>보내기 결과는 꼭 <code>== XM_CAN_OK</code> 로 확인하세요.</strong> <code>XM_CAN_OK</code> 가 0 이라 <code>if (XM_CanSend(...))</code> 는 실패를 성공으로 읽습니다.</p>
+</blockquote>
+<hr />
+<h2 id="한-포트에서-지킬-것">한 포트에서 지킬 것<a class="headerlink" href="#한-포트에서-지킬-것" title="Permanent link">&para;</a></h2>
+<ul>
+<li>클래식 장치와 CAN-FD 장치를 함께 연결하지 마세요.</li>
+<li>모든 장치는 같은 속도여야 합니다.</li>
+<li>두 장치가 같은 ID 를 보내면 안 됩니다 — 번호를 겹치지 마세요.</li>
+<li>보낼 수 있는 양에는 한계가 있습니다 — 메시지 시간을 더해 버스 시간 안에 드는지 계산하세요.</li>
+<li>데이터 속도는 최대 5 Mbit/s 입니다. CAN XL 은 지원하지 않습니다.</li>
+<li>11비트 ID 만 지원합니다. 리모트 프레임은 지원하지 않습니다.</li>
+<li>같은 ID 를 보낼 때 앞 메시지가 아직 대기 중이면 순서가 바뀔 수 있습니다 — 앞 메시지가 나간 뒤에 보내세요.</li>
+</ul>
+<hr />
+<h2 id="호출-규칙">호출 규칙<a class="headerlink" href="#호출-규칙" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>종류</th>
+<th>함수</th>
+<th>부르는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>사용자가 만드는 함수 (2개)</td>
+<td><code>XM_CanBusMode</code> · <code>XM_CanClassicBitTiming</code></td>
+<td>시스템이 전원을 켤 때 한 번 부릅니다. 이때는 다른 XM 함수를 아직 쓸 수 없으니 값만 돌려주거나 채우세요</td>
+</tr>
+<tr>
+<td>등록 (2개)</td>
+<td><code>XM_CanAttachDevice</code> · <code>XM_CanSubscribe</code></td>
+<td><code>Control_Setup()</code> 에서만</td>
+</tr>
+<tr>
+<td>송수신 · 설정 · 통계 (13개)</td>
+<td><code>XM_CanSetClassicBitTiming</code> · <code>XM_CanGetClassicBitTiming</code> · <code>XM_CanIsConnected</code> · <code>XM_CanReadLatest</code> · <code>XM_CanSend</code> · <code>XM_CanGetStats</code> · <code>XM_CanGetBusStats</code> · <code>XM_CanEnableSync</code> · <code>XM_CanEnableHeartbeat</code> · <code>XM_CanSendFrame</code> · <code>XM_CanReadFrame</code> · <code>XM_CanReadLatestById</code> · <code>XM_CanAgeMs</code></td>
+<td><code>Control_Setup()</code> · <code>Control_Loop()</code> 에서만</td>
+</tr>
+<tr>
+<td>어디서나 (5개)</td>
+<td><code>XM_CanGetBusMode</code> · <code>XM_CanIsIdAllowed</code> · <code>XM_CanIsDeviceIdAllowed</code> · <code>XM_CanFitLength</code> · <code>XM_CanSeqIsNewer</code></td>
+<td>어디서나</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>Control_Setup()</code> · <code>Control_Loop()</code> 밖(다른 태스크나 인터럽트)에서 부르면 거부됩니다. <code>bool</code> 을 돌려주는 함수는 <code>false</code>, 결과 값(<code>XmCanResult_t</code>)을 돌려주는 함수는 <code>XM_CAN_NOT_OWNER</code> 를 돌려주고, <a href="#xmcanbusstats_t"><code>owner_violation_count</code></a> 로 셉니다.</li>
+<li>어느 함수도 기다리지 않습니다.</li>
+</ul>
+<hr />
+<h2 id="함수-목록">함수 목록<a class="headerlink" href="#함수-목록" title="Permanent link">&para;</a></h2>
+<p><strong>버스 모드</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_canbusmode"><code>XM_CanBusMode</code></a></td>
+<td>포트의 버스 모드를 정하는 함수 — <strong>직접 만듭니다</strong>(선택)</td>
+</tr>
+<tr>
+<td><a href="#xm_cangetbusmode"><code>XM_CanGetBusMode</code></a></td>
+<td>지금 버스 모드</td>
+</tr>
+<tr>
+<td><a href="#xm_canclassicbittiming"><code>XM_CanClassicBitTiming</code></a></td>
+<td>클래식 CAN 속도를 정하는 함수 — <strong>직접 만듭니다</strong>(선택)</td>
+</tr>
+<tr>
+<td><a href="#xm_cansetclassicbittiming"><code>XM_CanSetClassicBitTiming</code></a></td>
+<td>실행 중에 클래식 CAN 속도 바꾸기</td>
+</tr>
+<tr>
+<td><a href="#xm_cangetclassicbittiming"><code>XM_CanGetClassicBitTiming</code></a></td>
+<td>지금 클래식 CAN 속도 읽기</td>
+</tr>
+</tbody>
+</table>
+<p><strong>장치 API</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_canattachdevice"><code>XM_CanAttachDevice</code></a></td>
+<td>장치 번호 등록 (<code>Control_Setup()</code> 에서만)</td>
+</tr>
+<tr>
+<td><a href="#xm_canisconnected"><code>XM_CanIsConnected</code></a></td>
+<td>3 초 안에 살아있음을 받았는지</td>
+</tr>
+<tr>
+<td><a href="#xm_canreadlatest"><code>XM_CanReadLatest</code></a></td>
+<td>장치의 주기 데이터 최신값 읽기</td>
+</tr>
+<tr>
+<td><a href="#xm_cansend"><code>XM_CanSend</code></a></td>
+<td>장치에 명령 보내기</td>
+</tr>
+<tr>
+<td><a href="#xm_cangetstats"><code>XM_CanGetStats</code></a></td>
+<td>장치별 통계</td>
+</tr>
+<tr>
+<td><a href="#xm_cangetbusstats"><code>XM_CanGetBusStats</code></a></td>
+<td>포트 공통 통계</td>
+</tr>
+<tr>
+<td><a href="#xm_canenablesync"><code>XM_CanEnableSync</code></a></td>
+<td>1 kHz 동기 신호(SYNC) 보내기</td>
+</tr>
+<tr>
+<td><a href="#xm_canenableheartbeat"><code>XM_CanEnableHeartbeat</code></a></td>
+<td>XM10 의 하트비트 보내기</td>
+</tr>
+</tbody>
+</table>
+<p><strong>자유 송수신</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_cansendframe"><code>XM_CanSendFrame</code></a></td>
+<td>메시지 하나 보내기</td>
+</tr>
+<tr>
+<td><a href="#xm_canreadframe"><code>XM_CanReadFrame</code></a></td>
+<td>받은 순서대로 하나 꺼내기</td>
+</tr>
+<tr>
+<td><a href="#xm_cansubscribe"><code>XM_CanSubscribe</code></a></td>
+<td>ID 를 최신값 우편함으로 받기 (<code>Control_Setup()</code> 에서만)</td>
+</tr>
+<tr>
+<td><a href="#xm_canreadlatestbyid"><code>XM_CanReadLatestById</code></a></td>
+<td>우편함 ID 의 최신값 읽기</td>
+</tr>
+<tr>
+<td><a href="#xm_canagems"><code>XM_CanAgeMs</code></a></td>
+<td>우편함 ID 를 마지막으로 받은 뒤 지난 시간 [ms]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>도움 함수</strong> (어디서나)</p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#xm_canisidallowed"><code>XM_CanIsIdAllowed</code></a></td>
+<td>이 모드에서 보낼 수 있는 ID 인지</td>
+</tr>
+<tr>
+<td><a href="#xm_canisdeviceidallowed"><code>XM_CanIsDeviceIdAllowed</code></a></td>
+<td>장치 API 에 등록할 수 있는 번호인지</td>
+</tr>
+<tr>
+<td><a href="#xm_canfitlength"><code>XM_CanFitLength</code></a></td>
+<td>버스에 실릴 길이로 올리기</td>
+</tr>
+<tr>
+<td><a href="#xm_canseqisnewer"><code>XM_CanSeqIsNewer</code></a></td>
+<td>8비트 순번이 새 값인지</td>
+</tr>
+</tbody>
+</table>
+<p><strong>타입 · 상수</strong>: <a href="#xmcanresult_t"><code>XmCanResult_t</code></a> · <a href="#xmcanbusmode_t"><code>XmCanBusMode_t</code></a> · <a href="#xmcanbittiming_t"><code>XmCanBitTiming_t</code></a> · <a href="#xmcanframe_t"><code>XmCanFrame_t</code></a> · <a href="#xmcandevicestats_t"><code>XmCanDeviceStats_t</code></a> · <a href="#xmcanbusstats_t"><code>XmCanBusStats_t</code></a> · <a href="#상수">상수 9개</a></p>
+<hr />
+<h2 id="장치-api-의-메시지-id">장치 API 의 메시지 ID<a class="headerlink" href="#장치-api-의-메시지-id" title="Permanent link">&para;</a></h2>
+<p><code>XM_CanAttachDevice()</code> 로 번호를 등록하면 XM10 이 그 번호의 아래 메시지를 다룹니다.</p>
+<table>
+<thead>
+<tr>
+<th>메시지</th>
+<th>ID</th>
+<th style="text-align: center;">방향</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주기 데이터 1</td>
+<td><code>0x180</code> + 번호</td>
+<td style="text-align: center;">장치 → XM10</td>
+<td>받아서 최신값으로 보관합니다</td>
+</tr>
+<tr>
+<td>주기 데이터 2</td>
+<td><code>0x280</code> + 번호</td>
+<td style="text-align: center;">장치 → XM10</td>
+<td>받아서 최신값으로 보관합니다</td>
+</tr>
+<tr>
+<td>살아있음</td>
+<td><code>0x700</code> + 번호</td>
+<td style="text-align: center;">장치 → XM10</td>
+<td>데이터 1 바이트 <code>0x05</code> 면 살아있음, <code>0x00</code> 이면 재시작 알림입니다. 3 초(<code>XM_CAN_ALIVE_TIMEOUT_MS</code>) 안에 <code>0x05</code> 를 받으면 연결로 봅니다</td>
+</tr>
+<tr>
+<td>명령</td>
+<td><code>0x200</code> + 번호</td>
+<td style="text-align: center;">XM10 → 장치</td>
+<td><a href="#xm_cansend"><code>XM_CanSend</code></a> 로 보냅니다</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>같은 버스에서 번호는 장치마다 달라야 합니다. XM10 은 중복을 알아채지 못합니다.</li>
+<li>등록할 수 있는 번호는 1 ~ 127 중 예약 번호(<code>0x01</code> · <code>0x02</code> · <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code> · <code>0x10</code> · <code>0x11</code>)를 뺀 나머지입니다 (<a href="#xm_canisdeviceidallowed"><code>XM_CanIsDeviceIdAllowed</code></a>).</li>
+<li>등록할 수 있는 장치는 최대 <code>XM_CAN_MAX_DEVICES</code> (4) 개입니다.</li>
+</ul>
+<hr />
+<h2 id="함수-상세">함수 상세<a class="headerlink" href="#함수-상세" title="Permanent link">&para;</a></h2>
+<h3 id="버스-모드">버스 모드<a class="headerlink" href="#버스-모드" title="Permanent link">&para;</a></h3>
+<h4 id="xm_canbusmode"><code>XM_CanBusMode</code><a class="headerlink" href="#xm_canbusmode" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">XmCanBusMode_t</span><span class="w"> </span><span class="nf">XM_CanBusMode</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>포트의 버스 모드를 정하는 함수입니다. <strong>사용자가 직접 만듭니다</strong>(선택). 만들지 않으면 CAN-FD 모드(<code>XM_CAN_BUS_FD</code>)입니다.</p>
+<p>전원을 켤 때 한 번 불립니다. 부팅 중이라 다른 XM 함수는 아직 준비 전이니, 값만 돌려주세요. 클래식으로 정하면 이 포트는 클래식 CAN 으로만 보내고 받으며, 센서 허브는 이 포트에서 동작하지 않습니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong>: <a href="#xmcanbusmode_t"><code>XmCanBusMode_t</code></a> — <code>XM_CAN_BUS_FD</code> 또는 <code>XM_CAN_BUS_CLASSIC</code></p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 시스템이 전원을 켤 때 한 번 부릅니다. 직접 부르지 않습니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">XmCanBusMode_t</span><span class="w"> </span><span class="nf">XM_CanBusMode</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">XM_CAN_BUS_CLASSIC</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_canclassicbittiming"><code>XM_CanClassicBitTiming</code></a>, <a href="#xm_cangetbusmode"><code>XM_CanGetBusMode</code></a></p>
+<hr />
+<h4 id="xm_cangetbusmode"><code>XM_CanGetBusMode</code><a class="headerlink" href="#xm_cangetbusmode" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">XmCanBusMode_t</span><span class="w"> </span><span class="nf">XM_CanGetBusMode</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+<p>지금 버스 모드를 돌려줍니다. 클래식을 설정하지 못했거나 포트가 고장 났으면 <code>XM_CAN_BUS_UNAVAILABLE</code> 입니다.</p>
+<p><strong>파라미터</strong>: 없음</p>
+<p><strong>반환값</strong>: <a href="#xmcanbusmode_t"><code>XmCanBusMode_t</code></a></p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 언제나 부를 수 있습니다.</p>
+<hr />
+<h4 id="xm_canclassicbittiming"><code>XM_CanClassicBitTiming</code><a class="headerlink" href="#xm_canclassicbittiming" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_CanClassicBitTiming</span><span class="p">(</span><span class="n">XmCanBitTiming_t</span><span class="o">*</span><span class="w"> </span><span class="n">timing</span><span class="p">);</span>
+</code></pre></div>
+<p>클래식 CAN 속도를 정하는 함수입니다. <strong>사용자가 직접 만듭니다</strong>(선택). 만들지 않으면 1 Mbit/s 입니다.</p>
+<p><code>XM_CanBusMode()</code> 가 클래식이면 전원을 켤 때 한 번 불립니다. 부팅 중이라 다른 XM 함수는 아직 준비 전이니, 값만 채우세요. 틀린 속도로 시작하면 XM10 이 오류 메시지로 버스를 깨므로 시작 전에 정합니다. 값이 범위 밖이면 포트를 쓰지 못합니다(<code>XM_CAN_BUS_UNAVAILABLE</code>).</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>timing</code></td>
+<td><a href="#xmcanbittiming_t"><code>XmCanBitTiming_t*</code></a></td>
+<td>속도를 채워 넣을 구조체. 프리셋(<code>XM_CAN_TIMING_*</code>)을 쓰면 편합니다</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 시스템이 전원을 켤 때 한 번 부릅니다. 직접 부르지 않습니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_CanClassicBitTiming</span><span class="p">(</span><span class="n">XmCanBitTiming_t</span><span class="o">*</span><span class="w"> </span><span class="n">timing</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">XmCanBitTiming_t</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">XM_CAN_TIMING_500K</span><span class="p">;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="o">*</span><span class="n">timing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xmcanbittiming_t"><code>XmCanBitTiming_t</code></a>, <a href="#xm_cansetclassicbittiming"><code>XM_CanSetClassicBitTiming</code></a></p>
+<hr />
+<h4 id="xm_cansetclassicbittiming"><code>XM_CanSetClassicBitTiming</code><a class="headerlink" href="#xm_cansetclassicbittiming" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">XmCanResult_t</span><span class="w"> </span><span class="nf">XM_CanSetClassicBitTiming</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">XmCanBitTiming_t</span><span class="o">*</span><span class="w"> </span><span class="n">t</span><span class="p">);</span>
+</code></pre></div>
+<p>실행 중에 클래식 CAN 속도를 바꿉니다. 기다리지 않습니다. 대부분은 <a href="#xm_canclassicbittiming"><code>XM_CanClassicBitTiming</code></a> 이면 충분합니다.</p>
+<p>공장 속도가 다른 장치를 새 속도로 설정한 뒤 함께 옮길 때 씁니다. 바꾸는 동안 받아 두고 아직 읽지 않은 메시지는 사라지고, 오류 카운터(<code>tec</code> · <code>rec</code>)는 그대로입니다. 같은 값이면 아무것도 멈추지 않고 <code>XM_CAN_OK</code> 입니다.</p>
+<p>장치에 속도 변경을 보낸 뒤에는 다른 메시지를 보내지 말고 바로 이 함수를 부르세요. 장치가 먼저 옮겨 가면 답을 못 받은 메시지가 남아 몇 초 동안 <code>XM_CAN_BUSY</code> 일 수 있습니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>t</code></td>
+<td><a href="#xmcanbittiming_t"><code>const XmCanBitTiming_t*</code></a></td>
+<td>새 속도 (<code>XM_CAN_TIMING_*</code> 또는 직접 쓴 값)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <a href="#xmcanresult_t"><code>XmCanResult_t</code></a></p>
+<ul>
+<li><code>XM_CAN_OK</code>: 바뀌었습니다. 다음 보내기부터 새 속도입니다.</li>
+<li><code>XM_CAN_BUSY</code>: 보낼 메시지가 남아 있습니다(SYNC 를 켰으면 먼저 끄세요). 또는 <code>XM_CanOpenSdoRead</code> · <code>XM_CanOpenSdoWrite</code> 가 진행 중이거나 잠깐 겹쳤습니다. 다음 주기에 다시 부르세요.</li>
+<li><code>XM_CAN_RECOVERY</code>: 버스 복구 중입니다.</li>
+<li><code>XM_CAN_REJECTED</code>: <code>NULL</code> 이거나, 값이 범위 밖이거나, 클래식 모드가 아니거나, 포트가 고장 났습니다. 포트가 고장 났으면 재시작하세요(<code>XM_CanGetBusMode()</code> 가 <code>XM_CAN_BUS_UNAVAILABLE</code>).</li>
+<li><code>XM_CAN_NOT_OWNER</code>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 밖에서 불렀습니다.</li>
+</ul>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<p><strong>참고</strong>: 버스의 모든 장치와 같은 속도여야 합니다. 어긋나면 오류가 쌓이고 버스 복구로 보입니다(<code>tec</code> · <code>bus_status</code>).</p>
+<hr />
+<h4 id="xm_cangetclassicbittiming"><code>XM_CanGetClassicBitTiming</code><a class="headerlink" href="#xm_cangetclassicbittiming" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanGetClassicBitTiming</span><span class="p">(</span><span class="n">XmCanBitTiming_t</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">);</span>
+</code></pre></div>
+<p>지금 클래식 CAN 속도를 읽습니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out</code></td>
+<td><a href="#xmcanbittiming_t"><code>XmCanBitTiming_t*</code></a></td>
+<td>속도를 받을 구조체</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: <code>out</code> 에 채웠습니다. <code>false</code>: 클래식 모드가 아니거나 포트가 고장 났습니다 — <code>out</code> 은 그대로입니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<hr />
+<h3 id="장치-api">장치 API<a class="headerlink" href="#장치-api" title="Permanent link">&para;</a></h3>
+<h4 id="xm_canattachdevice"><code>XM_CanAttachDevice</code><a class="headerlink" href="#xm_canattachdevice" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanAttachDevice</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">device_id</span><span class="p">);</span>
+</code></pre></div>
+<p>장치 번호를 등록합니다. 등록하면 그 장치의 주기 데이터 1(ID <code>0x180</code> + 번호) · 주기 데이터 2(<code>0x280</code> + 번호) · 살아있음(<code>0x700</code> + 번호)을 XM10 이 받아 둡니다. 같은 버스에서 번호는 장치마다 달라야 합니다(XM10 은 중복을 알아채지 못합니다).</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>device_id</code></td>
+<td><code>uint8_t</code></td>
+<td>장치 번호 — <a href="#xm_canisdeviceidallowed"><code>XM_CanIsDeviceIdAllowed</code></a> 가 <code>true</code> 인 번호</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 등록했습니다. <code>false</code>: 쓸 수 없는 번호이거나, 이미 등록했거나, 칸이 모자라거나(최대 <code>XM_CAN_MAX_DEVICES</code>), <code>Control_Setup()</code> 밖에서 불렀습니다. 이때 <code>bad_call_count</code> 가 1 늘어납니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> 에서만 부릅니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="cp">#define MY_SENSOR_ID  (0x20U)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Setup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="n">XM_CanAttachDevice</span><span class="p">(</span><span class="n">MY_SENSOR_ID</span><span class="p">);</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#장치-api-의-메시지-id">장치 API 의 메시지 ID</a>, <a href="#xm_canreadlatest"><code>XM_CanReadLatest</code></a></p>
+<hr />
+<h4 id="xm_canisconnected"><code>XM_CanIsConnected</code><a class="headerlink" href="#xm_canisconnected" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanIsConnected</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">device_id</span><span class="p">);</span>
+</code></pre></div>
+<p>3 초(<code>XM_CAN_ALIVE_TIMEOUT_MS</code>) 안에 살아있음(<code>0x05</code>)을 받았는지 돌려줍니다. 재시작 알림(<code>0x00</code>)을 받은 뒤에는 다음 <code>0x05</code> 가 올 때까지 <code>false</code> 입니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>device_id</code></td>
+<td><code>uint8_t</code></td>
+<td>등록한 장치 번호</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 연결돼 있습니다. <code>false</code>: 연결이 끊겼거나 재시작 알림 뒤 아직 <code>0x05</code> 가 오지 않았습니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<hr />
+<h4 id="xm_canreadlatest"><code>XM_CanReadLatest</code><a class="headerlink" href="#xm_canreadlatest" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanReadLatest</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">device_id</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">stream</span><span class="p">,</span><span class="w"> </span><span class="n">XmCanFrame_t</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">);</span>
+</code></pre></div>
+<p>그 장치의 주기 데이터 최신값을 읽습니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>device_id</code></td>
+<td><code>uint8_t</code></td>
+<td>등록한 장치 번호</td>
+</tr>
+<tr>
+<td><code>stream</code></td>
+<td><code>uint8_t</code></td>
+<td><code>1</code> = 주기 데이터 1, <code>2</code> = 주기 데이터 2</td>
+</tr>
+<tr>
+<td><code>out</code></td>
+<td><a href="#xmcanframe_t"><code>XmCanFrame_t*</code></a></td>
+<td>값을 받을 구조체</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code></p>
+<ul>
+<li><code>true</code>: <code>out</code> 에 값이 있습니다. 같은 <code>seq</code> 를 다시 읽어도 <code>true</code> 입니다 — 새 값인지는 <code>seq</code> 를 비교하세요. 끊긴 뒤에도 옛 값은 <code>true</code> 로 읽히니, <code>tick_ms</code> 와 <a href="#xm_canisconnected"><code>XM_CanIsConnected</code></a> 로 판단하세요.</li>
+<li><code>false</code>: 아직 받지 못했거나, 재시작 알림 뒤 새 값이 오기 전이거나, 쓰는 중이라 이번엔 읽지 못했거나, 인자가 잘못됐습니다 — <code>out</code> 은 그대로입니다.</li>
+</ul>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">s_last_seq</span><span class="p">;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="n">XmCanFrame_t</span><span class="w"> </span><span class="n">f</span><span class="p">;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_CanReadLatest</span><span class="p">(</span><span class="n">MY_SENSOR_ID</span><span class="p">,</span><span class="w"> </span><span class="mi">1U</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">seq</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">s_last_seq</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">        </span><span class="n">s_last_seq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">seq</span><span class="p">;</span><span class="w">                    </span><span class="cm">/* 새 메시지 */</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_CanIsConnected</span><span class="p">(</span><span class="n">MY_SENSOR_ID</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">            </span><span class="cm">/* f.data[0 .. f.len - 1] 사용 */</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xmcanframe_t"><code>XmCanFrame_t</code></a></p>
+<hr />
+<h4 id="xm_cansend"><code>XM_CanSend</code><a class="headerlink" href="#xm_cansend" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">XmCanResult_t</span><span class="w"> </span><span class="nf">XM_CanSend</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">device_id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+</code></pre></div>
+<p>장치에 명령을 보냅니다(ID <code>0x200</code> + 번호).</p>
+<p>길이는 1 ~ 64 입니다(클래식 모드는 1 ~ 8). 허용 길이(1 ~ 8 · 12 · 16 · 20 · 24 · 32 · 48 · 64)가 아니면 다음 허용 길이까지 0 으로 채워 나갑니다. XM10 이 최근 살아있음으로 '연결' 이라 판단할 때만 수락합니다(끊긴 직후 최대 3 초는 수락될 수 있습니다).</p>
+<p>수락된 명령은 하드웨어가 보낼 때까지 다시 시도하고, XM10 이 소프트웨어로 다시 보내지는 않습니다. 끊긴 동안 하드웨어에 남아 있던 명령은 다시 연결될 때 나갈 수 있습니다. 명령 첫 바이트를 순번으로 써서 장치가 중복 · 순서 뒤바뀜을 거르게 하세요(<a href="#xm_canseqisnewer"><code>XM_CanSeqIsNewer</code></a>). 순번은 유효기간이 아닙니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>device_id</code></td>
+<td><code>uint8_t</code></td>
+<td>등록한 장치 번호</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>const void*</code></td>
+<td>보낼 데이터</td>
+</tr>
+<tr>
+<td><code>len</code></td>
+<td><code>uint8_t</code></td>
+<td>길이 [B], 1 ~ 64 (클래식 1 ~ 8)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <a href="#xmcanresult_t"><code>XmCanResult_t</code></a></p>
+<ul>
+<li><code>XM_CAN_OK</code>: 보내기 큐에 실렸습니다. 전달이 끝났다는 뜻이 아닙니다.</li>
+<li><code>XM_CAN_NOT_CONNECTED</code> · <code>XM_CAN_BUSY</code> · <code>XM_CAN_RECOVERY</code> · <code>XM_CAN_REJECTED</code> · <code>XM_CAN_NOT_OWNER</code>: 뜻은 <a href="#xmcanresult_t"><code>XmCanResult_t</code></a> 표를 보세요.</li>
+</ul>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">s_cmd_seq</span><span class="p">;</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Control_Loop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">cmd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">s_cmd_seq</span><span class="p">,</span><span class="w"> </span><span class="mi">1U</span><span class="w"> </span><span class="p">};</span><span class="w">       </span><span class="cm">/* 첫 바이트 = 순번 */</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XM_CanSend</span><span class="p">(</span><span class="n">MY_SENSOR_ID</span><span class="p">,</span><span class="w"> </span><span class="n">cmd</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">XM_CAN_OK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">        </span><span class="n">s_cmd_seq</span><span class="o">++</span><span class="p">;</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <a href="#xm_canisconnected"><code>XM_CanIsConnected</code></a>, <a href="#xm_canseqisnewer"><code>XM_CanSeqIsNewer</code></a></p>
+<hr />
+<h4 id="xm_cangetstats"><code>XM_CanGetStats</code><a class="headerlink" href="#xm_cangetstats" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanGetStats</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">device_id</span><span class="p">,</span><span class="w"> </span><span class="n">XmCanDeviceStats_t</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">);</span>
+</code></pre></div>
+<p>장치별 통계를 읽습니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>device_id</code></td>
+<td><code>uint8_t</code></td>
+<td>등록한 장치 번호</td>
+</tr>
+<tr>
+<td><code>out</code></td>
+<td><a href="#xmcandevicestats_t"><code>XmCanDeviceStats_t*</code></a></td>
+<td>통계를 받을 구조체</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 채웠습니다. <code>false</code>: 등록하지 않은 번호이거나 <code>out</code> 이 <code>NULL</code> 입니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<hr />
+<h4 id="xm_cangetbusstats"><code>XM_CanGetBusStats</code><a class="headerlink" href="#xm_cangetbusstats" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanGetBusStats</span><span class="p">(</span><span class="n">XmCanBusStats_t</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">);</span>
+</code></pre></div>
+<p>포트 공통 통계를 읽습니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out</code></td>
+<td><a href="#xmcanbusstats_t"><code>XmCanBusStats_t*</code></a></td>
+<td>통계를 받을 구조체</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 채웠습니다. <code>false</code>: <code>out</code> 이 <code>NULL</code> 입니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<hr />
+<h4 id="xm_canenablesync"><code>XM_CanEnableSync</code><a class="headerlink" href="#xm_canenablesync" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">XM_CanEnableSync</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">on</span><span class="p">);</span>
+</code></pre></div>
+<p>1 kHz 동기 신호(SYNC, ID <code>0x080</code>)를 내 장치에게도 보냅니다. 기본은 꺼짐입니다.</p>
+<ul>
+<li>FD 모드: 켜도 받아 줄 장치가 3 초 안에 하나도 보이지 않으면 보내지 않습니다. 센서 허브가 동작 중이면 끄더라도 SYNC 는 그대로 나갑니다 — 끄기는 내 요청만 끕니다. SYNC 는 1 바이트(카운터)입니다.</li>
+<li>클래식 모드: SYNC 는 길이 0 입니다. 켠 동안에는 <code>XM_CanSendFrame</code> 으로 ID <code>0x080</code> 을 보낼 수 없습니다.</li>
+<li>SYNC 는 잠깐 멈추거나 한 번씩 빠질 수 있습니다. 장치는 샘플링 정렬에만 쓰고, 없으면 자기 주기로 계속 보내게 하세요.</li>
+</ul>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>on</code></td>
+<td><code>bool</code></td>
+<td><code>true</code>: 켬. <code>false</code>: 끔</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: 없음</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<p><strong>참고</strong>: <a href="#xm_cansendframe"><code>XM_CanSendFrame</code></a>, <code>sync_skip_*</code> (<a href="#xmcanbusstats_t"><code>XmCanBusStats_t</code></a>)</p>
+<hr />
+<h4 id="xm_canenableheartbeat"><code>XM_CanEnableHeartbeat</code><a class="headerlink" href="#xm_canenableheartbeat" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">XmCanResult_t</span><span class="w"> </span><span class="nf">XM_CanEnableHeartbeat</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">node_id</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">period_ms</span><span class="p">);</span>
+</code></pre></div>
+<p>XM10 의 하트비트를 내 장치에게 보냅니다 — ID <code>0x700</code> + <code>node_id</code>, 데이터 1 바이트 <code>0x05</code>. 기본은 꺼짐입니다.</p>
+<p><code>Control_Loop()</code> 가 끝난 직후에, 주기가 됐으면 보냅니다. 그래서 <code>Control_Loop()</code> 가 돌지 않으면 새로 보내지 않습니다 — 상대가 하트비트 끊김으로 스스로 멈추게 할 때 씁니다. 다만 이미 송신 대기에 든 메시지는 그 뒤에도 나갈 수 있고, 상대가 실제로 멈추는지는 상대 설정에 달렸습니다. 보드에서 확인하세요. (보드 확인 전) <!-- board-check --></p>
+<p>못 실으면 다음 주기가 아니라 다음 tick 에 다시 시도합니다(주기는 성공한 때부터). 버스 복구 중에는 간격이 길어질 수 있습니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>node_id</code></td>
+<td><code>uint8_t</code></td>
+<td>1 ~ 127 — 상대 장치가 기다리는 번호</td>
+</tr>
+<tr>
+<td><code>period_ms</code></td>
+<td><code>uint16_t</code></td>
+<td>보내는 주기 1 ~ 65535 [ms]. <code>0</code> = 끔 (<code>node_id</code> 는 보지 않습니다)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <a href="#xmcanresult_t"><code>XmCanResult_t</code></a></p>
+<ul>
+<li><code>XM_CAN_OK</code>: 켰거나, 껐거나, 주기를 바꿨습니다.</li>
+<li><code>XM_CAN_REJECTED</code>: 범위 밖 번호이거나, 사용 불가 모드이거나, FD 모드에서 <code>0x02</code> 또는 <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code> 이거나, 그 ID 를 <code>XM_CanAttachDevice</code> · <code>XM_CanSubscribe</code> · 감시(<code>XM_CanOpenWatchNode</code>)로 이미 받는 중입니다. 반대 순서(하트비트를 먼저 켜고 나중에 받기 등록)도 거부됩니다.</li>
+<li><code>XM_CAN_NOT_OWNER</code>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 밖에서 불렀습니다.</li>
+</ul>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<p><strong>참고</strong>: <code>heartbeat_sent_count</code> · <code>heartbeat_fail_count</code> · <code>heartbeat_last_fail</code> (<a href="#xmcanbusstats_t"><code>XmCanBusStats_t</code></a>)</p>
+<hr />
+<h3 id="자유-송수신">자유 송수신<a class="headerlink" href="#자유-송수신" title="Permanent link">&para;</a></h3>
+<h4 id="xm_cansendframe"><code>XM_CanSendFrame</code><a class="headerlink" href="#xm_cansendframe" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">XmCanResult_t</span><span class="w"> </span><span class="nf">XM_CanSendFrame</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+</code></pre></div>
+<p>메시지 하나를 보냅니다. 받는 장치가 없어도 수락될 수 있습니다. 수락은 전달이 아닙니다(<a href="#xm_cansend"><code>XM_CanSend</code></a> 와 같은 규칙).</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>uint16_t</code></td>
+<td>메시지 ID (11비트). 보낼 수 있는 ID 는 아래 표를 보세요</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>const void*</code></td>
+<td>보낼 데이터. 길이가 0 일 때만 <code>NULL</code> 이어도 됩니다</td>
+</tr>
+<tr>
+<td><code>len</code></td>
+<td><code>uint8_t</code></td>
+<td>길이 [B]. FD 모드 0 ~ 64 (다음 허용 길이까지 0 으로 채움), 클래식 모드 0 ~ 8</td>
+</tr>
+</tbody>
+</table>
+<p><strong>보낼 수 있는 ID</strong></p>
+<table>
+<thead>
+<tr>
+<th>모드</th>
+<th>보낼 수 있는 ID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FD</td>
+<td><code>0x000</code> ~ <code>0x7FF</code> 중 아래 3가지를 뺀 전부입니다. ① 아래 7비트가 <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code> 인 ID(센서 허브 자리) ② <code>0x080</code> (SYNC 는 <a href="#xm_canenablesync"><code>XM_CanEnableSync</code></a> 로) ③ <code>0x702</code> (XM10 시스템 하트비트). ID <code>0x000</code> 은 길이 2 이고 둘째 바이트가 대상 번호일 때만 보냅니다(<code>0</code> = 전체, 센서 허브 번호는 거부)</td>
+</tr>
+<tr>
+<td>클래식</td>
+<td><code>0x000</code> ~ <code>0x7FF</code> 전부입니다. 단 SYNC 를 켠 동안의 <code>0x080</code> 은 뺍니다. 11비트만 됩니다</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <a href="#xmcanresult_t"><code>XmCanResult_t</code></a> — <code>XM_CAN_OK</code>: 보내기 큐에 실렸습니다. 나머지 값의 뜻은 표를 보세요.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<p><strong>참고</strong>: <a href="#xm_canisidallowed"><code>XM_CanIsIdAllowed</code></a>, <a href="#xm_canfitlength"><code>XM_CanFitLength</code></a></p>
+<hr />
+<h4 id="xm_canreadframe"><code>XM_CanReadFrame</code><a class="headerlink" href="#xm_canreadframe" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanReadFrame</span><span class="p">(</span><span class="n">XmCanFrame_t</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">);</span>
+</code></pre></div>
+<p>받은 순서대로 메시지 하나를 꺼냅니다. 없으면 <code>false</code> 입니다.</p>
+<p>우편함이나 장치 API 가 가져가지 않은 메시지가 깊이 64 의 큐로 들어옵니다. 등록하지 않은 ID 도 모두 옵니다(FD 모드의 센서 허브 자리는 제외). 가득 차면 새 메시지를 버리고 <code>rx_queue_drop_count</code> 를 셉니다. <code>Control_Loop()</code> 에서 매 주기 비우세요.</p>
+<p>서로 다른 종류의 메시지(살아있음 · 응답 · 오류 알림 대 그 밖) 사이의 버스 순서는 보장하지 않습니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out</code></td>
+<td><a href="#xmcanframe_t"><code>XmCanFrame_t*</code></a></td>
+<td>메시지를 받을 구조체</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 하나 꺼냈습니다. <code>false</code>: 큐가 비었습니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<p><strong>예제</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">XmCanFrame_t</span><span class="w"> </span><span class="n">f</span><span class="p">;</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">XM_CanReadFrame</span><span class="p">(</span><span class="o">&amp;</span><span class="n">f</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">    </span><span class="cm">/* f.id, f.len, f.data 사용 */</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>참고</strong>: <code>rx_queue_drop_count</code> · <code>rx_queue_peak</code> (<a href="#xmcanbusstats_t"><code>XmCanBusStats_t</code></a>)</p>
+<hr />
+<h4 id="xm_cansubscribe"><code>XM_CanSubscribe</code><a class="headerlink" href="#xm_cansubscribe" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanSubscribe</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+</code></pre></div>
+<p>이 ID 는 큐 대신 <strong>최신값 우편함</strong>으로 받습니다. 1 kHz 주기 데이터에 알맞습니다.</p>
+<p>우편함은 장치 API 의 스트림과 합쳐 16 칸입니다. 다음은 거부합니다.</p>
+<ul>
+<li>11비트 밖 ID</li>
+<li>FD 모드의 센서 허브 자리(아래 7비트 <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code>)</li>
+<li>등록한 장치의 ID</li>
+<li>이미 등록한 ID</li>
+<li><code>XM_CanEnableHeartbeat</code> 로 내가 보내는 ID</li>
+</ul>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>uint16_t</code></td>
+<td>우편함으로 받을 메시지 ID</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 등록했습니다. <code>false</code>: 거부했습니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> 에서만 부릅니다.</p>
+<p><strong>참고</strong>: <a href="#xm_canreadlatestbyid"><code>XM_CanReadLatestById</code></a>, <a href="#xm_canagems"><code>XM_CanAgeMs</code></a></p>
+<hr />
+<h4 id="xm_canreadlatestbyid"><code>XM_CanReadLatestById</code><a class="headerlink" href="#xm_canreadlatestbyid" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanReadLatestById</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">XmCanFrame_t</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">);</span>
+</code></pre></div>
+<p>우편함 ID 의 최신값을 읽습니다. <a href="#xm_canreadlatest"><code>XM_CanReadLatest</code></a> 와 같은 규칙입니다 — 같은 <code>seq</code> 도 <code>true</code> 이고, 실패하면 <code>out</code> 은 그대로입니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>uint16_t</code></td>
+<td><code>XM_CanSubscribe</code> 로 등록한 ID</td>
+</tr>
+<tr>
+<td><code>out</code></td>
+<td><a href="#xmcanframe_t"><code>XmCanFrame_t*</code></a></td>
+<td>값을 받을 구조체</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: <code>out</code> 에 값이 있습니다. <code>false</code>: 읽지 못했습니다 — <code>out</code> 은 그대로입니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<hr />
+<h4 id="xm_canagems"><code>XM_CanAgeMs</code><a class="headerlink" href="#xm_canagems" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">XM_CanAgeMs</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+</code></pre></div>
+<p>우편함 ID 를 마지막으로 받은 뒤 지난 시간 [ms] 을 돌려줍니다. 받은 적이 없거나, 2^31 ms 이상 지났거나, 등록하지 않은 ID 이면 <code>XM_CAN_AGE_NONE</code> 입니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>uint16_t</code></td>
+<td><code>XM_CanSubscribe</code> 로 등록한 ID</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>uint32_t</code> — 지난 시간 [ms]. 또는 <code>XM_CAN_AGE_NONE</code> (<code>0xFFFFFFFF</code>)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: <code>Control_Setup()</code> · <code>Control_Loop()</code> 에서 부릅니다.</p>
+<hr />
+<h3 id="도움-함수-어디서나">도움 함수 (어디서나)<a class="headerlink" href="#도움-함수-어디서나" title="Permanent link">&para;</a></h3>
+<h4 id="xm_canisidallowed"><code>XM_CanIsIdAllowed</code><a class="headerlink" href="#xm_canisidallowed" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanIsIdAllowed</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+</code></pre></div>
+<p>이 모드의 ID 규칙으로 보낼 수 있는 ID 인지 돌려줍니다. ID 만 봅니다. ID <code>0x000</code> 의 데이터 검사 · SYNC 를 켠 동안의 <code>0x080</code> 거부 · <code>XM_CAN_BUSY</code> · <code>XM_CAN_RECOVERY</code> 는 <a href="#xm_cansendframe"><code>XM_CanSendFrame</code></a> 이 따로 알려 줍니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>uint16_t</code></td>
+<td>메시지 ID</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 보낼 수 있는 ID 입니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 어디서나 부를 수 있습니다.</p>
+<hr />
+<h4 id="xm_canisdeviceidallowed"><code>XM_CanIsDeviceIdAllowed</code><a class="headerlink" href="#xm_canisdeviceidallowed" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanIsDeviceIdAllowed</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+</code></pre></div>
+<p>장치 API 에 등록할 수 있는 번호인지 돌려줍니다. 1 ~ 127 중 예약 번호(<code>0x01</code> · <code>0x02</code> · <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code> · <code>0x10</code> · <code>0x11</code>)를 뺀 나머지입니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>uint8_t</code></td>
+<td>장치 번호</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 등록할 수 있는 번호입니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 어디서나 부를 수 있습니다.</p>
+<hr />
+<h4 id="xm_canfitlength"><code>XM_CanFitLength</code><a class="headerlink" href="#xm_canfitlength" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="nf">XM_CanFitLength</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+</code></pre></div>
+<p>버스에 실릴 길이로 올립니다(0 은 0). 이 모드에서 못 실으면 <code>XM_CAN_LENGTH_INVALID</code> 를 돌려줍니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>len</code></td>
+<td><code>uint8_t</code></td>
+<td>데이터 길이 [B]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>uint8_t</code> — 버스에 실릴 길이 [B]. 못 실으면 <code>XM_CAN_LENGTH_INVALID</code> (<code>0xFF</code>)</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 어디서나 부를 수 있습니다.</p>
+<hr />
+<h4 id="xm_canseqisnewer"><code>XM_CanSeqIsNewer</code><a class="headerlink" href="#xm_canseqisnewer" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanSeqIsNewer</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">last</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">now</span><span class="p">);</span>
+</code></pre></div>
+<p>8비트 순번이 새 값인지 돌려줍니다. <code>now</code> 가 <code>last</code> 보다 1 ~ 127 앞서면 새 값입니다. 차이가 0 이거나 128 ~ 255 이면 중복이거나 옛 값입니다.</p>
+<p><strong>파라미터</strong></p>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>last</code></td>
+<td><code>uint8_t</code></td>
+<td>지난번에 받은 순번</td>
+</tr>
+<tr>
+<td><code>now</code></td>
+<td><code>uint8_t</code></td>
+<td>이번에 받은 순번</td>
+</tr>
+</tbody>
+</table>
+<p><strong>반환값</strong>: <code>bool</code> — <code>true</code>: 새 값입니다.</p>
+<p><strong>⚠️ 호출 컨텍스트</strong>: 어디서나 부를 수 있습니다.</p>
+<p><strong>참고</strong>: <a href="#xm_cansend"><code>XM_CanSend</code></a></p>
+<hr />
+<h2 id="타입--상수">타입 / 상수<a class="headerlink" href="#타입--상수" title="Permanent link">&para;</a></h2>
+<h3 id="xmcanresult_t"><code>XmCanResult_t</code><a class="headerlink" href="#xmcanresult_t" title="Permanent link">&para;</a></h3>
+<p>모든 '보내기' 함수의 결과입니다. <strong>꼭 <code>== XM_CAN_OK</code> 로 확인하세요.</strong></p>
+<table>
+<thead>
+<tr>
+<th>값</th>
+<th>이름</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>XM_CAN_OK</code></td>
+<td>보내기 큐에 실렸습니다(수락). 상대가 받았다는 뜻은 아닙니다</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>XM_CAN_BUSY</code></td>
+<td>이번엔 못 실었습니다(큐 가득 · 다른 송신과 겹침) — 다음 주기에 다시</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>XM_CAN_RECOVERY</code></td>
+<td>버스 복구 중입니다(버스 오류 뒤 · 막힌 송신을 비우는 중) — 잠시 뒤 다시</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>XM_CAN_NOT_CONNECTED</code></td>
+<td>(장치 API 만) 장치가 연결돼 있지 않습니다</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>XM_CAN_REJECTED</code></td>
+<td>보낼 수 없는 ID · 길이 · 인자이거나, 이 모드에서 지원하지 않습니다</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>XM_CAN_NOT_OWNER</code></td>
+<td><code>Control_Setup()</code> · <code>Control_Loop()</code> 밖에서 불렀습니다</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xmcanbusmode_t"><code>XmCanBusMode_t</code><a class="headerlink" href="#xmcanbusmode_t" title="Permanent link">&para;</a></h3>
+<p>CAN-FD #2 포트의 버스 모드입니다. 전원을 켤 때 한 번 정합니다(<a href="#xm_canbusmode"><code>XM_CanBusMode</code></a>).</p>
+<table>
+<thead>
+<tr>
+<th>값</th>
+<th>이름</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>XM_CAN_BUS_FD</code></td>
+<td>기본 — CAN-FD(1 / 5 Mbit/s). IMU · EMG · FES 허브와 함께 쓸 수 있습니다</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>XM_CAN_BUS_CLASSIC</code></td>
+<td>클래식 CAN 전용(기본 1 Mbit/s — <a href="#xm_canclassicbittiming"><code>XM_CanClassicBitTiming</code></a>). 모터 드라이버 등에 씁니다. 이 포트에 허브를 연결하지 마세요</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>XM_CAN_BUS_UNAVAILABLE</code></td>
+<td>(읽기 전용) 클래식을 요청했지만 설정하지 못했습니다. 이 포트로 아무것도 보내지 않습니다</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xmcanbittiming_t"><code>XmCanBitTiming_t</code><a class="headerlink" href="#xmcanbittiming_t" title="Permanent link">&para;</a></h3>
+<p>클래식 CAN 비트 타이밍입니다. 속도 = 80 MHz ÷ <code>prescaler</code> ÷ (1 + <code>seg1</code> + <code>seg2</code>) 이고, 표본 위치 = (1 + <code>seg1</code>) ÷ (1 + <code>seg1</code> + <code>seg2</code>) 입니다. 상대 장치와 맞는 값을 쓰세요.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">prescaler</span><span class="p">;</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">seg1</span><span class="p">;</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">seg2</span><span class="p">;</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">sjw</span><span class="p">;</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="p">}</span><span class="w"> </span><span class="n">XmCanBitTiming_t</span><span class="p">;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>필드</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prescaler</code></td>
+<td><code>uint16_t</code></td>
+<td>분주 1 ~ 512</td>
+</tr>
+<tr>
+<td><code>seg1</code></td>
+<td><code>uint16_t</code></td>
+<td>표본 위치 앞 구간 1 ~ 256</td>
+</tr>
+<tr>
+<td><code>seg2</code></td>
+<td><code>uint8_t</code></td>
+<td>표본 위치 뒤 구간 1 ~ 128</td>
+</tr>
+<tr>
+<td><code>sjw</code></td>
+<td><code>uint8_t</code></td>
+<td>재동기 폭 1 ~ <code>seg2</code></td>
+</tr>
+</tbody>
+</table>
+<p>프리셋 4개를 <code>XmCanBitTiming_t</code> 의 초기값으로 쓸 수 있습니다. 표본 위치는 모두 87.5 % 입니다.</p>
+<table>
+<thead>
+<tr>
+<th>프리셋</th>
+<th>속도</th>
+<th style="text-align: center;"><code>prescaler</code></th>
+<th style="text-align: center;"><code>seg1</code></th>
+<th style="text-align: center;"><code>seg2</code></th>
+<th style="text-align: center;"><code>sjw</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_CAN_TIMING_1M</code></td>
+<td>1 Mbit/s (기본)</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr>
+<td><code>XM_CAN_TIMING_500K</code></td>
+<td>500 kbit/s</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr>
+<td><code>XM_CAN_TIMING_250K</code></td>
+<td>250 kbit/s</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr>
+<td><code>XM_CAN_TIMING_125K</code></td>
+<td>125 kbit/s</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xmcanframe_t"><code>XmCanFrame_t</code><a class="headerlink" href="#xmcanframe_t" title="Permanent link">&para;</a></h3>
+<p>받은 메시지 하나입니다.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">tick_ms</span><span class="p">;</span>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">len</span><span class="p">;</span>
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w">  </span><span class="n">data</span><span class="p">[</span><span class="n">XM_CAN_MAX_DATA</span><span class="p">];</span>
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="p">}</span><span class="w"> </span><span class="n">XmCanFrame_t</span><span class="p">;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>필드</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>seq</code></td>
+<td><code>uint32_t</code></td>
+<td><strong>큐</strong>: 큐로 들어온 순서 번호입니다. 넘쳐서 버린 것도 번호를 쓰므로 빠진 번호가 버린 수입니다. <strong>최신값(장치 API · 우편함)</strong>: 그 ID 를 받을 때마다 1 씩 늘어납니다. 지난번과 같으면 새 메시지가 아닙니다</td>
+</tr>
+<tr>
+<td><code>tick_ms</code></td>
+<td><code>uint32_t</code></td>
+<td>받은 시각 (<code>XM_GetTick</code> 기준, 1 ms)</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>uint16_t</code></td>
+<td>메시지 ID (11비트)</td>
+</tr>
+<tr>
+<td><code>len</code></td>
+<td><code>uint8_t</code></td>
+<td>버스에 실린 길이 [B]. FD: 0 ~ 8 · 12 · 16 · 20 · 24 · 32 · 48 · 64 / 클래식: 0 ~ 8</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>uint8_t[64]</code></td>
+<td>데이터 (<code>XM_CAN_MAX_DATA</code>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xmcandevicestats_t"><code>XmCanDeviceStats_t</code><a class="headerlink" href="#xmcandevicestats_t" title="Permanent link">&para;</a></h3>
+<p>장치별 통계입니다(등록한 장치만). <a href="#xm_cangetstats"><code>XM_CanGetStats()</code></a> 로 읽습니다. 각 값은 온전하지만 서로 같은 순간의 값은 아닙니다.</p>
+<table>
+<thead>
+<tr>
+<th>필드</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rx_count[2]</code></td>
+<td><code>uint32_t</code></td>
+<td>주기 데이터 1 · 2 를 받은 수</td>
+</tr>
+<tr>
+<td><code>rx_busy_drop_count</code></td>
+<td><code>uint32_t</code></td>
+<td>읽는 중이라 못 쓰고 버린 수</td>
+</tr>
+<tr>
+<td><code>unread_overwrite_count</code></td>
+<td><code>uint32_t</code></td>
+<td>아직 읽지 않은 값을 새 값이 덮은 수</td>
+</tr>
+<tr>
+<td><code>alive_count</code></td>
+<td><code>uint32_t</code></td>
+<td>살아있음(<code>0x05</code>)을 받은 수</td>
+</tr>
+<tr>
+<td><code>alive_invalid_count</code></td>
+<td><code>uint32_t</code></td>
+<td>살아있음 자리로 온 다른 값 · 빈 메시지 수</td>
+</tr>
+<tr>
+<td><code>reboot_count</code></td>
+<td><code>uint32_t</code></td>
+<td>재시작 알림(<code>0x00</code>)을 받은 수</td>
+</tr>
+<tr>
+<td><code>last_rx_tick</code></td>
+<td><code>uint32_t</code></td>
+<td>이 장치의 메시지를 마지막으로 받은 시각</td>
+</tr>
+<tr>
+<td><code>last_alive_tick</code></td>
+<td><code>uint32_t</code></td>
+<td>살아있음(<code>0x05</code>)을 마지막으로 받은 시각</td>
+</tr>
+<tr>
+<td><code>send_accept_count</code></td>
+<td><code>uint32_t</code></td>
+<td><code>XM_CanSend</code> 가 수락된 수</td>
+</tr>
+<tr>
+<td><code>send_fail_count</code></td>
+<td><code>uint32_t</code></td>
+<td><code>XM_CanSend</code> 가 실패한 수</td>
+</tr>
+<tr>
+<td><code>read_busy_count</code></td>
+<td><code>uint32_t</code></td>
+<td>쓰는 중이라 <code>XM_CanReadLatest</code> 가 이번엔 못 읽은 수</td>
+</tr>
+<tr>
+<td><code>last_send_fail</code></td>
+<td><code>uint8_t</code></td>
+<td>마지막으로 실패한 <code>XM_CanSend</code> 결과(<code>XmCanResult_t</code>). 0 = 아직 없음</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="xmcanbusstats_t"><code>XmCanBusStats_t</code><a class="headerlink" href="#xmcanbusstats_t" title="Permanent link">&para;</a></h3>
+<p>포트 공통 통계입니다. <a href="#xm_cangetbusstats"><code>XM_CanGetBusStats()</code></a> 로 읽습니다. 각 값은 온전하지만 서로 같은 순간의 값은 아닙니다.</p>
+<table>
+<thead>
+<tr>
+<th>필드</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bad_call_count</code></td>
+<td><code>uint32_t</code></td>
+<td>미등록 번호 · 잘못된 인자 · <code>Control_Setup()</code> 밖 등록</td>
+</tr>
+<tr>
+<td><code>owner_violation_count</code></td>
+<td><code>uint32_t</code></td>
+<td>다른 태스크 · 인터럽트에서 부른 수</td>
+</tr>
+<tr>
+<td><code>flush_request_count</code></td>
+<td><code>uint32_t</code></td>
+<td>받아 줄 장치가 없어 대기 중 메시지 취소를 '요청' 한 수. 완료 수가 아닙니다</td>
+</tr>
+<tr>
+<td><code>busoff_flush_count</code></td>
+<td><code>uint32_t</code></td>
+<td>버스 오류(bus-off) 뒤 대기 중 메시지를 비운 수</td>
+</tr>
+<tr>
+<td><code>tx_pending_count</code></td>
+<td><code>uint32_t</code></td>
+<td>지금 하드웨어에 남아 있는 송신 수(부른 순간)</td>
+</tr>
+<tr>
+<td><code>sync_skip_count</code></td>
+<td><code>uint32_t</code></td>
+<td>SYNC 를 보내지 못한 tick 수 — 아래 네 사유의 합</td>
+</tr>
+<tr>
+<td><code>sync_skip_busy</code></td>
+<td><code>uint32_t</code></td>
+<td>다른 송신과 겹침 · 송신 큐 가득</td>
+</tr>
+<tr>
+<td><code>sync_skip_hub_setup</code></td>
+<td><code>uint32_t</code></td>
+<td>센서 허브를 설정하는 동안</td>
+</tr>
+<tr>
+<td><code>sync_skip_recovery</code></td>
+<td><code>uint32_t</code></td>
+<td>버스 복구 중</td>
+</tr>
+<tr>
+<td><code>sync_skip_clear</code></td>
+<td><code>uint32_t</code></td>
+<td>(클래식) 장치 요청이 시간 초과로 끝난 뒤 송신 대기를 비우는 동안</td>
+</tr>
+<tr>
+<td><code>rx_frame_count</code></td>
+<td><code>uint32_t</code></td>
+<td>이 API 로 들어온 메시지 수</td>
+</tr>
+<tr>
+<td><code>rx_queue_drop_count</code></td>
+<td><code>uint32_t</code></td>
+<td>받은 순서 큐가 가득해 버린 수</td>
+</tr>
+<tr>
+<td><code>rx_queue_last_seq</code></td>
+<td><code>uint32_t</code></td>
+<td>큐로 보낸 마지막 메시지의 <code>seq</code>. 큐를 다 비운 뒤 drop 수와 대조합니다</td>
+</tr>
+<tr>
+<td><code>rx_queue_peak</code></td>
+<td><code>uint32_t</code></td>
+<td>큐에 쌓였던 최대 개수</td>
+</tr>
+<tr>
+<td><code>rejected_id_count</code></td>
+<td><code>uint32_t</code></td>
+<td>허용 밖 ID 로 보내려 한 수</td>
+</tr>
+<tr>
+<td><code>classic_hub_tx_refused_count</code></td>
+<td><code>uint32_t</code></td>
+<td>(클래식 · 사용 불가) XM10 이 이 포트로 내보내지 않고 막은 허브용 송신 수</td>
+</tr>
+<tr>
+<td><code>timing_write_fail_count</code></td>
+<td><code>uint32_t</code></td>
+<td><code>XM_CanSetClassicBitTiming</code> 이 속도를 쓰지 못한 수</td>
+</tr>
+<tr>
+<td><code>heartbeat_sent_count</code></td>
+<td><code>uint32_t</code></td>
+<td><code>XM_CanEnableHeartbeat</code> 의 하트비트가 수락된 수</td>
+</tr>
+<tr>
+<td><code>heartbeat_fail_count</code></td>
+<td><code>uint32_t</code></td>
+<td>하트비트를 못 실어 다음 주기로 미룬 수</td>
+</tr>
+<tr>
+<td><code>heartbeat_last_fail</code></td>
+<td><code>uint8_t</code></td>
+<td>마지막으로 실패한 하트비트 결과(<code>XmCanResult_t</code>). 0 = 아직 없음</td>
+</tr>
+<tr>
+<td><code>bus_mode</code></td>
+<td><code>uint8_t</code></td>
+<td>지금 버스 모드(<code>XmCanBusMode_t</code>)</td>
+</tr>
+<tr>
+<td><code>tec</code></td>
+<td><code>uint8_t</code></td>
+<td>송신 오류 카운터(부른 순간)</td>
+</tr>
+<tr>
+<td><code>rec</code></td>
+<td><code>uint8_t</code></td>
+<td>수신 오류 카운터(부른 순간)</td>
+</tr>
+<tr>
+<td><code>bus_status</code></td>
+<td><code>uint8_t</code></td>
+<td>bit0 = bus-off · bit1 = 오류 경고 · bit2 = 오류 수동</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="상수">상수<a class="headerlink" href="#상수" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>값</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XM_CAN_MAX_DEVICES</code></td>
+<td><code>4U</code></td>
+<td>등록할 수 있는 장치 수. 동시에 빠르게 돌릴 수 있는 대수를 보장하는 값은 아닙니다</td>
+</tr>
+<tr>
+<td><code>XM_CAN_MAX_DATA</code></td>
+<td><code>64U</code></td>
+<td>한 번에 싣는 데이터 최대 바이트 (클래식 모드는 8)</td>
+</tr>
+<tr>
+<td><code>XM_CAN_ALIVE_TIMEOUT_MS</code></td>
+<td><code>3000U</code></td>
+<td>살아있음이 이만큼 없으면 '끊김' [ms]</td>
+</tr>
+<tr>
+<td><code>XM_CAN_LENGTH_INVALID</code></td>
+<td><code>0xFFU</code></td>
+<td><code>XM_CanFitLength</code> 가 돌려주는 값 — 이 모드에서 못 싣는 길이</td>
+</tr>
+<tr>
+<td><code>XM_CAN_AGE_NONE</code></td>
+<td><code>0xFFFFFFFFUL</code></td>
+<td><code>XM_CanAgeMs</code> 가 돌려주는 값 — 받은 적 없음 · 너무 오래됨 · 등록 안 함</td>
+</tr>
+<tr>
+<td><code>XM_CAN_TIMING_1M</code></td>
+<td><code>{ 5U, 13U, 2U, 2U}</code></td>
+<td>클래식 CAN 1 Mbit/s (기본)</td>
+</tr>
+<tr>
+<td><code>XM_CAN_TIMING_500K</code></td>
+<td><code>{10U, 13U, 2U, 2U}</code></td>
+<td>클래식 CAN 500 kbit/s</td>
+</tr>
+<tr>
+<td><code>XM_CAN_TIMING_250K</code></td>
+<td><code>{20U, 13U, 2U, 2U}</code></td>
+<td>클래식 CAN 250 kbit/s</td>
+</tr>
+<tr>
+<td><code>XM_CAN_TIMING_125K</code></td>
+<td><code>{40U, 13U, 2U, 2U}</code></td>
+<td>클래식 CAN 125 kbit/s</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="rev11--rev20-차이-요약">Rev1.1 / Rev2.0 차이 요약<a class="headerlink" href="#rev11--rev20-차이-요약" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Rev1.1</th>
+<th>Rev2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CAN 버스 API (<code>xm_api_canbus.h</code>)</td>
+<td>❌ 없음</td>
+<td>🟢 전용</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="관련-문서">관련 문서<a class="headerlink" href="#관련-문서" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../11-canbus/">11. CAN 통신 (개념)</a> — 쓰는 순서, 배선, 장치 쪽 메시지 약속, 흔한 실수</li>
+<li><a href="../xm-api-canopen/"><code>xm_api_canopen.h</code> — CANopen 장치 도움 함수</a> — 클래식 모드에서 NMT · 하트비트 감시 · SDO</li>
+<li><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/">device-examples</a> — 직접 만든 장치나 PC 로 예제를 돌려 볼 수 있는 상대 장치</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  맨위로
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../xm-api-user-custom/" class="md-footer__link md-footer__link--prev" aria-label="이전: xm_api_user_custom.h (사용자 데이터)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                xm_api_user_custom.h (사용자 데이터)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../xm-api-canopen/" class="md-footer__link md-footer__link--next" aria-label="다음: xm_api_canopen.h (CANopen)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                다음
+              </span>
+              <div class="md-ellipsis">
+                xm_api_canopen.h (CANopen)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

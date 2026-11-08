@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://agr-aift.github.io/phai-x1-xm10-release/en/api-reference/ref/">
       
       
-        <link rel="prev" href="../10-struct-logging/">
+        <link rel="prev" href="../13-imu-calibration/">
       
       
         <link rel="next" href="xm-api/">
@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -35,10 +35,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -780,6 +780,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1118,6 +1124,90 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CAN Communication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-canopen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with CANopen Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13-imu-calibration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IMU Hub Sensor Calibration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1127,6 +1217,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1163,7 +1259,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_12" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_15" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -1185,14 +1281,14 @@
             </a>
             
               
-              <label class="md-nav__link md-nav__link--active" for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
+              <label class="md-nav__link md-nav__link--active" for="__nav_6_15" id="__nav_6_15_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_6_12">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_15">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1540,6 +1636,90 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="xm-api-canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canbus.h (CAN Communication)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="xm-api-canopen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_canopen.h (CANopen)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="xm-api-imu-calib/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xm_api_imu_calib.h (IMU Calibration)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1837,6 +2017,8 @@
       
         
       
+        
+      
     
     
     
@@ -1889,6 +2071,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/v2.10.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.10.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2400,6 +2610,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#can-communication--sensor-hubs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CAN Communication · Sensor Hubs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#memory--rtc" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2595,6 +2816,41 @@
 </tr>
 </tbody>
 </table>
+<h2 id="can-communication--sensor-hubs">CAN Communication · Sensor Hubs<a class="headerlink" href="#can-communication--sensor-hubs" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>One-line purpose</th>
+<th>Reference</th>
+<th>Related concept doc</th>
+<th>Representative example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>xm_api_canbus.h</code></td>
+<td>Send and receive with your own device connected over CAN-FD or classic CAN — device API · free send and receive · sync signal — 🟢 <strong>Rev 2.0 only</strong></td>
+<td><a href="xm-api-canbus/">xm-api-canbus.en.md</a></td>
+<td><a href="../11-canbus/">11. CAN Communication</a></td>
+<td><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/45_CANFD_My_Sensor/">45_CANFD_My_Sensor</a></td>
+</tr>
+<tr>
+<td><code>xm_api_canopen.h</code></td>
+<td>CANopen device helper functions — NMT · node heartbeat monitoring · SDO expedited read/write (classic mode only) — 🟢 <strong>Rev 2.0 only</strong></td>
+<td><a href="xm-api-canopen/">xm-api-canopen.en.md</a></td>
+<td><a href="../12-canopen/">12. Working with CANopen Devices</a></td>
+<td><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/46_CANopen_Drive/">46_CANopen_Drive</a></td>
+</tr>
+<tr>
+<td><code>xm_api_imu_calib.h</code></td>
+<td>In-place calibration of IMU Hub sensors — start · finish · abort · status · supported items — 🟢 <strong>Rev 2.0 only</strong></td>
+<td><a href="xm-api-imu-calib/">xm-api-imu-calib.en.md</a></td>
+<td><a href="../13-imu-calibration/">13. IMU Hub Sensor Calibration</a></td>
+<td><a href="https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/48_IMU_Hub_Calibration/">48_IMU_Hub_Calibration</a></td>
+</tr>
+</tbody>
+</table>
 <h2 id="memory--rtc">Memory · RTC<a class="headerlink" href="#memory--rtc" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2706,7 +2962,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../10-struct-logging/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Struct Logging">
+          <a href="../13-imu-calibration/" class="md-footer__link md-footer__link--prev" aria-label="Previous: IMU Hub Sensor Calibration">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -2716,7 +2972,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Struct Logging
+                IMU Hub Sensor Calibration
               </div>
             </div>
           </a>
@@ -2766,10 +3022,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>
