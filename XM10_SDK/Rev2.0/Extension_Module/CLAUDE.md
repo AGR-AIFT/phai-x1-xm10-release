@@ -44,6 +44,9 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 | **USB Type-C** | ✅ C-to-C 직결 지원 | A-to-C 케이블 필요 |
 | **RAM_D2 여유** | 충분 | 99.21% 사용 (Rev 1.1 위험 주의) |
 | **CAN-FD 센서 허브 (IMU/EMG Hub)** | ✅ Ex.41/42 지원 | ❌ 미지원 |
+| **CAN-FD #2 에 내 장치 · CANopen 드라이버** | ✅ Ex.45 ~ 47 (`xm_api_canbus.h` · `xm_api_canopen.h`) | ❌ 미지원 |
+| **IMU Hub 센서 제자리 보정** | ✅ Ex.48 (`xm_api_imu_calib.h`) | ❌ 미지원 |
+| **SDK 업데이트** | 계속 | **종료** — 마지막 v2.8.1 |
 
 > IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
 
@@ -51,7 +54,8 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 - ETH (LWIP) — `LWIP/` 미들웨어
 - PSRAM — 외부 메모리
 - RTC — `xm_api_rtc.h`
-- CAN-FD 센서 허브 — IMU/EMG Hub Module 연동 (Ex.41/42)
+- CAN-FD 센서 허브 — IMU/EMG Hub Module 연동 (Ex.41/42) · IMU Hub 센서 보정 (Ex.48)
+- CAN-FD #2 에 내 장치 · CANopen 드라이버 연결 (Ex.45 ~ 47)
 
 코드에서 `STM32H743xx` 매크로는 두 Rev 공통이지만, **Ethernet/PSRAM/RTC 페리페럴 코드는 Rev 2.0 SDK 에만 존재**합니다. Rev 1.1 사용자가 본 SDK 를 잘못 쓰면 빌드 실패 또는 페리페럴 초기화 hang.
 
@@ -62,8 +66,8 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 1. **[처음 시작 (AI 자동 안내)](docs/getting-started/00-claude-code-quickstart.md)** — Claude Code 가 환경 구축까지 동반
 2. **[Ex.00 Quick Start](examples/00_Quick_Start/)** — 보드 smoke test (⭐)
 3. **[Ex.01~03 Button & LED](examples/01_Button_LED_Basic/)** — 디지털 IO 기본 (⭐~⭐⭐)
-4. **[전체 학습 로드맵](docs/tutorials/README.md)** — 48 개 예제
-5. **Rev 2.0 전용 예제** — Ex.10 · 34 · 36 · 40 · 41 · 42 · 43 · 44 는 Rev 2.0 SDK 에만 들어 있습니다.
+4. **[전체 학습 로드맵](docs/tutorials/README.md)** — 52 개 예제
+5. **Rev 2.0 전용 예제** — Ex.10 · 34 · 36 · 40 ~ 48 은 Rev 2.0 SDK 에만 들어 있습니다.
 6. **[Ex.41 IMU Hub Dashboard](examples/41_IMU_Hub_Dashboard/) / [Ex.42 EMG Hub Biofeedback](examples/42_EMG_Hub_Biofeedback/)** — CAN-FD 센서 허브(IMU/EMG Hub Module) 연동 (⭐⭐⭐, Rev 2.0 전용)
 
 ---
@@ -129,7 +133,7 @@ Claude Code 미사용자는 [docs/getting-started/00-claude-code-quickstart.md](
 
 | 도구 | 역할 | XM10 과의 관계 |
 |------|------|---------------|
-| **PhAI Studio** | Total Data(시스템 데이터) 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신 |
+| **PhAI Studio** | Total Data(시스템 데이터) 모니터링 + FW 업로드 | USB-CDC 로 본 보드와 통신. 이 SDK(v2.10.0)의 Total Data 는 PhAI Studio 에서 보이지 않을 수 있습니다 — 그때는 `xm10` 도구로 보세요 |
 | **xm10 PC 도구** (`pc-data-tool/xm10.py`) | 실시간 그래프 + 무손실 저장(.xmlog) + CSV 내보내기. `demo` 로 보드 없이 체험, `build_exe.py` 로 실행파일 | 본 ZIP 에 들어 있음 — [안내](docs/getting-started/04-pc-data-tool.md) |
 
 ---
