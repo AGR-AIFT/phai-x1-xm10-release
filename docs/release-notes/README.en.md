@@ -4,6 +4,7 @@ This page lists release attachments, compatibility matrices, and known issues fo
 
 | Version | Date | Notes |
 |---------|------|-------|
+| [v2.10.0](v2.10.0.en.md) | 2026-11-08 | CAN communication · CANopen helpers · IMU Hub sensor calibration API (Rev 2.0 only) · new examples Ex.45 – 48 · device examples (G474 reference device · PC simulators) · Total Data 369 B · Rev 2.0: 52 examples |
 | [v2.9.0](v2.9.0.en.md) | 2026-10-19 | Struct logging + USB memory logging API (Rev 2.0 only) · new examples Ex.10 · 34 · 44 · USB-CDC function changes · 3 declarations removed · undeclared function calls are build errors · `.xmlog` receive time in UTC · Rev 2.0: 48 examples |
 | [v2.8.1](v2.8.1.en.md) | 2026-10-07 | PC tool tabs per module · CAN-FD receive fix · PC tool folder renamed `pc-data-tool` · EMG Hub calibration API · Rev 1.1: 40 examples · bootloader v1.1.0 |
 | [v2.8.0](v2.8.0.en.md) | 2026-09-10 | New PC data tool `xm10` — graphs, lossless saving (`.xmlog`), CSV export + user channel names shown |
