@@ -221,7 +221,7 @@ XM10 의 USB-C 포트는 하나입니다. USB 메모리를 꽂아 두는 동안�
 
 | 증상 | 원인 | 확인 |
 |------|------|------|
-| `XM_CanAttachDevice()` 가 `false` | 쓸 수 없는 번호(예약 번호 · 센서 허브 번호) · 같은 번호 두 번 · 5 대째 · `Control_Setup()` 밖 | `XM_CanIsDeviceIdAllowed()` · 호출 자리 |
+| `XM_CanAttachDevice()` 가 `false` | 쓸 수 없는 번호(예약 번호 · 센서 허브 번호) · 같은 번호 두 번 · 5 대째 · `Control_Setup()` 밖 | `XM_CanIsDeviceIdAllowed()` · [번호 표](api-reference/11-canbus.md#3-번호-한눈에-보기) · 호출 자리 |
 | `XM_CanIsConnected()` 가 계속 `false` | 장치의 살아있음(`0x700 + n`, `0x05`)이 오지 않음 — 배선 · 종단 저항 · 속도 · 샘플 포인트 · 장치 번호 | [CAN 통신](api-reference/11-canbus.md) 의 버스 모드 · 메시지 표 |
 | 보내기가 계속 `XM_CAN_BUSY` · `pending` 이 큼 | 받아 주는 장치가 없거나 버스가 바쁨 | 상대 장치 전원 · 버스 부하 |
 | `bus_status` 의 bit0(bus-off) | 속도가 다르거나 배선 · 종단 문제 | 모든 장치의 속도 · CAN_H/CAN_L 이 바뀌지 않았는지 |

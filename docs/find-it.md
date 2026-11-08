@@ -33,6 +33,7 @@
 | KIT H10 외골격 제어 | [api-reference/02-h10-control-n-data.md](api-reference/02-h10-control-n-data.md) + Ex.11~13 |
 | 상태 머신 (TSM) | [api-reference/01-task-state-machine.md](api-reference/01-task-state-machine.md) + Ex.03 |
 | 직접 만든 CAN-FD · 클래식 CAN 장치와 주고받기 (Rev 2.0 전용) | [api-reference/11-canbus.md](api-reference/11-canbus.md) + Ex.45 · [장치 예제](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/) |
+| CAN 장치 번호 — 고정 번호 · 쓸 수 있는 번호 (Rev 2.0 전용) | [api-reference/11-canbus.md — 번호 한눈에 보기](api-reference/11-canbus.md#3-번호-한눈에-보기) |
 | CANopen 모터 드라이버 다루기 (Rev 2.0 전용) | [api-reference/12-canopen.md](api-reference/12-canopen.md) + Ex.46 · 47 · [PC 시뮬레이터](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/canopen-pc-sim/) |
 | IMU Hub 센서를 장착한 채로 보정하기 (Rev 2.0 전용) | [api-reference/13-imu-calibration.md](api-reference/13-imu-calibration.md) + Ex.48 |
 

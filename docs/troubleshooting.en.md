@@ -221,7 +221,7 @@ The XM10 has a single USB-C port. While a USB memory stick is plugged in, you ca
 
 | Symptom | Cause | What to check |
 |------|------|------|
-| `XM_CanAttachDevice()` returns `false` | A number you cannot use (reserved number · sensor hub number) · the same number twice · a fifth device · called outside `Control_Setup()` | `XM_CanIsDeviceIdAllowed()` · where you call it |
+| `XM_CanAttachDevice()` returns `false` | A number you cannot use (reserved number · sensor hub number) · the same number twice · a fifth device · called outside `Control_Setup()` | `XM_CanIsDeviceIdAllowed()` · [number table](api-reference/11-canbus.en.md#3-numbers-at-a-glance) · where you call it |
 | `XM_CanIsConnected()` stays `false` | The device's alive signal (`0x700 + n`, `0x05`) does not arrive — wiring · termination resistor · speed · sample point · device number | The bus mode and message table in [CAN Communication](api-reference/11-canbus.en.md) |
 | Sending keeps returning `XM_CAN_BUSY` · `pending` is large | No device is accepting the messages, or the bus is busy | Power of the other device · bus load |
 | Bit0 (bus-off) of `bus_status` | The speed differs, or a wiring or termination problem | The speed of every device · that CAN_H and CAN_L are not swapped |
