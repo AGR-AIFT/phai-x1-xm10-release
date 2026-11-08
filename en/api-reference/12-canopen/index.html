@@ -2837,6 +2837,7 @@
 </tbody>
 </table>
 <p>The port must be set to classic mode (<code>XM_CanBusMode()</code> returns <code>XM_CAN_BUS_CLASSIC</code> — <a href="../11-canbus/">CAN Communication — Port and Bus Mode</a>). In FD mode, sending and registering return <code>XM_CAN_REJECTED</code> / <code>false</code>. For SYNC, use <code>XM_CanEnableSync</code>; for other messages such as PDO, use <code>XM_CanSendFrame</code> · <code>XM_CanReadFrame</code> · <code>XM_CanSubscribe</code>. The rules for where to call and for checking results (<code>== XM_CAN_OK</code>) are the same as in CAN Communication.</p>
+<p>Node numbers can be any of 1 – 127 (for <code>XM_CanOpenSendNmt</code>, 0 = all nodes). In classic mode the sensor hubs do not work, so the fixed and reserved numbers of the device API can also be used as node numbers — see <a href="../11-canbus/#3-numbers-at-a-glance">CAN Communication — Numbers at a Glance</a>.</p>
 <hr />
 <h2 id="2-nmt-and-heartbeat-monitoring">2. NMT and Heartbeat Monitoring<a class="headerlink" href="#2-nmt-and-heartbeat-monitoring" title="Permanent link">&para;</a></h2>
 <table>

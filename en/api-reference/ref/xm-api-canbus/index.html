@@ -3865,7 +3865,7 @@
 </table>
 <ul>
 <li>On one bus, every device must have a different number. XM10 cannot detect duplicates.</li>
-<li>A number you can register is any of 1 – 127 except the reserved numbers (<code>0x01</code> · <code>0x02</code> · <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code> · <code>0x10</code> · <code>0x11</code>) (<a href="#xm_canisdeviceidallowed"><code>XM_CanIsDeviceIdAllowed</code></a>).</li>
+<li>A number you can register is any of 1 – 127 except the reserved numbers (<code>0x01</code> · <code>0x02</code> · <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code> · <code>0x10</code> · <code>0x11</code>) (<a href="#xm_canisdeviceidallowed"><code>XM_CanIsDeviceIdAllowed</code></a>). Who uses each number is in the table at <a href="../../11-canbus/#3-numbers-at-a-glance">11. CAN Communication — Numbers at a Glance</a>.</li>
 <li>You can register at most <code>XM_CAN_MAX_DEVICES</code> (4) devices.</li>
 </ul>
 <hr />
@@ -4465,7 +4465,7 @@
 <h4 id="xm_canisdeviceidallowed"><code>XM_CanIsDeviceIdAllowed</code><a class="headerlink" href="#xm_canisdeviceidallowed" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanIsDeviceIdAllowed</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
 </code></pre></div>
-<p>Returns whether the number can be registered in the device API. It is any of 1 – 127 except the reserved numbers (<code>0x01</code> · <code>0x02</code> · <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code> · <code>0x10</code> · <code>0x11</code>).</p>
+<p>Returns whether the number can be registered in the device API. It is any of 1 – 127 except the reserved numbers (<code>0x01</code> · <code>0x02</code> · <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code> · <code>0x10</code> · <code>0x11</code>). Table by number: <a href="../../11-canbus/#3-numbers-at-a-glance">11. CAN Communication — Numbers at a Glance</a>.</p>
 <p><strong>Parameters</strong></p>
 <table>
 <thead>
@@ -4599,7 +4599,7 @@
 <tr>
 <td>0</td>
 <td><code>XM_CAN_BUS_FD</code></td>
-<td>Default — CAN-FD (1 / 5 Mbit/s). Can be used together with the IMU · EMG · FES hubs</td>
+<td>Default — CAN-FD (1 / 5 Mbit/s). Can be used together with the IMU · EMG hubs</td>
 </tr>
 <tr>
 <td>1</td>

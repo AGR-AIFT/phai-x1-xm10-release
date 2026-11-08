@@ -3865,7 +3865,7 @@
 </table>
 <ul>
 <li>같은 버스에서 번호는 장치마다 달라야 합니다. XM10 은 중복을 알아채지 못합니다.</li>
-<li>등록할 수 있는 번호는 1 ~ 127 중 예약 번호(<code>0x01</code> · <code>0x02</code> · <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code> · <code>0x10</code> · <code>0x11</code>)를 뺀 나머지입니다 (<a href="#xm_canisdeviceidallowed"><code>XM_CanIsDeviceIdAllowed</code></a>).</li>
+<li>등록할 수 있는 번호는 1 ~ 127 중 예약 번호(<code>0x01</code> · <code>0x02</code> · <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code> · <code>0x10</code> · <code>0x11</code>)를 뺀 나머지입니다 (<a href="#xm_canisdeviceidallowed"><code>XM_CanIsDeviceIdAllowed</code></a>). 번호마다 누가 쓰는지는 <a href="../../11-canbus/#3-번호-한눈에-보기">11. CAN 통신 — 번호 한눈에 보기</a> 표에 있습니다.</li>
 <li>등록할 수 있는 장치는 최대 <code>XM_CAN_MAX_DEVICES</code> (4) 개입니다.</li>
 </ul>
 <hr />
@@ -4465,7 +4465,7 @@
 <h4 id="xm_canisdeviceidallowed"><code>XM_CanIsDeviceIdAllowed</code><a class="headerlink" href="#xm_canisdeviceidallowed" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kt">bool</span><span class="w"> </span><span class="nf">XM_CanIsDeviceIdAllowed</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
 </code></pre></div>
-<p>장치 API 에 등록할 수 있는 번호인지 돌려줍니다. 1 ~ 127 중 예약 번호(<code>0x01</code> · <code>0x02</code> · <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code> · <code>0x10</code> · <code>0x11</code>)를 뺀 나머지입니다.</p>
+<p>장치 API 에 등록할 수 있는 번호인지 돌려줍니다. 1 ~ 127 중 예약 번호(<code>0x01</code> · <code>0x02</code> · <code>0x0C</code> · <code>0x0D</code> · <code>0x0F</code> · <code>0x10</code> · <code>0x11</code>)를 뺀 나머지입니다. 번호별 표: <a href="../../11-canbus/#3-번호-한눈에-보기">11. CAN 통신 — 번호 한눈에 보기</a>.</p>
 <p><strong>파라미터</strong></p>
 <table>
 <thead>
@@ -4599,7 +4599,7 @@
 <tr>
 <td>0</td>
 <td><code>XM_CAN_BUS_FD</code></td>
-<td>기본 — CAN-FD(1 / 5 Mbit/s). IMU · EMG · FES 허브와 함께 쓸 수 있습니다</td>
+<td>기본 — CAN-FD(1 / 5 Mbit/s). IMU · EMG 허브와 함께 쓸 수 있습니다</td>
 </tr>
 <tr>
 <td>1</td>

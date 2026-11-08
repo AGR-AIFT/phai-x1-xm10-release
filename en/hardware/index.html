@@ -2861,7 +2861,7 @@
 <p>Connection procedure: <a href="../getting-started/01-hardware-setup/">Getting Started — 01 Hardware Setup</a></p>
 </blockquote>
 <h3 id="can-fd-ports">CAN-FD Ports<a class="headerlink" href="#can-fd-ports" title="Permanent link">&para;</a></h3>
-<p>Two ports total. One communicates with KIT H10 through the main connector; the other is for expanding sensor hubs (EMG / GRF / FSR, etc.).</p>
+<p>Two ports total. One communicates with KIT H10 through the main connector; the other is for sensor hubs (IMU Hub · EMG Hub) and your own devices.</p>
 <table>
 <thead>
 <tr>
@@ -2907,6 +2907,10 @@
 <tr>
 <td>Rules for one port</td>
 <td>Do not connect classic devices and CAN-FD devices together · all devices use the same speed · do not let device numbers (IDs) overlap</td>
+</tr>
+<tr>
+<td>Device numbers</td>
+<td>Seven numbers, including IMU Hub <code>0x0D</code> · EMG Hub <code>0x0F</code> · XM10 <code>0x02</code>, are fixed or reserved. Pick your device numbers from the other 120 — <a href="../api-reference/11-canbus/#3-numbers-at-a-glance">Numbers at a Glance</a></td>
 </tr>
 </tbody>
 </table>

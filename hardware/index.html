@@ -2861,7 +2861,7 @@
 <p>연결 절차: <a href="../getting-started/01-hardware-setup/">Getting Started — 01 하드웨어 연결</a></p>
 </blockquote>
 <h3 id="can-fd-포트">CAN-FD 포트<a class="headerlink" href="#can-fd-포트" title="Permanent link">&para;</a></h3>
-<p>총 2 개. 하나는 메인 커넥터로 KIT H10 과 통신, 다른 하나는 센서 허브 (EMG/GRF/FSR 등) 확장용.</p>
+<p>총 2 개. 하나는 메인 커넥터로 KIT H10 과 통신, 다른 하나는 센서 허브(IMU Hub · EMG Hub) 확장 · 내 장치 연결용.</p>
 <table>
 <thead>
 <tr>
@@ -2907,6 +2907,10 @@
 <tr>
 <td>한 포트의 규칙</td>
 <td>클래식 장치와 CAN-FD 장치를 함께 연결하지 않습니다 · 모든 장치는 같은 속도 · 장치 번호(ID)를 겹치지 않습니다</td>
+</tr>
+<tr>
+<td>장치 번호</td>
+<td>IMU Hub <code>0x0D</code> · EMG Hub <code>0x0F</code> · XM10 <code>0x02</code> 를 포함한 7 개는 고정 · 예약 번호입니다. 내 장치는 나머지 120 개 중에서 고릅니다 — <a href="../api-reference/11-canbus/#3-번호-한눈에-보기">번호 한눈에 보기</a></td>
 </tr>
 </tbody>
 </table>
