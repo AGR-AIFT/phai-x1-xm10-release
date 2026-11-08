@@ -26,7 +26,7 @@
 
 ## 2. 포트와 버스 모드
 
-내 장치는 **CAN-FD #2 포트**에 연결합니다. 센서 허브(IMU · EMG · FES)를 연결하는 포트와 같습니다. 포트의 버스 모드는 전원을 켤 때 한 번 정합니다.
+내 장치는 **CAN-FD #2 포트**에 연결합니다. 센서 허브(IMU Hub · EMG Hub)를 연결하는 포트와 같습니다. 포트의 버스 모드는 전원을 켤 때 한 번 정합니다.
 
 | 모드 | 속도 | 함께 쓸 수 있는 것 | 정하는 법 |
 |------|------|------|------|
@@ -49,17 +49,33 @@ void XM_CanClassicBitTiming(XmCanBitTiming_t* timing)               // (선택) 
 
 ---
 
-## 3. 장치 API
+## 3. 번호 한눈에 보기
+
+XM10 은 장치를 번호 n(1 ~ 127)으로 구분합니다. 메시지 ID 는 종류마다 정해진 시작 값에 n 을 더한 값입니다 — 주기 데이터 1 `0x180 + n` · 주기 데이터 2 `0x280 + n` · 명령 `0x200 + n` · 살아있음 `0x700 + n`. 번호 7 개는 XM10 · 센서 허브가 쓰거나 예약한 번호라서 내 장치에 줄 수 없습니다.
+
+이 ID 배치는 CANopen(CiA 301)의 기본 ID 배치와 같은 모양입니다. 장치 API 는 배치만 같고 CANopen 은 아닙니다 — CANopen 장치는 클래식 모드에서 [CANopen 장치 다루기](12-canopen.md)의 도움 함수로 다룹니다.
+
+| 번호 n | 누가 쓰나 | 장치 API 등록 | FD 모드 자유 송수신 | 클래식 모드 자유 송수신 | 관련 |
+|------|------|:---:|------|------|------|
+| `0x01` | KIT H10 제어 모듈(CM, CAN-FD #1) — 고정 | ✗ | ✓ | ✓ | [KIT H10 제어](02-h10-control-n-data.md) |
+| `0x02` | XM10 — 고정 | ✗ | ✓ — `0x702`(XM10 하트비트)만 ✗ | ✓ | [6. 동기 신호와 XM10 하트비트](#6-동기-신호와-xm10-하트비트) |
+| `0x0C` | 예약 | ✗ | ✗ — 아래 7비트가 이 번호인 ID 는 보내지도 받지도 못합니다(허브 번호와 같은 규칙) | ✓ | — |
+| `0x0D` | IMU Hub — 고정 | ✗ | ✗ — 위와 같음(예: `0x18D` · `0x70D`) | ✓ — 허브는 동작하지 않습니다 | [Ex.41](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/) · [Ex.48](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/48_IMU_Hub_Calibration/) · [IMU Hub 센서 보정](13-imu-calibration.md) |
+| `0x0F` | EMG Hub — 고정 | ✗ | ✗ — 위와 같음 | ✓ — 허브는 동작하지 않습니다 | [Ex.42](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/) |
+| `0x10` · `0x11` | 예약 | ✗ | ✓ | ✓ | — |
+| 나머지 120 개 — `0x03` ~ `0x0B` · `0x0E` · `0x12` ~ `0x7F` | **내 장치** | ✓ (4 대까지) | ✓ | ✓ | [Ex.45](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/45_CANFD_My_Sensor/) · [장치 예제](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/) · 클래식: [Ex.46](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/46_CANopen_Drive/) · [Ex.47](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/47_CANopen_Drive_PDO/) |
+
+- **고정 번호는 바꿀 수 없습니다.** 내 장치 번호는 '내 장치' 120 개 중에서 고르고 `XM_CanIsDeviceIdAllowed(n)` 로 확인합니다(0 은 '모든 장치' 를 뜻해서 쓰지 않습니다). 같은 버스에서 장치마다 다른 번호를 쓰세요 — XM10 은 번호가 겹쳐도 알아채지 못합니다.
+- 클래식 모드에서는 센서 허브가 동작하지 않으므로 모든 ID 를 자유 송수신으로 주고받을 수 있고, CANopen 도움 함수도 노드 번호 1 ~ 127 을 모두 받습니다. 장치 API 에 등록할 수 있는 번호만 두 모드가 같습니다(120 개).
+- 번호와 상관없이 정해진 ID 가 둘 있습니다. `0x080`(동기 신호) — FD 모드에서는 `XM_CanEnableSync()` 로만 나가고, 클래식 모드에서는 동기 신호를 켠 동안만 직접 보낼 수 없습니다. `0x000` — FD 모드에서는 길이 2 이고 둘째 바이트가 대상 번호일 때만 보냅니다(대상 0 · 허브 자리 번호는 안 됨). 클래식 모드에서는 제한이 없습니다.
+
+---
+
+## 4. 장치 API
 
 ### 장치 번호
 
-장치마다 번호 n 을 하나 정하고 `Control_Setup()` 에서 `XM_CanAttachDevice(n)` 로 등록합니다. 4 대까지 등록합니다.
-
-| 번호 | 쓸 수 있나 |
-|------|------|
-| `0x01` · `0x02` · `0x10` · `0x11` | 예약 번호 — 쓸 수 없습니다 |
-| `0x0C` · `0x0D` · `0x0F` | 센서 허브 번호 — 쓸 수 없습니다 |
-| 1 ~ 127 의 나머지 | 쓸 수 있습니다 — `XM_CanIsDeviceIdAllowed()` 로 확인 |
+장치마다 번호 n 을 하나 정하고 `Control_Setup()` 에서 `XM_CanAttachDevice(n)` 로 등록합니다. 4 대까지 등록합니다. 쓸 수 있는 번호는 [3. 번호 한눈에 보기](#3-번호-한눈에-보기)의 '내 장치' 120 개이며, `XM_CanIsDeviceIdAllowed()` 로 확인합니다.
 
 같은 버스에서 번호가 겹치면 XM10 은 알아채지 못합니다. 장치마다 다른 번호를 쓰세요.
 
@@ -101,7 +117,7 @@ if (XM_CanSend(n, cmd, sizeof(cmd)) == XM_CAN_OK) {   // XM_CAN_OK 는 0 — 꼭
 
 ---
 
-## 4. 자유 송수신
+## 5. 자유 송수신
 
 ### 보내기
 
@@ -114,8 +130,10 @@ if (XM_CanIsIdAllowed(0x321)) {
 
 | 모드 | 보낼 수 있는 ID |
 |------|------|
-| CAN-FD | `0x000` ~ `0x7FF` 중 아래 7비트가 `0x0C` · `0x0D` · `0x0F` 인 ID(센서 허브 자리) · `0x080` · `0x702` 를 뺀 전부. `0x000` 은 길이 2 이고 둘째 바이트가 대상 번호일 때만 |
+| CAN-FD | `0x000` ~ `0x7FF` 중 아래 7비트가 `0x0C` · `0x0D` · `0x0F` 인 ID(센서 허브 자리) · `0x080` · `0x702` 를 뺀 전부. `0x000` 은 길이 2 이고 둘째 바이트가 대상 번호일 때만(대상 0 · 허브 자리 번호 제외) |
 | 클래식 | `0x000` ~ `0x7FF` 전부(동기 신호를 켠 동안의 `0x080` 제외) |
+
+번호별 표는 [3. 번호 한눈에 보기](#3-번호-한눈에-보기)에 있습니다.
 
 길이는 FD 0 ~ 64(다음 허용 길이까지 0 으로 채움) · 클래식 0 ~ 8 입니다. `XM_CanFitLength()` 로 실릴 길이를 미리 볼 수 있습니다. 11 비트 ID 만 되고 리모트 프레임은 지원하지 않습니다.
 
@@ -135,7 +153,7 @@ while (XM_CanReadFrame(&f)) {
 
 ---
 
-## 5. 동기 신호와 XM10 하트비트
+## 6. 동기 신호와 XM10 하트비트
 
 | 함수 | 하는 일 |
 |------|------|
@@ -144,7 +162,7 @@ while (XM_CanReadFrame(&f)) {
 
 ---
 
-## 6. 한 포트에서 지킬 것
+## 7. 한 포트에서 지킬 것
 
 - 클래식 장치와 CAN-FD 장치를 **함께 연결하지 마세요.**
 - 모든 장치는 **같은 속도**여야 합니다.
@@ -155,7 +173,7 @@ while (XM_CanReadFrame(&f)) {
 
 ---
 
-## 7. 결과 값과 호출 자리
+## 8. 결과 값과 호출 자리
 
 | 결과 (`XmCanResult_t`) | 뜻 | 할 일 |
 |------|------|------|
@@ -171,7 +189,7 @@ while (XM_CanReadFrame(&f)) {
 
 ---
 
-## 8. 통계로 원인 찾기
+## 9. 통계로 원인 찾기
 
 `XM_CanGetStats(n, &s)` (장치별) · `XM_CanGetBusStats(&b)` (포트 공통). 각 값은 온전하지만 서로 같은 순간의 값은 아닙니다.
 
@@ -186,7 +204,7 @@ while (XM_CanReadFrame(&f)) {
 
 ---
 
-## 9. 상대 장치와 예제
+## 10. 상대 장치와 예제
 
 | 무엇 | 링크 |
 |------|------|

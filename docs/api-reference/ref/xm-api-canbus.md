@@ -113,7 +113,7 @@ CANopen(CiA 301) 장치의 NMT · 하트비트 감시 · SDO 는 [`xm_api_canope
 | 명령 | `0x200` + 번호 | XM10 → 장치 | [`XM_CanSend`](#xm_cansend) 로 보냅니다 |
 
 - 같은 버스에서 번호는 장치마다 달라야 합니다. XM10 은 중복을 알아채지 못합니다.
-- 등록할 수 있는 번호는 1 ~ 127 중 예약 번호(`0x01` · `0x02` · `0x0C` · `0x0D` · `0x0F` · `0x10` · `0x11`)를 뺀 나머지입니다 ([`XM_CanIsDeviceIdAllowed`](#xm_canisdeviceidallowed)).
+- 등록할 수 있는 번호는 1 ~ 127 중 예약 번호(`0x01` · `0x02` · `0x0C` · `0x0D` · `0x0F` · `0x10` · `0x11`)를 뺀 나머지입니다 ([`XM_CanIsDeviceIdAllowed`](#xm_canisdeviceidallowed)). 번호마다 누가 쓰는지는 [11. CAN 통신 — 번호 한눈에 보기](../11-canbus.md#3-번호-한눈에-보기) 표에 있습니다.
 - 등록할 수 있는 장치는 최대 `XM_CAN_MAX_DEVICES` (4) 개입니다.
 
 ---
@@ -656,7 +656,7 @@ bool XM_CanIsIdAllowed(uint16_t id);
 bool XM_CanIsDeviceIdAllowed(uint8_t id);
 ```
 
-장치 API 에 등록할 수 있는 번호인지 돌려줍니다. 1 ~ 127 중 예약 번호(`0x01` · `0x02` · `0x0C` · `0x0D` · `0x0F` · `0x10` · `0x11`)를 뺀 나머지입니다.
+장치 API 에 등록할 수 있는 번호인지 돌려줍니다. 1 ~ 127 중 예약 번호(`0x01` · `0x02` · `0x0C` · `0x0D` · `0x0F` · `0x10` · `0x11`)를 뺀 나머지입니다. 번호별 표: [11. CAN 통신 — 번호 한눈에 보기](../11-canbus.md#3-번호-한눈에-보기).
 
 **파라미터**
 
@@ -736,7 +736,7 @@ CAN-FD #2 포트의 버스 모드입니다. 전원을 켤 때 한 번 정합니�
 
 | 값 | 이름 | 뜻 |
 |----|------|------|
-| 0 | `XM_CAN_BUS_FD` | 기본 — CAN-FD(1 / 5 Mbit/s). IMU · EMG · FES 허브와 함께 쓸 수 있습니다 |
+| 0 | `XM_CAN_BUS_FD` | 기본 — CAN-FD(1 / 5 Mbit/s). IMU · EMG 허브와 함께 쓸 수 있습니다 |
 | 1 | `XM_CAN_BUS_CLASSIC` | 클래식 CAN 전용(기본 1 Mbit/s — [`XM_CanClassicBitTiming`](#xm_canclassicbittiming)). 모터 드라이버 등에 씁니다. 이 포트에 허브를 연결하지 마세요 |
 | 2 | `XM_CAN_BUS_UNAVAILABLE` | (읽기 전용) 클래식을 요청했지만 설정하지 못했습니다. 이 포트로 아무것도 보내지 않습니다 |
 

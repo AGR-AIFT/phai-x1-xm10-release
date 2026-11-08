@@ -26,7 +26,7 @@ You may use both together. The protocol, the device setup and the start-up order
 
 ## 2. Port and Bus Mode
 
-Connect your device to the **CAN-FD #2 port**. It is the same port that the sensor hubs (IMU · EMG · FES) use. The bus mode of the port is set once, at power-on.
+Connect your device to the **CAN-FD #2 port**. It is the same port that the sensor hubs (IMU Hub · EMG Hub) use. The bus mode of the port is set once, at power-on.
 
 | Mode | Speed | Can be used together with | How to set it |
 |------|------|------|------|
@@ -49,17 +49,33 @@ void XM_CanClassicBitTiming(XmCanBitTiming_t* timing)               // (optional
 
 ---
 
-## 3. Device API
+## 3. Numbers at a Glance
+
+XM10 tells devices apart by a number n (1 – 127). Each message ID is the start value of its kind plus n — periodic data 1 `0x180 + n` · periodic data 2 `0x280 + n` · command `0x200 + n` · alive `0x700 + n`. Seven numbers are used or reserved by XM10 and the sensor hubs, so you cannot give them to your device.
+
+This ID layout has the same shape as the default ID layout of CANopen (CiA 301). The device API only shares the layout and is not CANopen — handle CANopen devices in classic mode with the helper functions in [Working with CANopen Devices](12-canopen.en.md).
+
+| Number n | Used by | Device API registration | FD mode free send and receive | Classic mode free send and receive | Related |
+|------|------|:---:|------|------|------|
+| `0x01` | KIT H10 control module (CM, CAN-FD #1) — fixed | ✗ | ✓ | ✓ | [KIT H10 Control](02-h10-control-n-data.en.md) |
+| `0x02` | XM10 — fixed | ✗ | ✓ — only `0x702` (XM10 heartbeat) is ✗ | ✓ | [6. Sync Signal and the XM10 Heartbeat](#6-sync-signal-and-the-xm10-heartbeat) |
+| `0x0C` | Reserved | ✗ | ✗ — IDs whose lower 7 bits are this number can be neither sent nor received (the same rule as the hub numbers) | ✓ | — |
+| `0x0D` | IMU Hub — fixed | ✗ | ✗ — same as above (e.g. `0x18D` · `0x70D`) | ✓ — the hub does not work | [Ex.41](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/41_IMU_Hub_Dashboard/) · [Ex.48](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/48_IMU_Hub_Calibration/) · [IMU Hub Sensor Calibration](13-imu-calibration.en.md) |
+| `0x0F` | EMG Hub — fixed | ✗ | ✗ — same as above | ✓ — the hub does not work | [Ex.42](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/42_EMG_Hub_Biofeedback/) |
+| `0x10` · `0x11` | Reserved | ✗ | ✓ | ✓ | — |
+| The other 120 — `0x03` – `0x0B` · `0x0E` · `0x12` – `0x7F` | **Your devices** | ✓ (up to 4) | ✓ | ✓ | [Ex.45](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/45_CANFD_My_Sensor/) · [device examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/) · classic: [Ex.46](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/46_CANopen_Drive/) · [Ex.47](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/47_CANopen_Drive_PDO/) |
+
+- **Fixed numbers cannot be changed.** Pick your device numbers from the 120 "your devices" numbers and check them with `XM_CanIsDeviceIdAllowed(n)` (0 means "all devices", so it is not used). Give each device on the same bus a different number — XM10 cannot detect a duplicate.
+- In classic mode the sensor hubs do not work, so every ID can be sent and received with free send and receive, and the CANopen helper functions accept every node number from 1 to 127. Only the numbers you can register in the device API stay the same in both modes (the 120).
+- Two IDs are fixed regardless of number. `0x080` (sync signal) — in FD mode it goes out only through `XM_CanEnableSync()`; in classic mode you can send it yourself, except while the sync signal is on. `0x000` — in FD mode it is sent only when the length is 2 and the second byte is the target number (not target 0 and not a hub slot number). In classic mode there is no restriction.
+
+---
+
+## 4. Device API
 
 ### Device number
 
-Pick one number n for each device and register it with `XM_CanAttachDevice(n)` in `Control_Setup()`. You can register up to 4 devices.
-
-| Number | Can you use it? |
-|------|------|
-| `0x01` · `0x02` · `0x10` · `0x11` | Reserved numbers — you cannot use them |
-| `0x0C` · `0x0D` · `0x0F` | Sensor hub numbers — you cannot use them |
-| The rest of 1 – 127 | You can use them — check with `XM_CanIsDeviceIdAllowed()` |
+Pick one number n for each device and register it with `XM_CanAttachDevice(n)` in `Control_Setup()`. You can register up to 4 devices. The numbers you can use are the 120 "your devices" numbers in [3. Numbers at a Glance](#3-numbers-at-a-glance); check them with `XM_CanIsDeviceIdAllowed()`.
 
 If two devices on the same bus use the same number, XM10 cannot detect it. Give each device a different number.
 
@@ -101,7 +117,7 @@ if (XM_CanSend(n, cmd, sizeof(cmd)) == XM_CAN_OK) {   // XM_CAN_OK is 0 — alwa
 
 ---
 
-## 4. Free Send and Receive
+## 5. Free Send and Receive
 
 ### Sending
 
@@ -114,8 +130,10 @@ if (XM_CanIsIdAllowed(0x321)) {
 
 | Mode | IDs you can send |
 |------|------|
-| CAN-FD | Every ID from `0x000` to `0x7FF` except IDs whose lower 7 bits are `0x0C` · `0x0D` · `0x0F` (the sensor hub slots), `0x080` and `0x702`. `0x000` only when the length is 2 and the second byte is the target number |
+| CAN-FD | Every ID from `0x000` to `0x7FF` except IDs whose lower 7 bits are `0x0C` · `0x0D` · `0x0F` (the sensor hub slots), `0x080` and `0x702`. `0x000` only when the length is 2 and the second byte is the target number (not 0 and not a hub slot number) |
 | Classic | Every ID from `0x000` to `0x7FF` (except `0x080` while the sync signal is on) |
+
+For the same rules by number, see [3. Numbers at a Glance](#3-numbers-at-a-glance).
 
 The length is 0 – 64 in FD (padded with zeros up to the next allowed length) and 0 – 8 in classic. You can see the length that will go on the bus beforehand with `XM_CanFitLength()`. Only 11-bit IDs work, and remote frames are not supported.
 
@@ -135,7 +153,7 @@ while (XM_CanReadFrame(&f)) {
 
 ---
 
-## 5. Sync Signal and the XM10 Heartbeat
+## 6. Sync Signal and the XM10 Heartbeat
 
 | Function | What it does |
 |------|------|
@@ -144,7 +162,7 @@ while (XM_CanReadFrame(&f)) {
 
 ---
 
-## 6. Rules for One Port
+## 7. Rules for One Port
 
 - Do not connect classic devices and CAN-FD devices together.
 - All devices must use the same speed.
@@ -155,7 +173,7 @@ while (XM_CanReadFrame(&f)) {
 
 ---
 
-## 7. Result Values and Where to Call
+## 8. Result Values and Where to Call
 
 | Result (`XmCanResult_t`) | Meaning | What to do |
 |------|------|------|
@@ -171,7 +189,7 @@ while (XM_CanReadFrame(&f)) {
 
 ---
 
-## 8. Finding Causes with Statistics
+## 9. Finding Causes with Statistics
 
 `XM_CanGetStats(n, &s)` (per device) · `XM_CanGetBusStats(&b)` (whole port). Each value is consistent on its own, but the values are not from the same instant.
 
@@ -186,7 +204,7 @@ while (XM_CanReadFrame(&f)) {
 
 ---
 
-## 9. Partner Devices and Examples
+## 10. Partner Devices and Examples
 
 | What | Link |
 |------|------|

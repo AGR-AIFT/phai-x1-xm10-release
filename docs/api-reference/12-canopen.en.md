@@ -25,6 +25,8 @@ This page is a guide to the **CANopen helper functions** defined in `xm_api_cano
 
 The port must be set to classic mode (`XM_CanBusMode()` returns `XM_CAN_BUS_CLASSIC` — [CAN Communication — Port and Bus Mode](11-canbus.en.md)). In FD mode, sending and registering return `XM_CAN_REJECTED` / `false`. For SYNC, use `XM_CanEnableSync`; for other messages such as PDO, use `XM_CanSendFrame` · `XM_CanReadFrame` · `XM_CanSubscribe`. The rules for where to call and for checking results (`== XM_CAN_OK`) are the same as in CAN Communication.
 
+Node numbers can be any of 1 – 127 (for `XM_CanOpenSendNmt`, 0 = all nodes). In classic mode the sensor hubs do not work, so the fixed and reserved numbers of the device API can also be used as node numbers — see [CAN Communication — Numbers at a Glance](11-canbus.en.md#3-numbers-at-a-glance).
+
 ---
 
 ## 2. NMT and Heartbeat Monitoring

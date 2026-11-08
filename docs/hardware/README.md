@@ -51,7 +51,7 @@ XM10 의 전원 + 통신을 한 가닥으로 받습니다. Molex 1053081206 6-pi
 
 ### CAN-FD 포트
 
-총 2 개. 하나는 메인 커넥터로 KIT H10 과 통신, 다른 하나는 센서 허브 (EMG/GRF/FSR 등) 확장용.
+총 2 개. 하나는 메인 커넥터로 KIT H10 과 통신, 다른 하나는 센서 허브(IMU Hub · EMG Hub) 확장 · 내 장치 연결용.
 
 | 포트 | 용도 |
 |------|------|
@@ -68,6 +68,7 @@ XM10 의 전원 + 통신을 한 가닥으로 받습니다. Molex 1053081206 6-pi
 | 배선 | 장치 트랜시버의 CAN_H · CAN_L · GND 를 포트의 같은 이름에 연결합니다 |
 | 종단 저항 | 버스 양 끝에 120 Ω. **XM10 보드에는 이미 있습니다** — 장치 쪽 끝에 하나를 둡니다 |
 | 한 포트의 규칙 | 클래식 장치와 CAN-FD 장치를 함께 연결하지 않습니다 · 모든 장치는 같은 속도 · 장치 번호(ID)를 겹치지 않습니다 |
+| 장치 번호 | IMU Hub `0x0D` · EMG Hub `0x0F` · XM10 `0x02` 를 포함한 7 개는 고정 · 예약 번호입니다. 내 장치는 나머지 120 개 중에서 고릅니다 — [번호 한눈에 보기](../api-reference/11-canbus.md#3-번호-한눈에-보기) |
 
 쓰는 법은 [CAN 통신](../api-reference/11-canbus.md) · [CANopen 장치 다루기](../api-reference/12-canopen.md), 상대 장치 예제는 [device-examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/) 를 보세요.
 

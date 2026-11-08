@@ -33,6 +33,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | KIT H10 exoskeleton control | [api-reference/02-h10-control-n-data.md](api-reference/02-h10-control-n-data.md) + Ex.11–13 |
 | State machine (TSM) | [api-reference/01-task-state-machine.md](api-reference/01-task-state-machine.md) + Ex.03 |
 | Talking to your own CAN-FD or classic CAN device (Rev 2.0 only) | [api-reference/11-canbus.en.md](api-reference/11-canbus.en.md) + Ex.45 · [device examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/) |
+| CAN device numbers — fixed numbers · numbers you can use (Rev 2.0 only) | [api-reference/11-canbus.en.md — Numbers at a Glance](api-reference/11-canbus.en.md#3-numbers-at-a-glance) |
 | Working with a CANopen motor driver (Rev 2.0 only) | [api-reference/12-canopen.en.md](api-reference/12-canopen.en.md) + Ex.46 · 47 · [PC simulator](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/canopen-pc-sim/) |
 | Calibrating IMU Hub sensors while they stay mounted (Rev 2.0 only) | [api-reference/13-imu-calibration.en.md](api-reference/13-imu-calibration.en.md) + Ex.48 |
 

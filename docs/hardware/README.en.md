@@ -51,7 +51,7 @@ Delivers both power and communication to the XM10 through a single cable. Uses a
 
 ### CAN-FD Ports
 
-Two ports total. One communicates with KIT H10 through the main connector; the other is for expanding sensor hubs (EMG / GRF / FSR, etc.).
+Two ports total. One communicates with KIT H10 through the main connector; the other is for sensor hubs (IMU Hub · EMG Hub) and your own devices.
 
 | Port | Purpose |
 |------|---------|
@@ -68,6 +68,7 @@ Two ports total. One communicates with KIT H10 through the main connector; the o
 | Wiring | Connect CAN_H · CAN_L · GND of the device transceiver to the pins of the same name on the port |
 | Termination resistor | 120 Ω at both ends of the bus. **The XM10 board already has one** — put one at the device end |
 | Rules for one port | Do not connect classic devices and CAN-FD devices together · all devices use the same speed · do not let device numbers (IDs) overlap |
+| Device numbers | Seven numbers, including IMU Hub `0x0D` · EMG Hub `0x0F` · XM10 `0x02`, are fixed or reserved. Pick your device numbers from the other 120 — [Numbers at a Glance](../api-reference/11-canbus.en.md#3-numbers-at-a-glance) |
 
 For how to use it, see [CAN Communication](../api-reference/11-canbus.en.md) and [Working with CANopen Devices](../api-reference/12-canopen.en.md). For partner device examples, see [device-examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/).
 

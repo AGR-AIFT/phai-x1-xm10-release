@@ -113,7 +113,7 @@ When you register a number with `XM_CanAttachDevice()`, XM10 handles these messa
 | Command | `0x200` + number | XM10 → device | Sent with [`XM_CanSend`](#xm_cansend) |
 
 - On one bus, every device must have a different number. XM10 cannot detect duplicates.
-- A number you can register is any of 1 – 127 except the reserved numbers (`0x01` · `0x02` · `0x0C` · `0x0D` · `0x0F` · `0x10` · `0x11`) ([`XM_CanIsDeviceIdAllowed`](#xm_canisdeviceidallowed)).
+- A number you can register is any of 1 – 127 except the reserved numbers (`0x01` · `0x02` · `0x0C` · `0x0D` · `0x0F` · `0x10` · `0x11`) ([`XM_CanIsDeviceIdAllowed`](#xm_canisdeviceidallowed)). Who uses each number is in the table at [11. CAN Communication — Numbers at a Glance](../11-canbus.en.md#3-numbers-at-a-glance).
 - You can register at most `XM_CAN_MAX_DEVICES` (4) devices.
 
 ---
@@ -656,7 +656,7 @@ Returns whether the ID can be sent under this mode's ID rules. It looks at the I
 bool XM_CanIsDeviceIdAllowed(uint8_t id);
 ```
 
-Returns whether the number can be registered in the device API. It is any of 1 – 127 except the reserved numbers (`0x01` · `0x02` · `0x0C` · `0x0D` · `0x0F` · `0x10` · `0x11`).
+Returns whether the number can be registered in the device API. It is any of 1 – 127 except the reserved numbers (`0x01` · `0x02` · `0x0C` · `0x0D` · `0x0F` · `0x10` · `0x11`). Table by number: [11. CAN Communication — Numbers at a Glance](../11-canbus.en.md#3-numbers-at-a-glance).
 
 **Parameters**
 
@@ -736,7 +736,7 @@ The bus mode of the CAN-FD #2 port. It is set once at power-on ([`XM_CanBusMode`
 
 | Value | Name | Meaning |
 |----|------|------|
-| 0 | `XM_CAN_BUS_FD` | Default — CAN-FD (1 / 5 Mbit/s). Can be used together with the IMU · EMG · FES hubs |
+| 0 | `XM_CAN_BUS_FD` | Default — CAN-FD (1 / 5 Mbit/s). Can be used together with the IMU · EMG hubs |
 | 1 | `XM_CAN_BUS_CLASSIC` | Classic CAN only (1 Mbit/s by default — [`XM_CanClassicBitTiming`](#xm_canclassicbittiming)). For motor drivers and the like. Do not connect a hub to this port |
 | 2 | `XM_CAN_BUS_UNAVAILABLE` | (read-only) Classic was requested but could not be set up. Nothing is sent from this port |
 

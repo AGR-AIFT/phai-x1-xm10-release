@@ -25,6 +25,8 @@
 
 포트를 클래식 모드로 정해야 합니다(`XM_CanBusMode()` 가 `XM_CAN_BUS_CLASSIC` — [CAN 통신 — 포트와 버스 모드](11-canbus.md)). FD 모드에서는 보내기 · 등록이 `XM_CAN_REJECTED` / `false` 입니다. SYNC 는 `XM_CanEnableSync`, PDO 같은 그 밖의 메시지는 `XM_CanSendFrame` · `XM_CanReadFrame` · `XM_CanSubscribe` 를 씁니다. 호출 자리와 결과 확인(`== XM_CAN_OK`) 규칙은 CAN 통신과 같습니다.
 
+노드 번호는 1 ~ 127 을 모두 쓸 수 있습니다(`XM_CanOpenSendNmt` 는 0 = 모든 노드). 클래식 모드에서는 센서 허브가 동작하지 않아, 장치 API 의 고정 · 예약 번호도 노드 번호로 쓸 수 있습니다 — [CAN 통신 — 번호 한눈에 보기](11-canbus.md#3-번호-한눈에-보기).
+
 ---
 
 ## 2. NMT 와 하트비트 감시
