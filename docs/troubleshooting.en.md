@@ -217,6 +217,29 @@ The XM10 has a single USB-C port. While a USB memory stick is plugged in, you ca
 
 > The IMU Hub and EMG Hub are modules under internal development. To use them, please contact us at https://huphailab.com/contact.
 
+### Cannot Communicate with My CAN Device (Rev 2.0)
+
+| Symptom | Cause | What to check |
+|------|------|------|
+| `XM_CanAttachDevice()` returns `false` | A number you cannot use (reserved number · sensor hub number) · the same number twice · a fifth device · called outside `Control_Setup()` | `XM_CanIsDeviceIdAllowed()` · where you call it |
+| `XM_CanIsConnected()` stays `false` | The device's alive signal (`0x700 + n`, `0x05`) does not arrive — wiring · termination resistor · speed · sample point · device number | The bus mode and message table in [CAN Communication](api-reference/11-canbus.en.md) |
+| Sending keeps returning `XM_CAN_BUSY` · `pending` is large | No device is accepting the messages, or the bus is busy | Power of the other device · bus load |
+| Bit0 (bus-off) of `bus_status` | The speed differs, or a wiring or termination problem | The speed of every device · that CAN_H and CAN_L are not swapped |
+| `if (XM_CanSend(...))` reads a failure as a success | `XM_CAN_OK` is 0 | Compare with `== XM_CAN_OK` |
+| The sensor hubs drop out after switching to classic mode | The hubs do not work in classic mode | Use FD mode if you need the hubs |
+| A CANopen SDO is blocked with `XM_CAN_BUSY` for 1.5 seconds | A quiet period after the previous request ended in a timeout | The SDO rules in [Working with CANopen Devices](api-reference/12-canopen.en.md) |
+
+### IMU Hub Sensor Calibration Does Not Work (Rev 2.0)
+
+| Symptom | Cause | What to check |
+|------|------|------|
+| `XM_IMU_CALIB_REQ_CONTROL_ACTIVE` | You cannot start in control mode | Switch to `XM_CTRL_MONITOR`, then start |
+| The calibration restarts each time it ends | `XM_ImuCalibStart()` is called every period | Call it only once, like a button event |
+| Ends with `NO_RESPONSE` or `HUB_NOT_SUPPORTED` | The IMU Hub firmware is old, or a communication problem | Update the IMU Hub firmware |
+| All channels drop out for a moment after an abort | Aborting an EBIMU magnetometer or full accelerometer calibration turns the power of all channels off for about 2 seconds | Normal — they reconnect when new data arrives |
+
+For the result values in detail, see [IMU Hub Sensor Calibration](api-reference/13-imu-calibration.en.md).
+
 ---
 
 ## Debugging

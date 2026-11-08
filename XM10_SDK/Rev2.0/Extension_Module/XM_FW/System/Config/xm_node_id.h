@@ -42,9 +42,18 @@ typedef uint8_t AGR_NodeID_t;
 #define AGR_NODE_ID_IMU_HUB          AGR_NODE_ID_IMU_HUB_A  /**< 기본 alias */
 #define AGR_NODE_ID_EMG_HUB          0x0F  /**< EMG Hub */
 #define AGR_NODE_ID_GRF_MODULE       0x11  /**< SM-GRF reserved node ID. XM UART path uses fixed-frame, port=identity. */
+#define AGR_NODE_ID_RESERVED_SENSOR  0x10  /**< 예약 — 아직 쓰는 모듈 없음 */
 
 /* Utility */
 #define AGR_NODE_ID_IS_VALID(id)     ((id) >= 0x01 && (id) <= 0x7F)
 #define AGR_NODE_ID_IS_BROADCAST(id) ((id) == AGR_NODE_ID_BROADCAST)
+
+/* 센서 허브 번호 — 이 번호의 메시지는 XM10 의 허브 경로가 쓴다(FD 모드 자유 송수신에서 막는다) */
+#define AGR_NODE_ID_IS_HUB(n)        ((n) == AGR_NODE_ID_FES_HUB || (n) == AGR_NODE_ID_IMU_HUB || (n) == AGR_NODE_ID_EMG_HUB)
+
+/* 외부 장치에 줄 수 있는 번호 — 1~0x7F 중 위 시스템 · 허브 · 예약 번호를 뺀 나머지(번호는 사람이 코드에 정해 넣는다) */
+#define AGR_NODE_ID_IS_DEVICE_OK(n)  (AGR_NODE_ID_IS_VALID(n) && (n) != AGR_NODE_ID_CM && (n) != AGR_NODE_ID_XM && \
+                                      !AGR_NODE_ID_IS_HUB(n) && (n) != AGR_NODE_ID_RESERVED_SENSOR &&             \
+                                      (n) != AGR_NODE_ID_GRF_MODULE)
 
 #endif /* XM_NODE_ID_H */

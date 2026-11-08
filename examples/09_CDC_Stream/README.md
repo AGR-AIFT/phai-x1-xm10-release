@@ -1,7 +1,7 @@
 # Ex.09 — CDC Stream (USB-CDC 실시간 바이너리 스트리밍)
 
 > 🎯 **학습 목표**:
-> - System 자동 스트리밍 (Total Data Packet 0x20, 365 B / 1 kHz) 의 존재를 이해합니다.
+> - System 자동 스트리밍 (Total Data Packet 0x20, 369 B · Rev 1.1 은 365 B / 1 kHz) 의 존재를 이해합니다.
 > - **User Custom 채널** (Module ID `0xF0~0xFE`) 로 알고리즘 디버그 변수를 추가 전송하는 방법.
 > - JSON 메타데이터 등록 + `XM_SendUsbDataWithId()` 패턴.
 >
@@ -22,7 +22,7 @@ PC 프로그램(PhAI Studio 또는 `xm10` 도구)으로 포트를 열면(Connect
 
 | Module ID | 출처 | 주기 | 내용 |
 |:---:|------|:---:|------|
-| **0x20** | System 자동 | 1 kHz | Total Data Packet 365 B (H10 + GRF + IMU Hub + External IO 전체) |
+| **0x20** | System 자동 | 1 kHz | Total Data Packet 369 B (Rev 1.1 은 365 B) — H10 + GRF + IMU Hub + External IO 전체 |
 | **0xEF** | System 자동 | 연결할 때 1회 | User Meta JSON |
 | **0xF0** | 본 예제 (Control_Loop) | 가변 | 16 B (H10 연결 / 좌·우 고관절 각도 / 전방 보행 속도) |
 
@@ -38,7 +38,7 @@ PC 프로그램(PhAI Studio 또는 `xm10` 도구)으로 포트를 열면(Connect
 
 ## 2️⃣ 사전 지식 — 시작 전 알아둘 것
 
-- **Total Data Packet (0x20)** — System 이 365 B 의 H10/IMU/External IO 전체 상태를 1 kHz 로 자동 스트리밍. 사용자 코드 0줄.
+- **Total Data Packet (0x20)** — System 이 369 B(Rev 1.1 은 365 B)의 H10/IMU/External IO 전체 상태를 1 kHz 로 자동 스트리밍. 사용자 코드 0줄.
 - **User Custom Channel (0xF0~0xFE)** — 알고리즘 내부 변수 (제어 출력, 추정치 등) 를 PC (`xm10` 도구) 로 내보냅니다. 채널 이름·단위는 메타 JSON 으로 등록하며, 등록은 하나만 유지되어 `XM_SetUsbCustomMeta` 를 다시 부르면 이전 것을 덮어씁니다.
 - **`XM_SetUsbCustomMeta(id, json)`** — Setup 단계 1회. JSON 배열로 채널별 `name` + `unit` 등록 → `xm10` 도구가 채널 이름을 그래프 제목·CSV 열 이름으로 씁니다.
 - **`XM_SendUsbDataWithId(ptr, size, id)`** — non-blocking 전송. 전송 버퍼가 가득 차거나 구조체가 1020 바이트를 넘으면 `false` 반환 + 해당 tick 드롭.
@@ -105,7 +105,7 @@ static void Run_Loop(void)
 
 ## 5️⃣ 다음 단계
 
-- PC 에서 받아 저장하고 CSV 로 뽑기: [xm10 도구 안내](../../docs/getting-started/04-pc-data-tool.md) — `recv` 로 그래프 + `.xmlog`, `export` 로 Total Data(0x20) 197채널과 이 예제의 0xF0 채널을 나란히 CSV 로
+- PC 에서 받아 저장하고 CSV 로 뽑기: [xm10 도구 안내](../../docs/getting-started/04-pc-data-tool.md) — `recv` 로 그래프 + `.xmlog`, `export` 로 Total Data(0x20) 채널과 이 예제의 0xF0 채널을 나란히 CSV 로
 - 실시간 제어 알고리즘 + PC 모니터링 (`xm10` 도구): [Ex.14 PD Realtime Control](../14_PD_Realtime_Control/)
 - 다채널 응용: [Ex.16 TinyAI](../16_TinyAI_Sensor_Fusion/) / [Ex.32 GRF Gait Intent](../32_GRF_Gait_Intent/)
 

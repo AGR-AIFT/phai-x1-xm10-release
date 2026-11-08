@@ -6,7 +6,8 @@
 
 > **어디에 있나요?** SDK ZIP 을 풀면 `Extension_Module\pc-data-tool\` 이 같이 들어 있습니다.
 > 받은 ZIP 에 이 폴더가 없다면(예전 버전) GitHub 레포에서 `pc-data-tool/` 폴더만 받아
-> 아무 데나 두고 쓰면 됩니다 — 보드 리비전과 무관하게 같은 파일입니다.
+> 아무 데나 두고 쓰면 됩니다. 단, 레포의 도구는 Rev 2.0 v2.10.0 의 Total Data(0x20, 369 B)에 맞춰져 있어
+> Rev 1.1 보드나 v2.9.0 이하 펌웨어(365 B)의 Total Data 는 풀지 않습니다. Rev 1.1 보드는 `Rev1.1.zip` 에 든 도구를 쓰세요.
 > v2.8.0 ZIP 에서는 이 폴더 이름이 `PythonDecoder` 였습니다 — 같은 도구의 예전 버전입니다.
 
 > **PhAI Studio 와 무엇이 다른가요?** PhAI Studio 는 웹에서 바로 쓰는 공식 도구이고, 이건
@@ -18,10 +19,12 @@
 > **내 구조체는 이 도구로 보세요.** PhAI Studio 는 보드가 자동으로 보내는 Total Data(0x20)를
 > 보여 줍니다. PhAI Studio 는 아직 개발 중이라, 직접 정의한 데이터 구조체(커스텀 구조체)는
 > 우선 `xm10` 도구로 보고 저장하세요.
+> Rev 2.0 v2.10.0 은 Total Data 가 4 바이트 커져 PhAI Studio 에서 Total Data 가 보이지 않을 수 있습니다 —
+> 그때는 이 도구의 **Show 0x20 tab** 으로 보세요.
 
 | 보고 싶은 것 | 쓰는 프로그램 |
 | :--- | :--- |
-| 보드가 자동으로 보내는 시스템 데이터 — 관절 각도·토크 등 (Total Data 0x20. 그 안의 28바이트 `User_Custom` 칸을 채우는 방법은 [`xm_api_user_custom`](../api-reference/ref/xm-api-user-custom.md)) | PhAI Studio |
+| 보드가 자동으로 보내는 시스템 데이터 — 관절 각도·토크 등 (Total Data 0x20. 그 안의 28바이트 `User_Custom` 칸을 채우는 방법은 [`xm_api_user_custom`](../api-reference/ref/xm-api-user-custom.md)) | PhAI Studio · `xm10` 도구(**Show 0x20 tab**) |
 | `XM_SendUsbDataWithId` 로 직접 보낸 내 구조체 (`0xF0`~`0xFE`) — Rev 2.0 은 구조체 로깅 `XM_LOG_SEND` 로 보낸 구조체도 | `xm10` 도구 (이 문서) |
 | `XM_SendUsbDebugMessage` 로 보낸 텍스트 | 시리얼 터미널 |
 | 보드가 USB 메모리에 직접 저장한 파일 🟢 **Rev 2.0 전용** | XM10 Log Decoder 2.2.0 이상 ([USB 메모리에 저장하기](05-usb-memory-log.md)) |
@@ -117,7 +120,7 @@ Disconnect 하면 아래 상태 표시줄에 몇 프레임을 받았고 어느 �
 CSV 만 있으면 될 것 같은데 왜 하나 더 저장하나요 — CSV 는 받는 순간 **해석한 결과**입니다.
 채널 이름이 데이터보다 늦게 도착했거나, 나중에 채널 구성을 바꿨거나, 해석에 실수가 있었다면
 그 CSV 는 그걸로 끝입니다. `.xmlog` 는 해석하지 않고 그대로 눕혀 두기 때문에, 언제든 다시
-뽑을 수 있습니다. 그래프로는 안 그리는 시스템 채널(0x20 Total Data 197채널)도 여기엔 다
+뽑을 수 있습니다. 그래프로는 안 그리는 시스템 채널(0x20 Total Data 의 약 200 개 채널)도 여기엔 다
 있습니다 (**Show 0x20 tab** 을 켜면 표로는 볼 수 있습니다).
 
 ### 4. `.xmlog` 에서 CSV 뽑기
@@ -133,7 +136,7 @@ CSV:
   cdc_..._user_0xF0.csv       12000 rows   [0xEF] JSON 메타 4채널  ⚠ 타입 미상 — float32 가정
 ```
 
-`total_0x20` 은 보드가 항상 보내는 197채널(관절 각도·토크·IMU·GRF 등)이고, `user_0xF0` 은
+`total_0x20` 은 보드가 항상 보내는 약 200 개 채널(관절 각도·토크·IMU·GRF 등)이고, `user_0xF0` 은
 여러분이 예제 코드에서 보낸 채널입니다. 받는 동안 보드가 보낸 채널 이름이 파일 안에 같이
 저장돼 있어서, 뽑을 때 따로 설정할 게 없습니다.
 
@@ -156,7 +159,7 @@ CSV:
 
 ```bash
 python xm10.py recv --cli --port COM6 --log                # CSV + .xmlog 저장, Ctrl+C 로 종료
-python xm10.py recv --cli --port COM6 --log --total-data   # 0x20 197채널도 별도 CSV 로
+python xm10.py recv --cli --port COM6 --log --total-data   # 0x20 Total Data 도 별도 CSV 로
 ```
 
 ---

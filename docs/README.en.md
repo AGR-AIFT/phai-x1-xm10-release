@@ -41,7 +41,7 @@ Start here if this is your first time.
 
 ---
 
-## 2. [Tutorials](tutorials/) — Step-by-Step Learning with 48 Examples
+## 2. [Tutorials](tutorials/) — Step-by-Step Learning with 52 Examples
 
 Each example follows a consistent 5-step structure: `Goal → Prerequisites → Key Code → Experiment → Next Steps`. Introductory examples are designed to be completable in under 30 minutes.
 
@@ -121,7 +121,7 @@ Common issues covering build errors, USB connection problems, communication fail
 ## Additional Resources
 
 - [🧭 find-it.md](find-it.md) — Quick keyword-to-page lookup
-- [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — Source code for all 48 examples (each folder includes a 5-step README)
+- [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — Source code for all 52 examples (each folder includes a 5-step README)
 - [PC Data Tool xm10](getting-started/04-pc-data-tool.en.md) — Graphs, lossless recording, CSV export (code lives in [pc-data-tool/](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/pc-data-tool/))
 - [Release Notes](release-notes/) — Per-version attachments and compatibility matrix
 - [Changelog](https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md) — Summary of changes by version

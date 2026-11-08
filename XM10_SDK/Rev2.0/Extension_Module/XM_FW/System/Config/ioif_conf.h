@@ -30,7 +30,7 @@
  * 비활성 모듈은 빈 번역 단위로 컴파일됩니다 (오버헤드 없음).
  */
 
-/* ===== FDCAN Rx 처리 모드 (RxTask — CM-WH 공통 RTOS Best Practice) ===== */
+/* ===== FDCAN Rx 처리 모드 (RxTask — RTOS 공통 방식) ===== */
 /**
  * @brief FDCAN 수신 = ISR(sem give) → RxTask → NonRealtimeTask 3계층 RTOS 패턴.
  * @details

@@ -41,7 +41,7 @@ XM10 의 전체 문서 인덱스입니다. 처음 시작하는 분은 위에서 
 
 ---
 
-## 2. [Tutorials](tutorials/) — 48 개 예제로 단계 학습
+## 2. [Tutorials](tutorials/) — 52 개 예제로 단계 학습
 
 각 예제는 `목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계` 5 단계로 통일되어 있습니다. 기초 예제는 30 분 안에 끝나도록 설계했습니다.
 
@@ -121,7 +121,7 @@ ST-Link SWD 직접 업로드 + PhAI Studio USB 업로드 두 가지 방법 + 부
 ## 추가 자료
 
 - [🧭 find-it.md](find-it.md) — 키워드 → 페이지 빠른 찾기
-- [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — 48 개 예제 소스 코드 (각 폴더에 5 단계 README 포함)
+- [Examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/) — 52 개 예제 소스 코드 (각 폴더에 5 단계 README 포함)
 - [PC 데이터 도구 xm10](getting-started/04-pc-data-tool.md) — 그래프·무손실 저장·CSV 내보내기 (코드는 [pc-data-tool/](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/pc-data-tool/))
 - [Release Notes](release-notes/) — 버전별 첨부 파일 + 호환성 매트릭스
 - [Changelog](https://github.com/AGR-AIFT/phai-x1-xm10-release/blob/Develop/CHANGELOG.md) — 버전별 변경 이력 요약

@@ -4,6 +4,40 @@
 
 ---
 
+## [v2.10.0] — 2026-11-08
+
+> **Rev 2.0 전용 릴리즈 — CAN-FD #2 포트로 내 장치 · CANopen 드라이버와 주고받고, IMU Hub 센서를 장착한 채로 보정합니다.** 새 헤더 3 개(`xm_api_canbus.h` · `xm_api_canopen.h` · `xm_api_imu_calib.h`)와 새 예제 4 개(Ex.45 ~ 48), 상대 장치 예제(`device-examples/`)가 생겼습니다. **Rev 1.1 은 더 이상 업데이트하지 않습니다**(마지막 v2.8.1).
+
+### Added
+* **CAN 통신 (Rev 2.0)** — `xm_api_canbus.h`. 장치 번호를 등록해 내 장치의 주기 데이터 · 살아있음을 받고 명령을 보냅니다(`XM_CanAttachDevice()` · `XM_CanReadLatest()` · `XM_CanSend()`). ID 와 데이터만으로 주고받는 자유 송수신(`XM_CanSendFrame()` · `XM_CanReadFrame()` · `XM_CanSubscribe()`), 클래식 CAN 모드(`XM_CanBusMode()`), 동기 신호 · XM10 하트비트(`XM_CanEnableSync()` · `XM_CanEnableHeartbeat()`)도 있습니다. (보드 확인 전) <!-- board-check -->
+* **CANopen 도움 함수 (Rev 2.0, 클래식 모드)** — `xm_api_canopen.h`. NMT(`XM_CanOpenSendNmt()`) · 하트비트 감시(`XM_CanOpenWatchNode()`) · SDO 빠른 읽기 · 쓰기(`XM_CanOpenSdoRead()` · `XM_CanOpenSdoWrite()` · `XM_CanOpenSdoGetResult()`). (보드 확인 전) <!-- board-check -->
+* **IMU Hub 센서 제자리 보정 (Rev 2.0)** — `xm_api_imu_calib.h`. 자이로 영점 · 지자기 · 가속도 보정을 사용자 코드에서 시작하고 끝냅니다(`XM_ImuCalibStart()` · `XM_ImuCalibFinish()` · `XM_ImuCalibAbort()` · `XM_ImuCalibGetStatus()`). 보정 기능이 있는 IMU Hub 펌웨어가 필요합니다. (보드 확인 전) <!-- board-check -->
+* **새 예제 4 개 (모두 Rev 2.0 전용)** — Ex.45 CAN-FD My Sensor · Ex.46 CANopen Drive · Ex.47 CANopen Drive PDO · Ex.48 IMU Hub Calibration. (보드 확인 전) <!-- board-check -->
+* **장치 예제 `device-examples/`** — Ex.45 의 상대 장치 참조 펌웨어(NUCLEO-G474RE + CAN-FD 트랜시버 보드)와 PC 시뮬레이터 2 개(CAN-FD 장치 · CANopen 드라이브, python-can). SDK ZIP 이 아니라 레포에 있습니다.
+* **Total Data 칸 `imu_hub_timestamp_b` (Rev 2.0)** — CAN-FD 로 연결된 IMU Hub 의 3 ~ 5번 센서 시각. Total Data 가 365 B 에서 369 B 가 되었습니다.
+
+### Changed
+* **구조체 로깅 등록 한도 (Rev 2.0)** — Total Data 가 4 B 커진 만큼 함께 보낼 수 있는 구조체 양이 줄었습니다. 한도에 딱 맞던 구조체는 `XM_LOG_REGISTER` 가 `false` 를 돌려줄 수 있습니다 — 구조체를 줄이거나 주기를 낮추세요.
+* **`XM_SetChannelLedRGB(ch, 0, 0, 0)` (Rev 2.0)** — 설명대로 그 채널 LED 를 시스템 자동 표시로 돌려놓습니다. 0, 0, 0 으로 LED 를 끄던 코드는 이제 시스템이 정한 색이 켜집니다.
+* **`xm_api.h` (Rev 2.0)** — 새 헤더 3 개를 함께 가져오고, XM10 내부 이름은 더 이상 가져오지 않습니다. `xm_api.h` 를 통해 우연히 보이던 내부 함수 · 매크로를 쓰던 코드는 빌드되지 않을 수 있습니다 — 헤더에 선언된 XM API 로 바꿔 주세요.
+* **`pc-data-tool/` (`xm10` 도구)** — Rev 2.0 v2.10.0 의 Total Data(369 B)에 맞췄습니다. Rev 1.1 보드나 v2.9.0 이하 펌웨어는 그 펌웨어를 받은 ZIP 에 든 도구를 쓰세요.
+* **예제 개수** — Rev 2.0 48 개에서 52 개로, Rev 1.1 은 40 개 그대로입니다.
+* **펌웨어 버전 (Rev 2.0)** — SDK 에 적힌 버전이 2.10.0 입니다.
+
+### Fixed
+* **Total Data 값의 흔들림 (Rev 2.0)** — Total Data 에 담긴 IMU Hub 센서 시각이 50 ms · 5 초마다 같은 값으로 두 번 오거나 하나를 건너뛰던 문제.
+* **1회성 태스크 (Rev 2.0)** — `XM_Task_CreateOneShot()` 으로 만든 태스크가 끝난 뒤 지우거나 멈췄다 다시 시작할 때 이미 해제된 메모리를 건드리던 문제.
+* **내부 이름과 겹치는 이름 (Rev 2.0)** — `xm_api.h` 를 include 한 코드에서 XM10 내부 이름과 같은 이름(예: 상태 · 통신 상수 이름)을 쓰면 빌드되지 않을 수 있던 문제.
+* **Release 빌드 설정 (Rev 2.0 SDK)** — STM32CubeIDE 에서 빌드 설정을 Release 로 바꾸면 헤더를 찾지 못해 빌드가 실패하던 문제. Rev 1.1 SDK 도 레포에서는 고쳤지만 `Rev1.1.zip`(v2.8.1)에는 들어 있지 않습니다.
+
+### Notes
+* **보드로 아직 확인하지 못한 것** — CAN 통신 · CANopen · IMU Hub 센서 보정 전체와 Ex.45 ~ 48, 장치 예제(G474 참조 장치는 빌드까지, PC 시뮬레이터는 PC 안의 가상 버스 시험까지), Total Data 의 새 칸과 흔들림 수정, 새 기능을 쓰지 않는 코드의 동작, 버전 번호 보고. (보드 확인 전) <!-- board-check -->
+* **PhAI Studio** — Total Data 가 4 B 커져 PhAI Studio 에서 Total Data 가 보이지 않을 수 있습니다. 그때는 `xm10` 도구로 보세요.
+* **Rev 1.1 업데이트 종료** — 마지막 Rev 1.1 SDK 는 v2.8.1 입니다(예제 40 개). 다음 릴리즈부터는 Rev 2.0 만 냅니다. 새 헤더가 없어 CAN 통신 · CANopen · IMU Hub 센서 보정은 Rev 1.1 에서 쓸 수 없습니다.
+* 부트로더는 v1.1.0, KIT H10 펌웨어는 CM · SAM10 v2.4.0 그대로입니다.
+
+---
+
 ## [v2.9.0] — 2026-10-19
 
 > **Rev 2.0 전용 릴리즈 — 구조체 로깅과 USB 메모리 저장이 새로 생겼습니다.** 구조체를 등록하면 필드 이름 · 단위 · 타입을 함께 PC 로 보내도록 했고, v2.5.0 에서 뺐던 USB 메모리 저장을 새 API 로 다시 제공합니다. 새 예제 3 개(Ex.10 · Ex.34 · Ex.44)가 들어가 Rev 2.0 예제는 48 개가 됩니다. **USB-CDC 함수 몇 곳의 동작이 바뀌었고, 헤더에서 선언 3 개가 빠졌고, Rev 2.0 SDK 의 빌드 설정이 선언 없는 함수 호출을 오류로 처리합니다(아래 Changed · Removed).** Rev 1.1 은 v2.8.1 그대로입니다. 새로 생긴 동작은 아직 보드로 확인하지 않았습니다. (보드 확인 전) <!-- board-check -->

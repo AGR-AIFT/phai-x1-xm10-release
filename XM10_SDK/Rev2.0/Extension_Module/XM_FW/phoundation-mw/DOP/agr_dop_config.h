@@ -39,7 +39,11 @@
 #define AGR_CANFD_MAX_PAYLOAD       64
 #endif
 
-/** @brief SDO 최대 데이터 크기 (CANFD 페이로드 - 헤더 4바이트) */
+/** @brief SDO 데이터 버퍼 크기 — **전송 가능한 상한이 아니다** (2026-10-29 정정).
+ *  AGR 단일 포맷의 Write Req(0x21)·Read Resp(0x41)는 헤더가 6B(cs+index+sub 4B + 길이 2B)라
+ *  CAN-FD 단일 프레임의 실효 데이터 상한은 64 - 6 = **58B** 다(`agr_sdo_protocol.c` SDO_EXPLICIT_OFFSET,
+ *  `AGR_SDO_Encode` 가 초과 시 -2). 종전 주석 "페이로드 - 헤더 4바이트" 는 0x80·0x60 의 4B 헤더
+ *  기준이라 60B 를 쓸 수 있는 것처럼 읽혔다. 같은 정의가 `agr_dop_types.h` 에도 있다(값 동일, #ifndef). */
 #ifndef AGR_SDO_MAX_DATA_SIZE
 #define AGR_SDO_MAX_DATA_SIZE       60
 #endif

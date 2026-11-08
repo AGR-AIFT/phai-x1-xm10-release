@@ -88,14 +88,14 @@ def test_corrupt_crc_is_rejected():
     ok("일부러 깨뜨린 CRC 는 'crc' 로 거부된다")
 
 
-def test_total_payload_is_365_and_pads_to_368():
+def test_total_payload_is_369_and_pads_to_372():
     p = DS.total_payload({"xm_loop_count": 7})
-    assert len(p) == 365, "0x20 구조체 %d B (365 여야)" % len(p)
+    assert len(p) == 369, "0x20 구조체 %d B (369 여야)" % len(p)
     raw = cobs_decode(DS.wire_frame(0, 0x20, p)[:-1])
-    assert raw[1] == 92, "LEN %d (368/4 = 92 여야)" % raw[1]
-    assert len(raw) == 6 + 368 + 2, "raw %d B" % len(raw)
-    assert raw[6 + 365:6 + 368] == b"\x00\x00\x00", "패딩 3 B 가 0 이 아니다"
-    ok("0x20 은 365 B 구조체 -> 와이어 368 B (LEN=92)")
+    assert raw[1] == 93, "LEN %d (372/4 = 93 이어야)" % raw[1]
+    assert len(raw) == 6 + 372 + 2, "raw %d B" % len(raw)
+    assert raw[6 + 369:6 + 372] == b"\x00\x00\x00", "패딩 3 B 가 0 이 아니다"
+    ok("0x20 은 369 B 구조체 -> 와이어 372 B (LEN=93)")
 
 
 def test_demo_struct_offsets_match_c_alignment():
@@ -229,7 +229,7 @@ def main():
     test_cobs_two_implementations_agree()
     test_wire_frame_layout_by_hand()
     test_corrupt_crc_is_rejected()
-    test_total_payload_is_365_and_pads_to_368()
+    test_total_payload_is_369_and_pads_to_372()
     test_demo_struct_offsets_match_c_alignment()
     test_typed_payload_holes_are_zero()
     test_schema_fragment_round_trip()

@@ -1,6 +1,6 @@
 # `xm_api_user_custom.h` — 28-byte user slot API inside the Total Data Packet
 
-> **Target header**: `XM_FW/XM_API/xm_api_user_custom.h` (Rev1.1 and Rev2.0 headers are identical — no functional difference, only the top-of-file `@date` comment differs by one day)
+> **Target header**: `XM_FW/XM_API/xm_api_user_custom.h` (Rev1.1 and Rev2.0 work the same — only the Total Data size in the comments differs: 369 B on Rev 2.0, 365 B on Rev 1.1)
 > 📚 **Related concept docs**: [05. USB Serial Communication](../05-usb-connectivity.en.md) (distinguishes Total Data Packet 0x20 from the User Custom Channel 0xF0~0xFE), [02. KIT H10 Control + Data](../02-h10-control-n-data.en.md) (the `Control_Setup`/`Control_Loop` IPO cycle)
 > 🧪 **Related examples**: No example currently calls this API directly (it has been part of the SDK since v2.2.0). Read [Ex.09 CDC Stream](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) first, which covers the same Total Data Packet (0x20) so you can see which stream this slot rides on.
 
@@ -8,7 +8,7 @@
 
 ## When to use this
 
-XM10 automatically sends a 365-byte **Total Data Packet** (Module ID `0x20`) over USB at 1 kHz, once per `Control_Loop()` iteration. The last 28 bytes of this packet are the `User_Custom` region — slots deliberately left open for whatever values you want to carry, such as a filtered EMG signal or an FSM state. Once you fill these 28 bytes with the functions in this header, they are automatically included in the PhAI Studio live graph and the recording — no extra transmission code required.
+XM10 automatically sends a **Total Data Packet** (Module ID `0x20`; 369 bytes on Rev 2.0, 365 bytes on Rev 1.1) over USB at 1 kHz, once per `Control_Loop()` iteration. The 28 bytes at offset 337–364 of this packet are the `User_Custom` region — slots deliberately left open for whatever values you want to carry, such as a filtered EMG signal or an FSM state. Once you fill these 28 bytes with the functions in this header, they go out to the PC with the Total Data packet — no extra transmission code required. You can view and save them with the `xm10` tool (table and CSV).
 
 Don't confuse this with the similarly-named User Custom **Channel** (`0xF0~0xFE`, `XM_SetUsbCustomMeta`/`XM_SendUsbDataWithId`) described in [doc 05](../05-usb-connectivity.en.md) — that is a different mechanism. That channel lets you freely grow the packet size and channel count; this API is a much lighter-weight way to fill in a **fixed 28 bytes** inside the `0x20` packet that is already always being sent. If 4 float slots + 4 int16 slots + 16 flag bits + 2 uint8 slots are enough for you, use this API; if you need larger or variable-sized data, use the custom channel from doc 05 instead. (PhAI Studio is still under development, so for now use the `xm10` tool to view and save the `0xF0`–`0xFE` channels.)
 
@@ -231,7 +231,7 @@ XM_SendUsbDebugMessage(buf);   /* for a terminal only — while a PC tool decode
 
 ### `XM_UserCustomBlock_t`
 
-A struct that mirrors the 28-byte `User_Custom` region at the end of the Total Data Packet (365 B, Module ID `0x20`). This is the output type of `XM_UserCustom_GetBlock()`.
+A struct that mirrors the 28-byte `User_Custom` region (offset 337–364) of the Total Data Packet (Module ID `0x20`). This is the output type of `XM_UserCustom_GetBlock()`.
 
 ```c
 typedef struct {
@@ -249,7 +249,7 @@ typedef struct {
 | `flags` | `uint16_t` | 2B | 361 ~ 362 | `XM_UserCustom_SetFlags` / `XM_UserCustom_SetFlag` |
 | `u8[2]` | `uint8_t` | 2B | 363 ~ 364 | `XM_UserCustom_SetU8` |
 
-> The offsets above are for the values laid out in the order `user_f`/`user_i16`/`user_flags`/`user_u8`. Together they total 28 bytes, corresponding to the last segment (offset 337~364) of the 365-byte Total Data Packet.
+> The offsets above are for the values laid out in the order `user_f`/`user_i16`/`user_flags`/`user_u8`. Together they total 28 bytes, corresponding to offset 337~364 of the Total Data Packet. On Rev 1.1 (365 bytes) this is the last segment of the packet; on Rev 2.0 (369 bytes) 4 more bytes (IMU Hub sensor time) follow it.
 > `XM_UserCustomBlock_t` itself carries no `packed` attribute, but given the field order (float → int16 → uint16 → uint8), the compiler's natural alignment already produces exactly 28 bytes with no padding.
 
 ### Macros

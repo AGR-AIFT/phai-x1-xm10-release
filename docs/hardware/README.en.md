@@ -56,9 +56,20 @@ Two ports total. One communicates with KIT H10 through the main connector; the o
 | Port | Purpose |
 |------|---------|
 | CAN-FD #1 | KIT H10 exoskeleton ↔ XM10 (routed through the main connector) |
-| CAN-FD #2 | Sensor hub module expansion |
+| CAN-FD #2 | Sensor hub module expansion · connecting your own device (🟢 Rev 2.0) |
 
 > The EMG Hub is a module under internal development. To use it, please contact us at https://huphailab.com/contact.
+
+**Connect your own device to CAN-FD #2** 🟢 **Rev 2.0** *(v2.10.0)*
+
+| Item | Details |
+|------|------|
+| Bus mode | CAN-FD by default — arbitration 1 Mbit/s · data 5 Mbit/s, sample point 75 %. You can switch to classic CAN (1 Mbit/s by default, sample point 87.5 %) — the sensor hubs do not work then |
+| Wiring | Connect CAN_H · CAN_L · GND of the device transceiver to the pins of the same name on the port |
+| Termination resistor | 120 Ω at both ends of the bus. **The XM10 board already has one** — put one at the device end |
+| Rules for one port | Do not connect classic devices and CAN-FD devices together · all devices use the same speed · do not let device numbers (IDs) overlap |
+
+For how to use it, see [CAN Communication](../api-reference/11-canbus.en.md) and [Working with CANopen Devices](../api-reference/12-canopen.en.md). For partner device examples, see [device-examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/).
 
 ### USB-C Port
 
@@ -173,6 +184,7 @@ First, confirm which revision your board is. The board label reads either `Rev 1
 | Onboard button MCU pins | PC10 / PC11 / PC12 | PC11 / PC12 / PC13 (shifted by one pin) |
 | External GPIO connector location / label | [Rev 1.1 pinmap](external-gpio-rev1.1.md) | [Rev 2.0 pinmap](external-gpio-rev2.0.md) |
 | Distribution ZIP | `Rev1.1.zip` | `Rev2.0.zip` |
+| SDK updates | **Ended** — last version v2.8.1 | Ongoing |
 
 > Building with a ZIP from a different revision than your board — the build itself will succeed, but the onboard button and LED MCU pin mappings will be off by one position and the board will not behave correctly. Always check the board label first.
 

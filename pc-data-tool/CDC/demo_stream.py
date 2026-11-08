@@ -16,8 +16,8 @@
 --------------------------------
 현실에서 틀리기 쉬운 자리를 전부 한 번씩 밟는다.
 
-* `0x20` Total Data — 365 B 구조체가 와이어에서는 **368 B**(LEN 이 4바이트 단위라
-  0 패딩이 붙는다). 365 를 기대하는 디코더는 단위시험을 통과하고 보드에서 100% 실패한다.
+* `0x20` Total Data — 369 B 구조체가 와이어에서는 **372 B**(LEN 이 4바이트 단위라
+  0 패딩이 붙는다). 369 를 기대하는 디코더는 단위시험을 통과하고 보드에서 100% 실패한다.
 * `0xF0` — **패딩 구멍이 둘 있는** 사용자 구조체. 필드를 이어붙인 struct 포맷
   문자열로 풀면 틀린다. `0xEE` 가 필드마다 `struct_offset` 을 들고 오는 이유다.
 * **데이터가 스키마보다 먼저 온다.** 보드는 데이터를 바로 보내고 필드 정보(`0xEE`)는
@@ -112,7 +112,7 @@ def wire_frame(seq_id: int, module_id: int, payload: bytes,
     """FW 규약 그대로 한 프레임. 반환값은 딜리미터(`0x00`)까지 포함한다.
 
     `LEN` 은 **4바이트 단위**라 payload 를 4의 배수로 올린다. 이 한 줄이 0x20 의
-    365 -> 368 을 만든다.
+    369 -> 372 를 만든다.
     """
     padded = bytes(payload) + bytes((-len(payload)) % 4)
     if len(padded) // 4 > 255:
@@ -130,7 +130,7 @@ def wire_frame(seq_id: int, module_id: int, payload: bytes,
 
 
 def total_payload(values: dict) -> bytes:
-    """0x20 Total Data 페이로드(365 B). 준 채널만 채우고 나머지는 0."""
+    """0x20 Total Data 페이로드(369 B). 준 채널만 채우고 나머지는 0."""
     by_name = {d.name: d for d in M.TOTAL_DATA_MAP}
     code = {"uint8": "B", "int8": "b", "uint16": "H", "int16": "h",
             "uint32": "I", "int32": "i", "float32": "f"}

@@ -3,6 +3,10 @@ Debug/
 Release/
 build/
 !**/tools/build/
+# 장치 예제 — STM32CubeIDE 가 가져올 때 만드는 설정(빌드마다 바뀜)
+device-examples/**/.settings/
+# 장치 예제 — PC 시뮬레이터 실행 산출물
+device-examples/**/__pycache__/
 
 # MkDocs 빌드 산출물 (gh-pages 는 CI 가 생성)
 site/
@@ -63,6 +67,8 @@ docs/release-notes/*
 !docs/release-notes/v2.8.1.en.md
 !docs/release-notes/v2.9.0.md
 !docs/release-notes/v2.9.0.en.md
+!docs/release-notes/v2.10.0.md
+!docs/release-notes/v2.10.0.en.md
 !docs/getting-started/
 docs/getting-started/*
 !docs/getting-started/00-claude-code-quickstart.md
@@ -83,6 +89,9 @@ docs/api-reference/*
 !docs/api-reference/08-rtc-clock.md
 !docs/api-reference/09-task-creation.md
 !docs/api-reference/10-struct-logging.md
+!docs/api-reference/11-canbus.md
+!docs/api-reference/12-canopen.md
+!docs/api-reference/13-imu-calibration.md
 !docs/api-reference/README.md
 !docs/api-reference/ref/
 docs/api-reference/ref/*
@@ -99,6 +108,9 @@ docs/api-reference/ref/*
 !docs/api-reference/ref/xm-api-rtc.md
 !docs/api-reference/ref/xm-api-freertos.md
 !docs/api-reference/ref/xm-api-user-custom.md
+!docs/api-reference/ref/xm-api-canbus.md
+!docs/api-reference/ref/xm-api-canopen.md
+!docs/api-reference/ref/xm-api-imu-calib.md
 !docs/advanced/
 docs/advanced/*
 !docs/advanced/README.md
@@ -155,6 +167,9 @@ docs/stylesheets/*
 !docs/api-reference/08-rtc-clock.en.md
 !docs/api-reference/09-task-creation.en.md
 !docs/api-reference/10-struct-logging.en.md
+!docs/api-reference/11-canbus.en.md
+!docs/api-reference/12-canopen.en.md
+!docs/api-reference/13-imu-calibration.en.md
 !docs/api-reference/ref/README.en.md
 !docs/api-reference/ref/xm-api.en.md
 !docs/api-reference/ref/xm-api-data.en.md
@@ -168,6 +183,9 @@ docs/stylesheets/*
 !docs/api-reference/ref/xm-api-rtc.en.md
 !docs/api-reference/ref/xm-api-freertos.en.md
 !docs/api-reference/ref/xm-api-user-custom.en.md
+!docs/api-reference/ref/xm-api-canbus.en.md
+!docs/api-reference/ref/xm-api-canopen.en.md
+!docs/api-reference/ref/xm-api-imu-calib.en.md
 !docs/architecture/README.en.md
 !docs/kit-h10-firmware/README.en.md
 !docs/bootloader/README.en.md

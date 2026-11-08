@@ -306,7 +306,7 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 
   /* [2026-08-19 P1] Boot FTP 스캔(COBS decode+CRC16+Flash read+CDC TX)을 ISR 에서
    * 제거 — CdcDopRouter_Process()(UserTask 1kHz, StreamBuffer 소비자)로 이동.
-   * ISR 은 raw bytes 전달만 수행한다 (Rule 13 ISR 최소화). */
+   * ISR 은 raw bytes 전달만 수행한다 (ISR 은 짧게). */
 
   /* 수신된 데이터를 상위 계층(IOIF)으로 전달 */
   if (s_rx_cplt_cb != NULL) {

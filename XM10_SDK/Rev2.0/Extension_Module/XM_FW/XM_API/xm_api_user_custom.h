@@ -5,7 +5,7 @@
  * @brief   In-packet User Custom data slot API (lives inside Total Data 0x20)
  * @details
  * 사용자가 알고리즘 출력(필터링된 EMG, 디버그 변수, 상태 플래그 등)을
- * 365B Total Data Packet(Module ID 0x20)의 User_Custom 영역(28B)에 직접 써
+ * 369B Total Data Packet(Module ID 0x20)의 User_Custom 영역(28B)에 직접 써
  * 1kHz 로 PC 에 자동 전송되게 한다 (PhAI Studio 에서 그래프·녹화, xm10 도구에서 표·CSV 로 확인).
  *
  * Layout (28B at offset 337..364):

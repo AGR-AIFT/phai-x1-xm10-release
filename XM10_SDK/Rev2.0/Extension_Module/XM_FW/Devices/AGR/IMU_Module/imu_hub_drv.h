@@ -107,9 +107,12 @@ typedef struct __attribute__((packed)) {
 /**
  * @brief IMU Hub 수신 데이터 (최종 처리 완료)
  * @note Timestamp는 24-bit 값이지만 uint32_t에 저장 (상위 8bit = 0)
+ * @note TPDO1·TPDO2 는 따로 도착·반영되므로 imu[0..2] 와 imu[3..5] 가 같은 프레임이라는 보장이 없다.
+ *       timestamp == timestamp_b 일 때만 6개가 같은 프레임이다 (IMU Hub 는 두 TPDO 에 같은 시각을 넣어 보낸다).
  */
 typedef struct {
-	uint32_t         timestamp;               /**< Frame Timestamp (24-bit, 0~16777215 ms, 약 4.6시간 순환) */
+	uint32_t         timestamp;               /**< TPDO1(IMU 0~2) Frame Timestamp (24-bit, 0~16777215 ms, 약 4.6시간 순환) */
+	uint32_t         timestamp_b;             /**< TPDO2(IMU 3~5) Frame Timestamp (24-bit, 같은 형식) */
 	uint8_t          connected_mask;          /**< bit0~5: IMU 0~5 연결 상태 (1=connected, 0=disconnected) */
     ImuHub_ImuData_t imu[IMUHUB_IMU_COUNT];  /**< 6개 IMU 데이터 {q[4], a[3], g[3]} */
 } ImuHub_RxData_t;

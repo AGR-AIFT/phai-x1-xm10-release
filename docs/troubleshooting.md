@@ -217,6 +217,29 @@ XM10 의 USB-C 포트는 하나입니다. USB 메모리를 꽂아 두는 동안�
 
 > IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
 
+### 내 CAN 장치와 통신이 안 됨 (Rev 2.0)
+
+| 증상 | 원인 | 확인 |
+|------|------|------|
+| `XM_CanAttachDevice()` 가 `false` | 쓸 수 없는 번호(예약 번호 · 센서 허브 번호) · 같은 번호 두 번 · 5 대째 · `Control_Setup()` 밖 | `XM_CanIsDeviceIdAllowed()` · 호출 자리 |
+| `XM_CanIsConnected()` 가 계속 `false` | 장치의 살아있음(`0x700 + n`, `0x05`)이 오지 않음 — 배선 · 종단 저항 · 속도 · 샘플 포인트 · 장치 번호 | [CAN 통신](api-reference/11-canbus.md) 의 버스 모드 · 메시지 표 |
+| 보내기가 계속 `XM_CAN_BUSY` · `pending` 이 큼 | 받아 주는 장치가 없거나 버스가 바쁨 | 상대 장치 전원 · 버스 부하 |
+| `bus_status` 의 bit0(bus-off) | 속도가 다르거나 배선 · 종단 문제 | 모든 장치의 속도 · CAN_H/CAN_L 이 바뀌지 않았는지 |
+| `if (XM_CanSend(...))` 가 실패를 성공으로 읽음 | `XM_CAN_OK` 가 0 | `== XM_CAN_OK` 로 비교 |
+| 클래식 모드로 바꾼 뒤 센서 허브가 끊김 | 클래식 모드에서는 허브가 동작하지 않음 | 허브를 쓰려면 FD 모드 |
+| CANopen SDO 가 `XM_CAN_BUSY` 로 1.5 초 막힘 | 앞 요청이 시간 초과로 끝난 뒤 쉬는 시간 | [CANopen 장치 다루기](api-reference/12-canopen.md) 의 SDO 규칙 |
+
+### IMU Hub 센서 보정이 안 됨 (Rev 2.0)
+
+| 증상 | 원인 | 확인 |
+|------|------|------|
+| `XM_IMU_CALIB_REQ_CONTROL_ACTIVE` | 제어 모드에서는 시작할 수 없음 | `XM_CTRL_MONITOR` 로 바꾼 뒤 시작 |
+| 끝날 때마다 다시 시작함 | `XM_ImuCalibStart()` 를 매 주기 부름 | 버튼 이벤트처럼 한 번만 |
+| `NO_RESPONSE` · `HUB_NOT_SUPPORTED` 로 끝남 | IMU Hub 펌웨어가 오래됨 · 통신 문제 | IMU Hub 펌웨어 업데이트 |
+| 중단했더니 모든 채널이 잠깐 끊김 | EBIMU 의 지자기 · 가속도 정밀 중단은 모든 채널 전원을 약 2 초 끕니다 | 정상 — 새 데이터가 들어오면 다시 연결됩니다 |
+
+자세한 결과 값은 [IMU Hub 센서 보정](api-reference/13-imu-calibration.md) 을 보세요.
+
 ---
 
 ## 디버깅 관련

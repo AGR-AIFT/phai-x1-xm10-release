@@ -1,6 +1,6 @@
 # XM10 예제
 
-48 개의 실습 예제입니다. 각 폴더에 소스 코드 `.c` 와 그 예제만의 설명서 `README.md` 가 함께 들어있습니다.
+52 개의 실습 예제입니다. 각 폴더에 소스 코드 `.c` 와 그 예제만의 설명서 `README.md` 가 함께 들어있습니다.
 
 - API 함수 명세: [docs/api-reference/](../docs/api-reference/)
 - 단계별 학습 안내: [docs/tutorials/](../docs/tutorials/)
@@ -19,7 +19,7 @@
 
 여기까지 약 2 시간입니다. 외부 부품 없이 보드 하나로 다 됩니다. Ex.04 부터 외부 입출력과 센서로 넓혀갑니다.
 
-**보드 리비전 호환성** — 48 개 예제 중 40 개는 Rev 1.1 / Rev 2.0 양쪽 모두 빌드·실행됩니다. 나머지 8 개는 Rev 2.0 전용입니다. Ex.10 USB Memory Log, Ex.34 USB Memory Gait Log, Ex.36 OnDevice Kinesthetic Learning, Ex.40 EMG Proportional Assist, Ex.41 IMU Hub Dashboard, Ex.42 EMG Hub Biofeedback, Ex.43 External UART Ping-Pong, Ex.44 CDC Struct Logging 은 **Rev 1.1 SDK 에 포함되지 않습니다**(그래서 Rev 1.1 SDK 는 40 개). ⚠️ 특히 **Ex.43 은 Rev 1.1 보드에 그대로 배선하면 안 됩니다** — Rev 1.1 의 PD6 은 USB 전원을 켜고 끄는 출력 핀이라 상대 보드의 TX 와 맞부딪칩니다. 그 외 두 가지 주의 사항이 있습니다.
+**보드 리비전 호환성** — 52 개 예제 중 40 개는 Rev 1.1 / Rev 2.0 양쪽 모두 빌드·실행됩니다. 나머지 12 개는 Rev 2.0 전용입니다. Ex.10 USB Memory Log, Ex.34 USB Memory Gait Log, Ex.36 OnDevice Kinesthetic Learning, Ex.40 EMG Proportional Assist, Ex.41 IMU Hub Dashboard, Ex.42 EMG Hub Biofeedback, Ex.43 External UART Ping-Pong, Ex.44 CDC Struct Logging, Ex.45 CAN-FD My Sensor, Ex.46 CANopen Drive, Ex.47 CANopen Drive PDO, Ex.48 IMU Hub Calibration 은 **Rev 1.1 SDK 에 포함되지 않습니다**(그래서 Rev 1.1 SDK 는 40 개). ⚠️ 특히 **Ex.43 은 Rev 1.1 보드에 그대로 배선하면 안 됩니다** — Rev 1.1 의 PD6 은 USB 전원을 켜고 끄는 출력 핀이라 상대 보드의 TX 와 맞부딪칩니다. 그 외 두 가지 주의 사항이 있습니다.
 
 - ⚠️ **본인 보드와 같은 Rev 의 ZIP** 을 받아야 합니다. `Rev1.1.zip` 과 `Rev2.0.zip` 은 보드별 main.h (MCU 핀 매핑) 가 다른 독립 SDK 입니다. 보드는 Rev 2.0 인데 `Rev1.1.zip` 을 풀어 빌드하면 — 빌드는 통과하지만 — 내장 버튼/LED 의 핀이 한 칸씩 어긋나서 Ex.01~03 의 버튼이 안 눌리거나 엉뚱한 `XM_BTN_N` 으로 잡힙니다. 보드 라벨을 먼저 확인하세요 ([보드 리비전 비교](../docs/hardware/README.md#보드-리비전-비교)).
 - 외부 GPIO 를 직접 다루는 예제 (Ex.04~06, Ex.05a~05d, Ex.16 외부 IMU 모드) 는 커넥터 위치·핀 라벨이 리비전마다 다릅니다. 시작 전에 본인 보드의 핀맵을 펴두세요 — [Rev 1.1 핀맵](../docs/hardware/external-gpio-rev1.1.md) / [Rev 2.0 핀맵](../docs/hardware/external-gpio-rev2.0.md).
@@ -32,7 +32,7 @@
 
 ## 큰 그림 — 5 단계 학습 흐름
 
-기본기를 다진 다음, 48 개 예제는 다섯 단계의 흐름 + 외부 센서 허브 연동(Ex.40~42) + 외부 장비 연동(Ex.43)을 따라갑니다. "로봇이 인간을 어떻게 이해하고, 함께 성장하는가" 라는 한 줄로 묶을 수 있습니다.
+기본기를 다진 다음, 52 개 예제는 다섯 단계의 흐름 + 외부 센서 허브 연동(Ex.40~42, 48) + 외부 장비 연동(Ex.43, 45~47)을 따라갑니다. "로봇이 인간을 어떻게 이해하고, 함께 성장하는가" 라는 한 줄로 묶을 수 있습니다.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -207,7 +207,7 @@ Stage 5      사람과 AI 가 함께
 | [08](08_CDC_Sensor_Print/) | sprintf 센서 모니터링 | 초급 | `sprintf` + 논블로킹 타이머 |
 | [09](09_CDC_Stream/) | **CDC 실시간 스트리밍 (Total Data + 사용자 채널)** | 중급 | `XM_SetUsbCustomMeta`, `XM_SendUsbDataWithId` |
 
-> **Ex.09 핵심**: Total Data(0x20) 365B 자동 스트리밍 구조 이해 + User Custom(0xF0) 추가 채널 등록 방법
+> **Ex.09 핵심**: Total Data(0x20) 자동 스트리밍 구조 이해 + User Custom(0xF0) 추가 채널 등록 방법
 
 ### 구조체 로깅 (44)
 
@@ -375,9 +375,9 @@ Hogan(1985) 의 정의대로 임피던스를 0 에 가깝게. Ex.21 의 공칭 �
 
 ---
 
-## Part 7: 외부 센서 허브 · 외부 장비 연동 (Ex.40~43)
+## Part 7: 외부 센서 허브 · 외부 장비 연동 (Ex.40~48)
 
-> 🛑 **Rev 2.0 전용** — CAN-FD 외부 센서 허브 / 외부 전원 API 를 사용합니다. Rev 1.1 SDK 에는 포함되지 않습니다.
+> 🛑 **Rev 2.0 전용** — CAN-FD 외부 센서 허브 / 외부 전원 · CAN 통신 API 를 사용합니다. Rev 1.1 SDK 에는 포함되지 않습니다.
 >
 > IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
 
@@ -387,6 +387,10 @@ Hogan(1985) 의 정의대로 임피던스를 0 에 가깝게. Ex.21 의 공칭 �
 | [41](41_IMU_Hub_Dashboard/) | IMU Hub 자세 대시보드 🛑 **Rev 2.0 전용** | 고급 | 최대 6개 IMU 쿼터니언→오일러(r/p/y) 변환, 연결 자동감지 + 0xF0 18채널 스트리밍(xm10 도구) (CAN-FD 센서 허브) |
 | [42](42_EMG_Hub_Biofeedback/) | EMG Hub 바이오피드백 🛑 **Rev 2.0 전용** | 고급 | 허브 처리 근활성도(envelope/MVC%) 수신, BTN 캘리브 + LED/0xF0 4채널 실시간 피드백(xm10 도구) (CAN-FD 센서 허브, 모터 미구동) |
 | [43](43_External_UART_PingPong/) | 보드끼리 시리얼로 대화하기 🛑 **Rev 2.0 전용** | 중급 | External UART(PD5/PD6)로 XM10 2대 직결 통신 — 콜백은 복사만, 프레임 경계는 바이트 상태기계로 (외부 장비 연동의 토대) |
+| [45](45_CANFD_My_Sensor/) | CAN-FD 로 연결한 내 장치와 주고받기 🛑 **Rev 2.0 전용** | 중급 | 장치 번호 등록 · 최신값 읽기 · 명령 · 통계 · 자유 송수신 (`XM_CanAttachDevice`, `XM_CanReadLatest`, `XM_CanSend`) — 상대 장치: [G474 참조 장치](../device-examples/canfd-sensor-stm32g474/) · [PC 시뮬레이터](../device-examples/canfd-sensor-pc-sim/) |
+| [46](46_CANopen_Drive/) | CANopen 모터 드라이버를 SDO 로 설정하고 명령하기 🛑 **Rev 2.0 전용** | 고급 | 클래식 CAN · NMT · 하트비트 감시와 소비 · SDO 100 Hz (`XM_CanBusMode`, `XM_CanOpenSdoWrite`) — 상대: [PC 시뮬레이터](../device-examples/canopen-pc-sim/) |
+| [47](47_CANopen_Drive_PDO/) | CANopen 모터 드라이버를 PDO + SYNC 로 1 kHz 명령하기 🛑 **Rev 2.0 전용** | 고급 | PDO 매핑 절차 · SYNC · RPDO / TPDO (`XM_CanEnableSync`, `XM_CanSendFrame`, `XM_CanSubscribe`) — 상대: [PC 시뮬레이터](../device-examples/canopen-pc-sim/) |
+| [48](48_IMU_Hub_Calibration/) | IMU Hub 센서를 제자리에서 보정하기 🛑 **Rev 2.0 전용** | 중급 | 자이로 영점 · 지자기 보정 · 중단, 기다리지 않는 요청과 상태 보기 (`XM_ImuCalibStart`, `XM_ImuCalibGetStatus`) (CAN-FD 센서 허브) |
 
 ---
 

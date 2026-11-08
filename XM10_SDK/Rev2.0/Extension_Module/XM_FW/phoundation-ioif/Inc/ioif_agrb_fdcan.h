@@ -62,7 +62,7 @@ typedef uint32_t IOIF_FDCANx_t;
 // FDCAN 수신 메시지를 담을 구조체
 typedef struct {
     uint16_t id;
-    uint32_t  len;
+    uint32_t  len;   /**< 데이터 바이트 수 — FD 프레임은 DLC 표(최대 64), 클래식 프레임은 최대 8 (DLC 9~15 도 8) */
     uint8_t  data[IOIF_FDCAN_RX_BUFF_SIZE];
 } IOIF_FDCAN_Msg_t;
 
@@ -127,6 +127,8 @@ AGRBStatusDef IOIF_FDCAN_AssignInstance(IOIF_FDCANx_t* id, FDCAN_HandleTypeDef* 
  * @brief FDCAN 인스턴스의 통신을 시작합니다. (필터 설정 및 인터럽트 활성화 포함)
  * @param id IOIF_FDCAN_AssignInstance를 통해 발급받은 ID.
  * @return AGRBStatus_OK on success.
+ * @note 글로벌 필터: 비매칭 프레임 거부 · **리모트 프레임은 모든 채널에서 거부**(IOIF_FDCAN_Msg_t 에 RTR
+ *       표시가 없어 받으면 데이터 프레임처럼 올라간다 — 2026-10-29 전에는 필터대로 받았다).
  */
 AGRBStatusDef IOIF_FDCAN_Start(IOIF_FDCANx_t id);
 
@@ -146,8 +148,9 @@ AGRBStatusDef IOIF_FDCAN_SetRestrictedMode(IOIF_FDCANx_t id, bool restricted);
  * @param id IOIF_FDCANx_t 핸들.
  * @param can_id 전송할 메시지의 CAN ID (11-bit Standard or 29-bit Extended).
  * @param txData 전송할 데이터의 포인터.
- * @param len 전송할 데이터의 길이 (바이트, 최대 64).
- * @return AGRBStatus_OK: 성공, AGRBStatus_TIMEOUT: Mutex 실패, AGRBStatus_ERROR: 전송 실패
+ * @param len 전송할 데이터의 길이 (바이트, 최대 64 — 클래식 전용 채널은 8).
+ * @return AGRBStatus_OK: 성공, AGRBStatus_TIMEOUT: Mutex 실패, AGRBStatus_ERROR: 전송 실패,
+ *         AGRBStatus_PARAM_ERROR: len 초과
  * 
  * @note Thread-Safe: RTOS 환경에서 내부 Tx Mutex로 보호 (Priority Inheritance)
  * @note BareMetal: ISR 우선순위 차별화로 보호 (Mutex 없음)
@@ -156,8 +159,12 @@ AGRBStatusDef IOIF_FDCAN_Transmit(IOIF_FDCANx_t id, uint32_t can_id, const uint8
 
 /**
  * @brief RT(1kHz) 경로용 논블로킹 송신 — Transmit 과 동일하되 Tx Mutex try-lock(0).
- * @return AGRBStatus_OK: 성공, AGRBStatus_BUSY: Tx Mutex 경합(대기 0, 미송신),
- *         AGRBStatus_ERROR: HW FIFO 전송 실패
+ * @return AGRBStatus_OK: 성공, AGRBStatus_BUSY: Tx Mutex 경합 **또는 bus-off flush 대기**(대기 0, 미송신 —
+ *         다음 주기에 재시도), AGRBStatus_ERROR: HW FIFO 전송 실패,
+ *         AGRBStatus_PARAM_ERROR: len 초과(64 — 클래식 전용 채널은 8)
+ * @note bus-off flush 대기(ISR 이 flush 를 예약했고 ServicePeriodic/ProcessQueue 가 아직 비우지 않음) 중에는
+ *       받지 않는다 — 받아도 곧 그 flush 가 취소한다(2026-10-29 부터). ServicePeriodic 이 PENDING_BUSY 로
+ *       요구하던 "이번 주기 신규 송신 억제"를 이 함수가 강제한다.
  * @note RTOS: 블로킹 0 보장 — 1ms 주기 task 의 5ms TX_LOCK 대기 제거 (2026-07-23).
  *       경합/실패 시 호출자가 드롭 계측 후 다음 주기 최신값으로 대체(latest-wins).
  * @note BareMetal: Transmit 과 동일 동작 (try-lock 이 항상 성공).
@@ -177,7 +184,7 @@ AGRBStatusDef IOIF_FDCAN_TransmitClassic(IOIF_FDCANx_t id, uint32_t can_id, cons
  *   송신 영수증 (Tx Event FIFO) — AGRB_IOIF_FDCAN_TX_RECEIPT_ENABLE 에서만
  *-----------------------------------------------------------
  * 기존 송신 API 는 "큐에 넣었다"까지만 알려준다. 발행 세대를 실제 프레임 완료와
- * 묶어야 하는 소비자(pcm RPDO 릴레이)를 위한 **별도 opt-in 창구**다.
+ * 묶어야 하는 소비자를 위한 **별도 opt-in 창구**다.
  * 기존 `IOIF_FDCAN_Transmit*`·`AGR_TxFunc_t` 경로는 이 게이트를 몰라도 된다.
  *
  * 설계·검증 근거 → `docs/plans/PLAN-20260921-fdcan-tx-receipt.md`
@@ -234,10 +241,11 @@ typedef struct {
  * @details TX try-lock 안에서 u8 토큰을 발급하고 `FDCAN_STORE_TX_EVENTS` + `MessageMarker`
  *          로 보낸다. 완료 확인은 `IOIF_FDCAN_DrainTxReceipts()` — 새 ISR 은 없다.
  * @param[out] out_ticket 발급된 토큰·세대 (OK 일 때만 유효)
- * @return AGRBStatus_OK / AGRBStatus_BUSY (TX 락 경합 — 미송신) /
+ * @return AGRBStatus_OK / AGRBStatus_BUSY (TX 락 경합 또는 bus-off flush 대기 — 미송신, TransmitTry 와 같다) /
  *         AGRBStatus_NO_RESOURCE (토큰 고갈 또는 abort 미정착으로 동결 중) /
  *         AGRBStatus_NOT_INITIALIZED (미할당 · `Init.TxEventsNbr == 0`) /
- *         AGRBStatus_PARAM_ERROR / AGRBStatus_ERROR (HAL 거절) /
+ *         AGRBStatus_PARAM_ERROR (len 초과 — 64, 클래식 전용 채널은 8 · out_ticket NULL) /
+ *         AGRBStatus_ERROR (HAL 거절) /
  *         AGRBStatus_NOT_SUPPORTED (게이트는 켰으나 H7+FreeRTOS 가 아님)
  * @note `Init.TxEventsNbr` 를 0 이 아닌 값으로 두는 것은 **소비 프로젝트(CubeMX) 책임**이다.
  *       0 이면 이 함수는 조용히 실패하지 않고 NOT_INITIALIZED 를 돌려준다.
@@ -397,9 +405,10 @@ AGRBStatusDef IOIF_FDCAN_GetBusStatus(IOIF_FDCANx_t id, uint8_t* lec, uint8_t* b
  * @param id IOIF_FDCANx_t 핸들
  * @param can_id CAN ID
  * @param data 전송 데이터
- * @param len 데이터 길이
+ * @param len 데이터 길이 (최대 64 — 클래식 전용 채널은 8)
  * @param priority 우선순위 (0=최고, 255=최저, 현재 미사용)
- * @return AGRBStatus_OK: 성공, AGRBStatus_TIMEOUT: Mutex 실패, AGRBStatus_ERROR: Queue Full
+ * @return AGRBStatus_OK: 성공, AGRBStatus_TIMEOUT: Mutex 실패, AGRBStatus_ERROR: Queue Full,
+ *         AGRBStatus_PARAM_ERROR: id · data 오류 또는 len 초과
  * 
  * @note Thread-Safe: RTOS 환경에서 내부 Tx Mutex로 보호
  * @note Tx FIFO Full 시 Queue에 저장, IOIF_FDCAN_ProcessQueue에서 자동 전송
@@ -432,7 +441,7 @@ typedef enum {
 
 /**
  * @brief [필수 주기 서비스] Bus-Off 복구 flush 전용 경량 서비스 (SW queue drain 없음)
- * @details direct-transmit 모듈(XM10/CM-WH 등 IOIF_FDCAN_Transmit 직접 호출·SW Tx
+ * @details direct-transmit 모듈(IOIF_FDCAN_Transmit 직접 호출·SW Tx
  *          Queue 미사용)이 IOIF_FDCAN_ProcessQueue 를 주기 호출하지 않아도, bus-off
  *          복구 직후 stale HW Tx 버퍼가 복구된 버스로 버스트 송신되는 것을 막을 수 있도록
  *          bus-off flush(test-and-clear + HW Tx abort + SW queue flush)만 떼어낸 필수
@@ -455,8 +464,15 @@ IOIF_FDCAN_SvcResult_t IOIF_FDCAN_ServicePeriodic(IOIF_FDCANx_t id);
 /**
  * @brief 모든 Pending Tx 요청 취소 (Thread-Safe)
  * @param id IOIF_FDCANx_t 핸들
+ * @return AGRBStatus_OK — HW Tx 버퍼 abort 요청 + SW 큐 비움. **완료 보장은 아니다** — 이미 버스에
+ *         나가는 중인 프레임은 abort 로 취소되지 않을 수 있다(HW 대기가 0 이 됐는지는
+ *         IOIF_FDCAN_GetTxInFlightCount 로 본다).
+ *         AGRBStatus_TIMEOUT — TX 락(5 ms) 실패, **아무것도 비우지 않았다** → flush 요청을 다시 세울 것.
+ *         AGRBStatus_NOT_INITIALIZED — 미할당 id.
+ * @note 2026-10-29 전에는 void 라 TIMEOUT 을 알 수 없었다(XM PLAN-20261029 §10 ⑮). 반환값을 쓰지 않는
+ *       기존 호출(문장 호출)은 그대로 컴파일되고 동작도 같다. BareMetal 은 TX 락이 없어 항상 OK.
  */
-void IOIF_FDCAN_AbortAllTx(IOIF_FDCANx_t id);
+AGRBStatusDef IOIF_FDCAN_AbortAllTx(IOIF_FDCANx_t id);
 
 /**
  * @brief FDCAN 수신 인터럽트 발생 시 호출될 콜백 함수를 등록합니다.
@@ -500,6 +516,88 @@ AGRBStatusDef IOIF_FDCAN_ConfigFilter(IOIF_FDCANx_t id, FDCAN_FilterTypeDef* fil
  *       (미호출 = BLOCKING. AssignInstance 의 memset 0 이 기본값을 보장)
  */
 AGRBStatusDef IOIF_FDCAN_ConfigRxFifoMode(IOIF_FDCANx_t id, uint8_t fifo, IOIF_FDCAN_RxFifoMode_t mode);
+
+/**
+ * @brief 채널을 클래식 CAN 전용으로 바꾼다 — CCCR.FDOE = BRSE = 0 (System Layer 소유, 부팅 시 1회)
+ * @details 클래식 장치만 있는 버스용이다. FD 프레임이 하나라도 나가면 상대가 에러 프레임으로 깨고
+ *          자동 재전송이 이어져 bus-off 로 가므로, 하드웨어에서 FD 송신을 끈다. 비트 타이밍은 그대로다.
+ *          바꾼 뒤 그 채널에서는:
+ *          - 송신: Transmit · TransmitTry · TransmitTryEx · QueueMessage 의 len 상한이 **8 B** 다(넘으면
+ *            PARAM_ERROR). 헤더도 클래식(FDF=0 · BRS off)으로 나간다. TransmitClassic 은 원래 8 B 상한이다.
+ *          - 수신: 클래식 프레임만 받는다. 길이는 모든 채널 공통 규칙(프레임의 FDF 로 표를 고름 —
+ *            클래식 DLC 9~15 = 8 B)이고, 리모트 프레임도 모든 채널에서 거부한다(IOIF_FDCAN_Start).
+ *          필터 · FIFO 모드 · 알림 · TDC · bus-off 복구 · SetRestrictedMode 는 그대로다.
+ *          호출하지 않은 채널(FD)은 동작이 바뀌지 않는다.
+ * @param id IOIF_FDCANx_t 핸들
+ * @return AGRBStatus_OK / NOT_INITIALIZED / TIMEOUT(TX 락 5 ms) /
+ *         BUSY(Start 이후 — 실행 중 전환은 지원하지 않는다 · 또는 SW 큐에 프레임이 있다) /
+ *         ERROR(레지스터 쓰기가 먹지 않음 — 판정도 바뀌지 않는다)
+ * @note **AssignInstance 뒤 · IOIF_FDCAN_Start() 이전에** task 컨텍스트에서 호출한다(TX 락을 잡는다 — ISR 금지).
+ *       되돌리는 함수는 없다(부팅 때 정하는 모드). H7 · G4 공통.
+ */
+AGRBStatusDef IOIF_FDCAN_SetClassicOnly(IOIF_FDCANx_t id);
+
+/**
+ * @brief 클래식 전용 채널인지 조회 — HAL `Init.FrameFormat == FDCAN_FRAME_CLASSIC`
+ * @return true = 클래식 전용 / false = FD 채널 또는 미할당 id
+ */
+bool IOIF_FDCAN_IsClassicOnly(IOIF_FDCANx_t id);
+
+/**
+ * @brief Nominal(중재 구간) 비트 타이밍을 바꾼다 — NBTP (System Layer 소유, 부팅 시 1회)
+ * @details 값의 뜻은 HAL `Init.NominalPrescaler / NominalTimeSeg1 / NominalTimeSeg2 / NominalSyncJumpWidth` 와
+ *          같다(레지스터의 -1 인코딩은 IOIF 가 HAL_FDCAN_Init 과 같은 식으로 한다). 범위도 HAL 의
+ *          IS_FDCAN_NOMINAL_* 와 같다 — 넘으면 PARAM_ERROR.
+ *          tq = FDCAN 커널 클럭 / prescaler, 1 비트 = (1 + seg1 + seg2) tq,
+ *          샘플 포인트 = (1 + seg1) / (1 + seg1 + seg2).
+ *          데이터 구간(DBTP) · TDC · 필터 · FIFO · 프레임 형식은 건드리지 않는다.
+ *          예) 커널 80 MHz 에서 1 Mbit/s · 16 tq · 샘플 포인트 87.5 % = (5, 13, 2, 2).
+ * @param id        IOIF_FDCANx_t 핸들
+ * @param prescaler Nominal 분주비 (1~512)
+ * @param seg1      샘플 포인트 앞 구간 = Prop_Seg + Phase_Seg1 (tq, 1~256)
+ * @param seg2      샘플 포인트 뒤 구간 = Phase_Seg2 (tq, 1~128)
+ * @param sjw       재동기 폭 (tq, 1~128)
+ * @return AGRBStatus_OK / NOT_INITIALIZED / PARAM_ERROR(범위 밖) / TIMEOUT(TX 락 5 ms) /
+ *         BUSY(Start 이후 — 실행 중 변경은 IOIF_FDCAN_ChangeNominalBitTiming · 또는 SW 큐에 프레임이 있다) /
+ *         ERROR(레지스터 쓰기가 먹지 않음 — Init 값도 바꾸지 않는다)
+ * @note **AssignInstance 뒤 · IOIF_FDCAN_Start() 이전에** task 컨텍스트에서 호출한다(TX 락을 잡는다 — ISR 금지).
+ *       IOIF_FDCAN_SetClassicOnly 와 같은 자리 · 같은 규약이다. 부르지 않으면 CubeMX(HAL_FDCAN_Init) 값
+ *       그대로다. H7 · G4 공통.
+ */
+AGRBStatusDef IOIF_FDCAN_SetNominalBitTiming(IOIF_FDCANx_t id, uint16_t prescaler, uint16_t seg1,
+                                             uint8_t seg2, uint8_t sjw);
+
+/**
+ * @brief 실행 중 Nominal 비트 타이밍을 바꾼다 — NBTP. 기다리지 않는다 (H7 · G4 공통)
+ * @details IOIF_FDCAN_SetNominalBitTiming 의 실행 중 판이다(값의 뜻 · 범위가 같다). HAL_FDCAN_Stop → NBTP →
+ *          HAL_FDCAN_Start 만 하므로 필터 · 알림 · TDC · DBTP · 프레임 형식은 그대로다. 멈추는 동안 일어나는 일:
+ *          - **수신 FIFO 에 남은 프레임은 잃는다**(RX FIFO 상태가 초기화된다).
+ *          - 오류 카운터(TEC · REC)는 그대로다 — 옛 속도에서 쌓인 값이 넘어온다.
+ *          - 재시작 뒤 11 recessive bit 를 본 다음 버스에 참여한다. 송신은 그때부터 새 속도다.
+ *          (Bosch M_CAN 3.3.1 §3.1.1 기준 — STM32 RM 원문은 대조하지 못했다.)
+ * @param id        IOIF_FDCANx_t 핸들
+ * @param prescaler Nominal 분주비 (1~512)
+ * @param seg1      샘플 포인트 앞 구간 (tq, 1~256)
+ * @param seg2      샘플 포인트 뒤 구간 (tq, 1~128)
+ * @param sjw       재동기 폭 (tq, 1~128)
+ * @return AGRBStatus_OK — 새 값으로 달린다(이미 그 값이면 멈추지 않는다) /
+ *         NOT_INITIALIZED · PARAM_ERROR — 손대지 않았다 /
+ *         BUSY — 손대지 않았다. 다음 주기에 다시 부른다: TX 락 경합 · bus-off flush 대기 · SW 큐 · HW 버퍼에 프레임.
+ *                ACK 받지 못하는 프레임이 HW 버퍼에 남아 있으면 계속 BUSY 다 — 비우는 것은 호출자 몫(AbortAllTx) /
+ *         ERROR — 쓰기가 먹지 않았다. 옛 값으로 달린다. 다시 불러도 된다 /
+ *         FAILED — 재시작 전에는 복구되지 않는다: 시작 전 · 이전 고장(손대지 않음) · HAL_FDCAN_Stop 실패(HAL ERROR —
+ *                  Start · Stop · 송수신 모두 거절, 옛 값) · 값을 알 수 없음(Start 안 함 — 버스에 나가지 않는다) ·
+ *                  HAL_FDCAN_Start 실패(INIT 유지)
+ * @note task 컨텍스트 전용(ISR 금지). **호출 task 의 우선순위는 FDCAN RxTask(IOIF_FDCAN_RX_TASK_PRIORITY)보다 낮아야
+ *       한다** — RxTask 를 선점하면 읽기와 ack 사이에 Stop 이 들어가, 재시작 뒤 옛 인덱스를 ack 한다.
+ * @note 버스의 다른 장치와 맞는 값인지는 호출자 책임이다. 틀리면 오류 프레임 · bus-off 로 드러난다.
+ * @note BareMetal 빌드는 TX 락이 없다(SetRestrictedMode 와 같다) — 송신 ISR 이 끼어들면 HW 버퍼 검사와 Stop 사이에 넣은
+ *       프레임을 잃는다. 호출자가 그 창의 송신을 막아야 한다.
+ * @note 정상 경로는 기다리지 않는다. HAL_FDCAN_Stop 이 고장 난 경우만 다르다: H7 은 폴링 횟수로 끝나고(각 50회),
+ *       G4 는 HAL_GetTick 으로 폴링마다 약 10 ms 까지 기다린다.
+ */
+AGRBStatusDef IOIF_FDCAN_ChangeNominalBitTiming(IOIF_FDCANx_t id, uint16_t prescaler, uint16_t seg1,
+                                                uint8_t seg2, uint8_t sjw);
 
 #if defined(USE_FREERTOS)
 /**

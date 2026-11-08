@@ -100,6 +100,9 @@ plugins:
             실시간 시계 (RTC): Real-Time Clock (RTC)
             보조 태스크: Auxiliary Tasks
             구조체 로깅: Struct Logging
+            CAN 통신: CAN Communication
+            CANopen 장치 다루기: Working with CANopen Devices
+            IMU Hub 센서 보정: IMU Hub Sensor Calibration
             함수 레퍼런스: Function Reference
             xm_api.h (진입점): xm_api.h (Entry Point)
             xm_api_data.h (제어·데이터): xm_api_data.h (Control & Data)
@@ -113,6 +116,9 @@ plugins:
             xm_api_rtc.h (RTC): xm_api_rtc.h (RTC)
             xm_api_freertos.h (RTOS): xm_api_freertos.h (RTOS)
             xm_api_user_custom.h (사용자 데이터): xm_api_user_custom.h (User Data)
+            xm_api_canbus.h (CAN 통신): xm_api_canbus.h (CAN Communication)
+            xm_api_canopen.h (CANopen): xm_api_canopen.h (CANopen)
+            xm_api_imu_calib.h (IMU 보정): xm_api_imu_calib.h (IMU Calibration)
             아키텍처: Architecture
             KIT H10 펌웨어: KIT H10 Firmware
             부트로더: Bootloader
@@ -186,6 +192,9 @@ nav:
       - 실시간 시계 (RTC): api-reference/08-rtc-clock.md
       - 보조 태스크: api-reference/09-task-creation.md
       - 구조체 로깅: api-reference/10-struct-logging.md
+      - CAN 통신: api-reference/11-canbus.md
+      - CANopen 장치 다루기: api-reference/12-canopen.md
+      - IMU Hub 센서 보정: api-reference/13-imu-calibration.md
       - 함수 레퍼런스:
           - 개요: api-reference/ref/README.md
           - xm_api.h (진입점): api-reference/ref/xm-api.md
@@ -200,6 +209,9 @@ nav:
           - xm_api_rtc.h (RTC): api-reference/ref/xm-api-rtc.md
           - xm_api_freertos.h (RTOS): api-reference/ref/xm-api-freertos.md
           - xm_api_user_custom.h (사용자 데이터): api-reference/ref/xm-api-user-custom.md
+          - xm_api_canbus.h (CAN 통신): api-reference/ref/xm-api-canbus.md
+          - xm_api_canopen.h (CANopen): api-reference/ref/xm-api-canopen.md
+          - xm_api_imu_calib.h (IMU 보정): api-reference/ref/xm-api-imu-calib.md
   - 아키텍처: architecture/README.md
   - KIT H10 펌웨어: kit-h10-firmware/README.md
   - 부트로더: bootloader/README.md
@@ -210,6 +222,7 @@ nav:
   - 문제 해결: troubleshooting.md
   - 릴리스 노트:
       - 개요: release-notes/README.md
+      - v2.10.0: release-notes/v2.10.0.md
       - v2.9.0: release-notes/v2.9.0.md
       - v2.8.1: release-notes/v2.8.1.md
       - v2.8.0: release-notes/v2.8.0.md

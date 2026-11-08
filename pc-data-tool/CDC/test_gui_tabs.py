@@ -1042,17 +1042,17 @@ def test_total_tab_throttle_and_mismatch(RX, DS, tmp):
         ok("크기가 안 맞는 payload(124 B) -> decode_system_values() 는 None (float32 로 안 푼다)")
 
         assert RX.decode_system_values(frame(M.TOTAL_PACKET_SIZE)) is not None
-        names, vals = RX.decode_system_values(frame(368))
+        names, vals = RX.decode_system_values(frame(372))
         assert len(names) == len(vals) == len(M.SCALAR_NAMES)
-        ok("맞는 크기(365/368 B)는 %d 채널로 풀린다" % len(names))
+        ok("맞는 크기(369/372 B)는 %d 채널로 풀린다" % len(names))
 
     # 맵 자체가 없는 환경(레지스트리가 float32 폴백을 내주는 경우)도 새면 안 된다.
     # 앞 블록이 채운 캐시를 안 쓰도록 새 레지스트리에서 한다.
     with _fresh_schema_registry(RX) as reg:
         reg._total = None
-        cs = reg.get(0x20, 368)
+        cs = reg.get(0x20, 372)
         assert cs is not None and cs.source == "fallback", cs      # 전제: 레지스트리는 폴백을 준다
-        got = RX.decode_system_values(frame(368))
+        got = RX.decode_system_values(frame(372))
         assert got is None, "맵이 없는데 float32 폴백으로 %d 채널을 풀었다" % len(got[0])
         ok("맵이 없어 레지스트리가 float32 폴백을 내주는 경우에도 None (표에 그럴듯한 틀린 숫자가 안 뜬다)")
 

@@ -39,6 +39,14 @@ A per-header collection of pages documenting the **exact function signatures, pa
 | `xm_api_logging.h` | Struct logging — send a struct to the PC with field names, units and types (also covers `xm_api_logging_raw.h`) — 🟢 **Rev 2.0 only** | [xm-api-logging.en.md](xm-api-logging.en.md) | [10. Struct Logging](../10-struct-logging.en.md) | [44_CDC_Struct_Logging](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/) |
 | `xm_api_usb_msc.h` | USB memory logging — save one struct to a USB memory stick at a fixed rate — 🟢 **Rev 2.0 only**, 14 functions | [xm-api-usb-msc.en.md](xm-api-usb-msc.en.md) | [06. USB Memory Logging](../06-usb-data-logging.en.md) | [10_USB_Memory_Log](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/10_USB_Memory_Log/) · [34_USB_Memory_Gait_Log](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/34_USB_Memory_Gait_Log/) |
 
+## CAN Communication · Sensor Hubs
+
+| Header | One-line purpose | Reference | Related concept doc | Representative example |
+|--------|-------------------|-----------|----------------------|-------------------------|
+| `xm_api_canbus.h` | Send and receive with your own device connected over CAN-FD or classic CAN — device API · free send and receive · sync signal — 🟢 **Rev 2.0 only** | [xm-api-canbus.en.md](xm-api-canbus.en.md) | [11. CAN Communication](../11-canbus.en.md) | [45_CANFD_My_Sensor](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/45_CANFD_My_Sensor/) |
+| `xm_api_canopen.h` | CANopen device helper functions — NMT · node heartbeat monitoring · SDO expedited read/write (classic mode only) — 🟢 **Rev 2.0 only** | [xm-api-canopen.en.md](xm-api-canopen.en.md) | [12. Working with CANopen Devices](../12-canopen.en.md) | [46_CANopen_Drive](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/46_CANopen_Drive/) |
+| `xm_api_imu_calib.h` | In-place calibration of IMU Hub sensors — start · finish · abort · status · supported items — 🟢 **Rev 2.0 only** | [xm-api-imu-calib.en.md](xm-api-imu-calib.en.md) | [13. IMU Hub Sensor Calibration](../13-imu-calibration.en.md) | [48_IMU_Hub_Calibration](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/48_IMU_Hub_Calibration/) |
+
 ## Memory · RTC
 
 | Header | One-line purpose | Reference | Related concept doc | Representative example |

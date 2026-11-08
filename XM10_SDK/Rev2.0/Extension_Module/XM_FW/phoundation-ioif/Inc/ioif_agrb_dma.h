@@ -28,8 +28,8 @@
  *
  * [주의] 이 선언/정의를 아래 ENABLE 가드 안으로 옮기지 말 것. UART/ADC 의
  * Manual-Init 가 자기 ENABLE 플래그만으로 DMA NVIC 를 설정해야 하는데,
- * DMA_ENABLE 을 켜지 않는 소비 모듈이 실제로 있다 - pheel-imu 는 UART_ENABLE 만,
- * pheel-emg 는 ADC_ENABLE 만 켠다(각 모듈 ioif_conf.h 실측, 2026-09-10).
+ * DMA_ENABLE 을 켜지 않는 소비 모듈이 실제로 있다 - UART_ENABLE 만 켜는 모듈과
+ * ADC_ENABLE 만 켜는 모듈이다(각 모듈 ioif_conf.h 실측, 2026-09-10).
  * 가드 안으로 넣으면 그 두 모듈에서 undefined reference 가 난다.
  *
  * MCU die 헤더만 include 한다(HAL 전체 아님). ioif_agrb_defs.h 는 CMSIS/HAL

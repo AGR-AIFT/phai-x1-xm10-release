@@ -11,16 +11,16 @@ xm_total_data_map.py 가 갖고 있고, 여기에는 그 표를 쓰는 방법만
 
     from total_data_decoder import TotalDataDecoder
     dec = TotalDataDecoder()
-    values = dec.scaled(frame.payload)          # 197개, 물리단위
+    values = dec.scaled(frame.payload)          # 198개, 물리단위
     named  = dec.named(frame.payload)           # 이름 -> 값
 
 보드 없이 자기검사가 된다:  python total_data_decoder.py
 
-와이어 페이로드는 365 B 가 아니라 368 B 다
+와이어 페이로드는 369 B 가 아니라 372 B 다
 ------------------------------------------
-PhAI V2.2 의 LEN 은 **4바이트 단위**라, 365 B 구조체는 92 units = 368 B 로 실린다.
-뒤 3 B 는 패딩이다. parse_phai_frame() 이 돌려주는 payload 도 368 B 다.
-그래서 unpack() 이 아니라 unpack_from() 을 쓴다 — 길이를 365 로 단정하면
+PhAI V2.2 의 LEN 은 **4바이트 단위**라, 369 B 구조체는 93 units = 372 B 로 실린다.
+뒤 3 B 는 패딩이다. parse_phai_frame() 이 돌려주는 payload 도 372 B 다.
+그래서 unpack() 이 아니라 unpack_from() 을 쓴다 — 길이를 369 로 단정하면
 정상 프레임이 전부 실패한다.
 
 맵 정체성 — 알아야 할 한계
@@ -52,7 +52,7 @@ MAP_MISSING_HINT = (
     "generate_data_map.py 를 --py-out 으로 돌려 이 폴더에 두면 된다."
 )
 
-# 구조체 크기(365)와 와이어 페이로드 크기(368, 4바이트 단위 패딩).
+# 구조체 크기(369)와 와이어 페이로드 크기(372, 4바이트 단위 패딩).
 PAYLOAD_SIZE = _MAP.TOTAL_PACKET_SIZE if MAP_AVAILABLE else 0
 WIRE_PAYLOAD_SIZE = ((PAYLOAD_SIZE + 3) // 4) * 4 if MAP_AVAILABLE else 0
 MODULE_ID = _MAP.MODULE_ID_TOTAL if MAP_AVAILABLE else 0x20
@@ -83,7 +83,7 @@ class TotalDataDecoder:
         self.fingerprint = _MAP.DATA_MAP_FINGERPRINT
         self._st = _MAP.PACKET_STRUCT
 
-        # 스케일이 있는 자리만 미리 뽑아 둔다. 1 kHz 에서 197개를 매번 분기시키는 것과
+        # 스케일이 있는 자리만 미리 뽑아 둔다. 1 kHz 에서 198개를 매번 분기시키는 것과
         # 스케일 있는 것만 손보는 것은 체감이 다르다.
         self._mul_idx = tuple((i, m) for i, m in enumerate(_MAP.SCALAR_MUL) if m is not None)
         self._div_idx = tuple((i, d) for i, d in enumerate(_MAP.SCALAR_DIV) if d is not None)
@@ -93,7 +93,7 @@ class TotalDataDecoder:
 
     # ---------------------------------------------------------------- 기본
     def accepts(self, payload) -> bool:
-        """365(정확) 또는 368(4바이트 패딩)만 받는다.
+        """369(정확) 또는 372(4바이트 패딩)만 받는다.
 
         느슨하게 받으면 맵이 바뀐 보드를 조용히 잘못 풀게 된다. 크기는 우리가 가진
         유일한 무료 오라클이라 버리지 않는다.
@@ -101,7 +101,7 @@ class TotalDataDecoder:
         return len(payload) in (self.size, self.wire_size)
 
     def unpack(self, payload):
-        """스케일 없이 raw 197개. 형식이 아니면 None 을 돌려주고 카운터를 올린다."""
+        """스케일 없이 raw 198개. 형식이 아니면 None 을 돌려주고 카운터를 올린다."""
         if not self.accepts(payload):
             self.rejected_size += 1
             return None
@@ -109,7 +109,7 @@ class TotalDataDecoder:
         return self._st.unpack_from(payload, 0)
 
     def scaled(self, payload):
-        """물리단위 197개(list). 형식이 아니면 None."""
+        """물리단위 198개(list). 형식이 아니면 None."""
         raw = self.unpack(payload)
         if raw is None:
             return None
@@ -129,7 +129,7 @@ class TotalDataDecoder:
 
     # ---------------------------------------------------------------- 부분 선택
     def selector(self, wanted):
-        """이름 몇 개만 뽑는 콜러블. 197개를 다 스케일링하지 않는다.
+        """이름 몇 개만 뽑는 콜러블. 198개를 다 스케일링하지 않는다.
 
             take = dec.selector(["leftHipAngle", "rightHipAngle"])
             a, b = take(frame.payload)
@@ -195,15 +195,15 @@ def _selftest() -> int:
         if not cond:
             fails.append(msg)
 
-    check(dec.size == 365, "구조체 크기가 365 가 아님: %d" % dec.size)
-    check(dec.wire_size == 368, "와이어 페이로드가 368 이 아님: %d" % dec.wire_size)
-    check(len(dec.names) == 197, "채널 수가 197 이 아님: %d" % len(dec.names))
+    check(dec.size == 369, "구조체 크기가 369 가 아님: %d" % dec.size)
+    check(dec.wire_size == 372, "와이어 페이로드가 372 가 아님: %d" % dec.wire_size)
+    check(len(dec.names) == 198, "채널 수가 198 이 아님: %d" % len(dec.names))
 
-    # 1) 패딩된 368 B 를 받아들이는가 (이게 실제 와이어 모양이다)
-    check(dec.unpack(bytes(dec.wire_size)) is not None, "368 B 패딩 페이로드를 거절했다")
+    # 1) 패딩된 372 B 를 받아들이는가 (이게 실제 와이어 모양이다)
+    check(dec.unpack(bytes(dec.wire_size)) is not None, "372 B 패딩 페이로드를 거절했다")
 
-    # 2) 패딩 안 된 365 B 도 받는가
-    check(dec.unpack(bytes(dec.size)) is not None, "365 B 페이로드를 거절했다")
+    # 2) 패딩 안 된 369 B 도 받는가
+    check(dec.unpack(bytes(dec.size)) is not None, "369 B 페이로드를 거절했다")
 
     # 3) 엉뚱한 길이는 거절하는가
     check(dec.unpack(bytes(dec.size - 1)) is None, "짧은 페이로드를 통과시켰다")
