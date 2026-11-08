@@ -12,8 +12,8 @@
 ------------------
 조각들이 각자 맞아도 이어 붙이면 틀리는 자리가 있다.
 
-* 0x20 페이로드는 와이어에서 368 B(4바이트 패딩)다. 저장할 때 365 로 자르거나
-  CSV 단계에서 365 를 기대하면 조각 시험은 전부 통과하고 이 시험만 실패한다.
+* 0x20 페이로드는 와이어에서 372 B(4바이트 패딩)다. 저장할 때 369 로 자르거나
+  CSV 단계에서 369 를 기대하면 조각 시험은 전부 통과하고 이 시험만 실패한다.
 * `0xEF` 메타는 데이터보다 **늦게** 올 수 있다. 그래도 사후 내보내기에서는
   전부 이름이 붙어야 한다(data-before-schema).
 
@@ -136,13 +136,13 @@ def main():
             check((g["from_seq"], g["to_seq"]) == (3, 6), "gap %r" % ((g["from_seq"], g["to_seq"]),))
         check(cap.lost_total == 2, "capture lost_total %d" % cap.lost_total)
 
-        # 0x20 페이로드가 **368 B 그대로** 저장돼야 한다 (365 로 자르면 안 된다)
+        # 0x20 페이로드가 **372 B 그대로** 저장돼야 한다 (369 로 자르면 안 된다)
         d20 = [r for r in res.records
                if r.rec_type == X.REC_DATA and r.fields["module_id"] == PHAI_MODULE_TOTAL_DATA]
         check(len(d20) == 2, "0x20 DATA %d" % len(d20))
         if d20:
-            check(len(d20[0].payload) == 368,
-                  "0x20 payload %d B (368 이어야 — 4바이트 패딩)" % len(d20[0].payload))
+            check(len(d20[0].payload) == 372,
+                  "0x20 payload %d B (372 여야 — 4바이트 패딩)" % len(d20[0].payload))
 
         # 0xEF 메타도 버려지지 않고 파일 안에 있어야 한다
         dEF = [r for r in res.records
@@ -169,12 +169,12 @@ def main():
         check(names == ["session_meta_0xEF.csv", "session_total_0x20.csv",
                         "session_user_0xF0.csv"], "CSV 파일 %r" % (names,))
 
-        # 0x20 CSV — 197 채널이 이름으로
+        # 0x20 CSV — 198 채널이 이름으로
         p20 = os.path.join(out, "session_total_0x20.csv")
         with open(p20, encoding="utf-8") as f:
             hdr = f.readline().rstrip("\n").split(",")
             rows = [ln.rstrip("\n").split(",") for ln in f if ln.strip()]
-        check(len(hdr) == 3 + 197, "0x20 헤더 %d 열 (3 + 197 이어야)" % len(hdr))
+        check(len(hdr) == 3 + 198, "0x20 헤더 %d 열 (3 + 198 이어야)" % len(hdr))
         check("leftHipAngle" in hdr, "leftHipAngle 열이 없다 — 맵이 안 붙었다")
         check(len(rows) == 2, "0x20 행 %d" % len(rows))
         if rows and "leftHipAngle" in hdr:
@@ -211,7 +211,7 @@ def main():
             h3 = f.readline().rstrip("\n").split(",")
             r3 = f.readline().rstrip("\n").split(",")
         check(h3[-1] == "payload_hex", "raw-hex 헤더 %r" % (h3,))
-        check(len(r3[-1]) == 368 * 2, "hex 길이 %d (368 B = 736 자)" % len(r3[-1]))
+        check(len(r3[-1]) == 372 * 2, "hex 길이 %d (372 B = 744 자)" % len(r3[-1]))
 
         # ---- 8. hex 행 판별 — CSV 를 읽는 쪽이 값이 아닌 행을 값으로 읽지 않는다 ------
         # 채널 수가 헤더와 달라진 프레임은 값 칸을 비우고 마지막 칸에 payload 를 hex 로 적는다
@@ -274,7 +274,7 @@ def main():
         print("%d FAILED" % len(fails))
         return 1
     print("  wire -> .xmlog -> CSV 전 구간 통과")
-    print("  (0x20 368 B 보존 / 손실 2 를 GAP 으로 / 197채널 이름 / "
+    print("  (0x20 372 B 보존 / 손실 2 를 GAP 으로 / 198채널 이름 / "
           "0xEF 가 늦게 와도 사후 라벨링 / raw-hex 대체 경로 / GUI 워커 .xmlog)")
     return 0
 

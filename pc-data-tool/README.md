@@ -13,6 +13,10 @@ XM10 보드가 USB-CDC 로 내보내는 데이터를 PC 에서 받아 그래프�
 > 저장하며, 저장한 파일은 이 도구가 아니라 별도의 PC 프로그램(XM10 Log Decoder 2.2.0 이상)으로 풉니다.
 > 사용법은 [USB 메모리에 저장하기](../docs/getting-started/05-usb-memory-log.md) 를 보세요.
 > Rev 1.1 은 USB 메모리 저장을 지원하지 않습니다. 온보드 저장(SD카드)은 현재 지원하지 않습니다.
+>
+> **보드 펌웨어와 같은 ZIP 에 든 도구를 쓰세요.** 이 폴더의 도구는 Rev 2.0 v2.10.0 의 Total Data
+> (`0x20`, 369 B · 198채널)에 맞춰져 있습니다. Rev 1.1 보드나 Rev 2.0 v2.9.0 이하 펌웨어(365 B · 197채널)라면
+> 그 펌웨어를 받은 ZIP 에 든 `pc-data-tool` 을 쓰세요. 크기가 다르면 `0x20` 값을 풀지 않습니다.
 
 ---
 
@@ -39,7 +43,7 @@ python xm10.py selftest              # 보드 없이 도는 자체 검증 (창�
 합성 와이어 -> COBS/CRC 파싱 -> 실시간 타입 디코딩 -> .xmlog -> 되읽기 -> CSV -> 판정
 ```
 
-일부러 어긋나기 쉬운 자리를 전부 밟습니다 — 0x20 의 365→368 B 패딩, 패딩 구멍이
+일부러 어긋나기 쉬운 자리를 전부 밟습니다 — 0x20 의 369→372 B 패딩, 패딩 구멍이
 둘 있는 사용자 구조체, **데이터가 스키마보다 먼저 도착하는** 순서, seq 구멍,
 CRC 가 깨진 프레임, 그리고 시리얼이 프레임 경계를 지켜 주지 않는다는 사실(스트림을
 일부러 어중간한 크기로 잘라 먹입니다). 17개 항목을 판정해 PASS/FAIL 을 냅니다.
@@ -70,7 +74,7 @@ python build_exe.py --no-gui   # 콘솔 전용 (약 23 MB)
 
 - 예전 방식의 소형 센서 모듈 채널 (Module ID `0x01~0x07`, `0x10`, `0xFF`)
 - 사용자 정의 커스텀 채널 (Module ID `0xF0~0xFE`) — [Ex.09 CDC Stream](../examples/09_CDC_Stream/) 방식
-- **Total Data Packet (Module ID `0x20`)** — 197채널, 365 B. `total_data_decoder.py` 담당
+- **Total Data Packet (Module ID `0x20`)** — 198채널, 369 B. `total_data_decoder.py` 담당
 
 0x20 은 원래 이 샘플이 못 풀던 패킷입니다. uint32/uint16/uint8/float 가 섞인 구조체라
 "payload 를 float 배열로 해석"하는 방식으로는 값이 깨졌고, 예전 README 는 구조체 레이아웃에
@@ -219,7 +223,7 @@ SCHEMA_ACTIVATION 은 적는 즉시 내보내므로, 스키마 번호(`activatio
 
 CSV 로 뽑을 때 채널 이름의 출처는 이 순서입니다:
 
-1. **0x20** → 펌웨어와 같은 정의에서 생성된 맵 (197채널 이름·단위·스케일)
+1. **0x20** → 펌웨어와 같은 정의에서 생성된 맵 (198채널 이름·단위·스케일)
 2. **SCHEMA_ACTIVATION** → 보드가 보낸 이진 스키마 *(구조체 로깅을 쓰는 Rev 2.0 보드)*
 3. `XM_SetUsbCustomMeta()` 로 등록한 이름(`0xEF`) → 이름만 알고 값은 float32 로 **가정**
 4. 위 어느 것도 없으면 → float32 배열로 **가정**하고 `ch0..chN`
@@ -268,22 +272,22 @@ float32 가정으로 내려갑니다.
 
 ## `CDC/total_data_decoder.py` — Total Data(0x20) 디코더
 
-생성된 표(`CDC/xm_total_data_map.py`)를 읽어 365 B 구조체를 이름 붙은 197개 값으로 풉니다.
+생성된 표(`CDC/xm_total_data_map.py`)를 읽어 369 B 구조체를 이름 붙은 198개 값으로 풉니다.
 
 ```python
 from total_data_decoder import TotalDataDecoder
 dec = TotalDataDecoder()
 named = dec.named(frame.payload)        # {'leftHipAngle': 12.3, ...}
-take  = dec.selector(['leftHipAngle'])  # 몇 개만 뽑을 때 (197개 전부 계산하지 않음)
+take  = dec.selector(['leftHipAngle'])  # 몇 개만 뽑을 때 (198개 전부 계산하지 않음)
 ```
 
 CLI 로 바로 CSV 를 뽑을 수도 있습니다 — 사용자 채널 CSV 와 **별도 파일**로 나갑니다
-(컬럼 의미가 다르고, 197채널을 사용자 CSV 에 섞으면 헤더가 어긋납니다).
+(컬럼 의미가 다르고, 198채널을 사용자 CSV 에 섞으면 헤더가 어긋납니다).
 
 ```bash
 python CDC/cdc_phai_receiver.py --cli --port COM6 --total-data
 #  data/cdc_phai_<시각>_user_0xF0.csv   사용자 채널 (module 하나당 파일 하나, 0xF0 예시)
-#  data/cdc_total_<시각>.csv            0x20 197채널
+#  data/cdc_total_<시각>.csv            0x20 198채널
 #  data/cdc_total_<시각>.csv.meta.txt   어느 맵으로 풀었는지
 ```
 
@@ -381,7 +385,7 @@ python CDC/soak.py --list-ports
 | `CDC/cdc_phai_receiver.py` | 실시간 수신 — 그래프 창(GUI) 과 콘솔(`--cli`) |
 | `CDC/schema_0xee.py` | 보드가 보내는 구조체 설명(0xEE) 파서·재조립 |
 | `CDC/schema_registry.py` | 채널 이름·타입의 출처를 하나로 (0xEE > 0xEF > 생성 맵 > float32 가정) |
-| `CDC/total_data_decoder.py` | Total Data(0x20) 197채널 디코더 |
+| `CDC/total_data_decoder.py` | Total Data(0x20) 198채널 디코더 |
 | `CDC/xm_total_data_map.py` | 0x20 레이아웃 표 — **생성 파일**, 손으로 고치지 않음 |
 | `CDC/xmlog.py` | `.xmlog` 파일 형식 — 쓰기·읽기·잘린 파일 복구 |
 | `CDC/xmlog_capture.py` | 받은 프레임을 `.xmlog` 로 눕히는 다리 (수신 루프가 이걸 부른다). 스키마가 오면 번호(activation)를 발급해 뒤따르는 DATA 에 단다 |

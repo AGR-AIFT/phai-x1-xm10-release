@@ -201,8 +201,8 @@ def run_demo(out_dir: str, cycles: int = 25, chunk: int = 61,
     d20 = [r for r in res.records
            if r.rec_type == X.REC_DATA and r.fields["module_id"] == 0x20]
     if d20:
-        checks.append(Check("0x20 이 368 B 로 저장됐다 (365 아님)",
-                            len(d20[0].payload) == 368, "%d B" % len(d20[0].payload)))
+        checks.append(Check("0x20 이 372 B 로 저장됐다 (369 아님)",
+                            len(d20[0].payload) == 372, "%d B" % len(d20[0].payload)))
 
     # ------------------------------------------------------------ 5. 내보내기
     say("")

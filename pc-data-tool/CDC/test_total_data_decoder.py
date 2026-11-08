@@ -7,9 +7,9 @@ total_data_decoder.py 안의 자기검사가 **디코더 단독**을 보는 반�
 **와이어부터** 본다: 프레임을 만들어 COBS 로 싸고, 수신기와 같은 경로
 (cobs_decode -> parse_phai_frame -> FrameRouter -> TotalDataDecoder)로 되푼다.
 
-여기서만 잡히는 것이 하나 있다 — **페이로드가 368 B 로 온다는 사실**이다.
-PhAI 의 LEN 은 4바이트 단위라 365 B 구조체가 92 units = 368 B 로 실린다.
-디코더를 365 로 단정해 짜면 단독 시험은 통과하고 실기에서 전멸한다.
+여기서만 잡히는 것이 하나 있다 — **페이로드가 372 B 로 온다는 사실**이다.
+PhAI 의 LEN 은 4바이트 단위라 369 B 구조체가 93 units = 372 B 로 실린다.
+디코더를 369 로 단정해 짜면 단독 시험은 통과하고 실기에서 전멸한다.
 """
 import struct
 import sys
@@ -24,7 +24,7 @@ import xm_total_data_map as M
 
 
 def build_total_data_wire(seq_id, payload365, status=0):
-    """365 B 구조체를 FW 와 같은 규약으로 와이어 바이트로 만든다.
+    """369 B 구조체를 FW 와 같은 규약으로 와이어 바이트로 만든다.
 
     FW 는 payload 를 4바이트 배수로 올려 LEN(4바이트 단위)에 담는다
     (phai_packet_builder.c). 그 패딩을 여기서도 그대로 한다 — 안 하면
@@ -46,7 +46,7 @@ def module_id_of():
 
 
 def make_payload(values):
-    """{필드이름: raw값} -> 365 B."""
+    """{필드이름: raw값} -> 369 B."""
     by_name = {d.name: d for d in M.TOTAL_DATA_MAP}
     code = {"uint8": "B", "int8": "b", "uint16": "H", "int16": "h",
             "uint32": "I", "int32": "i", "float32": "f"}
@@ -83,29 +83,29 @@ def main():
         "phai_x1_status": 0xA5,     # none
     }
     payload = make_payload(known)
-    check(len(payload) == 365, "payload 가 365 B 가 아님: %d" % len(payload))
+    check(len(payload) == 369, "payload 가 369 B 가 아님: %d" % len(payload))
 
     wire, raw_len = build_total_data_wire(7, payload)
 
     # 와이어 산수 — 0x20 원시값과 대조한다.
-    #   raw  = 6(헤더) + roundup4(365) + 2(CRC) = 376  ... 항등식
-    #   wire = raw + floor(raw/254) + 2 = 379        ... **상한**이지 항등식이 아니다
+    #   raw  = 6(헤더) + roundup4(369) + 2(CRC) = 380  ... 항등식
+    #   wire = raw + floor(raw/254) + 2 = 383        ... **상한**이지 항등식이 아니다
     #
     # COBS 오버헤드는 0 바이트가 없을 때 최대다. 0x20 페이로드는 보통 0 이 많아
-    # 실제로는 378 B 로 나온다(2026-09-10 실측). 예산은 상한을 써야 하므로 379 가
-    # 맞고, 아래는 그 상한이 정말 상한인지와 최악치가 정확히 379 인지를 함께 본다.
-    check(raw_len == 376, "raw 프레임이 376 B 가 아님: %d" % raw_len)
+    # 실제 와이어는 상한보다 짧다(이 시험의 페이로드는 382 B). 예산은 상한을 써야 하므로 383 이
+    # 맞고, 아래는 그 상한이 정말 상한인지와 최악치가 정확히 383 인지를 함께 본다.
+    check(raw_len == 380, "raw 프레임이 380 B 가 아님: %d" % raw_len)
     budget = raw_len + raw_len // 254 + 2
-    check(budget == 379, "예산식이 379 를 주지 않음: %d" % budget)
+    check(budget == 383, "예산식이 383 을 주지 않음: %d" % budget)
     check(len(wire) <= budget,
           "실제 와이어 %d 가 예산 상한 %d 를 넘었다" % (len(wire), budget))
 
     # 0 이 하나도 없는 페이로드 = COBS 최악. 이때 상한과 딱 맞아야 한다.
     worst_payload = bytes((i % 255) + 1 for i in range(M.TOTAL_PACKET_SIZE))
     worst_wire, worst_raw = build_total_data_wire(8, worst_payload)
-    check(worst_raw == 376, "최악 raw %d" % worst_raw)
-    check(len(worst_wire) == 379,
-          "COBS 최악 와이어가 379 가 아님: %d — 예산 상한식이 틀렸다" % len(worst_wire))
+    check(worst_raw == 380, "최악 raw %d" % worst_raw)
+    check(len(worst_wire) == 383,
+          "COBS 최악 와이어가 383 이 아님: %d — 예산 상한식이 틀렸다" % len(worst_wire))
 
     # 수신기와 같은 경로로 되푼다
     delim = wire.index(0)
@@ -119,8 +119,8 @@ def main():
 
     check(pkt.module_id == PHAI_MODULE_TOTAL_DATA,
           "module_id 0x%02X" % pkt.module_id)
-    check(len(pkt.payload) == 368,
-          "와이어 페이로드가 368 B 가 아님: %d (4바이트 패딩 규약)" % len(pkt.payload))
+    check(len(pkt.payload) == 372,
+          "와이어 페이로드가 372 B 가 아님: %d (4바이트 패딩 규약)" % len(pkt.payload))
 
     router = FrameRouter()
     tag, _module_id, _delta = router.route(pkt)
@@ -129,7 +129,7 @@ def main():
           "system tap 이 세지 않음")
 
     named = dec.named(pkt.payload)
-    check(named is not None, "368 B 페이로드 디코드 실패")
+    check(named is not None, "372 B 페이로드 디코드 실패")
     if named is not None:
         check(named["xm_loop_count"] == 1234567,
               "xm_loop_count %r" % named["xm_loop_count"])
@@ -139,7 +139,7 @@ def main():
               "leftHipAngle %r" % named["leftHipAngle"])
         check(named["rightHipAngle"] == -360.0,
               "rightHipAngle %r" % named["rightHipAngle"])
-        check(len(named) == 197, "채널 수 %d" % len(named))
+        check(len(named) == 198, "채널 수 %d" % len(named))
 
     # CSV 헤더가 값 개수와 맞는가 — 어긋나면 컬럼이 밀린 CSV 가 나온다
     hdr = dec.csv_header().split(",")
@@ -153,7 +153,7 @@ def main():
             print("  FAIL  " + m)
         print("%d FAILED" % len(fails))
         return 1
-    print("  wire -> decode chain passed (365 B struct, 368 B payload, 379 B wire)")
+    print("  wire -> decode chain passed (369 B struct, 372 B payload, 383 B wire)")
     return 0
 
 

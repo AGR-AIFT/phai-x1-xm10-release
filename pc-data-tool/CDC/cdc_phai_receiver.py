@@ -128,7 +128,7 @@ MAX_NEW_TABS_PER_POLL = 1
 # 지나야 그리고, 다 따라잡으면 그 틱에서 바로 그린다. 평소(안 밀릴 때)는 틱마다 그린다.
 BACKLOG_RENDER_PERIOD_S = 0.5
 
-# "Show 0x20 tab" — 197채널을 6-plot 으로 그리는 건 무겁다(스펙 §2). 그래프 대신
+# "Show 0x20 tab" — 198채널을 6-plot 으로 그리는 건 무겁다(스펙 §2). 그래프 대신
 # 표(이름+최신값) 하나로 대체하고, 갱신을 5Hz 로 스로틀한다 — 1kHz 로 오는 값을
 # 표 위젯에 매번 반영하면 그 자체가 병목이다.
 TOTAL_DATA_TABLE_HZ = 5.0
@@ -799,7 +799,7 @@ class ModuleTab(QtWidgets.QWidget):
 class TotalDataTab(QtWidgets.QWidget):
     """"Show 0x20 tab" 체크박스가 만드는 요약 탭.
 
-    197채널을 6-plot 으로 그리는 건 무겁다 — 그래서 그래프 대신 표(채널명 + 최신값)
+    198채널을 6-plot 으로 그리는 건 무겁다 — 그래서 그래프 대신 표(채널명 + 최신값)
     하나로 대체하고, 갱신을 5Hz 로 스로틀한다(TOTAL_DATA_TABLE_HZ). CSV 는 쓰지 않는다
     — CLI `--total-data` 가 이미 그 역할을 하고, `.xmlog` 에는 어차피 전부 남는다.
     """
@@ -833,7 +833,7 @@ class TotalDataTab(QtWidgets.QWidget):
         """5Hz 스로틀 — True 를 받은 호출부만 디코드하고 표를 갱신한다.
 
         True 를 돌려주는 순간 다음 주기가 시작된다(호출할 때마다 시계가 움직이는 게이트).
-        스로틀이 표를 채우는 쪽에만 있으면 표는 5Hz 로 바뀌어도 그 앞의 197채널 unpack·
+        스로틀이 표를 채우는 쪽에만 있으면 표는 5Hz 로 바뀌어도 그 앞의 198채널 unpack·
         스케일링은 poll 틱마다(약 33Hz) 계속 돌기 때문에, 디코드 **앞**에서 물어야 한다.
         `now_t` 는 단조 증가하는 아무 시계(perf_counter 등)다.
         """
@@ -988,7 +988,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._chk_xmlog.setToolTip("받은 프레임을 그대로 무손실 저장 (CSV 와 별개, 같은 폴더)")
         r1.addWidget(self._chk_xmlog)
 
-        # 197채널 0x20 은 기본적으로 화면에 안 그린다(무겁다) — 원하면 요약 표 탭을 띄운다.
+        # 198채널 0x20 은 기본적으로 화면에 안 그린다(무겁다) — 원하면 요약 표 탭을 띄운다.
         self._chk_total_tab = QtWidgets.QCheckBox("Show 0x20 tab")
         self._chk_total_tab.setChecked(False)
         self._chk_total_tab.setToolTip(
@@ -1502,7 +1502,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._tabs[mid].update_latest_labels(floats)
 
         if last_total_pkt is not None and self._total_tab.allow_update(time.perf_counter()):
-            # 디코드는 5Hz 게이트를 통과한 뒤에만 한다 — 197채널 unpack+스케일을 poll
+            # 디코드는 5Hz 게이트를 통과한 뒤에만 한다 — 198채널 unpack+스케일을 poll
             # 틱마다(약 33Hz) 돌리지 않으려는 것이다. 못 풀면 float32 로 덮지 않고
             # '못 풀었다' 를 그대로 보여준다.
             result = decode_system_values(last_total_pkt)
@@ -1728,7 +1728,7 @@ def run_cli(port, baud, output, total_data=False, log=False):
     print(f"[PhAI V2.2 CLI]  Port: {port}  Output: {output}  (stem: {stem})")
 
     # 0x20 은 사용자 채널이 아니라 시스템 채널이라 위 CSV 에 섞지 않는다 —
-    # 컬럼 의미가 다르고, 197채널을 사용자 CSV 에 밀어 넣으면 헤더가 어긋난다.
+    # 컬럼 의미가 다르고, 198채널을 사용자 CSV 에 밀어 넣으면 헤더가 어긋난다.
     # 별도 파일로 뺀다.
     td_dec = None
     td_path = None

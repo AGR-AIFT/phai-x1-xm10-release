@@ -382,12 +382,12 @@ def test_fallback_when_nothing_known():
 
 def test_total_data_uses_generated_map():
     reg = R.SchemaRegistry()
-    cs = reg.get(R.MODULE_ID_TOTAL, 368)
+    cs = reg.get(R.MODULE_ID_TOTAL, 372)
     if cs is None:
         print("  (생성된 0x20 맵 없음 — 이 항목 생략)")
         return
     assert cs.source == "generated-map", cs.source
-    assert len(cs.names) == 197, len(cs.names)
+    assert len(cs.names) == 198, len(cs.names)
     assert cs.assumed_float32 is False
 
 
