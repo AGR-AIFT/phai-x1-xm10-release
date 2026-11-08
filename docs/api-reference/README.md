@@ -14,7 +14,7 @@ API 문서는 **역할이 다른 두 레이어**로 나뉘어 있습니다. 무�
 
 | 레이어 | 위치 | 다루는 것 | 이럴 때 펴보세요 |
 |--------|------|-----------|------------------|
-| **① 개념 가이드** | 본 문서 (01~10, 아래 [함수 그룹](#함수-그룹) 표) | **왜** 이 API 가 있고 **어떻게** 알고리즘에 녹이는지 — 배경 지식, 흔한 실수, 예제 코드 흐름 | 처음 써보는 API 를 어떻게 조합해야 할지 모를 때 |
+| **① 개념 가이드** | 본 문서 (01~13, 아래 [함수 그룹](#함수-그룹) 표) | **왜** 이 API 가 있고 **어떻게** 알고리즘에 녹이는지 — 배경 지식, 흔한 실수, 예제 코드 흐름 | 처음 써보는 API 를 어떻게 조합해야 할지 모를 때 |
 | **② 함수 레퍼런스** | [`ref/`](ref/README.md) — 헤더 1개당 페이지 1개 | **정확한** 함수 시그니처 · 파라미터 타입/범위 · 반환값 · 구조체 필드 | 함수 이름/파라미터 순서/반환값 의미를 정확히 확인해야 할 때 |
 
 두 레이어는 서로를 대체하지 않습니다. 개념 가이드 각 항목 끝에는 대응하는 `ref/` 페이지가 링크되어 있고, `ref/` 각 페이지 상단에도 대응하는 개념 가이드가 링크되어 있습니다 — 막히면 반대쪽으로 건너가세요.
@@ -37,6 +37,9 @@ API 문서는 **역할이 다른 두 레이어**로 나뉘어 있습니다. 무�
 | 08 | [실시간 시계](08-rtc-clock.md) | 날짜/시간 읽기·쓰기 | `XM_RTC_SetDateTime`, `XM_RTC_GetDateTime`, `XM_RTC_IsRunning` |
 | 09 | [보조 task + 데이터 공유](09-task-creation.md) | 1 kHz 제어 루프와 별도 작업 + 안전한 데이터 공유 | `XM_Task_CreateOneShot/Periodic`, `XM_Mutex_Lock/Unlock` |
 | 10 | [구조체 로깅](10-struct-logging.md) | 구조체를 이름 · 단위 · 타입과 함께 PC 로 전송 🟢 **Rev 2.0 전용** | `XM_LOG_DECLARE`, `XM_LOG_FIELDS`, `XM_LOG_REGISTER`, `XM_LOG_SEND` |
+| 11 | [CAN 통신](11-canbus.md) | CAN-FD · 클래식 CAN 으로 연결한 내 장치와 주고받기 🟢 **Rev 2.0 전용** | `XM_CanAttachDevice`, `XM_CanReadLatest`, `XM_CanSend`, `XM_CanSendFrame`, `XM_CanReadFrame` |
+| 12 | [CANopen 장치 다루기](12-canopen.md) | CANopen 모터 드라이버 — NMT · 하트비트 감시 · SDO, PDO + SYNC 🟢 **Rev 2.0 전용** | `XM_CanOpenSendNmt`, `XM_CanOpenWatchNode`, `XM_CanOpenSdoRead/Write`, `XM_CanOpenSdoGetResult` |
+| 13 | [IMU Hub 센서 보정](13-imu-calibration.md) | IMU Hub 센서를 장착한 채로 보정 🟢 **Rev 2.0 전용** | `XM_ImuCalibStart`, `XM_ImuCalibGetStatus`, `XM_ImuCalibFinish`, `XM_ImuCalibAbort` |
 
 ---
 

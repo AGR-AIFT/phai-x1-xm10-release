@@ -59,7 +59,7 @@ python pc-data-tool/xm10.py recv --cli --port COM6 --log         # 콘솔 수신
 python pc-data-tool/xm10.py export data/cdc_<시각>.xmlog --csv out/   # 채널별 CSV 로
 ```
 
-`out/` 에 `..._user_0xF0.csv`(여러분 채널)와 `..._total_0x20.csv`(보드가 항상 보내는 197채널 — 관절 각도·토크·IMU·GRF)가 생깁니다. 두 파일 모두 앞에 `pc_time_us`(PC 수신 시각)와 `seq_id`(보드가 보낸 순번, 모든 채널이 하나의 순번을 공유) 열이 있어 시간축을 맞출 수 있습니다.
+`out/` 에 `..._user_0xF0.csv`(여러분 채널)와 `..._total_0x20.csv`(보드가 항상 보내는 약 200 개 채널 — 관절 각도·토크·IMU·GRF)가 생깁니다. 두 파일 모두 앞에 `pc_time_us`(PC 수신 시각)와 `seq_id`(보드가 보낸 순번, 모든 채널이 하나의 순번을 공유) 열이 있어 시간축을 맞출 수 있습니다.
 
 ### 3. 학습 프레임워크에서 로드
 

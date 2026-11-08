@@ -2,15 +2,15 @@
 
 A tool for **plotting as a live graph, saving raw, and exporting to CSV** the data your board streams out over USB. It lives in the `Extension_Module/pc-data-tool/` folder — run it directly with Python, or bundle it into a single executable for a PC that doesn't have Python installed.
 
-> **Where is it?** When you unzip the SDK, `Extension_Module\pc-data-tool\` is included. If your ZIP doesn't have that folder (an older release), grab just the `pc-data-tool/` folder from the GitHub repo and put it anywhere — it's the same files regardless of board revision. In the v2.8.0 ZIP this folder was named `PythonDecoder` — it is an earlier version of the same tool.
+> **Where is it?** When you unzip the SDK, `Extension_Module\pc-data-tool\` is included. If your ZIP doesn't have that folder (an older release), grab just the `pc-data-tool/` folder from the GitHub repo and put it anywhere. Note that the repo's tool matches the Total Data of Rev 2.0 v2.10.0 (0x20, 369 B): it does not decode the Total Data of a Rev 1.1 board or of firmware v2.9.0 and earlier (365 B). For a Rev 1.1 board, use the tool inside `Rev1.1.zip`. In the v2.8.0 ZIP this folder was named `PythonDecoder` — it is an earlier version of the same tool.
 
 > **How is this different from PhAI Studio?** PhAI Studio is the official tool you use straight from the browser. This is an open-source, local tool. It **saves the raw bytes before interpreting them**, so you can re-export later even if the channel layout changes, and if you know Python you can modify it however you like. The two tools **can't have the same COM port open at the same time** — connect only one PC program at a time.
 
-> **Use this tool to see your own structs.** PhAI Studio shows the Total Data (0x20) the board sends automatically. PhAI Studio is still under development, so for now use the `xm10` tool to view and save your own (custom) data structs.
+> **Use this tool to see your own structs.** PhAI Studio shows the Total Data (0x20) the board sends automatically. PhAI Studio is still under development, so for now use the `xm10` tool to view and save your own (custom) data structs. On Rev 2.0 v2.10.0 the Total Data grew by 4 bytes, so PhAI Studio may not show it — if so, use **Show 0x20 tab** in this tool.
 
 | What you want to see | Program to use |
 | :--- | :--- |
-| System data the board sends automatically — joint angles, torque, etc. (Total Data 0x20; to fill the 28-byte `User_Custom` block inside it, see [`xm_api_user_custom`](../api-reference/ref/xm-api-user-custom.en.md)) | PhAI Studio |
+| System data the board sends automatically — joint angles, torque, etc. (Total Data 0x20; to fill the 28-byte `User_Custom` block inside it, see [`xm_api_user_custom`](../api-reference/ref/xm-api-user-custom.en.md)) | PhAI Studio · the `xm10` tool (**Show 0x20 tab**) |
 | Your own struct sent with `XM_SendUsbDataWithId` (`0xF0`–`0xFE`) — on Rev 2.0, also structs sent with struct logging (`XM_LOG_SEND`) | the `xm10` tool (this page) |
 | Text sent with `XM_SendUsbDebugMessage` | a serial terminal |
 | Files the board saved by itself to a USB memory stick 🟢 **Rev 2.0 only** | XM10 Log Decoder 2.2.0 or later ([Save Data to a USB Memory Stick](05-usb-memory-log.en.md)) |
@@ -95,7 +95,7 @@ Each time you connect, two kinds of files show up in the `Output` folder.
 | `cdc_phai_<timestamp>_user_0xF0.csv` | The user channels plotted on screen, as a table (opens directly in Excel). One file per Module ID |
 | `cdc_<timestamp>.xmlog` | **Every** frame received, raw bytes (explained below) |
 
-Why save a second file when the CSV should be enough? The CSV is **already interpreted** at the moment it's received. If the channel names arrived after the data, or you changed the channel layout afterward, or there was a mistake in interpretation, that CSV is final — you're stuck with it. The `.xmlog` is laid down without any interpretation, so you can always re-export it later. It also includes the system channels that are not plotted as graphs (the 0x20 Total Data, 197 channels — turn on **Show 0x20 tab** to see them as a table).
+Why save a second file when the CSV should be enough? The CSV is **already interpreted** at the moment it's received. If the channel names arrived after the data, or you changed the channel layout afterward, or there was a mistake in interpretation, that CSV is final — you're stuck with it. The `.xmlog` is laid down without any interpretation, so you can always re-export it later. It also includes the system channels that are not plotted as graphs (the 0x20 Total Data, about 200 channels — turn on **Show 0x20 tab** to see them as a table).
 
 ### 4. Export CSV from `.xmlog`
 
@@ -111,7 +111,7 @@ CSV:
 ```
 *("JSON meta, 4 channels"; the warning reads "type unknown — assuming float32".)*
 
-`total_0x20` is the 197 channels the board always sends (joint angles, torque, IMU, GRF, etc.), and `user_0xF0` is the channel you sent from your own example code. The channel names the board sent while you were recording are stored inside the file itself, so there's nothing extra to configure when exporting.
+`total_0x20` is the roughly 200 channels the board always sends (joint angles, torque, IMU, GRF, etc.), and `user_0xF0` is the channel you sent from your own example code. The channel names the board sent while you were recording are stored inside the file itself, so there's nothing extra to configure when exporting.
 
 Each row is decoded with the **channel description that was valid when the row was received** (a row received before any description is decoded with the first one that arrives afterwards on the same connection). If the struct description for a Module ID changes partway through a single file (for example, a script that keeps writing into one file across a reconnect — the graph window opens a new file for every connection), the CSV for that Module ID is split per description — `..._user_0xF0.csv`, `..._user_0xF0_schema2.csv` — because the same column name can mean something different (the same four bytes are `1.0` as a `float` but `1065353216` as a `uint32_t`).
 
@@ -125,7 +125,7 @@ When you don't need the graph window, or you're leaving it running for a long ti
 
 ```bash
 python xm10.py recv --cli --port COM6 --log                # saves CSV + .xmlog, Ctrl+C to stop
-python xm10.py recv --cli --port COM6 --log --total-data   # also exports the 0x20 (197-channel) data
+python xm10.py recv --cli --port COM6 --log --total-data   # also exports the 0x20 Total Data
 ```
 
 ---

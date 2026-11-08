@@ -39,6 +39,14 @@
 | `xm_api_logging.h` | 구조체 로깅 — 구조체를 이름 · 단위 · 타입과 함께 PC 로 전송 (`xm_api_logging_raw.h` 함께 설명) — 🟢 **Rev 2.0 전용** | [xm-api-logging.md](xm-api-logging.md) | [10. 구조체 로깅](../10-struct-logging.md) | [44_CDC_Struct_Logging](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/44_CDC_Struct_Logging/) |
 | `xm_api_usb_msc.h` | USB 메모리 저장 — 구조체 하나를 USB 메모리에 주기적으로 저장 — 🟢 **Rev 2.0 전용**, 14함수 | [xm-api-usb-msc.md](xm-api-usb-msc.md) | [06. USB 메모리 저장](../06-usb-data-logging.md) | [10_USB_Memory_Log](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/10_USB_Memory_Log/) · [34_USB_Memory_Gait_Log](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/34_USB_Memory_Gait_Log/) |
 
+## CAN 통신 · 센서 허브
+
+| 헤더 | 한 줄 설명 | 레퍼런스 | 관련 개념 문서 | 대표 예제 |
+|------|-----------|----------|---------------|-----------|
+| `xm_api_canbus.h` | CAN-FD · 클래식 CAN 으로 연결한 내 장치와 주고받기 — 장치 API · 자유 송수신 · 동기 신호 — 🟢 **Rev 2.0 전용** | [xm-api-canbus.md](xm-api-canbus.md) | [11. CAN 통신](../11-canbus.md) | [45_CANFD_My_Sensor](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/45_CANFD_My_Sensor/) |
+| `xm_api_canopen.h` | CANopen 장치 도움 함수 — NMT · 노드 하트비트 감시 · SDO 빠른 읽기/쓰기(클래식 모드 전용) — 🟢 **Rev 2.0 전용** | [xm-api-canopen.md](xm-api-canopen.md) | [12. CANopen 장치 다루기](../12-canopen.md) | [46_CANopen_Drive](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/46_CANopen_Drive/) |
+| `xm_api_imu_calib.h` | IMU Hub 센서 제자리 보정 — 시작 · 끝내기 · 중단 · 상태 · 지원 항목 — 🟢 **Rev 2.0 전용** | [xm-api-imu-calib.md](xm-api-imu-calib.md) | [13. IMU Hub 센서 보정](../13-imu-calibration.md) | [48_IMU_Hub_Calibration](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/48_IMU_Hub_Calibration/) |
+
 ## 메모리 · RTC
 
 | 헤더 | 한 줄 설명 | 레퍼런스 | 관련 개념 문서 | 대표 예제 |

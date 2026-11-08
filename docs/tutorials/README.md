@@ -1,6 +1,6 @@
-# Tutorials — 48 개 예제로 배우기
+# Tutorials — 52 개 예제로 배우기
 
-XM10 기능을 단계적으로 익힐 수 있도록 48 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.09 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.
+XM10 기능을 단계적으로 익힐 수 있도록 52 개 예제를 준비했습니다. 각 폴더에 소스 코드와 README 가 함께 있고, README 는 모두 같은 형식 (목표 → 사전 지식 → 핵심 코드 → 실험 → 다음 단계 + 흔한 실수) 으로 정돈되어 있습니다. 기초 예제 (Ex.09 이하)는 30 분 안에 끝나도록 설계했습니다. 다만 제어·고급 예제 (Ex.11 이상)는 난이도에 따라 45 분에서 수 주가 걸릴 수 있습니다.
 
 예제 전체 카탈로그는 [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) 에 있고, 막히면 각 README 맨 아래의 "흔한 실수" 섹션을 먼저 보세요. Claude Code 사용자라면 `"Ex.XX 가 안 돼"` 라고만 말해도 `example-helper` 가 해당 예제의 흔한 실수 + 트러블슈팅 문서를 인용해 답해줍니다.
 
@@ -49,7 +49,7 @@ XM10 기능을 단계적으로 익힐 수 있도록 48 개 예제를 준비했�
 - 8 주차 미니 프로젝트는 사용자의 동기 유지에 효과적입니다. "Ex.05~09 까지 익힌 걸로 무엇이든" 같은 열린 주제로 운영하세요.
 - 16 주차 기말은 팀 단위 (3~4 명) 권장합니다. Physical AI 응용 트랙 (Ex.21, 31, 32, 33) 을 마지막에 깊이 다루는 팀이 보통 나옵니다.
 
-진도표에 빠진 예제 (Ex.05d, 10, 15, 22, 24, 28~36, 38~44) 는 자기주도 학습 또는 다음 학기 후속 과목용으로 남겨두는 것이 분량 면에서 자연스럽습니다.
+진도표에 빠진 예제 (Ex.05d, 10, 15, 22, 24, 28~36, 38~48) 는 자기주도 학습 또는 다음 학기 후속 과목용으로 남겨두는 것이 분량 면에서 자연스럽습니다.
 
 ---
 
@@ -197,6 +197,21 @@ PC 와 실시간으로 메시지를 주고받고 데이터를 스트리밍합니
 | [43](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/) | 보드끼리 시리얼로 대화하기 🛑 **Rev 2.0 전용** | ⭐⭐ | External UART(PD5/PD6)로 XM10 2대를 직결해 통신 — 콜백은 복사만, 프레임 경계는 바이트 상태기계로 |
 
 > IMU Hub·EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
+
+---
+
+## Part 8 — CAN 장치 연동 · 센서 보정 🛑 **Rev 2.0 전용** *(v2.10.0)*
+
+CAN-FD #2 포트에 직접 만든 장치나 CANopen 모터 드라이버를 연결하고, IMU Hub 센서를 장착한 채로 보정합니다. 상대 장치가 없으면 [장치 예제](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/) 의 PC 시뮬레이터로 먼저 해 보세요.
+
+| 예제 | 제목 | 난이도 | 학습 내용 |
+| :---: | :--- | :---: | :--- |
+| [45](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/45_CANFD_My_Sensor/) | CAN-FD 로 연결한 내 장치와 주고받기 | ⭐⭐⭐ | 장치 번호 등록 · 최신값 읽기 · 명령 · 통계 · 자유 송수신 |
+| [46](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/46_CANopen_Drive/) | CANopen 드라이버를 SDO 로 설정하고 명령하기 | ⭐⭐⭐⭐ | 클래식 CAN · NMT · 하트비트 감시와 소비 · SDO 100 Hz |
+| [47](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/47_CANopen_Drive_PDO/) | CANopen 드라이버를 PDO + SYNC 로 1 kHz 명령하기 | ⭐⭐⭐⭐ | PDO 매핑 절차 · SYNC · RPDO / TPDO |
+| [48](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/48_IMU_Hub_Calibration/) | IMU Hub 센서를 제자리에서 보정하기 | ⭐⭐⭐ | 자이로 영점 · 지자기 보정 · 중단, 기다리지 않는 요청 |
+
+> IMU Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
 
 ---
 

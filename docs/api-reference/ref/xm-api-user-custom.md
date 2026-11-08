@@ -1,6 +1,6 @@
 # `xm_api_user_custom.h` — Total Data Packet 안 28바이트 사용자 슬롯 API
 
-> **대상 헤더**: `XM_FW/XM_API/xm_api_user_custom.h` (Rev1.1 · Rev2.0 헤더 동일 — 기능 차이 없음, 파일 상단 `@date` 주석만 하루 차이)
+> **대상 헤더**: `XM_FW/XM_API/xm_api_user_custom.h` (Rev1.1 · Rev2.0 기능 동일 — 주석의 Total Data 크기만 다름: Rev 2.0 369 B · Rev 1.1 365 B)
 > 📚 **관련 개념 문서**: [05. USB 시리얼 통신](../05-usb-connectivity.md) (Total Data Packet 0x20 / User Custom Channel 0xF0~0xFE 구분), [02. KIT H10 제어 + 데이터](../02-h10-control-n-data.md) (`Control_Setup`/`Control_Loop` IPO 주기)
 > 🧪 **관련 예제**: 이 API를 직접 호출하는 예제는 아직 없습니다 (v2.2.0 부터 들어 있는 API). 같은 Total Data Packet(0x20) 을 다루는 [Ex.09 CDC Stream](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/09_CDC_Stream/) 을 먼저 읽으면 이 슬롯이 어떤 스트림에 실리는지 이해하기 쉽습니다.
 
@@ -8,7 +8,7 @@
 
 ## 언제 사용하나
 
-XM10 은 `Control_Loop()` 가 끝날 때마다 365바이트짜리 **Total Data Packet**(Module ID `0x20`)을 1kHz 로 USB 에 자동 전송합니다. 이 패킷의 마지막 28바이트는 `User_Custom` 영역으로, 필터링한 EMG 신호나 FSM 상태 같은 사용자 값을 그대로 실을 수 있게 비워 둔 슬롯입니다. 본 헤더의 함수로 이 28바이트를 채워 두기만 하면, 별도의 전송 코드 없이 PhAI Studio 실시간 그래프와 녹화 파일에 자동으로 함께 기록됩니다.
+XM10 은 `Control_Loop()` 가 끝날 때마다 **Total Data Packet**(Module ID `0x20`, Rev 2.0 은 369바이트 · Rev 1.1 은 365바이트)을 1kHz 로 USB 에 자동 전송합니다. 이 패킷의 offset 337~364 의 28바이트는 `User_Custom` 영역으로, 필터링한 EMG 신호나 FSM 상태 같은 사용자 값을 그대로 실을 수 있게 비워 둔 슬롯입니다. 본 헤더의 함수로 이 28바이트를 채워 두기만 하면, 별도의 전송 코드 없이 Total Data 와 함께 PC 로 나갑니다. `xm10` 도구로 표 · CSV 로 보거나 저장할 수 있습니다.
 
 이름이 비슷한 [User Custom **Channel** (`0xF0~0xFE`, `XM_SetUsbCustomMeta`/`XM_SendUsbDataWithId`)](../05-usb-connectivity.md) 과는 다른 기능이니 주의하세요. 그쪽은 패킷 크기와 개수를 자유롭게 늘릴 수 있는 별도 채널이고, 본 API 는 이미 항상 전송되는 `0x20` 패킷 안의 **고정된 28바이트**에 값만 채워 넣는 훨씬 가벼운 방법입니다. 슬롯 4개(float) + 4개(int16) + 16비트(flags) + 2개(uint8) 만으로 충분하다면 이 API 를, 더 크거나 가변적인 데이터를 보내야 한다면 05번 문서의 커스텀 채널을 사용하세요. (PhAI Studio 는 아직 개발 중이라, `0xF0`~`0xFE` 채널은 우선 `xm10` 도구로 보고 저장하세요.)
 
@@ -231,7 +231,7 @@ XM_SendUsbDebugMessage(buf);   /* 터미널로 볼 때만 쓰세요 — 스트�
 
 ### `XM_UserCustomBlock_t`
 
-Total Data Packet(365B, Module ID `0x20`) 끝의 28바이트 `User_Custom` 영역을 그대로 거울처럼 옮겨 담는 구조체입니다. `XM_UserCustom_GetBlock()` 의 출력 타입으로 쓰입니다.
+Total Data Packet(Module ID `0x20`)의 28바이트 `User_Custom` 영역(offset 337~364)을 그대로 거울처럼 옮겨 담는 구조체입니다. `XM_UserCustom_GetBlock()` 의 출력 타입으로 쓰입니다.
 
 ```c
 typedef struct {
@@ -249,7 +249,7 @@ typedef struct {
 | `flags` | `uint16_t` | 2B | 361 ~ 362 | `XM_UserCustom_SetFlags` / `XM_UserCustom_SetFlag` |
 | `u8[2]` | `uint8_t` | 2B | 363 ~ 364 | `XM_UserCustom_SetU8` |
 
-> 위 오프셋은 `user_f`/`user_i16`/`user_flags`/`user_u8` 순서대로 놓인 값입니다. 총 28바이트로, 365바이트 Total Data Packet 의 마지막 구간(offset 337~364)에 해당합니다.
+> 위 오프셋은 `user_f`/`user_i16`/`user_flags`/`user_u8` 순서대로 놓인 값입니다. 총 28바이트로, Total Data Packet 의 offset 337~364 에 해당합니다. Rev 1.1(365바이트)에서는 패킷의 마지막 구간이고, Rev 2.0(369바이트)에서는 그 뒤에 IMU Hub 센서 시각 4바이트가 더 있습니다.
 > `XM_UserCustomBlock_t` 자체에는 `packed` 속성이 없지만, 필드 순서(float→int16→uint16→uint8) 상 컴파일러의 자연 정렬만으로도 패딩 없이 정확히 28바이트가 됩니다.
 
 ### 매크로

@@ -32,12 +32,15 @@
 | 날짜·시간 (RTC) | [api-reference/08-rtc-clock.md](api-reference/08-rtc-clock.md) |
 | KIT H10 외골격 제어 | [api-reference/02-h10-control-n-data.md](api-reference/02-h10-control-n-data.md) + Ex.11~13 |
 | 상태 머신 (TSM) | [api-reference/01-task-state-machine.md](api-reference/01-task-state-machine.md) + Ex.03 |
+| 직접 만든 CAN-FD · 클래식 CAN 장치와 주고받기 (Rev 2.0 전용) | [api-reference/11-canbus.md](api-reference/11-canbus.md) + Ex.45 · [장치 예제](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/) |
+| CANopen 모터 드라이버 다루기 (Rev 2.0 전용) | [api-reference/12-canopen.md](api-reference/12-canopen.md) + Ex.46 · 47 · [PC 시뮬레이터](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/canopen-pc-sim/) |
+| IMU Hub 센서를 장착한 채로 보정하기 (Rev 2.0 전용) | [api-reference/13-imu-calibration.md](api-reference/13-imu-calibration.md) + Ex.48 |
 
 ## 📚 예제
 
 | 상황 | 어디로 |
 |------|--------|
-| 48 개 예제 전체 인덱스 | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
+| 52 개 예제 전체 인덱스 | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
 | 난이도별·트랙별 학습 경로 | [docs/tutorials/README.md](tutorials/README.md) |
 | 한 학기 수업 진도표 (16 주) | [tutorials/README.md - 한 학기 진도표 섹션](tutorials/README.md#한-학기-16-주-수업-진도표-예시) |
 | Ex.XX 예제가 잘 안 됩니다 | 해당 `examples/XX_*/README.md` 의 "⚠️ 흔한 실수" 섹션 |
@@ -52,7 +55,7 @@
 | 외부 GPIO 핀맵 (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | 외부 GPIO 핀맵 (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | 내 보드가 Rev 1.1 인지 Rev 2.0 인지 | [hardware/README.md - 보드 리비전 비교](hardware/README.md#보드-리비전-비교) |
-| 48 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (40 개는 양쪽 모두 동작·외부 GPIO 핀맵만 다름, Ex.10 · Ex.34 · Ex.36 과 Ex.40/41/42/43/44 는 Rev 2.0 전용) |
+| 52 개 예제는 어느 리비전에서 동작 | [examples/README.md - 보드 리비전 호환성](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (40 개는 양쪽 모두 동작·외부 GPIO 핀맵만 다름, Ex.10 · Ex.34 · Ex.36 과 Ex.40/41/42/43/44 는 Rev 2.0 전용) |
 
 ## 📥 펌웨어 업로드
 

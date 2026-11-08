@@ -18,7 +18,7 @@ XM10 예제(`.c`) 파일 맨 위에 아래 한 줄만 추가하면 로봇 제어
 
 ## 이 헤더가 통합하는 API
 
-`xm_api.h` 는 다음 하위 API 헤더들을 `#include` 합니다. Rev2.0 기준 12개, Rev1.1 기준 9개입니다(차이는 아래 표와 "Rev 차이 요약" 참고). 구조체 로깅 매크로(`XM_LOG_*`)를 쓰는 `.c` 파일은 `xm_api_logging_raw.h` 도 직접 include 하세요 — `xm_api.h` 는 그 헤더를 포함하지 않습니다.
+`xm_api.h` 는 다음 하위 API 헤더들을 `#include` 합니다. Rev2.0 기준 15개, Rev1.1 기준 9개입니다(차이는 아래 표와 "Rev 차이 요약" 참고). 구조체 로깅 매크로(`XM_LOG_*`)를 쓰는 `.c` 파일은 `xm_api_logging_raw.h` 도 직접 include 하세요 — `xm_api.h` 는 그 헤더를 포함하지 않습니다.
 
 | # | 포함 헤더 | 한 줄 설명 | 개념 문서 |
 |---|-----------|-----------|-----------|
@@ -34,10 +34,13 @@ XM10 예제(`.c`) 파일 맨 위에 아래 한 줄만 추가하면 로봇 제어
 | 10 | `xm_api_rtc.h` | RTC 날짜/시간 관리 | [08 실시간 시계](../08-rtc-clock.md) — ⚠️ Rev1.1 에서는 stub |
 | 11 | `xm_api_freertos.h` | 보조 task 생성 + Mutex (FreeRTOS 학생 친화 wrapper) | [09 보조 task + 데이터 공유](../09-task-creation.md) |
 | 12 | `xm_api_safety.h` | 안전 토크 헬퍼 (v2.6.0 신규) — 이상값 차단 + 한계 클램프 + 진입 소프트스타트 + 기울기 제한을 한 번에 처리하는 `XM_SafeTorque_*`, 보조 레벨 클램프 `XM_SafeAssistLevel()`, 센서 신선도 확인 `XM_SafeIsFresh()`. 헤더 안에 구현이 들어 있어 별도 `.c` 가 없습니다 | [02 KIT H10 제어 + 데이터](../02-h10-control-n-data.md) |
+| 13 | `xm_api_canbus.h` | CAN-FD · 클래식 CAN 으로 연결한 내 장치와 주고받기 | [11 CAN 통신](../11-canbus.md) — 🟢 **Rev 2.0 전용** |
+| 14 | `xm_api_canopen.h` | CANopen 장치 도움 함수(클래식 모드 전용) | [12 CANopen 장치 다루기](../12-canopen.md) — 🟢 **Rev 2.0 전용** |
+| 15 | `xm_api_imu_calib.h` | IMU Hub 센서 제자리 보정 | [13 IMU Hub 센서 보정](../13-imu-calibration.md) — 🟢 **Rev 2.0 전용** |
 
 **Rev 차이 요약**:
 
-- 🟢 **Rev 2.0 전용**: `xm_api_memory.h` · `xm_api_logging.h` · `xm_api_usb_msc.h` — Rev1.1 SDK 에는 이 헤더 파일 자체가 없습니다(즉 `xm_api.h` 가 이 헤더들을 include 하지 않습니다). `xm_api_memory.h` 는 Workspace/PSRAM 8MB 등 Rev2.0 전용 하드웨어를 반영한 API 입니다. `xm_api_logging_raw.h` 도 Rev2.0 SDK 에만 있습니다.
+- 🟢 **Rev 2.0 전용**: `xm_api_memory.h` · `xm_api_logging.h` · `xm_api_usb_msc.h` · `xm_api_canbus.h` · `xm_api_canopen.h` · `xm_api_imu_calib.h` — Rev1.1 SDK 에는 이 헤더 파일 자체가 없습니다(즉 `xm_api.h` 가 이 헤더들을 include 하지 않습니다). `xm_api_memory.h` 는 Workspace/PSRAM 8MB 등 Rev2.0 전용 하드웨어를 반영한 API 입니다. `xm_api_logging_raw.h` 도 Rev2.0 SDK 에만 있습니다.
 - ⚠️ **Rev1.1 제한**: `xm_api_rtc.h` 는 두 리비전 모두에 파일이 존재하지만, Rev1.1 보드에는 RTC 칩(MCP79510)이 실장되어 있지 않아 모든 함수가 stub(항상 `false` 반환/무동작)으로 컴파일됩니다. Rev1.1 에서 시간 기록이 필요하면 `XM_GetTick()` 기반 경과시간으로 대체하세요.
 - 그 외 헤더 중 `xm_api_data.h` · `xm_api_led_btn.h` · `xm_api_external_io.h` · `xm_api_usb.h` 는 두 리비전의 내용이 다릅니다. 다른 점은 각 레퍼런스 페이지에서 확인하세요(예: [`xm_api_usb.h`](xm-api-usb.md) 의 "Rev1.1 / Rev2.0 차이 요약"). `xm_api_tsm.h` · `xm_api_user_custom.h` · `xm_api_freertos.h` · `xm_api_safety.h` 는 기능 차이가 없습니다.
 

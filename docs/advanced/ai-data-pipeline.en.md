@@ -59,7 +59,7 @@ python pc-data-tool/xm10.py recv --cli --port COM6 --log         # receive to co
 python pc-data-tool/xm10.py export data/cdc_<timestamp>.xmlog --csv out/   # export per-channel CSV
 ```
 
-`out/` gets `..._user_0xF0.csv` (your channel) and `..._total_0x20.csv` (the 197 channels the board always sends — joint angle/torque, IMU, GRF). Both files carry `pc_time_us` (PC receive time) and `seq_id` (the board's send sequence, shared across all channels) columns up front so you can align the time axis.
+`out/` gets `..._user_0xF0.csv` (your channel) and `..._total_0x20.csv` (the roughly 200 channels the board always sends — joint angle/torque, IMU, GRF). Both files carry `pc_time_us` (PC receive time) and `seq_id` (the board's send sequence, shared across all channels) columns up front so you can align the time axis.
 
 ### 3. Loading into a Training Framework
 

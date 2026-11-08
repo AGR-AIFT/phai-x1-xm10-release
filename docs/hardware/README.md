@@ -56,9 +56,20 @@ XM10 의 전원 + 통신을 한 가닥으로 받습니다. Molex 1053081206 6-pi
 | 포트 | 용도 |
 |------|------|
 | CAN-FD #1 | KIT H10 외골격 ↔ XM10 (메인 커넥터에 포함) |
-| CAN-FD #2 | 센서 허브 모듈 확장 |
+| CAN-FD #2 | 센서 허브 모듈 확장 · 내 장치 연결 (🟢 Rev 2.0) |
 
 > EMG Hub 는 내부에서 개발 중인 모듈입니다. 사용하려면 https://huphailab.com/contact 로 문의해 주세요.
+
+**CAN-FD #2 에 내 장치 연결하기** 🟢 **Rev 2.0** *(v2.10.0)*
+
+| 항목 | 내용 |
+|------|------|
+| 버스 모드 | 기본 CAN-FD — 중재 1 Mbit/s · 데이터 5 Mbit/s, 샘플 포인트 75 %. 클래식 CAN(기본 1 Mbit/s, 샘플 포인트 87.5 %)으로 바꿀 수 있습니다 — 그때는 센서 허브가 동작하지 않습니다 |
+| 배선 | 장치 트랜시버의 CAN_H · CAN_L · GND 를 포트의 같은 이름에 연결합니다 |
+| 종단 저항 | 버스 양 끝에 120 Ω. **XM10 보드에는 이미 있습니다** — 장치 쪽 끝에 하나를 둡니다 |
+| 한 포트의 규칙 | 클래식 장치와 CAN-FD 장치를 함께 연결하지 않습니다 · 모든 장치는 같은 속도 · 장치 번호(ID)를 겹치지 않습니다 |
+
+쓰는 법은 [CAN 통신](../api-reference/11-canbus.md) · [CANopen 장치 다루기](../api-reference/12-canopen.md), 상대 장치 예제는 [device-examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/) 를 보세요.
 
 ### USB-C 포트
 
