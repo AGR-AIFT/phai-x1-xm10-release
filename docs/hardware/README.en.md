@@ -56,9 +56,20 @@ Two ports total. One communicates with KIT H10 through the main connector; the o
 | Port | Purpose |
 |------|---------|
 | CAN-FD #1 | KIT H10 exoskeleton ↔ XM10 (routed through the main connector) |
-| CAN-FD #2 | Sensor hub module expansion |
+| CAN-FD #2 | Sensor hub module expansion · connecting your own device (🟢 Rev 2.0) |
 
 > The EMG Hub is a module under internal development. To use it, please contact us at https://huphailab.com/contact.
+
+**Connect your own device to CAN-FD #2** 🟢 **Rev 2.0** *(v2.10.0)*
+
+| Item | Details |
+|------|------|
+| Bus mode | CAN-FD by default — arbitration 1 Mbit/s · data 5 Mbit/s, sample point 75 %. You can switch to classic CAN (1 Mbit/s by default, sample point 87.5 %) — the sensor hubs do not work then |
+| Wiring | Connect CAN_H · CAN_L · GND of the device transceiver to the pins of the same name on the port |
+| Termination resistor | 120 Ω at both ends of the bus. **The XM10 board already has one** — put one at the device end |
+| Rules for one port | Do not connect classic devices and CAN-FD devices together · all devices use the same speed · do not let device numbers (IDs) overlap |
+
+For how to use it, see [CAN Communication](../api-reference/11-canbus.en.md) and [Working with CANopen Devices](../api-reference/12-canopen.en.md). For partner device examples, see [device-examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/).
 
 ### USB-C Port
 

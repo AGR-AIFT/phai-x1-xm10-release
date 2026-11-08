@@ -14,7 +14,7 @@ The API documentation is split into **two layers with different jobs**. Open the
 
 | Layer | Location | Covers | Open this when |
 |-------|----------|--------|-----------------|
-| **① Concept Guides** | This document (01–10, the [Function Groups](#function-groups) table below) | **Why** the API exists and **how** to weave it into your algorithm — background, common pitfalls, example code flow | You don't yet know how to combine an API you're using for the first time |
+| **① Concept Guides** | This document (01–13, the [Function Groups](#function-groups) table below) | **Why** the API exists and **how** to weave it into your algorithm — background, common pitfalls, example code flow | You don't yet know how to combine an API you're using for the first time |
 | **② Function Reference** | [`ref/`](ref/README.en.md) — one page per header | **Exact** function signatures, parameter types/ranges, return values, struct fields | You need to double-check a function name, argument order, or exact return meaning |
 
 The two layers don't replace each other. Each concept-guide entry links to its matching `ref/` page, and every `ref/` page links back to its matching concept guide — if you get stuck, jump to the other side.
@@ -37,6 +37,9 @@ The two layers don't replace each other. Each concept-guide entry links to its m
 | 08 | [Real-Time Clock](08-rtc-clock.md) | Read and write date/time | `XM_RTC_SetDateTime`, `XM_RTC_GetDateTime`, `XM_RTC_IsRunning` |
 | 09 | [Auxiliary Tasks + Data Sharing](09-task-creation.md) | Tasks separate from the 1 kHz control loop + safe data sharing | `XM_Task_CreateOneShot/Periodic`, `XM_Mutex_Lock/Unlock` |
 | 10 | [Struct Logging](10-struct-logging.md) | Send a struct to the PC with field names, units and types 🟢 **Rev 2.0 only** | `XM_LOG_DECLARE`, `XM_LOG_FIELDS`, `XM_LOG_REGISTER`, `XM_LOG_SEND` |
+| 11 | [CAN Communication](11-canbus.en.md) | Send and receive with your own device connected over CAN-FD or classic CAN 🟢 **Rev 2.0 only** | `XM_CanAttachDevice`, `XM_CanReadLatest`, `XM_CanSend`, `XM_CanSendFrame`, `XM_CanReadFrame` |
+| 12 | [Working with CANopen Devices](12-canopen.en.md) | CANopen motor drivers — NMT · heartbeat monitoring · SDO, PDO + SYNC 🟢 **Rev 2.0 only** | `XM_CanOpenSendNmt`, `XM_CanOpenWatchNode`, `XM_CanOpenSdoRead/Write`, `XM_CanOpenSdoGetResult` |
+| 13 | [IMU Hub Sensor Calibration](13-imu-calibration.en.md) | Calibrate IMU Hub sensors while they stay mounted 🟢 **Rev 2.0 only** | `XM_ImuCalibStart`, `XM_ImuCalibGetStatus`, `XM_ImuCalibFinish`, `XM_ImuCalibAbort` |
 
 ---
 

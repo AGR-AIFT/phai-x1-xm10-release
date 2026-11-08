@@ -18,7 +18,7 @@ Add this single line at the top of any XM10 example (`.c`) file, and you get acc
 
 ## What this header aggregates
 
-`xm_api.h` includes the following sub-API headers. There are 12 on Rev2.0 and 9 on Rev1.1 (see the table below and "Revision differences at a glance" for the difference). A `.c` file that uses the struct logging macros (`XM_LOG_*`) must also include `xm_api_logging_raw.h` directly — `xm_api.h` does not include that header.
+`xm_api.h` includes the following sub-API headers. There are 15 on Rev2.0 and 9 on Rev1.1 (see the table below and "Revision differences at a glance" for the difference). A `.c` file that uses the struct logging macros (`XM_LOG_*`) must also include `xm_api_logging_raw.h` directly — `xm_api.h` does not include that header.
 
 | # | Included header | One-line description | Concept doc |
 |---|-----------|-----------|-----------|
@@ -34,10 +34,13 @@ Add this single line at the top of any XM10 example (`.c`) file, and you get acc
 | 10 | `xm_api_rtc.h` | RTC date/time management | [08 Real-Time Clock](../08-rtc-clock.en.md) — ⚠️ stub on Rev1.1 |
 | 11 | `xm_api_freertos.h` | Auxiliary task creation + Mutex (student-friendly FreeRTOS wrapper) | [09 Auxiliary Tasks & Data Sharing](../09-task-creation.en.md) |
 | 12 | `xm_api_safety.h` | Safe-torque helpers (new in v2.6.0) — `XM_SafeTorque_*` combines bad-value rejection, limit clamping, entry soft-start and slew limiting in one call; plus `XM_SafeAssistLevel()` and `XM_SafeIsFresh()` for sensor freshness. Implemented inside the header, so there is no separate `.c` | [02 KIT H10 Control & Data](../02-h10-control-n-data.en.md) |
+| 13 | `xm_api_canbus.h` | Send and receive with your own device connected over CAN-FD or classic CAN | [11 CAN Communication](../11-canbus.en.md) — 🟢 **Rev 2.0 only** |
+| 14 | `xm_api_canopen.h` | CANopen device helper functions (classic mode only) | [12 Working with CANopen Devices](../12-canopen.en.md) — 🟢 **Rev 2.0 only** |
+| 15 | `xm_api_imu_calib.h` | In-place calibration of IMU Hub sensors | [13 IMU Hub Sensor Calibration](../13-imu-calibration.en.md) — 🟢 **Rev 2.0 only** |
 
 **Revision differences at a glance**:
 
-- 🟢 **Rev 2.0 only**: `xm_api_memory.h` · `xm_api_logging.h` · `xm_api_usb_msc.h` — these header files do not exist at all in the Rev1.1 SDK (i.e. `xm_api.h` does not include them there). `xm_api_memory.h` reflects Rev2.0-only hardware such as the 8MB Workspace/PSRAM. `xm_api_logging_raw.h` also exists only in the Rev2.0 SDK.
+- 🟢 **Rev 2.0 only**: `xm_api_memory.h` · `xm_api_logging.h` · `xm_api_usb_msc.h` · `xm_api_canbus.h` · `xm_api_canopen.h` · `xm_api_imu_calib.h` — these header files do not exist at all in the Rev1.1 SDK (i.e. `xm_api.h` does not include them there). `xm_api_memory.h` reflects Rev2.0-only hardware such as the 8MB Workspace/PSRAM. `xm_api_logging_raw.h` also exists only in the Rev2.0 SDK.
 - ⚠️ **Rev1.1 limitation**: `xm_api_rtc.h` exists as a file in both revisions, but Rev1.1 boards do not carry the RTC chip (MCP79510), so every function compiles down to a stub (always returns `false` / no-op). If you need timekeeping on Rev1.1, fall back to elapsed time based on `XM_GetTick()`.
 - Among the other headers, `xm_api_data.h`, `xm_api_led_btn.h`, `xm_api_external_io.h` and `xm_api_usb.h` differ in content between the two revisions. For what differs, see each reference page (for example the "Rev1.1 / Rev2.0 Difference Summary" of [`xm_api_usb.h`](xm-api-usb.en.md)). `xm_api_tsm.h`, `xm_api_user_custom.h`, `xm_api_freertos.h` and `xm_api_safety.h` have no functional difference.
 

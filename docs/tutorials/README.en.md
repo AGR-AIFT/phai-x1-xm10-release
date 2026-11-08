@@ -1,6 +1,6 @@
-# Tutorials — Learning Through 48 Examples
+# Tutorials — Learning Through 52 Examples
 
-XM10's features are covered through 48 progressively structured examples. Each folder contains source code and a README, and every README follows the same format: Goal → Prerequisites → Key Code → Experiments → Next Steps + Common Mistakes. The introductory examples (Ex.09 and below) are designed to complete in under 30 minutes. Control and advanced examples (Ex.11 and above) may take anywhere from 45 minutes to several weeks, depending on difficulty.
+XM10's features are covered through 52 progressively structured examples. Each folder contains source code and a README, and every README follows the same format: Goal → Prerequisites → Key Code → Experiments → Next Steps + Common Mistakes. The introductory examples (Ex.09 and below) are designed to complete in under 30 minutes. Control and advanced examples (Ex.11 and above) may take anywhere from 45 minutes to several weeks, depending on difficulty.
 
 The full example catalog is at [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md). If you get stuck, check the "Common Mistakes" section at the bottom of each README first. Claude Code users can simply say `"Ex.XX isn't working"` and the `example-helper` skill will respond with the relevant common mistakes and troubleshooting documentation.
 
@@ -49,7 +49,7 @@ Teaching tips:
 - The Week 8 mini project is effective for maintaining motivation. Run it as an open-ended prompt like "build anything using what you've learned from Ex.05–09."
 - For Week 16, teams of 3–4 are recommended. Teams that dive deep into the Physical AI application track (Ex.21, 31, 32, 33) at the end tend to produce the strongest final projects.
 
-Examples not in this schedule (Ex.05d, 10, 15, 22, 24, 28–36, 38–44) are naturally left for self-directed study or a follow-on course in the next semester.
+Examples not in this schedule (Ex.05d, 10, 15, 22, 24, 28–36, 38–48) are naturally left for self-directed study or a follow-on course in the next semester.
 
 ---
 
@@ -197,6 +197,21 @@ The key stages of Physical AI — transparency → intent detection → learning
 | [43](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/43_External_UART_PingPong/) | Two boards talking over serial 🛑 **Rev 2.0 only** | ⭐⭐ | Connect two XM10s directly over the External UART (PD5/PD6) — copy only inside the callback, find frame boundaries with a byte state machine |
 
 > The IMU Hub and EMG Hub are modules under internal development. To use them, please contact us at https://huphailab.com/contact.
+
+---
+
+## Part 8 — CAN Device Integration · Sensor Calibration 🛑 **Rev 2.0 only** *(v2.10.0)*
+
+Connect your own device or a CANopen motor driver to the CAN-FD #2 port, and calibrate IMU Hub sensors while they stay mounted. If you do not have the partner device, try the PC simulators in [device examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/) first.
+
+| Example | Title | Difficulty | What You Learn |
+| :---: | :--- | :---: | :--- |
+| [45](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/45_CANFD_My_Sensor/) | Talk to your own device over CAN-FD | ⭐⭐⭐ | Register a device number · read the latest value · send commands · statistics · free send and receive |
+| [46](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/46_CANopen_Drive/) | Set up and command a CANopen drive over SDO | ⭐⭐⭐⭐ | Classic CAN · NMT · heartbeat monitoring and consuming · SDO at 100 Hz |
+| [47](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/47_CANopen_Drive_PDO/) | Command a CANopen drive at 1 kHz with PDO + SYNC | ⭐⭐⭐⭐ | PDO mapping steps · SYNC · RPDO / TPDO |
+| [48](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/48_IMU_Hub_Calibration/) | Calibrate IMU Hub sensors in place | ⭐⭐⭐ | Gyro zero · magnetometer calibration · abort, non-waiting requests |
+
+> The IMU Hub is a module under internal development. To use it, please contact us at https://huphailab.com/contact.
 
 ---
 

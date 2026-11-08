@@ -32,12 +32,15 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | Date / time (RTC) | [api-reference/08-rtc-clock.md](api-reference/08-rtc-clock.md) |
 | KIT H10 exoskeleton control | [api-reference/02-h10-control-n-data.md](api-reference/02-h10-control-n-data.md) + Ex.11–13 |
 | State machine (TSM) | [api-reference/01-task-state-machine.md](api-reference/01-task-state-machine.md) + Ex.03 |
+| Talking to your own CAN-FD or classic CAN device (Rev 2.0 only) | [api-reference/11-canbus.en.md](api-reference/11-canbus.en.md) + Ex.45 · [device examples](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/) |
+| Working with a CANopen motor driver (Rev 2.0 only) | [api-reference/12-canopen.en.md](api-reference/12-canopen.en.md) + Ex.46 · 47 · [PC simulator](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/device-examples/canopen-pc-sim/) |
+| Calibrating IMU Hub sensors while they stay mounted (Rev 2.0 only) | [api-reference/13-imu-calibration.en.md](api-reference/13-imu-calibration.en.md) + Ex.48 |
 
 ## 📚 Examples
 
 | Situation | Where to go |
 |-----------|-------------|
-| Full index of all 48 examples | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
+| Full index of all 52 examples | [examples/README.md](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) |
 | Learning paths by difficulty and track | [docs/tutorials/README.md](tutorials/README.md) |
 | 16-week semester schedule | [tutorials/README.md — Semester Schedule section](tutorials/README.md#한-학기-16-주-수업-진도표-예시) |
 | An example (Ex.XX) isn't working | See the "⚠️ Common Mistakes" section in `examples/XX_*/README.md` |
@@ -52,7 +55,7 @@ Common questions and frequently visited pages, all in one place. Use Ctrl+F to s
 | External GPIO pinmap (Rev 1.1) | [hardware/external-gpio-rev1.1.md](hardware/external-gpio-rev1.1.md) |
 | External GPIO pinmap (Rev 2.0) | [hardware/external-gpio-rev2.0.md](hardware/external-gpio-rev2.0.md) |
 | Is my board Rev 1.1 or Rev 2.0? | [hardware/README.md — Board Revision Comparison](hardware/README.md#보드-리비전-비교) |
-| Which board revision do the 48 examples support? | [examples/README.md — Board Revision Compatibility](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (40 work on both; Ex.10, Ex.34, Ex.36 and Ex.40/41/42/43/44 are Rev 2.0-only) |
+| Which board revision do the 52 examples support? | [examples/README.md — Board Revision Compatibility](https://github.com/AGR-AIFT/phai-x1-xm10-release/tree/Develop/examples/README.md) (40 work on both; Ex.10, Ex.34, Ex.36 and Ex.40–48 are Rev 2.0-only) |
 
 ## 📥 Firmware Upload
 
